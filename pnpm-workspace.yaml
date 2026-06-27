@@ -1,0 +1,4 @@
+allowBuilds:
+  es5-ext: true
+minimumReleaseAgeExclude:
+  - shadcn@4.12.0

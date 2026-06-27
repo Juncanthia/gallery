@@ -1,0 +1,264 @@
+import { useState } from "react";
+import { GallerySection, DemoRow, SectionGroup } from "../gallery-section";
+import { Button } from "@/components/base/button";
+import { Badge } from "@/components/base/badge";
+import { Flex } from "@/components/base/flex";
+import { Space } from "@/components/base/space";
+import { Watermark } from "@/components/base/watermark";
+import { Affix } from "@/components/base/affix";
+import { ScrollArea } from "@/components/base/scroll-area";
+import { AspectRatio } from "@/components/base/aspect-ratio";
+import { Calendar } from "@/components/base/calendar";
+import {
+  ResizablePanelGroup, ResizablePanel, ResizableHandle,
+} from "@/components/base/resizable";
+import {
+  Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext,
+} from "@/components/base/carousel";
+import { Card, CardContent } from "@/components/base/card";
+import { type DateRange } from "react-day-picker";
+
+export function LayoutSection() {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+
+  return (
+    <SectionGroup title="Layout & Misc" description="Structural layout utilities, containers, and miscellaneous components.">
+      <GallerySection id="flex" title="Flex" description="Flexbox layout utility.">
+        <DemoRow label="justify variants">
+          {(["start", "center", "end", "between"] as const).map((j) => (
+            <div key={j} className="w-48 rounded-md border overflow-hidden">
+              <p className="text-xs text-muted-foreground px-2 py-1 border-b bg-muted/50">{j}</p>
+              <Flex justify={j} className="p-2" gap={1}>
+                <Badge variant="secondary">A</Badge>
+                <Badge variant="secondary">B</Badge>
+                <Badge variant="secondary">C</Badge>
+              </Flex>
+            </div>
+          ))}
+        </DemoRow>
+        <DemoRow label="direction + align">
+          <div className="w-48 rounded-md border overflow-hidden">
+            <p className="text-xs text-muted-foreground px-2 py-1 border-b bg-muted/50">col / center</p>
+            <Flex direction="col" align="center" className="p-3" gap={2}>
+              <Badge>First</Badge>
+              <Badge variant="secondary">Second</Badge>
+              <Badge variant="outline">Third</Badge>
+            </Flex>
+          </div>
+          <div className="w-48 rounded-md border overflow-hidden">
+            <p className="text-xs text-muted-foreground px-2 py-1 border-b bg-muted/50">wrap</p>
+            <Flex wrap="wrap" className="p-2" gap={1}>
+              {Array.from({ length: 6 }, (_, i) => (
+                <Badge key={i} variant="secondary">Item {i + 1}</Badge>
+              ))}
+            </Flex>
+          </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="space" title="Space" description="Uniform spacing between children.">
+        <DemoRow label="Horizontal">
+          <Space>
+            <Badge>Item 1</Badge>
+            <Badge variant="secondary">Item 2</Badge>
+            <Badge variant="outline">Item 3</Badge>
+          </Space>
+        </DemoRow>
+        <DemoRow label="Vertical with divider">
+          <Space direction="vertical" size="default" split={<hr className="border-border w-full" />} className="w-40">
+            <p className="text-sm">First item</p>
+            <p className="text-sm">Second item</p>
+            <p className="text-sm">Third item</p>
+          </Space>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="resizable" title="Resizable" description="Drag-to-resize panel groups.">
+        <DemoRow>
+          <div className="w-full max-w-xl rounded-lg border overflow-hidden" style={{ height: 160 }}>
+            <ResizablePanelGroup orientation="horizontal">
+              <ResizablePanel defaultSize={50}>
+                <div className="flex h-full items-center justify-center p-4 text-sm font-medium">
+                  Left Panel
+                </div>
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={50}>
+                <ResizablePanelGroup orientation="vertical">
+                  <ResizablePanel defaultSize={50}>
+                    <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
+                      Top Right
+                    </div>
+                  </ResizablePanel>
+                  <ResizableHandle withHandle />
+                  <ResizablePanel defaultSize={50}>
+                    <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
+                      Bottom Right
+                    </div>
+                  </ResizablePanel>
+                </ResizablePanelGroup>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="scroll-area" title="Scroll Area" description="Custom scrollable container.">
+        <DemoRow>
+          <ScrollArea className="h-48 w-64 rounded-md border">
+            <div className="p-4 space-y-3">
+              {Array.from({ length: 20 }, (_, i) => (
+                <div key={i} className="flex items-center gap-3 text-sm">
+                  <div className="size-6 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-xs font-medium">
+                    {i + 1}
+                  </div>
+                  <span className="text-muted-foreground">Scroll item {i + 1}</span>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+          <ScrollArea className="h-48 w-64 rounded-md border">
+            <div className="flex gap-3 p-4 w-max">
+              {Array.from({ length: 12 }, (_, i) => (
+                <div key={i} className="size-16 flex-shrink-0 rounded-lg bg-muted flex items-center justify-center text-xs font-medium">
+                  {i + 1}
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="aspect-ratio" title="Aspect Ratio" description="Maintain consistent width/height ratio.">
+        <DemoRow>
+          <div className="w-64">
+            <AspectRatio ratio={16 / 9} className="rounded-lg overflow-hidden bg-muted">
+              <img
+                src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?w=400"
+                alt="Landscape"
+                className="w-full h-full object-cover"
+              />
+            </AspectRatio>
+            <p className="text-xs text-muted-foreground mt-1 text-center">16:9</p>
+          </div>
+          <div className="w-40">
+            <AspectRatio ratio={1} className="rounded-lg overflow-hidden bg-muted">
+              <img
+                src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=200"
+                alt="Portrait"
+                className="w-full h-full object-cover"
+              />
+            </AspectRatio>
+            <p className="text-xs text-muted-foreground mt-1 text-center">1:1</p>
+          </div>
+          <div className="w-48">
+            <AspectRatio ratio={4 / 3} className="rounded-lg overflow-hidden bg-muted">
+              <img
+                src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=300"
+                alt="Food"
+                className="w-full h-full object-cover"
+              />
+            </AspectRatio>
+            <p className="text-xs text-muted-foreground mt-1 text-center">4:3</p>
+          </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="calendar" title="Calendar" description="Date and date range picker.">
+        <DemoRow label="Single date">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="rounded-md border"
+          />
+        </DemoRow>
+        <DemoRow label="Date range">
+          <Calendar
+            mode="range"
+            selected={dateRange}
+            onSelect={setDateRange}
+            numberOfMonths={2}
+            className="rounded-md border"
+          />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="carousel" title="Carousel" description="Slidable content carousel.">
+        <DemoRow label="Horizontal">
+          <div className="w-full max-w-sm">
+            <Carousel>
+              <CarouselContent>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <CarouselItem key={i}>
+                    <Card>
+                      <CardContent className="flex aspect-square items-center justify-center p-6">
+                        <span className="text-4xl font-semibold text-muted-foreground">{i + 1}</span>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        </DemoRow>
+        <DemoRow label="Multiple visible">
+          <div className="w-full max-w-xl">
+            <Carousel opts={{ align: "start" }}>
+              <CarouselContent className="-ml-2">
+                {Array.from({ length: 8 }, (_, i) => (
+                  <CarouselItem key={i} className="pl-2 basis-1/3">
+                    <Card>
+                      <CardContent className="flex aspect-square items-center justify-center p-4">
+                        <span className="text-2xl font-semibold text-muted-foreground">{i + 1}</span>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="watermark" title="Watermark" description="Canvas-rendered repeating overlay.">
+        <DemoRow>
+          <div className="relative w-72 h-36 rounded-lg border overflow-hidden bg-card flex items-center justify-center">
+            <Watermark content="Confidential" gap={[60, 40]}>
+              <div className="flex flex-col items-center gap-1">
+                <p className="text-sm font-medium">Protected Content</p>
+                <p className="text-xs text-muted-foreground">Single line watermark</p>
+              </div>
+            </Watermark>
+          </div>
+          <div className="relative w-72 h-36 rounded-lg border overflow-hidden bg-card flex items-center justify-center">
+            <Watermark content={["Acme Corp", "Internal Use"]} rotate={-30} gap={[80, 50]}>
+              <div className="flex flex-col items-center gap-1">
+                <p className="text-sm font-medium">Multi-line Watermark</p>
+                <p className="text-xs text-muted-foreground">Two text lines</p>
+              </div>
+            </Watermark>
+          </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="affix" title="Affix" description="Element that sticks when scrolling past an offset.">
+        <DemoRow>
+          <div className="rounded-lg border p-4 bg-muted/20 max-w-sm">
+            <p className="text-sm text-muted-foreground mb-3">
+              Affix pins an element to the viewport once the user scrolls past a threshold. Used for sticky toolbars, back-to-top buttons, or sidebars.
+            </p>
+            <Affix offsetTop={80}>
+              <Button size="sm" variant="outline">Sticky at 80px from top</Button>
+            </Affix>
+          </div>
+        </DemoRow>
+      </GallerySection>
+    </SectionGroup>
+  );
+}
