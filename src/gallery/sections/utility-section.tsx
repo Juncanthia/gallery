@@ -5,6 +5,7 @@ import { Tour, type TourStepConfig } from "@/components/composite/tour";
 import { Plus, MessageCircle, Share, CreditCard as Edit, Settings, HelpCircle } from "lucide-react";
 import { Button } from "@/components/base/button";
 import { message } from "@/components/base/message-api";
+import { notification } from "@/components/base/notification-api";
 
 export function UtilitySection() {
   const [tourOpen, setTourOpen] = useState(false);
@@ -50,6 +51,45 @@ export function UtilitySection() {
             Open config
           </Button>
           <Button variant="text" onClick={() => message.destroy()}>
+            Destroy all
+          </Button>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="notification" title="Notification" description="Richer feedback with title + description, placed at screen corners.">
+        <DemoRow label="Types">
+          <Button onClick={() => notification.success({ title: "Success", description: "Operation completed." })}>Success</Button>
+          <Button onClick={() => notification.info({ title: "Info", description: "Here is some information." })}>Info</Button>
+          <Button onClick={() => notification.warning({ title: "Warning", description: "Please review your input." })}>Warning</Button>
+          <Button onClick={() => notification.error({ title: "Error", description: "Something went wrong. Please try again." })}>Error</Button>
+        </DemoRow>
+        <DemoRow label="Placement">
+          <Button
+            variant="outlined"
+            onClick={() => notification.info({ title: "Top Left", description: "Appears at top-left corner.", placement: "topLeft" })}
+          >
+            topLeft
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => notification.info({ title: "Bottom Right", description: "Appears at bottom-right.", placement: "bottomRight" })}
+          >
+            bottomRight
+          </Button>
+        </DemoRow>
+        <DemoRow label="Duration & key">
+          <Button
+            onClick={() => {
+              const key = "notif-update";
+              notification.info({ key, title: "Processing...", description: "Please wait.", duration: 0 });
+              window.setTimeout(() => {
+                notification.success({ key, title: "Done", description: "Task completed.", duration: 3 });
+              }, 1500);
+            }}
+          >
+            Update by key
+          </Button>
+          <Button variant="text" onClick={() => notification.destroy()}>
             Destroy all
           </Button>
         </DemoRow>

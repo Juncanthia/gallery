@@ -89,6 +89,7 @@ export const NAV: NavGroup[] = [
     group: "Feedback",
     items: [
       { id: "message", label: "Message" },
+      { id: "notification", label: "Notification" },
       { id: "progress", label: "Progress" },
       { id: "alert-component", label: "Alert" },
     ],
