@@ -17,6 +17,7 @@ import {
   TimePicker,
 } from "@/components/composite/time-picker";
 import { ColorPicker } from "@/components/base/color-picker";
+import { Mentions } from "@/components/base/mentions";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -407,6 +408,22 @@ export function FormsSection() {
       <GallerySection id="color-picker" title="ColorPicker" description="HSL color picker with sliders and hex input.">
         <DemoRow label="Basic">
           <ColorPicker defaultValue="#6366f1" onChange={(v) => console.log(v)} />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="mentions" title="Mentions" description="@-mention text input with dropdown suggestions.">
+        <DemoRow label="Basic">
+          <Mentions
+            className="w-64"
+            prefix="@"
+            placeholder="Type @ to mention..."
+            options={[
+              { value: "alice", label: "Alice" },
+              { value: "bob", label: "Bob" },
+              { value: "charlie", label: "Charlie" },
+            ]}
+            rows={2}
+          />
         </DemoRow>
       </GallerySection>
 
