@@ -13,6 +13,7 @@ import { Card, CardGrid, CardMeta } from "@/components/base/card";
 import { Skeleton, SkeletonAvatar, SkeletonButton, SkeletonImage, SkeletonInput, SkeletonNode } from "@/components/base/skeleton";
 import { Result } from "@/components/base/result";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, EMPTY_IMAGE_DEFAULT, EMPTY_IMAGE_SIMPLE } from "@/components/base/empty-state";
+import { Image } from "@/components/base/image";
 import { BorderBeam } from "@/components/base/border-beam";
 import { Table } from "@/components/base/table";
 import { Descriptions } from "@/components/base/descriptions";
@@ -642,6 +643,41 @@ export function DisplaySection() {
                 <Button size="small" variant="outlined">Upload</Button>
               </EmptyContent>
             </Empty>
+          </DemoRow>
+        </GallerySection>
+
+        <GallerySection id="image" title="Image" description="Image display with preview zoom and fallback states.">
+          <DemoRow label="Basic">
+            <Image
+              src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=120"
+              width={120}
+              height={80}
+              alt="Demo"
+            />
+          </DemoRow>
+          <DemoRow label="With placeholder & fallback">
+            <Image
+              src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=120"
+              width={120}
+              height={80}
+              alt="With placeholder"
+              placeholder={
+                <div className="flex items-center justify-center h-full">
+                  <span className="text-xs text-muted-foreground">Loading...</span>
+                </div>
+              }
+            />
+            <Image
+              src="https://invalid.url/broken.jpg"
+              width={120}
+              height={80}
+              alt="Broken"
+              fallback={
+                <div className="flex items-center justify-center h-full bg-muted text-xs text-muted-foreground">
+                  Broken
+                </div>
+              }
+            />
           </DemoRow>
         </GallerySection>
 
