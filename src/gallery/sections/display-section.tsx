@@ -16,6 +16,8 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Image } from "@/components/base/image";
 import { List } from "@/components/base/list";
 import { QRCode } from "@/components/base/qr-code";
+import { Tree } from "@/components/base/tree";
+import { TreeNode, TreeNodeTrigger, TreeNodeContent } from "@/components/composite/tree";
 import { BorderBeam } from "@/components/base/border-beam";
 import { Table } from "@/components/base/table";
 import { Descriptions } from "@/components/base/descriptions";
@@ -762,6 +764,32 @@ export function DisplaySection() {
                 <FileItem icon={FileText} gitStatus="untracked">README.md</FileItem>
               </Files>
             </div>
+          </DemoRow>
+        </GallerySection>
+
+        <GallerySection id="tree" title="Tree" description="Hierarchical tree with expand/collapse and selection.">
+          <DemoRow label="Basic">
+            <Tree className="w-56 rounded-md border bg-background p-2 text-sm" defaultExpandedIds={["1"]}>
+              <TreeNode nodeId="1">
+                <TreeNodeTrigger>Root</TreeNodeTrigger>
+                <TreeNodeContent>
+                  <TreeNode nodeId="1-1">
+                    <TreeNodeTrigger>Child A</TreeNodeTrigger>
+                    <TreeNodeContent>
+                      <TreeNode nodeId="1-1-1">
+                        <TreeNodeTrigger>Grandchild</TreeNodeTrigger>
+                      </TreeNode>
+                    </TreeNodeContent>
+                  </TreeNode>
+                  <TreeNode nodeId="1-2">
+                    <TreeNodeTrigger>Child B</TreeNodeTrigger>
+                  </TreeNode>
+                </TreeNodeContent>
+              </TreeNode>
+              <TreeNode nodeId="2">
+                <TreeNodeTrigger>Standalone</TreeNodeTrigger>
+              </TreeNode>
+            </Tree>
           </DemoRow>
         </GallerySection>
 
