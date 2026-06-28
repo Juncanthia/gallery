@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {
   Tabs as TabsPrimitive,
   TabsList as TabsListPrimitive,
@@ -23,15 +25,22 @@ type TabsItem = {
   label: React.ReactNode;
   children?: React.ReactNode;
   disabled?: boolean;
+  forceRender?: boolean;
   icon?: React.ReactNode;
 };
 
 type TabsProps = TabsPrimitiveProps & {
   activeKey?: string;
+  centered?: boolean;
   defaultActiveKey?: string;
   items?: TabsItem[];
   onChange?: (key: string) => void;
   size?: TabsSize;
+  tabBarExtraContent?: React.ReactNode | {
+    left?: React.ReactNode;
+    right?: React.ReactNode;
+  };
+  tabBarGutter?: number;
   tabPlacement?: TabsPlacement;
   type?: TabsType;
 };
@@ -49,8 +58,20 @@ const tabsTriggerSizeClasses: Record<TabsSize, string> = {
   large: 'h-9 px-3 text-sm',
 };
 
+function isTabsExtraContentObject(
+  extra: TabsProps['tabBarExtraContent'],
+): extra is { left?: React.ReactNode; right?: React.ReactNode } {
+  return (
+    typeof extra === 'object' &&
+    extra !== null &&
+    !React.isValidElement(extra) &&
+    ('left' in extra || 'right' in extra)
+  );
+}
+
 function Tabs({
   activeKey,
+  centered,
   className,
   defaultActiveKey,
   defaultValue,
@@ -58,6 +79,8 @@ function Tabs({
   onChange,
   onValueChange,
   size = 'middle',
+  tabBarExtraContent,
+  tabBarGutter,
   tabPlacement = 'top',
   type = 'line',
   value,
@@ -73,35 +96,47 @@ function Tabs({
   };
 
   if (items?.length) {
+    const hasExtraObject = isTabsExtraContentObject(tabBarExtraContent);
+    const extraLeft = hasExtraObject ? tabBarExtraContent.left : null;
+    const extraRight = hasExtraObject ? tabBarExtraContent.right : tabBarExtraContent;
     const list = (
-      <TabsList
-        className={cn(
-          type === 'card' && 'bg-transparent p-0 gap-1',
-          orientation === 'vertical' && 'h-fit w-36 flex-col items-stretch',
-        )}
-      >
-        {items.map((item) => (
-          <TabsTrigger
-            key={item.key}
-            value={item.key}
-            disabled={item.disabled}
-            className={cn(
-              tabsTriggerSizeClasses[size],
-              type === 'card' && 'border data-[state=active]:bg-background',
-              orientation === 'vertical' && 'justify-start',
-            )}
-          >
-            {item.icon && <span className="inline-flex shrink-0">{item.icon}</span>}
-            {item.label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className={cn(
+        'flex items-center gap-2',
+        centered && orientation !== 'vertical' && 'justify-center',
+        orientation === 'vertical' && 'flex-col items-stretch',
+      )}>
+        {extraLeft}
+        <TabsList
+          className={cn(
+            type === 'card' && 'bg-transparent p-0 gap-1',
+            orientation === 'vertical' && 'h-fit w-36 flex-col items-stretch',
+          )}
+          style={tabBarGutter !== undefined ? { gap: tabBarGutter } : undefined}
+        >
+          {items.map((item) => (
+            <TabsTrigger
+              key={item.key}
+              value={item.key}
+              disabled={item.disabled}
+              className={cn(
+                tabsTriggerSizeClasses[size],
+                type === 'card' && 'border data-[state=active]:bg-background',
+                orientation === 'vertical' && 'justify-start',
+              )}
+            >
+              {item.icon && <span className="inline-flex shrink-0">{item.icon}</span>}
+              {item.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {extraRight}
+      </div>
     );
 
     const contents = (
       <TabsContents>
         {items.map((item) => (
-          <TabsContent key={item.key} value={item.key}>
+          <TabsContent key={item.key} value={item.key} forceMount={item.forceRender || undefined}>
             {item.children}
           </TabsContent>
         ))}

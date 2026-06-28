@@ -47,12 +47,20 @@ const typographyTypeClasses: Record<"default" | "secondary" | "success" | "warni
 };
 type CopyableConfig = {
   text?: string | (() => string | Promise<string>);
-  onCopy?: () => void;
-  icon?: React.ReactNode;
+  onCopy?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
+  icon?: React.ReactNode | [React.ReactNode, React.ReactNode];
+  tooltips?: React.ReactNode | [React.ReactNode, React.ReactNode] | false;
+  tabIndex?: number;
 }
 type EllipsisConfig = {
   rows?: number;
   tooltip?: boolean | React.ReactNode;
+  expandable?: boolean | "collapsible";
+  suffix?: React.ReactNode;
+  symbol?: React.ReactNode | ((expanded: boolean) => React.ReactNode);
+  defaultExpanded?: boolean;
+  expanded?: boolean;
+  onExpand?: (event: React.MouseEvent<HTMLElement>, info: { expanded: boolean }) => void;
 }
 
 type TextProps = Omit<React.ComponentProps<"span">, "color"> &
@@ -92,8 +100,12 @@ function getTextFromNode(node: React.ReactNode) {
   return "";
 }
 
-function getEllipsisStyle(ellipsis?: boolean | EllipsisConfig): React.CSSProperties | undefined {
-  if (!ellipsis) {
+function toTuple<T>(value: T | [T, T] | undefined): [T | undefined, T | undefined] {
+  return Array.isArray(value) ? value : [value, value];
+}
+
+function getEllipsisStyle(ellipsis?: boolean | EllipsisConfig, expanded?: boolean): React.CSSProperties | undefined {
+  if (!ellipsis || expanded) {
     return undefined;
   }
 
@@ -109,6 +121,69 @@ function getEllipsisStyle(ellipsis?: boolean | EllipsisConfig): React.CSSPropert
   return undefined;
 }
 
+function useEllipsisState(ellipsis?: boolean | EllipsisConfig) {
+  const config = typeof ellipsis === "object" ? ellipsis : undefined;
+  const [innerExpanded, setInnerExpanded] = React.useState(config?.defaultExpanded ?? false);
+  const expanded = config?.expanded ?? innerExpanded;
+
+  const onToggle = React.useCallback((event: React.MouseEvent<HTMLElement>) => {
+    const nextExpanded = config?.expandable === "collapsible" ? !expanded : true;
+
+    if (config?.expanded === undefined) {
+      setInnerExpanded(nextExpanded);
+    }
+
+    config?.onExpand?.(event, { expanded: nextExpanded });
+  }, [config, expanded]);
+
+  return { config, expanded, onToggle };
+}
+
+function EllipsisAction({
+  config,
+  expanded,
+  onToggle,
+}: {
+  config?: EllipsisConfig;
+  expanded: boolean;
+  onToggle: (event: React.MouseEvent<HTMLElement>) => void;
+}) {
+  if (!config?.expandable) {
+    return null;
+  }
+
+  const symbol = typeof config.symbol === "function" ? config.symbol(expanded) : config.symbol ?? (expanded ? "Collapse" : "More");
+
+  return (
+    <button
+      type="button"
+      className="ml-1 inline-flex items-center rounded px-1 text-primary underline-offset-4 hover:underline"
+      onClick={onToggle}
+    >
+      {symbol}
+    </button>
+  );
+}
+
+function renderEllipsisChildren(
+  children: React.ReactNode,
+  ellipsisState: ReturnType<typeof useEllipsisState>
+) {
+  const suffix = ellipsisState.config?.suffix;
+
+  if (!ellipsisState.config?.expandable && suffix === undefined) {
+    return children;
+  }
+
+  return (
+    <>
+      {children}
+      {!ellipsisState.expanded && suffix !== undefined ? suffix : null}
+      <EllipsisAction {...ellipsisState} />
+    </>
+  );
+}
+
 function useCopyable(copyable: TextProps["copyable"], children: React.ReactNode) {
   const [copied, setCopied] = React.useState(false);
 
@@ -122,7 +197,6 @@ function useCopyable(copyable: TextProps["copyable"], children: React.ReactNode)
     }
 
     setCopied(true);
-    config?.onCopy?.();
     globalThis.setTimeout(() => setCopied(false), 1200);
   }, [children, copyable]);
 
@@ -131,16 +205,25 @@ function useCopyable(copyable: TextProps["copyable"], children: React.ReactNode)
 
 function CopyAction({ copyable, children }: { copyable: TextProps["copyable"]; children: React.ReactNode }) {
   const { copied, copy } = useCopyable(copyable, children);
-  const icon = typeof copyable === "object" ? copyable.icon : undefined;
+  const config = typeof copyable === "object" ? copyable : undefined;
+  const iconNodes = toTuple(config?.icon);
+  const tooltipNodes = toTuple(config?.tooltips === false ? undefined : config?.tooltips);
+  const title = tooltipNodes[copied ? 1 : 0];
+  const ariaLabel = typeof title === "string" ? title : copied ? "Copied" : "Copy";
 
   return (
     <button
       type="button"
       className="ml-1 inline-flex size-5 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-      aria-label={copied ? "Copied" : "Copy"}
-      onClick={copy}
+      aria-label={ariaLabel}
+      title={typeof title === "string" ? title : undefined}
+      tabIndex={config?.tabIndex}
+      onClick={(event) => {
+        void copy();
+        config?.onCopy?.(event);
+      }}
     >
-      {copied ? <Check className="size-3" /> : icon ?? <Copy className="size-3" />}
+      {copied ? iconNodes[1] ?? <Check className="size-3" /> : iconNodes[0] ?? <Copy className="size-3" />}
     </button>
   );
 }
@@ -168,6 +251,7 @@ function Text({
   ...props
 }: TextProps) {
   const Component = asChild ? Slot.Root : "span";
+  const ellipsisState = useEllipsisState(ellipsis);
   const content = (
     <Component
       data-slot="text"
@@ -185,10 +269,10 @@ function Text({
         disabled && "pointer-events-none select-none",
         className
       )}
-      style={{ ...getEllipsisStyle(ellipsis), ...style }}
+      style={{ ...getEllipsisStyle(ellipsis, ellipsisState.expanded), ...style }}
       {...props}
     >
-      {children}
+      {renderEllipsisChildren(children, ellipsisState)}
     </Component>
   );
 
@@ -232,6 +316,7 @@ type TitleProps = Omit<React.ComponentProps<"h1">, "color"> &
 function Title({ children, level = 1, className, type, disabled, copyable, ellipsis, style, ...props }: TitleProps) {
   const tagMap = { 1: "h1", 2: "h2", 3: "h3", 4: "h4", 5: "h5" } as const;
   const Component = tagMap[level ?? 1];
+  const ellipsisState = useEllipsisState(ellipsis);
   const content = (
     <Component
       data-slot="title"
@@ -243,10 +328,10 @@ function Title({ children, level = 1, className, type, disabled, copyable, ellip
         disabled && "pointer-events-none select-none",
         className
       )}
-      style={{ ...getEllipsisStyle(ellipsis), ...style }}
+      style={{ ...getEllipsisStyle(ellipsis, ellipsisState.expanded), ...style }}
       {...props}
     >
-      {children}
+      {renderEllipsisChildren(children, ellipsisState)}
     </Component>
   );
 
@@ -271,6 +356,7 @@ type ParagraphProps = Omit<React.ComponentProps<"p">, "color"> & {
 }
 
 function Paragraph({ children, className, type, disabled, copyable, ellipsis, strong, style, ...props }: ParagraphProps) {
+  const ellipsisState = useEllipsisState(ellipsis);
   const content = (
     <p
       data-slot="paragraph"
@@ -283,10 +369,10 @@ function Paragraph({ children, className, type, disabled, copyable, ellipsis, st
         disabled && "pointer-events-none select-none",
         className
       )}
-      style={{ ...getEllipsisStyle(ellipsis), ...style }}
+      style={{ ...getEllipsisStyle(ellipsis, ellipsisState.expanded), ...style }}
       {...props}
     >
-      {children}
+      {renderEllipsisChildren(children, ellipsisState)}
     </p>
   );
 

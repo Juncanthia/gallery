@@ -16,11 +16,16 @@ import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Chevr
 type CalendarCellInfo = {
   type: "date";
   originNode: React.ReactNode;
+  today: Date;
 }
+
+type CalendarPanelMode = "month" | "year"
 
 type CalendarHeaderRenderConfig = {
   value: Date;
+  type: CalendarPanelMode;
   onChange: (date: Date) => void;
+  onTypeChange: (type: CalendarPanelMode) => void;
 }
 
 type CalendarProps = React.ComponentProps<typeof DayPicker> & {
@@ -35,6 +40,10 @@ type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   fullCellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
   headerRender?: (config: CalendarHeaderRenderConfig) => React.ReactNode
   fullscreen?: boolean
+  panelMode?: CalendarPanelMode
+  defaultPanelMode?: CalendarPanelMode
+  onPanelChange?: (date: Date, mode: CalendarPanelMode) => void
+  showWeek?: boolean
 }
 
 function isBeforeDay(date: Date, target: Date) {
@@ -64,13 +73,22 @@ function Calendar({
   fullCellRender,
   headerRender,
   fullscreen = false,
+  panelMode,
+  defaultPanelMode = "month",
+  onPanelChange,
+  showWeek,
   disabled,
+  onMonthChange,
+  showWeekNumber,
   ...props
 }: CalendarProps) {
   const defaultClassNames = getDefaultClassNames()
   const isSingleApi = value !== undefined || defaultValue !== undefined || onChange !== undefined
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? value ?? new Date())
+  const [internalPanelMode, setInternalPanelMode] = React.useState(defaultPanelMode)
   const mergedValue = value ?? internalValue
+  const mergedPanelMode = panelMode ?? internalPanelMode
+  const mergedShowWeekNumber = showWeekNumber ?? showWeek
 
   const changeValue = React.useCallback((date?: Date) => {
     if (!date) return
@@ -80,6 +98,23 @@ function Calendar({
     }
     onChange?.(date)
   }, [onChange, value])
+
+  const changePanelValue = React.useCallback((date: Date) => {
+    changeValue(date)
+    onPanelChange?.(date, mergedPanelMode)
+  }, [changeValue, mergedPanelMode, onPanelChange])
+
+  const changePanelMode = React.useCallback((nextMode: CalendarPanelMode) => {
+    if (panelMode === undefined) {
+      setInternalPanelMode(nextMode)
+    }
+    onPanelChange?.(mergedValue, nextMode)
+  }, [mergedValue, onPanelChange, panelMode])
+
+  const handleMonthChange = React.useCallback((date: Date) => {
+    onMonthChange?.(date)
+    onPanelChange?.(date, mergedPanelMode)
+  }, [mergedPanelMode, onMonthChange, onPanelChange])
 
   const mergedDisabled = React.useMemo(() => {
     const disabledMatchers = Array.isArray(disabled) ? [...disabled] : disabled ? [disabled] : []
@@ -97,7 +132,7 @@ function Calendar({
 
   return (
     <div data-slot="calendar-wrapper" className={cn(fullscreen && "w-full", !fullscreen && "w-fit")}>
-      {headerRender ? headerRender({ value: mergedValue, onChange: changeValue }) : null}
+      {headerRender ? headerRender({ value: mergedValue, type: mergedPanelMode, onChange: changePanelValue, onTypeChange: changePanelMode }) : null}
       <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
@@ -176,7 +211,7 @@ function Calendar({
         ),
         day: cn(
           "group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)",
-          props.showWeekNumber
+          mergedShowWeekNumber
             ? "[&:nth-child(2)[data-selected=true]_button]:rounded-l-(--cell-radius)"
             : "[&:first-child[data-selected=true]_button]:rounded-l-(--cell-radius)",
           defaultClassNames.day
@@ -206,6 +241,8 @@ function Calendar({
         ...classNames,
       }}
       disabled={mergedDisabled}
+      onMonthChange={handleMonthChange}
+      showWeekNumber={mergedShowWeekNumber}
       {...(isSingleApi ? { ...props, mode: "single" as const, selected: mergedValue, onSelect: changeValue } : props)}
       components={{
         Root: ({ className, rootRef, ...props }) => {
@@ -287,8 +324,9 @@ function CalendarDayButton({
   }, [modifiers.focused])
 
   const originNode = <>{children}</>
-  const extraNode = cellRender?.(day.date, { type: "date", originNode }) ?? dateCellRender?.(day.date)
-  const contentNode = fullCellRender?.(day.date, { type: "date", originNode }) ?? (
+  const cellInfo = { type: "date", originNode, today: new Date() } satisfies CalendarCellInfo
+  const extraNode = cellRender?.(day.date, cellInfo) ?? dateCellRender?.(day.date)
+  const contentNode = fullCellRender?.(day.date, cellInfo) ?? (
     <>
       {originNode}
       {extraNode ? <span data-slot="calendar-cell-extra" className="text-[10px] leading-none opacity-80">{extraNode}</span> : null}
@@ -324,4 +362,4 @@ function CalendarDayButton({
 }
 
 export { Calendar, CalendarDayButton }
-export type { CalendarCellInfo, CalendarHeaderRenderConfig, CalendarProps }
+export type { CalendarCellInfo, CalendarHeaderRenderConfig, CalendarPanelMode, CalendarProps }

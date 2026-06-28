@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { GallerySection, DemoRow, DemoCard, SectionGroup } from "../gallery-section";
 import { Button } from "@/components/base/button";
-import { Badge } from "@/components/base/badge";
+import { Badge, BadgeRibbon } from "@/components/base/badge";
 import { Kbd, KbdGroup } from "@/components/base/kbd";
 import { Separator } from "@/components/base/separator";
 import { Avatar, AvatarFallback, AvatarImage, AvatarGroup, AvatarGroupCount } from "@/components/base/avatar";
 import { Text, Title, Paragraph } from "@/components/base/typography";
-import { Statistic, StatisticDiff } from "@/components/base/statistic";
+import { Statistic, StatisticDiff, StatisticTimer } from "@/components/base/statistic";
 import { Alert } from "@/components/base/alert";
 import { Card, CardGrid, CardMeta } from "@/components/base/card";
 import { Skeleton, SkeletonAvatar, SkeletonButton, SkeletonImage, SkeletonInput, SkeletonNode } from "@/components/base/skeleton";
 import { Result } from "@/components/base/result";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/base/empty-state";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, EMPTY_IMAGE_DEFAULT, EMPTY_IMAGE_SIMPLE } from "@/components/base/empty-state";
 import { BorderBeam } from "@/components/base/border-beam";
 import { Table } from "@/components/base/table";
 import { Descriptions } from "@/components/base/descriptions";
@@ -20,7 +20,7 @@ import { Steps } from "@/components/base/steps";
 import {
   Files, FolderItem, FolderTrigger, FolderContent, FileItem, type FileTreeDataNode,
 } from "@/components/base/file-tree";
-import { ChevronRight, Download, Plus, Trash2, Users, DollarSign, TrendingUp, FileText, FolderOpen } from "lucide-react";
+import { Check, ChevronRight, Copy, Download, Plus, Trash2, Users, DollarSign, TrendingUp, FileText, FolderOpen } from "lucide-react";
 
 const TABLE_DATA = [
   { invoice: "INV-001", status: "Paid", method: "Credit Card", amount: "$250.00" },
@@ -60,6 +60,7 @@ const FILE_TREE_DATA: FileTreeDataNode[] = [
 export function DisplaySection() {
   const [stepsVal, setStepsVal] = useState(1);
   const [selectedFileKeys, setSelectedFileKeys] = useState<string[]>(["src/components/button.tsx"]);
+  const [timerDeadline] = useState(() => Date.now() + 90_000);
 
   return (
     <>
@@ -116,6 +117,14 @@ export function DisplaySection() {
             <Badge status="error" text="Error" />
             <Badge color="#8b5cf6" text="Custom" />
           </DemoRow>
+          <DemoRow label="Ribbon">
+            <BadgeRibbon text="New">
+              <div className="w-40 rounded border p-3 text-sm">End placement</div>
+            </BadgeRibbon>
+            <BadgeRibbon text="Beta" placement="start" color="#8b5cf6">
+              <div className="w-40 rounded border p-3 text-sm">Start placement</div>
+            </BadgeRibbon>
+          </DemoRow>
         </GallerySection>
 
         <GallerySection id="avatar" title="Avatar" description="User profile pictures and groups.">
@@ -125,6 +134,14 @@ export function DisplaySection() {
             <Avatar size="large" src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" alt="Large">LG</Avatar>
             <Avatar size={48} shape="square">AB</Avatar>
             <Avatar icon={<Users className="size-4" />} />
+            <Avatar
+              src="/missing-avatar.png"
+              onError={() => true}
+              draggable={false}
+              crossOrigin="anonymous"
+            >
+              FB
+            </Avatar>
           </DemoRow>
           <DemoRow label="Group">
             <AvatarGroup
@@ -203,11 +220,19 @@ export function DisplaySection() {
             <Text strong>Strong</Text>
           </DemoRow>
           <DemoRow label="Copy / ellipsis">
-            <Text copyable>Copy this text</Text>
+            <Text
+              copyable={{
+                text: "Copy this text",
+                icon: [<Copy key="copy" className="size-3" />, <Check key="check" className="size-3" />],
+                tooltips: ["Copy", "Copied"],
+              }}
+            >
+              Copy this text
+            </Text>
             <Text ellipsis className="max-w-48">
               This single line is intentionally long and will be truncated.
             </Text>
-            <Paragraph ellipsis={{ rows: 2 }} className="max-w-sm">
+            <Paragraph ellipsis={{ rows: 2, expandable: "collapsible", suffix: "…" }} className="max-w-sm">
               The quick brown fox jumps over the lazy dog. A pangram containing every letter of the alphabet at least once. This paragraph uses a two-line clamp.
             </Paragraph>
           </DemoRow>
@@ -259,6 +284,12 @@ export function DisplaySection() {
                 title="Custom render"
                 value={98420}
                 valueRender={(node) => <span className="text-green-600">{node}</span>}
+              />
+              <StatisticTimer
+                title="Countdown"
+                value={timerDeadline}
+                type="countdown"
+                format="mm:ss"
               />
             </DemoCard>
           </DemoRow>
@@ -565,13 +596,14 @@ export function DisplaySection() {
         <GallerySection id="empty" title="Empty" description="Empty state placeholder with action area.">
           <DemoRow label="API">
             <Empty
+              image={EMPTY_IMAGE_DEFAULT}
               description="No projects yet"
               actions={<Button size="small">Create project</Button>}
               className="max-w-sm"
             />
             <Empty
               simple
-              image={false}
+              image={EMPTY_IMAGE_SIMPLE}
               description="No notifications"
               actions={<Button size="small" variant="outlined">Refresh</Button>}
               className="max-w-xs"
@@ -638,8 +670,21 @@ export function DisplaySection() {
             <Table
               bordered
               caption="A list of recent invoices."
+              title={(data) => `Recent invoices (${data.length})`}
+              footer={(data) => `Sorted / paged locally · ${data.length} records`}
               className="max-w-2xl"
               rowKey="invoice"
+              rowClassName={(record) => String(record.status) === "Unpaid" ? "bg-destructive/5" : ""}
+              onRow={(record) => ({ "data-status": String(record.status).toLowerCase() })}
+              expandable={{
+                defaultExpandedRowKeys: ["INV-001"],
+                rowExpandable: (record) => String(record.status) !== "Unpaid",
+                expandedRowRender: (record) => (
+                  <span>
+                    Payment method: {String(record.method)} · Amount: {String(record.amount)}
+                  </span>
+                ),
+              }}
               rowSelection={{}}
               pagination={{
                 pageSize: 2,
@@ -663,8 +708,9 @@ export function DisplaySection() {
                     </Badge>
                   ),
                 },
-                { title: "Method", dataIndex: "method" },
+                { title: "Method", dataIndex: "method", ellipsis: true, width: 160 },
                 { title: "Amount", dataIndex: "amount", align: "right", sorter: true },
+                { title: "Hidden", dataIndex: "method", hidden: true },
               ]}
             />
           </DemoRow>
@@ -679,7 +725,7 @@ export function DisplaySection() {
             />
             <Table
               size="small"
-              emptyText="No invoices"
+              locale={{ emptyText: "No invoices found" }}
               columns={[
                 { title: "Invoice", dataIndex: "invoice" },
                 { title: "Amount", dataIndex: "amount", align: "right" },

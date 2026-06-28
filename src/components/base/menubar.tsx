@@ -38,6 +38,7 @@ type MenubarItemOption =
       type?: "item"
       label: React.ReactNode
       icon?: React.ReactNode
+      extra?: React.ReactNode
       shortcut?: React.ReactNode
       disabled?: boolean
       danger?: boolean
@@ -48,6 +49,7 @@ type MenubarItemOption =
       type: "submenu"
       label: React.ReactNode
       icon?: React.ReactNode
+      extra?: React.ReactNode
       disabled?: boolean
       danger?: boolean
       children: MenubarItemOption[]
@@ -82,6 +84,7 @@ function renderMenubarItemLabel(item: MenubarLabelItem) {
     <>
       {item.icon}
       <span className="truncate">{item.label}</span>
+      {item.extra && <MenubarShortcut>{item.extra}</MenubarShortcut>}
     </>
   )
 }
@@ -146,7 +149,7 @@ function renderMenubarItems(
         }}
       >
         {renderMenubarItemLabel(item)}
-        {item.shortcut && <MenubarShortcut>{item.shortcut}</MenubarShortcut>}
+        {(item.shortcut && !item.extra) && <MenubarShortcut>{item.shortcut}</MenubarShortcut>}
       </MenubarItem>
     )
   })

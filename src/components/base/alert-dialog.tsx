@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button } from '@/components/base/button';
+import { Button, type ButtonProps } from '@/components/base/button';
 import {
   AlertDialog as AlertDialogPrimitive,
   AlertDialogContent as AlertDialogContentPrimitive,
@@ -34,6 +34,9 @@ type AlertDialogProps = AlertDialogPrimitiveProps & {
   footer?: React.ReactNode;
   okText?: React.ReactNode;
   cancelText?: React.ReactNode;
+  confirmLoading?: boolean;
+  okButtonProps?: ButtonProps;
+  cancelButtonProps?: ButtonProps;
   contentProps?: AlertDialogContentProps;
   onOk?: React.MouseEventHandler<HTMLButtonElement>;
   onCancel?: React.MouseEventHandler<HTMLButtonElement>;
@@ -60,6 +63,9 @@ function AlertDialog({
   footer,
   okText,
   cancelText,
+  confirmLoading,
+  okButtonProps,
+  cancelButtonProps,
   contentProps,
   onOk,
   onCancel,
@@ -73,6 +79,9 @@ function AlertDialog({
     footer !== undefined ||
     okText !== undefined ||
     cancelText !== undefined ||
+    confirmLoading !== undefined ||
+    okButtonProps !== undefined ||
+    cancelButtonProps !== undefined ||
     contentProps !== undefined ||
     onOk !== undefined ||
     onCancel !== undefined;
@@ -81,14 +90,26 @@ function AlertDialog({
     return <AlertDialogPrimitive {...props}>{children}</AlertDialogPrimitive>;
   }
 
-  const footerNode = footer ?? (
-    <AlertDialogFooter>
-      <AlertDialogCancel onClick={onCancel}>
-        {cancelText ?? 'Cancel'}
-      </AlertDialogCancel>
-      <AlertDialogAction onClick={onOk}>{okText ?? 'Continue'}</AlertDialogAction>
-    </AlertDialogFooter>
-  );
+  const footerNode = footer === null
+    ? null
+    : (footer ?? (
+      <AlertDialogFooter>
+        <AlertDialogCancel asChild>
+          <Button
+            variant="outlined"
+            {...cancelButtonProps}
+            onClick={onCancel}
+          >
+            {cancelText ?? 'Cancel'}
+          </Button>
+        </AlertDialogCancel>
+        <AlertDialogAction asChild>
+          <Button loading={confirmLoading} {...okButtonProps} onClick={onOk}>
+            {okText ?? 'Continue'}
+          </Button>
+        </AlertDialogAction>
+      </AlertDialogFooter>
+    ));
 
   return (
     <AlertDialogPrimitive {...props}>

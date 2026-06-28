@@ -28,6 +28,7 @@ export type WatermarkProps = Omit<React.ComponentProps<"div">, "content"> & {
   gap?: [number, number];
   offset?: [number, number];
   inherit?: boolean;
+  onRemove?: () => void;
   children?: React.ReactNode;
 }
 
@@ -70,6 +71,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
       gap = [100, 100],
       offset = [gap[0] / 2, gap[1] / 2],
       inherit = true,
+      onRemove,
       children,
       className,
       style,
@@ -80,8 +82,19 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
     void inherit;
 
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const rootRef = React.useRef<HTMLDivElement>(null);
     const overlayRef = React.useRef<HTMLDivElement>(null);
     const contentLines = React.useMemo(() => toLines(content, font), [content, font]);
+
+    const setRootRef = React.useCallback((node: HTMLDivElement | null) => {
+      rootRef.current = node;
+
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }
+    }, [ref]);
 
     React.useEffect(() => {
       const canvas = canvasRef.current;
@@ -145,9 +158,41 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
       }
     }, [contentLines, gap, height, image, offset, rotate, width]);
 
+    React.useEffect(() => {
+      if (!onRemove || typeof MutationObserver === "undefined") {
+        return undefined;
+      }
+
+      const root = rootRef.current;
+      const overlay = overlayRef.current;
+      if (!root || !overlay) {
+        return undefined;
+      }
+
+      const observer = new MutationObserver((mutations) => {
+        const removed = mutations.some((mutation) => (
+          Array.from(mutation.removedNodes).includes(overlay)
+        ));
+
+        if (!removed) {
+          return;
+        }
+
+        onRemove();
+
+        if (!overlay.parentElement) {
+          root.insertBefore(overlay, canvasRef.current?.nextSibling ?? root.firstChild);
+        }
+      });
+
+      observer.observe(root, { childList: true });
+
+      return () => observer.disconnect();
+    }, [onRemove]);
+
     return (
       <div
-        ref={ref}
+        ref={setRootRef}
         data-slot="watermark"
         className={cn("relative overflow-hidden", className)}
         style={style}

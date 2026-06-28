@@ -16,8 +16,12 @@ type TableColumn<T extends TableRecord = TableRecord> = {
   render?: (value: unknown, record: T, index: number) => React.ReactNode
   align?: TableAlign
   width?: number | string
+  ellipsis?: boolean
+  hidden?: boolean
   className?: string
   headerClassName?: string
+  onCell?: (record: T, index: number) => React.TdHTMLAttributes<HTMLTableCellElement>
+  onHeaderCell?: (column: TableColumn<T>) => React.ThHTMLAttributes<HTMLTableCellElement>
   sorter?: boolean | ((a: T, b: T) => number)
   defaultSortOrder?: TableSortOrder
 }
@@ -43,6 +47,29 @@ type TableRowSelection<T extends TableRecord = TableRecord> = {
   getCheckboxProps?: (record: T) => { disabled?: boolean; title?: string }
 }
 
+type TableLocale = {
+  emptyText?: React.ReactNode
+}
+
+type TableRowProps = React.HTMLAttributes<HTMLTableRowElement> & Record<`data-${string}`, string | number | boolean | undefined>
+
+type TableExpandable<T extends TableRecord = TableRecord> = {
+  expandedRowRender?: (record: T, index: number, indent: number, expanded: boolean) => React.ReactNode
+  rowExpandable?: (record: T) => boolean
+  expandedRowKeys?: React.Key[]
+  defaultExpandedRowKeys?: React.Key[]
+  onExpand?: (expanded: boolean, record: T) => void
+  onExpandedRowsChange?: (expandedKeys: React.Key[]) => void
+  expandIcon?: (props: {
+    expanded: boolean
+    expandable: boolean
+    record: T
+    onExpand: (record: T) => void
+  }) => React.ReactNode
+  columnTitle?: React.ReactNode
+  columnWidth?: number | string
+}
+
 type TableSorterResult<T extends TableRecord = TableRecord> = {
   column?: TableColumn<T>
   columnKey?: React.Key
@@ -52,18 +79,25 @@ type TableSorterResult<T extends TableRecord = TableRecord> = {
 
 type TableProps<T extends TableRecord = TableRecord> = Omit<
   React.ComponentProps<"table">,
-  "children" | "onChange"
+  "children" | "onChange" | "title"
 > & {
   columns?: TableColumn<T>[]
   dataSource?: T[]
   rowKey?: keyof T | ((record: T, index: number) => React.Key)
   loading?: boolean
   emptyText?: React.ReactNode
+  locale?: TableLocale
   caption?: React.ReactNode
+  title?: React.ReactNode | ((data: T[]) => React.ReactNode)
+  footer?: React.ReactNode | ((data: T[]) => React.ReactNode)
   bordered?: boolean
   size?: TableSize
+  showHeader?: boolean
   pagination?: false | TablePaginationConfig
   rowSelection?: TableRowSelection<T>
+  rowClassName?: string | ((record: T, index: number) => string)
+  onRow?: (record: T, index: number) => TableRowProps
+  expandable?: TableExpandable<T>
   onChange?: (
     pagination: { current: number; pageSize: number; total: number },
     filters: Record<string, unknown>,
@@ -144,6 +178,21 @@ function getHeadSizeClassName(size: TableSize) {
   return "h-10 px-2"
 }
 
+function renderTableNode<T extends TableRecord>(
+  node: React.ReactNode | ((data: T[]) => React.ReactNode) | undefined,
+  data: T[]
+) {
+  return typeof node === "function" ? node(data) : node
+}
+
+function getRowClassName<T extends TableRecord>(
+  rowClassName: TableProps<T>["rowClassName"],
+  record: T,
+  index: number
+) {
+  return typeof rowClassName === "function" ? rowClassName(record, index) : rowClassName
+}
+
 function Table<T extends TableRecord = TableRecord>({
   className,
   columns,
@@ -151,19 +200,27 @@ function Table<T extends TableRecord = TableRecord>({
   rowKey,
   loading,
   emptyText = "No data",
+  locale,
   caption,
+  title,
+  footer,
   bordered,
   size = "default",
+  showHeader = true,
   pagination,
   rowSelection,
+  rowClassName,
+  onRow,
+  expandable,
   onChange,
   children,
   ...props
 }: TableProps<T>) {
   const hasApiData = columns !== undefined
-  const defaultSortColumn = columns?.find((column) => column.defaultSortOrder)
+  const visibleColumns = React.useMemo(() => columns?.filter((column) => !column.hidden), [columns])
+  const defaultSortColumn = visibleColumns?.find((column) => column.defaultSortOrder)
   const defaultSortColumnIndex = defaultSortColumn
-    ? columns?.indexOf(defaultSortColumn) ?? -1
+    ? visibleColumns?.indexOf(defaultSortColumn) ?? -1
     : -1
   const [sortState, setSortState] = React.useState<{
     columnKey?: React.Key
@@ -181,14 +238,19 @@ function Table<T extends TableRecord = TableRecord>({
   const [innerSelectedRowKeys, setInnerSelectedRowKeys] = React.useState<React.Key[]>(
     rowSelection?.defaultSelectedRowKeys ?? []
   )
+  const [innerExpandedRowKeys, setInnerExpandedRowKeys] = React.useState<React.Key[]>(
+    expandable?.defaultExpandedRowKeys ?? []
+  )
   const mergedSelectedRowKeys = rowSelection?.selectedRowKeys ?? innerSelectedRowKeys
+  const mergedExpandedRowKeys = expandable?.expandedRowKeys ?? innerExpandedRowKeys
   const selectionEnabled = rowSelection !== undefined
+  const expandableEnabled = expandable?.expandedRowRender !== undefined
   const normalizedData = React.useMemo(() => dataSource ?? [], [dataSource])
 
   const sortedData = React.useMemo(() => {
-    if (!columns || !sortState.columnKey || !sortState.order) return normalizedData
+    if (!visibleColumns || !sortState.columnKey || !sortState.order) return normalizedData
 
-    const column = columns.find((item, index) => getColumnKey(item, index) === sortState.columnKey)
+    const column = visibleColumns.find((item, index) => getColumnKey(item, index) === sortState.columnKey)
     if (!column?.sorter) return normalizedData
 
     return [...normalizedData].sort((a, b) => {
@@ -198,7 +260,7 @@ function Table<T extends TableRecord = TableRecord>({
 
       return sortState.order === "ascend" ? result : -result
     })
-  }, [columns, normalizedData, sortState.columnKey, sortState.order])
+  }, [normalizedData, sortState.columnKey, sortState.order, visibleColumns])
 
   const mergedPagination = getPaginationConfig(pagination, sortedData.length)
   const effectiveCurrent = paginationConfigProp?.current !== undefined
@@ -208,7 +270,9 @@ function Table<T extends TableRecord = TableRecord>({
   const pagedData = mergedPagination
     ? sortedData.slice((effectiveCurrent - 1) * pageSize, effectiveCurrent * pageSize)
     : sortedData
-  const columnCount = Math.max((columns?.length ?? 1) + (selectionEnabled ? 1 : 0), 1)
+  const columnCount = Math.max((visibleColumns?.length ?? 1) + (selectionEnabled ? 1 : 0) + (expandableEnabled ? 1 : 0), 1)
+  const titleNode = renderTableNode(title, sortedData)
+  const footerNode = renderTableNode(footer, sortedData)
 
   const getSelectedRows = React.useCallback(
     (selectedKeys: React.Key[]) => {
@@ -246,6 +310,21 @@ function Table<T extends TableRecord = TableRecord>({
     [onChange, pageSize, sortedData]
   )
 
+  const toggleExpanded = React.useCallback((record: T, index: number) => {
+    const key = getRecordKey(record, index, rowKey)
+    const expanded = !mergedExpandedRowKeys.map(String).includes(String(key))
+    const nextKeys = expanded
+      ? [...mergedExpandedRowKeys, key]
+      : mergedExpandedRowKeys.filter((item) => String(item) !== String(key))
+
+    if (expandable?.expandedRowKeys === undefined) {
+      setInnerExpandedRowKeys(nextKeys)
+    }
+
+    expandable?.onExpand?.(expanded, record)
+    expandable?.onExpandedRowsChange?.(nextKeys)
+  }, [expandable, mergedExpandedRowKeys, rowKey])
+
   return (
     <div
       data-slot="table-container"
@@ -254,6 +333,11 @@ function Table<T extends TableRecord = TableRecord>({
         bordered && "rounded-md border"
       )}
     >
+      {titleNode ? (
+        <div data-slot="table-title" className={cn("border-b p-3 text-sm font-medium", !bordered && "rounded-t border")}>
+          {titleNode}
+        </div>
+      ) : null}
       <table
         data-slot="table"
         className={cn("w-full caption-bottom text-sm", className)}
@@ -262,102 +346,130 @@ function Table<T extends TableRecord = TableRecord>({
         {caption && <TableCaption>{caption}</TableCaption>}
         {hasApiData ? (
           <>
-            <TableHeader>
-              <TableRow>
-                {selectionEnabled && (
-                  <TableHead
-                    className={cn(
-                      getHeadSizeClassName(size),
-                      "w-10",
-                      bordered && "border-r"
-                    )}
-                  >
-                    <Checkbox
-                      aria-label="Select all rows"
-                      checked={
-                        pagedData.length > 0 &&
-                        pagedData.every((record, index) =>
-                          mergedSelectedRowKeys.map(String).includes(
-                            String(getRecordKey(record, index, rowKey))
-                          )
-                        )
-                      }
-                      indeterminate={
-                        pagedData.some((record, index) =>
-                          mergedSelectedRowKeys.map(String).includes(
-                            String(getRecordKey(record, index, rowKey))
-                          )
-                        ) &&
-                        !pagedData.every((record, index) =>
-                          mergedSelectedRowKeys.map(String).includes(
-                            String(getRecordKey(record, index, rowKey))
-                          )
-                        )
-                      }
-                      onChange={(checked) => {
-                        const pageKeys = pagedData.map((record, index) =>
-                          getRecordKey(record, index, rowKey)
-                        )
-                        const selectedSet = new Set(mergedSelectedRowKeys)
-
-                        if (checked) {
-                          pageKeys.forEach((key) => selectedSet.add(key))
-                        } else {
-                          pageKeys.forEach((key) => selectedSet.delete(key))
-                        }
-
-                        updateSelection(Array.from(selectedSet))
-                      }}
-                    />
-                  </TableHead>
-                )}
-                {columns.map((column, index) => {
-                  const columnKey = getColumnKey(column, index)
-                  const sortOrder = sortState.columnKey === columnKey ? sortState.order : null
-
-                  return (
+            {showHeader ? (
+              <TableHeader>
+                <TableRow>
+                  {expandableEnabled && (
                     <TableHead
-                      key={columnKey}
                       className={cn(
                         getHeadSizeClassName(size),
-                        getAlignClassName(column.align),
-                        bordered && "border-r last:border-r-0",
-                        column.headerClassName
+                        "w-10",
+                        bordered && "border-r"
                       )}
-                      style={{ width: column.width }}
+                      style={{ width: expandable?.columnWidth }}
                     >
-                      {column.sorter ? (
-                        <button
-                          type="button"
-                          className="inline-flex items-center gap-1 text-left hover:text-foreground"
-                          onClick={() => {
-                            const order = getNextSortOrder(sortOrder)
-                            setSortState({ columnKey, order })
-                            triggerChange(effectiveCurrent, {
-                              column,
-                              columnKey,
-                              field: column.dataIndex,
-                              order,
-                            })
-                          }}
-                        >
-                          <span>{column.title}</span>
-                          <span className="text-[10px] text-muted-foreground">
-                            {sortOrder === "ascend" ? "▲" : sortOrder === "descend" ? "▼" : "↕"}
-                          </span>
-                        </button>
-                      ) : (
-                        column.title
-                      )}
+                      {expandable?.columnTitle}
                     </TableHead>
-                  )
-                })}
-              </TableRow>
-            </TableHeader>
+                  )}
+                  {selectionEnabled && (
+                    <TableHead
+                      className={cn(
+                        getHeadSizeClassName(size),
+                        "w-10",
+                        bordered && "border-r"
+                      )}
+                    >
+                      <Checkbox
+                        aria-label="Select all rows"
+                        checked={
+                          pagedData.length > 0 &&
+                          pagedData.every((record, index) =>
+                            mergedSelectedRowKeys.map(String).includes(
+                              String(getRecordKey(record, index, rowKey))
+                            )
+                          )
+                        }
+                        indeterminate={
+                          pagedData.some((record, index) =>
+                            mergedSelectedRowKeys.map(String).includes(
+                              String(getRecordKey(record, index, rowKey))
+                            )
+                          ) &&
+                          !pagedData.every((record, index) =>
+                            mergedSelectedRowKeys.map(String).includes(
+                              String(getRecordKey(record, index, rowKey))
+                            )
+                          )
+                        }
+                        onChange={(checked) => {
+                          const pageKeys = pagedData.map((record, index) =>
+                            getRecordKey(record, index, rowKey)
+                          )
+                          const selectedSet = new Set(mergedSelectedRowKeys)
+
+                          if (checked) {
+                            pageKeys.forEach((key) => selectedSet.add(key))
+                          } else {
+                            pageKeys.forEach((key) => selectedSet.delete(key))
+                          }
+
+                          updateSelection(Array.from(selectedSet))
+                        }}
+                      />
+                    </TableHead>
+                  )}
+                  {visibleColumns?.map((column, index) => {
+                    const columnKey = getColumnKey(column, index)
+                    const sortOrder = sortState.columnKey === columnKey ? sortState.order : null
+                    const headerCellProps = column.onHeaderCell?.(column)
+
+                    return (
+                      <TableHead
+                        key={columnKey}
+                        {...headerCellProps}
+                        className={cn(
+                          getHeadSizeClassName(size),
+                          getAlignClassName(column.align),
+                          bordered && "border-r last:border-r-0",
+                          headerCellProps?.className,
+                          column.headerClassName
+                        )}
+                        style={{ width: column.width, ...headerCellProps?.style }}
+                      >
+                        {column.sorter ? (
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-1 text-left hover:text-foreground"
+                            onClick={() => {
+                              const order = getNextSortOrder(sortOrder)
+                              setSortState({ columnKey, order })
+                              triggerChange(effectiveCurrent, {
+                                column,
+                                columnKey,
+                                field: column.dataIndex,
+                                order,
+                              })
+                            }}
+                          >
+                            <span>{column.title}</span>
+                            <span className="text-[10px] text-muted-foreground">
+                              {sortOrder === "ascend" ? "▲" : sortOrder === "descend" ? "▼" : "↕"}
+                            </span>
+                          </button>
+                        ) : (
+                          column.title
+                        )}
+                      </TableHead>
+                    )
+                  })}
+                </TableRow>
+              </TableHeader>
+            ) : null}
             <TableBody>
               {loading ? (
                 Array.from({ length: 3 }, (_, rowIndex) => (
                   <TableRow key={rowIndex}>
+                    {expandableEnabled && (
+                      <TableCell
+                        className={cn(
+                          getCellSizeClassName(size),
+                          "w-10",
+                          bordered && "border-r"
+                        )}
+                      >
+                        <div className="h-3 w-3 animate-pulse rounded bg-muted" />
+                      </TableCell>
+                    )}
                     {selectionEnabled && (
                       <TableCell
                         className={cn(
@@ -369,7 +481,7 @@ function Table<T extends TableRecord = TableRecord>({
                         <div className="h-3 w-3 animate-pulse rounded bg-muted" />
                       </TableCell>
                     )}
-                    {columns.map((column, colIndex) => (
+                    {visibleColumns?.map((column, colIndex) => (
                       <TableCell
                         key={getColumnKey(column, colIndex)}
                         className={cn(
@@ -384,61 +496,110 @@ function Table<T extends TableRecord = TableRecord>({
                   </TableRow>
                 ))
               ) : pagedData.length ? (
-                pagedData.map((record, rowIndex) => (
-                  <TableRow key={getRecordKey(record, rowIndex, rowKey)}>
-                    {selectionEnabled && (
-                      <TableCell
-                        className={cn(
-                          getCellSizeClassName(size),
-                          "w-10",
-                          bordered && "border-r"
-                        )}
+                pagedData.map((record, rowIndex) => {
+                  const recordKey = getRecordKey(record, rowIndex, rowKey)
+                  const expanded = mergedExpandedRowKeys.map(String).includes(String(recordKey))
+                  const canExpand = expandableEnabled && (expandable?.rowExpandable?.(record) ?? true)
+                  const rowProps = onRow?.(record, rowIndex)
+
+                  return (
+                    <React.Fragment key={recordKey}>
+                      <TableRow
+                        {...rowProps}
+                        data-state={mergedSelectedRowKeys.map(String).includes(String(recordKey)) ? "selected" : undefined}
+                        className={cn(rowProps?.className, getRowClassName(rowClassName, record, rowIndex))}
                       >
-                        <Checkbox
-                          aria-label="Select row"
-                          checked={mergedSelectedRowKeys.map(String).includes(
-                            String(getRecordKey(record, rowIndex, rowKey))
-                          )}
-                          disabled={rowSelection?.getCheckboxProps?.(record).disabled}
-                          title={rowSelection?.getCheckboxProps?.(record).title}
-                          onChange={(checked) => {
-                            const key = getRecordKey(record, rowIndex, rowKey)
-                            const selectedSet = new Set(mergedSelectedRowKeys)
+                        {expandableEnabled && (
+                          <TableCell
+                            className={cn(
+                              getCellSizeClassName(size),
+                              "w-10",
+                              bordered && "border-r"
+                            )}
+                          >
+                            {expandable?.expandIcon ? (
+                              expandable.expandIcon({
+                                expanded,
+                                expandable: canExpand,
+                                record,
+                                onExpand: (nextRecord) => toggleExpanded(nextRecord, rowIndex),
+                              })
+                            ) : canExpand ? (
+                              <button
+                                type="button"
+                                className="inline-flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
+                                aria-label={expanded ? "Collapse row" : "Expand row"}
+                                onClick={() => toggleExpanded(record, rowIndex)}
+                              >
+                                <span className={cn("text-xs transition-transform", expanded && "rotate-90")}>▶</span>
+                              </button>
+                            ) : null}
+                          </TableCell>
+                        )}
+                        {selectionEnabled && (
+                          <TableCell
+                            className={cn(
+                              getCellSizeClassName(size),
+                              "w-10",
+                              bordered && "border-r"
+                            )}
+                          >
+                            <Checkbox
+                              aria-label="Select row"
+                              checked={mergedSelectedRowKeys.map(String).includes(String(recordKey))}
+                              disabled={rowSelection?.getCheckboxProps?.(record).disabled}
+                              title={rowSelection?.getCheckboxProps?.(record).title}
+                              onChange={(checked) => {
+                                const selectedSet = new Set(mergedSelectedRowKeys)
 
-                            if (checked) {
-                              selectedSet.add(key)
-                            } else {
-                              selectedSet.delete(key)
-                            }
+                                if (checked) {
+                                  selectedSet.add(recordKey)
+                                } else {
+                                  selectedSet.delete(recordKey)
+                                }
 
-                            updateSelection(Array.from(selectedSet))
-                          }}
-                        />
-                      </TableCell>
-                    )}
-                    {columns.map((column, colIndex) => {
-                      const value = getValue(record, column.dataIndex)
+                                updateSelection(Array.from(selectedSet))
+                              }}
+                            />
+                          </TableCell>
+                        )}
+                        {visibleColumns?.map((column, colIndex) => {
+                          const value = getValue(record, column.dataIndex)
+                          const cellProps = column.onCell?.(record, rowIndex)
 
-                      return (
-                        <TableCell
-                          key={getColumnKey(column, colIndex)}
-                          className={cn(
-                            getCellSizeClassName(size),
-                            getAlignClassName(column.align),
-                            bordered && "border-r last:border-r-0",
-                            column.className
-                          )}
-                        >
-                          {column.render ? column.render(value, record, rowIndex) : String(value ?? "")}
-                        </TableCell>
-                      )
-                    })}
-                  </TableRow>
-                ))
+                          return (
+                            <TableCell
+                              key={getColumnKey(column, colIndex)}
+                              {...cellProps}
+                              className={cn(
+                                getCellSizeClassName(size),
+                                getAlignClassName(column.align),
+                                column.ellipsis && "max-w-0 truncate",
+                                bordered && "border-r last:border-r-0",
+                                cellProps?.className,
+                                column.className
+                              )}
+                              style={{ width: column.width, ...cellProps?.style }}
+                            >
+                              {column.render ? column.render(value, record, rowIndex) : String(value ?? "")}
+                            </TableCell>
+                          )
+                        })}
+                      </TableRow>
+                      {expanded && expandable?.expandedRowRender ? (
+                        <TableRow data-slot="table-expanded-row">
+                          <TableCell className={cn(getCellSizeClassName(size), "bg-muted/30 text-muted-foreground")} colSpan={columnCount}>
+                            {expandable.expandedRowRender(record, rowIndex, 0, expanded)}
+                          </TableCell>
+                        </TableRow>
+                      ) : null}
+                    </React.Fragment>
+                  )
+                })
               ) : (
                 <TableRow>
                   <TableCell className="h-24 text-center text-muted-foreground" colSpan={columnCount}>
-                    {emptyText}
+                    {locale?.emptyText ?? emptyText}
                   </TableCell>
                 </TableRow>
               )}
@@ -459,9 +620,9 @@ function Table<T extends TableRecord = TableRecord>({
             }
             paginationConfigProp?.onChange?.(page, nextPageSize)
             triggerChange(page, {
-              column: columns?.find((column, index) => getColumnKey(column, index) === sortState.columnKey),
+              column: visibleColumns?.find((column, index) => getColumnKey(column, index) === sortState.columnKey),
               columnKey: sortState.columnKey,
-              field: columns?.find((column, index) => getColumnKey(column, index) === sortState.columnKey)?.dataIndex,
+              field: visibleColumns?.find((column, index) => getColumnKey(column, index) === sortState.columnKey)?.dataIndex,
               order: sortState.order,
             })
           }}
@@ -473,6 +634,11 @@ function Table<T extends TableRecord = TableRecord>({
           total={sortedData.length}
         />
       )}
+      {footerNode ? (
+        <div data-slot="table-footer" className={cn("border-t p-3 text-sm text-muted-foreground", !bordered && "rounded-b border")}>
+          {footerNode}
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -572,4 +738,4 @@ export {
   TableCell,
   TableCaption,
 }
-export type { TableAlign, TableColumn, TablePaginationConfig, TableProps, TableRecord, TableRowSelection, TableSize, TableSorterResult, TableSortOrder }
+export type { TableAlign, TableColumn, TableExpandable, TableLocale, TablePaginationConfig, TableProps, TableRecord, TableRowProps, TableRowSelection, TableSize, TableSorterResult, TableSortOrder }

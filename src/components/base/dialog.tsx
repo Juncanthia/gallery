@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { X } from 'lucide-react';
 
-import { Button } from '@/components/base/button';
+import { Button, type ButtonProps } from '@/components/base/button';
 import {
   Dialog as DialogPrimitive,
   DialogTrigger as DialogTriggerPrimitive,
@@ -34,7 +34,14 @@ type DialogProps = DialogPrimitiveProps & {
   okText?: React.ReactNode;
   cancelText?: React.ReactNode;
   confirmLoading?: boolean;
+  closable?: boolean;
+  closeIcon?: React.ReactNode;
+  mask?: boolean;
+  maskClosable?: boolean;
+  width?: number | string;
   showCloseButton?: boolean;
+  okButtonProps?: ButtonProps;
+  cancelButtonProps?: ButtonProps;
   contentProps?: Omit<DialogContentProps, 'children'>;
   onOk?: React.MouseEventHandler<HTMLButtonElement>;
   onCancel?: React.MouseEventHandler<HTMLButtonElement>;
@@ -58,7 +65,14 @@ function Dialog({
   okText,
   cancelText,
   confirmLoading,
+  closable,
+  closeIcon,
+  mask,
+  maskClosable,
+  width,
   showCloseButton,
+  okButtonProps,
+  cancelButtonProps,
   contentProps,
   onOk,
   onCancel,
@@ -73,7 +87,14 @@ function Dialog({
     okText !== undefined ||
     cancelText !== undefined ||
     confirmLoading !== undefined ||
+    closable !== undefined ||
+    closeIcon !== undefined ||
+    mask !== undefined ||
+    maskClosable !== undefined ||
+    width !== undefined ||
     showCloseButton !== undefined ||
+    okButtonProps !== undefined ||
+    cancelButtonProps !== undefined ||
     contentProps !== undefined ||
     onOk !== undefined ||
     onCancel !== undefined;
@@ -82,31 +103,46 @@ function Dialog({
     return <DialogPrimitive {...props}>{children}</DialogPrimitive>;
   }
 
-  const footerNode =
-    footer ??
-    ((okText !== undefined ||
+  const mergedClosable = closable ?? showCloseButton;
+  const footerNode = footer === null
+    ? null
+    : (footer ??
+      ((okText !== undefined ||
       cancelText !== undefined ||
       onOk !== undefined ||
       onCancel !== undefined ||
+      okButtonProps !== undefined ||
+      cancelButtonProps !== undefined ||
       confirmLoading !== undefined) && (
       <DialogFooter>
         <DialogClose asChild>
-          <Button variant="outlined" onClick={onCancel}>
+          <Button
+            variant="outlined"
+            {...cancelButtonProps}
+            onClick={onCancel}
+          >
             {cancelText ?? 'Cancel'}
           </Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button loading={confirmLoading} onClick={onOk}>
+          <Button loading={confirmLoading} {...okButtonProps} onClick={onOk}>
             {okText ?? 'OK'}
           </Button>
         </DialogClose>
       </DialogFooter>
-    ));
+    )));
 
   return (
     <DialogPrimitive {...props}>
       {renderDialogTrigger(trigger)}
-      <DialogContent showCloseButton={showCloseButton} {...contentProps}>
+      <DialogContent
+        closable={mergedClosable}
+        closeIcon={closeIcon}
+        mask={mask}
+        maskClosable={maskClosable}
+        width={width}
+        {...contentProps}
+      >
         {(title !== undefined || description !== undefined) && (
           <DialogHeader>
             {title !== undefined && <DialogTitle>{title}</DialogTitle>}
@@ -146,29 +182,54 @@ function DialogOverlay({ className, ...props }: DialogOverlayProps) {
 }
 
 type DialogContentProps = DialogContentPrimitiveProps & {
+  closable?: boolean;
+  closeIcon?: React.ReactNode;
+  mask?: boolean;
+  maskClosable?: boolean;
   showCloseButton?: boolean;
+  width?: number | string;
 };
 
 function DialogContent({
   className,
   children,
-  showCloseButton = true,
+  closable,
+  closeIcon,
+  mask = true,
+  maskClosable = true,
+  showCloseButton,
+  style,
+  width,
+  onInteractOutside,
   ...props
 }: DialogContentProps) {
+  const mergedClosable = closable ?? showCloseButton ?? true;
+  const mergedStyle = {
+    width,
+    ...style,
+  };
+
   return (
     <DialogPortal>
-      <DialogOverlay />
+      {mask && <DialogOverlay />}
       <DialogContentPrimitive
         className={cn(
           'bg-background fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg sm:max-w-lg',
           className,
         )}
+        style={mergedStyle}
+        onInteractOutside={(event) => {
+          if (!maskClosable) {
+            event.preventDefault();
+          }
+          onInteractOutside?.(event);
+        }}
         {...props}
       >
         {children}
-        {showCloseButton && (
+        {mergedClosable && (
           <DialogClosePrimitive className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
-            <X />
+            {closeIcon ?? <X />}
             <span className="sr-only">Close</span>
           </DialogClosePrimitive>
         )}

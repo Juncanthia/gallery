@@ -12,10 +12,13 @@ type AvatarProps = Omit<React.ComponentProps<typeof AvatarPrimitive.Root>, "chil
   src?: string
   srcSet?: string
   alt?: string
+  crossOrigin?: React.ImgHTMLAttributes<HTMLImageElement>["crossOrigin"]
+  draggable?: boolean | "true" | "false"
   icon?: React.ReactNode
   gap?: number
+  onError?: () => boolean | void
   children?: React.ReactNode
-  imageProps?: Omit<React.ComponentProps<typeof AvatarPrimitive.Image>, "src" | "srcSet" | "alt">
+  imageProps?: Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src" | "srcSet" | "alt">
   fallbackProps?: React.ComponentProps<typeof AvatarPrimitive.Fallback>
 }
 
@@ -71,8 +74,11 @@ function Avatar({
   src,
   srcSet,
   alt,
+  crossOrigin,
+  draggable,
   icon,
   gap = 4,
+  onError,
   children,
   imageProps,
   fallbackProps,
@@ -82,6 +88,16 @@ function Avatar({
   const sizeValue = getSizeValue(size)
   const isComposed = src === undefined && icon === undefined
   const fallbackContent = icon ?? children
+  const [failedSrc, setFailedSrc] = React.useState<string | null>(null)
+  const isImgExist = !src || failedSrc !== src
+
+  const handleImageError = React.useCallback(() => {
+    const shouldFallback = onError?.()
+
+    if (src && shouldFallback !== false) {
+      setFailedSrc(src)
+    }
+  }, [onError, src])
 
   return (
     <AvatarPrimitive.Root
@@ -100,8 +116,26 @@ function Avatar({
         children
       ) : (
         <>
-          {src ? <AvatarImage src={src} srcSet={srcSet} alt={alt} {...imageProps} /> : null}
-          <AvatarFallback {...fallbackProps}>{fallbackContent}</AvatarFallback>
+          {src && isImgExist ? (
+            <img
+              data-slot="avatar-image"
+              className={cn(
+                "aspect-square size-full object-cover group-data-[shape=circle]/avatar:rounded-full group-data-[shape=square]/avatar:rounded",
+                imageProps?.className
+              )}
+              src={src}
+              srcSet={srcSet}
+              alt={alt}
+              crossOrigin={crossOrigin}
+              draggable={draggable}
+              {...imageProps}
+              onError={(event) => {
+                imageProps?.onError?.(event)
+                handleImageError()
+              }}
+            />
+          ) : null}
+          {!src || !isImgExist ? <AvatarFallback {...fallbackProps}>{fallbackContent}</AvatarFallback> : null}
         </>
       )}
     </AvatarPrimitive.Root>

@@ -23,18 +23,23 @@ export function UtilitySection() {
             <p className="text-sm text-muted-foreground">Float buttons appear at the bottom-right</p>
             <div className="absolute right-4 bottom-4 flex flex-col items-end gap-2">
               <FloatButtonBackTop visibilityHeight={0} type="primary" />
-              <FloatButton icon={<Settings className="size-4" />} tooltip="Settings" badge={{ dot: true }} />
+              <FloatButton icon={<Settings className="size-4" />} tooltip={{ title: "Settings", placement: "left" }} badge={{ dot: true }} />
               <FloatButton shape="square" icon={<HelpCircle className="size-4" />} content="Help" tooltip="Help center" />
             </div>
           </div>
           <div className="relative flex h-52 w-64 items-center justify-center overflow-hidden rounded border bg-muted/20">
             <p className="px-4 text-center text-sm text-muted-foreground">Group with trigger</p>
             <div className="absolute right-4 bottom-4">
-              <FloatButtonGroup trigger="click" placement="top" triggerIcon={<Plus className="size-5" />}>
-                <FloatButton icon={<MessageCircle className="size-4" />} tooltip="Message" />
-                <FloatButton icon={<Share className="size-4" />} tooltip="Share" badge={2} />
-                <FloatButton icon={<Edit className="size-4" />} tooltip="Edit" />
-              </FloatButtonGroup>
+              <FloatButtonGroup
+                trigger="click"
+                placement="top"
+                triggerIcon={<Plus className="size-5" />}
+                items={[
+                  { key: "message", icon: <MessageCircle className="size-4" />, tooltip: "Message" },
+                  { key: "share", icon: <Share className="size-4" />, tooltip: "Share", badge: 2 },
+                  { key: "edit", icon: <Edit className="size-4" />, tooltip: { title: "Edit", placement: "left" } },
+                ]}
+              />
             </div>
           </div>
         </DemoRow>

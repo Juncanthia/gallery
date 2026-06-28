@@ -1,3 +1,4 @@
+import * as React from "react";
 import { type CSSProperties, type ReactNode, useEffect } from "react";
 import { useMotionValue, animate, useTransform, motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -172,5 +173,87 @@ function StatisticDiff({ value, className }: StatisticDiffProps) {
   );
 }
 
-export { Statistic, StatisticDiff };
-export type { StatisticProps, StatisticDiffProps };
+type StatisticTimerType = "countdown" | "countup";
+
+interface StatisticTimerProps extends Omit<StatisticProps, "value" | "formatter" | "valueRender"> {
+  value?: number | string | Date;
+  type?: StatisticTimerType;
+  format?: string;
+  onFinish?: () => void;
+  onChange?: (value: number) => void;
+}
+
+function getTimestamp(value?: number | string | Date) {
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+
+  if (typeof value === "string") {
+    return new Date(value).getTime();
+  }
+
+  return value ?? Date.now();
+}
+
+function padTime(value: number, length = 2) {
+  return String(value).padStart(length, "0");
+}
+
+function formatDuration(value: number, format: string) {
+  const total = Math.max(0, Math.floor(value / 1000));
+  const days = Math.floor(total / 86400);
+  const hours = Math.floor((total % 86400) / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+
+  return format
+    .replace(/DD/g, padTime(days))
+    .replace(/D/g, String(days))
+    .replace(/HH/g, padTime(hours))
+    .replace(/H/g, String(hours))
+    .replace(/mm/g, padTime(minutes))
+    .replace(/m/g, String(minutes))
+    .replace(/ss/g, padTime(seconds))
+    .replace(/s/g, String(seconds));
+}
+
+function StatisticTimer({
+  value,
+  type = "countdown",
+  format = "HH:mm:ss",
+  onFinish,
+  onChange,
+  ...props
+}: StatisticTimerProps) {
+  const [now, setNow] = React.useState(() => Date.now());
+  const finishedRef = React.useRef(false);
+  const timestamp = getTimestamp(value);
+  const diff = type === "countdown" ? timestamp - now : now - timestamp;
+  const safeDiff = Math.max(0, diff);
+
+  useEffect(() => {
+    finishedRef.current = false;
+  }, [timestamp, type]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    onChange?.(safeDiff);
+
+    if (type === "countdown" && diff <= 0 && !finishedRef.current) {
+      finishedRef.current = true;
+      onFinish?.();
+    }
+  }, [diff, onChange, onFinish, safeDiff, type]);
+
+  return <Statistic {...props} value={formatDuration(safeDiff, format)} />;
+}
+
+export { Statistic, StatisticDiff, StatisticTimer };
+export type { StatisticProps, StatisticDiffProps, StatisticTimerProps, StatisticTimerType };

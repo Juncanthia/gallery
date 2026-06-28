@@ -49,6 +49,8 @@ export function InteractiveSection() {
             <Tabs
               defaultActiveKey="overview"
               className="w-full max-w-md"
+              centered
+              tabBarExtraContent={{ right: <Button size="small" variant="outlined">Export</Button> }}
               items={[
                 {
                   key: "overview",
@@ -72,6 +74,7 @@ export function InteractiveSection() {
             <Tabs
               type="card"
               size="small"
+              tabBarGutter={6}
               defaultActiveKey="account"
               className="w-full max-w-md"
               items={[
@@ -98,7 +101,7 @@ export function InteractiveSection() {
                       { key: "new", label: "New File", icon: <FileText className="size-4" />, shortcut: "⌘N" },
                       { key: "open", label: "Open Folder", icon: <FolderOpen className="size-4" />, shortcut: "⌘O" },
                       { type: "divider" },
-                      { key: "settings", label: "Settings", icon: <Settings className="size-4" /> },
+                      { key: "settings", label: "Settings", icon: <Settings className="size-4" />, extra: "⌘," },
                     ],
                   },
                   {
@@ -156,6 +159,7 @@ export function InteractiveSection() {
                         key: "core",
                         label: "Core Platform",
                         icon: <Settings className="size-4" />,
+                        extra: "New",
                         description: "Manage application settings, teams, and permissions.",
                       },
                       {
@@ -177,6 +181,7 @@ export function InteractiveSection() {
                     key: "billing",
                     label: "Billing",
                     icon: <CreditCard className="size-4" />,
+                    extra: "2",
                   },
                   {
                     key: "disabled",
@@ -226,6 +231,31 @@ export function InteractiveSection() {
                 { key: "deploy", label: "Deploy preview", children: "Preview deployment is ready." },
                 { key: "logs", label: "Build logs", showArrow: false, children: "No arrow for this panel." },
                 { key: "disabled", label: "Disabled", disabled: true, children: "Disabled content." },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Trigger area / custom icon">
+            <Accordion
+              defaultActiveKey={["metrics"]}
+              collapsible="icon"
+              expandIcon={({ isActive }) => (
+                <ChevronDown className={`size-4 transition-transform ${isActive ? "rotate-180" : ""}`} />
+              )}
+              className="w-full max-w-md"
+              items={[
+                {
+                  key: "metrics",
+                  label: "Only the icon toggles this panel",
+                  forceRender: true,
+                  extra: <Button size="small" variant="text">Action</Button>,
+                  children: "The content stays mounted with forceRender while the panel is hidden.",
+                },
+                {
+                  key: "locked",
+                  label: "Disabled by collapsible",
+                  collapsible: "disabled",
+                  children: "This panel cannot be toggled.",
+                },
               ]}
             />
           </DemoRow>
@@ -311,6 +341,7 @@ export function InteractiveSection() {
               title="Dependencies"
               defaultOpen
               className="w-64"
+              collapsible="icon"
               extra={<span className="text-xs text-muted-foreground">4 deps</span>}
             >
               <div className="space-y-1">
@@ -334,7 +365,10 @@ export function InteractiveSection() {
               description="Make changes to your profile here."
               cancelText="Cancel"
               okText="Save changes"
-              contentProps={{ className: "sm:max-w-md" }}
+              width={460}
+              maskClosable={false}
+              okButtonProps={{ color: "primary" }}
+              cancelButtonProps={{ variant: "outlined" }}
             >
               <div className="grid gap-3 py-4">
                 <div className="flex flex-col gap-1.5">
@@ -358,6 +392,8 @@ export function InteractiveSection() {
               description="This action cannot be undone. Your account will be permanently deleted."
               cancelText="Cancel"
               okText="Continue"
+              confirmLoading={false}
+              okButtonProps={{ color: "danger", variant: "solid" }}
             />
           </DemoRow>
         </GallerySection>
@@ -367,10 +403,12 @@ export function InteractiveSection() {
             {(["left", "right", "top", "bottom"] as const).map((side) => (
               <Sheet
                 key={side}
-                side={side}
+                placement={side}
+                size={side === "left" || side === "right" ? "default" : 280}
                 trigger={<Button variant="outlined" className="capitalize">{side}</Button>}
                 title={`Settings (${side})`}
                 description="Configure your preferences in this side panel."
+                extra={<Button size="small" variant="outlined">Reset</Button>}
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -393,6 +431,9 @@ export function InteractiveSection() {
               trigger={<Button variant="outlined">Open Drawer</Button>}
               title="Quick Actions"
               description="Select an action to perform."
+              placement="right"
+              size="default"
+              extra={<Button size="small">Done</Button>}
               closeText="Cancel"
             >
               <div className="flex flex-col gap-2">
@@ -408,16 +449,17 @@ export function InteractiveSection() {
           <DemoRow label="Items API">
             <DropdownMenu
               trigger={<Button variant="outlined"><User className="size-4" /> My Account <ChevronDown className="ml-1 size-3" /></Button>}
+              placement="bottomRight"
               contentProps={{ className: "w-52" }}
-              items={[
+              menu={{ items: [
                 { type: "label", label: "My Account" },
                 { type: "separator" },
-                { label: "Profile", icon: <User className="size-4" />, shortcut: "⇧⌘P" },
+                { label: "Profile", icon: <User className="size-4" />, extra: "⇧⌘P" },
                 { label: "Billing", icon: <CreditCard className="size-4" />, shortcut: "⌘B" },
                 { label: "Settings", icon: <Settings className="size-4" /> },
                 { type: "separator" },
                 { label: "Log out", icon: <LogOut className="size-4" />, danger: true },
-              ]}
+              ]}}
             />
 
             <DropdownMenu
@@ -455,7 +497,7 @@ export function InteractiveSection() {
               items={[
                 { type: "label", label: "Actions" },
                 { type: "separator" },
-                { label: "Copy", icon: <Copy className="size-4" />, shortcut: "⌘C" },
+                { label: "Copy", icon: <Copy className="size-4" />, extra: "⌘C" },
                 { label: "Rename", icon: <Settings className="size-4" /> },
                 { type: "checkbox", label: "Show hidden", checked: true },
                 { type: "separator" },
@@ -469,10 +511,12 @@ export function InteractiveSection() {
           <DemoRow label="API">
             <Popover
               trigger={<Button variant="outlined">Open Popover</Button>}
+              title="Quick Actions"
+              placement="topLeft"
+              arrow
               contentProps={{ className: "w-60" }}
               content={
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Quick Actions</p>
                   <p className="text-xs text-muted-foreground">Choose an action to perform.</p>
                   <div className="flex gap-2 pt-1">
                     <Button size="small" variant="outlined" className="flex-1">Cancel</Button>
@@ -486,16 +530,16 @@ export function InteractiveSection() {
 
         <GallerySection id="tooltip" title="Tooltip" description="Short contextual hints on hover.">
           <DemoRow label="API">
-            <Tooltip title="Confirm selection">
+            <Tooltip title="Confirm selection" placement="top" arrow>
               <Button variant="outlined" shape="square"><Check className="size-4" /></Button>
             </Tooltip>
-            <Tooltip title="More information" contentProps={{ side: "bottom" }}>
+            <Tooltip title="More information" placement="bottom" arrow>
               <Button variant="outlined" shape="square"><Info className="size-4" /></Button>
             </Tooltip>
-            <Tooltip title="Open settings" contentProps={{ side: "right" }}>
+            <Tooltip title="Open settings" placement="right" color="#2563eb" arrow>
               <Button variant="outlined" shape="square"><Settings className="size-4" /></Button>
             </Tooltip>
-            <Tooltip title="Notifications" contentProps={{ side: "left" }}>
+            <Tooltip title="Notifications" placement="left" color="#f59e0b" arrow>
               <Button variant="outlined" shape="square"><Bell className="size-4" /></Button>
             </Tooltip>
           </DemoRow>
@@ -505,6 +549,8 @@ export function InteractiveSection() {
           <DemoRow label="API">
             <HoverCard
               trigger={<Button variant="link" className="h-auto p-0 text-base">@acme_corp</Button>}
+              placement="rightTop"
+              arrow
               contentProps={{ className: "w-72" }}
               content={
                 <div className="flex gap-3">

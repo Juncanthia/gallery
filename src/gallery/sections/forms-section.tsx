@@ -295,7 +295,7 @@ export function FormsSection() {
           </div>
           <div className="space-y-2 w-64">
             <p className="text-xs text-muted-foreground">Step = 10</p>
-            <Slider defaultValue={50} min={0} max={100} step={10} />
+            <Slider defaultValue={50} min={0} max={100} step={10} dots />
           </div>
         </DemoRow>
         <DemoRow label="Marks / tooltip">
@@ -309,7 +309,9 @@ export function FormsSection() {
                 37: "37°C",
                 100: { label: <strong>100°C</strong>, className: "text-destructive" },
               }}
-              tooltip={{ formatter: (value) => `${value}°C` }}
+              dots
+              step={null}
+              tooltip={{ formatter: (value) => `${value}°C`, placement: "bottom" }}
             />
           </div>
           <div className="space-y-2 w-64">
@@ -318,7 +320,7 @@ export function FormsSection() {
           </div>
           <div className="h-40 space-y-2">
             <p className="text-xs text-muted-foreground">Vertical</p>
-            <Slider vertical defaultValue={40} className="h-32" />
+            <Slider orientation="vertical" defaultValue={40} className="h-32" />
           </div>
         </DemoRow>
       </GallerySection>

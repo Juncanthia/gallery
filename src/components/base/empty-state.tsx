@@ -29,6 +29,9 @@ function DefaultEmptyImage({ simple }: { simple?: boolean }) {
   )
 }
 
+const EMPTY_IMAGE_DEFAULT = <DefaultEmptyImage />
+const EMPTY_IMAGE_SIMPLE = <DefaultEmptyImage simple />
+
 function renderImage(image: EmptyProps["image"], simple?: boolean) {
   if (image === false) {
     return null
@@ -184,5 +187,7 @@ export {
   EmptyDescription,
   EmptyContent,
   EmptyMedia,
+  EMPTY_IMAGE_DEFAULT,
+  EMPTY_IMAGE_SIMPLE,
 }
 export type { EmptyProps }

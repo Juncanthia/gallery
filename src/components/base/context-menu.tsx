@@ -20,6 +20,7 @@ type ContextMenuItemOption =
       type?: "item"
       label: React.ReactNode
       icon?: React.ReactNode
+      extra?: React.ReactNode
       shortcut?: React.ReactNode
       disabled?: boolean
       danger?: boolean
@@ -38,6 +39,7 @@ type ContextMenuItemOption =
       type: "submenu"
       label: React.ReactNode
       icon?: React.ReactNode
+      extra?: React.ReactNode
       disabled?: boolean
       children: ContextMenuItemOption[]
     }
@@ -93,6 +95,9 @@ function renderContextMenuItems(items: ContextMenuItemOption[]) {
           <ContextMenuSubTrigger disabled={item.disabled}>
             {item.icon}
             {item.label}
+            {item.extra && (
+              <ContextMenuShortcut>{item.extra}</ContextMenuShortcut>
+            )}
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
             {renderContextMenuItems(item.children)}
@@ -110,8 +115,8 @@ function renderContextMenuItems(items: ContextMenuItemOption[]) {
       >
         {item.icon}
         {item.label}
-        {item.shortcut && (
-          <ContextMenuShortcut>{item.shortcut}</ContextMenuShortcut>
+        {(item.extra ?? item.shortcut) && (
+          <ContextMenuShortcut>{item.extra ?? item.shortcut}</ContextMenuShortcut>
         )}
       </ContextMenuItem>
     )

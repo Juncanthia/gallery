@@ -9,6 +9,7 @@ import { badgeVariants } from "./badge-variants"
 
 type BadgeStatus = "success" | "processing" | "default" | "error" | "warning"
 type BadgeSize = "default" | "small"
+type BadgeRibbonPlacement = "start" | "end"
 
 type BadgeProps = Omit<React.ComponentProps<"span">, "title" | "color"> &
   VariantProps<typeof badgeVariants> & {
@@ -24,6 +25,14 @@ type BadgeProps = Omit<React.ComponentProps<"span">, "title" | "color"> &
     offset?: [number | string, number | string]
     title?: string | null | false
   }
+
+type BadgeRibbonProps = Omit<React.ComponentProps<"div">, "color"> & {
+  text?: React.ReactNode
+  color?: string
+  placement?: BadgeRibbonPlacement
+  ribbonClassName?: string
+  ribbonStyle?: React.CSSProperties
+}
 
 const statusClasses: Record<BadgeStatus, string> = {
   success: "bg-green-500",
@@ -163,5 +172,49 @@ function Badge({
   )
 }
 
-export { Badge }
-export type { BadgeProps, BadgeSize, BadgeStatus }
+function BadgeRibbon({
+  className,
+  children,
+  text,
+  color,
+  placement = "end",
+  ribbonClassName,
+  ribbonStyle,
+  ...props
+}: BadgeRibbonProps) {
+  const ribbonColorStyle = color ? { backgroundColor: color } : undefined
+  const cornerColorStyle = color ? { borderTopColor: color } : undefined
+
+  return (
+    <div
+      data-slot="badge-ribbon-wrapper"
+      className={cn("relative inline-block", className)}
+      {...props}
+    >
+      {children}
+      <div
+        data-slot="badge-ribbon"
+        data-placement={placement}
+        className={cn(
+          "absolute top-2 z-10 inline-flex h-6 items-center bg-primary px-2 text-xs font-medium text-primary-foreground",
+          placement === "start" ? "-left-2 rounded-r" : "-right-2 rounded-l",
+          ribbonClassName
+        )}
+        style={{ ...ribbonColorStyle, ...ribbonStyle }}
+      >
+        {text}
+        <span
+          data-slot="badge-ribbon-corner"
+          className={cn(
+            "absolute top-full size-0 border-t-[4px] border-t-primary border-b-0 border-x-[4px] border-x-transparent",
+            placement === "start" ? "left-0 -scale-x-100" : "right-0"
+          )}
+          style={cornerColorStyle}
+        />
+      </div>
+    </div>
+  )
+}
+
+export { Badge, BadgeRibbon }
+export type { BadgeProps, BadgeRibbonProps, BadgeRibbonPlacement, BadgeSize, BadgeStatus }

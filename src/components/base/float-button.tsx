@@ -1,18 +1,25 @@
 import * as React from "react";
-import { ArrowUp, Bone as CloseIcon, FileText, Plus as PlusIcon } from "lucide-react";
+import { ArrowUp, FileText, Plus as PlusIcon, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Badge, type BadgeProps } from "@/components/base/badge";
 import {
   Tooltip,
   TooltipProvider,
-  TooltipTrigger,
-  TooltipContent,
 } from "@/components/base/tooltip";
 import { cn } from "@/lib/utils";
 import { floatButtonVariants, type FloatButtonShape, type FloatButtonSize, type FloatButtonType } from "./float-button-variants";
 
 type FloatButtonBadge = string | number | Omit<BadgeProps, "children" | "text" | "status">;
 type FloatButtonElement = HTMLButtonElement | HTMLAnchorElement;
+type FloatButtonTooltipConfig = {
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  placement?: "top" | "bottom" | "left" | "right" | "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
+  open?: boolean;
+};
+type FloatButtonTooltip =
+  | React.ReactNode
+  | FloatButtonTooltipConfig;
 
 export type FloatButtonProps = Omit<React.ComponentProps<"button">, "children" | "type" | "onClick"> & {
   type?: FloatButtonType;
@@ -20,7 +27,7 @@ export type FloatButtonProps = Omit<React.ComponentProps<"button">, "children" |
   shape?: FloatButtonShape;
   icon?: React.ReactNode;
   content?: React.ReactNode;
-  tooltip?: React.ReactNode;
+  tooltip?: FloatButtonTooltip;
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
   badge?: FloatButtonBadge;
@@ -36,6 +43,15 @@ function renderBadge(badge?: FloatButtonBadge) {
   const badgeProps = typeof badge === "object" ? badge : { count: badge };
 
   return <Badge {...badgeProps} className={cn("absolute -top-1 -right-1", badgeProps.className)} />;
+}
+
+function isTooltipConfig(tooltip: FloatButtonTooltip): tooltip is FloatButtonTooltipConfig {
+  return Boolean(
+    tooltip &&
+    typeof tooltip === "object" &&
+    !React.isValidElement(tooltip) &&
+    ("title" in tooltip || "content" in tooltip || "placement" in tooltip || "open" in tooltip)
+  );
 }
 
 export const FloatButton = React.forwardRef<FloatButtonElement, FloatButtonProps>(
@@ -97,11 +113,13 @@ export const FloatButton = React.forwardRef<FloatButtonElement, FloatButtonProps
     );
 
     if (tooltip) {
+      const tooltipConfig = isTooltipConfig(tooltip) ? tooltip : undefined;
+      const tooltipTitle = tooltipConfig ? tooltipConfig.title ?? tooltipConfig.content : tooltip as React.ReactNode;
+
       return (
         <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>{node}</TooltipTrigger>
-            <TooltipContent>{tooltip}</TooltipContent>
+          <Tooltip title={tooltipTitle} placement={tooltipConfig?.placement} open={tooltipConfig?.open}>
+            {node}
           </Tooltip>
         </TooltipProvider>
       );
@@ -117,6 +135,7 @@ export interface FloatButtonGroupProps extends Omit<React.ComponentProps<"div">,
   trigger?: "click" | "hover";
   triggerIcon?: React.ReactNode;
   closeIcon?: React.ReactNode;
+  items?: Array<FloatButtonProps & { key?: React.Key }>;
   children?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -148,6 +167,7 @@ export const FloatButtonGroup = React.forwardRef<
       trigger = "click",
       triggerIcon,
       closeIcon,
+      items,
       children,
       open: controlledOpen,
       onOpenChange,
@@ -182,7 +202,21 @@ export const FloatButtonGroup = React.forwardRef<
       }
     };
 
-    const childArray = React.Children.toArray(children);
+    const itemNodes = items
+      ? items.map(({ key, ...item }, index) => (
+          <FloatButton key={key ?? index} shape={item.shape ?? shape} type={item.type ?? type} {...item} />
+        ))
+      : children;
+    const childArray = React.Children.toArray(itemNodes).map((child) => {
+      if (!React.isValidElement<FloatButtonProps>(child)) {
+        return child;
+      }
+
+      return React.cloneElement(child, {
+        shape: child.props.shape ?? shape,
+        type: child.props.type ?? type,
+      });
+    });
 
     React.useEffect(() => {
       if (trigger !== "click" || !open) {
@@ -314,4 +348,4 @@ export const FloatButtonBackTop = React.forwardRef<FloatButtonElement, FloatButt
 
 FloatButtonBackTop.displayName = "FloatButtonBackTop";
 
-export type { FloatButtonBadge, FloatButtonElement, FloatButtonShape, FloatButtonSize, FloatButtonType };
+export type { FloatButtonBadge, FloatButtonElement, FloatButtonShape, FloatButtonSize, FloatButtonTooltip, FloatButtonType };

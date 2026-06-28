@@ -37,6 +37,37 @@ import {
 import { cn } from '@/lib/utils';
 import { Check as CheckIcon, ChevronRight as ChevronRightIcon, Circle as CircleIcon } from 'lucide-react';
 
+type DropdownMenuPlacement =
+  | 'top'
+  | 'bottom'
+  | 'topLeft'
+  | 'topRight'
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'left'
+  | 'leftTop'
+  | 'leftBottom'
+  | 'right'
+  | 'rightTop'
+  | 'rightBottom';
+
+type DropdownMenuPlacementConfig = Pick<DropdownMenuContentProps, 'align' | 'side'>;
+
+const dropdownMenuPlacementMap: Record<DropdownMenuPlacement, DropdownMenuPlacementConfig> = {
+  top: { side: 'top', align: 'center' },
+  bottom: { side: 'bottom', align: 'center' },
+  topLeft: { side: 'top', align: 'start' },
+  topRight: { side: 'top', align: 'end' },
+  bottomLeft: { side: 'bottom', align: 'start' },
+  bottomRight: { side: 'bottom', align: 'end' },
+  left: { side: 'left', align: 'center' },
+  leftTop: { side: 'left', align: 'start' },
+  leftBottom: { side: 'left', align: 'end' },
+  right: { side: 'right', align: 'center' },
+  rightTop: { side: 'right', align: 'start' },
+  rightBottom: { side: 'right', align: 'end' },
+};
+
 type DropdownMenuItemOption =
   | {
       key?: React.Key;
@@ -53,6 +84,7 @@ type DropdownMenuItemOption =
       type?: 'item';
       label: React.ReactNode;
       icon?: React.ReactNode;
+      extra?: React.ReactNode;
       shortcut?: React.ReactNode;
       disabled?: boolean;
       danger?: boolean;
@@ -71,6 +103,7 @@ type DropdownMenuItemOption =
       type: 'submenu';
       label: React.ReactNode;
       icon?: React.ReactNode;
+      extra?: React.ReactNode;
       disabled?: boolean;
       children: DropdownMenuItemOption[];
     };
@@ -78,6 +111,8 @@ type DropdownMenuItemOption =
 type DropdownMenuProps = DropdownMenuPrimitiveProps & {
   trigger?: React.ReactNode;
   items?: DropdownMenuItemOption[];
+  menu?: { items?: DropdownMenuItemOption[] };
+  placement?: DropdownMenuPlacement;
   contentProps?: DropdownMenuContentProps;
 };
 
@@ -126,6 +161,9 @@ function renderDropdownItems(items: DropdownMenuItemOption[]) {
           <DropdownMenuSubTrigger disabled={item.disabled}>
             {item.icon}
             {item.label}
+            {item.extra && (
+              <DropdownMenuShortcut>{item.extra}</DropdownMenuShortcut>
+            )}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             {renderDropdownItems(item.children)}
@@ -143,8 +181,8 @@ function renderDropdownItems(items: DropdownMenuItemOption[]) {
       >
         {item.icon}
         {item.label}
-        {item.shortcut && (
-          <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
+        {(item.extra ?? item.shortcut) && (
+          <DropdownMenuShortcut>{item.extra ?? item.shortcut}</DropdownMenuShortcut>
         )}
       </DropdownMenuItem>
     );
@@ -154,21 +192,27 @@ function renderDropdownItems(items: DropdownMenuItemOption[]) {
 function DropdownMenu({
   trigger,
   items,
+  menu,
+  placement = 'bottomLeft',
   contentProps,
   children,
   ...props
 }: DropdownMenuProps) {
-  if (trigger === undefined && items === undefined) {
+  const mergedItems = items ?? menu?.items;
+
+  if (trigger === undefined && mergedItems === undefined) {
     return <DropdownMenuPrimitive {...props}>{children}</DropdownMenuPrimitive>;
   }
+
+  const placementProps = dropdownMenuPlacementMap[placement];
 
   return (
     <DropdownMenuPrimitive {...props}>
       {renderDropdownTrigger(trigger)}
       {children}
-      {items !== undefined && (
-        <DropdownMenuContent {...contentProps}>
-          {renderDropdownItems(items)}
+      {mergedItems !== undefined && (
+        <DropdownMenuContent {...placementProps} {...contentProps}>
+          {renderDropdownItems(mergedItems)}
         </DropdownMenuContent>
       )}
     </DropdownMenuPrimitive>
@@ -450,4 +494,5 @@ export {
   type DropdownMenuSubTriggerProps,
   type DropdownMenuSubContentProps,
   type DropdownMenuItemOption,
+  type DropdownMenuPlacement,
 };

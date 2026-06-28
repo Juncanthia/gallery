@@ -29,6 +29,7 @@ type NavigationMenuItemOption =
       type?: "item"
       label: React.ReactNode
       icon?: React.ReactNode
+      extra?: React.ReactNode
       description?: React.ReactNode
       href?: string
       content?: React.ReactNode
@@ -73,6 +74,9 @@ function renderNavigationLabel(item: NavigationMenuLabelItem) {
     <>
       {item.icon}
       <span>{item.label}</span>
+      {item.extra && (
+        <span className="ml-1 text-xs text-muted-foreground">{item.extra}</span>
+      )}
     </>
   )
 }
@@ -118,6 +122,9 @@ function renderNavigationContentItems(
         <div className="flex items-center gap-2">
           {item.icon}
           <span className="font-medium">{item.label}</span>
+          {item.extra && (
+            <span className="ml-auto text-xs text-muted-foreground">{item.extra}</span>
+          )}
         </div>
         {item.description && (
           <p className="mt-1 line-clamp-2 text-xs leading-snug text-muted-foreground">

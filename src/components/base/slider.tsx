@@ -28,6 +28,7 @@ type SliderTooltip =
   | {
       open?: boolean
       formatter?: (value: number) => React.ReactNode
+      placement?: "top" | "bottom" | "left" | "right"
     }
 
 type SliderSharedProps = Omit<
@@ -39,12 +40,16 @@ type SliderSharedProps = Omit<
   | "onValueChange"
   | "onValueCommit"
   | "orientation"
+  | "step"
   | "value"
 > & {
   className?: string
+  dots?: boolean
   included?: boolean
   marks?: Record<number, SliderMark>
+  orientation?: "horizontal" | "vertical"
   reverse?: boolean
+  step?: number | null
   tooltip?: SliderTooltip
   vertical?: boolean
 }
@@ -136,23 +141,50 @@ function getMarkPercent(value: number, min: number, max: number, reverse: boolea
   return reverse ? 100 - percent : percent
 }
 
+function getClosestValue(value: number, values: number[]) {
+  return values.reduce((closest, item) =>
+    Math.abs(item - value) < Math.abs(closest - value) ? item : closest
+  )
+}
+
+function getStepDots(min: number, max: number, step: number | null | undefined) {
+  if (!step || step <= 0) {
+    return []
+  }
+
+  const dots: number[] = []
+  for (let value = min; value <= max; value += step) {
+    dots.push(Number(value.toFixed(5)))
+  }
+
+  if (dots[dots.length - 1] !== max) {
+    dots.push(max)
+  }
+
+  return dots
+}
+
 function Slider({
   className,
   defaultValue,
   disabled,
+  dots = false,
   included = true,
   marks,
   max = 100,
   min = 0,
   onChange,
   onChangeComplete,
+  orientation,
   range = false,
   reverse = false,
+  step = 1,
   tooltip,
   value,
   vertical = false,
   ...props
 }: SliderProps) {
+  const isVertical = orientation ? orientation === "vertical" : vertical
   const initialValues = React.useMemo(
     () => normalizeValue(defaultValue, range, min, max),
     [defaultValue, max, min, range]
@@ -167,6 +199,7 @@ function Slider({
   const showTooltip = tooltip !== false
   const tooltipFormatter = tooltipConfig?.formatter
   const tooltipOpen = tooltipConfig?.open
+  const tooltipPlacement = tooltipConfig?.placement ?? (isVertical ? "right" : "top")
   const markEntries = React.useMemo(
     () =>
       Object.entries(marks ?? {})
@@ -174,6 +207,22 @@ function Slider({
         .filter(([markValue]) => Number.isFinite(markValue) && markValue >= min && markValue <= max)
         .sort(([a], [b]) => a - b),
     [marks, max, min]
+  )
+  const snapValues = React.useMemo(
+    () => Array.from(new Set([min, ...markEntries.map(([markValue]) => markValue), max])).sort((a, b) => a - b),
+    [markEntries, max, min]
+  )
+  const dotValues = React.useMemo(
+    () => {
+      if (!dots) {
+        return []
+      }
+
+      return markEntries.length > 0
+        ? snapValues
+        : getStepDots(min, max, step)
+    },
+    [dots, markEntries.length, max, min, snapValues, step]
   )
 
   const emitChange = onChange as ((value: SliderValue) => void) | undefined
@@ -183,20 +232,28 @@ function Slider({
 
   const handleValueChange = React.useCallback(
     (nextValues: number[]) => {
+      const normalizedValues = step === null && snapValues.length > 0
+        ? nextValues.map((nextValue) => getClosestValue(nextValue, snapValues))
+        : nextValues
+
       if (value === undefined) {
-        setInnerValues(nextValues)
+        setInnerValues(normalizedValues)
       }
 
-      emitChange?.(formatValue(nextValues, range))
+      emitChange?.(formatValue(normalizedValues, range))
     },
-    [emitChange, range, value]
+    [emitChange, range, snapValues, step, value]
   )
 
   const handleValueCommit = React.useCallback(
     (nextValues: number[]) => {
-      emitChangeComplete?.(formatValue(nextValues, range))
+      const normalizedValues = step === null && snapValues.length > 0
+        ? nextValues.map((nextValue) => getClosestValue(nextValue, snapValues))
+        : nextValues
+
+      emitChangeComplete?.(formatValue(normalizedValues, range))
     },
-    [emitChangeComplete, range]
+    [emitChangeComplete, range, snapValues, step]
   )
 
   return (
@@ -204,23 +261,23 @@ function Slider({
       data-slot="slider-wrapper"
       className={cn(
         "relative w-full",
-        markEntries.length > 0 && !vertical && "pb-6",
-        vertical && "flex h-full min-h-40 w-fit items-center",
-        vertical && markEntries.length > 0 && "pl-12",
+        markEntries.length > 0 && !isVertical && "pb-6",
+        isVertical && "flex h-full min-h-40 w-fit items-center",
+        isVertical && markEntries.length > 0 && "pl-12",
         className
       )}
     >
       <SliderPrimitive.Root
         data-slot="slider"
-        defaultValue={value === undefined ? initialValues : undefined}
         disabled={disabled}
         inverted={reverse}
         max={max}
         min={min}
         onValueChange={handleValueChange}
         onValueCommit={handleValueCommit}
-        orientation={vertical ? "vertical" : "horizontal"}
-        value={value === undefined ? undefined : controlledValues}
+        orientation={isVertical ? "vertical" : "horizontal"}
+        step={step ?? undefined}
+        value={mergedValues}
         className={cn(
           "relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col"
         )}
@@ -230,6 +287,21 @@ function Slider({
           data-slot="slider-track"
           className="relative grow overflow-hidden rounded-full bg-muted data-horizontal:h-1.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-1.5"
         >
+          {dotValues.map((dotValue) => {
+            const percent = getMarkPercent(dotValue, min, max, reverse)
+
+            return (
+              <span
+                data-slot="slider-dot"
+                key={dotValue}
+                className={cn(
+                  "absolute z-10 size-1.5 rounded-full bg-background ring-1 ring-muted-foreground/40",
+                  isVertical ? "left-1/2 -translate-x-1/2 translate-y-1/2" : "top-1/2 -translate-y-1/2 -translate-x-1/2"
+                )}
+                style={isVertical ? { bottom: `${percent}%` } : { left: `${percent}%` }}
+              />
+            )
+          })}
           <SliderPrimitive.Range
             data-slot="slider-range"
             className={cn(
@@ -255,7 +327,7 @@ function Slider({
             return (
               <Tooltip key={index} open={tooltipOpen}>
                 <TooltipTrigger asChild>{thumb}</TooltipTrigger>
-                <TooltipContent side={vertical ? "right" : "top"}>
+                <TooltipContent side={tooltipPlacement}>
                   {tooltipFormatter ? tooltipFormatter(thumbValue) : thumbValue}
                 </TooltipContent>
               </Tooltip>
@@ -269,7 +341,7 @@ function Slider({
           data-slot="slider-marks"
           className={cn(
             "pointer-events-none absolute text-xs text-muted-foreground",
-            vertical ? "inset-y-0 left-0 w-10" : "inset-x-0 bottom-0 h-4"
+            isVertical ? "inset-y-0 left-0 w-10" : "inset-x-0 bottom-0 h-4"
           )}
         >
           {markEntries.map(([markValue, mark]) => {
@@ -282,11 +354,11 @@ function Slider({
                 key={markValue}
                 className={cn(
                   "absolute whitespace-nowrap",
-                  vertical ? "right-0 translate-y-1/2" : "top-0 -translate-x-1/2",
+                  isVertical ? "right-0 translate-y-1/2" : "top-0 -translate-x-1/2",
                   getMarkClassName(mark)
                 )}
                 style={{
-                  ...(vertical ? { bottom: `${percent}%` } : { left: `${percent}%` }),
+                  ...(isVertical ? { bottom: `${percent}%` } : { left: `${percent}%` }),
                   ...markStyle,
                 }}
               >

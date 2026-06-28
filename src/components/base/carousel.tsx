@@ -19,6 +19,12 @@ type CarouselProps = {
   setApi?: (api: CarouselApi) => void
   items?: CarouselItemOption[]
   arrows?: boolean
+  dots?: boolean | { className?: string }
+  dotPlacement?: "top" | "bottom" | "start" | "end"
+  autoplay?: boolean | { dotDuration?: boolean }
+  autoplaySpeed?: number
+  beforeChange?: (current: number, next: number) => void
+  afterChange?: (current: number) => void
   contentClassName?: string
   itemClassName?: string
 }
@@ -34,8 +40,11 @@ type CarouselContextProps = {
   api: ReturnType<typeof useEmblaCarousel>[1]
   scrollPrev: () => void
   scrollNext: () => void
+  scrollTo: (index: number) => void
   canScrollPrev: boolean
   canScrollNext: boolean
+  selectedIndex: number
+  scrollSnaps: number[]
 } & CarouselProps
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -57,6 +66,12 @@ function Carousel({
   plugins,
   items,
   arrows = true,
+  dots = true,
+  dotPlacement = "bottom",
+  autoplay = false,
+  autoplaySpeed = 3000,
+  beforeChange,
+  afterChange,
   contentClassName,
   itemClassName,
   className,
@@ -72,20 +87,54 @@ function Carousel({
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
+  const selectedIndexRef = React.useRef(0)
 
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return
+
+    const nextIndex = api.selectedScrollSnap()
     setCanScrollPrev(api.canScrollPrev())
     setCanScrollNext(api.canScrollNext())
-  }, [])
+    setSelectedIndex(nextIndex)
+    setScrollSnaps(api.scrollSnapList())
+
+    if (selectedIndexRef.current !== nextIndex) {
+      selectedIndexRef.current = nextIndex
+      afterChange?.(nextIndex)
+    }
+  }, [afterChange])
 
   const scrollPrev = React.useCallback(() => {
-    api?.scrollPrev()
-  }, [api])
+    if (!api) return
+
+    const current = api.selectedScrollSnap()
+    const next = Math.max(0, current - 1)
+    beforeChange?.(current, next)
+    api.scrollPrev()
+  }, [api, beforeChange])
 
   const scrollNext = React.useCallback(() => {
-    api?.scrollNext()
-  }, [api])
+    if (!api) return
+
+    const current = api.selectedScrollSnap()
+    const next = api.canScrollNext() ? current + 1 : 0
+    beforeChange?.(current, next)
+    if (api.canScrollNext()) {
+      api.scrollNext()
+    } else {
+      api.scrollTo(0)
+    }
+  }, [api, beforeChange])
+
+  const scrollTo = React.useCallback((index: number) => {
+    if (!api) return
+
+    const current = api.selectedScrollSnap()
+    beforeChange?.(current, index)
+    api.scrollTo(index)
+  }, [api, beforeChange])
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -113,9 +162,25 @@ function Carousel({
 
     return () => {
       window.cancelAnimationFrame(frame)
-      api?.off("select", onSelect)
+      api.off("reInit", onSelect)
+      api.off("select", onSelect)
     }
   }, [api, onSelect])
+
+  React.useEffect(() => {
+    if (!api || !autoplay) return undefined
+
+    const timer = window.setInterval(() => {
+      if (document.hidden) return
+
+      const current = api.selectedScrollSnap()
+      const next = api.canScrollNext() ? current + 1 : 0
+      beforeChange?.(current, next)
+      api.scrollTo(next)
+    }, autoplaySpeed)
+
+    return () => window.clearInterval(timer)
+  }, [api, autoplay, autoplaySpeed, beforeChange])
 
   const renderedChildren = items ? (
     <>
@@ -150,8 +215,11 @@ function Carousel({
           orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
         scrollPrev,
         scrollNext,
+        scrollTo,
         canScrollPrev,
         canScrollNext,
+        selectedIndex,
+        scrollSnaps,
       }}
     >
       <div
@@ -163,8 +231,66 @@ function Carousel({
         {...props}
       >
         {renderedChildren}
+        {dots ? <CarouselDots dots={dots} placement={dotPlacement} autoplay={autoplay} autoplaySpeed={autoplaySpeed} /> : null}
       </div>
     </CarouselContext.Provider>
+  )
+}
+
+function CarouselDots({
+  dots,
+  placement,
+  autoplay,
+  autoplaySpeed,
+}: {
+  dots: true | { className?: string }
+  placement: NonNullable<CarouselProps["dotPlacement"]>
+  autoplay: CarouselProps["autoplay"]
+  autoplaySpeed: number
+}) {
+  const { scrollSnaps, selectedIndex, scrollTo } = useCarousel()
+  const showDuration = typeof autoplay === "object" && autoplay.dotDuration
+
+  if (scrollSnaps.length <= 1) {
+    return null
+  }
+
+  return (
+    <div
+      data-slot="carousel-dots"
+      data-placement={placement}
+      className={cn(
+        "absolute z-10 flex items-center justify-center gap-2",
+        placement === "bottom" && "right-3 bottom-3 left-3",
+        placement === "top" && "top-3 right-3 left-3",
+        placement === "start" && "top-3 bottom-3 left-3 flex-col",
+        placement === "end" && "top-3 right-3 bottom-3 flex-col",
+        typeof dots === "object" && dots.className
+      )}
+    >
+      {scrollSnaps.map((_, index) => (
+        <button
+          key={index}
+          type="button"
+          data-slot="carousel-dot"
+          data-active={selectedIndex === index || undefined}
+          className={cn(
+            "relative h-1.5 w-5 overflow-hidden rounded-full bg-muted-foreground/30 transition-colors hover:bg-muted-foreground/50",
+            selectedIndex === index && "bg-primary"
+          )}
+          aria-label={`Go to slide ${index + 1}`}
+          aria-current={selectedIndex === index ? "true" : undefined}
+          onClick={() => scrollTo(index)}
+        >
+          {showDuration && selectedIndex === index ? (
+            <span
+              className="absolute inset-y-0 left-0 bg-primary-foreground/60"
+              style={{ width: "100%", transition: `width ${autoplaySpeed}ms linear` }}
+            />
+          ) : null}
+        </button>
+      ))}
+    </div>
   )
 }
 

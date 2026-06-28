@@ -19,6 +19,7 @@ export function LayoutSection() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [calendarValue, setCalendarValue] = useState(new Date());
   const [affixed, setAffixed] = useState(false);
+  const [watermarkRemoveCount, setWatermarkRemoveCount] = useState(0);
 
   return (
     <SectionGroup title="Layout & Misc" description="Structural layout utilities, containers, and miscellaneous components.">
@@ -193,11 +194,16 @@ export function LayoutSection() {
           <Calendar
             value={calendarValue}
             onChange={setCalendarValue}
+            onPanelChange={(nextValue) => setCalendarValue(nextValue)}
+            showWeek
             validRange={[new Date(2024, 0, 1), new Date(2026, 11, 31)]}
-            dateCellRender={(current) => current.getDate() === calendarValue.getDate() ? <span>selected</span> : null}
-            headerRender={({ value }) => (
-              <div className="px-3 pt-3 text-sm font-medium">
-                {value.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+            cellRender={(current, info) => current.getDate() === calendarValue.getDate() && info.type === "date" ? <span>selected</span> : null}
+            headerRender={({ value, type, onTypeChange }) => (
+              <div className="flex items-center justify-between gap-2 px-3 pt-3 text-sm font-medium">
+                <span>{value.toLocaleDateString(undefined, { month: "long", year: "numeric" })}</span>
+                <Button size="small" variant="outlined" onClick={() => onTypeChange(type === "month" ? "year" : "month")}>
+                  {type}
+                </Button>
               </div>
             )}
           />
@@ -221,6 +227,9 @@ export function LayoutSection() {
         <DemoRow label="Items API">
           <div className="w-full max-w-sm">
             <Carousel
+              autoplay
+              autoplaySpeed={2400}
+              dotPlacement="bottom"
               items={Array.from({ length: 5 }, (_, i) => ({
                 content: (
                   <Card>
@@ -237,6 +246,8 @@ export function LayoutSection() {
           <div className="w-full max-w-xl">
             <Carousel
               opts={{ align: "start" }}
+              dots={{ className: "top-2" }}
+              dotPlacement="top"
               contentClassName="-ml-2"
               itemClassName="basis-1/3 pl-2"
               items={Array.from({ length: 8 }, (_, i) => ({
@@ -256,10 +267,10 @@ export function LayoutSection() {
       <GallerySection id="watermark" title="Watermark" description="Canvas-rendered repeating overlay.">
         <DemoRow>
           <div className="relative w-72 h-36 rounded-lg border overflow-hidden bg-card flex items-center justify-center">
-            <Watermark content="Confidential" gap={[60, 40]}>
+            <Watermark content="Confidential" gap={[60, 40]} onRemove={() => setWatermarkRemoveCount((count) => count + 1)}>
               <div className="flex flex-col items-center gap-1">
                 <p className="text-sm font-medium">Protected Content</p>
-                <p className="text-xs text-muted-foreground">Single line watermark</p>
+                <p className="text-xs text-muted-foreground">Removed {watermarkRemoveCount} times</p>
               </div>
             </Watermark>
           </div>
@@ -269,6 +280,7 @@ export function LayoutSection() {
               rotate={-30}
               gap={[80, 50]}
               font={{ color: "rgba(37,99,235,0.16)", fontSize: 14 }}
+              onRemove={() => setWatermarkRemoveCount((count) => count + 1)}
             >
               <div className="flex flex-col items-center gap-1">
                 <p className="text-sm font-medium">Multi-line Watermark</p>
