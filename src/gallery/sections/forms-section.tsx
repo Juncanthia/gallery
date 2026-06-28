@@ -19,6 +19,7 @@ import {
 import { ColorPicker } from "@/components/base/color-picker";
 import { Mentions } from "@/components/base/mentions";
 import { TreeSelect } from "@/components/base/tree-select";
+import { Transfer } from "@/components/base/transfer";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -441,6 +442,22 @@ export function FormsSection() {
               { value: "solo", label: "Solo" },
             ]}
             treeDefaultExpandAll
+          />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="transfer" title="Transfer" description="Shuttle box for moving items between two columns.">
+        <DemoRow label="Basic">
+          <Transfer
+            dataSource={[
+              { key: "1", title: "Item 1" },
+              { key: "2", title: "Item 2" },
+              { key: "3", title: "Item 3", disabled: true },
+              { key: "4", title: "Item 4" },
+              { key: "5", title: "Item 5" },
+            ]}
+            titles={["Available", "Selected"]}
+            defaultTargetKeys={["1", "4"]}
           />
         </DemoRow>
       </GallerySection>
