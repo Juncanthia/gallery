@@ -11,6 +11,7 @@ import { Select } from "@/components/base/select";
 import { AutoComplete } from "@/components/base/auto-complete";
 import { Toggle } from "@/components/base/toggle";
 import { ToggleGroup } from "@/components/base/toggle-group";
+import { Rate } from "@/components/base/rate";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -349,6 +350,19 @@ export function FormsSection() {
         <DemoRow label="Groups">
           <ToggleGroup type="single" defaultValue="left" options={alignOptions} />
           <ToggleGroup type="multiple" variant="outline" options={formatOptions} />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="rate" title="Rate" description="Star rating input with half-star and clear support.">
+        <DemoRow label="Basic">
+          <Rate defaultValue={3} onChange={(v) => console.log(v)} />
+        </DemoRow>
+        <DemoRow label="Half star">
+          <Rate defaultValue={2.5} allowHalf />
+        </DemoRow>
+        <DemoRow label="Clear & disable">
+          <Rate defaultValue={4} allowClear />
+          <Rate defaultValue={3} disabled />
         </DemoRow>
       </GallerySection>
 
