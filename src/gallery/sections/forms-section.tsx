@@ -18,6 +18,7 @@ import {
 } from "@/components/composite/time-picker";
 import { ColorPicker } from "@/components/base/color-picker";
 import { Mentions } from "@/components/base/mentions";
+import { TreeSelect } from "@/components/base/tree-select";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -423,6 +424,23 @@ export function FormsSection() {
               { value: "charlie", label: "Charlie" },
             ]}
             rows={2}
+          />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="tree-select" title="TreeSelect" description="Tree-structured dropdown selection.">
+        <DemoRow label="Basic">
+          <TreeSelect
+            className="w-52"
+            placeholder="Select node"
+            options={[
+              { value: "parent", label: "Parent", children: [
+                { value: "child1", label: "Child 1" },
+                { value: "child2", label: "Child 2" },
+              ]},
+              { value: "solo", label: "Solo" },
+            ]}
+            treeDefaultExpandAll
           />
         </DemoRow>
       </GallerySection>

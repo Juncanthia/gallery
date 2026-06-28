@@ -62,6 +62,7 @@ export const NAV: NavGroup[] = [
       { id: "time-picker", label: "TimePicker" },
       { id: "color-picker", label: "ColorPicker" },
       { id: "mentions", label: "Mentions" },
+      { id: "tree-select", label: "TreeSelect" },
       { id: "input-number", label: "Input.Number" },
       { id: "input-otp", label: "Input.OTP" },
       { id: "auto-complete", label: "AutoComplete" },
