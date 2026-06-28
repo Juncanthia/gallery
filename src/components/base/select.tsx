@@ -72,6 +72,7 @@ type SelectCommonApiProps = {
   showSearch?: boolean
   filterOption?: boolean | ((input: string, option: SelectOption) => boolean)
   filterSort?: (a: SelectOption, b: SelectOption, input: string) => number
+  onSearch?: (value: string) => void
   onSelect?: (value: string, option: SelectOption) => void
   onDeselect?: (value: string, option: SelectOption) => void
   onClear?: () => void
@@ -175,6 +176,7 @@ function isApiSelectProps(props: SelectProps): props is SelectApiProps {
     "labelRender" in props ||
     "filterOption" in props ||
     "filterSort" in props ||
+    "onSearch" in props ||
     "onSelect" in props ||
     "onDeselect" in props ||
     "onClear" in props ||
@@ -331,6 +333,7 @@ function SelectSingleApi(props: SelectSingleApiProps) {
     showSearch,
     filterOption,
     filterSort,
+    onSearch,
     onSelect,
     onClear,
     mode,
@@ -399,11 +402,12 @@ function SelectSingleApi(props: SelectSingleApiProps) {
   const handleInputValueChange = React.useCallback(
     (nextValue: string) => {
       setInputValue(nextValue)
+      onSearch?.(nextValue)
       if (mode === "combobox") {
         setValue(nextValue || undefined)
       }
     },
-    [mode, setValue]
+    [mode, onSearch, setValue]
   )
 
   const handleClear = React.useCallback(() => {

@@ -8,6 +8,7 @@ import { RadioGroup } from "@/components/base/radio-group";
 import { Switch } from "@/components/base/switch";
 import { Slider } from "@/components/base/slider";
 import { Select } from "@/components/base/select";
+import { AutoComplete } from "@/components/base/auto-complete";
 import { Toggle } from "@/components/base/toggle";
 import { ToggleGroup } from "@/components/base/toggle-group";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
@@ -386,6 +387,60 @@ export function FormsSection() {
         </DemoRow>
       </GallerySection>
 
+      <GallerySection id="auto-complete" title="AutoComplete" description="Input with type-ahead suggestions. Free-text value is allowed.">
+        <DemoRow label="Basic">
+          <AutoComplete
+            placeholder="Search framework..."
+            className="w-52"
+            options={[
+              { label: "React", value: "react" },
+              { label: "Vue", value: "vue" },
+              { label: "Angular", value: "angular" },
+              { label: "Svelte", value: "svelte" },
+              { label: "Solid", value: "solid" },
+            ]}
+          />
+        </DemoRow>
+        <DemoRow label="With groups">
+          <AutoComplete
+            placeholder="Search language..."
+            className="w-56"
+            options={[
+              {
+                label: "Frontend",
+                options: [
+                  { label: "TypeScript", value: "ts" },
+                  { label: "JavaScript", value: "js" },
+                ],
+              },
+              {
+                label: "Backend",
+                options: [
+                  { label: "Go", value: "go" },
+                  { label: "Rust", value: "rust" },
+                  { label: "Python", value: "python", disabled: true },
+                ],
+              },
+            ]}
+          />
+        </DemoRow>
+        <DemoRow label="Allow clear">
+          <AutoComplete
+            placeholder="Select a fruit..."
+            allowClear
+            className="w-48"
+            options={[
+              { label: "Apple", value: "apple" },
+              { label: "Banana", value: "banana" },
+              { label: "Cherry", value: "cherry" },
+            ]}
+          />
+        </DemoRow>
+        <DemoRow label="Controlled + onSearch">
+          <ControlledAutoComplete />
+        </DemoRow>
+      </GallerySection>
+
       <GallerySection id="form" title="Form" description="Layout-first form composition with API items.">
         <DemoRow label="Items API">
           <Form
@@ -485,5 +540,42 @@ export function FormsSection() {
         </DemoRow>
       </GallerySection>
     </SectionGroup>
+  );
+}
+
+function ControlledAutoComplete() {
+  const [keyword, setKeyword] = useState("");
+  const [value, setValue] = useState<string | undefined>();
+  const allOptions = [
+    { label: "Beijing", value: "beijing" },
+    { label: "Shanghai", value: "shanghai" },
+    { label: "Shenzhen", value: "shenzhen" },
+    { label: "Hangzhou", value: "hangzhou" },
+    { label: "Chengdu", value: "chengdu" },
+  ];
+  const filtered = keyword
+    ? allOptions.filter((option) =>
+        option.label.toLowerCase().includes(keyword.toLowerCase()),
+      )
+    : allOptions;
+
+  return (
+    <div className="w-56 space-y-1">
+      <div className="flex items-center gap-2">
+        <AutoComplete
+          placeholder="Search city..."
+          allowClear
+          value={value}
+          onValueChange={setValue}
+          onSearch={setKeyword}
+          options={filtered}
+          filterOption={false}
+        />
+      </div>
+      <p className="text-xs text-muted-foreground">
+        {keyword ? `Searching: "${keyword}"` : "Type to search"}
+        {value && ` — Selected: ${value}`}
+      </p>
+    </div>
   );
 }
