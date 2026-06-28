@@ -1,4 +1,5 @@
-import { type ReactNode } from "react";
+import * as React from "react";
+import { Check, Copy } from "lucide-react";
 import { Slot } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -34,50 +35,174 @@ const textVariants = cva("", {
   },
 });
 
-interface TextProps extends VariantProps<typeof textVariants> {
-  children: ReactNode;
-  className?: string;
-  asChild?: boolean;
-  underline?: boolean;
-  italic?: boolean;
-  del?: boolean;
-  mark?: boolean;
-  code?: boolean;
-  ellipsis?: boolean;
+type TypographyType = "secondary" | "success" | "warning" | "danger"
+
+const typographyTypeClasses: Record<"default" | "secondary" | "success" | "warning" | "danger" | "disabled", string> = {
+  default: "text-foreground",
+  secondary: "text-muted-foreground",
+  success: "text-green-600 dark:text-green-500",
+  warning: "text-yellow-600 dark:text-yellow-500",
+  danger: "text-destructive",
+  disabled: "text-muted-foreground opacity-50",
+};
+type CopyableConfig = {
+  text?: string | (() => string | Promise<string>);
+  onCopy?: () => void;
+  icon?: React.ReactNode;
+}
+type EllipsisConfig = {
+  rows?: number;
+  tooltip?: boolean | React.ReactNode;
+}
+
+type TextProps = Omit<React.ComponentProps<"span">, "color"> &
+  VariantProps<typeof textVariants> & {
+    asChild?: boolean;
+    type?: TypographyType;
+    disabled?: boolean;
+    underline?: boolean;
+    italic?: boolean;
+    del?: boolean;
+    delete?: boolean;
+    mark?: boolean;
+    code?: boolean;
+    keyboard?: boolean;
+    strong?: boolean;
+    copyable?: boolean | CopyableConfig;
+    ellipsis?: boolean | EllipsisConfig;
+  }
+
+function getVariant(variant: TextProps["variant"], type?: TypographyType, disabled?: boolean) {
+  if (disabled) {
+    return "disabled";
+  }
+
+  return type ?? variant;
+}
+
+function getTypeClass(type?: TypographyType, disabled?: boolean) {
+  return typographyTypeClasses[getVariant("default", type, disabled) ?? "default"];
+}
+
+function getTextFromNode(node: React.ReactNode) {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+
+  return "";
+}
+
+function getEllipsisStyle(ellipsis?: boolean | EllipsisConfig): React.CSSProperties | undefined {
+  if (!ellipsis) {
+    return undefined;
+  }
+
+  if (typeof ellipsis === "object" && ellipsis.rows && ellipsis.rows > 1) {
+    return {
+      display: "-webkit-box",
+      WebkitLineClamp: ellipsis.rows,
+      WebkitBoxOrient: "vertical",
+      overflow: "hidden",
+    };
+  }
+
+  return undefined;
+}
+
+function useCopyable(copyable: TextProps["copyable"], children: React.ReactNode) {
+  const [copied, setCopied] = React.useState(false);
+
+  const copy = React.useCallback(async () => {
+    const config = typeof copyable === "object" ? copyable : undefined;
+    const rawText = config?.text;
+    const text = typeof rawText === "function" ? await rawText() : rawText ?? getTextFromNode(children);
+
+    if (text) {
+      await globalThis.navigator?.clipboard?.writeText(text);
+    }
+
+    setCopied(true);
+    config?.onCopy?.();
+    globalThis.setTimeout(() => setCopied(false), 1200);
+  }, [children, copyable]);
+
+  return { copied, copy };
+}
+
+function CopyAction({ copyable, children }: { copyable: TextProps["copyable"]; children: React.ReactNode }) {
+  const { copied, copy } = useCopyable(copyable, children);
+  const icon = typeof copyable === "object" ? copyable.icon : undefined;
+
+  return (
+    <button
+      type="button"
+      className="ml-1 inline-flex size-5 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      aria-label={copied ? "Copied" : "Copy"}
+      onClick={copy}
+    >
+      {copied ? <Check className="size-3" /> : icon ?? <Copy className="size-3" />}
+    </button>
+  );
 }
 
 function Text({
   children,
   className,
   variant,
+  type,
+  disabled,
   size,
   weight,
   asChild,
   underline,
   italic,
   del,
+  delete: deleteText,
   mark,
   code,
+  keyboard,
+  strong,
+  copyable,
   ellipsis,
+  style,
+  ...props
 }: TextProps) {
   const Component = asChild ? Slot.Root : "span";
-
-  return (
+  const content = (
     <Component
       data-slot="text"
+      aria-disabled={disabled || undefined}
       className={cn(
-        textVariants({ variant, size, weight }),
+        textVariants({ variant: getVariant(variant, type, disabled), size, weight: strong ? "semibold" : weight }),
         underline && "underline underline-offset-4",
         italic && "italic",
-        del && "line-through",
-        mark && "bg-yellow-200 dark:bg-yellow-900/40 rounded-sm px-0.5",
-        code && "font-mono bg-muted rounded px-1 py-0.5 text-[0.875em]",
-        ellipsis && "truncate",
+        (del || deleteText) && "line-through",
+        mark && "rounded-sm bg-yellow-200 px-0.5 dark:bg-yellow-900/40",
+        code && "rounded bg-muted px-1 py-0.5 font-mono text-[0.875em]",
+        keyboard && "rounded border bg-muted px-1 py-0.5 font-mono text-[0.875em] shadow-xs",
+        ellipsis && "inline-block max-w-full align-bottom",
+        ellipsis === true && "truncate",
+        disabled && "pointer-events-none select-none",
         className
       )}
+      style={{ ...getEllipsisStyle(ellipsis), ...style }}
+      {...props}
     >
       {children}
     </Component>
+  );
+
+  if (!copyable) {
+    return content;
+  }
+
+  return (
+    <span data-slot="text-copyable" className="inline-flex max-w-full items-center align-bottom">
+      {content}
+      <CopyAction copyable={copyable}>
+        {children}
+      </CopyAction>
+    </span>
   );
 }
 
@@ -96,59 +221,103 @@ const titleVariants = cva("scroll-m-20 font-semibold tracking-tight", {
   },
 });
 
-interface TitleProps extends VariantProps<typeof titleVariants> {
-  children: ReactNode;
-  className?: string;
-}
+type TitleProps = Omit<React.ComponentProps<"h1">, "color"> &
+  VariantProps<typeof titleVariants> & {
+    type?: TypographyType;
+    disabled?: boolean;
+    copyable?: boolean | CopyableConfig;
+    ellipsis?: boolean | EllipsisConfig;
+  }
 
-function Title({ children, level = 1, className }: TitleProps) {
+function Title({ children, level = 1, className, type, disabled, copyable, ellipsis, style, ...props }: TitleProps) {
   const tagMap = { 1: "h1", 2: "h2", 3: "h3", 4: "h4", 5: "h5" } as const;
   const Component = tagMap[level ?? 1];
-
-  return (
+  const content = (
     <Component
       data-slot="title"
-      className={cn(titleVariants({ level }), className)}
+      aria-disabled={disabled || undefined}
+      className={cn(
+        titleVariants({ level }),
+        getTypeClass(type, disabled),
+        ellipsis === true && "truncate",
+        disabled && "pointer-events-none select-none",
+        className
+      )}
+      style={{ ...getEllipsisStyle(ellipsis), ...style }}
+      {...props}
     >
       {children}
     </Component>
   );
-}
 
-interface ParagraphProps {
-  children: ReactNode;
-  className?: string;
-}
+  if (!copyable) {
+    return content;
+  }
 
-function Paragraph({ children, className }: ParagraphProps) {
   return (
+    <div data-slot="title-copyable" className="inline-flex max-w-full items-center gap-1">
+      {content}
+      <CopyAction copyable={copyable}>{children}</CopyAction>
+    </div>
+  );
+}
+
+type ParagraphProps = Omit<React.ComponentProps<"p">, "color"> & {
+  type?: TypographyType;
+  disabled?: boolean;
+  copyable?: boolean | CopyableConfig;
+  ellipsis?: boolean | EllipsisConfig;
+  strong?: boolean;
+}
+
+function Paragraph({ children, className, type, disabled, copyable, ellipsis, strong, style, ...props }: ParagraphProps) {
+  const content = (
     <p
       data-slot="paragraph"
+      aria-disabled={disabled || undefined}
       className={cn(
-        "text-sm leading-relaxed text-foreground [&:not(:first-child)]:mt-4",
+        "text-sm leading-relaxed [&:not(:first-child)]:mt-4",
+        getTypeClass(type, disabled),
+        strong && "font-semibold",
+        ellipsis === true && "truncate",
+        disabled && "pointer-events-none select-none",
         className
       )}
+      style={{ ...getEllipsisStyle(ellipsis), ...style }}
+      {...props}
     >
       {children}
     </p>
   );
+
+  if (!copyable) {
+    return content;
+  }
+
+  return (
+    <div data-slot="paragraph-copyable" className="inline-flex max-w-full items-start gap-1">
+      {content}
+      <CopyAction copyable={copyable}>{children}</CopyAction>
+    </div>
+  );
 }
 
-interface LinkProps {
-  children: ReactNode;
-  href: string;
-  className?: string;
+type LinkProps = React.ComponentProps<"a"> & {
+  disabled?: boolean;
 }
 
-function Link({ children, href, className }: LinkProps) {
+function Link({ children, href, className, disabled, ...props }: LinkProps) {
   return (
     <a
       data-slot="link"
-      href={href}
+      href={disabled ? undefined : href}
+      aria-disabled={disabled || undefined}
       className={cn(
-        "text-primary underline underline-offset-4 hover:text-primary/80 transition-colors",
+        "text-primary underline underline-offset-4 transition-colors hover:text-primary/80",
+        disabled && "pointer-events-none text-muted-foreground opacity-50",
         className
       )}
+      {...props}
     >
       {children}
     </a>
@@ -156,4 +325,4 @@ function Link({ children, href, className }: LinkProps) {
 }
 
 export { Text, Title, Paragraph, Link };
-export type { TextProps, TitleProps, ParagraphProps, LinkProps };
+export type { TextProps, TitleProps, ParagraphProps, LinkProps, CopyableConfig, EllipsisConfig, TypographyType };

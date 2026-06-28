@@ -1,8 +1,8 @@
-import { GallerySection, DemoRow } from "../gallery-section";
-import { FloatButton, FloatButtonGroup } from "@/components/base/float-button";
-import { Tour, type TourStepConfig } from "@/components/composite/tour";
-import { Plus, MessageCircle, Share, CreditCard as Edit, Settings, ArrowUp } from "lucide-react";
 import { useState } from "react";
+import { GallerySection, DemoRow, SectionGroup } from "../gallery-section";
+import { FloatButton, FloatButtonBackTop, FloatButtonGroup } from "@/components/base/float-button";
+import { Tour, type TourStepConfig } from "@/components/composite/tour";
+import { Plus, MessageCircle, Share, CreditCard as Edit, Settings, HelpCircle } from "lucide-react";
 import { Button } from "@/components/base/button";
 
 export function UtilitySection() {
@@ -16,23 +16,24 @@ export function UtilitySection() {
   ];
 
   return (
-    <>
-      <GallerySection id="float-button" title="Float Button" description="Floating action buttons anchored to the viewport.">
-        <DemoRow>
-          <div className="rounded-lg border bg-muted/20 w-full max-w-sm h-48 relative overflow-hidden flex items-center justify-center">
+    <SectionGroup title="Utility" description="Floating actions and guided product utilities.">
+      <GallerySection id="float-button" title="Float Button" description="Floating action buttons anchored to a surface or viewport.">
+        <DemoRow label="API">
+          <div className="relative flex h-52 w-full max-w-sm items-center justify-center overflow-hidden rounded border bg-muted/20">
             <p className="text-sm text-muted-foreground">Float buttons appear at the bottom-right</p>
-            <div className="absolute bottom-4 right-4 flex flex-col gap-2 items-end">
-              <FloatButton type="primary" icon={<ArrowUp className="size-4" />} tooltip="Back to top" shape="circle" />
-              <FloatButton icon={<Settings className="size-4" />} tooltip="Settings" shape="circle" />
+            <div className="absolute right-4 bottom-4 flex flex-col items-end gap-2">
+              <FloatButtonBackTop visibilityHeight={0} type="primary" />
+              <FloatButton icon={<Settings className="size-4" />} tooltip="Settings" badge={{ dot: true }} />
+              <FloatButton shape="square" icon={<HelpCircle className="size-4" />} content="Help" tooltip="Help center" />
             </div>
           </div>
-          <div className="rounded-lg border bg-muted/20 w-56 h-48 relative overflow-hidden flex items-center justify-center">
-            <p className="text-sm text-muted-foreground text-center px-4">Group with trigger</p>
-            <div className="absolute bottom-4 right-4">
-              <FloatButtonGroup trigger="click" triggerIcon={<Plus className="size-5" />}>
-                <FloatButton icon={<MessageCircle className="size-4" />} tooltip="Message" shape="circle" />
-                <FloatButton icon={<Share className="size-4" />} tooltip="Share" shape="circle" />
-                <FloatButton icon={<Edit className="size-4" />} tooltip="Edit" shape="circle" />
+          <div className="relative flex h-52 w-64 items-center justify-center overflow-hidden rounded border bg-muted/20">
+            <p className="px-4 text-center text-sm text-muted-foreground">Group with trigger</p>
+            <div className="absolute right-4 bottom-4">
+              <FloatButtonGroup trigger="click" placement="top" triggerIcon={<Plus className="size-5" />}>
+                <FloatButton icon={<MessageCircle className="size-4" />} tooltip="Message" />
+                <FloatButton icon={<Share className="size-4" />} tooltip="Share" badge={2} />
+                <FloatButton icon={<Edit className="size-4" />} tooltip="Edit" />
               </FloatButtonGroup>
             </div>
           </div>
@@ -52,6 +53,6 @@ export function UtilitySection() {
           />
         </DemoRow>
       </GallerySection>
-    </>
+    </SectionGroup>
   );
 }

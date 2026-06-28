@@ -1,68 +1,91 @@
-import { type ReactNode, Children } from "react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 
-interface SpaceProps {
-  children: ReactNode[];
-  className?: string;
-  direction?: "horizontal" | "vertical";
-  size?: "sm" | "default" | "lg";
+type SpaceSize = "sm" | "small" | "default" | "middle" | "lg" | "large" | number;
+type SpaceOrientation = "horizontal" | "vertical";
+type SpaceProps = React.ComponentProps<"div"> & {
+  direction?: SpaceOrientation;
+  orientation?: SpaceOrientation;
+  vertical?: boolean;
+  size?: SpaceSize | [SpaceSize, SpaceSize];
   align?: "start" | "center" | "end" | "baseline";
-  split?: ReactNode;
+  split?: React.ReactNode;
+  separator?: React.ReactNode;
   block?: boolean;
+  wrap?: boolean;
+}
+
+const sizeClassMap: Record<Exclude<SpaceSize, number>, string> = {
+  sm: "0.375rem",
+  small: "0.375rem",
+  default: "0.625rem",
+  middle: "0.625rem",
+  lg: "1rem",
+  large: "1rem",
+};
+
+const alignMap = {
+  start: "items-start",
+  center: "items-center",
+  end: "items-end",
+  baseline: "items-baseline",
+};
+
+function getGapValue(size: SpaceSize) {
+  return typeof size === "number" ? size : sizeClassMap[size];
 }
 
 function Space({
   children,
   className,
-  direction = "horizontal",
+  direction,
+  orientation,
+  vertical,
   size = "default",
-  align = "start",
+  align,
   split,
+  separator,
   block,
+  wrap,
+  style,
+  ...props
 }: SpaceProps) {
-  const sizeMap = {
-    sm: "gap-1.5",
-    default: "gap-2.5",
-    lg: "gap-4",
-  };
+  const isVertical = vertical || orientation === "vertical" || direction === "vertical";
+  const [horizontalSize, verticalSize] = Array.isArray(size) ? size : [size, size];
+  const childArray = React.Children.toArray(children).filter(Boolean);
+  const mergedSeparator = separator ?? split;
 
-  const alignMap = {
-    start: "items-start",
-    center: "items-center",
-    end: "items-end",
-    baseline: "items-baseline",
-  };
-
-  const isHorizontal = direction === "horizontal";
-  const baseClasses = isHorizontal ? "flex-wrap" : "flex-col";
-  const flexType = block ? "flex" : "inline-flex";
-  const width = block ? "w-full" : "";
-
-  const childArray = Children.toArray(children).filter(Boolean);
+  if (childArray.length === 0) {
+    return null;
+  }
 
   return (
     <div
       data-slot="space"
       className={cn(
-        flexType,
-        baseClasses,
-        alignMap[align],
-        sizeMap[size],
-        width,
+        block ? "flex" : "inline-flex",
+        isVertical ? "flex-col" : "flex-row",
+        !isVertical && wrap && "flex-wrap",
+        alignMap[align ?? (isVertical ? "start" : "center")],
+        block && "w-full",
         className
       )}
+      style={{ columnGap: getGapValue(horizontalSize), rowGap: getGapValue(verticalSize), ...style }}
+      {...props}
     >
       {childArray.map((child, index) => (
-        <div key={index}>
-          {index > 0 && split && (
-            <span className="mx-1 text-border">{split}</span>
-          )}
-          {child}
-        </div>
+        <React.Fragment key={(child as React.ReactElement).key ?? index}>
+          {index > 0 && mergedSeparator ? (
+            <span data-slot="space-separator" className={cn(isVertical ? "my-1" : "mx-1", "text-border")}>
+              {mergedSeparator}
+            </span>
+          ) : null}
+          <div data-slot="space-item">{child}</div>
+        </React.Fragment>
       ))}
     </div>
   );
 }
 
 export { Space };
-export type { SpaceProps };
+export type { SpaceOrientation, SpaceProps, SpaceSize };

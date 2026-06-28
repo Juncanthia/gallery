@@ -1,111 +1,125 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import * as React from "react";
+import { cn } from "@/lib/utils";
+
+export type AffixRef = {
+  updatePosition: () => void;
+}
 
 export type AffixProps = Omit<React.ComponentProps<"div">, "onChange"> & {
   offsetTop?: number;
   offsetBottom?: number;
-  target?: () => HTMLElement;
+  target?: () => Window | HTMLElement | null;
   onChange?: (affixed: boolean) => void;
+  zIndex?: number;
   children?: React.ReactNode;
 }
 
-export const Affix = React.forwardRef<HTMLDivElement, AffixProps>(
+function isWindow(target: Window | HTMLElement): target is Window {
+  return typeof window !== "undefined" && target === window;
+}
+
+function getTargetRect(target: Window | HTMLElement) {
+  if (isWindow(target)) {
+    return { top: 0, bottom: window.innerHeight, left: 0 };
+  }
+
+  return target.getBoundingClientRect();
+}
+
+export const Affix = React.forwardRef<AffixRef, AffixProps>(
   (
     {
       offsetTop = 0,
       offsetBottom,
       target,
       onChange,
+      zIndex = 10,
       children,
       className,
+      style,
       ...props
     },
     ref
   ) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const placeholderRef = useRef<HTMLDivElement>(null);
-    const [affixed, setAffixed] = useState(false);
-    const [childHeight, setChildHeight] = useState(0);
-    const [containerWidth, setContainerWidth] = useState(0);
+    const placeholderRef = React.useRef<HTMLDivElement>(null);
+    const fixedRef = React.useRef<HTMLDivElement>(null);
+    const lastAffixedRef = React.useRef(false);
+    const [affixStyle, setAffixStyle] = React.useState<React.CSSProperties>();
+    const [placeholderStyle, setPlaceholderStyle] = React.useState<React.CSSProperties>();
 
-    const updateContainerWidth = useCallback(() => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
+    const measure = React.useCallback(() => {
+      const placeholder = placeholderRef.current;
+      const fixed = fixedRef.current;
+      const targetNode = target?.() ?? window;
+
+      if (!placeholder || !fixed || !targetNode) {
+        return;
       }
-    }, []);
 
-    const handleScroll = useCallback(() => {
-      if (!containerRef.current) return;
-
-      const rect = containerRef.current.getBoundingClientRect();
-      const scrollContainer = target?.() || window;
-
-      let shouldAffix = false;
+      const placeholderRect = placeholder.getBoundingClientRect();
+      const targetRect = getTargetRect(targetNode);
+      const width = placeholderRect.width;
+      const height = fixed.offsetHeight || placeholderRect.height;
+      let nextAffixStyle: React.CSSProperties | undefined;
 
       if (offsetBottom !== undefined) {
-        const viewportHeight =
-          scrollContainer === window
-            ? window.innerHeight
-            : (scrollContainer as HTMLElement).clientHeight;
-        shouldAffix = rect.bottom > viewportHeight;
-      } else {
-        shouldAffix = rect.top <= offsetTop;
-      }
-
-      if (shouldAffix !== affixed) {
-        setAffixed(shouldAffix);
-        onChange?.(shouldAffix);
-
-        if (!shouldAffix && placeholderRef.current) {
-          setChildHeight(0);
-        } else if (shouldAffix) {
-          if (containerRef.current) {
-            setChildHeight(containerRef.current.offsetHeight);
-          }
+        const fixedBottom = targetRect.bottom - placeholderRect.bottom + offsetBottom;
+        if (fixedBottom > 0) {
+          nextAffixStyle = {
+            position: "fixed",
+            bottom: offsetBottom,
+            left: placeholderRect.left,
+            width,
+            zIndex,
+          };
         }
+      } else if (placeholderRect.top - targetRect.top <= offsetTop) {
+        nextAffixStyle = {
+          position: "fixed",
+          top: targetRect.top + offsetTop,
+          left: placeholderRect.left,
+          width,
+          zIndex,
+        };
       }
 
-      updateContainerWidth();
-    }, [affixed, offsetTop, offsetBottom, target, onChange, updateContainerWidth]);
+      const nextAffixed = !!nextAffixStyle;
+      setAffixStyle(nextAffixStyle);
+      setPlaceholderStyle(nextAffixed ? { width, height } : undefined);
 
-    useEffect(() => {
-      updateContainerWidth();
-      const scrollContainer = target?.() || window;
-      const scrollElement =
-        scrollContainer === window ? window : (scrollContainer as HTMLElement);
+      if (lastAffixedRef.current !== nextAffixed) {
+        lastAffixedRef.current = nextAffixed;
+        onChange?.(nextAffixed);
+      }
+    }, [offsetBottom, offsetTop, onChange, target, zIndex]);
 
-      scrollElement.addEventListener("scroll", handleScroll, true);
-      window.addEventListener("resize", updateContainerWidth);
+    React.useImperativeHandle(ref, () => ({ updatePosition: measure }), [measure]);
 
-      handleScroll();
+    React.useEffect(() => {
+      const targetNode = target?.() ?? window;
+      const scrollTarget = isWindow(targetNode) ? window : targetNode;
+      const rafMeasure = () => requestAnimationFrame(measure);
+
+      measure();
+      scrollTarget.addEventListener("scroll", rafMeasure, true);
+      window.addEventListener("resize", rafMeasure);
 
       return () => {
-        scrollElement.removeEventListener("scroll", handleScroll, true);
-        window.removeEventListener("resize", updateContainerWidth);
+        scrollTarget.removeEventListener("scroll", rafMeasure, true);
+        window.removeEventListener("resize", rafMeasure);
       };
-    }, [handleScroll, updateContainerWidth, target]);
+    }, [measure, target]);
 
     return (
       <div
-        ref={containerRef}
+        ref={placeholderRef}
         data-slot="affix"
-        className={className}
+        className={cn(className)}
+        style={style}
         {...props}
       >
-        {affixed && <div ref={placeholderRef} style={{ height: childHeight }} />}
-        <div
-          style={
-            affixed
-              ? {
-                  position: "fixed",
-                  top: offsetBottom !== undefined ? undefined : offsetTop,
-                  bottom: offsetBottom,
-                  zIndex: 10,
-                  width: containerWidth,
-                  left: (ref as any)?.current?.getBoundingClientRect?.().left ?? 0,
-                }
-              : {}
-          }
-        >
+        {affixStyle ? <div aria-hidden="true" style={placeholderStyle} /> : null}
+        <div ref={fixedRef} data-slot="affix-content" style={affixStyle}>
           {children}
         </div>
       </div>

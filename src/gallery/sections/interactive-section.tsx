@@ -4,6 +4,8 @@ import { Button } from "@/components/base/button";
 import { Label } from "@/components/base/label";
 import { Switch } from "@/components/base/switch";
 import { Tabs } from "@/components/base/tabs";
+import { Menubar } from "@/components/base/menubar";
+import { NavigationMenu } from "@/components/base/navigation-menu";
 import { Accordion } from "@/components/base/accordion";
 import { Breadcrumb } from "@/components/base/breadcrumb";
 import { Pagination } from "@/components/base/pagination";
@@ -21,7 +23,7 @@ import { Progress } from "@/components/base/progress";
 import { Avatar, AvatarFallback } from "@/components/base/avatar";
 import {
   User, Settings, Bell, LogOut, CreditCard, Check, Info,
-  ChevronDown, Copy, Trash2,
+  ChevronDown, Copy, Trash2, FolderOpen, FileText, Shield,
 } from "lucide-react";
 
 export function InteractiveSection() {
@@ -31,6 +33,8 @@ export function InteractiveSection() {
   );
   const [notifChecked, setNotifChecked] = useState({ status: true, badge: false });
   const [paginationPage, setPaginationPage] = useState(2);
+  const [menuKeys, setMenuKeys] = useState<string[]>(["projects"]);
+  const [navKeys, setNavKeys] = useState<string[]>(["overview"]);
 
   function toggleDark() {
     document.documentElement.classList.toggle("dark");
@@ -76,6 +80,113 @@ export function InteractiveSection() {
                 { key: "billing", label: "Billing", icon: <CreditCard className="size-3.5" />, disabled: true, children: <p className="pt-3 text-sm text-muted-foreground">Billing is disabled.</p> },
               ]}
             />
+          </DemoRow>
+        </GallerySection>
+
+        <GallerySection id="menubar" title="Menubar" description="Desktop application menu with AntD-like items API.">
+          <DemoRow label="Items API">
+            <div className="w-full max-w-2xl space-y-3">
+              <Menubar
+                selectedKeys={menuKeys}
+                onSelect={({ selectedKeys }) => setMenuKeys(selectedKeys.map(String))}
+                items={[
+                  {
+                    key: "file",
+                    type: "submenu",
+                    label: "File",
+                    children: [
+                      { key: "new", label: "New File", icon: <FileText className="size-4" />, shortcut: "⌘N" },
+                      { key: "open", label: "Open Folder", icon: <FolderOpen className="size-4" />, shortcut: "⌘O" },
+                      { type: "divider" },
+                      { key: "settings", label: "Settings", icon: <Settings className="size-4" /> },
+                    ],
+                  },
+                  {
+                    key: "projects",
+                    label: "Projects",
+                    icon: <FolderOpen className="size-4" />,
+                  },
+                  {
+                    key: "view",
+                    type: "submenu",
+                    label: "View",
+                    children: [
+                      {
+                        key: "layout",
+                        type: "group",
+                        label: "Layout",
+                        children: [
+                          { key: "sidebar", label: "Show Sidebar", shortcut: "⌘B" },
+                          { key: "panel", label: "Toggle Panel", shortcut: "⌘J" },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    key: "delete",
+                    label: "Delete",
+                    icon: <Trash2 className="size-4" />,
+                    danger: true,
+                  },
+                ]}
+              />
+              <p className="text-xs text-muted-foreground">Selected: {menuKeys.join(", ")}</p>
+            </div>
+          </DemoRow>
+        </GallerySection>
+
+        <GallerySection id="navigation-menu" title="Navigation Menu" description="Site navigation with link panels and selected key state.">
+          <DemoRow label="Items API">
+            <div className="w-full max-w-2xl space-y-3">
+              <NavigationMenu
+                selectedKeys={navKeys}
+                onSelect={({ selectedKeys }) => setNavKeys(selectedKeys.map(String))}
+                items={[
+                  {
+                    key: "overview",
+                    label: "Overview",
+                    icon: <Info className="size-4" />,
+                  },
+                  {
+                    key: "products",
+                    label: "Products",
+                    icon: <FolderOpen className="size-4" />,
+                    children: [
+                      {
+                        key: "core",
+                        label: "Core Platform",
+                        icon: <Settings className="size-4" />,
+                        description: "Manage application settings, teams, and permissions.",
+                      },
+                      {
+                        key: "security",
+                        label: "Security Center",
+                        icon: <Shield className="size-4" />,
+                        description: "Audit access, policies, and sensitive operations.",
+                      },
+                      { type: "divider" },
+                      {
+                        key: "docs",
+                        label: "Documentation",
+                        icon: <FileText className="size-4" />,
+                        description: "Read implementation guides and API references.",
+                      },
+                    ],
+                  },
+                  {
+                    key: "billing",
+                    label: "Billing",
+                    icon: <CreditCard className="size-4" />,
+                  },
+                  {
+                    key: "disabled",
+                    label: "Disabled",
+                    disabled: true,
+                  },
+                ]}
+              />
+              <p className="text-xs text-muted-foreground">Selected: {navKeys.join(", ")}</p>
+            </div>
           </DemoRow>
         </GallerySection>
 

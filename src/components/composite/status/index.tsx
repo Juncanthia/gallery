@@ -2,7 +2,7 @@ import type { ComponentProps, HTMLAttributes } from "react";
 import { Badge } from "@/components/base/badge";
 import { cn } from "@/lib/utils";
 
-export type StatusProps = ComponentProps<typeof Badge> & {
+export type StatusProps = Omit<ComponentProps<typeof Badge>, "status"> & {
   status: "online" | "offline" | "maintenance" | "degraded";
 };
 
@@ -20,7 +20,7 @@ export const StatusIndicator = ({
   className,
   ...props
 }: StatusIndicatorProps) => (
-  <span className="relative flex h-2 w-2" {...props}>
+  <span className={cn("relative flex h-2 w-2", className)} {...props}>
     <span
       className={cn(
         "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",

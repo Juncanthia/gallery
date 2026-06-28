@@ -1,113 +1,143 @@
-import React, { type ComponentProps, useState } from "react";
-import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
-import { Plus as PlusIcon, Bone as XIcon } from "lucide-react";
+import * as React from "react";
+import { ArrowUp, Bone as CloseIcon, FileText, Plus as PlusIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { Badge, type BadgeProps } from "@/components/base/badge";
 import {
   Tooltip,
+  TooltipProvider,
   TooltipTrigger,
   TooltipContent,
 } from "@/components/base/tooltip";
+import { cn } from "@/lib/utils";
+import { floatButtonVariants, type FloatButtonShape, type FloatButtonSize, type FloatButtonType } from "./float-button-variants";
 
-export const floatButtonVariants = cva(
-  "relative inline-flex cursor-pointer items-center justify-center transition-all hover:shadow-xl active:scale-95",
-  {
-    variants: {
-      type: {
-        default:
-          "bg-background border border-border text-foreground hover:bg-muted shadow-lg",
-        primary:
-          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg",
-      },
-      size: {
-        default: "h-12 w-12",
-        sm: "h-9 w-9",
-        lg: "h-14 w-14",
-      },
-    },
-    defaultVariants: {
-      type: "default",
-      size: "default",
-    },
-  }
-);
+type FloatButtonBadge = string | number | Omit<BadgeProps, "children" | "text" | "status">;
+type FloatButtonElement = HTMLButtonElement | HTMLAnchorElement;
 
-export type FloatButtonProps = Omit<ComponentProps<"button">, "children" | "type"> &
-  VariantProps<typeof floatButtonVariants> & {
-  shape?: "circle" | "square";
+export type FloatButtonProps = Omit<React.ComponentProps<"button">, "children" | "type" | "onClick"> & {
+  type?: FloatButtonType;
+  size?: FloatButtonSize;
+  shape?: FloatButtonShape;
   icon?: React.ReactNode;
+  content?: React.ReactNode;
   tooltip?: React.ReactNode;
   href?: string;
-  badge?: string | number;
+  target?: React.HTMLAttributeAnchorTarget;
+  badge?: FloatButtonBadge;
+  htmlType?: React.ComponentProps<"button">["type"];
+  onClick?: React.MouseEventHandler<FloatButtonElement>;
 }
 
-export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>(
+function renderBadge(badge?: FloatButtonBadge) {
+  if (badge === undefined || badge === null) {
+    return null;
+  }
+
+  const badgeProps = typeof badge === "object" ? badge : { count: badge };
+
+  return <Badge {...badgeProps} className={cn("absolute -top-1 -right-1", badgeProps.className)} />;
+}
+
+export const FloatButton = React.forwardRef<FloatButtonElement, FloatButtonProps>(
   (
     {
       type = "default",
       size = "default",
       shape = "circle",
       icon,
+      content,
       tooltip,
       href,
+      target,
       badge,
+      htmlType = "button",
       className,
+      disabled,
+      onClick,
       ...props
     },
     ref
   ) => {
-    const shapeClass = shape === "circle" ? "rounded-full" : "rounded-xl";
-
-    const button = (
-      <button
-        ref={ref}
-        data-slot="float-button"
-        className={cn(
-          floatButtonVariants({ type, size }),
-          shapeClass,
-          className
-        )}
-        {...props}
-      >
-        {badge !== undefined && (
-          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-medium text-destructive-foreground">
-            {badge}
-          </span>
-        )}
-        {icon}
-      </button>
+    const iconOnly = content === undefined || content === null;
+    const mergedIcon = iconOnly && !icon ? <FileText className="size-5" /> : icon;
+    const inner = (
+      <>
+        {renderBadge(badge)}
+        {mergedIcon ? <span data-slot="float-button-icon">{mergedIcon}</span> : null}
+        {content !== undefined && content !== null ? <span data-slot="float-button-content">{content}</span> : null}
+      </>
     );
 
-    const content = href ? (
-      <a href={href} className="inline-flex">
-        {button}
+    const sharedClassName = cn(floatButtonVariants({ type, size, shape, iconOnly }), className);
+    const node = href ? (
+      <a
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        data-slot="float-button"
+        href={disabled ? undefined : href}
+        target={target}
+        aria-disabled={disabled || undefined}
+        className={sharedClassName}
+        onClick={disabled ? undefined : (onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>)}
+        {...(props as Omit<React.ComponentProps<"a">, "type">)}
+      >
+        {inner}
       </a>
     ) : (
-      button
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        data-slot="float-button"
+        type={htmlType}
+        disabled={disabled}
+        className={sharedClassName}
+        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
+        {...props}
+      >
+        {inner}
+      </button>
     );
 
     if (tooltip) {
       return (
-        <Tooltip>
-          <TooltipTrigger asChild>{content}</TooltipTrigger>
-          <TooltipContent>{tooltip}</TooltipContent>
-        </Tooltip>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>{node}</TooltipTrigger>
+            <TooltipContent>{tooltip}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       );
     }
 
-    return content;
+    return node;
   }
 );
 
 FloatButton.displayName = "FloatButton";
 
-export interface FloatButtonGroupProps extends Omit<ComponentProps<"div">, "children"> {
+export interface FloatButtonGroupProps extends Omit<React.ComponentProps<"div">, "children"> {
   trigger?: "click" | "hover";
   triggerIcon?: React.ReactNode;
+  closeIcon?: React.ReactNode;
   children?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  placement?: "top" | "right" | "bottom" | "left";
+  shape?: FloatButtonShape;
+  type?: FloatButtonType;
 }
+
+const placementClasses: Record<NonNullable<FloatButtonGroupProps["placement"]>, string> = {
+  top: "flex-col-reverse",
+  bottom: "flex-col",
+  left: "flex-row-reverse",
+  right: "flex-row",
+};
+
+const listPlacementClasses: Record<NonNullable<FloatButtonGroupProps["placement"]>, string> = {
+  top: "flex-col-reverse",
+  bottom: "flex-col",
+  left: "flex-row-reverse",
+  right: "flex-row",
+};
 
 export const FloatButtonGroup = React.forwardRef<
   HTMLDivElement,
@@ -117,25 +147,28 @@ export const FloatButtonGroup = React.forwardRef<
     {
       trigger = "click",
       triggerIcon,
+      closeIcon,
       children,
       open: controlledOpen,
       onOpenChange,
+      placement = "top",
+      shape = "circle",
+      type = "primary",
       className,
       ...props
     },
     ref
   ) => {
-    const [internalOpen, setInternalOpen] = useState(false);
+    const [internalOpen, setInternalOpen] = React.useState(false);
     const isControlled = controlledOpen !== undefined;
     const open = isControlled ? controlledOpen : internalOpen;
 
-    const setOpen = (value: boolean) => {
-      if (isControlled) {
-        onOpenChange?.(value);
-      } else {
+    const setOpen = React.useCallback((value: boolean) => {
+      if (!isControlled) {
         setInternalOpen(value);
       }
-    };
+      onOpenChange?.(value);
+    }, [isControlled, onOpenChange]);
 
     const handleTriggerClick = () => {
       if (trigger === "click") {
@@ -151,41 +184,51 @@ export const FloatButtonGroup = React.forwardRef<
 
     const childArray = React.Children.toArray(children);
 
+    React.useEffect(() => {
+      if (trigger !== "click" || !open) {
+        return;
+      }
+
+      const close = () => setOpen(false);
+      document.addEventListener("click", close, { capture: true });
+      return () => document.removeEventListener("click", close, { capture: true });
+    }, [open, setOpen, trigger]);
+
     return (
       <div
         ref={ref}
         data-slot="float-button-group"
-        className={cn("relative inline-flex flex-col items-center gap-2", className)}
+        className={cn("relative inline-flex items-center gap-2", placementClasses[placement], className)}
         onMouseEnter={() => handleTriggerHover(true)}
         onMouseLeave={() => handleTriggerHover(false)}
+        onClick={(event) => event.stopPropagation()}
         {...props}
       >
         <AnimatePresence>
           {open && (
-            <>
+            <div data-slot="float-button-group-list" className={cn("flex gap-2", listPlacementClasses[placement])}>
               {childArray.map((child, index) => (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                  key={(child as React.ReactElement).key ?? index}
+                  initial={{ opacity: 0, y: placement === "top" ? 10 : 0, scale: 0.8 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.8 }}
+                  exit={{ opacity: 0, y: placement === "top" ? 10 : 0, scale: 0.8 }}
                   transition={{ delay: index * 0.05 }}
                 >
                   {child}
                 </motion.div>
               ))}
-            </>
+            </div>
           )}
         </AnimatePresence>
 
         <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.2 }}>
           <FloatButton
-            type="primary"
-            size="default"
-            icon={
-              triggerIcon || (open ? <XIcon className="h-5 w-5" /> : <PlusIcon className="h-5 w-5" />)
-            }
+            type={type}
+            shape={shape}
+            icon={open ? closeIcon ?? <CloseIcon className="size-5" /> : triggerIcon ?? <PlusIcon className="size-5" />}
             onClick={handleTriggerClick}
+            aria-expanded={open}
           />
         </motion.div>
       </div>
@@ -194,3 +237,81 @@ export const FloatButtonGroup = React.forwardRef<
 );
 
 FloatButtonGroup.displayName = "FloatButtonGroup";
+
+export type FloatButtonBackTopProps = Omit<FloatButtonProps, "onClick"> & {
+  visibilityHeight?: number;
+  target?: () => Window | HTMLElement | Document;
+  duration?: number;
+  onClick?: React.MouseEventHandler<FloatButtonElement>;
+}
+
+function isWindow(target: Window | HTMLElement | Document): target is Window {
+  return typeof window !== "undefined" && target === window;
+}
+
+function isDocument(target: Window | HTMLElement | Document): target is Document {
+  return typeof Document !== "undefined" && target instanceof Document;
+}
+
+function getScrollTop(target: Window | HTMLElement | Document) {
+  if (isWindow(target)) {
+    return window.scrollY || document.documentElement.scrollTop;
+  }
+
+  if (isDocument(target)) {
+    return target.documentElement.scrollTop;
+  }
+
+  return target.scrollTop;
+}
+
+function scrollToTop(target: Window | HTMLElement | Document, behavior: ScrollBehavior) {
+  if (isWindow(target)) {
+    window.scrollTo({ top: 0, behavior });
+    return;
+  }
+
+  if (isDocument(target)) {
+    target.documentElement.scrollTo({ top: 0, behavior });
+    return;
+  }
+
+  target.scrollTo({ top: 0, behavior });
+}
+
+export const FloatButtonBackTop = React.forwardRef<FloatButtonElement, FloatButtonBackTopProps>(
+  ({ visibilityHeight = 400, target, duration = 450, icon, tooltip = "Back to top", onClick, ...props }, ref) => {
+    const [visible, setVisible] = React.useState(visibilityHeight === 0);
+
+    React.useEffect(() => {
+      const targetNode = target?.() ?? window;
+      const handleScroll = () => setVisible(getScrollTop(targetNode) >= visibilityHeight);
+      handleScroll();
+      targetNode.addEventListener("scroll", handleScroll);
+      return () => targetNode.removeEventListener("scroll", handleScroll);
+    }, [target, visibilityHeight]);
+
+    return (
+      <AnimatePresence>
+        {visible ? (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}>
+            <FloatButton
+              ref={ref}
+              icon={icon ?? <ArrowUp className="size-5" />}
+              tooltip={tooltip}
+              onClick={(event) => {
+                scrollToTop(target?.() ?? window, duration > 0 ? "smooth" : "auto");
+                onClick?.(event);
+              }}
+              {...props}
+            />
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    );
+  }
+);
+
+FloatButtonBackTop.displayName = "FloatButtonBackTop";
+
+export type { FloatButtonBadge, FloatButtonElement, FloatButtonShape, FloatButtonSize, FloatButtonType };

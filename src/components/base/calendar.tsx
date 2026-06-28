@@ -13,6 +13,38 @@ import { Button } from "@/components/base/button"
 import { buttonVariants } from "@/components/base/button-variants"
 import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, ChevronDown as ChevronDownIcon } from "lucide-react"
 
+type CalendarCellInfo = {
+  type: "date";
+  originNode: React.ReactNode;
+}
+
+type CalendarHeaderRenderConfig = {
+  value: Date;
+  onChange: (date: Date) => void;
+}
+
+type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  buttonVariant?: React.ComponentProps<typeof Button>["variant"]
+  value?: Date
+  defaultValue?: Date
+  onChange?: (date: Date) => void
+  validRange?: [Date, Date]
+  disabledDate?: (date: Date) => boolean
+  dateCellRender?: (date: Date) => React.ReactNode
+  cellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
+  fullCellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
+  headerRender?: (config: CalendarHeaderRenderConfig) => React.ReactNode
+  fullscreen?: boolean
+}
+
+function isBeforeDay(date: Date, target: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()) < new Date(target.getFullYear(), target.getMonth(), target.getDate())
+}
+
+function isAfterDay(date: Date, target: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()) > new Date(target.getFullYear(), target.getMonth(), target.getDate())
+}
+
 function Calendar({
   className,
   classNames,
@@ -22,17 +54,56 @@ function Calendar({
   locale,
   formatters,
   components,
+  value,
+  defaultValue,
+  onChange,
+  validRange,
+  disabledDate,
+  dateCellRender,
+  cellRender,
+  fullCellRender,
+  headerRender,
+  fullscreen = false,
+  disabled,
   ...props
-}: React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>["variant"]
-}) {
+}: CalendarProps) {
   const defaultClassNames = getDefaultClassNames()
+  const isSingleApi = value !== undefined || defaultValue !== undefined || onChange !== undefined
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? value ?? new Date())
+  const mergedValue = value ?? internalValue
+
+  const changeValue = React.useCallback((date?: Date) => {
+    if (!date) return
+
+    if (value === undefined) {
+      setInternalValue(date)
+    }
+    onChange?.(date)
+  }, [onChange, value])
+
+  const mergedDisabled = React.useMemo(() => {
+    const disabledMatchers = Array.isArray(disabled) ? [...disabled] : disabled ? [disabled] : []
+
+    if (validRange) {
+      disabledMatchers.push((date: Date) => isBeforeDay(date, validRange[0]) || isAfterDay(date, validRange[1]))
+    }
+
+    if (disabledDate) {
+      disabledMatchers.push(disabledDate)
+    }
+
+    return disabledMatchers.length ? disabledMatchers : undefined
+  }, [disabled, disabledDate, validRange])
 
   return (
-    <DayPicker
+    <div data-slot="calendar-wrapper" className={cn(fullscreen && "w-full", !fullscreen && "w-fit")}>
+      {headerRender ? headerRender({ value: mergedValue, onChange: changeValue }) : null}
+      <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
         "group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
+        fullscreen && "w-full",
+        !fullscreen && "rounded-md border",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className
@@ -134,6 +205,8 @@ function Calendar({
         hidden: cn("invisible", defaultClassNames.hidden),
         ...classNames,
       }}
+      disabled={mergedDisabled}
+      {...(isSingleApi ? { ...props, mode: "single" as const, selected: mergedValue, onSelect: changeValue } : props)}
       components={{
         Root: ({ className, rootRef, ...props }) => {
           return (
@@ -163,7 +236,13 @@ function Calendar({
           )
         },
         DayButton: ({ ...props }) => (
-          <CalendarDayButton locale={locale} {...props} />
+          <CalendarDayButton
+            locale={locale}
+            dateCellRender={dateCellRender}
+            cellRender={cellRender}
+            fullCellRender={fullCellRender}
+            {...props}
+          />
         ),
         WeekNumber: ({ children, ...props }) => {
           return (
@@ -176,8 +255,8 @@ function Calendar({
         },
         ...components,
       }}
-      {...props}
     />
+    </div>
   )
 }
 
@@ -187,8 +266,17 @@ function CalendarDayButton({
   modifiers,
   locale,
   type,
+  children,
+  dateCellRender,
+  cellRender,
+  fullCellRender,
   ...props
-}: React.ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {
+}: React.ComponentProps<typeof DayButton> & {
+  locale?: Partial<Locale>
+  dateCellRender?: (date: Date) => React.ReactNode
+  cellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
+  fullCellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
+}) {
   const defaultClassNames = getDefaultClassNames()
   const buttonProps = { ...props } as Omit<typeof props, "color">
   delete (buttonProps as { color?: unknown }).color
@@ -197,6 +285,15 @@ function CalendarDayButton({
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
+
+  const originNode = <>{children}</>
+  const extraNode = cellRender?.(day.date, { type: "date", originNode }) ?? dateCellRender?.(day.date)
+  const contentNode = fullCellRender?.(day.date, { type: "date", originNode }) ?? (
+    <>
+      {originNode}
+      {extraNode ? <span data-slot="calendar-cell-extra" className="text-[10px] leading-none opacity-80">{extraNode}</span> : null}
+    </>
+  )
 
   return (
     <Button
@@ -220,8 +317,11 @@ function CalendarDayButton({
         className
       )}
       {...buttonProps}
-    />
+    >
+      {contentNode}
+    </Button>
   )
 }
 
 export { Calendar, CalendarDayButton }
+export type { CalendarCellInfo, CalendarHeaderRenderConfig, CalendarProps }

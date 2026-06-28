@@ -17,6 +17,8 @@ import { type DateRange } from "react-day-picker";
 export function LayoutSection() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [calendarValue, setCalendarValue] = useState(new Date());
+  const [affixed, setAffixed] = useState(false);
 
   return (
     <SectionGroup title="Layout & Misc" description="Structural layout utilities, containers, and miscellaneous components.">
@@ -33,36 +35,45 @@ export function LayoutSection() {
             </div>
           ))}
         </DemoRow>
-        <DemoRow label="direction + align">
+        <DemoRow label="API">
           <div className="w-48 rounded-md border overflow-hidden">
-            <p className="text-xs text-muted-foreground px-2 py-1 border-b bg-muted/50">col / center</p>
-            <Flex direction="col" align="center" className="p-3" gap={2}>
+            <p className="text-xs text-muted-foreground px-2 py-1 border-b bg-muted/50">vertical / center</p>
+            <Flex vertical align="center" className="p-3" gap="small">
               <Badge>First</Badge>
               <Badge variant="secondary">Second</Badge>
               <Badge variant="outline">Third</Badge>
             </Flex>
           </div>
           <div className="w-48 rounded-md border overflow-hidden">
-            <p className="text-xs text-muted-foreground px-2 py-1 border-b bg-muted/50">wrap</p>
-            <Flex wrap="wrap" className="p-2" gap={1}>
+            <p className="text-xs text-muted-foreground px-2 py-1 border-b bg-muted/50">wrap + number gap</p>
+            <Flex wrap className="p-2" gap={8}>
               {Array.from({ length: 6 }, (_, i) => (
                 <Badge key={i} variant="secondary">Item {i + 1}</Badge>
               ))}
             </Flex>
           </div>
+          <Flex as="section" flex="1" align="center" gap="middle" className="rounded-md border p-2">
+            <Badge>as=section</Badge>
+            <span className="text-sm text-muted-foreground">custom flex style</span>
+          </Flex>
         </DemoRow>
       </GallerySection>
 
       <GallerySection id="space" title="Space" description="Uniform spacing between children.">
         <DemoRow label="Horizontal">
-          <Space>
+          <Space size="middle" wrap>
             <Badge>Item 1</Badge>
             <Badge variant="secondary">Item 2</Badge>
             <Badge variant="outline">Item 3</Badge>
           </Space>
+          <Space size={[8, 16]} separator={<span>/</span>}>
+            <Button size="small" variant="text">Edit</Button>
+            <Button size="small" variant="text">Copy</Button>
+            <Button size="small" variant="text">Delete</Button>
+          </Space>
         </DemoRow>
-        <DemoRow label="Vertical with divider">
-          <Space direction="vertical" size="default" split={<hr className="border-border w-full" />} className="w-40">
+        <DemoRow label="Vertical with separator">
+          <Space vertical size={12} separator={<hr className="w-full border-border" />} className="w-40">
             <p className="text-sm">First item</p>
             <p className="text-sm">Second item</p>
             <p className="text-sm">Third item</p>
@@ -178,21 +189,30 @@ export function LayoutSection() {
       </GallerySection>
 
       <GallerySection id="calendar" title="Calendar" description="Date and date range picker.">
-        <DemoRow label="Single date">
+        <DemoRow label="AntD-like API">
+          <Calendar
+            value={calendarValue}
+            onChange={setCalendarValue}
+            validRange={[new Date(2024, 0, 1), new Date(2026, 11, 31)]}
+            dateCellRender={(current) => current.getDate() === calendarValue.getDate() ? <span>selected</span> : null}
+            headerRender={({ value }) => (
+              <div className="px-3 pt-3 text-sm font-medium">
+                {value.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+              </div>
+            )}
+          />
+        </DemoRow>
+        <DemoRow label="DayPicker compatibility">
           <Calendar
             mode="single"
             selected={date}
             onSelect={setDate}
-            className="rounded-md border"
           />
-        </DemoRow>
-        <DemoRow label="Date range">
           <Calendar
             mode="range"
             selected={dateRange}
             onSelect={setDateRange}
             numberOfMonths={2}
-            className="rounded-md border"
           />
         </DemoRow>
       </GallerySection>
@@ -244,7 +264,12 @@ export function LayoutSection() {
             </Watermark>
           </div>
           <div className="relative w-72 h-36 rounded-lg border overflow-hidden bg-card flex items-center justify-center">
-            <Watermark content={["Acme Corp", "Internal Use"]} rotate={-30} gap={[80, 50]}>
+            <Watermark
+              content={[{ text: "Acme Corp", font: { fontWeight: 700 } }, "Internal Use"]}
+              rotate={-30}
+              gap={[80, 50]}
+              font={{ color: "rgba(37,99,235,0.16)", fontSize: 14 }}
+            >
               <div className="flex flex-col items-center gap-1">
                 <p className="text-sm font-medium">Multi-line Watermark</p>
                 <p className="text-xs text-muted-foreground">Two text lines</p>
@@ -260,8 +285,10 @@ export function LayoutSection() {
             <p className="text-sm text-muted-foreground mb-3">
               Affix pins an element to the viewport once the user scrolls past a threshold. Used for sticky toolbars, back-to-top buttons, or sidebars.
             </p>
-            <Affix offsetTop={80}>
-              <Button size="small" variant="outlined">Sticky at 80px from top</Button>
+            <Affix offsetTop={80} onChange={setAffixed}>
+              <Button size="small" variant={affixed ? "solid" : "outlined"}>
+                {affixed ? "Affixed" : "Sticky at 80px from top"}
+              </Button>
             </Affix>
           </div>
         </DemoRow>

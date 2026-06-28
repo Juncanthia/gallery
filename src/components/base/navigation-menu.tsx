@@ -1,18 +1,287 @@
 import * as React from "react"
-import { cva } from "class-variance-authority"
 import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui"
 
+import { navigationMenuTriggerStyle } from "@/components/base/navigation-menu-variants"
 import { cn } from "@/lib/utils"
 import { ChevronDown as ChevronDownIcon } from "lucide-react"
+
+type NavigationMenuSelectInfo = {
+  key: React.Key
+  keyPath: React.Key[]
+  selectedKeys: React.Key[]
+  item: NavigationMenuItemOption
+  domEvent: React.MouseEvent
+}
+
+type NavigationMenuItemOption =
+  | {
+      key?: React.Key
+      type: "divider"
+    }
+  | {
+      key?: React.Key
+      type: "group"
+      label: React.ReactNode
+      children?: NavigationMenuItemOption[]
+    }
+  | {
+      key?: React.Key
+      type?: "item"
+      label: React.ReactNode
+      icon?: React.ReactNode
+      description?: React.ReactNode
+      href?: string
+      content?: React.ReactNode
+      disabled?: boolean
+      danger?: boolean
+      onSelect?: (event: React.MouseEvent) => void
+      children?: NavigationMenuItemOption[]
+    }
+
+type NavigationMenuProps = Omit<
+  React.ComponentProps<typeof NavigationMenuPrimitive.Root>,
+  "onSelect"
+> & {
+  viewport?: boolean
+  items?: NavigationMenuItemOption[]
+  selectedKeys?: React.Key[]
+  defaultSelectedKeys?: React.Key[]
+  onSelect?: (info: NavigationMenuSelectInfo) => void
+  listProps?: React.ComponentProps<typeof NavigationMenuPrimitive.List>
+}
+
+type NavigationMenuLabelItem = Extract<
+  NavigationMenuItemOption,
+  { type?: "item" }
+>
+
+function isSelected(key: React.Key | undefined, selectedKeys: React.Key[]) {
+  if (key === undefined) return false
+  return selectedKeys.some((selectedKey) => String(selectedKey) === String(key))
+}
+
+function getItemKey(
+  item: NavigationMenuItemOption,
+  index: number,
+  parentKeys: React.Key[]
+) {
+  return item.key ?? [...parentKeys, index].join("-")
+}
+
+function renderNavigationLabel(item: NavigationMenuLabelItem) {
+  return (
+    <>
+      {item.icon}
+      <span>{item.label}</span>
+    </>
+  )
+}
+
+function renderNavigationContentItems(
+  items: NavigationMenuItemOption[],
+  selectedKeys: React.Key[],
+  onItemSelect: (
+    item: NavigationMenuItemOption,
+    key: React.Key,
+    keyPath: React.Key[],
+    event: React.MouseEvent
+  ) => void,
+  parentKeys: React.Key[] = []
+) {
+  return items.map((item, index) => {
+    const key = getItemKey(item, index, parentKeys)
+
+    if (item.type === "divider") {
+      return <div key={String(key)} className="col-span-full h-px bg-border" />
+    }
+
+    if (item.type === "group") {
+      return (
+        <div key={String(key)} className="col-span-full space-y-1">
+          <div className="px-2 py-1 text-xs font-medium text-muted-foreground">
+            {item.label}
+          </div>
+          <div className="grid gap-1">
+            {item.children &&
+              renderNavigationContentItems(item.children, selectedKeys, onItemSelect, [
+                key,
+                ...parentKeys,
+              ])}
+          </div>
+        </div>
+      )
+    }
+
+    const selected = isSelected(key, selectedKeys)
+    const content = (
+      <>
+        <div className="flex items-center gap-2">
+          {item.icon}
+          <span className="font-medium">{item.label}</span>
+        </div>
+        {item.description && (
+          <p className="mt-1 line-clamp-2 text-xs leading-snug text-muted-foreground">
+            {item.description}
+          </p>
+        )}
+      </>
+    )
+
+    return (
+      <NavigationMenuLink
+        key={String(key)}
+        asChild
+        active={selected}
+        disabled={item.disabled}
+        danger={item.danger}
+      >
+        {item.href ? (
+          <a
+            href={item.href}
+            onClick={(event) => {
+              if (item.disabled) {
+                event.preventDefault()
+                return
+              }
+              item.onSelect?.(event)
+              if (!event.defaultPrevented) {
+                onItemSelect(item, key, [key, ...parentKeys], event)
+              }
+            }}
+          >
+            {content}
+          </a>
+        ) : (
+          <button
+            type="button"
+            onClick={(event) => {
+              if (item.disabled) return
+              item.onSelect?.(event)
+              if (!event.defaultPrevented) {
+                onItemSelect(item, key, [key, ...parentKeys], event)
+              }
+            }}
+          >
+            {content}
+          </button>
+        )}
+      </NavigationMenuLink>
+    )
+  })
+}
+
+function renderNavigationItems(
+  items: NavigationMenuItemOption[],
+  selectedKeys: React.Key[],
+  onItemSelect: (
+    item: NavigationMenuItemOption,
+    key: React.Key,
+    keyPath: React.Key[],
+    event: React.MouseEvent
+  ) => void
+) {
+  return items.map((item, index) => {
+    const key = getItemKey(item, index, [])
+
+    if (item.type === "divider" || item.type === "group") return null
+
+    const selected = isSelected(key, selectedKeys)
+    const hasPanel = item.content !== undefined || item.children !== undefined
+
+    return (
+      <NavigationMenuItem key={String(key)}>
+        {hasPanel ? (
+          <>
+            <NavigationMenuTrigger
+              disabled={item.disabled}
+              selected={selected}
+              danger={item.danger}
+            >
+              {renderNavigationLabel(item)}
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <div className="grid w-[420px] gap-2 p-2">
+                {item.content}
+                {item.children &&
+                  renderNavigationContentItems(item.children, selectedKeys, onItemSelect, [
+                    key,
+                  ])}
+              </div>
+            </NavigationMenuContent>
+          </>
+        ) : (
+          <NavigationMenuLink
+            asChild
+            active={selected}
+            disabled={item.disabled}
+            danger={item.danger}
+          >
+            {item.href ? (
+              <a
+                href={item.href}
+                onClick={(event) => {
+                  if (item.disabled) {
+                    event.preventDefault()
+                    return
+                  }
+                  item.onSelect?.(event)
+                  if (!event.defaultPrevented) {
+                    onItemSelect(item, key, [key], event)
+                  }
+                }}
+              >
+                {renderNavigationLabel(item)}
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={(event) => {
+                  if (item.disabled) return
+                  item.onSelect?.(event)
+                  if (!event.defaultPrevented) {
+                    onItemSelect(item, key, [key], event)
+                  }
+                }}
+              >
+                {renderNavigationLabel(item)}
+              </button>
+            )}
+          </NavigationMenuLink>
+        )}
+      </NavigationMenuItem>
+    )
+  })
+}
 
 function NavigationMenu({
   className,
   children,
   viewport = true,
+  items,
+  selectedKeys,
+  defaultSelectedKeys,
+  onSelect,
+  listProps,
   ...props
-}: React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {
-  viewport?: boolean
-}) {
+}: NavigationMenuProps) {
+  const [innerSelectedKeys, setInnerSelectedKeys] = React.useState<React.Key[]>(
+    defaultSelectedKeys ?? []
+  )
+  const mergedSelectedKeys = selectedKeys ?? innerSelectedKeys
+
+  function handleItemSelect(
+    item: NavigationMenuItemOption,
+    key: React.Key,
+    keyPath: React.Key[],
+    domEvent: React.MouseEvent
+  ) {
+    const nextSelectedKeys = [key]
+    if (selectedKeys === undefined) {
+      setInnerSelectedKeys(nextSelectedKeys)
+    }
+    onSelect?.({ key, keyPath, selectedKeys: nextSelectedKeys, item, domEvent })
+  }
+
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
@@ -23,7 +292,13 @@ function NavigationMenu({
       )}
       {...props}
     >
-      {children}
+      {items ? (
+        <NavigationMenuList {...listProps}>
+          {renderNavigationItems(items, mergedSelectedKeys, handleItemSelect)}
+        </NavigationMenuList>
+      ) : (
+        children
+      )}
       {viewport && <NavigationMenuViewport />}
     </NavigationMenuPrimitive.Root>
   )
@@ -58,19 +333,26 @@ function NavigationMenuItem({
   )
 }
 
-const navigationMenuTriggerStyle = cva(
-  "group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-popup-open:bg-muted/50 data-popup-open:hover:bg-muted data-open:bg-muted/50 data-open:hover:bg-muted data-open:focus:bg-muted"
-)
-
 function NavigationMenuTrigger({
   className,
   children,
+  selected,
+  danger,
   ...props
-}: React.ComponentProps<typeof NavigationMenuPrimitive.Trigger>) {
+}: React.ComponentProps<typeof NavigationMenuPrimitive.Trigger> & {
+  selected?: boolean
+  danger?: boolean
+}) {
   return (
     <NavigationMenuPrimitive.Trigger
       data-slot="navigation-menu-trigger"
-      className={cn(navigationMenuTriggerStyle(), "group", className)}
+      data-selected={selected}
+      data-danger={danger}
+      className={cn(
+        navigationMenuTriggerStyle(),
+        "group gap-1.5 data-[selected=true]:bg-muted data-[selected=true]:text-foreground data-[danger=true]:text-destructive",
+        className
+      )}
       {...props}
     >
       {children}{" "}
@@ -119,13 +401,21 @@ function NavigationMenuViewport({
 
 function NavigationMenuLink({
   className,
+  disabled,
+  danger,
   ...props
-}: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {
+}: React.ComponentProps<typeof NavigationMenuPrimitive.Link> & {
+  disabled?: boolean
+  danger?: boolean
+}) {
   return (
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
+      data-disabled={disabled}
+      data-danger={danger}
+      aria-disabled={disabled}
       className={cn(
-        "flex items-center gap-1.5 rounded-md p-2 text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-sm data-[active=true]:bg-muted/50 data-[active=true]:hover:bg-muted data-[active=true]:focus:bg-muted [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-1.5 rounded-md p-2 text-left text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-sm data-[active=true]:bg-muted/50 data-[active=true]:hover:bg-muted data-[active=true]:focus:bg-muted data-[danger=true]:text-destructive data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -160,5 +450,7 @@ export {
   NavigationMenuLink,
   NavigationMenuIndicator,
   NavigationMenuViewport,
-  navigationMenuTriggerStyle,
+  type NavigationMenuProps,
+  type NavigationMenuItemOption,
+  type NavigationMenuSelectInfo,
 }

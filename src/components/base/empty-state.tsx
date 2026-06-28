@@ -1,17 +1,100 @@
+import * as React from "react"
+import { Inbox as InboxIcon } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-function Empty({ className, ...props }: React.ComponentProps<"div">) {
+type EmptyProps = React.ComponentProps<"div"> & {
+  image?: React.ReactNode | string | false
+  imageStyle?: React.CSSProperties
+  imageClassName?: string
+  description?: React.ReactNode
+  actions?: React.ReactNode
+  simple?: boolean
+  footerClassName?: string
+  descriptionClassName?: string
+}
+
+function DefaultEmptyImage({ simple }: { simple?: boolean }) {
+  return (
+    <div
+      className={cn(
+        "flex items-center justify-center rounded border border-dashed bg-muted/40 text-muted-foreground",
+        simple ? "size-12" : "h-20 w-28"
+      )}
+      aria-hidden="true"
+    >
+      <InboxIcon className={cn(simple ? "size-5" : "size-8")} />
+    </div>
+  )
+}
+
+function renderImage(image: EmptyProps["image"], simple?: boolean) {
+  if (image === false) {
+    return null
+  }
+
+  if (typeof image === "string") {
+    return <img src={image} alt="empty" draggable={false} />
+  }
+
+  return image ?? <DefaultEmptyImage simple={simple} />
+}
+
+function Empty({
+  className,
+  children,
+  image,
+  imageStyle,
+  imageClassName,
+  description,
+  actions,
+  simple,
+  footerClassName,
+  descriptionClassName,
+  ...props
+}: EmptyProps) {
+  const hasApiContent = image !== undefined || description !== undefined || actions !== undefined || simple
+
+  if (!hasApiContent) {
+    return (
+      <div
+        data-slot="empty"
+        className={cn(
+          "flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded border border-dashed p-12 text-center text-balance",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    )
+  }
+
+  const imageNode = renderImage(image, simple)
+
   return (
     <div
       data-slot="empty"
       className={cn(
-        "flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-lg border-dashed p-12 text-center text-balance",
+        "flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-3 rounded border border-dashed p-10 text-center text-balance",
+        simple && "gap-2 p-6",
         className
       )}
       {...props}
-    />
+    >
+      {imageNode ? (
+        <EmptyMedia className={imageClassName} style={imageStyle}>
+          {imageNode}
+        </EmptyMedia>
+      ) : null}
+      {description !== false ? (
+        <EmptyDescription className={descriptionClassName}>
+          {description ?? "No data"}
+        </EmptyDescription>
+      ) : null}
+      {actions ?? children ? <EmptyContent className={footerClassName}>{actions ?? children}</EmptyContent> : null}
+    </div>
   )
 }
 
@@ -31,7 +114,7 @@ const emptyMediaVariants = cva(
     variants: {
       variant: {
         default: "bg-transparent",
-        icon: "flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-6",
+        icon: "flex size-10 shrink-0 items-center justify-center rounded bg-muted text-foreground [&_svg:not([class*='size-'])]:size-6",
       },
     },
     defaultVariants: {
@@ -70,7 +153,7 @@ function EmptyTitle({ className, ...props }: React.ComponentProps<"div">) {
 
 function EmptyDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
-    <div
+    <p
       data-slot="empty-description"
       className={cn(
         "text-sm/relaxed text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
@@ -86,7 +169,7 @@ function EmptyContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="empty-content"
       className={cn(
-        "flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance",
+        "flex w-full max-w-sm min-w-0 flex-col items-center gap-3 text-sm text-balance",
         className
       )}
       {...props}
@@ -102,3 +185,4 @@ export {
   EmptyContent,
   EmptyMedia,
 }
+export type { EmptyProps }

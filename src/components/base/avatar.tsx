@@ -3,23 +3,108 @@ import { Avatar as AvatarPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+type AvatarShape = "circle" | "square"
+type AvatarSize = "sm" | "small" | "default" | "middle" | "lg" | "large" | number
+
+type AvatarProps = Omit<React.ComponentProps<typeof AvatarPrimitive.Root>, "children"> & {
+  size?: AvatarSize
+  shape?: AvatarShape
+  src?: string
+  srcSet?: string
+  alt?: string
+  icon?: React.ReactNode
+  gap?: number
+  children?: React.ReactNode
+  imageProps?: Omit<React.ComponentProps<typeof AvatarPrimitive.Image>, "src" | "srcSet" | "alt">
+  fallbackProps?: React.ComponentProps<typeof AvatarPrimitive.Fallback>
+}
+
+type AvatarItem = Omit<AvatarProps, "children"> & {
+  key?: React.Key
+  label?: React.ReactNode
+  children?: React.ReactNode
+}
+
+type AvatarGroupProps = React.ComponentProps<"div"> & {
+  items?: AvatarItem[]
+  max?: number | { count?: number; render?: (omittedCount: number, omittedItems: AvatarItem[]) => React.ReactNode }
+  size?: AvatarSize
+  shape?: AvatarShape
+}
+
+function getSizeValue(size: AvatarSize) {
+  if (typeof size === "number") {
+    return size
+  }
+
+  if (size === "sm" || size === "small") {
+    return 24
+  }
+
+  if (size === "lg" || size === "large") {
+    return 40
+  }
+
+  return 32
+}
+
+function getSizeName(size: AvatarSize) {
+  if (size === "small") {
+    return "sm"
+  }
+
+  if (size === "middle") {
+    return "default"
+  }
+
+  if (size === "large") {
+    return "lg"
+  }
+
+  return typeof size === "number" ? "custom" : size
+}
+
 function Avatar({
   className,
   size = "default",
+  shape = "circle",
+  src,
+  srcSet,
+  alt,
+  icon,
+  gap = 4,
+  children,
+  imageProps,
+  fallbackProps,
+  style,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Root> & {
-  size?: "default" | "sm" | "lg"
-}) {
+}: AvatarProps) {
+  const sizeValue = getSizeValue(size)
+  const isComposed = src === undefined && icon === undefined
+  const fallbackContent = icon ?? children
+
   return (
     <AvatarPrimitive.Root
       data-slot="avatar"
-      data-size={size}
+      data-size={getSizeName(size)}
+      data-shape={shape}
       className={cn(
-        "group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
+        "group/avatar relative flex shrink-0 select-none after:absolute after:inset-0 after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten",
+        shape === "circle" ? "rounded-full after:rounded-full" : "rounded after:rounded",
         className
       )}
+      style={{ width: sizeValue, height: sizeValue, fontSize: Math.max(12, Math.floor((sizeValue - gap * 2) / 2)), ...style }}
       {...props}
-    />
+    >
+      {isComposed ? (
+        children
+      ) : (
+        <>
+          {src ? <AvatarImage src={src} srcSet={srcSet} alt={alt} {...imageProps} /> : null}
+          <AvatarFallback {...fallbackProps}>{fallbackContent}</AvatarFallback>
+        </>
+      )}
+    </AvatarPrimitive.Root>
   )
 }
 
@@ -31,7 +116,7 @@ function AvatarImage({
     <AvatarPrimitive.Image
       data-slot="avatar-image"
       className={cn(
-        "aspect-square size-full rounded-full object-cover",
+        "aspect-square size-full object-cover group-data-[shape=circle]/avatar:rounded-full group-data-[shape=square]/avatar:rounded",
         className
       )}
       {...props}
@@ -47,7 +132,7 @@ function AvatarFallback({
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        "flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs",
+        "flex size-full items-center justify-center bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs group-data-[shape=circle]/avatar:rounded-full group-data-[shape=square]/avatar:rounded",
         className
       )}
       {...props}
@@ -71,7 +156,21 @@ function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {
   )
 }
 
-function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
+function AvatarGroup({ className, children, items, max, size, shape, ...props }: AvatarGroupProps) {
+  const count = typeof max === "number" ? max : max?.count
+  const nodes = items?.map((item, index) => {
+    const { key, label, children: itemChildren, ...avatarProps } = item
+
+    return (
+      <Avatar key={key ?? index} size={avatarProps.size ?? size} shape={avatarProps.shape ?? shape} {...avatarProps}>
+        {itemChildren ?? label}
+      </Avatar>
+    )
+  }) ?? React.Children.toArray(children)
+  const visibleNodes = count && count > 0 && nodes.length > count ? nodes.slice(0, count) : nodes
+  const omittedItems = count && items && nodes.length > count ? items.slice(count) : []
+  const omittedCount = count && nodes.length > count ? nodes.length - count : 0
+
   return (
     <div
       data-slot="avatar-group"
@@ -80,7 +179,14 @@ function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
         className
       )}
       {...props}
-    />
+    >
+      {visibleNodes}
+      {omittedCount > 0 ? (
+        <AvatarGroupCount style={{ width: getSizeValue(size ?? "default"), height: getSizeValue(size ?? "default") }}>
+          {typeof max === "object" && max.render ? max.render(omittedCount, omittedItems) : `+${omittedCount}`}
+        </AvatarGroupCount>
+      ) : null}
+    </div>
   )
 }
 
@@ -92,7 +198,7 @@ function AvatarGroupCount({
     <div
       data-slot="avatar-group-count"
       className={cn(
-        "relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3",
+        "relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background [&>svg]:size-4",
         className
       )}
       {...props}
@@ -108,3 +214,4 @@ export {
   AvatarGroupCount,
   AvatarBadge,
 }
+export type { AvatarProps, AvatarGroupProps, AvatarItem, AvatarShape, AvatarSize }

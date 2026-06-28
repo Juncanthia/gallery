@@ -4,12 +4,248 @@ import * as React from "react"
 import { Menubar as MenubarPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
-import { Check as CheckIcon, ChevronRight as ChevronRightIcon } from "lucide-react"
+import {
+  Check as CheckIcon,
+  ChevronDown as ChevronDownIcon,
+  ChevronRight as ChevronRightIcon,
+} from "lucide-react"
+
+type MenubarItemSelectEvent = Parameters<
+  NonNullable<React.ComponentProps<typeof MenubarPrimitive.Item>["onSelect"]>
+>[0]
+
+type MenubarSelectInfo = {
+  key: React.Key
+  keyPath: React.Key[]
+  selectedKeys: React.Key[]
+  item: MenubarItemOption
+  domEvent: MenubarItemSelectEvent | React.MouseEvent
+}
+
+type MenubarItemOption =
+  | {
+      key?: React.Key
+      type: "divider"
+    }
+  | {
+      key?: React.Key
+      type: "group"
+      label: React.ReactNode
+      children?: MenubarItemOption[]
+    }
+  | {
+      key?: React.Key
+      type?: "item"
+      label: React.ReactNode
+      icon?: React.ReactNode
+      shortcut?: React.ReactNode
+      disabled?: boolean
+      danger?: boolean
+      onSelect?: React.ComponentProps<typeof MenubarPrimitive.Item>["onSelect"]
+    }
+  | {
+      key?: React.Key
+      type: "submenu"
+      label: React.ReactNode
+      icon?: React.ReactNode
+      disabled?: boolean
+      danger?: boolean
+      children: MenubarItemOption[]
+    }
+
+type MenubarLabelItem =
+  | Extract<MenubarItemOption, { type?: "item" }>
+  | Extract<MenubarItemOption, { type: "submenu" }>
+
+type MenubarProps = Omit<
+  React.ComponentProps<typeof MenubarPrimitive.Root>,
+  "onSelect"
+> & {
+  items?: MenubarItemOption[]
+  selectedKeys?: React.Key[]
+  defaultSelectedKeys?: React.Key[]
+  onSelect?: (info: MenubarSelectInfo) => void
+  contentProps?: React.ComponentProps<typeof MenubarPrimitive.Content>
+}
+
+function isSelected(key: React.Key | undefined, selectedKeys: React.Key[]) {
+  if (key === undefined) return false
+  return selectedKeys.some((selectedKey) => String(selectedKey) === String(key))
+}
+
+function getItemKey(item: MenubarItemOption, index: number, parentKeys: React.Key[]) {
+  return item.key ?? [...parentKeys, index].join("-")
+}
+
+function renderMenubarItemLabel(item: MenubarLabelItem) {
+  return (
+    <>
+      {item.icon}
+      <span className="truncate">{item.label}</span>
+    </>
+  )
+}
+
+function renderMenubarItems(
+  items: MenubarItemOption[],
+  selectedKeys: React.Key[],
+  onItemSelect: (
+    item: MenubarItemOption,
+    key: React.Key,
+    keyPath: React.Key[],
+    event: MenubarItemSelectEvent | React.MouseEvent
+  ) => void,
+  parentKeys: React.Key[] = []
+) {
+  return items.map((item, index) => {
+    const key = getItemKey(item, index, parentKeys)
+
+    if (item.type === "divider") {
+      return <MenubarSeparator key={String(key)} />
+    }
+
+    if (item.type === "group") {
+      return (
+        <MenubarGroup key={String(key)}>
+          <MenubarLabel>{item.label}</MenubarLabel>
+          {item.children && renderMenubarItems(item.children, selectedKeys, onItemSelect, [
+            key,
+            ...parentKeys,
+          ])}
+        </MenubarGroup>
+      )
+    }
+
+    if (item.type === "submenu") {
+      return (
+        <MenubarSub key={String(key)}>
+          <MenubarSubTrigger disabled={item.disabled} danger={item.danger}>
+            {renderMenubarItemLabel(item)}
+          </MenubarSubTrigger>
+          <MenubarSubContent>
+            {renderMenubarItems(item.children, selectedKeys, onItemSelect, [
+              key,
+              ...parentKeys,
+            ])}
+          </MenubarSubContent>
+        </MenubarSub>
+      )
+    }
+
+    return (
+      <MenubarItem
+        key={String(key)}
+        disabled={item.disabled}
+        selected={isSelected(key, selectedKeys)}
+        variant={item.danger ? "destructive" : "default"}
+        onSelect={(event) => {
+          item.onSelect?.(event)
+          if (!event.defaultPrevented) {
+            onItemSelect(item, key, [key, ...parentKeys], event)
+          }
+        }}
+      >
+        {renderMenubarItemLabel(item)}
+        {item.shortcut && <MenubarShortcut>{item.shortcut}</MenubarShortcut>}
+      </MenubarItem>
+    )
+  })
+}
+
+function renderMenubarTopItems(
+  items: MenubarItemOption[],
+  selectedKeys: React.Key[],
+  contentProps: MenubarProps["contentProps"],
+  onItemSelect: (
+    item: MenubarItemOption,
+    key: React.Key,
+    keyPath: React.Key[],
+    event: MenubarItemSelectEvent | React.MouseEvent
+  ) => void
+) {
+  return items.map((item, index) => {
+    const key = getItemKey(item, index, [])
+
+    if (item.type === "divider") return null
+
+    if (item.type === "group") {
+      return (
+        <MenubarMenu key={String(key)}>
+          <MenubarTrigger selected={isSelected(key, selectedKeys)}>
+            {item.label}
+            <ChevronDownIcon className="size-3" />
+          </MenubarTrigger>
+          <MenubarContent {...contentProps}>
+            {item.children && renderMenubarItems(item.children, selectedKeys, onItemSelect, [key])}
+          </MenubarContent>
+        </MenubarMenu>
+      )
+    }
+
+    if (item.type === "submenu") {
+      return (
+        <MenubarMenu key={String(key)}>
+          <MenubarTrigger
+            disabled={item.disabled}
+            selected={isSelected(key, selectedKeys)}
+            danger={item.danger}
+          >
+            {renderMenubarItemLabel(item)}
+            <ChevronDownIcon className="size-3" />
+          </MenubarTrigger>
+          <MenubarContent {...contentProps}>
+            {renderMenubarItems(item.children, selectedKeys, onItemSelect, [key])}
+          </MenubarContent>
+        </MenubarMenu>
+      )
+    }
+
+    return (
+      <MenubarMenu key={String(key)}>
+        <MenubarTrigger
+          disabled={item.disabled}
+          selected={isSelected(key, selectedKeys)}
+          danger={item.danger}
+          onClick={(event) => {
+            if (item.disabled) return
+            onItemSelect(item, key, [key], event)
+          }}
+        >
+          {renderMenubarItemLabel(item)}
+        </MenubarTrigger>
+      </MenubarMenu>
+    )
+  })
+}
 
 function Menubar({
   className,
+  items,
+  selectedKeys,
+  defaultSelectedKeys,
+  onSelect,
+  contentProps,
+  children,
   ...props
-}: React.ComponentProps<typeof MenubarPrimitive.Root>) {
+}: MenubarProps) {
+  const [innerSelectedKeys, setInnerSelectedKeys] = React.useState<React.Key[]>(
+    defaultSelectedKeys ?? []
+  )
+  const mergedSelectedKeys = selectedKeys ?? innerSelectedKeys
+
+  function handleItemSelect(
+    item: MenubarItemOption,
+    key: React.Key,
+    keyPath: React.Key[],
+    domEvent: MenubarItemSelectEvent | React.MouseEvent
+  ) {
+    const nextSelectedKeys = [key]
+    if (selectedKeys === undefined) {
+      setInnerSelectedKeys(nextSelectedKeys)
+    }
+    onSelect?.({ key, keyPath, selectedKeys: nextSelectedKeys, item, domEvent })
+  }
+
   return (
     <MenubarPrimitive.Root
       data-slot="menubar"
@@ -18,7 +254,16 @@ function Menubar({
         className
       )}
       {...props}
-    />
+    >
+      {children}
+      {items &&
+        renderMenubarTopItems(
+          items,
+          mergedSelectedKeys,
+          contentProps,
+          handleItemSelect
+        )}
+    </MenubarPrimitive.Root>
   )
 }
 
@@ -50,13 +295,20 @@ function MenubarRadioGroup({
 
 function MenubarTrigger({
   className,
+  selected,
+  danger,
   ...props
-}: React.ComponentProps<typeof MenubarPrimitive.Trigger>) {
+}: React.ComponentProps<typeof MenubarPrimitive.Trigger> & {
+  selected?: boolean
+  danger?: boolean
+}) {
   return (
     <MenubarPrimitive.Trigger
       data-slot="menubar-trigger"
+      data-selected={selected}
+      data-danger={danger}
       className={cn(
-        "flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none hover:bg-muted aria-expanded:bg-muted",
+        "flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none hover:bg-muted aria-expanded:bg-muted data-[selected=true]:bg-muted data-[selected=true]:text-foreground data-[danger=true]:text-destructive disabled:pointer-events-none disabled:opacity-50",
         className
       )}
       {...props}
@@ -88,19 +340,22 @@ function MenubarContent({
 function MenubarItem({
   className,
   inset,
+  selected,
   variant = "default",
   ...props
 }: React.ComponentProps<typeof MenubarPrimitive.Item> & {
   inset?: boolean
+  selected?: boolean
   variant?: "default" | "destructive"
 }) {
   return (
     <MenubarPrimitive.Item
       data-slot="menubar-item"
       data-inset={inset}
+      data-selected={selected}
       data-variant={variant}
       className={cn(
-        "group/menubar-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive!",
+        "group/menubar-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-8 data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive!",
         className
       )}
       {...props}
@@ -227,16 +482,19 @@ function MenubarSubTrigger({
   className,
   inset,
   children,
+  danger,
   ...props
 }: React.ComponentProps<typeof MenubarPrimitive.SubTrigger> & {
   inset?: boolean
+  danger?: boolean
 }) {
   return (
     <MenubarPrimitive.SubTrigger
       data-slot="menubar-sub-trigger"
       data-inset={inset}
+      data-danger={danger}
       className={cn(
-        "flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-8 data-open:bg-accent data-open:text-accent-foreground [&_svg:not([class*='size-'])]:size-4",
+        "flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-8 data-open:bg-accent data-open:text-accent-foreground data-[danger=true]:text-destructive [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -277,4 +535,7 @@ export {
   MenubarSub,
   MenubarSubTrigger,
   MenubarSubContent,
+  type MenubarProps,
+  type MenubarItemOption,
+  type MenubarSelectInfo,
 }

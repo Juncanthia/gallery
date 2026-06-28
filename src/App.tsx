@@ -5,6 +5,7 @@ import { DisplaySection } from "./gallery/sections/display-section";
 import { FormsSection } from "./gallery/sections/forms-section";
 import { InteractiveSection } from "./gallery/sections/interactive-section";
 import { LayoutSection } from "./gallery/sections/layout-section";
+import { UtilitySection } from "./gallery/sections/utility-section";
 import { NAV } from "./gallery/nav";
 
 const totalComponents = NAV.flatMap((g) => g.items).length;
@@ -88,6 +89,7 @@ export function App() {
           <FormsSection />
           <InteractiveSection />
           <LayoutSection />
+          <UtilitySection />
           <div className="border-t border-border/60 pt-8 pb-4">
             <p className="text-xs text-muted-foreground">
               {totalComponents} components · Built with Radix UI, Tailwind CSS, and Motion

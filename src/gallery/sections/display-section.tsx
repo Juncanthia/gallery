@@ -11,13 +11,14 @@ import { Alert } from "@/components/base/alert";
 import { Card } from "@/components/base/card";
 import { Skeleton, SkeletonAvatar, SkeletonButton } from "@/components/base/skeleton";
 import { Result } from "@/components/base/result";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/base/empty-state";
 import { BorderBeam } from "@/components/base/border-beam";
 import { Table } from "@/components/base/table";
 import { Descriptions } from "@/components/base/descriptions";
 import { Timeline } from "@/components/base/timeline";
 import { Steps } from "@/components/base/steps";
 import {
-  Files, FolderItem, FolderTrigger, FolderContent, FileItem,
+  Files, FolderItem, FolderTrigger, FolderContent, FileItem, type FileTreeDataNode,
 } from "@/components/base/file-tree";
 import { ChevronRight, Download, Plus, Trash2, Users, DollarSign, TrendingUp, FileText, FolderOpen } from "lucide-react";
 
@@ -28,8 +29,37 @@ const TABLE_DATA = [
   { invoice: "INV-004", status: "Paid", method: "Credit Card", amount: "$450.00" },
 ];
 
+const FILE_TREE_DATA: FileTreeDataNode[] = [
+  {
+    key: "src",
+    title: "src",
+    gitStatus: "modified",
+    children: [
+      {
+        key: "src/components",
+        title: "components",
+        children: [
+          { key: "src/components/button.tsx", title: "button.tsx", icon: FileText, gitStatus: "modified" },
+          { key: "src/components/dialog.tsx", title: "dialog.tsx", icon: FileText, gitStatus: "untracked" },
+          { key: "src/components/tabs.tsx", title: "tabs.tsx", icon: FileText },
+        ],
+      },
+      { key: "src/App.tsx", title: "App.tsx", icon: FileText, gitStatus: "modified" },
+      { key: "src/main.tsx", title: "main.tsx", icon: FileText },
+    ],
+  },
+  {
+    key: "public",
+    title: "public",
+    children: [{ key: "public/vite.svg", title: "vite.svg", icon: FileText }],
+  },
+  { key: "package.json", title: "package.json", icon: FolderOpen },
+  { key: "README.md", title: "README.md", icon: FileText, gitStatus: "untracked" },
+];
+
 export function DisplaySection() {
   const [stepsVal, setStepsVal] = useState(1);
+  const [selectedFileKeys, setSelectedFileKeys] = useState<string[]>(["src/components/button.tsx"]);
 
   return (
     <>
@@ -57,24 +87,56 @@ export function DisplaySection() {
           </DemoRow>
         </GallerySection>
 
-        <GallerySection id="badge" title="Badge" description="Small status labels.">
-          <DemoRow label="Variants">
+        <GallerySection id="badge" title="Badge" description="Small status labels and notification counts.">
+          <DemoRow label="Label variants">
             <Badge>Default</Badge>
             <Badge variant="secondary">Secondary</Badge>
             <Badge variant="destructive">Destructive</Badge>
             <Badge variant="outline">Outline</Badge>
             <Badge variant="ghost">Ghost</Badge>
           </DemoRow>
+          <DemoRow label="Count API">
+            <Badge count={5}>
+              <Button variant="outlined" size="small">Inbox</Button>
+            </Badge>
+            <Badge count={128} overflowCount={99}>
+              <Button variant="outlined" size="small">Messages</Button>
+            </Badge>
+            <Badge dot>
+              <Button variant="outlined" size="small">Updates</Button>
+            </Badge>
+            <Badge count={0} showZero>
+              <Button variant="outlined" size="small">Tasks</Button>
+            </Badge>
+          </DemoRow>
+          <DemoRow label="Status">
+            <Badge status="success" text="Success" />
+            <Badge status="processing" text="Processing" />
+            <Badge status="warning" text="Warning" />
+            <Badge status="error" text="Error" />
+            <Badge color="#8b5cf6" text="Custom" />
+          </DemoRow>
         </GallerySection>
 
         <GallerySection id="avatar" title="Avatar" description="User profile pictures and groups.">
-          <DemoRow label="Sizes">
-            <Avatar size="sm"><AvatarImage src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" /><AvatarFallback>SM</AvatarFallback></Avatar>
-            <Avatar><AvatarImage src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" /><AvatarFallback>MD</AvatarFallback></Avatar>
-            <Avatar size="lg"><AvatarImage src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" /><AvatarFallback>LG</AvatarFallback></Avatar>
-            <Avatar><AvatarFallback>AB</AvatarFallback></Avatar>
+          <DemoRow label="API">
+            <Avatar size="small" src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" alt="Small">SM</Avatar>
+            <Avatar src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" alt="Middle">MD</Avatar>
+            <Avatar size="large" src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" alt="Large">LG</Avatar>
+            <Avatar size={48} shape="square">AB</Avatar>
+            <Avatar icon={<Users className="size-4" />} />
           </DemoRow>
           <DemoRow label="Group">
+            <AvatarGroup
+              max={{ count: 3 }}
+              items={[
+                { src: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60", label: "A" },
+                { label: "BC" },
+                { label: "DE" },
+                { label: "FG" },
+                { label: "HI" },
+              ]}
+            />
             <AvatarGroup>
               <Avatar><AvatarImage src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=60" /><AvatarFallback>A</AvatarFallback></Avatar>
               <Avatar><AvatarFallback>BC</AvatarFallback></Avatar>
@@ -125,22 +187,28 @@ export function DisplaySection() {
           </DemoRow>
           <DemoRow label="Text variants">
             <Text>Default</Text>
-            <Text variant="secondary">Secondary</Text>
-            <Text variant="success">Success</Text>
-            <Text variant="warning">Warning</Text>
-            <Text variant="danger">Danger</Text>
-            <Text variant="disabled">Disabled</Text>
+            <Text type="secondary">Secondary</Text>
+            <Text type="success">Success</Text>
+            <Text type="warning">Warning</Text>
+            <Text type="danger">Danger</Text>
+            <Text disabled>Disabled</Text>
           </DemoRow>
           <DemoRow label="Decorations">
             <Text underline>Underline</Text>
             <Text italic>Italic</Text>
-            <Text del>Strikethrough</Text>
+            <Text delete>Strikethrough</Text>
             <Text mark>Highlight</Text>
             <Text code>code()</Text>
+            <Text keyboard>⌘K</Text>
+            <Text strong>Strong</Text>
           </DemoRow>
-          <DemoRow label="Paragraph">
-            <Paragraph className="max-w-sm">
-              The quick brown fox jumps over the lazy dog. A pangram containing every letter of the alphabet at least once.
+          <DemoRow label="Copy / ellipsis">
+            <Text copyable>Copy this text</Text>
+            <Text ellipsis className="max-w-48">
+              This single line is intentionally long and will be truncated.
+            </Text>
+            <Paragraph ellipsis={{ rows: 2 }} className="max-w-sm">
+              The quick brown fox jumps over the lazy dog. A pangram containing every letter of the alphabet at least once. This paragraph uses a two-line clamp.
             </Paragraph>
           </DemoRow>
         </GallerySection>
@@ -386,9 +454,48 @@ export function DisplaySection() {
           </DemoRow>
         </GallerySection>
 
+        <GallerySection id="empty" title="Empty" description="Empty state placeholder with action area.">
+          <DemoRow label="API">
+            <Empty
+              description="No projects yet"
+              actions={<Button size="small">Create project</Button>}
+              className="max-w-sm"
+            />
+            <Empty
+              simple
+              image={false}
+              description="No notifications"
+              actions={<Button size="small" variant="outlined">Refresh</Button>}
+              className="max-w-xs"
+            />
+          </DemoRow>
+          <DemoRow label="Compound">
+            <Empty className="max-w-sm">
+              <EmptyHeader>
+                <EmptyMedia variant="icon"><FileText className="size-5" /></EmptyMedia>
+                <EmptyTitle>No files uploaded</EmptyTitle>
+                <EmptyDescription>Drop files here or click upload to get started.</EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button size="small" variant="outlined">Upload</Button>
+              </EmptyContent>
+            </Empty>
+          </DemoRow>
+        </GallerySection>
+
         <GallerySection id="file-tree" title="File Tree" description="Hierarchical file explorer.">
-          <DemoRow label="Explorer">
-            <div className="w-64 rounded-md border bg-background text-sm font-mono">
+          <DemoRow label="TreeData API">
+            <div className="w-72 rounded-md border bg-background font-mono text-sm">
+              <Files
+                treeData={FILE_TREE_DATA}
+                defaultExpandedKeys={["src", "src/components", "public"]}
+                selectedKeys={selectedFileKeys}
+                onSelect={(keys) => setSelectedFileKeys(keys.map(String))}
+              />
+            </div>
+          </DemoRow>
+          <DemoRow label="Compound">
+            <div className="w-64 rounded-md border bg-background font-mono text-sm">
               <Files>
                 <FolderItem value="src">
                   <FolderTrigger gitStatus="modified">src</FolderTrigger>

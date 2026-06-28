@@ -36,6 +36,7 @@ export const NAV: NavGroup[] = [
       { id: "timeline", label: "Timeline" },
       { id: "steps", label: "Steps" },
       { id: "result", label: "Result" },
+      { id: "empty", label: "Empty" },
       { id: "file-tree", label: "File Tree" },
       { id: "table", label: "Table" },
     ],
@@ -59,6 +60,8 @@ export const NAV: NavGroup[] = [
     group: "Navigation",
     items: [
       { id: "tabs", label: "Tabs" },
+      { id: "menubar", label: "Menubar" },
+      { id: "navigation-menu", label: "Navigation Menu" },
       { id: "accordion", label: "Accordion" },
       { id: "breadcrumb", label: "Breadcrumb" },
       { id: "pagination", label: "Pagination" },
@@ -104,6 +107,13 @@ export const NAV: NavGroup[] = [
       { id: "affix", label: "Affix" },
       { id: "calendar", label: "Calendar" },
       { id: "carousel", label: "Carousel" },
+    ],
+  },
+  {
+    group: "Utility",
+    items: [
+      { id: "float-button", label: "Float Button" },
+      { id: "tour-demo", label: "Tour" },
     ],
   },
 ];
