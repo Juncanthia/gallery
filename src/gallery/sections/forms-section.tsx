@@ -12,6 +12,7 @@ import { AutoComplete } from "@/components/base/auto-complete";
 import { Toggle } from "@/components/base/toggle";
 import { ToggleGroup } from "@/components/base/toggle-group";
 import { Rate } from "@/components/base/rate";
+import { DatePicker } from "@/components/base/date-picker";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -363,6 +364,30 @@ export function FormsSection() {
         <DemoRow label="Clear & disable">
           <Rate defaultValue={4} allowClear />
           <Rate defaultValue={3} disabled />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="date-picker" title="DatePicker" description="Date selection with calendar popover.">
+        <DemoRow label="Basic">
+          <DatePicker
+            placeholder="Pick a date"
+            onChange={(date) => console.log(date)}
+          />
+        </DemoRow>
+        <DemoRow label="Allow clear">
+          <DatePicker
+            defaultValue={new Date()}
+            placeholder="Select date"
+            allowClear
+          />
+        </DemoRow>
+        <DemoRow label="With format & disabled">
+          <DatePicker
+            defaultValue={new Date()}
+            format="MM/dd/yyyy"
+            disabledDate={(date) => date > new Date()}
+          />
+          <DatePicker placeholder="Disabled" disabled />
         </DemoRow>
       </GallerySection>
 

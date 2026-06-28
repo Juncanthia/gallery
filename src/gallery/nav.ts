@@ -56,6 +56,7 @@ export const NAV: NavGroup[] = [
       { id: "slider", label: "Slider" },
       { id: "toggle", label: "Toggle" },
       { id: "rate", label: "Rate" },
+      { id: "date-picker", label: "DatePicker" },
       { id: "input-number", label: "Input.Number" },
       { id: "input-otp", label: "Input.OTP" },
       { id: "auto-complete", label: "AutoComplete" },
