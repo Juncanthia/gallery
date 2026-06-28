@@ -15,7 +15,7 @@ import { Rate } from "@/components/base/rate";
 import { DatePicker } from "@/components/base/date-picker";
 import {
   TimePicker,
-} from "@/components/composite/time-picker";
+} from "@/components/base/time-picker";
 import { ColorPicker } from "@/components/base/color-picker";
 import { Mentions } from "@/components/base/mentions";
 import { TreeSelect } from "@/components/base/tree-select";
@@ -590,6 +590,7 @@ export function FormsSection() {
                 htmlFor: "form-role",
                 control: (
                   <Select
+                    id="form-role"
                     placeholder="Select role"
                     options={[
                       { label: "Admin", value: "admin" },

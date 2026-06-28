@@ -63,7 +63,7 @@ function resolveDuration(duration?: number) {
   return duration * 1000
 }
 
-function renderNotificationContent(args: NotificationArgs) {
+function renderNotificationContent(args: NotificationArgs, dismissKey?: string | number) {
   const { title, description, closable = true, closeIcon } = args
 
   return (
@@ -82,7 +82,9 @@ function renderNotificationContent(args: NotificationArgs) {
           className="shrink-0 rounded-sm text-muted-foreground opacity-70 transition-opacity hover:opacity-100"
           onClick={(e) => {
             e.stopPropagation()
-            // The toast will be dismissed by sonner's default close button or can be customized
+            if (dismissKey !== undefined) {
+              toast.dismiss(dismissKey)
+            }
           }}
           aria-label="Close"
           type="button"
@@ -123,25 +125,23 @@ function openNotification(args: NotificationArgs): NotificationClose {
     style,
   }
 
-  const content = renderNotificationContent(args)
+  const content = renderNotificationContent(args, key)
 
-  // sonner doesn't have a direct "notification" type, use toast.custom with type-based styling
+  let id: string | number
   if (args.type === "success") {
-    toast.success(content, options)
+    id = toast.success(content, options)
   } else if (args.type === "warning") {
-    toast.warning(content, options)
+    id = toast.warning(content, options)
   } else if (args.type === "error") {
-    toast.error(content, options)
+    id = toast.error(content, options)
   } else if (args.type === "info") {
-    toast.info(content, options)
+    id = toast.info(content, options)
   } else {
-    toast(content, options)
+    id = toast(content, options)
   }
 
   return () => {
-    if (args.key !== undefined) {
-      toast.dismiss(args.key)
-    }
+    toast.dismiss(key ?? id)
   }
 }
 

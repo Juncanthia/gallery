@@ -672,7 +672,7 @@ export function DisplaySection() {
               }
             />
             <Image
-              src="https://invalid.url/broken.jpg"
+              src="./nonexistent.jpg"
               width={120}
               height={80}
               alt="Broken"

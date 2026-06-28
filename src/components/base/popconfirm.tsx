@@ -82,7 +82,7 @@ function Popconfirm({
         <Button size="small" variant="outlined" onClick={handleCancel}>
           {cancelText}
         </Button>
-        <Button size="small" color="primary" variant={okColor === "danger" ? "solid" : "solid"} onClick={handleConfirm}>
+        <Button size="small" color={okColor === "danger" ? "danger" : "primary"} variant="solid" onClick={handleConfirm}>
           {okText}
         </Button>
       </div>

@@ -42,23 +42,24 @@ type DatePickerProps = {
   style?: React.CSSProperties
 }
 
-function DatePicker({
-  value: controlledValue,
-  defaultValue,
-  onChange,
-  format: dateFormat = "yyyy-MM-dd",
-  placeholder = "Select date",
-  allowClear = true,
-  disabled,
-  disabledDate,
-  variant = "outlined",
-  size = "middle",
-  status,
-  onOpenChange,
-  className,
-  style,
-}: DatePickerProps) {
-  const isControlled = controlledValue !== undefined
+function DatePicker(props: DatePickerProps) {
+  const {
+    value: controlledValue,
+    defaultValue,
+    onChange,
+    format: dateFormat = "yyyy-MM-dd",
+    placeholder = "Select date",
+    allowClear = true,
+    disabled,
+    disabledDate,
+    variant = "outlined",
+    size = "middle",
+    status,
+    onOpenChange,
+    className,
+    style,
+  } = props
+  const isControlled = "value" in props
   const [internalValue, setInternalValue] = React.useState<Date | undefined>(defaultValue)
   const value = isControlled ? controlledValue : internalValue
   const [open, setOpen] = React.useState(false)

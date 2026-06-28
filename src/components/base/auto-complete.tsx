@@ -65,6 +65,8 @@ type AutoCompleteProps = {
   defaultValue?: string
   /** Callback when the value changes. Fires on every keystroke and on option selection. */
   onValueChange?: (value: string | undefined) => void
+  /** Alias for onValueChange — AntD-compatible name. */
+  onChange?: (value: string | undefined) => void
   /** CSS class for the root trigger element. */
   className?: string
   /** CSS class for the popup content. */
@@ -82,11 +84,15 @@ type AutoCompleteProps = {
 }
 
 function AutoComplete(props: AutoCompleteProps) {
+  const { onChange, onValueChange, ...rest } = props
+  const handleValueChange = onChange ?? onValueChange
+
   return (
     <Select
       mode="combobox"
       showSearch
-      {...props}
+      {...rest}
+      onValueChange={handleValueChange}
     />
   )
 }
