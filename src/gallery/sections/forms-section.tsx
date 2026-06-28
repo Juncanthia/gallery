@@ -20,6 +20,7 @@ import { ColorPicker } from "@/components/base/color-picker";
 import { Mentions } from "@/components/base/mentions";
 import { TreeSelect } from "@/components/base/tree-select";
 import { Transfer } from "@/components/base/transfer";
+import { Cascader } from "@/components/base/cascader";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -458,6 +459,25 @@ export function FormsSection() {
             ]}
             titles={["Available", "Selected"]}
             defaultTargetKeys={["1", "4"]}
+          />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="cascader" title="Cascader" description="Cascading dropdown for hierarchical option selection.">
+        <DemoRow label="Basic">
+          <Cascader
+            className="w-52"
+            placeholder="Select"
+            options={[
+              { value: "zhejiang", label: "Zhejiang", children: [
+                { value: "hangzhou", label: "Hangzhou", children: [
+                  { value: "xihu", label: "West Lake" },
+                ]},
+              ]},
+              { value: "jiangsu", label: "Jiangsu", children: [
+                { value: "nanjing", label: "Nanjing" },
+              ]},
+            ]}
           />
         </DemoRow>
       </GallerySection>
