@@ -14,6 +14,7 @@ import { Skeleton, SkeletonAvatar, SkeletonButton, SkeletonImage, SkeletonInput,
 import { Result } from "@/components/base/result";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, EMPTY_IMAGE_DEFAULT, EMPTY_IMAGE_SIMPLE } from "@/components/base/empty-state";
 import { Image } from "@/components/base/image";
+import { List } from "@/components/base/list";
 import { BorderBeam } from "@/components/base/border-beam";
 import { Table } from "@/components/base/table";
 import { Descriptions } from "@/components/base/descriptions";
@@ -677,6 +678,36 @@ export function DisplaySection() {
                   Broken
                 </div>
               }
+            />
+          </DemoRow>
+        </GallerySection>
+
+        <GallerySection id="list" title="List" description="Ordered data display with header, footer, split, and loading.">
+          <DemoRow label="Basic">
+            <List
+              className="w-64"
+              dataSource={["React", "Vue", "Angular", "Svelte"]}
+              renderItem={(item) => <span>{item}</span>}
+            />
+          </DemoRow>
+          <DemoRow label="With header / footer / bordered">
+            <List
+              className="w-64"
+              bordered
+              header="Frameworks"
+              footer="4 items"
+              dataSource={["React", "Vue", "Angular"]}
+              renderItem={(item) => <span>{item}</span>}
+            />
+          </DemoRow>
+          <DemoRow label="Loading & empty">
+            <List
+              className="w-56"
+              loading
+              dataSource={[]}
+              renderItem={(item) => <span>{item}</span>}
+              emptyText="No data"
+              size="small"
             />
           </DemoRow>
         </GallerySection>
