@@ -7,6 +7,7 @@ import { Button } from "@/components/base/button";
 import { message } from "@/components/base/message-api";
 import { notification } from "@/components/base/notification-api";
 import { Popconfirm } from "@/components/base/popconfirm";
+import { Spin } from "@/components/base/spin";
 
 export function UtilitySection() {
   const [tourOpen, setTourOpen] = useState(false);
@@ -125,6 +126,28 @@ export function UtilitySection() {
           >
             <Button color="danger" variant="outlined">删除</Button>
           </Popconfirm>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="spin" title="Spin" description="Loading spinner with optional tip and content wrapping.">
+        <DemoRow label="Sizes">
+          <Spin size="small" />
+          <Spin />
+          <Spin size="large" />
+        </DemoRow>
+        <DemoRow label="With tip">
+          <Spin tip="Loading data..." />
+        </DemoRow>
+        <DemoRow label="Wrap content">
+          <Spin spinning tip="Refreshing...">
+            <div className="w-48 rounded border p-4 text-sm">
+              <p className="font-medium">Dashboard</p>
+              <p className="text-muted-foreground">Some content here that is currently loading.</p>
+            </div>
+          </Spin>
+        </DemoRow>
+        <DemoRow label="Delay">
+          <Spin delay={500} tip="Shows after 500ms" />
         </DemoRow>
       </GallerySection>
 

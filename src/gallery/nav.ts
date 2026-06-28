@@ -94,6 +94,7 @@ export const NAV: NavGroup[] = [
       { id: "notification", label: "Notification" },
       { id: "popconfirm", label: "Popconfirm" },
       { id: "progress", label: "Progress" },
+      { id: "spin", label: "Spin" },
       { id: "alert-component", label: "Alert" },
     ],
   },
