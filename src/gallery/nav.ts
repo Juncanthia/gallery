@@ -14,6 +14,7 @@ export const NAV: NavGroup[] = [
     items: [
       { id: "button", label: "Button" },
       { id: "badge", label: "Badge" },
+      { id: "tag", label: "Tag" },
       { id: "avatar", label: "Avatar" },
       { id: "kbd", label: "Kbd" },
       { id: "separator", label: "Separator" },

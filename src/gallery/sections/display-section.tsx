@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GallerySection, DemoRow, DemoCard, SectionGroup } from "../gallery-section";
 import { Button } from "@/components/base/button";
 import { Badge, BadgeRibbon } from "@/components/base/badge";
+import { Tag } from "@/components/base/tag";
 import { Kbd, KbdGroup } from "@/components/base/kbd";
 import { Separator } from "@/components/base/separator";
 import { Avatar, AvatarFallback, AvatarImage, AvatarGroup, AvatarGroupCount } from "@/components/base/avatar";
@@ -124,6 +125,27 @@ export function DisplaySection() {
             <BadgeRibbon text="Beta" placement="start" color="#8b5cf6">
               <div className="w-40 rounded border p-3 text-sm">Start placement</div>
             </BadgeRibbon>
+          </DemoRow>
+        </GallerySection>
+
+        <GallerySection id="tag" title="Tag" description="Keyword labels for categorization and filtering.">
+          <DemoRow label="Colors">
+            <Tag>Default</Tag>
+            <Tag color="blue">Blue</Tag>
+            <Tag color="green">Green</Tag>
+            <Tag color="red">Red</Tag>
+            <Tag color="orange">Orange</Tag>
+            <Tag color="purple">Purple</Tag>
+            <Tag color="cyan">Cyan</Tag>
+            <Tag color="magenta">Magenta</Tag>
+          </DemoRow>
+          <DemoRow label="With icon">
+            <Tag icon={<Check className="size-3" />} color="green">Done</Tag>
+            <Tag icon={<Users className="size-3" />} color="blue">Team</Tag>
+          </DemoRow>
+          <DemoRow label="Closable">
+            <Tag closable onClose={() => {}} color="blue">Removable</Tag>
+            <Tag closable color="purple" bordered={false}>No border</Tag>
           </DemoRow>
         </GallerySection>
 
