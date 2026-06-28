@@ -16,6 +16,7 @@ import { DatePicker } from "@/components/base/date-picker";
 import {
   TimePicker,
 } from "@/components/composite/time-picker";
+import { ColorPicker } from "@/components/base/color-picker";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -400,6 +401,12 @@ export function FormsSection() {
         </DemoRow>
         <DemoRow label="12-hour">
           <TimePicker defaultValue="02:30 PM" use12Hours format="HH:mm" placeholder="Select time" />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="color-picker" title="ColorPicker" description="HSL color picker with sliders and hex input.">
+        <DemoRow label="Basic">
+          <ColorPicker defaultValue="#6366f1" onChange={(v) => console.log(v)} />
         </DemoRow>
       </GallerySection>
 
