@@ -6,6 +6,7 @@ import { Plus, MessageCircle, Share, CreditCard as Edit, Settings, HelpCircle } 
 import { Button } from "@/components/base/button";
 import { message } from "@/components/base/message-api";
 import { notification } from "@/components/base/notification-api";
+import { Popconfirm } from "@/components/base/popconfirm";
 
 export function UtilitySection() {
   const [tourOpen, setTourOpen] = useState(false);
@@ -92,6 +93,38 @@ export function UtilitySection() {
           <Button variant="text" onClick={() => notification.destroy()}>
             Destroy all
           </Button>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="popconfirm" title="Popconfirm" description="Confirmation popover triggered by a child button.">
+        <DemoRow label="Basic">
+          <Popconfirm
+            title="Are you sure?"
+            description="This action cannot be undone."
+            onConfirm={() => message.success("Deleted")}
+          >
+            <Button variant="outlined">Delete</Button>
+          </Popconfirm>
+          <Popconfirm
+            title="Confirm publish?"
+            onConfirm={() => message.success("Published")}
+            okText="Publish"
+            cancelText="Cancel"
+          >
+            <Button>Publish</Button>
+          </Popconfirm>
+        </DemoRow>
+        <DemoRow label="Danger">
+          <Popconfirm
+            title="永久删除此项目？"
+            description="删除后无法恢复。"
+            onConfirm={() => message.success("已删除")}
+            okColor="danger"
+            okText="删除"
+            cancelText="取消"
+          >
+            <Button color="danger" variant="outlined">删除</Button>
+          </Popconfirm>
         </DemoRow>
       </GallerySection>
 
