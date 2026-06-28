@@ -10,6 +10,8 @@ import { Slider } from "@/components/base/slider";
 import { Select } from "@/components/base/select";
 import { Toggle } from "@/components/base/toggle";
 import { ToggleGroup } from "@/components/base/toggle-group";
+import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
+import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
 
 const checkboxOptions = [
@@ -37,6 +39,16 @@ const formatOptions = [
   { label: <Underline className="size-4" />, value: "underline", "aria-label": "Underline" },
 ];
 
+const initialAttachmentFiles: AttachmentFile[] = [
+  {
+    uid: "brief",
+    name: "product-brief.pdf",
+    size: 328_000,
+    type: "application/pdf",
+    status: "done",
+  },
+];
+
 export function FormsSection() {
   const [sliderVal, setSliderVal] = useState(40);
   const [radioVal, setRadioVal] = useState("option-1");
@@ -47,6 +59,8 @@ export function FormsSection() {
   const [selectValue, setSelectValue] = useState<string | undefined>();
   const [selectTags, setSelectTags] = useState<string[]>(["react"]);
   const [checkboxValues, setCheckboxValues] = useState<CheckboxValue[]>(["apple"]);
+  const [attachmentFiles, setAttachmentFiles] =
+    useState<AttachmentFile[]>(initialAttachmentFiles);
   const enabledCheckboxValues: CheckboxValue[] = checkboxOptions
     .filter((option) => !option.disabled)
     .map((option) => option.value);
@@ -368,6 +382,105 @@ export function FormsSection() {
           <div className="flex flex-col gap-2">
             <Label>4-digit PIN</Label>
             <Input.OTP length={4} mask />
+          </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="form" title="Form" description="Layout-first form composition with API items.">
+        <DemoRow label="Items API">
+          <Form
+            layout="horizontal"
+            className="max-w-xl"
+            items={[
+              {
+                key: "email",
+                label: "Email",
+                required: true,
+                htmlFor: "form-email",
+                control: <Input id="form-email" type="email" placeholder="you@example.com" />,
+              },
+              {
+                key: "role",
+                label: "Role",
+                htmlFor: "form-role",
+                control: (
+                  <Select
+                    placeholder="Select role"
+                    options={[
+                      { label: "Admin", value: "admin" },
+                      { label: "Editor", value: "editor" },
+                    ]}
+                  />
+                ),
+              },
+              {
+                key: "note",
+                label: "Note",
+                help: "The lightweight form wrapper only handles layout, not validation state.",
+                control: <Input.TextArea id="form-note" rows={3} placeholder="Internal note..." />,
+              },
+            ]}
+          />
+        </DemoRow>
+        <DemoRow label="Status">
+          <div className="w-full max-w-sm">
+            <FormItem
+              label="Username"
+              required
+              htmlFor="form-username"
+              validateStatus="error"
+              errors={[{ message: "Username is required" }]}
+            >
+              <Input id="form-username" status="error" placeholder="Enter username" />
+            </FormItem>
+          </div>
+          <div className="w-full max-w-sm">
+            <FormItem
+              label="Website"
+              htmlFor="form-website"
+              help="Optional public profile URL"
+            >
+              <Input id="form-website" addonBefore="https://" placeholder="example.com" />
+            </FormItem>
+          </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="attachment" title="Attachment" description="File selection and attachment list.">
+        <DemoRow label="Basic / drag">
+          <div className="w-80">
+            <AttachmentUpload
+              multiple
+              accept=".pdf,.png,.jpg"
+              defaultFileList={initialAttachmentFiles}
+              maxCount={3}
+            />
+          </div>
+          <div className="w-80">
+            <AttachmentUpload
+              drag
+              multiple
+              accept="image/*,.pdf"
+              maxCount={4}
+              emptyText="Drop or choose files to preview the list"
+            />
+          </div>
+        </DemoRow>
+        <DemoRow label="Controlled">
+          <div className="w-96">
+            <AttachmentUpload
+              fileList={attachmentFiles}
+              onChange={({ fileList }) => setAttachmentFiles(fileList)}
+              onRemove={(file) => file.name !== "locked-contract.pdf"}
+              beforeUpload={(file) => file.size < 1024 * 1024}
+              multiple
+              maxCount={3}
+              trigger={<Button variant="filled">Add attachment</Button>}
+              emptyText="No controlled files"
+            />
+            <p className="mt-2 text-xs text-muted-foreground">
+              Files larger than 1 MB are ignored. The list is controlled by state.
+            </p>
           </div>
         </DemoRow>
       </GallerySection>

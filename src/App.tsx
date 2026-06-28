@@ -6,6 +6,7 @@ import { FormsSection } from "./gallery/sections/forms-section";
 import { InteractiveSection } from "./gallery/sections/interactive-section";
 import { LayoutSection } from "./gallery/sections/layout-section";
 import { UtilitySection } from "./gallery/sections/utility-section";
+import { Toaster } from "@/components/base/toaster";
 import { NAV } from "./gallery/nav";
 
 const totalComponents = NAV.flatMap((g) => g.items).length;
@@ -97,6 +98,7 @@ export function App() {
           </div>
         </main>
       </div>
+      <Toaster position="top-center" richColors />
     </div>
   );
 }

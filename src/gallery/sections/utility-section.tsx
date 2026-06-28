@@ -4,6 +4,7 @@ import { FloatButton, FloatButtonBackTop, FloatButtonGroup } from "@/components/
 import { Tour, type TourStepConfig } from "@/components/composite/tour";
 import { Plus, MessageCircle, Share, CreditCard as Edit, Settings, HelpCircle } from "lucide-react";
 import { Button } from "@/components/base/button";
+import { message } from "@/components/base/message-api";
 
 export function UtilitySection() {
   const [tourOpen, setTourOpen] = useState(false);
@@ -17,6 +18,43 @@ export function UtilitySection() {
 
   return (
     <SectionGroup title="Utility" description="Floating actions and guided product utilities.">
+      <GallerySection id="message" title="Message" description="Global feedback messages with API-first calls.">
+        <DemoRow label="Types">
+          <Button onClick={() => message.success("Saved successfully")}>Success</Button>
+          <Button onClick={() => message.info("New update available")}>Info</Button>
+          <Button onClick={() => message.warning("Please check the form")}>Warning</Button>
+          <Button onClick={() => message.error("Something went wrong")}>Error</Button>
+        </DemoRow>
+        <DemoRow label="Key / loading">
+          <Button
+            onClick={() => {
+              const key = "message-save";
+              message.loading({ key, content: "Saving...", duration: 0 });
+              window.setTimeout(() => {
+                message.success({ key, content: "Saved", duration: 2 });
+              }, 1000);
+            }}
+          >
+            Update by key
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() =>
+              message.open({
+                type: "info",
+                content: "Custom duration",
+                duration: 5,
+              })
+            }
+          >
+            Open config
+          </Button>
+          <Button variant="text" onClick={() => message.destroy()}>
+            Destroy all
+          </Button>
+        </DemoRow>
+      </GallerySection>
+
       <GallerySection id="float-button" title="Float Button" description="Floating action buttons anchored to a surface or viewport.">
         <DemoRow label="API">
           <div className="relative flex h-52 w-full max-w-sm items-center justify-center overflow-hidden rounded border bg-muted/20">

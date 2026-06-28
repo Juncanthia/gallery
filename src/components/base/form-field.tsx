@@ -5,6 +5,32 @@ import { cn } from "@/lib/utils"
 import { Label } from "@/components/base/label"
 import { Separator } from "@/components/base/separator"
 
+type FormLayout = "vertical" | "horizontal" | "inline"
+
+type FieldErrorItem = { message?: string } | undefined
+
+type FormItemProps = React.ComponentProps<"div"> & {
+  label?: React.ReactNode
+  required?: boolean
+  help?: React.ReactNode
+  extra?: React.ReactNode
+  errors?: FieldErrorItem[]
+  validateStatus?: "success" | "warning" | "error"
+  htmlFor?: string
+  orientation?: VariantProps<typeof fieldVariants>["orientation"]
+}
+
+type FormItemConfig = Omit<FormItemProps, "children"> & {
+  key?: React.Key
+  control?: React.ReactNode
+}
+
+type FormProps = Omit<React.ComponentProps<"form">, "children"> & {
+  layout?: FormLayout
+  items?: FormItemConfig[]
+  children?: React.ReactNode
+}
+
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
     <fieldset
@@ -66,6 +92,51 @@ const fieldVariants = cva(
     },
   }
 )
+
+const formVariants = cva("flex w-full", {
+  variants: {
+    layout: {
+      vertical: "flex-col gap-5",
+      horizontal: "flex-col gap-4",
+      inline: "flex-row flex-wrap items-start gap-3",
+    },
+  },
+  defaultVariants: {
+    layout: "vertical",
+  },
+})
+
+function Form({
+  className,
+  layout = "vertical",
+  items,
+  children,
+  ...props
+}: FormProps) {
+  const defaultOrientation =
+    layout === "vertical" ? "vertical" : "horizontal"
+
+  return (
+    <form
+      data-slot="form"
+      data-layout={layout}
+      className={cn(formVariants({ layout }), className)}
+      {...props}
+    >
+      {items
+        ? items.map(({ key, control, orientation, ...item }, index) => (
+            <FormItem
+              key={key ?? item.htmlFor ?? index}
+              orientation={orientation ?? defaultOrientation}
+              {...item}
+            >
+              {control}
+            </FormItem>
+          ))
+        : children}
+    </form>
+  )
+}
 
 function Field({
   className,
@@ -222,7 +293,53 @@ function FieldError({
   )
 }
 
+function FormItem({
+  className,
+  label,
+  required = false,
+  help,
+  extra,
+  errors,
+  validateStatus,
+  htmlFor,
+  orientation = "vertical",
+  children,
+  ...props
+}: FormItemProps) {
+  const invalid = validateStatus === "error" || Boolean(errors?.length)
+
+  return (
+    <Field
+      data-form-item
+      data-status={validateStatus}
+      data-invalid={invalid || undefined}
+      orientation={orientation}
+      className={className}
+      {...props}
+    >
+      {label ? (
+        <FieldLabel htmlFor={htmlFor}>
+          {label}
+          {required ? (
+            <span aria-hidden="true" className="text-destructive">
+              *
+            </span>
+          ) : null}
+        </FieldLabel>
+      ) : null}
+      <FieldContent>
+        {children}
+        {help ? <FieldDescription>{help}</FieldDescription> : null}
+        {extra ? <FieldDescription>{extra}</FieldDescription> : null}
+        <FieldError errors={errors} />
+      </FieldContent>
+    </Field>
+  )
+}
+
 export {
+  Form,
+  FormItem,
   Field,
   FieldLabel,
   FieldDescription,
@@ -234,3 +351,4 @@ export {
   FieldContent,
   FieldTitle,
 }
+export type { FormItemConfig, FormItemProps, FormLayout, FormProps }

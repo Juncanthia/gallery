@@ -54,6 +54,8 @@ export const NAV: NavGroup[] = [
       { id: "toggle", label: "Toggle" },
       { id: "input-number", label: "Input.Number" },
       { id: "input-otp", label: "Input.OTP" },
+      { id: "form", label: "Form" },
+      { id: "attachment", label: "Attachment" },
     ],
   },
   {
@@ -85,6 +87,7 @@ export const NAV: NavGroup[] = [
   {
     group: "Feedback",
     items: [
+      { id: "message", label: "Message" },
       { id: "progress", label: "Progress" },
       { id: "alert-component", label: "Alert" },
     ],
