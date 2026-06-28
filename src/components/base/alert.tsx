@@ -27,29 +27,45 @@ const alertVariants = cva(
 )
 
 type AlertType = "success" | "info" | "warning" | "error"
+type AlertVariant = "outlined" | "filled"
+type AlertClosable =
+  | boolean
+  | {
+      closeIcon?: React.ReactNode
+      onClose?: React.MouseEventHandler<HTMLButtonElement>
+      afterClose?: () => void
+    }
 
 type AlertProps = Omit<React.ComponentProps<"div">, "title"> &
-  VariantProps<typeof alertVariants> & {
+  Omit<VariantProps<typeof alertVariants>, "variant"> & {
     type?: AlertType
+    variant?: AlertVariant | NonNullable<VariantProps<typeof alertVariants>["variant"]>
     title?: React.ReactNode
     message?: React.ReactNode
     description?: React.ReactNode
     icon?: React.ReactNode
     showIcon?: boolean
     action?: React.ReactNode
-    closable?: boolean
+    closable?: AlertClosable
     closeText?: React.ReactNode
+    closeIcon?: React.ReactNode
     onClose?: React.MouseEventHandler<HTMLButtonElement>
+    afterClose?: () => void
+    banner?: boolean
   }
 
-const alertTypeClasses: Record<AlertType, string> = {
-  success:
-    "border-green-500/40 bg-green-500/10 text-green-700 dark:text-green-400",
+const alertOutlinedClasses: Record<AlertType, string> = {
+  success: "border-green-500/40 bg-card text-green-700 dark:text-green-400",
+  info: "border-blue-500/40 bg-card text-blue-700 dark:text-blue-400",
+  warning: "border-yellow-500/40 bg-card text-yellow-700 dark:text-yellow-400",
+  error: "border-destructive/40 bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90",
+}
+
+const alertFilledClasses: Record<AlertType, string> = {
+  success: "border-green-500/40 bg-green-500/10 text-green-700 dark:text-green-400",
   info: "border-blue-500/40 bg-blue-500/10 text-blue-700 dark:text-blue-400",
-  warning:
-    "border-yellow-500/40 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
-  error:
-    "border-destructive/40 bg-destructive/10 text-destructive *:data-[slot=alert-description]:text-destructive/90",
+  warning: "border-yellow-500/40 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
+  error: "border-destructive/40 bg-destructive/10 text-destructive *:data-[slot=alert-description]:text-destructive/90",
 }
 
 const alertIcons: Record<AlertType, React.ReactNode> = {
@@ -71,7 +87,10 @@ function Alert({
   action,
   closable,
   closeText,
+  closeIcon,
   onClose,
+  afterClose,
+  banner,
   children,
   ...props
 }: AlertProps) {
@@ -86,9 +105,20 @@ function Alert({
     action !== undefined ||
     closable !== undefined ||
     closeText !== undefined ||
-    onClose !== undefined
-  const mergedType = type ?? (variant === "destructive" ? "error" : "info")
-  const shouldShowIcon = showIcon ?? type !== undefined
+    closeIcon !== undefined ||
+    onClose !== undefined ||
+    afterClose !== undefined ||
+    banner !== undefined
+  const mergedType = type ?? (variant === "destructive" ? "error" : banner ? "warning" : "info")
+  const mergedVariant: AlertVariant = variant === "filled" ? "filled" : "outlined"
+  const legacyVariant = variant === "destructive" ? "destructive" : "default"
+  const closableConfig = typeof closable === "object" ? closable : undefined
+  const isClosable =
+    Boolean(closable) ||
+    closeText !== undefined ||
+    closeIcon !== undefined ||
+    closableConfig?.closeIcon !== undefined
+  const shouldShowIcon = showIcon ?? (banner || type !== undefined)
 
   if (closed) return null
 
@@ -97,7 +127,12 @@ function Alert({
       <div
         data-slot="alert"
         role="alert"
-        className={cn(alertVariants({ variant }), className)}
+        className={cn(
+          alertVariants({
+            variant: variant === "destructive" ? "destructive" : "default",
+          }),
+          className
+        )}
         {...props}
       >
         {children}
@@ -106,8 +141,15 @@ function Alert({
   }
 
   const handleClose: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    closableConfig?.onClose?.(event)
     onClose?.(event)
-    if (!event.defaultPrevented) setClosed(true)
+    if (!event.defaultPrevented) {
+      setClosed(true)
+      queueMicrotask(() => {
+        closableConfig?.afterClose?.()
+        afterClose?.()
+      })
+    }
   }
 
   return (
@@ -115,9 +157,12 @@ function Alert({
       data-slot="alert"
       role="alert"
       className={cn(
-        alertVariants({ variant: mergedType === "error" ? "destructive" : variant }),
-        alertTypeClasses[mergedType],
-        (closable || closeText) && "pr-10",
+        alertVariants({ variant: mergedType === "error" ? "destructive" : legacyVariant }),
+        mergedVariant === "filled"
+          ? alertFilledClasses[mergedType]
+          : alertOutlinedClasses[mergedType],
+        banner && "rounded-none border-x-0",
+        isClosable && "pr-10",
         className
       )}
       {...props}
@@ -131,13 +176,13 @@ function Alert({
         {children}
       </div>
       {action !== undefined && <AlertAction>{action}</AlertAction>}
-      {(closable || closeText) && (
+      {isClosable && (
         <button
           type="button"
           className="absolute right-3 top-2.5 inline-flex size-5 items-center justify-center rounded opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={handleClose}
         >
-          {closeText ?? <X className="size-4" />}
+          {closableConfig?.closeIcon ?? closeText ?? closeIcon ?? <X className="size-4" />}
           <span className="sr-only">Close</span>
         </button>
       )}
@@ -185,4 +230,4 @@ function AlertAction({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 export { Alert, AlertTitle, AlertDescription, AlertAction }
-export type { AlertProps, AlertType }
+export type { AlertProps, AlertType, AlertVariant, AlertClosable }

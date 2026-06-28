@@ -2,8 +2,9 @@ import React, { createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
 
 type DescriptionsVariant = "default" | "bordered";
-type DescriptionsSize = "sm" | "default" | "lg";
+type DescriptionsSize = "sm" | "small" | "default" | "middle" | "lg" | "large";
 type DescriptionsLayout = "horizontal" | "vertical";
+type DescriptionsBreakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 
 interface DescriptionsContextType {
   variant: DescriptionsVariant;
@@ -30,7 +31,9 @@ export interface DescriptionsItemProps {
   label?: React.ReactNode;
   children?: React.ReactNode;
   content?: React.ReactNode;
-  span?: number;
+  span?: number | "filled" | Partial<Record<DescriptionsBreakpoint, number>>;
+  labelStyle?: React.CSSProperties;
+  contentStyle?: React.CSSProperties;
   labelClassName?: string;
   contentClassName?: string;
   className?: string;
@@ -38,8 +41,20 @@ export interface DescriptionsItemProps {
 
 const sizeClasses: Record<DescriptionsSize, string> = {
   sm: "px-3 py-1.5",
+  small: "px-3 py-1.5",
   default: "px-4 py-2.5",
+  middle: "px-4 py-2.5",
   lg: "px-5 py-4",
+  large: "px-5 py-4",
+};
+
+const breakpointMinWidth: Record<DescriptionsBreakpoint, number> = {
+  xs: 0,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1600,
 };
 
 function renderLabel(label: React.ReactNode, colon: boolean) {
@@ -57,6 +72,8 @@ export const DescriptionsItem = React.forwardRef<
       children,
       content,
       span = 1,
+      labelStyle,
+      contentStyle,
       labelClassName,
       contentClassName,
       className,
@@ -67,6 +84,7 @@ export const DescriptionsItem = React.forwardRef<
     const mergedContent = content ?? children;
     const mergedLabelClassName = cn(context.labelClassName, labelClassName);
     const mergedContentClassName = cn(context.contentClassName, contentClassName);
+    const numericSpan = typeof span === "number" ? span : 1;
 
     if (context.variant === "bordered") {
       if (context.layout === "vertical") {
@@ -74,14 +92,14 @@ export const DescriptionsItem = React.forwardRef<
           <td
             ref={ref as React.Ref<HTMLTableCellElement>}
             className={cn("border-r border-b border-border text-sm", sizeClasses[context.size], className)}
-            colSpan={Math.max(1, span)}
+            colSpan={Math.max(1, numericSpan)}
           >
             {label && (
-              <div className={cn("mb-1 font-medium text-muted-foreground", mergedLabelClassName)}>
+              <div className={cn("mb-1 font-medium text-muted-foreground", mergedLabelClassName)} style={labelStyle}>
                 {renderLabel(label, context.colon)}
               </div>
             )}
-            <div className={mergedContentClassName}>{mergedContent}</div>
+            <div className={mergedContentClassName} style={contentStyle}>{mergedContent}</div>
           </td>
         );
       }
@@ -96,6 +114,7 @@ export const DescriptionsItem = React.forwardRef<
               mergedLabelClassName,
               className
             )}
+            style={labelStyle}
           >
             {renderLabel(label, context.colon)}
           </td>
@@ -105,7 +124,8 @@ export const DescriptionsItem = React.forwardRef<
               sizeClasses[context.size],
               mergedContentClassName
             )}
-            colSpan={Math.max(1, span * 2 - 1)}
+            style={contentStyle}
+            colSpan={Math.max(1, numericSpan * 2 - 1)}
           >
             {mergedContent}
           </td>
@@ -120,14 +140,14 @@ export const DescriptionsItem = React.forwardRef<
           context.layout === "vertical" ? "space-y-1 py-2" : "flex gap-2 py-2",
           className
         )}
-        style={{ gridColumn: span > 1 ? `span ${span} / span ${span}` : undefined }}
+        style={{ gridColumn: numericSpan > 1 ? `span ${numericSpan} / span ${numericSpan}` : undefined }}
       >
         {label && (
-          <div className={cn("shrink-0 font-medium text-muted-foreground", mergedLabelClassName)}>
+          <div className={cn("shrink-0 font-medium text-muted-foreground", mergedLabelClassName)} style={labelStyle}>
             {renderLabel(label, context.colon)}
           </div>
         )}
-        <div className={cn("min-w-0", mergedContentClassName)}>{mergedContent}</div>
+        <div className={cn("min-w-0", mergedContentClassName)} style={contentStyle}>{mergedContent}</div>
       </div>
     );
   }
@@ -142,25 +162,67 @@ export interface DescriptionsItemConfig extends DescriptionsItemProps {
 export interface DescriptionsProps {
   title?: React.ReactNode;
   extra?: React.ReactNode;
-  column?: number;
+  column?: number | Partial<Record<DescriptionsBreakpoint, number>>;
   bordered?: boolean;
   colon?: boolean;
   layout?: DescriptionsLayout;
   size?: DescriptionsSize;
   items?: DescriptionsItemConfig[];
   children?: React.ReactNode;
+  labelStyle?: React.CSSProperties;
+  contentStyle?: React.CSSProperties;
   labelClassName?: string;
   contentClassName?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-function chunkItems(items: DescriptionsItemConfig[], column: number) {
+function useViewportWidth() {
+  const [width, setWidth] = React.useState(() =>
+    typeof window === "undefined" ? 1024 : window.innerWidth
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return width;
+}
+
+function getResponsiveValue(
+  value: number | Partial<Record<DescriptionsBreakpoint, number>> | undefined,
+  width: number,
+  fallback: number
+) {
+  if (typeof value === "number") return value;
+  if (!value) return fallback;
+
+  const active = (Object.entries(breakpointMinWidth) as Array<[DescriptionsBreakpoint, number]>)
+    .filter(([breakpoint, minWidth]) => width >= minWidth && value[breakpoint] !== undefined)
+    .sort((a, b) => b[1] - a[1])[0]?.[0];
+
+  return active ? value[active] ?? fallback : fallback;
+}
+
+function resolveSpan(
+  span: DescriptionsItemConfig["span"],
+  column: number,
+  usedSpan: number,
+  width: number
+) {
+  if (span === "filled") return Math.max(1, column - usedSpan);
+  return Math.min(Math.max(getResponsiveValue(span, width, 1), 1), column);
+}
+
+function chunkItems(items: DescriptionsItemConfig[], column: number, width: number) {
   const rows: DescriptionsItemConfig[][] = [];
   let currentRow: DescriptionsItemConfig[] = [];
   let usedSpan = 0;
 
   items.forEach((item) => {
-    const span = Math.min(Math.max(item.span ?? 1, 1), column);
+    const span = resolveSpan(item.span, column, usedSpan, width);
     if (usedSpan + span > column && currentRow.length > 0) {
       rows.push(currentRow);
       currentRow = [];
@@ -186,18 +248,23 @@ export const Descriptions = React.forwardRef<HTMLDivElement, DescriptionsProps>(
       size = "default",
       items,
       children,
+      labelStyle,
+      contentStyle,
       labelClassName,
       contentClassName,
       className,
+      style,
     },
     ref
   ) => {
     const variant = bordered ? "bordered" : "default";
-    const safeColumn = Math.max(1, column);
-    const rows = items ? chunkItems(items, safeColumn) : [];
+    const viewportWidth = useViewportWidth();
+    const safeColumn = Math.max(1, getResponsiveValue(column, viewportWidth, 3));
+    const rows = items ? chunkItems(items, safeColumn, viewportWidth) : [];
+    const normalizedItems = rows.flat();
 
     return (
-      <div ref={ref} data-slot="descriptions" className={className}>
+      <div ref={ref} data-slot="descriptions" className={className} style={style}>
         {(title || extra) && (
           <div className="mb-3 flex items-center justify-between gap-3">
             {title && <h3 className="text-base font-semibold">{title}</h3>}
@@ -227,6 +294,8 @@ export const Descriptions = React.forwardRef<HTMLDivElement, DescriptionsProps>(
                           label={item.label}
                           span={item.span}
                           className={item.className}
+                          labelStyle={item.labelStyle ?? labelStyle}
+                          contentStyle={item.contentStyle ?? contentStyle}
                           labelClassName={item.labelClassName}
                           contentClassName={item.contentClassName}
                         >
@@ -246,12 +315,14 @@ export const Descriptions = React.forwardRef<HTMLDivElement, DescriptionsProps>(
               style={{ gridTemplateColumns: `repeat(${safeColumn}, minmax(0, 1fr))` }}
             >
               {items
-                ? items.map((item, index) => (
+                ? normalizedItems.map((item, index) => (
                     <DescriptionsItem
                       key={item.key ?? index}
                       label={item.label}
                       span={item.span}
                       className={item.className}
+                      labelStyle={item.labelStyle ?? labelStyle}
+                      contentStyle={item.contentStyle ?? contentStyle}
                       labelClassName={item.labelClassName}
                       contentClassName={item.contentClassName}
                     >

@@ -11,8 +11,10 @@ import {
 type PaginationSize = "small" | "middle"
 type PaginationItemType = "page" | "prev" | "next" | "jump-prev" | "jump-next"
 type PaginationElement = number | "jump-prev" | "jump-next"
+type PaginationAlign = "start" | "center" | "end"
 
 type PaginationProps = Omit<React.ComponentProps<"nav">, "onChange"> & {
+  align?: PaginationAlign
   current?: number
   defaultCurrent?: number
   defaultPageSize?: number
@@ -24,8 +26,12 @@ type PaginationProps = Omit<React.ComponentProps<"nav">, "onChange"> & {
     originalElement: React.ReactNode
   ) => React.ReactNode
   onChange?: (page: number, pageSize: number) => void
+  onShowSizeChange?: (current: number, size: number) => void
   pageSize?: number
+  pageSizeOptions?: Array<number | string>
   showLessItems?: boolean
+  showQuickJumper?: boolean | { goButton?: React.ReactNode }
+  showSizeChanger?: boolean
   showTotal?: (total: number, range: [number, number]) => React.ReactNode
   simple?: boolean | { readOnly?: boolean }
   size?: PaginationSize
@@ -78,6 +84,7 @@ function getPaginationElements(
 }
 
 function Pagination({
+  align = "center",
   children,
   className,
   current,
@@ -87,8 +94,12 @@ function Pagination({
   hideOnSinglePage = false,
   itemRender,
   onChange,
+  onShowSizeChange,
   pageSize,
+  pageSizeOptions = [10, 20, 50, 100],
   showLessItems = false,
+  showQuickJumper = false,
+  showSizeChanger = false,
   showTotal,
   simple = false,
   size = "middle",
@@ -96,7 +107,9 @@ function Pagination({
   ...props
 }: PaginationProps) {
   const [innerCurrent, setInnerCurrent] = React.useState(defaultCurrent)
-  const mergedPageSize = Math.max(1, pageSize ?? defaultPageSize)
+  const [innerPageSize, setInnerPageSize] = React.useState(defaultPageSize)
+  const [quickPage, setQuickPage] = React.useState("")
+  const mergedPageSize = Math.max(1, pageSize ?? innerPageSize)
   const pageCount = getPageCount(total, mergedPageSize)
   const mergedCurrent = clampPage(current ?? innerCurrent, pageCount)
 
@@ -106,29 +119,46 @@ function Pagination({
   const rangeStart = total === 0 ? 0 : (mergedCurrent - 1) * mergedPageSize + 1
   const rangeEnd = Math.min(mergedCurrent * mergedPageSize, total)
 
-  const changePage = React.useCallback(
-    (nextPage: number) => {
-      const targetPage = clampPage(nextPage, pageCount)
+  const changePage = (nextPage: number, nextPageSize = mergedPageSize) => {
+    const nextPageCount = getPageCount(total, nextPageSize)
+    const targetPage = clampPage(nextPage, nextPageCount)
 
-      if (disabled || targetPage === mergedCurrent) {
-        return
-      }
+    if (disabled || targetPage === mergedCurrent) {
+      return
+    }
 
-      if (current === undefined) {
-        setInnerCurrent(targetPage)
-      }
+    if (current === undefined) {
+      setInnerCurrent(targetPage)
+    }
 
-      onChange?.(targetPage, mergedPageSize)
-    },
-    [current, disabled, mergedCurrent, mergedPageSize, onChange, pageCount]
-  )
+    onChange?.(targetPage, nextPageSize)
+  }
 
-  const renderItem = React.useCallback(
-    (page: number, type: PaginationItemType, originalElement: React.ReactNode) => {
-      return itemRender?.(page, type, originalElement) ?? originalElement
-    },
-    [itemRender]
-  )
+  const changePageSize = (nextPageSize: number) => {
+    if (disabled) return
+    const safePageSize = Math.max(1, nextPageSize)
+    const nextPage = clampPage(mergedCurrent, getPageCount(total, safePageSize))
+
+    if (pageSize === undefined) {
+      setInnerPageSize(safePageSize)
+    }
+    if (current === undefined) {
+      setInnerCurrent(nextPage)
+    }
+
+    onShowSizeChange?.(nextPage, safePageSize)
+    onChange?.(nextPage, safePageSize)
+  }
+
+  const jumpToQuickPage = () => {
+    if (!quickPage) return
+    changePage(Number(quickPage))
+    setQuickPage("")
+  }
+
+  const renderItem = (page: number, type: PaginationItemType, originalElement: React.ReactNode) => {
+    return itemRender?.(page, type, originalElement) ?? originalElement
+  }
 
   if (children) {
     return (
@@ -185,7 +215,13 @@ function Pagination({
       role="navigation"
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("mx-auto flex w-full flex-wrap items-center justify-center gap-3", className)}
+      className={cn(
+        "mx-auto flex w-full flex-wrap items-center gap-3",
+        align === "start" && "justify-start",
+        align === "center" && "justify-center",
+        align === "end" && "justify-end",
+        className
+      )}
       {...props}
     >
       {showTotal && (
@@ -199,11 +235,29 @@ function Pagination({
 
         {simple ? (
           <PaginationItem>
-            <span className="flex h-8 items-center px-2 text-sm tabular-nums text-muted-foreground">
-              <span className="text-foreground">{mergedCurrent}</span>
-              <span className="px-1">/</span>
-              <span>{pageCount}</span>
-            </span>
+            {typeof simple === "object" && !simple.readOnly ? (
+              <span className="flex h-8 items-center gap-1 text-sm tabular-nums text-muted-foreground">
+                <input
+                  aria-label="Page"
+                  className="h-8 w-12 rounded border bg-background px-2 text-center text-foreground outline-none focus:ring-2 focus:ring-ring"
+                  value={quickPage}
+                  placeholder={String(mergedCurrent)}
+                  disabled={disabled}
+                  onChange={(event) => setQuickPage(event.target.value.replace(/\D/g, ""))}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") jumpToQuickPage()
+                  }}
+                />
+                <span>/</span>
+                <span>{pageCount}</span>
+              </span>
+            ) : (
+              <span className="flex h-8 items-center px-2 text-sm tabular-nums text-muted-foreground">
+                <span className="text-foreground">{mergedCurrent}</span>
+                <span className="px-1">/</span>
+                <span>{pageCount}</span>
+              </span>
+            )}
           </PaginationItem>
         ) : (
           getPaginationElements(mergedCurrent, pageCount, showLessItems).map((item) => {
@@ -258,6 +312,51 @@ function Pagination({
 
         <PaginationItem>{renderItem(mergedCurrent + 1, "next", nextElement)}</PaginationItem>
       </PaginationContent>
+
+      {showSizeChanger && (
+        <select
+          aria-label="Page size"
+          data-slot="pagination-size-changer"
+          className="h-8 rounded border bg-background px-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+          disabled={disabled}
+          value={mergedPageSize}
+          onChange={(event) => changePageSize(Number(event.target.value))}
+        >
+          {pageSizeOptions.map((option) => {
+            const value = Number(option)
+            return (
+              <option key={String(option)} value={value}>
+                {value} / page
+              </option>
+            )
+          })}
+        </select>
+      )}
+
+      {showQuickJumper && !simple && (
+        <div data-slot="pagination-quick-jumper" className="flex items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Go to</span>
+          <input
+            aria-label="Jump to page"
+            className="h-8 w-14 rounded border bg-background px-2 text-center outline-none focus:ring-2 focus:ring-ring"
+            value={quickPage}
+            disabled={disabled}
+            onChange={(event) => setQuickPage(event.target.value.replace(/\D/g, ""))}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") jumpToQuickPage()
+            }}
+          />
+          {typeof showQuickJumper === "object" && showQuickJumper.goButton !== undefined ? (
+            <button type="button" onClick={jumpToQuickPage} disabled={disabled}>
+              {showQuickJumper.goButton}
+            </button>
+          ) : (
+            <Button size="small" variant="outlined" htmlType="button" disabled={disabled} onClick={jumpToQuickPage}>
+              Go
+            </Button>
+          )}
+        </div>
+      )}
     </nav>
   )
 }
@@ -376,6 +475,7 @@ export {
   PaginationNext,
   PaginationPrevious,
   type PaginationItemType,
+  type PaginationAlign,
   type PaginationProps,
   type PaginationSize,
 }

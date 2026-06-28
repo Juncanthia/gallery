@@ -2,11 +2,13 @@ import React from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-type TimelineColor = "default" | "success" | "warning" | "error" | "blue" | "red" | "green" | "gray";
+type TimelinePresetColor = "default" | "success" | "warning" | "error" | "blue" | "red" | "green" | "gray";
+type TimelineColor = TimelinePresetColor | (string & {});
 type TimelineMode = "left" | "right" | "start" | "end" | "alternate";
 type TimelinePlacement = "start" | "end";
+type TimelineOrientation = "vertical" | "horizontal";
 
-const colorMap: Record<TimelineColor, string> = {
+const colorMap: Record<TimelinePresetColor, string> = {
   default: "bg-primary",
   success: "bg-green-500",
   warning: "bg-yellow-500",
@@ -29,6 +31,8 @@ export interface TimelineItemProps {
   pending?: boolean;
   loading?: boolean;
   className?: string;
+  style?: React.CSSProperties;
+  position?: TimelinePlacement | "left" | "right";
 }
 
 export const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
@@ -45,12 +49,15 @@ export const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
       pending,
       loading,
       className,
+      style,
     },
     ref
   ) => {
     const dotColor = pending || loading
       ? "border-2 border-muted-foreground bg-background animate-pulse"
-      : colorMap[color];
+      : color in colorMap
+        ? colorMap[color as TimelinePresetColor]
+        : "bg-[var(--timeline-dot-color)]";
     const mergedContent = content ?? children;
 
     return (
@@ -58,6 +65,7 @@ export const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
         ref={ref}
         data-placement={placement}
         className={cn("relative flex gap-4 pb-8 last:pb-0", className)}
+        style={{ "--timeline-dot-color": color, ...style } as React.CSSProperties}
       >
         {label && (
           <div className="w-28 shrink-0 text-right text-sm text-muted-foreground">
@@ -96,12 +104,16 @@ export interface TimelineProps {
   reverse?: boolean;
   items?: TimelineItemConfig[];
   mode?: TimelineMode;
+  orientation?: TimelineOrientation;
   children?: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 function getPlacement(mode: TimelineMode, index: number, item?: TimelineItemConfig): TimelinePlacement {
   if (item?.placement) return item.placement;
+  if (item?.position === "right" || item?.position === "end") return "end";
+  if (item?.position === "left" || item?.position === "start") return "start";
   if (mode === "right" || mode === "end") return "end";
   if (mode === "alternate") return index % 2 === 0 ? "start" : "end";
   return "start";
@@ -112,7 +124,7 @@ function getModeClassName(placement: TimelinePlacement) {
 }
 
 export const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
-  ({ pending, pendingDot, reverse, items, mode = "left", children, className }, ref) => {
+  ({ pending, pendingDot, reverse, items, mode = "left", orientation = "vertical", children, className, style }, ref) => {
     const normalizedItems = items ? [...items] : [];
     if (pending) {
       normalizedItems.push({ key: "__pending", pending: true, dot: pendingDot, content: pending });
@@ -121,32 +133,72 @@ export const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
     const itemsToRender = reverse ? normalizedItems.reverse() : normalizedItems;
 
     return (
-      <div ref={ref} data-slot="timeline" className={cn(className)}>
+      <div
+        ref={ref}
+        data-slot="timeline"
+        data-orientation={orientation}
+        className={cn(orientation === "horizontal" && "flex items-start gap-6", className)}
+        style={style}
+      >
         {itemsToRender.map((item, index) => {
           const placement = getPlacement(mode, index, item);
 
           return (
             <motion.div
               key={item.key ?? index}
-              className={getModeClassName(placement)}
-              initial={{ opacity: 0, x: placement === "end" ? 16 : -16 }}
-              animate={{ opacity: 1, x: 0 }}
+              className={cn(
+                orientation === "horizontal" ? "min-w-36 flex-1" : getModeClassName(placement)
+              )}
+              initial={{ opacity: 0, x: orientation === "horizontal" ? 0 : placement === "end" ? 16 : -16, y: orientation === "horizontal" ? 8 : 0 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.07, ease: "easeOut" }}
             >
-              <TimelineItem
-                dot={item.dot}
-                icon={item.icon}
-                color={item.color}
-                label={item.label}
-                title={item.title}
-                content={item.content}
-                placement={placement}
-                pending={item.pending}
-                loading={item.loading}
-                className={item.className}
-              >
-                {item.children}
-              </TimelineItem>
+              {orientation === "horizontal" ? (
+                <div
+                  className={cn("relative flex flex-col gap-2 pb-0", item.className)}
+                  style={{ "--timeline-dot-color": item.color, ...item.style } as React.CSSProperties}
+                >
+                  <div className="relative flex items-center">
+                    <div
+                      className={cn(
+                        "z-10 flex size-3 items-center justify-center rounded-full text-background [&_svg]:size-3",
+                        (item.dot || item.icon) && "size-5 bg-background text-foreground ring-1 ring-border",
+                        item.pending || item.loading
+                          ? "border-2 border-muted-foreground bg-background animate-pulse"
+                          : item.color && !(item.color in colorMap)
+                            ? "bg-[var(--timeline-dot-color)]"
+                            : colorMap[(item.color ?? "default") as TimelinePresetColor]
+                      )}
+                    >
+                      {item.icon ?? item.dot ?? null}
+                    </div>
+                    {index < itemsToRender.length - 1 && (
+                      <div className="ml-2 h-0.5 flex-1 bg-border" />
+                    )}
+                  </div>
+                  {item.label && <div className="text-xs text-muted-foreground">{item.label}</div>}
+                  {item.title && <div className="text-sm font-medium">{item.title}</div>}
+                  {(item.content ?? item.children) && (
+                    <div className="text-sm text-muted-foreground">{item.content ?? item.children}</div>
+                  )}
+                </div>
+              ) : (
+                <TimelineItem
+                  dot={item.dot}
+                  icon={item.icon}
+                  color={item.color}
+                  label={item.label}
+                  title={item.title}
+                  content={item.content}
+                  placement={placement}
+                  pending={item.pending}
+                  loading={item.loading}
+                  className={item.className}
+                  style={item.style}
+                >
+                  {item.children}
+                </TimelineItem>
+              )}
             </motion.div>
           );
         })}

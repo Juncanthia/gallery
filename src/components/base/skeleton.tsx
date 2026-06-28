@@ -2,12 +2,12 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-type SkeletonSize = "sm" | "default" | "lg"
-type SkeletonShape = "default" | "circle" | "square"
+type SkeletonSize = "sm" | "small" | "default" | "middle" | "lg" | "large"
+type SkeletonShape = "default" | "circle" | "square" | "round"
 
 type SkeletonAvatarConfig = {
   size?: SkeletonSize | number
-  shape?: "circle" | "square"
+  shape?: SkeletonShape
   className?: string
 }
 
@@ -38,9 +38,25 @@ function toWidth(value: number | string | undefined) {
 
 function getAvatarSize(size: SkeletonAvatarConfig["size"]) {
   if (typeof size === "number") return `${size}px`
-  if (size === "sm") return "32px"
-  if (size === "lg") return "48px"
+  if (size === "sm" || size === "small") return "32px"
+  if (size === "lg" || size === "large") return "48px"
   return "40px"
+}
+
+function getElementHeight(size: SkeletonSize | number | undefined) {
+  if (typeof size === "number") return `${size}px`
+  if (size === "sm" || size === "small") return "32px"
+  if (size === "lg" || size === "large") return "40px"
+  return "36px"
+}
+
+function getElementWidth(size: SkeletonSize | number | undefined, fallback: string) {
+  if (typeof size === "number") return `${size * 2}px`
+  return fallback
+}
+
+function isRoundShape(shape: SkeletonShape | undefined) {
+  return shape === "circle" || shape === "round"
 }
 
 function SkeletonBlock({
@@ -163,7 +179,7 @@ function SkeletonAvatar({
   return (
     <SkeletonBlock
       active={active}
-      round={shape === "circle"}
+      round={isRoundShape(shape)}
       className={cn("shrink-0", className)}
       style={{ width: getAvatarSize(size), height: getAvatarSize(size) }}
       {...props}
@@ -176,17 +192,20 @@ function SkeletonButton({
   size = "default",
   active = true,
   block,
+  shape = "default",
   ...props
 }: React.ComponentProps<"div"> & {
   size?: SkeletonSize
   active?: boolean
   block?: boolean
+  shape?: Exclude<SkeletonShape, "circle">
 }) {
   return (
     <SkeletonBlock
       active={active}
+      round={shape === "round"}
       className={cn(
-        size === "sm" ? "h-8" : size === "lg" ? "h-10" : "h-9",
+        size === "sm" || size === "small" ? "h-8" : size === "lg" || size === "large" ? "h-10" : "h-9",
         block ? "w-full" : "w-20",
         className
       )}
@@ -195,7 +214,69 @@ function SkeletonButton({
   )
 }
 
-export { Skeleton, SkeletonAvatar, SkeletonButton }
+function SkeletonInput({
+  className,
+  size = "default",
+  active = true,
+  block,
+  ...props
+}: React.ComponentProps<"div"> & {
+  size?: SkeletonSize | number
+  active?: boolean
+  block?: boolean
+}) {
+  return (
+    <SkeletonBlock
+      active={active}
+      className={cn(block ? "w-full" : "w-40", className)}
+      style={{
+        height: getElementHeight(size),
+        width: block ? undefined : getElementWidth(size, "160px"),
+      }}
+      {...props}
+    />
+  )
+}
+
+function SkeletonImage({
+  className,
+  active = true,
+  size = 96,
+  ...props
+}: React.ComponentProps<"div"> & {
+  active?: boolean
+  size?: number
+}) {
+  return (
+    <SkeletonBlock
+      active={active}
+      className={cn("flex items-center justify-center", className)}
+      style={{ width: size, height: size }}
+      {...props}
+    />
+  )
+}
+
+function SkeletonNode({
+  className,
+  active = true,
+  children,
+  ...props
+}: React.ComponentProps<"div"> & {
+  active?: boolean
+}) {
+  return (
+    <SkeletonBlock
+      active={active}
+      className={cn("flex size-24 items-center justify-center", className)}
+      {...props}
+    >
+      {children}
+    </SkeletonBlock>
+  )
+}
+
+export { Skeleton, SkeletonAvatar, SkeletonButton, SkeletonInput, SkeletonImage, SkeletonNode }
 export type {
   SkeletonAvatarConfig,
   SkeletonParagraphConfig,

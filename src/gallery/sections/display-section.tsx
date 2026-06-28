@@ -8,8 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage, AvatarGroup, AvatarGroupCount } fr
 import { Text, Title, Paragraph } from "@/components/base/typography";
 import { Statistic, StatisticDiff } from "@/components/base/statistic";
 import { Alert } from "@/components/base/alert";
-import { Card } from "@/components/base/card";
-import { Skeleton, SkeletonAvatar, SkeletonButton } from "@/components/base/skeleton";
+import { Card, CardGrid, CardMeta } from "@/components/base/card";
+import { Skeleton, SkeletonAvatar, SkeletonButton, SkeletonImage, SkeletonInput, SkeletonNode } from "@/components/base/skeleton";
 import { Result } from "@/components/base/result";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/base/empty-state";
 import { BorderBeam } from "@/components/base/border-beam";
@@ -281,6 +281,19 @@ export function DisplaySection() {
                 description="Something went wrong. Please try again later."
                 closable
               />
+              <Alert
+                banner
+                type="warning"
+                title="Maintenance window"
+                description="Scheduled maintenance starts at 02:00 UTC."
+              />
+              <Alert
+                type="info"
+                variant="filled"
+                title="Filled variant"
+                action={<Button size="small" variant="outlined">Details</Button>}
+                closable={{ closeIcon: "Dismiss" }}
+              />
             </div>
           </DemoRow>
         </GallerySection>
@@ -318,6 +331,32 @@ export function DisplaySection() {
             </Card>
             <Card loading title="Loading Card" className="w-64" />
           </DemoRow>
+          <DemoRow label="Tabs / meta / grid">
+            <Card
+              title="Workspace"
+              tabList={[
+                { key: "overview", label: "Overview" },
+                { key: "activity", label: "Activity" },
+              ]}
+              extra={<Button size="small" variant="text">Manage</Button>}
+              className="w-80"
+              defaultActiveTabKey="overview"
+            >
+              <CardMeta
+                avatar={<Avatar size="small"><AvatarFallback>AC</AvatarFallback></Avatar>}
+                title="Acme Workspace"
+                description="Team plan · 12 members"
+              />
+            </Card>
+            <Card title="Resources" type="inner" className="w-72">
+              <div className="-m-4 grid grid-cols-2">
+                <CardGrid>Docs</CardGrid>
+                <CardGrid>API</CardGrid>
+                <CardGrid>Billing</CardGrid>
+                <CardGrid>Settings</CardGrid>
+              </div>
+            </Card>
+          </DemoRow>
         </GallerySection>
 
         <GallerySection id="skeleton" title="Skeleton" description="Loading placeholder states.">
@@ -342,6 +381,14 @@ export function DisplaySection() {
               <SkeletonButton />
               <SkeletonButton block />
             </div>
+            <div className="flex items-center gap-3">
+              <SkeletonInput size="large" />
+              <SkeletonButton shape="round" />
+            </div>
+            <SkeletonImage />
+            <SkeletonNode>
+              <FileText className="size-6 text-muted-foreground" />
+            </SkeletonNode>
           </DemoRow>
         </GallerySection>
 
@@ -374,6 +421,20 @@ export function DisplaySection() {
               ]}
             />
           </DemoRow>
+          <DemoRow label="Responsive / filled">
+            <Descriptions
+              title="Deployment"
+              column={{ xs: 1, md: 2, xl: 3 }}
+              labelStyle={{ minWidth: 90 }}
+              className="w-full max-w-2xl"
+              items={[
+                { key: "env", label: "Environment", children: <Badge>Production</Badge> },
+                { key: "region", label: "Region", children: "us-east-1" },
+                { key: "version", label: "Version", children: "v2.4.1" },
+                { key: "commit", label: "Commit", children: "8f4a2c9", span: "filled" },
+              ]}
+            />
+          </DemoRow>
         </GallerySection>
 
         <GallerySection id="timeline" title="Timeline" description="Chronological event list — items stagger in on render.">
@@ -393,6 +454,17 @@ export function DisplaySection() {
                 { title: "2024 Q2 — Development", content: "Build", label: "Apr" },
                 { title: "2024 Q3 — Beta", content: "Pilot", label: "Jul" },
                 { title: "2024 Q4 — Launch", content: "Release", label: "Oct", color: "success" },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Horizontal / custom color">
+            <Timeline
+              orientation="horizontal"
+              items={[
+                { title: "Queued", content: "Waiting for worker", color: "gray" },
+                { title: "Building", content: "Running checks", color: "#6366f1" },
+                { title: "Deploying", content: "Uploading assets", color: "blue" },
+                { title: "Done", content: "Live now", color: "success" },
               ]}
             />
           </DemoRow>
@@ -440,6 +512,30 @@ export function DisplaySection() {
               ]}
             />
           </DemoRow>
+          <DemoRow label="Progress / inline / maxCount">
+            <Steps
+              current={1}
+              percent={60}
+              titlePlacement="horizontal"
+              items={[
+                { title: "Upload", content: "Complete" },
+                { title: "Validate", content: "60%" },
+                { title: "Publish", content: "Pending" },
+              ]}
+            />
+            <Steps
+              type="inline"
+              current={2}
+              maxCount={4}
+              items={[
+                { title: "Draft" },
+                { title: "Review" },
+                { title: "Approve" },
+                { title: "Release" },
+                { title: "Archive" },
+              ]}
+            />
+          </DemoRow>
         </GallerySection>
 
         <GallerySection id="result" title="Result" description="Feedback for operation outcomes.">
@@ -451,6 +547,18 @@ export function DisplaySection() {
                 </div>
               ))}
             </div>
+          </DemoRow>
+          <DemoRow label="Extra actions">
+            <Result
+              status="success"
+              title="Published"
+              subTitle="The release has been deployed to production."
+              extra={[
+                <Button key="console" size="small">Open console</Button>,
+                <Button key="logs" size="small" variant="outlined">View logs</Button>,
+              ]}
+              className="w-full max-w-md rounded border bg-muted/20 py-8"
+            />
           </DemoRow>
         </GallerySection>
 

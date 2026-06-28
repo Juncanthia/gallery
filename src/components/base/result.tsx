@@ -1,5 +1,5 @@
 import React from "react";
-import { CircleCheck as CheckCircle2, Circle as XCircle, Info, TriangleAlert as AlertTriangle, FileQuestionMark as FileQuestion, Lock, ServerOff } from "lucide-react";
+import { CircleCheck as CheckCircle2, CircleX as XCircle, Info, TriangleAlert as AlertTriangle, FileQuestionMark as FileQuestion, Lock, ServerOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type ResultStatus =
@@ -24,22 +24,22 @@ const statusIcons: Record<string, React.ReactNode> = {
   500: <ServerOff className="text-muted-foreground" />,
 };
 
-export interface ResultProps {
+export interface ResultProps extends Omit<React.ComponentProps<"div">, "title"> {
   status?: ResultStatus;
   title?: React.ReactNode;
   subTitle?: React.ReactNode;
   icon?: React.ReactNode;
-  extra?: React.ReactNode;
+  extra?: React.ReactNode | React.ReactNode[];
   children?: React.ReactNode;
-  className?: string;
 }
 
 export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
   (
-    { status = "info", title, subTitle, icon, extra, children, className },
+    { status = "info", title, subTitle, icon, extra, children, className, ...props },
     ref
   ) => {
     const displayIcon = icon === false || icon === null ? null : icon || statusIcons[String(status)];
+    const extraItems = Array.isArray(extra) ? extra : extra === undefined ? [] : [extra];
 
     return (
       <div
@@ -49,6 +49,7 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
           "flex flex-col items-center justify-center gap-6 px-8 py-12 text-center",
           className
         )}
+        {...props}
       >
         {displayIcon && (
           <div data-slot="result-icon" className="h-16 w-16 [&>svg]:h-full [&>svg]:w-full">
@@ -74,9 +75,11 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
 
         {children && <div data-slot="result-content">{children}</div>}
 
-        {extra && (
-          <div data-slot="result-extra" className="flex items-center gap-3">
-            {extra}
+        {extraItems.length > 0 && (
+          <div data-slot="result-extra" className="flex flex-wrap items-center justify-center gap-3">
+            {extraItems.map((item, index) => (
+              <React.Fragment key={index}>{item}</React.Fragment>
+            ))}
           </div>
         )}
       </div>

@@ -252,6 +252,23 @@ export function InteractiveSection() {
                 { title: "Settings" },
               ]}
             />
+            <Breadcrumb
+              routes={[
+                { breadcrumbName: "Home", path: "home" },
+                {
+                  breadcrumbName: "Projects",
+                  path: "projects",
+                  menu: {
+                    items: [
+                      { label: "Active projects", path: "active" },
+                      { label: "Archived projects", path: "archived" },
+                    ],
+                  },
+                },
+                { breadcrumbName: "Detail", path: ":id" },
+              ]}
+              params={{ id: 42 }}
+            />
           </DemoRow>
         </GallerySection>
 
@@ -272,6 +289,19 @@ export function InteractiveSection() {
             <Pagination defaultCurrent={6} total={120} showLessItems size="small" />
             <Pagination simple defaultCurrent={3} total={80} />
             <Pagination disabled defaultCurrent={4} total={80} />
+          </DemoRow>
+          <DemoRow label="Changer / jumper">
+            <div className="flex w-full max-w-2xl flex-col gap-3">
+              <Pagination
+                align="end"
+                defaultCurrent={3}
+                total={286}
+                showSizeChanger
+                showQuickJumper
+                pageSizeOptions={[10, 20, 50]}
+                showTotal={(total) => `${total} items`}
+              />
+            </div>
           </DemoRow>
         </GallerySection>
 
@@ -496,11 +526,26 @@ export function InteractiveSection() {
               <Progress percent={progress} size="small" />
               <Progress percent={progress} showInfo />
               <Progress percent={progress} size="large" status={progress >= 80 ? "success" : "active"} />
+              <Progress
+                percent={progress}
+                showInfo
+                percentPosition={{ type: "inner", align: "end" }}
+                strokeColor={{ from: "#6366f1", to: "#22c55e" }}
+                success={{ percent: 25, strokeColor: "#22c55e" }}
+              />
               <div className="flex gap-2 items-center">
                 <Button size="small" variant="outlined" onClick={() => setProgress((p) => Math.max(0, p - 10))}>-10</Button>
                 <Button size="small" variant="outlined" onClick={() => setProgress((p) => Math.min(100, p + 10))}>+10</Button>
                 <span className="text-sm tabular-nums text-muted-foreground">{progress}%</span>
               </div>
+            </div>
+          </DemoRow>
+          <DemoRow label="Circle / steps">
+            <Progress type="circle" percent={progress} showInfo />
+            <Progress type="dashboard" percent={72} showInfo status="active" />
+            <div className="w-full max-w-sm space-y-3">
+              <Progress steps={{ count: 8, gap: 6 }} percent={progress} showInfo />
+              <Progress steps={5} percent={100} status="success" showInfo />
             </div>
           </DemoRow>
         </GallerySection>

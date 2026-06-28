@@ -1,18 +1,31 @@
 import * as React from "react"
 import { Slot } from "radix-ui"
 
+import { DropdownMenu } from "@/components/base/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { ChevronRight as ChevronRightIcon, MoveHorizontal as MoreHorizontalIcon } from "lucide-react"
+import { ChevronDown as ChevronDownIcon, ChevronRight as ChevronRightIcon, MoveHorizontal as MoreHorizontalIcon } from "lucide-react"
 
 type BreadcrumbParams = Record<string, string | number>
 
 type BreadcrumbRouteItem = {
   key?: React.Key
-  title: React.ReactNode
+  title?: React.ReactNode
+  breadcrumbName?: string
   href?: string
   path?: string
+  menu?: {
+    items?: Array<{
+      key?: React.Key
+      title?: React.ReactNode
+      label?: React.ReactNode
+      href?: string
+      path?: string
+      onClick?: React.MouseEventHandler<HTMLAnchorElement>
+    }>
+  }
   onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLSpanElement>
   className?: string
+  style?: React.CSSProperties
 }
 
 type BreadcrumbSeparatorItem = {
@@ -32,8 +45,10 @@ type BreadcrumbProps = Omit<React.ComponentProps<"nav">, "children"> & {
     paths: string[],
   ) => React.ReactNode
   items?: BreadcrumbItemOption[]
+  routes?: BreadcrumbItemOption[]
   params?: BreadcrumbParams
   separator?: React.ReactNode
+  dropdownIcon?: React.ReactNode
 }
 
 function isSeparatorItem(item: BreadcrumbItemOption): item is BreadcrumbSeparatorItem {
@@ -57,11 +72,15 @@ function Breadcrumb({
   className,
   itemRender,
   items,
+  routes,
   params = {},
   separator,
+  dropdownIcon,
   ...props
 }: BreadcrumbProps) {
-  if (!items?.length) {
+  const mergedItems = items ?? routes
+
+  if (!mergedItems?.length) {
     return (
       <nav
         aria-label="breadcrumb"
@@ -84,7 +103,7 @@ function Breadcrumb({
       {...props}
     >
       <BreadcrumbList>
-        {items.map((item, index) => {
+        {mergedItems.map((item, index) => {
           const key = item.key ?? index
 
           if (isSeparatorItem(item)) {
@@ -98,10 +117,10 @@ function Breadcrumb({
             paths.push(mergedPath)
           }
 
-          const isLast = index === items.length - 1
+          const isLast = index === mergedItems.length - 1
           const href = routeItem.href ?? (paths.length > 0 && mergedPath !== undefined ? `/${paths.join("/")}` : undefined)
-          const title = renderTitle(routeItem.title, params)
-          const originalNode = href && !isLast ? (
+          const title = renderTitle(routeItem.title ?? routeItem.breadcrumbName, params)
+          const linkNode = href && !isLast ? (
             <BreadcrumbLink href={href} onClick={routeItem.onClick} className={routeItem.className}>
               {title}
             </BreadcrumbLink>
@@ -110,7 +129,29 @@ function Breadcrumb({
               {title}
             </BreadcrumbPage>
           )
-          const node = itemRender?.(item, params, items, paths) ?? originalNode
+          const originalNode = routeItem.menu?.items?.length ? (
+            <DropdownMenu
+              trigger={
+                <span className="inline-flex items-center gap-1">
+                  {linkNode}
+                  {dropdownIcon ?? <ChevronDownIcon className="size-3" />}
+                </span>
+              }
+              items={routeItem.menu.items.map((menuItem, menuIndex) => {
+                const label = menuItem.label ?? menuItem.title
+                const menuHref = menuItem.href ?? (menuItem.path ? `${href ?? ""}/${menuItem.path}` : undefined)
+
+                return {
+                  key: menuItem.key ?? menuIndex,
+                  label,
+                  onSelect: () => {
+                    if (menuHref) window.location.href = menuHref
+                  },
+                }
+              })}
+            />
+          ) : linkNode
+          const node = itemRender?.(item, params, mergedItems, paths) ?? originalNode
 
           return (
             <React.Fragment key={key}>

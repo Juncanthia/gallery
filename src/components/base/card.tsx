@@ -5,6 +5,15 @@ import { cn } from "@/lib/utils"
 
 type CardSize = "default" | "sm" | "small"
 type CardVariant = "outlined" | "borderless"
+type CardType = "inner"
+
+type CardTabItem = {
+  key: string
+  label?: React.ReactNode
+  tab?: React.ReactNode
+  disabled?: boolean
+  icon?: React.ReactNode
+}
 
 type CardProps = Omit<React.ComponentProps<"div">, "title"> & {
   title?: React.ReactNode
@@ -12,13 +21,33 @@ type CardProps = Omit<React.ComponentProps<"div">, "title"> & {
   extra?: React.ReactNode
   cover?: React.ReactNode
   actions?: React.ReactNode[]
+  tabList?: CardTabItem[]
+  tabBarExtraContent?: React.ReactNode
+  activeTabKey?: string
+  defaultActiveTabKey?: string
+  onTabChange?: (key: string) => void
+  tabProps?: React.ComponentProps<"div">
   loading?: boolean
   hoverable?: boolean
   size?: CardSize
   variant?: CardVariant
+  type?: CardType
+  bordered?: boolean
+  headStyle?: React.CSSProperties
+  bodyStyle?: React.CSSProperties
   headerClassName?: string
   bodyClassName?: string
   actionsClassName?: string
+}
+
+type CardMetaProps = React.ComponentProps<"div"> & {
+  avatar?: React.ReactNode
+  title?: React.ReactNode
+  description?: React.ReactNode
+}
+
+type CardGridProps = React.ComponentProps<"div"> & {
+  hoverable?: boolean
 }
 
 function Card({
@@ -28,10 +57,20 @@ function Card({
   extra,
   cover,
   actions,
+  tabList,
+  tabBarExtraContent,
+  activeTabKey,
+  defaultActiveTabKey,
+  onTabChange,
+  tabProps,
   loading,
   hoverable,
   size = "default",
   variant = "outlined",
+  type,
+  bordered,
+  headStyle,
+  bodyStyle,
   headerClassName,
   bodyClassName,
   actionsClassName,
@@ -39,12 +78,25 @@ function Card({
   ...props
 }: CardProps) {
   const mergedSize = size === "small" ? "sm" : size
+  const mergedVariant = bordered === false ? "borderless" : variant
+  const [innerActiveTabKey, setInnerActiveTabKey] = React.useState(
+    defaultActiveTabKey ?? tabList?.[0]?.key
+  )
+  const mergedActiveTabKey = activeTabKey ?? innerActiveTabKey
+  const handleTabChange = (key: string) => {
+    if (activeTabKey === undefined) {
+      setInnerActiveTabKey(key)
+    }
+    onTabChange?.(key)
+  }
   const hasApiContent =
     title !== undefined ||
     description !== undefined ||
     extra !== undefined ||
     cover !== undefined ||
     actions !== undefined ||
+    tabList !== undefined ||
+    tabBarExtraContent !== undefined ||
     loading !== undefined
 
   return (
@@ -53,8 +105,9 @@ function Card({
       data-size={mergedSize}
       className={cn(
         "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-xs [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
-        variant === "outlined" && "ring-1 ring-foreground/10",
-        variant === "borderless" && "shadow-none ring-0",
+        mergedVariant === "outlined" && "ring-1 ring-foreground/10",
+        mergedVariant === "borderless" && "shadow-none ring-0",
+        type === "inner" && "[--card-spacing:--spacing(4)] bg-muted/20",
         hoverable && "transition-shadow hover:shadow-md",
         className
       )}
@@ -63,16 +116,53 @@ function Card({
       {hasApiContent ? (
         <>
           {cover && <div data-slot="card-cover">{cover}</div>}
-          {(title || description || extra) && (
-            <CardHeader className={headerClassName}>
-              <div>
-                {title && <CardTitle>{title}</CardTitle>}
-                {description && <CardDescription>{description}</CardDescription>}
-              </div>
-              {extra && <CardAction>{extra}</CardAction>}
+          {(title || description || extra || tabList?.length || tabBarExtraContent) && (
+            <CardHeader
+              className={cn(type === "inner" && "border-b pb-(--card-spacing)", headerClassName)}
+              style={headStyle}
+            >
+              {(title || description || extra) && (
+                <div>
+                  {title && <CardTitle>{title}</CardTitle>}
+                  {description && <CardDescription>{description}</CardDescription>}
+                </div>
+              )}
+              {(extra || tabBarExtraContent) && (
+                <CardAction>{extra ?? tabBarExtraContent}</CardAction>
+              )}
+              {tabList?.length ? (
+                <div
+                  role="tablist"
+                  data-slot="card-tabs"
+                  {...tabProps}
+                  className={cn("col-span-full mt-2 flex items-center gap-1 border-b", tabProps?.className)}
+                >
+                  {tabList.map((item) => {
+                    const active = item.key === mergedActiveTabKey
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        data-state={active ? "active" : "inactive"}
+                        disabled={item.disabled}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 border-b-2 border-transparent px-2 py-1.5 text-sm text-muted-foreground transition-colors disabled:pointer-events-none disabled:opacity-50",
+                          active && "border-foreground text-foreground"
+                        )}
+                        onClick={() => handleTabChange(item.key)}
+                      >
+                        {item.icon && <span className="inline-flex shrink-0">{item.icon}</span>}
+                        {item.label ?? item.tab}
+                      </button>
+                    )
+                  })}
+                </div>
+              ) : null}
             </CardHeader>
           )}
-          <CardContent className={bodyClassName}>
+          <CardContent className={bodyClassName} style={bodyStyle}>
             {loading ? <Skeleton active paragraph={{ rows: 4 }} title={false} /> : children}
           </CardContent>
           {actions?.length ? (
@@ -166,6 +256,52 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+function CardMeta({
+  className,
+  avatar,
+  title,
+  description,
+  children,
+  ...props
+}: CardMetaProps) {
+  return (
+    <div
+      data-slot="card-meta"
+      className={cn("flex items-start gap-3", className)}
+      {...props}
+    >
+      {avatar && <div data-slot="card-meta-avatar" className="shrink-0">{avatar}</div>}
+      <div className="min-w-0 flex-1">
+        {title && <div data-slot="card-meta-title" className="font-medium">{title}</div>}
+        {description && (
+          <div data-slot="card-meta-description" className="text-sm text-muted-foreground">
+            {description}
+          </div>
+        )}
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function CardGrid({
+  className,
+  hoverable = true,
+  ...props
+}: CardGridProps) {
+  return (
+    <div
+      data-slot="card-grid"
+      className={cn(
+        "border-b border-r p-4",
+        hoverable && "transition-colors hover:bg-muted/50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
 export {
   Card,
   CardHeader,
@@ -174,5 +310,7 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  CardMeta,
+  CardGrid,
 }
-export type { CardProps, CardSize, CardVariant }
+export type { CardProps, CardSize, CardVariant, CardType, CardTabItem, CardMetaProps, CardGridProps }
