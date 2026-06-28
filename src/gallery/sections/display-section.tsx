@@ -15,6 +15,7 @@ import { Result } from "@/components/base/result";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, EMPTY_IMAGE_DEFAULT, EMPTY_IMAGE_SIMPLE } from "@/components/base/empty-state";
 import { Image } from "@/components/base/image";
 import { List } from "@/components/base/list";
+import { QRCode } from "@/components/base/qr-code";
 import { BorderBeam } from "@/components/base/border-beam";
 import { Table } from "@/components/base/table";
 import { Descriptions } from "@/components/base/descriptions";
@@ -709,6 +710,16 @@ export function DisplaySection() {
               emptyText="No data"
               size="small"
             />
+          </DemoRow>
+        </GallerySection>
+
+        <GallerySection id="qr-code" title="QRCode" description="QR code generation from text or URL data.">
+          <DemoRow label="Basic">
+            <QRCode data="https://github.com/Juncanthia/gallery" />
+          </DemoRow>
+          <DemoRow label="Sizes via className">
+            <QRCode data="Hello World" className="[&_svg]:w-24 [&_svg]:h-24" />
+            <QRCode data="Small" className="[&_svg]:w-16 [&_svg]:h-16" />
           </DemoRow>
         </GallerySection>
 

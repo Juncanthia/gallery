@@ -40,6 +40,7 @@ export const NAV: NavGroup[] = [
       { id: "empty", label: "Empty" },
       { id: "image", label: "Image" },
       { id: "list", label: "List" },
+      { id: "qr-code", label: "QRCode" },
       { id: "file-tree", label: "File Tree" },
       { id: "table", label: "Table" },
     ],
