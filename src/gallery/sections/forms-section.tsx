@@ -13,6 +13,9 @@ import { Toggle } from "@/components/base/toggle";
 import { ToggleGroup } from "@/components/base/toggle-group";
 import { Rate } from "@/components/base/rate";
 import { DatePicker } from "@/components/base/date-picker";
+import {
+  TimePicker,
+} from "@/components/composite/time-picker";
 import { AttachmentUpload, type AttachmentFile } from "@/components/base/attachment";
 import { Form, FormItem } from "@/components/base/form-field";
 import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
@@ -388,6 +391,15 @@ export function FormsSection() {
             disabledDate={(date) => date > new Date()}
           />
           <DatePicker placeholder="Disabled" disabled />
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="time-picker" title="TimePicker" description="Time selection with scrollable column picker.">
+        <DemoRow label="Basic">
+          <TimePicker defaultValue="14:30" onChange={(v) => console.log(v)} placeholder="Select time" />
+        </DemoRow>
+        <DemoRow label="12-hour">
+          <TimePicker defaultValue="02:30 PM" use12Hours format="HH:mm" placeholder="Select time" />
         </DemoRow>
       </GallerySection>
 

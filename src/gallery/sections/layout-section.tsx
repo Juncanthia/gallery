@@ -11,6 +11,7 @@ import { AspectRatio } from "@/components/base/aspect-ratio";
 import { Calendar } from "@/components/base/calendar";
 import { Resizable } from "@/components/base/resizable";
 import { Carousel } from "@/components/base/carousel";
+import { Anchor } from "@/components/base/anchor";
 import { Card, CardContent } from "@/components/base/card";
 import { type DateRange } from "react-day-picker";
 
@@ -303,6 +304,20 @@ export function LayoutSection() {
               </Button>
             </Affix>
           </div>
+        </DemoRow>
+      </GallerySection>
+
+      <GallerySection id="anchor" title="Anchor" description="Scroll-to navigation with ink indicator.">
+        <DemoRow>
+          <Anchor
+            className="w-40 rounded border p-1"
+            items={[
+              { key: "section1", href: "#button", title: "Button" },
+              { key: "section2", href: "#badge", title: "Badge" },
+              { key: "section3", href: "#avatar", title: "Avatar" },
+            ]}
+            defaultActiveKey="section1"
+          />
         </DemoRow>
       </GallerySection>
     </SectionGroup>
