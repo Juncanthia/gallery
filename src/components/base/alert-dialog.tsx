@@ -1,3 +1,6 @@
+import * as React from 'react';
+
+import { Button } from '@/components/base/button';
 import {
   AlertDialog as AlertDialogPrimitive,
   AlertDialogContent as AlertDialogContentPrimitive,
@@ -21,13 +24,89 @@ import {
   type AlertDialogActionProps as AlertDialogActionPrimitiveProps,
   type AlertDialogCancelProps as AlertDialogCancelPrimitiveProps,
 } from '@/primitives/radix/alert-dialog';
-import { buttonVariants } from '@/components/base/button';
+import { buttonVariants } from '@/components/base/button-variants';
 import { cn } from '@/lib/utils';
 
-type AlertDialogProps = AlertDialogPrimitiveProps;
+type AlertDialogProps = AlertDialogPrimitiveProps & {
+  trigger?: React.ReactNode;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  footer?: React.ReactNode;
+  okText?: React.ReactNode;
+  cancelText?: React.ReactNode;
+  contentProps?: AlertDialogContentProps;
+  onOk?: React.MouseEventHandler<HTMLButtonElement>;
+  onCancel?: React.MouseEventHandler<HTMLButtonElement>;
+};
 
-function AlertDialog(props: AlertDialogProps) {
-  return <AlertDialogPrimitive {...props} />;
+function renderAlertDialogTrigger(trigger: React.ReactNode) {
+  if (trigger === undefined) return null;
+
+  return (
+    <AlertDialogTrigger asChild>
+      {React.isValidElement(trigger) ? (
+        trigger
+      ) : (
+        <Button>{trigger}</Button>
+      )}
+    </AlertDialogTrigger>
+  );
+}
+
+function AlertDialog({
+  trigger,
+  title,
+  description,
+  footer,
+  okText,
+  cancelText,
+  contentProps,
+  onOk,
+  onCancel,
+  children,
+  ...props
+}: AlertDialogProps) {
+  const hasApiContent =
+    trigger !== undefined ||
+    title !== undefined ||
+    description !== undefined ||
+    footer !== undefined ||
+    okText !== undefined ||
+    cancelText !== undefined ||
+    contentProps !== undefined ||
+    onOk !== undefined ||
+    onCancel !== undefined;
+
+  if (!hasApiContent) {
+    return <AlertDialogPrimitive {...props}>{children}</AlertDialogPrimitive>;
+  }
+
+  const footerNode = footer ?? (
+    <AlertDialogFooter>
+      <AlertDialogCancel onClick={onCancel}>
+        {cancelText ?? 'Cancel'}
+      </AlertDialogCancel>
+      <AlertDialogAction onClick={onOk}>{okText ?? 'Continue'}</AlertDialogAction>
+    </AlertDialogFooter>
+  );
+
+  return (
+    <AlertDialogPrimitive {...props}>
+      {renderAlertDialogTrigger(trigger)}
+      <AlertDialogContent {...contentProps}>
+        {(title !== undefined || description !== undefined) && (
+          <AlertDialogHeader>
+            {title !== undefined && <AlertDialogTitle>{title}</AlertDialogTitle>}
+            {description !== undefined && (
+              <AlertDialogDescription>{description}</AlertDialogDescription>
+            )}
+          </AlertDialogHeader>
+        )}
+        {children}
+        {footerNode}
+      </AlertDialogContent>
+    </AlertDialogPrimitive>
+  );
 }
 
 type AlertDialogTriggerProps = AlertDialogTriggerPrimitiveProps;
@@ -136,7 +215,7 @@ function AlertDialogCancel({
 }: AlertDialogCancelPrimitiveProps) {
   return (
     <AlertDialogCancelPrimitive
-      className={cn(buttonVariants({ variant: 'outline' }), className)}
+      className={cn(buttonVariants({ variant: 'outlined' }), className)}
       {...props}
     />
   );

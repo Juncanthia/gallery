@@ -9,7 +9,8 @@ import {
 } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/base/button"
+import { Button } from "@/components/base/button"
+import { buttonVariants } from "@/components/base/button-variants"
 import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, ChevronDown as ChevronDownIcon } from "lucide-react"
 
 function Calendar({
@@ -17,7 +18,7 @@ function Calendar({
   classNames,
   showOutsideDays = true,
   captionLayout = "label",
-  buttonVariant = "ghost",
+  buttonVariant = "text",
   locale,
   formatters,
   components,
@@ -185,9 +186,12 @@ function CalendarDayButton({
   day,
   modifiers,
   locale,
+  type,
   ...props
 }: React.ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {
   const defaultClassNames = getDefaultClassNames()
+  const buttonProps = { ...props } as Omit<typeof props, "color">
+  delete (buttonProps as { color?: unknown }).color
 
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
@@ -197,8 +201,9 @@ function CalendarDayButton({
   return (
     <Button
       ref={ref}
-      variant="ghost"
-      size="icon"
+      variant="text"
+      shape="square"
+      htmlType={type}
       data-day={day.date.toLocaleDateString(locale?.code)}
       data-selected-single={
         modifiers.selected &&
@@ -214,7 +219,7 @@ function CalendarDayButton({
         defaultClassNames.day,
         className
       )}
-      {...props}
+      {...buttonProps}
     />
   )
 }

@@ -1,3 +1,6 @@
+import * as React from 'react';
+
+import { Button } from '@/components/base/button';
 import {
   DropdownMenu as DropdownMenuPrimitive,
   DropdownMenuContent as DropdownMenuContentPrimitive,
@@ -34,10 +37,142 @@ import {
 import { cn } from '@/lib/utils';
 import { Check as CheckIcon, ChevronRight as ChevronRightIcon, Circle as CircleIcon } from 'lucide-react';
 
-type DropdownMenuProps = DropdownMenuPrimitiveProps;
+type DropdownMenuItemOption =
+  | {
+      key?: React.Key;
+      type: 'label';
+      label: React.ReactNode;
+      inset?: boolean;
+    }
+  | {
+      key?: React.Key;
+      type: 'separator';
+    }
+  | {
+      key?: React.Key;
+      type?: 'item';
+      label: React.ReactNode;
+      icon?: React.ReactNode;
+      shortcut?: React.ReactNode;
+      disabled?: boolean;
+      danger?: boolean;
+      onSelect?: DropdownMenuItemPrimitiveProps['onSelect'];
+    }
+  | {
+      key?: React.Key;
+      type: 'checkbox';
+      label: React.ReactNode;
+      checked?: boolean;
+      disabled?: boolean;
+      onCheckedChange?: DropdownMenuCheckboxItemPrimitiveProps['onCheckedChange'];
+    }
+  | {
+      key?: React.Key;
+      type: 'submenu';
+      label: React.ReactNode;
+      icon?: React.ReactNode;
+      disabled?: boolean;
+      children: DropdownMenuItemOption[];
+    };
 
-function DropdownMenu(props: DropdownMenuProps) {
-  return <DropdownMenuPrimitive {...props} />;
+type DropdownMenuProps = DropdownMenuPrimitiveProps & {
+  trigger?: React.ReactNode;
+  items?: DropdownMenuItemOption[];
+  contentProps?: DropdownMenuContentProps;
+};
+
+function renderDropdownTrigger(trigger: React.ReactNode) {
+  if (trigger === undefined) return null;
+
+  return (
+    <DropdownMenuTrigger asChild>
+      {React.isValidElement(trigger) ? trigger : <Button>{trigger}</Button>}
+    </DropdownMenuTrigger>
+  );
+}
+
+function renderDropdownItems(items: DropdownMenuItemOption[]) {
+  return items.map((item, index) => {
+    const key = item.key ?? index;
+
+    if (item.type === 'separator') {
+      return <DropdownMenuSeparator key={key} />;
+    }
+
+    if (item.type === 'label') {
+      return (
+        <DropdownMenuLabel key={key} inset={item.inset}>
+          {item.label}
+        </DropdownMenuLabel>
+      );
+    }
+
+    if (item.type === 'checkbox') {
+      return (
+        <DropdownMenuCheckboxItem
+          key={key}
+          checked={item.checked}
+          disabled={item.disabled}
+          onCheckedChange={item.onCheckedChange}
+        >
+          {item.label}
+        </DropdownMenuCheckboxItem>
+      );
+    }
+
+    if (item.type === 'submenu') {
+      return (
+        <DropdownMenuSub key={key}>
+          <DropdownMenuSubTrigger disabled={item.disabled}>
+            {item.icon}
+            {item.label}
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            {renderDropdownItems(item.children)}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      );
+    }
+
+    return (
+      <DropdownMenuItem
+        key={key}
+        disabled={item.disabled}
+        variant={item.danger ? 'destructive' : 'default'}
+        onSelect={item.onSelect}
+      >
+        {item.icon}
+        {item.label}
+        {item.shortcut && (
+          <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
+        )}
+      </DropdownMenuItem>
+    );
+  });
+}
+
+function DropdownMenu({
+  trigger,
+  items,
+  contentProps,
+  children,
+  ...props
+}: DropdownMenuProps) {
+  if (trigger === undefined && items === undefined) {
+    return <DropdownMenuPrimitive {...props}>{children}</DropdownMenuPrimitive>;
+  }
+
+  return (
+    <DropdownMenuPrimitive {...props}>
+      {renderDropdownTrigger(trigger)}
+      {children}
+      {items !== undefined && (
+        <DropdownMenuContent {...contentProps}>
+          {renderDropdownItems(items)}
+        </DropdownMenuContent>
+      )}
+    </DropdownMenuPrimitive>
+  );
 }
 
 type DropdownMenuTriggerProps = DropdownMenuTriggerPrimitiveProps;
@@ -314,4 +449,5 @@ export {
   type DropdownMenuSubProps,
   type DropdownMenuSubTriggerProps,
   type DropdownMenuSubContentProps,
+  type DropdownMenuItemOption,
 };

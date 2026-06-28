@@ -47,8 +47,8 @@ export const SnippetCopyButton = ({
   ...props
 }: SnippetCopyButtonProps) => (
   <CopyButton
-    size="icon-sm"
-    variant="ghost"
+    size="small" shape="square"
+    variant="text"
     {...props}
     className={cn("opacity-0 transition-opacity group-hover:opacity-100", className)}
     content={value}

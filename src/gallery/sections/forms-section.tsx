@@ -1,29 +1,61 @@
 import { useState } from "react";
 import { GallerySection, DemoRow, SectionGroup } from "../gallery-section";
+import { Button } from "@/components/base/button";
 import { Input } from "@/components/base/input";
-import { Textarea } from "@/components/base/textarea";
 import { Label } from "@/components/base/label";
-import { Checkbox } from "@/components/base/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/base/radio-group";
+import { Checkbox, CheckboxGroup, type CheckboxValue } from "@/components/base/checkbox";
+import { RadioGroup } from "@/components/base/radio-group";
 import { Switch } from "@/components/base/switch";
 import { Slider } from "@/components/base/slider";
-import {
-  Select, SelectTrigger, SelectValue, SelectContent,
-  SelectItem, SelectLabel, SelectGroup,
-} from "@/components/base/select";
+import { Select } from "@/components/base/select";
 import { Toggle } from "@/components/base/toggle";
-import { ToggleGroup, ToggleGroupItem } from "@/components/base/toggle-group";
-import { InputNumber } from "@/components/base/input-number";
-import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@/components/base/input-otp";
-import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight } from "lucide-react";
+import { ToggleGroup } from "@/components/base/toggle-group";
+import { Bold, Italic, Underline, ChevronLeft as AlignLeft, TextAlignCenter as AlignCenter, Highlighter as AlignRight, Mail, Search } from "lucide-react";
 
+const checkboxOptions = [
+  { label: "Apple", value: "apple" },
+  { label: "Pear", value: "pear" },
+  { label: "Orange", value: "orange", disabled: true },
+];
+
+const radioOptions = [
+  { label: "Option One", value: "option-1" },
+  { label: "Option Two", value: "option-2" },
+  { label: "Option Three", value: "option-3" },
+  { label: "Disabled", value: "option-4", disabled: true },
+];
+
+const alignOptions = [
+  { label: <AlignLeft className="size-4" />, value: "left", "aria-label": "Left" },
+  { label: <AlignCenter className="size-4" />, value: "center", "aria-label": "Center" },
+  { label: <AlignRight className="size-4" />, value: "right", "aria-label": "Right" },
+];
+
+const formatOptions = [
+  { label: <Bold className="size-4" />, value: "bold", "aria-label": "Bold" },
+  { label: <Italic className="size-4" />, value: "italic", "aria-label": "Italic" },
+  { label: <Underline className="size-4" />, value: "underline", "aria-label": "Underline" },
+];
 
 export function FormsSection() {
-  const [sliderVal, setSliderVal] = useState([40]);
+  const [sliderVal, setSliderVal] = useState(40);
   const [radioVal, setRadioVal] = useState("option-1");
   const [switchOn, setSwitchOn] = useState(false);
   const [numVal, setNumVal] = useState(10);
   const [otp, setOtp] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [selectValue, setSelectValue] = useState<string | undefined>();
+  const [selectTags, setSelectTags] = useState<string[]>(["react"]);
+  const [checkboxValues, setCheckboxValues] = useState<CheckboxValue[]>(["apple"]);
+  const enabledCheckboxValues: CheckboxValue[] = checkboxOptions
+    .filter((option) => !option.disabled)
+    .map((option) => option.value);
+  const allChecked = enabledCheckboxValues.every((value) =>
+    checkboxValues.includes(value),
+  );
+  const indeterminate =
+    enabledCheckboxValues.some((value) => checkboxValues.includes(value)) &&
+    !allChecked;
 
   return (
     <SectionGroup title="Forms" description="Input controls, selection, and data entry components.">
@@ -34,16 +66,60 @@ export function FormsSection() {
             <Input id="demo-input" placeholder="Enter text..." />
           </div>
           <div className="flex flex-col gap-2 w-56">
-            <Label htmlFor="demo-email">Email</Label>
-            <Input id="demo-email" type="email" placeholder="you@example.com" />
+            <Label htmlFor="demo-email">With prefix</Label>
+            <Input id="demo-email" type="email" prefix={<Mail className="size-4" />} placeholder="you@example.com" allowClear />
           </div>
           <div className="flex flex-col gap-2 w-56">
             <Label htmlFor="demo-password">Password</Label>
-            <Input id="demo-password" type="password" placeholder="••••••••" />
+            <Input.Password
+              id="demo-password"
+              placeholder="••••••••"
+              visibilityToggle={{
+                visible: passwordVisible,
+                onVisibleChange: setPasswordVisible,
+              }}
+            />
           </div>
           <div className="flex flex-col gap-2 w-56">
-            <Label htmlFor="demo-disabled">Disabled</Label>
-            <Input id="demo-disabled" disabled placeholder="Disabled..." />
+            <Label htmlFor="demo-search">Search</Label>
+            <Input.Search id="demo-search" prefix={<Search className="size-4" />} placeholder="Search..." enterButton allowClear />
+          </div>
+        </DemoRow>
+        <DemoRow label="Addon / status">
+          <div className="flex flex-col gap-2 w-72">
+            <Label htmlFor="demo-addon">Website</Label>
+            <Input id="demo-addon" addonBefore="https://" addonAfter=".com" placeholder="example" />
+          </div>
+          <div className="flex flex-col gap-2 w-56">
+            <Label htmlFor="demo-warning">Warning</Label>
+            <Input id="demo-warning" status="warning" placeholder="Warning status" />
+          </div>
+          <div className="flex flex-col gap-2 w-56">
+            <Label htmlFor="demo-error">Error</Label>
+            <Input id="demo-error" status="error" placeholder="Error status" />
+          </div>
+        </DemoRow>
+        <DemoRow label="Count / custom search">
+          <div className="flex flex-col gap-2 w-56">
+            <Label htmlFor="demo-count">Emoji count</Label>
+            <Input
+              id="demo-count"
+              defaultValue="🔥🔥🔥"
+              count={{
+                show: true,
+                max: 4,
+                strategy: (text) => Array.from(text).length,
+                exceedFormatter: (text, { max }) => Array.from(text).slice(0, max).join(""),
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-2 w-72">
+            <Label htmlFor="demo-custom-search">Custom button</Label>
+            <Input.Search
+              id="demo-custom-search"
+              placeholder="Search with custom button"
+              enterButton={<Button variant="filled">Go</Button>}
+            />
           </div>
         </DemoRow>
       </GallerySection>
@@ -52,67 +128,141 @@ export function FormsSection() {
         <DemoRow label="Variants">
           <div className="flex flex-col gap-2 w-64">
             <Label htmlFor="ta1">Message</Label>
-            <Textarea id="ta1" placeholder="Write your message here..." rows={3} />
+            <Input.TextArea
+              id="ta1"
+              placeholder="Write your message here..."
+              autoSize={{ minRows: 3, maxRows: 6 }}
+              count={{
+                show: true,
+                max: 120,
+                formatter: ({ count, maxLength }) => `${count}/${maxLength}`,
+              }}
+              maxLength={120}
+            />
           </div>
           <div className="flex flex-col gap-2 w-64">
             <Label htmlFor="ta2">Disabled</Label>
-            <Textarea id="ta2" disabled placeholder="Disabled..." rows={3} />
+            <Input.TextArea id="ta2" disabled placeholder="Disabled..." rows={3} />
           </div>
         </DemoRow>
       </GallerySection>
 
       <GallerySection id="select" title="Select" description="Dropdown option selection.">
-        <DemoRow label="Sizes">
+        <DemoRow label="Basic / search">
           <div className="flex flex-col gap-2 w-48">
             <Label>Framework</Label>
-            <Select>
-              <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Frontend</SelectLabel>
-                  <SelectItem value="react">React</SelectItem>
-                  <SelectItem value="vue">Vue</SelectItem>
-                  <SelectItem value="svelte">Svelte</SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>Backend</SelectLabel>
-                  <SelectItem value="node">Node.js</SelectItem>
-                  <SelectItem value="deno">Deno</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <Select
+              allowClear
+              placeholder="Select..."
+              value={selectValue}
+              onValueChange={setSelectValue}
+              options={[
+                {
+                  label: "Frontend",
+                  options: [
+                    { label: "React", value: "react" },
+                    { label: "Vue", value: "vue" },
+                    { label: "Svelte", value: "svelte" },
+                  ],
+                },
+                {
+                  label: "Backend",
+                  options: [
+                    { label: "Node.js", value: "node" },
+                    { label: "Deno", value: "deno" },
+                  ],
+                },
+              ]}
+            />
           </div>
           <div className="flex flex-col gap-2 w-48">
-            <Label>Small size</Label>
-            <Select>
-              <SelectTrigger size="sm"><SelectValue placeholder="Small..." /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="a">Option A</SelectItem>
-                <SelectItem value="b">Option B</SelectItem>
-                <SelectItem value="c" disabled>Disabled</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label>Search</Label>
+            <Select
+              showSearch
+              placeholder="Search..."
+              options={[
+                { label: "Option A", value: "a" },
+                { label: "Option B", value: "b" },
+                { label: "Disabled", value: "c", disabled: true },
+              ]}
+            />
+          </div>
+        </DemoRow>
+        <DemoRow label="Status / modes">
+          <div className="flex flex-col gap-2 w-48">
+            <Label>Warning</Label>
+            <Select
+              status="warning"
+              variant="filled"
+              placeholder="Filled warning"
+              options={[
+                { label: "Daily", value: "daily" },
+                { label: "Weekly", value: "weekly" },
+              ]}
+            />
+          </div>
+          <div className="flex flex-col gap-2 w-72">
+            <Label>Tags</Label>
+            <Select
+              mode="tags"
+              allowClear
+              placeholder="Add tags..."
+              value={selectTags}
+              onValueChange={setSelectTags}
+              options={[
+                { label: "React", value: "react" },
+                { label: "Vue", value: "vue" },
+                { label: "Svelte", value: "svelte" },
+              ]}
+            />
           </div>
         </DemoRow>
       </GallerySection>
 
       <GallerySection id="checkbox" title="Checkbox" description="Binary checked state.">
         <DemoRow label="States">
-          <div className="flex items-center gap-2"><Checkbox id="cb1" /><Label htmlFor="cb1">Default</Label></div>
-          <div className="flex items-center gap-2"><Checkbox id="cb2" defaultChecked /><Label htmlFor="cb2">Checked</Label></div>
-          <div className="flex items-center gap-2"><Checkbox id="cb3" checked="indeterminate" /><Label htmlFor="cb3">Indeterminate</Label></div>
-          <div className="flex items-center gap-2"><Checkbox id="cb4" disabled /><Label htmlFor="cb4" className="text-muted-foreground">Disabled</Label></div>
+          <Checkbox label="Default" />
+          <Checkbox defaultChecked label="Checked" />
+          <Checkbox indeterminate label="Indeterminate" />
+          <Checkbox disabled label="Disabled" />
+        </DemoRow>
+        <DemoRow label="Group">
+          <div className="flex flex-col gap-3">
+            <Checkbox
+              checked={allChecked}
+              indeterminate={indeterminate}
+              label="Check all"
+              onCheckedChange={(checked) => {
+                setCheckboxValues((currentValues) => {
+                  if (checked) {
+                    return Array.from(
+                      new Set([...currentValues, ...enabledCheckboxValues]),
+                    );
+                  }
+
+                  return currentValues.filter(
+                    (value) => !enabledCheckboxValues.includes(value),
+                  );
+                });
+              }}
+            />
+            <CheckboxGroup
+              options={checkboxOptions}
+              value={checkboxValues}
+              onValueChange={setCheckboxValues}
+            />
+          </div>
         </DemoRow>
       </GallerySection>
 
       <GallerySection id="radio" title="Radio Group" description="Single selection from a list.">
         <DemoRow label="Options">
-          <RadioGroup value={radioVal} onValueChange={setRadioVal} className="gap-3">
-            <div className="flex items-center gap-2"><RadioGroupItem value="option-1" id="r1" /><Label htmlFor="r1">Option One</Label></div>
-            <div className="flex items-center gap-2"><RadioGroupItem value="option-2" id="r2" /><Label htmlFor="r2">Option Two</Label></div>
-            <div className="flex items-center gap-2"><RadioGroupItem value="option-3" id="r3" /><Label htmlFor="r3">Option Three</Label></div>
-            <div className="flex items-center gap-2"><RadioGroupItem value="option-4" id="r4" disabled /><Label htmlFor="r4" className="text-muted-foreground">Disabled</Label></div>
-          </RadioGroup>
+          <RadioGroup
+            direction="horizontal"
+            options={radioOptions}
+            value={radioVal}
+            onValueChange={setRadioVal}
+          />
           <p className="text-xs text-muted-foreground self-end">Selected: <strong>{radioVal}</strong></p>
         </DemoRow>
       </GallerySection>
@@ -122,24 +272,53 @@ export function FormsSection() {
           <div className="flex items-center gap-3"><Switch checked={switchOn} onCheckedChange={setSwitchOn} /><Label>{switchOn ? "On" : "Off"}</Label></div>
           <div className="flex items-center gap-3"><Switch defaultChecked /><Label>Default on</Label></div>
           <div className="flex items-center gap-3"><Switch disabled /><Label className="text-muted-foreground">Disabled</Label></div>
+          <div className="flex items-center gap-3"><Switch loading defaultChecked /><Label className="text-muted-foreground">Loading</Label></div>
+        </DemoRow>
+        <DemoRow label="Content / sizes">
+          <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked />
+          <Switch checkedChildren="1" unCheckedChildren="0" />
+          <Switch size="small" checkedChildren="1" unCheckedChildren="0" defaultChecked />
         </DemoRow>
       </GallerySection>
 
       <GallerySection id="slider" title="Slider" description="Range and value selection.">
-        <DemoRow label="Variants">
+        <DemoRow label="Basic / range">
           <div className="space-y-3 w-64">
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Value</span><span className="tabular-nums">{sliderVal[0]}</span>
+              <span>Value</span><span className="tabular-nums">{sliderVal}</span>
             </div>
-            <Slider value={sliderVal} onValueChange={setSliderVal} min={0} max={100} />
+            <Slider value={sliderVal} onChange={setSliderVal} min={0} max={100} />
           </div>
           <div className="space-y-2 w-64">
             <p className="text-xs text-muted-foreground">Range (two thumbs)</p>
-            <Slider defaultValue={[20, 80]} min={0} max={100} />
+            <Slider range defaultValue={[20, 80]} min={0} max={100} />
           </div>
           <div className="space-y-2 w-64">
             <p className="text-xs text-muted-foreground">Step = 10</p>
-            <Slider defaultValue={[50]} min={0} max={100} step={10} />
+            <Slider defaultValue={50} min={0} max={100} step={10} />
+          </div>
+        </DemoRow>
+        <DemoRow label="Marks / tooltip">
+          <div className="space-y-2 w-72">
+            <p className="text-xs text-muted-foreground">Temperature marks</p>
+            <Slider
+              defaultValue={37}
+              marks={{
+                0: "0°C",
+                26: "26°C",
+                37: "37°C",
+                100: { label: <strong>100°C</strong>, className: "text-destructive" },
+              }}
+              tooltip={{ formatter: (value) => `${value}°C` }}
+            />
+          </div>
+          <div className="space-y-2 w-64">
+            <p className="text-xs text-muted-foreground">Reverse</p>
+            <Slider defaultValue={30} reverse tooltip={{ open: true }} />
+          </div>
+          <div className="h-40 space-y-2">
+            <p className="text-xs text-muted-foreground">Vertical</p>
+            <Slider vertical defaultValue={40} className="h-32" />
           </div>
         </DemoRow>
       </GallerySection>
@@ -151,16 +330,8 @@ export function FormsSection() {
           <Toggle aria-label="Underline" defaultPressed><Underline className="size-4" /></Toggle>
         </DemoRow>
         <DemoRow label="Groups">
-          <ToggleGroup type="single" defaultValue="left">
-            <ToggleGroupItem value="left" aria-label="Left"><AlignLeft className="size-4" /></ToggleGroupItem>
-            <ToggleGroupItem value="center" aria-label="Center"><AlignCenter className="size-4" /></ToggleGroupItem>
-            <ToggleGroupItem value="right" aria-label="Right"><AlignRight className="size-4" /></ToggleGroupItem>
-          </ToggleGroup>
-          <ToggleGroup type="multiple" variant="outline">
-            <ToggleGroupItem value="bold"><Bold className="size-4" /></ToggleGroupItem>
-            <ToggleGroupItem value="italic"><Italic className="size-4" /></ToggleGroupItem>
-            <ToggleGroupItem value="underline"><Underline className="size-4" /></ToggleGroupItem>
-          </ToggleGroup>
+          <ToggleGroup type="single" defaultValue="left" options={alignOptions} />
+          <ToggleGroup type="multiple" variant="outline" options={formatOptions} />
         </DemoRow>
       </GallerySection>
 
@@ -168,19 +339,19 @@ export function FormsSection() {
         <DemoRow label="Variants">
           <div className="flex flex-col gap-2">
             <Label>Quantity</Label>
-            <InputNumber value={numVal} onChange={(v) => setNumVal(v ?? 0)} min={0} max={100} className="w-32" />
+            <Input.Number value={numVal} onChange={(v) => setNumVal(v ?? 0)} min={0} max={100} className="w-32" />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Price</Label>
-            <InputNumber defaultValue={9.99} step={0.01} precision={2} prefix="$" className="w-36" />
+            <Input.Number defaultValue={9.99} step={0.01} precision={2} prefix="$" className="w-36" />
           </div>
           <div className="flex flex-col gap-2">
             <Label>No controls</Label>
-            <InputNumber defaultValue={42} controls={false} className="w-28" />
+            <Input.Number defaultValue={42} controls={false} className="w-28" />
           </div>
           <div className="flex flex-col gap-2">
             <Label>With suffix</Label>
-            <InputNumber defaultValue={75} suffix="%" min={0} max={100} className="w-32" />
+            <Input.Number defaultValue={75} suffix="%" min={0} max={100} className="w-32" />
           </div>
         </DemoRow>
       </GallerySection>
@@ -189,31 +360,12 @@ export function FormsSection() {
         <DemoRow label="Lengths">
           <div className="flex flex-col gap-2">
             <Label>6-digit OTP</Label>
-            <InputOTP maxLength={6} value={otp} onChange={setOtp}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
+            <Input.OTP length={6} separator={3} value={otp} onChange={setOtp} formatter={(value) => value.toUpperCase()} />
             {otp.length === 6 && <p className="text-xs text-muted-foreground">Entered: <strong>{otp}</strong></p>}
           </div>
           <div className="flex flex-col gap-2">
             <Label>4-digit PIN</Label>
-            <InputOTP maxLength={4}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-                <InputOTPSlot index={3} />
-              </InputOTPGroup>
-            </InputOTP>
+            <Input.OTP length={4} mask />
           </div>
         </DemoRow>
       </GallerySection>

@@ -5,8 +5,8 @@ import { addDays, format, isSameDay, isToday } from "date-fns";
 import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from "lucide-react";
 import { Slot } from "radix-ui";
 import {
-  type ButtonHTMLAttributes,
   type ComponentProps,
+  type ComponentPropsWithoutRef,
   createContext,
   type HTMLAttributes,
   type MouseEventHandler,
@@ -126,7 +126,7 @@ export const MiniCalendar = ({
 };
 
 export type MiniCalendarNavigationProps =
-  ButtonHTMLAttributes<HTMLButtonElement> & {
+  ComponentProps<typeof Button> & {
     direction: "prev" | "next";
     asChild?: boolean;
   };
@@ -148,7 +148,10 @@ export const MiniCalendarNavigation = ({
 
   if (asChild) {
     return (
-      <Slot.Root onClick={handleClick} {...props}>
+      <Slot.Root
+        onClick={handleClick}
+        {...(props as ComponentPropsWithoutRef<typeof Slot.Root>)}
+      >
         {children}
       </Slot.Root>
     );
@@ -157,9 +160,10 @@ export const MiniCalendarNavigation = ({
   return (
     <Button
       onClick={handleClick}
-      size={asChild ? undefined : "icon"}
-      type="button"
-      variant={asChild ? undefined : "ghost"}
+      size="small"
+      shape="square"
+      htmlType="button"
+      variant="text"
       {...props}
     >
       {children ?? <Icon className="size-4" />}
@@ -211,9 +215,10 @@ export const MiniCalendarDay = ({
         className
       )}
       onClick={() => onDateSelect(date)}
-      size="sm"
-      type="button"
-      variant={isSelected ? "default" : "ghost"}
+      size="small"
+      htmlType="button"
+      color={isSelected ? "primary" : "default"}
+      variant={isSelected ? "solid" : "text"}
       {...props}
     >
       <span

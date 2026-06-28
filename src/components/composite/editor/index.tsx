@@ -802,8 +802,8 @@ const BubbleMenuButton = ({
   <Button
     className={`flex gap-4 ${hideName ? "" : "w-full"}`}
     onClick={() => command()}
-    size="sm"
-    variant="ghost"
+    size="small"
+    variant="text"
   >
     <Icon className="shrink-0 text-muted-foreground" size={12} />
     {!hideName && <span className="flex-1 text-left">{name}</span>}
@@ -1104,8 +1104,8 @@ export const EditorSelector = ({
       <PopoverTrigger asChild>
         <Button
           className="gap-2 rounded-none border-none"
-          size="sm"
-          variant="ghost"
+          size="small"
+          variant="text"
         >
           <span className="whitespace-nowrap text-xs">{title}</span>
           <ChevronDownIcon size={12} />
@@ -1341,8 +1341,8 @@ export const EditorLinkSelector = ({
       <PopoverTrigger asChild>
         <Button
           className="gap-2 rounded-none border-none"
-          size="sm"
-          variant="ghost"
+          size="small"
+          variant="text"
         >
           <ExternalLinkIcon size={12} />
           <p
@@ -1376,14 +1376,14 @@ export const EditorLinkSelector = ({
                 editor.chain().focus().unsetLink().run();
                 onOpenChange?.(false);
               }}
-              size="icon"
-              type="button"
-              variant="outline"
+              shape="square"
+              htmlType="button"
+              variant="outlined"
             >
               <TrashIcon size={12} />
             </Button>
           ) : (
-            <Button className="h-8" size="icon" variant="secondary">
+            <Button className="h-8" shape="square" variant="filled">
               <CheckIcon size={12} />
             </Button>
           )}
@@ -1539,7 +1539,7 @@ export const EditorTableColumnMenu = ({
         )}
         style={{ top, left }}
       >
-        <Button size="icon" variant="ghost">
+        <Button shape="square" variant="text">
           <EllipsisIcon className="text-muted-foreground" size={16} />
         </Button>
       </DropdownMenuTrigger>
@@ -1603,9 +1603,9 @@ export const EditorTableRowMenu = ({ children }: EditorTableRowMenuProps) => {
               hidden: !(left || top),
             }
           )}
-          size="icon"
+          shape="square"
           style={{ top, left }}
-          variant="ghost"
+          variant="text"
         >
           <EllipsisVerticalIcon className="text-muted-foreground" size={12} />
         </Button>
@@ -1760,8 +1760,8 @@ export const EditorTableHeaderColumnToggle = () => {
         <Button
           className="flex items-center gap-2 rounded-full"
           onClick={handleClick}
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
         >
           <ColumnsIcon className="text-muted-foreground" size={16} />
         </Button>
@@ -1792,8 +1792,8 @@ export const EditorTableHeaderRowToggle = () => {
         <Button
           className="flex items-center gap-2 rounded-full"
           onClick={handleClick}
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
         >
           <RowsIcon className="text-muted-foreground" size={16} />
         </Button>
@@ -1824,8 +1824,8 @@ export const EditorTableDelete = () => {
         <Button
           className="flex items-center gap-2 rounded-full"
           onClick={handleClick}
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
         >
           <TrashIcon className="text-destructive" size={16} />
         </Button>
@@ -1856,8 +1856,8 @@ export const EditorTableMergeCells = () => {
         <Button
           className="flex items-center gap-2 rounded-full"
           onClick={handleClick}
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
         >
           <TableCellsMergeIcon className="text-muted-foreground" size={16} />
         </Button>
@@ -1888,8 +1888,8 @@ export const EditorTableSplitCell = () => {
         <Button
           className="flex items-center gap-2 rounded-full"
           onClick={handleClick}
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
         >
           <TableColumnsSplitIcon className="text-muted-foreground" size={16} />
         </Button>
@@ -1920,8 +1920,8 @@ export const EditorTableFix = () => {
         <Button
           className="flex items-center gap-2 rounded-full"
           onClick={handleClick}
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
         >
           <BoltIcon className="text-muted-foreground" size={16} />
         </Button>

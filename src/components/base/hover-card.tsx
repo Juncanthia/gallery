@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {
   HoverCard as HoverCardPrimitive,
   HoverCardTrigger as HoverCardTriggerPrimitive,
@@ -9,10 +11,35 @@ import {
 } from '@/primitives/radix/hover-card';
 import { cn } from '@/lib/utils';
 
-type HoverCardProps = HoverCardPrimitiveProps;
+type HoverCardProps = HoverCardPrimitiveProps & {
+  trigger?: React.ReactNode;
+  content?: React.ReactNode;
+  contentProps?: HoverCardContentProps;
+};
 
-function HoverCard(props: HoverCardProps) {
-  return <HoverCardPrimitive {...props} />;
+function HoverCard({
+  trigger,
+  content,
+  contentProps,
+  children,
+  ...props
+}: HoverCardProps) {
+  const hasApiContent =
+    trigger !== undefined || content !== undefined || contentProps !== undefined;
+
+  if (!hasApiContent) {
+    return <HoverCardPrimitive {...props}>{children}</HoverCardPrimitive>;
+  }
+
+  return (
+    <HoverCardPrimitive {...props}>
+      <HoverCardTrigger asChild>
+        {React.isValidElement(trigger) ? trigger : <span>{trigger}</span>}
+      </HoverCardTrigger>
+      {children}
+      <HoverCardContent {...contentProps}>{content}</HoverCardContent>
+    </HoverCardPrimitive>
+  );
 }
 
 type HoverCardTriggerProps = HoverCardTriggerPrimitiveProps;

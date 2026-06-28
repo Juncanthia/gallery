@@ -140,7 +140,7 @@ export function TreeSelect({
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="outlined"
           disabled={disabled}
           className={cn("justify-between w-full", triggerClassName)}
           data-slot="tree-select-trigger"
@@ -246,7 +246,7 @@ function TreeNode({
         {isMultiple && (
           <Checkbox
             checked={isSelected}
-            onChange={() => onSelect(node.value)}
+            onCheckedChange={() => onSelect(node.value)}
             onClick={(e) => e.stopPropagation()}
             disabled={node.disabled}
           />

@@ -7,16 +7,13 @@ import { Separator } from "@/components/base/separator";
 import { Avatar, AvatarFallback, AvatarImage, AvatarGroup, AvatarGroupCount } from "@/components/base/avatar";
 import { Text, Title, Paragraph } from "@/components/base/typography";
 import { Statistic, StatisticDiff } from "@/components/base/statistic";
-import { Alert, AlertTitle, AlertDescription } from "@/components/base/alert";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/base/card";
-import { Skeleton } from "@/components/base/skeleton";
+import { Alert } from "@/components/base/alert";
+import { Card } from "@/components/base/card";
+import { Skeleton, SkeletonAvatar, SkeletonButton } from "@/components/base/skeleton";
 import { Result } from "@/components/base/result";
 import { BorderBeam } from "@/components/base/border-beam";
-import {
-  Table, TableHeader, TableBody, TableRow,
-  TableHead, TableCell, TableCaption,
-} from "@/components/base/table";
-import { Descriptions, DescriptionsItem } from "@/components/base/descriptions";
+import { Table } from "@/components/base/table";
+import { Descriptions } from "@/components/base/descriptions";
 import { Timeline } from "@/components/base/timeline";
 import { Steps } from "@/components/base/steps";
 import {
@@ -40,22 +37,22 @@ export function DisplaySection() {
         <GallerySection id="button" title="Button" description="Trigger actions and commands.">
           <DemoRow label="Variants">
             <Button>Default</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="outline">Outline</Button>
-            <Button variant="ghost">Ghost</Button>
+            <Button variant="filled">Secondary</Button>
+            <Button variant="outlined">Outline</Button>
+            <Button variant="text">Ghost</Button>
             <Button variant="link">Link</Button>
-            <Button variant="destructive">Destructive</Button>
+            <Button color="danger" variant="solid">Destructive</Button>
           </DemoRow>
           <DemoRow label="Sizes">
-            <Button size="sm">Small</Button>
+            <Button size="small">Small</Button>
             <Button>Default</Button>
-            <Button size="lg">Large</Button>
-            <Button size="icon"><Plus className="size-4" /></Button>
+            <Button size="large">Large</Button>
+            <Button shape="square"><Plus className="size-4" /></Button>
           </DemoRow>
           <DemoRow label="With icons / states">
             <Button><Download className="size-4" /> Download</Button>
-            <Button variant="destructive"><Trash2 className="size-4" /> Delete</Button>
-            <Button variant="outline"><ChevronRight className="size-4" /> Continue</Button>
+            <Button color="danger" variant="solid"><Trash2 className="size-4" /> Delete</Button>
+            <Button variant="outlined"><ChevronRight className="size-4" /> Continue</Button>
             <Button disabled>Disabled</Button>
           </DemoRow>
         </GallerySection>
@@ -155,7 +152,7 @@ export function DisplaySection() {
                 <Statistic title="Total Users" value={128430} />
               </div>
               <div className="space-y-1">
-                <Statistic title="Revenue" value={24680} prefix="$" precision={2} />
+                <Statistic title="Revenue" value={24680} prefix="$" precision={2} groupSeparator="," />
               </div>
               <div className="space-y-1">
                 <Statistic title="Completion" value={87.5} suffix="%" precision={1} />
@@ -183,91 +180,131 @@ export function DisplaySection() {
               ))}
             </DemoCard>
           </DemoRow>
+          <DemoRow label="Formatter">
+            <DemoCard>
+              <Statistic
+                title="Conversion"
+                value={0.218}
+                formatter={(value) => `${(Number(value) * 100).toFixed(1)}%`}
+              />
+              <Statistic
+                title="Custom render"
+                value={98420}
+                valueRender={(node) => <span className="text-green-600">{node}</span>}
+              />
+            </DemoCard>
+          </DemoRow>
         </GallerySection>
       </SectionGroup>
 
       <SectionGroup title="Data Display" description="Components for presenting structured information.">
         <GallerySection id="alert" title="Alert" description="Contextual feedback messages.">
-          <DemoRow label="Variants">
+          <DemoRow label="API">
             <div className="w-full max-w-lg space-y-3">
-              <Alert>
-                <AlertTitle>Heads up</AlertTitle>
-                <AlertDescription>Your account has been successfully updated.</AlertDescription>
-              </Alert>
-              <Alert variant="destructive">
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>Something went wrong. Please try again later.</AlertDescription>
-              </Alert>
+              <Alert
+                type="success"
+                title="Heads up"
+                description="Your account has been successfully updated."
+                showIcon
+              />
+              <Alert
+                type="error"
+                title="Error"
+                description="Something went wrong. Please try again later."
+                closable
+              />
             </div>
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="card" title="Card" description="Content containers with structured layout.">
-          <DemoRow label="Sizes">
-            <Card className="w-72">
-              <CardHeader>
-                <CardTitle>Team Members</CardTitle>
-                <CardDescription>Manage your team and their access.</CardDescription>
-              </CardHeader>
-              <CardContent>
+          <DemoRow label="API">
+            <Card
+              title="Team Members"
+              description="Manage your team and their access."
+              extra={<Badge variant="secondary">3</Badge>}
+              actions={[
+                <Button key="invite" size="small" variant="text">Invite</Button>,
+                <Button key="manage" size="small" variant="text">Manage</Button>,
+              ]}
+              hoverable
+              className="w-72"
+            >
+              <div className="space-y-3">
                 <div className="flex gap-2">
                   <Avatar size="sm"><AvatarFallback>JD</AvatarFallback></Avatar>
                   <Avatar size="sm"><AvatarFallback>AS</AvatarFallback></Avatar>
                   <Avatar size="sm"><AvatarFallback>MK</AvatarFallback></Avatar>
                 </div>
-              </CardContent>
-              <CardFooter>
-                <Button size="sm" className="w-full">Invite Member</Button>
-              </CardFooter>
+                <p className="text-sm text-muted-foreground">API-first title / extra / actions.</p>
+              </div>
             </Card>
-            <Card size="sm" className="w-56">
-              <CardHeader>
-                <CardTitle>Small Card</CardTitle>
-                <CardDescription>Compact variant.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">Less padding, same structure.</p>
-              </CardContent>
+            <Card
+              size="small"
+              title="Small Card"
+              description="Compact variant."
+              variant="borderless"
+              className="w-56 bg-muted/40"
+            >
+              <p className="text-sm text-muted-foreground">Less padding, same structure.</p>
             </Card>
+            <Card loading title="Loading Card" className="w-64" />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="skeleton" title="Skeleton" description="Loading placeholder states.">
-          <DemoRow label="Patterns">
+          <DemoRow label="Primitive">
             <div className="space-y-2 w-48">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-5/6" />
               <Skeleton className="h-4 w-4/6" />
             </div>
+            <Skeleton className="h-32 w-48 rounded-lg" />
+          </DemoRow>
+          <DemoRow label="API">
+            <Skeleton avatar paragraph={{ rows: 3, width: ["100%", "90%", "60%"] }} />
             <div className="flex items-center gap-3">
-              <Skeleton className="size-12 rounded-full" />
+              <SkeletonAvatar size="lg" />
               <div className="space-y-2">
                 <Skeleton className="h-3 w-32" />
                 <Skeleton className="h-3 w-24" />
               </div>
             </div>
-            <Skeleton className="h-32 w-48 rounded-lg" />
+            <div className="space-y-2">
+              <SkeletonButton />
+              <SkeletonButton block />
+            </div>
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="descriptions" title="Descriptions" description="Key-value data display.">
-          <DemoRow label="Default">
-            <Descriptions title="User Info" className="w-full max-w-2xl">
-              <DescriptionsItem label="Name">Alice Chen</DescriptionsItem>
-              <DescriptionsItem label="Role">Engineer</DescriptionsItem>
-              <DescriptionsItem label="Location">San Francisco</DescriptionsItem>
-              <DescriptionsItem label="Email">alice@example.com</DescriptionsItem>
-              <DescriptionsItem label="Status"><Badge>Active</Badge></DescriptionsItem>
-              <DescriptionsItem label="Joined">2023-04-01</DescriptionsItem>
-            </Descriptions>
+          <DemoRow label="Items API">
+            <Descriptions
+              title="User Info"
+              className="w-full max-w-2xl"
+              items={[
+                { key: "name", label: "Name", children: "Alice Chen" },
+                { key: "role", label: "Role", children: "Engineer" },
+                { key: "location", label: "Location", children: "San Francisco" },
+                { key: "email", label: "Email", children: "alice@example.com", span: 2 },
+                { key: "status", label: "Status", children: <Badge>Active</Badge> },
+                { key: "joined", label: "Joined", children: "2023-04-01" },
+              ]}
+            />
           </DemoRow>
           <DemoRow label="Bordered">
-            <Descriptions bordered title="Project" column={2} className="w-full max-w-lg">
-              <DescriptionsItem label="Status"><Badge variant="secondary">In Progress</Badge></DescriptionsItem>
-              <DescriptionsItem label="Priority">High</DescriptionsItem>
-              <DescriptionsItem label="Due Date">2025-12-31</DescriptionsItem>
-              <DescriptionsItem label="Assignee">Bob Smith</DescriptionsItem>
-            </Descriptions>
+            <Descriptions
+              bordered
+              title="Project"
+              column={2}
+              className="w-full max-w-lg"
+              items={[
+                { key: "status", label: "Status", children: <Badge variant="secondary">In Progress</Badge> },
+                { key: "priority", label: "Priority", children: "High" },
+                { key: "due", label: "Due Date", children: "2025-12-31" },
+                { key: "assignee", label: "Assignee", children: "Bob Smith" },
+              ]}
+            />
           </DemoRow>
         </GallerySection>
 
@@ -275,19 +312,19 @@ export function DisplaySection() {
           <DemoRow label="Default">
             <Timeline
               items={[
-                { children: "Create your account", color: "success" },
-                { children: "Set up your workspace" },
-                { children: "Invite team members" },
-                { children: "Launch your project", pending: true },
+                { title: "Create your account", content: "Identity verified", color: "success" },
+                { title: "Set up your workspace", content: "Invite collaborators" },
+                { title: "Invite team members", content: "Pending invites" },
+                { title: "Launch your project", content: "Waiting for release", pending: true },
               ]}
             />
             <Timeline
               mode="alternate"
               items={[
-                { children: "2024 Q1 — Planning", label: "Jan" },
-                { children: "2024 Q2 — Development", label: "Apr" },
-                { children: "2024 Q3 — Beta", label: "Jul" },
-                { children: "2024 Q4 — Launch", label: "Oct", color: "success" },
+                { title: "2024 Q1 — Planning", content: "Roadmap", label: "Jan" },
+                { title: "2024 Q2 — Development", content: "Build", label: "Apr" },
+                { title: "2024 Q3 — Beta", content: "Pilot", label: "Jul" },
+                { title: "2024 Q4 — Launch", content: "Release", label: "Oct", color: "success" },
               ]}
             />
           </DemoRow>
@@ -301,25 +338,37 @@ export function DisplaySection() {
                 onChange={setStepsVal}
                 items={[
                   { title: "Account", description: "Create account" },
-                  { title: "Profile", description: "Set up profile" },
+                  { title: "Profile", content: "Set up profile" },
                   { title: "Billing", description: "Add payment" },
                   { title: "Done", description: "All set!" },
                 ]}
               />
               <div className="flex gap-2">
-                <Button size="sm" variant="outline" disabled={stepsVal === 0} onClick={() => setStepsVal((v) => v - 1)}>Prev</Button>
-                <Button size="sm" disabled={stepsVal === 3} onClick={() => setStepsVal((v) => v + 1)}>Next</Button>
+                <Button size="small" variant="outlined" disabled={stepsVal === 0} onClick={() => setStepsVal((v) => v - 1)}>Prev</Button>
+                <Button size="small" disabled={stepsVal === 3} onClick={() => setStepsVal((v) => v + 1)}>Next</Button>
               </div>
             </div>
           </DemoRow>
           <DemoRow label="Vertical">
             <Steps
-              direction="vertical"
+              orientation="vertical"
               current={1}
               items={[
                 { title: "Submitted", description: "2024-01-10" },
                 { title: "In Review", description: "Processing..." },
                 { title: "Approved", description: "Pending" },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Dot">
+            <Steps
+              type="dot"
+              current={2}
+              items={[
+                { title: "Queued", content: "Waiting" },
+                { title: "Running", content: "Processing" },
+                { title: "Review", content: "Current" },
+                { title: "Done", content: "Finish" },
               ]}
             />
           </DemoRow>
@@ -370,34 +419,58 @@ export function DisplaySection() {
         </GallerySection>
 
         <GallerySection id="table" title="Table" description="Structured data in rows and columns.">
-          <DemoRow label="Invoice list">
-            <div className="w-full max-w-2xl rounded-md border overflow-hidden">
-              <Table>
-                <TableCaption>A list of recent invoices.</TableCaption>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Invoice</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Method</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {TABLE_DATA.map((row) => (
-                    <TableRow key={row.invoice}>
-                      <TableCell className="font-medium">{row.invoice}</TableCell>
-                      <TableCell>
-                        <Badge variant={row.status === "Paid" ? "default" : row.status === "Pending" ? "secondary" : "destructive"}>
-                          {row.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{row.method}</TableCell>
-                      <TableCell className="text-right">{row.amount}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+          <DemoRow label="Columns API">
+            <Table
+              bordered
+              caption="A list of recent invoices."
+              className="max-w-2xl"
+              rowKey="invoice"
+              rowSelection={{}}
+              pagination={{
+                pageSize: 2,
+                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+              }}
+              dataSource={TABLE_DATA}
+              columns={[
+                {
+                  title: "Invoice",
+                  dataIndex: "invoice",
+                  className: "font-medium",
+                  sorter: true,
+                },
+                {
+                  title: "Status",
+                  dataIndex: "status",
+                  sorter: true,
+                  render: (value) => (
+                    <Badge variant={value === "Paid" ? "default" : value === "Pending" ? "secondary" : "destructive"}>
+                      {String(value)}
+                    </Badge>
+                  ),
+                },
+                { title: "Method", dataIndex: "method" },
+                { title: "Amount", dataIndex: "amount", align: "right", sorter: true },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Loading / Empty">
+            <Table
+              size="small"
+              loading
+              columns={[
+                { title: "Name", dataIndex: "name" },
+                { title: "Role", dataIndex: "role" },
+              ]}
+            />
+            <Table
+              size="small"
+              emptyText="No invoices"
+              columns={[
+                { title: "Invoice", dataIndex: "invoice" },
+                { title: "Amount", dataIndex: "amount", align: "right" },
+              ]}
+              dataSource={[]}
+            />
           </DemoRow>
         </GallerySection>
 

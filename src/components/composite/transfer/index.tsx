@@ -162,8 +162,8 @@ export function Transfer({
 
       <div className="flex flex-col gap-2">
         <Button
-          size="icon"
-          variant="outline"
+          shape="square"
+          variant="outlined"
           disabled={!oneWay && (disabled || leftChecked.length === 0)}
           onClick={() => handleTransfer("right")}
         >
@@ -171,8 +171,8 @@ export function Transfer({
         </Button>
         {!oneWay && (
           <Button
-            size="icon"
-            variant="outline"
+            shape="square"
+            variant="outlined"
             disabled={disabled || rightChecked.length === 0}
             onClick={() => handleTransfer("left")}
           >
@@ -281,7 +281,7 @@ function TransferPanel({
               >
                 <Checkbox
                   checked={checked.includes(item.key)}
-                  onChange={() => handleToggle(item.key)}
+                  onCheckedChange={() => handleToggle(item.key)}
                   disabled={item.disabled}
                 />
                 <div className="flex-1 min-w-0">

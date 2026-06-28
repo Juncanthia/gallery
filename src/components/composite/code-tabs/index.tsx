@@ -118,8 +118,8 @@ function CodeTabs({
           {copyButton && highlightedCodes && (
             <CopyButton
               content={codes[selectedCode]}
-              size="xs"
-              variant="ghost"
+              size="small"
+              variant="text"
               className="-me-2.5 bg-transparent hover:bg-black/5 dark:hover:bg-white/10"
               onCopiedChange={onCopiedChange}
             />

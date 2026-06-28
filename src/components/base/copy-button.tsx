@@ -22,8 +22,9 @@ export function CopyButton({
   onCopiedChange,
   onClick,
   delay = 3000,
-  size = "icon",
-  variant = "ghost",
+  size = "small",
+  shape = "square",
+  variant = "text",
   ...props
 }: CopyButtonProps) {
   const [isCopied, setIsCopied] = useControlledState({
@@ -60,6 +61,7 @@ export function CopyButton({
       className={cn(className)}
       onClick={handleCopy}
       size={size}
+      shape={shape}
       variant={variant}
       {...props}
     >

@@ -45,8 +45,8 @@ export const PillButton = ({ className, ...props }: PillButtonProps) => (
       "-my-2 -mr-2 size-6 rounded-full p-0.5 hover:bg-foreground/5",
       className
     )}
-    size="icon"
-    variant="ghost"
+    shape="square"
+    variant="text"
     {...props}
   />
 );

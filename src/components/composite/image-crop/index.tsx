@@ -5,6 +5,7 @@ import { Crop as CropIcon, RotateCcw as RotateCcwIcon } from "lucide-react";
 import { Slot } from "radix-ui";
 import {
   type ComponentProps,
+  type ComponentPropsWithoutRef,
   type CSSProperties,
   createContext,
   type MouseEvent,
@@ -273,7 +274,7 @@ export const ImageCropContent = ({
   );
 };
 
-export type ImageCropApplyProps = ComponentProps<"button"> & {
+export type ImageCropApplyProps = ComponentProps<typeof Button> & {
   asChild?: boolean;
 };
 
@@ -292,20 +293,23 @@ export const ImageCropApply = ({
 
   if (asChild) {
     return (
-      <Slot.Root onClick={handleClick} {...props}>
+      <Slot.Root
+        onClick={handleClick}
+        {...(props as ComponentPropsWithoutRef<typeof Slot.Root>)}
+      >
         {children}
       </Slot.Root>
     );
   }
 
   return (
-    <Button onClick={handleClick} size="icon" variant="ghost" {...props}>
+    <Button onClick={handleClick} shape="square" variant="text" {...props}>
       {children ?? <CropIcon className="size-4" />}
     </Button>
   );
 };
 
-export type ImageCropResetProps = ComponentProps<"button"> & {
+export type ImageCropResetProps = ComponentProps<typeof Button> & {
   asChild?: boolean;
 };
 
@@ -324,14 +328,17 @@ export const ImageCropReset = ({
 
   if (asChild) {
     return (
-      <Slot.Root onClick={handleClick} {...props}>
+      <Slot.Root
+        onClick={handleClick}
+        {...(props as ComponentPropsWithoutRef<typeof Slot.Root>)}
+      >
         {children}
       </Slot.Root>
     );
   }
 
   return (
-    <Button onClick={handleClick} size="icon" variant="ghost" {...props}>
+    <Button onClick={handleClick} shape="square" variant="text" {...props}>
       {children ?? <RotateCcwIcon className="size-4" />}
     </Button>
   );

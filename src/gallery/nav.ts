@@ -44,15 +44,15 @@ export const NAV: NavGroup[] = [
     group: "Forms",
     items: [
       { id: "input", label: "Input" },
-      { id: "textarea", label: "Textarea" },
+      { id: "textarea", label: "Input.TextArea" },
       { id: "select", label: "Select" },
       { id: "checkbox", label: "Checkbox" },
       { id: "radio", label: "Radio Group" },
       { id: "switch", label: "Switch" },
       { id: "slider", label: "Slider" },
       { id: "toggle", label: "Toggle" },
-      { id: "input-number", label: "InputNumber" },
-      { id: "input-otp", label: "InputOTP" },
+      { id: "input-number", label: "Input.Number" },
+      { id: "input-otp", label: "Input.OTP" },
     ],
   },
   {

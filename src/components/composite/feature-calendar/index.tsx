@@ -12,13 +12,7 @@ import {
   useMemo,
 } from "react";
 import { Button } from "@/components/base/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/base/select";
+import { Select } from "@/components/base/select";
 import { cn } from "@/lib/utils";
 
 export type CalendarState = {
@@ -74,18 +68,16 @@ const CalendarSelect = ({
   data,
   className,
 }: CalendarSelectProps) => (
-  <Select value={value} onValueChange={setValue}>
-    <SelectTrigger className={cn("w-40 capitalize", className)}>
-      <SelectValue />
-    </SelectTrigger>
-    <SelectContent>
-      {data.map((item) => (
-        <SelectItem className="capitalize" key={item.value} value={item.value}>
-          {item.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
+  <Select
+    className={cn("w-40 capitalize", className)}
+    onValueChange={(nextValue: string | undefined) => {
+      if (nextValue) {
+        setValue(nextValue);
+      }
+    }}
+    options={data}
+    value={value}
+  />
 );
 
 export const monthsForLocale = (
@@ -346,10 +338,10 @@ export const CalendarDatePagination = ({
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <Button onClick={handlePreviousMonth} size="icon" variant="ghost">
+      <Button onClick={handlePreviousMonth} shape="square" variant="text">
         <ChevronLeftIcon size={16} />
       </Button>
-      <Button onClick={handleNextMonth} size="icon" variant="ghost">
+      <Button onClick={handleNextMonth} shape="square" variant="text">
         <ChevronRightIcon size={16} />
       </Button>
     </div>

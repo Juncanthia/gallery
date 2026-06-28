@@ -9,12 +9,8 @@ import { Affix } from "@/components/base/affix";
 import { ScrollArea } from "@/components/base/scroll-area";
 import { AspectRatio } from "@/components/base/aspect-ratio";
 import { Calendar } from "@/components/base/calendar";
-import {
-  ResizablePanelGroup, ResizablePanel, ResizableHandle,
-} from "@/components/base/resizable";
-import {
-  Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext,
-} from "@/components/base/carousel";
+import { Resizable } from "@/components/base/resizable";
+import { Carousel } from "@/components/base/carousel";
 import { Card, CardContent } from "@/components/base/card";
 import { type DateRange } from "react-day-picker";
 
@@ -75,31 +71,47 @@ export function LayoutSection() {
       </GallerySection>
 
       <GallerySection id="resizable" title="Resizable" description="Drag-to-resize panel groups.">
-        <DemoRow>
-          <div className="w-full max-w-xl rounded-lg border overflow-hidden" style={{ height: 160 }}>
-            <ResizablePanelGroup orientation="horizontal">
-              <ResizablePanel defaultSize={50}>
-                <div className="flex h-full items-center justify-center p-4 text-sm font-medium">
-                  Left Panel
-                </div>
-              </ResizablePanel>
-              <ResizableHandle withHandle />
-              <ResizablePanel defaultSize={50}>
-                <ResizablePanelGroup orientation="vertical">
-                  <ResizablePanel defaultSize={50}>
-                    <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
-                      Top Right
+        <DemoRow label="Items API">
+          <div className="w-full max-w-xl overflow-hidden rounded border" style={{ height: 160 }}>
+            <Resizable
+              orientation="horizontal"
+              items={[
+                {
+                  defaultSize: 45,
+                  content: (
+                    <div className="flex h-full items-center justify-center p-4 text-sm font-medium">
+                      Left Panel
                     </div>
-                  </ResizablePanel>
-                  <ResizableHandle withHandle />
-                  <ResizablePanel defaultSize={50}>
-                    <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
-                      Bottom Right
-                    </div>
-                  </ResizablePanel>
-                </ResizablePanelGroup>
-              </ResizablePanel>
-            </ResizablePanelGroup>
+                  ),
+                },
+                {
+                  defaultSize: 55,
+                  content: (
+                    <Resizable
+                      orientation="vertical"
+                      items={[
+                        {
+                          defaultSize: 50,
+                          content: (
+                            <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
+                              Top Right
+                            </div>
+                          ),
+                        },
+                        {
+                          defaultSize: 50,
+                          content: (
+                            <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
+                              Bottom Right
+                            </div>
+                          ),
+                        },
+                      ]}
+                    />
+                  ),
+                },
+              ]}
+            />
           </div>
         </DemoRow>
       </GallerySection>
@@ -186,42 +198,37 @@ export function LayoutSection() {
       </GallerySection>
 
       <GallerySection id="carousel" title="Carousel" description="Slidable content carousel.">
-        <DemoRow label="Horizontal">
+        <DemoRow label="Items API">
           <div className="w-full max-w-sm">
-            <Carousel>
-              <CarouselContent>
-                {Array.from({ length: 5 }, (_, i) => (
-                  <CarouselItem key={i}>
-                    <Card>
-                      <CardContent className="flex aspect-square items-center justify-center p-6">
-                        <span className="text-4xl font-semibold text-muted-foreground">{i + 1}</span>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+            <Carousel
+              items={Array.from({ length: 5 }, (_, i) => ({
+                content: (
+                  <Card>
+                    <CardContent className="flex aspect-square items-center justify-center p-6">
+                      <span className="text-4xl font-semibold text-muted-foreground">{i + 1}</span>
+                    </CardContent>
+                  </Card>
+                ),
+              }))}
+            />
           </div>
         </DemoRow>
         <DemoRow label="Multiple visible">
           <div className="w-full max-w-xl">
-            <Carousel opts={{ align: "start" }}>
-              <CarouselContent className="-ml-2">
-                {Array.from({ length: 8 }, (_, i) => (
-                  <CarouselItem key={i} className="pl-2 basis-1/3">
+            <Carousel
+              opts={{ align: "start" }}
+              contentClassName="-ml-2"
+              itemClassName="basis-1/3 pl-2"
+              items={Array.from({ length: 8 }, (_, i) => ({
+                content: (
                     <Card>
                       <CardContent className="flex aspect-square items-center justify-center p-4">
                         <span className="text-2xl font-semibold text-muted-foreground">{i + 1}</span>
                       </CardContent>
                     </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+                ),
+              }))}
+            />
           </div>
         </DemoRow>
       </GallerySection>
@@ -254,7 +261,7 @@ export function LayoutSection() {
               Affix pins an element to the viewport once the user scrolls past a threshold. Used for sticky toolbars, back-to-top buttons, or sidebars.
             </p>
             <Affix offsetTop={80}>
-              <Button size="sm" variant="outline">Sticky at 80px from top</Button>
+              <Button size="small" variant="outlined">Sticky at 80px from top</Button>
             </Affix>
           </div>
         </DemoRow>

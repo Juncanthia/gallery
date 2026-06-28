@@ -1,3 +1,6 @@
+import * as React from 'react';
+
+import { Button } from '@/components/base/button';
 import {
   Popover as PopoverPrimitive,
   PopoverTrigger as PopoverTriggerPrimitive,
@@ -13,10 +16,55 @@ import {
 } from '@/primitives/radix/popover';
 import { cn } from '@/lib/utils';
 
-type PopoverProps = PopoverPrimitiveProps;
+type PopoverProps = PopoverPrimitiveProps & {
+  trigger?: React.ReactNode;
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  contentProps?: PopoverContentProps;
+};
 
-function Popover(props: PopoverProps) {
-  return <PopoverPrimitive {...props} />;
+function renderPopoverTrigger(trigger: React.ReactNode) {
+  if (trigger === undefined) return null;
+
+  return (
+    <PopoverTrigger asChild>
+      {React.isValidElement(trigger) ? trigger : <Button>{trigger}</Button>}
+    </PopoverTrigger>
+  );
+}
+
+function Popover({
+  trigger,
+  title,
+  content,
+  contentProps,
+  children,
+  ...props
+}: PopoverProps) {
+  const hasApiContent =
+    trigger !== undefined ||
+    title !== undefined ||
+    content !== undefined ||
+    contentProps !== undefined;
+
+  if (!hasApiContent) {
+    return <PopoverPrimitive {...props}>{children}</PopoverPrimitive>;
+  }
+
+  return (
+    <PopoverPrimitive {...props}>
+      {renderPopoverTrigger(trigger)}
+      {children}
+      <PopoverContent {...contentProps}>
+        <div className="space-y-2">
+          {title !== undefined && <p className="text-sm font-medium">{title}</p>}
+          {content !== undefined && (
+            <div className="text-sm text-muted-foreground">{content}</div>
+          )}
+        </div>
+      </PopoverContent>
+    </PopoverPrimitive>
+  );
 }
 
 type PopoverTriggerProps = PopoverTriggerPrimitiveProps;

@@ -92,7 +92,7 @@ export function Cascader({
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="outlined"
           disabled={disabled}
           className={cn("justify-between w-full", triggerClassName)}
           data-slot="cascader-trigger"

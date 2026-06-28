@@ -9,7 +9,9 @@ interface DescriptionsContextType {
   variant: DescriptionsVariant;
   size: DescriptionsSize;
   layout: DescriptionsLayout;
-  column: number;
+  colon: boolean;
+  labelClassName?: string;
+  contentClassName?: string;
 }
 
 const DescriptionsContext = createContext<DescriptionsContextType | undefined>(
@@ -27,20 +29,33 @@ const useDescriptionsContext = () => {
 export interface DescriptionsItemProps {
   label?: React.ReactNode;
   children?: React.ReactNode;
+  content?: React.ReactNode;
   span?: number;
   labelClassName?: string;
   contentClassName?: string;
   className?: string;
 }
 
+const sizeClasses: Record<DescriptionsSize, string> = {
+  sm: "px-3 py-1.5",
+  default: "px-4 py-2.5",
+  lg: "px-5 py-4",
+};
+
+function renderLabel(label: React.ReactNode, colon: boolean) {
+  if (!label) return null;
+  return colon ? <>{label}:</> : label;
+}
+
 export const DescriptionsItem = React.forwardRef<
-  HTMLTableCellElement,
+  HTMLTableCellElement | HTMLDivElement,
   DescriptionsItemProps
 >(
   (
     {
       label,
       children,
+      content,
       span = 1,
       labelClassName,
       contentClassName,
@@ -48,50 +63,71 @@ export const DescriptionsItem = React.forwardRef<
     },
     ref
   ) => {
-    const { variant, size } = useDescriptionsContext();
+    const context = useDescriptionsContext();
+    const mergedContent = content ?? children;
+    const mergedLabelClassName = cn(context.labelClassName, labelClassName);
+    const mergedContentClassName = cn(context.contentClassName, contentClassName);
 
-    const sizeClasses = {
-      sm: "px-3 py-1.5",
-      default: "px-4 py-2.5",
-      lg: "px-5 py-4",
-    };
+    if (context.variant === "bordered") {
+      if (context.layout === "vertical") {
+        return (
+          <td
+            ref={ref as React.Ref<HTMLTableCellElement>}
+            className={cn("border-r border-b border-border text-sm", sizeClasses[context.size], className)}
+            colSpan={Math.max(1, span)}
+          >
+            {label && (
+              <div className={cn("mb-1 font-medium text-muted-foreground", mergedLabelClassName)}>
+                {renderLabel(label, context.colon)}
+              </div>
+            )}
+            <div className={mergedContentClassName}>{mergedContent}</div>
+          </td>
+        );
+      }
 
-    if (variant === "bordered") {
       return (
         <>
           <td
-            ref={ref}
+            ref={ref as React.Ref<HTMLTableCellElement>}
             className={cn(
-              "border-r border-b border-border bg-muted/40 font-medium text-sm text-muted-foreground",
-              sizeClasses[size],
-              labelClassName,
+              "border-r border-b border-border bg-muted/40 text-sm font-medium text-muted-foreground",
+              sizeClasses[context.size],
+              mergedLabelClassName,
               className
             )}
           >
-            {label}
+            {renderLabel(label, context.colon)}
           </td>
           <td
             className={cn(
               "border-r border-b border-border text-sm",
-              sizeClasses[size],
-              contentClassName
+              sizeClasses[context.size],
+              mergedContentClassName
             )}
-            colSpan={span}
+            colSpan={Math.max(1, span * 2 - 1)}
           >
-            {children}
+            {mergedContent}
           </td>
         </>
       );
     }
 
     return (
-      <div className={cn("flex py-2", className)}>
+      <div
+        ref={ref as React.Ref<HTMLDivElement>}
+        className={cn(
+          context.layout === "vertical" ? "space-y-1 py-2" : "flex gap-2 py-2",
+          className
+        )}
+        style={{ gridColumn: span > 1 ? `span ${span} / span ${span}` : undefined }}
+      >
         {label && (
-          <div className={cn("text-muted-foreground mr-2 font-medium", labelClassName)}>
-            {label}
+          <div className={cn("shrink-0 font-medium text-muted-foreground", mergedLabelClassName)}>
+            {renderLabel(label, context.colon)}
           </div>
         )}
-        <div className={contentClassName}>{children}</div>
+        <div className={cn("min-w-0", mergedContentClassName)}>{mergedContent}</div>
       </div>
     );
   }
@@ -99,11 +135,8 @@ export const DescriptionsItem = React.forwardRef<
 
 DescriptionsItem.displayName = "DescriptionsItem";
 
-export interface DescriptionsItemConfig {
-  key?: string;
-  label?: React.ReactNode;
-  children?: React.ReactNode;
-  span?: number;
+export interface DescriptionsItemConfig extends DescriptionsItemProps {
+  key?: React.Key;
 }
 
 export interface DescriptionsProps {
@@ -111,10 +144,34 @@ export interface DescriptionsProps {
   extra?: React.ReactNode;
   column?: number;
   bordered?: boolean;
+  colon?: boolean;
+  layout?: DescriptionsLayout;
   size?: DescriptionsSize;
   items?: DescriptionsItemConfig[];
   children?: React.ReactNode;
+  labelClassName?: string;
+  contentClassName?: string;
   className?: string;
+}
+
+function chunkItems(items: DescriptionsItemConfig[], column: number) {
+  const rows: DescriptionsItemConfig[][] = [];
+  let currentRow: DescriptionsItemConfig[] = [];
+  let usedSpan = 0;
+
+  items.forEach((item) => {
+    const span = Math.min(Math.max(item.span ?? 1, 1), column);
+    if (usedSpan + span > column && currentRow.length > 0) {
+      rows.push(currentRow);
+      currentRow = [];
+      usedSpan = 0;
+    }
+    currentRow.push({ ...item, span });
+    usedSpan += span;
+  });
+
+  if (currentRow.length > 0) rows.push(currentRow);
+  return rows;
 }
 
 export const Descriptions = React.forwardRef<HTMLDivElement, DescriptionsProps>(
@@ -124,64 +181,85 @@ export const Descriptions = React.forwardRef<HTMLDivElement, DescriptionsProps>(
       extra,
       column = 3,
       bordered = false,
+      colon = true,
+      layout = "horizontal",
       size = "default",
       items,
       children,
+      labelClassName,
+      contentClassName,
       className,
     },
     ref
   ) => {
     const variant = bordered ? "bordered" : "default";
-    const layout = "horizontal";
+    const safeColumn = Math.max(1, column);
+    const rows = items ? chunkItems(items, safeColumn) : [];
 
     return (
       <div ref={ref} data-slot="descriptions" className={className}>
         {(title || extra) && (
-          <div className="flex justify-between mb-3">
-            {title && <h3 className="font-semibold text-base">{title}</h3>}
+          <div className="mb-3 flex items-center justify-between gap-3">
+            {title && <h3 className="text-base font-semibold">{title}</h3>}
             {extra && <div>{extra}</div>}
           </div>
         )}
 
         <DescriptionsContext.Provider
-          value={{ variant, size, layout, column }}
+          value={{
+            variant,
+            size,
+            layout,
+            colon,
+            labelClassName,
+            contentClassName,
+          }}
         >
           {bordered ? (
-            <table className="border border-border rounded-lg overflow-hidden w-full border-collapse">
+            <table className="w-full overflow-hidden rounded border border-collapse border-border">
               <tbody>
                 {items ? (
-                  Array.from({ length: Math.ceil(items.length / column) }).map(
-                    (_, rowIndex) => (
-                      <tr key={rowIndex}>
-                        {items
-                          .slice(
-                            rowIndex * column,
-                            rowIndex * column + column
-                          )
-                          .map((item, colIndex) => (
-                            <React.Fragment key={item.key || colIndex}>
-                              <DescriptionsItem
-                                label={item.label}
-                                span={item.span}
-                              >
-                                {item.children}
-                              </DescriptionsItem>
-                            </React.Fragment>
-                          ))}
-                      </tr>
-                    )
-                  )
+                  rows.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {row.map((item, colIndex) => (
+                        <DescriptionsItem
+                          key={item.key ?? colIndex}
+                          label={item.label}
+                          span={item.span}
+                          className={item.className}
+                          labelClassName={item.labelClassName}
+                          contentClassName={item.contentClassName}
+                        >
+                          {item.content ?? item.children}
+                        </DescriptionsItem>
+                      ))}
+                    </tr>
+                  ))
                 ) : (
                   <tr>{children}</tr>
                 )}
               </tbody>
             </table>
           ) : (
-            <div>{items ? items.map((item) => (
-              <DescriptionsItem key={item.key} label={item.label}>
-                {item.children}
-              </DescriptionsItem>
-            )) : children}</div>
+            <div
+              className="grid gap-x-6"
+              style={{ gridTemplateColumns: `repeat(${safeColumn}, minmax(0, 1fr))` }}
+            >
+              {items
+                ? items.map((item, index) => (
+                    <DescriptionsItem
+                      key={item.key ?? index}
+                      label={item.label}
+                      span={item.span}
+                      className={item.className}
+                      labelClassName={item.labelClassName}
+                      contentClassName={item.contentClassName}
+                    >
+                      {item.content ?? item.children}
+                    </DescriptionsItem>
+                  ))
+                : children}
+            </div>
           )}
         </DescriptionsContext.Provider>
       </div>

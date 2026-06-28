@@ -166,8 +166,8 @@ export function TableColumnHeader<TData, TValue>({
         <DropdownMenuTrigger asChild>
           <Button
             className="-ml-3 h-8 data-[state=open]:bg-accent"
-            size="sm"
-            variant="ghost"
+            size="small"
+            variant="text"
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (

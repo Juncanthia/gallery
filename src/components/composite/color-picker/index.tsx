@@ -17,13 +17,7 @@ import {
 } from "react";
 import { Button } from "@/components/base/button";
 import { Input } from "@/components/base/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/base/select";
+import { Select, type SelectSingleApiProps } from "@/components/base/select";
 import { cn } from "@/lib/utils";
 
 type ColorPickerContextValue = {
@@ -292,9 +286,9 @@ export const ColorPickerEyeDropper = ({
     <Button
       className={cn("shrink-0 text-muted-foreground", className)}
       onClick={handleEyeDropper}
-      size="icon"
-      type="button"
-      variant="outline"
+      shape="square"
+      htmlType="button"
+      variant="outlined"
       {...props}
     >
       <PipetteIcon size={16} />
@@ -302,9 +296,16 @@ export const ColorPickerEyeDropper = ({
   );
 };
 
-export type ColorPickerOutputProps = ComponentProps<typeof SelectTrigger>;
+export type ColorPickerOutputProps = Omit<
+  SelectSingleApiProps,
+  "mode" | "onValueChange" | "options" | "value"
+>;
 
 const formats = ["hex", "rgb", "css", "hsl"];
+const formatOptions = formats.map((format) => ({
+  label: format.toUpperCase(),
+  value: format,
+}));
 
 export const ColorPickerOutput = ({
   className,
@@ -313,18 +314,18 @@ export const ColorPickerOutput = ({
   const { mode, setMode } = useColorPicker();
 
   return (
-    <Select onValueChange={setMode} value={mode}>
-      <SelectTrigger className="h-8 w-20 shrink-0 text-xs" {...props}>
-        <SelectValue placeholder="Mode" />
-      </SelectTrigger>
-      <SelectContent>
-        {formats.map((format) => (
-          <SelectItem className="text-xs" key={format} value={format}>
-            {format.toUpperCase()}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Select
+      className={cn("h-8 w-20 shrink-0 text-xs", className)}
+      onValueChange={(value: string | undefined) => {
+        if (value) {
+          setMode(value);
+        }
+      }}
+      options={formatOptions}
+      placeholder="Mode"
+      value={mode}
+      {...props}
+    />
   );
 };
 

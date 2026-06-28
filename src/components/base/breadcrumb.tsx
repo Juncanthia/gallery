@@ -4,14 +4,123 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 import { ChevronRight as ChevronRightIcon, MoveHorizontal as MoreHorizontalIcon } from "lucide-react"
 
-function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
+type BreadcrumbParams = Record<string, string | number>
+
+type BreadcrumbRouteItem = {
+  key?: React.Key
+  title: React.ReactNode
+  href?: string
+  path?: string
+  onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLSpanElement>
+  className?: string
+}
+
+type BreadcrumbSeparatorItem = {
+  key?: React.Key
+  type: "separator"
+  separator?: React.ReactNode
+}
+
+type BreadcrumbItemOption = BreadcrumbRouteItem | BreadcrumbSeparatorItem
+
+type BreadcrumbProps = Omit<React.ComponentProps<"nav">, "children"> & {
+  children?: React.ReactNode
+  itemRender?: (
+    item: BreadcrumbItemOption,
+    params: BreadcrumbParams,
+    items: BreadcrumbItemOption[],
+    paths: string[],
+  ) => React.ReactNode
+  items?: BreadcrumbItemOption[]
+  params?: BreadcrumbParams
+  separator?: React.ReactNode
+}
+
+function isSeparatorItem(item: BreadcrumbItemOption): item is BreadcrumbSeparatorItem {
+  return "type" in item && item.type === "separator"
+}
+
+function mergePath(path: string, params: BreadcrumbParams) {
+  return path.replace(/^\//, "").replace(/:([^/]+)/g, (_, key: string) => String(params[key] ?? `:${key}`))
+}
+
+function renderTitle(title: React.ReactNode, params: BreadcrumbParams) {
+  if (typeof title !== "string") {
+    return title
+  }
+
+  return title.replace(/:([^/]+)/g, (_, key: string) => String(params[key] ?? `:${key}`))
+}
+
+function Breadcrumb({
+  children,
+  className,
+  itemRender,
+  items,
+  params = {},
+  separator,
+  ...props
+}: BreadcrumbProps) {
+  if (!items?.length) {
+    return (
+      <nav
+        aria-label="breadcrumb"
+        data-slot="breadcrumb"
+        className={cn(className)}
+        {...props}
+      >
+        {children}
+      </nav>
+    )
+  }
+
+  const paths: string[] = []
+
   return (
     <nav
       aria-label="breadcrumb"
       data-slot="breadcrumb"
       className={cn(className)}
       {...props}
-    />
+    >
+      <BreadcrumbList>
+        {items.map((item, index) => {
+          const key = item.key ?? index
+
+          if (isSeparatorItem(item)) {
+            return <BreadcrumbSeparator key={key}>{item.separator}</BreadcrumbSeparator>
+          }
+
+          const routeItem = item
+          const mergedPath = routeItem.path ? mergePath(routeItem.path, params) : undefined
+
+          if (mergedPath !== undefined) {
+            paths.push(mergedPath)
+          }
+
+          const isLast = index === items.length - 1
+          const href = routeItem.href ?? (paths.length > 0 && mergedPath !== undefined ? `/${paths.join("/")}` : undefined)
+          const title = renderTitle(routeItem.title, params)
+          const originalNode = href && !isLast ? (
+            <BreadcrumbLink href={href} onClick={routeItem.onClick} className={routeItem.className}>
+              {title}
+            </BreadcrumbLink>
+          ) : (
+            <BreadcrumbPage onClick={routeItem.onClick} className={routeItem.className}>
+              {title}
+            </BreadcrumbPage>
+          )
+          const node = itemRender?.(item, params, items, paths) ?? originalNode
+
+          return (
+            <React.Fragment key={key}>
+              <BreadcrumbItem>{node}</BreadcrumbItem>
+              {!isLast && <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>}
+            </React.Fragment>
+          )
+        })}
+      </BreadcrumbList>
+    </nav>
   )
 }
 
@@ -119,4 +228,7 @@ export {
   BreadcrumbPage,
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
+  type BreadcrumbItemOption,
+  type BreadcrumbParams,
+  type BreadcrumbProps,
 }

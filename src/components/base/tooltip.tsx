@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {
   TooltipProvider as TooltipProviderPrimitive,
   Tooltip as TooltipPrimitive,
@@ -20,10 +22,24 @@ function TooltipProvider({
   return <TooltipProviderPrimitive delayDuration={delayDuration} {...props} />;
 }
 
-type TooltipProps = TooltipPrimitiveProps;
+type TooltipProps = TooltipPrimitiveProps & {
+  title?: React.ReactNode;
+  contentProps?: TooltipContentProps;
+};
 
-function Tooltip(props: TooltipProps) {
-  return <TooltipPrimitive {...props} />;
+function Tooltip({ title, contentProps, children, ...props }: TooltipProps) {
+  if (title === undefined && contentProps === undefined) {
+    return <TooltipPrimitive {...props}>{children}</TooltipPrimitive>;
+  }
+
+  return (
+    <TooltipPrimitive {...props}>
+      <TooltipTrigger asChild>
+        {React.isValidElement(children) ? children : <span>{children}</span>}
+      </TooltipTrigger>
+      <TooltipContent {...contentProps}>{title}</TooltipContent>
+    </TooltipPrimitive>
+  );
 }
 
 type TooltipTriggerProps = TooltipTriggerPrimitiveProps;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { LoaderCircle } from 'lucide-react';
 
 import {
   Switch as SwitchPrimitive,
@@ -8,64 +9,120 @@ import {
 } from '@/primitives/radix/switch';
 import { cn } from '@/lib/utils';
 
-type SwitchProps = SwitchPrimitiveProps & {
+type SwitchSize = 'small' | 'middle';
+
+const switchSizeClasses: Record<SwitchSize, string> = {
+  small: 'h-4 w-7',
+  middle: 'h-5 w-8',
+};
+
+const switchWithContentSizeClasses: Record<SwitchSize, string> = {
+  small: 'h-4 min-w-9',
+  middle: 'h-5 min-w-11',
+};
+
+const switchThumbSizeClasses: Record<SwitchSize, string> = {
+  small: 'size-3',
+  middle: 'size-4',
+};
+
+const switchPressedWidths: Record<SwitchSize, number> = {
+  small: 15,
+  middle: 19,
+};
+
+type SwitchProps = Omit<SwitchPrimitiveProps, 'onChange'> & {
+  size?: SwitchSize;
+  loading?: boolean;
   pressedWidth?: number;
-  startIcon?: React.ReactElement;
-  endIcon?: React.ReactElement;
+  checkedChildren?: React.ReactNode;
+  unCheckedChildren?: React.ReactNode;
   thumbIcon?: React.ReactElement;
+  onChange?: (checked: boolean) => void;
 };
 
 function Switch({
   className,
-  pressedWidth = 19,
-  startIcon,
-  endIcon,
+  size = 'middle',
+  loading,
+  disabled,
+  pressedWidth,
+  checkedChildren,
+  unCheckedChildren,
   thumbIcon,
+  onCheckedChange,
+  onChange,
   ...props
 }: SwitchProps) {
+  const hasContent = checkedChildren !== undefined || unCheckedChildren !== undefined;
+  const mergedDisabled = disabled || loading;
+  const mergedThumbIcon = loading ? (
+    <LoaderCircle className="animate-spin" />
+  ) : (
+    thumbIcon
+  );
+
+  const handleCheckedChange = React.useCallback(
+    (checked: boolean) => {
+      onCheckedChange?.(checked);
+      onChange?.(checked);
+    },
+    [onChange, onCheckedChange],
+  );
+
   return (
     <SwitchPrimitive
       className={cn(
-        'relative peer focus-visible:border-ring focus-visible:ring-ring/50 flex h-5 w-8 px-px shrink-0 items-center justify-start rounded-full border border-transparent shadow-xs outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+        'relative peer focus-visible:border-ring focus-visible:ring-ring/50 flex px-px shrink-0 items-center justify-start rounded-full border border-transparent shadow-xs outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
         'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 data-[state=checked]:justify-end',
+        hasContent ? switchWithContentSizeClasses[size] : switchSizeClasses[size],
         className,
       )}
+      disabled={mergedDisabled}
+      onCheckedChange={handleCheckedChange}
       {...props}
     >
       <SwitchThumbPrimitive
         className={cn(
-          'relative z-10 bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0',
+          'relative z-10 bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block rounded-full ring-0',
+          switchThumbSizeClasses[size],
         )}
-        pressedAnimation={{ width: pressedWidth }}
+        pressedAnimation={{ width: pressedWidth ?? switchPressedWidths[size] }}
       >
-        {thumbIcon && (
+        {mergedThumbIcon && (
           <SwitchIconPrimitive
             position="thumb"
             className="absolute [&_svg]:size-[9px] left-1/2 top-1/2 -translate-1/2 dark:text-neutral-500 text-neutral-400"
           >
-            {thumbIcon}
+            {mergedThumbIcon}
           </SwitchIconPrimitive>
         )}
       </SwitchThumbPrimitive>
 
-      {startIcon && (
+      {checkedChildren !== undefined && (
         <SwitchIconPrimitive
           position="left"
-          className="absolute [&_svg]:size-[9px] left-0.5 top-1/2 -translate-y-1/2 dark:text-neutral-500 text-neutral-400"
+          className={cn(
+            'pointer-events-none absolute left-1.5 top-1/2 -translate-y-1/2 text-[10px] leading-none text-primary-foreground [&_svg]:size-[9px]',
+            size === 'small' && 'left-1 text-[9px]',
+          )}
         >
-          {startIcon}
+          {checkedChildren}
         </SwitchIconPrimitive>
       )}
-      {endIcon && (
+      {unCheckedChildren !== undefined && (
         <SwitchIconPrimitive
           position="right"
-          className="absolute [&_svg]:size-[9px] right-0.5 top-1/2 -translate-y-1/2 dark:text-neutral-400 text-neutral-500"
+          className={cn(
+            'pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px] leading-none text-muted-foreground [&_svg]:size-[9px]',
+            size === 'small' && 'right-1 text-[9px]',
+          )}
         >
-          {endIcon}
+          {unCheckedChildren}
         </SwitchIconPrimitive>
       )}
     </SwitchPrimitive>
   );
 }
 
-export { Switch, type SwitchProps };
+export { Switch, type SwitchProps, type SwitchSize };

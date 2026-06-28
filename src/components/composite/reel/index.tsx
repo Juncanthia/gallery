@@ -555,9 +555,9 @@ export const ReelPreviousButton = ({
       )}
       disabled={currentIndex === 0}
       onClick={handlePrevious}
-      size="icon"
-      type="button"
-      variant="ghost"
+      shape="square"
+      htmlType="button"
+      variant="text"
       {...props}
     >
       {children || <ChevronLeft className="size-4" />}
@@ -594,9 +594,9 @@ export const ReelNextButton = ({
       )}
       disabled={currentIndex === totalItems - 1}
       onClick={handleNext}
-      size="icon"
-      type="button"
-      variant="ghost"
+      shape="square"
+      htmlType="button"
+      variant="text"
       {...props}
     >
       {children || <ChevronRight className="size-4" />}
@@ -621,8 +621,8 @@ export const ReelPlayButton = ({
         className
       )}
       onClick={() => setIsPlaying(!isPlaying)}
-      size="icon"
-      variant="ghost"
+      shape="square"
+      variant="text"
       {...props}
     >
       {children ||
@@ -652,8 +652,8 @@ export const ReelMuteButton = ({
         className
       )}
       onClick={() => setIsMuted(!isMuted)}
-      size="icon"
-      variant="ghost"
+      shape="square"
+      variant="text"
       {...props}
     >
       {children ||

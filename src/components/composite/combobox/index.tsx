@@ -147,7 +147,7 @@ export const ComboboxTrigger = ({
 
   return (
     <PopoverTrigger asChild>
-      <Button variant="outline" {...props} ref={ref}>
+      <Button variant="outlined" {...props} ref={ref}>
         {children ?? (
           <span className="flex w-full items-center justify-between gap-2">
             {value
@@ -407,7 +407,7 @@ export const TagsTrigger = ({
       className={cn("h-auto w-full justify-between p-2", className)}
       // biome-ignore lint/a11y/useSemanticElements: "Required"
       role="combobox"
-      variant="outline"
+      variant="outlined"
       {...props}
     >
       <div className="flex flex-wrap items-center gap-1">

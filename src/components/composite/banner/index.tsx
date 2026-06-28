@@ -93,8 +93,8 @@ export const BannerTitle = ({ className, ...props }: BannerTitleProps) => (
 export type BannerActionProps = ComponentProps<typeof Button>;
 
 export const BannerAction = ({
-  variant = "outline",
-  size = "sm",
+  variant = "outlined",
+  size = "small",
   className,
   ...props
 }: BannerActionProps) => (
@@ -112,8 +112,9 @@ export const BannerAction = ({
 export type BannerCloseProps = ComponentProps<typeof Button>;
 
 export const BannerClose = ({
-  variant = "ghost",
-  size = "icon",
+  variant = "text",
+  size = "small",
+  shape = "square",
   onClick,
   className,
   ...props
@@ -133,6 +134,7 @@ export const BannerClose = ({
       )}
       onClick={handleClick}
       size={size}
+      shape={shape}
       variant={variant}
       {...props}
     >

@@ -180,7 +180,7 @@ export function TimePicker({
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button
-            variant="outline"
+            variant="outlined"
             disabled={disabled}
             className={cn('w-full justify-start gap-2', triggerClassName)}
           >

@@ -1,22 +1,96 @@
 import * as React from "react"
 
+import { Skeleton } from "@/components/base/skeleton"
 import { cn } from "@/lib/utils"
+
+type CardSize = "default" | "sm" | "small"
+type CardVariant = "outlined" | "borderless"
+
+type CardProps = Omit<React.ComponentProps<"div">, "title"> & {
+  title?: React.ReactNode
+  description?: React.ReactNode
+  extra?: React.ReactNode
+  cover?: React.ReactNode
+  actions?: React.ReactNode[]
+  loading?: boolean
+  hoverable?: boolean
+  size?: CardSize
+  variant?: CardVariant
+  headerClassName?: string
+  bodyClassName?: string
+  actionsClassName?: string
+}
 
 function Card({
   className,
+  title,
+  description,
+  extra,
+  cover,
+  actions,
+  loading,
+  hoverable,
   size = "default",
+  variant = "outlined",
+  headerClassName,
+  bodyClassName,
+  actionsClassName,
+  children,
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: CardProps) {
+  const mergedSize = size === "small" ? "sm" : size
+  const hasApiContent =
+    title !== undefined ||
+    description !== undefined ||
+    extra !== undefined ||
+    cover !== undefined ||
+    actions !== undefined ||
+    loading !== undefined
+
   return (
     <div
       data-slot="card"
-      data-size={size}
+      data-size={mergedSize}
       className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-xs [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        variant === "outlined" && "ring-1 ring-foreground/10",
+        variant === "borderless" && "shadow-none ring-0",
+        hoverable && "transition-shadow hover:shadow-md",
         className
       )}
       {...props}
-    />
+    >
+      {hasApiContent ? (
+        <>
+          {cover && <div data-slot="card-cover">{cover}</div>}
+          {(title || description || extra) && (
+            <CardHeader className={headerClassName}>
+              <div>
+                {title && <CardTitle>{title}</CardTitle>}
+                {description && <CardDescription>{description}</CardDescription>}
+              </div>
+              {extra && <CardAction>{extra}</CardAction>}
+            </CardHeader>
+          )}
+          <CardContent className={bodyClassName}>
+            {loading ? <Skeleton active paragraph={{ rows: 4 }} title={false} /> : children}
+          </CardContent>
+          {actions?.length ? (
+            <CardFooter className={cn("border-t px-0 pt-0", actionsClassName)}>
+              <div className="grid w-full grid-flow-col divide-x divide-border">
+                {actions.map((action, index) => (
+                  <div key={index} className="flex items-center justify-center px-3 py-2">
+                    {action}
+                  </div>
+                ))}
+              </div>
+            </CardFooter>
+          ) : null}
+        </>
+      ) : (
+        children
+      )}
+    </div>
   )
 }
 
@@ -101,3 +175,4 @@ export {
   CardDescription,
   CardContent,
 }
+export type { CardProps, CardSize, CardVariant }

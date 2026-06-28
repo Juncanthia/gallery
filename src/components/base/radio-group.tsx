@@ -1,4 +1,6 @@
 import { Circle as CircleIcon } from 'lucide-react';
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 import {
   RadioGroup as RadioGroupPrimitive,
@@ -9,27 +11,124 @@ import {
 } from '@/primitives/radix/radio-group';
 import { cn } from '@/lib/utils';
 
-type RadioGroupProps = RadioGroupPrimitiveProps;
+const radioGroupItemVariants = cva(
+  'border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+  {
+    variants: {
+      size: {
+        small: 'size-3.5',
+        middle: 'size-4',
+        large: 'size-5',
+      },
+    },
+    defaultVariants: {
+      size: 'middle',
+    },
+  },
+);
 
-function RadioGroup({ className, ...props }: RadioGroupProps) {
+const radioGroupIndicatorVariants = cva(
+  'fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+  {
+    variants: {
+      size: {
+        small: 'size-1.5',
+        middle: 'size-2',
+        large: 'size-2.5',
+      },
+    },
+    defaultVariants: {
+      size: 'middle',
+    },
+  },
+);
+
+type RadioGroupSize = NonNullable<VariantProps<typeof radioGroupItemVariants>['size']>;
+
+type RadioGroupOption = {
+  label: React.ReactNode;
+  value: string;
+  disabled?: boolean;
+  className?: string;
+  labelClassName?: string;
+  title?: string;
+  id?: string;
+  required?: boolean;
+};
+
+type RadioGroupProps = Omit<RadioGroupPrimitiveProps, 'children'> & {
+  children?: React.ReactNode;
+  options?: RadioGroupOption[];
+  size?: RadioGroupSize;
+  direction?: 'horizontal' | 'vertical';
+  optionClassName?: string;
+  labelClassName?: string;
+};
+
+function RadioGroup({
+  className,
+  children,
+  options,
+  size = 'middle',
+  direction = 'vertical',
+  optionClassName,
+  labelClassName,
+  disabled,
+  orientation,
+  ...props
+}: RadioGroupProps) {
   return (
-    <RadioGroupPrimitive className={cn('grid gap-3', className)} {...props} />
+    <RadioGroupPrimitive
+      className={cn(
+        'gap-3',
+        direction === 'vertical' ? 'grid' : 'flex flex-row flex-wrap',
+        className,
+      )}
+      disabled={disabled}
+      orientation={orientation ?? direction}
+      {...props}
+    >
+      {options?.length
+        ? options.map((option) => (
+            <label
+              className={cn(
+                'inline-flex items-center gap-2 text-sm leading-none font-normal',
+                (disabled || option.disabled) && 'cursor-not-allowed opacity-60',
+                optionClassName,
+                option.className,
+              )}
+              key={option.value}
+              title={option.title}
+            >
+              <RadioGroupItem
+                disabled={disabled || option.disabled}
+                id={option.id}
+                required={option.required}
+                size={size}
+                value={option.value}
+              />
+              <span className={cn('select-none', labelClassName, option.labelClassName)}>
+                {option.label}
+              </span>
+            </label>
+          ))
+        : children}
+    </RadioGroupPrimitive>
   );
 }
 
-type RadioGroupItemProps = RadioGroupItemPrimitiveProps;
+type RadioGroupItemProps = RadioGroupItemPrimitiveProps & {
+  size?: RadioGroupSize;
+};
 
-function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {
+function RadioGroupItem({ className, size = 'middle', ...props }: RadioGroupItemProps) {
   return (
     <RadioGroupItemPrimitive
-      className={cn(
-        'border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
-        className,
-      )}
+      className={cn(radioGroupItemVariants({ size }), className)}
       {...props}
     >
       <RadioGroupIndicatorPrimitive className="relative flex items-center justify-center">
-        <CircleIcon className="fill-primary absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2" />
+        <CircleIcon className={radioGroupIndicatorVariants({ size })} />
       </RadioGroupIndicatorPrimitive>
     </RadioGroupItemPrimitive>
   );
@@ -38,6 +137,8 @@ function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {
 export {
   RadioGroup,
   RadioGroupItem,
+  type RadioGroupOption,
   type RadioGroupProps,
   type RadioGroupItemProps,
+  type RadioGroupSize,
 };

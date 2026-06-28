@@ -75,6 +75,11 @@ export const Dropzone = ({
     },
     ...props,
   });
+  const rootProps = getRootProps() as Omit<
+    ReturnType<typeof getRootProps>,
+    "color"
+  >;
+  delete (rootProps as { color?: unknown }).color;
 
   return (
     <DropzoneContext.Provider
@@ -88,9 +93,9 @@ export const Dropzone = ({
           className
         )}
         disabled={disabled}
-        type="button"
-        variant="outline"
-        {...getRootProps()}
+        htmlType="button"
+        variant="outlined"
+        {...rootProps}
       >
         <input {...getInputProps()} disabled={disabled} />
         {children}

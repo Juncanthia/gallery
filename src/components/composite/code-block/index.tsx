@@ -102,6 +102,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  type SelectLegacyProps,
 } from "@/components/base/select";
 import { cn } from "@/lib/utils";
 
@@ -413,7 +414,7 @@ export const CodeBlockFilename = ({
   );
 };
 
-export type CodeBlockSelectProps = ComponentProps<typeof Select>;
+export type CodeBlockSelectProps = SelectLegacyProps;
 
 export const CodeBlockSelect = (props: CodeBlockSelectProps) => {
   const { value, onValueChange } = useContext(CodeBlockContext);
@@ -490,8 +491,8 @@ export const CodeBlockCopyButton = ({
       onCopiedChange={(copied) => {
         if (copied) onCopy?.();
       }}
-      size="icon"
-      variant="ghost"
+      shape="square"
+      variant="text"
       {...props}
     />
   );

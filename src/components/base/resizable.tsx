@@ -1,8 +1,58 @@
 "use client"
 
+import * as React from "react"
 import * as ResizablePrimitive from "react-resizable-panels"
 
 import { cn } from "@/lib/utils"
+
+type ResizableItem = Omit<
+  ResizablePrimitive.PanelProps,
+  "children" | "content"
+> & {
+  key?: React.Key
+  content?: React.ReactNode
+  children?: React.ReactNode
+}
+
+type ResizableProps = Omit<ResizablePrimitive.GroupProps, "children"> & {
+  items?: ResizableItem[]
+  children?: React.ReactNode
+  withHandle?: boolean
+  handleClassName?: string
+}
+
+function Resizable({
+  items,
+  children,
+  withHandle = true,
+  handleClassName,
+  orientation = "horizontal",
+  ...props
+}: ResizableProps) {
+  if (!items) {
+    return (
+      <ResizablePanelGroup orientation={orientation} {...props}>
+        {children}
+      </ResizablePanelGroup>
+    )
+  }
+
+  return (
+    <ResizablePanelGroup orientation={orientation} {...props}>
+      {items.map(({ key, content, children: panelChildren, ...item }, index) => (
+        <React.Fragment key={key ?? index}>
+          <ResizablePanel {...item}>{content ?? panelChildren}</ResizablePanel>
+          {index < items.length - 1 && (
+            <ResizableHandle
+              withHandle={withHandle}
+              className={handleClassName}
+            />
+          )}
+        </React.Fragment>
+      ))}
+    </ResizablePanelGroup>
+  )
+}
 
 function ResizablePanelGroup({
   className,
@@ -47,4 +97,5 @@ function ResizableHandle({
   )
 }
 
-export { ResizableHandle, ResizablePanel, ResizablePanelGroup }
+export { Resizable, ResizableHandle, ResizablePanel, ResizablePanelGroup }
+export type { ResizableProps, ResizableItem }

@@ -1,3 +1,7 @@
+import * as React from 'react';
+import { Bone as XIcon } from 'lucide-react';
+
+import { Button } from '@/components/base/button';
 import {
   Sheet as SheetPrimitive,
   SheetTrigger as SheetTriggerPrimitive,
@@ -20,12 +24,72 @@ import {
   type SheetDescriptionProps as SheetDescriptionPrimitiveProps,
 } from '@/primitives/radix/sheet';
 import { cn } from '@/lib/utils';
-import { Bone as XIcon } from 'lucide-react';
 
-type SheetProps = SheetPrimitiveProps;
+type SheetProps = SheetPrimitiveProps & {
+  trigger?: React.ReactNode;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  footer?: React.ReactNode;
+  side?: SheetContentProps['side'];
+  showCloseButton?: boolean;
+  contentProps?: Omit<SheetContentProps, 'children' | 'side' | 'showCloseButton'>;
+};
 
-function Sheet(props: SheetProps) {
-  return <SheetPrimitive {...props} />;
+function renderSheetTrigger(trigger: React.ReactNode) {
+  if (trigger === undefined) return null;
+
+  return (
+    <SheetTrigger asChild>
+      {React.isValidElement(trigger) ? trigger : <Button>{trigger}</Button>}
+    </SheetTrigger>
+  );
+}
+
+function Sheet({
+  trigger,
+  title,
+  description,
+  footer,
+  side,
+  showCloseButton,
+  contentProps,
+  children,
+  ...props
+}: SheetProps) {
+  const hasApiContent =
+    trigger !== undefined ||
+    title !== undefined ||
+    description !== undefined ||
+    footer !== undefined ||
+    side !== undefined ||
+    showCloseButton !== undefined ||
+    contentProps !== undefined;
+
+  if (!hasApiContent) {
+    return <SheetPrimitive {...props}>{children}</SheetPrimitive>;
+  }
+
+  return (
+    <SheetPrimitive {...props}>
+      {renderSheetTrigger(trigger)}
+      <SheetContent
+        side={side}
+        showCloseButton={showCloseButton}
+        {...contentProps}
+      >
+        {(title !== undefined || description !== undefined) && (
+          <SheetHeader>
+            {title !== undefined && <SheetTitle>{title}</SheetTitle>}
+            {description !== undefined && (
+              <SheetDescription>{description}</SheetDescription>
+            )}
+          </SheetHeader>
+        )}
+        <div className="px-4 pb-4">{children}</div>
+        {footer !== undefined && <SheetFooter>{footer}</SheetFooter>}
+      </SheetContent>
+    </SheetPrimitive>
+  );
 }
 
 type SheetTriggerProps = SheetTriggerPrimitiveProps;

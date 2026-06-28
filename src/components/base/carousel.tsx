@@ -17,6 +17,16 @@ type CarouselProps = {
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
+  items?: CarouselItemOption[]
+  arrows?: boolean
+  contentClassName?: string
+  itemClassName?: string
+}
+
+type CarouselItemOption = {
+  key?: React.Key
+  content: React.ReactNode
+  className?: string
 }
 
 type CarouselContextProps = {
@@ -45,6 +55,10 @@ function Carousel({
   opts,
   setApi,
   plugins,
+  items,
+  arrows = true,
+  contentClassName,
+  itemClassName,
   className,
   children,
   ...props
@@ -93,14 +107,38 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return
-    onSelect(api)
+    const frame = window.requestAnimationFrame(() => onSelect(api))
     api.on("reInit", onSelect)
     api.on("select", onSelect)
 
     return () => {
+      window.cancelAnimationFrame(frame)
       api?.off("select", onSelect)
     }
   }, [api, onSelect])
+
+  const renderedChildren = items ? (
+    <>
+      <CarouselContent className={contentClassName}>
+        {items.map((item, index) => (
+          <CarouselItem
+            key={item.key ?? index}
+            className={cn(itemClassName, item.className)}
+          >
+            {item.content}
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      {arrows && (
+        <>
+          <CarouselPrevious />
+          <CarouselNext />
+        </>
+      )}
+    </>
+  ) : (
+    children
+  )
 
   return (
     <CarouselContext.Provider
@@ -124,7 +162,7 @@ function Carousel({
         data-slot="carousel"
         {...props}
       >
-        {children}
+        {renderedChildren}
       </div>
     </CarouselContext.Provider>
   )
@@ -171,8 +209,9 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 
 function CarouselPrevious({
   className,
-  variant = "outline",
-  size = "icon-sm",
+  variant = "outlined",
+  size = "small",
+  shape = "circle",
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
@@ -182,6 +221,7 @@ function CarouselPrevious({
       data-slot="carousel-previous"
       variant={variant}
       size={size}
+      shape={shape}
       className={cn(
         "absolute touch-manipulation rounded-full",
         orientation === "horizontal"
@@ -201,8 +241,9 @@ function CarouselPrevious({
 
 function CarouselNext({
   className,
-  variant = "outline",
-  size = "icon-sm",
+  variant = "outlined",
+  size = "small",
+  shape = "circle",
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
@@ -212,6 +253,7 @@ function CarouselNext({
       data-slot="carousel-next"
       variant={variant}
       size={size}
+      shape={shape}
       className={cn(
         "absolute touch-manipulation rounded-full",
         orientation === "horizontal"
@@ -236,5 +278,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-  useCarousel,
+  type CarouselItemOption,
 }

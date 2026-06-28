@@ -1,10 +1,17 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import {
+  CheckCircle,
+  CircleX,
+  Info,
+  TriangleAlert,
+  X,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
-  "group/alert relative grid w-full gap-0.5 rounded-lg border px-4 py-3 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2.5 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4",
+  "group/alert relative grid w-full gap-0.5 rounded border px-4 py-3 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2.5 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -19,18 +26,122 @@ const alertVariants = cva(
   }
 )
 
+type AlertType = "success" | "info" | "warning" | "error"
+
+type AlertProps = Omit<React.ComponentProps<"div">, "title"> &
+  VariantProps<typeof alertVariants> & {
+    type?: AlertType
+    title?: React.ReactNode
+    message?: React.ReactNode
+    description?: React.ReactNode
+    icon?: React.ReactNode
+    showIcon?: boolean
+    action?: React.ReactNode
+    closable?: boolean
+    closeText?: React.ReactNode
+    onClose?: React.MouseEventHandler<HTMLButtonElement>
+  }
+
+const alertTypeClasses: Record<AlertType, string> = {
+  success:
+    "border-green-500/40 bg-green-500/10 text-green-700 dark:text-green-400",
+  info: "border-blue-500/40 bg-blue-500/10 text-blue-700 dark:text-blue-400",
+  warning:
+    "border-yellow-500/40 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
+  error:
+    "border-destructive/40 bg-destructive/10 text-destructive *:data-[slot=alert-description]:text-destructive/90",
+}
+
+const alertIcons: Record<AlertType, React.ReactNode> = {
+  success: <CheckCircle />,
+  info: <Info />,
+  warning: <TriangleAlert />,
+  error: <CircleX />,
+}
+
 function Alert({
   className,
   variant,
+  type,
+  title,
+  message,
+  description,
+  icon,
+  showIcon,
+  action,
+  closable,
+  closeText,
+  onClose,
+  children,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+}: AlertProps) {
+  const [closed, setClosed] = React.useState(false)
+  const mergedTitle = title ?? message
+  const hasApiContent =
+    type !== undefined ||
+    mergedTitle !== undefined ||
+    description !== undefined ||
+    icon !== undefined ||
+    showIcon !== undefined ||
+    action !== undefined ||
+    closable !== undefined ||
+    closeText !== undefined ||
+    onClose !== undefined
+  const mergedType = type ?? (variant === "destructive" ? "error" : "info")
+  const shouldShowIcon = showIcon ?? type !== undefined
+
+  if (closed) return null
+
+  if (!hasApiContent) {
+    return (
+      <div
+        data-slot="alert"
+        role="alert"
+        className={cn(alertVariants({ variant }), className)}
+        {...props}
+      >
+        {children}
+      </div>
+    )
+  }
+
+  const handleClose: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    onClose?.(event)
+    if (!event.defaultPrevented) setClosed(true)
+  }
+
   return (
     <div
       data-slot="alert"
       role="alert"
-      className={cn(alertVariants({ variant }), className)}
+      className={cn(
+        alertVariants({ variant: mergedType === "error" ? "destructive" : variant }),
+        alertTypeClasses[mergedType],
+        (closable || closeText) && "pr-10",
+        className
+      )}
       {...props}
-    />
+    >
+      {shouldShowIcon && (icon ?? alertIcons[mergedType])}
+      <div className={cn(shouldShowIcon && "col-start-2")}>
+        {mergedTitle !== undefined && <AlertTitle>{mergedTitle}</AlertTitle>}
+        {description !== undefined && (
+          <AlertDescription>{description}</AlertDescription>
+        )}
+        {children}
+      </div>
+      {action !== undefined && <AlertAction>{action}</AlertAction>}
+      {(closable || closeText) && (
+        <button
+          type="button"
+          className="absolute right-3 top-2.5 inline-flex size-5 items-center justify-center rounded opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          onClick={handleClose}
+        >
+          {closeText ?? <X className="size-4" />}
+          <span className="sr-only">Close</span>
+        </button>
+      )}
+    </div>
   )
 }
 
@@ -74,3 +185,4 @@ function AlertAction({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 export { Alert, AlertTitle, AlertDescription, AlertAction }
+export type { AlertProps, AlertType }

@@ -63,8 +63,8 @@ function CodeHeader({
       {copyButton && (
         <CopyButton
           content={code}
-          size="xs"
-          variant="ghost"
+          size="small"
+          variant="text"
           className="ml-auto w-auto h-auto p-2 -mr-2"
         />
       )}

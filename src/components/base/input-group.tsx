@@ -4,7 +4,6 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/base/button"
 import { Input } from "@/components/base/input"
-import { Textarea } from "@/components/base/textarea"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -83,15 +82,15 @@ const inputGroupButtonVariants = cva(
 
 function InputGroupButton({
   className,
-  type = "button",
-  variant = "ghost",
+  htmlType = "button",
+  variant = "text",
   size = "xs",
   ...props
 }: Omit<React.ComponentProps<typeof Button>, "size"> &
   VariantProps<typeof inputGroupButtonVariants>) {
   return (
     <Button
-      type={type}
+      htmlType={htmlType}
       data-size={size}
       variant={variant}
       className={cn(inputGroupButtonVariants({ size }), className)}
@@ -115,7 +114,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
 function InputGroupInput({
   className,
   ...props
-}: React.ComponentProps<"input">) {
+}: Omit<React.ComponentProps<"input">, "ref" | "size">) {
   return (
     <Input
       data-slot="input-group-control"
@@ -131,9 +130,9 @@ function InputGroupInput({
 function InputGroupTextarea({
   className,
   ...props
-}: React.ComponentProps<"textarea">) {
+}: Omit<React.ComponentProps<"textarea">, "ref">) {
   return (
-    <Textarea
+    <Input.TextArea
       data-slot="input-group-control"
       className={cn(
         "flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent",

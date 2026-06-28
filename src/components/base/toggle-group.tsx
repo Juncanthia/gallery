@@ -1,4 +1,5 @@
 import { type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
 
 import {
   ToggleGroup as ToggleGroupPrimitive,
@@ -17,13 +18,28 @@ const [ToggleGroupProvider, useToggleGroup] =
   getStrictContext<VariantProps<typeof toggleVariants>>('ToggleGroupContext');
 
 type ToggleGroupProps = ToggleGroupPrimitiveProps &
-  VariantProps<typeof toggleVariants>;
+  VariantProps<typeof toggleVariants> & {
+    options?: ToggleGroupOption[];
+    direction?: 'horizontal' | 'vertical';
+  };
+
+type ToggleGroupOption = {
+  label: React.ReactNode;
+  value: string;
+  disabled?: boolean;
+  className?: string;
+  title?: string;
+  'aria-label'?: string;
+};
 
 function ToggleGroup({
   className,
   variant,
   size,
   children,
+  options,
+  direction = 'horizontal',
+  orientation,
   ...props
 }: ToggleGroupProps) {
   return (
@@ -32,17 +48,45 @@ function ToggleGroup({
       data-size={size}
       className={cn(
         'group/toggle-group flex gap-0.5 w-fit items-center rounded-lg data-[variant=outline]:shadow-xs data-[variant=outline]:border data-[variant=outline]:p-0.5',
+        direction === 'vertical' && 'flex-col items-stretch',
         className,
       )}
+      orientation={orientation ?? direction}
       {...props}
     >
       <ToggleGroupProvider value={{ variant, size }}>
         {props.type === 'single' ? (
           <ToggleGroupHighlightPrimitive className="bg-accent rounded-md">
-            {children}
+            {options?.length
+              ? options.map((option) => (
+                  <ToggleGroupItem
+                    aria-label={option['aria-label']}
+                    className={option.className}
+                    disabled={option.disabled}
+                    key={option.value}
+                    title={option.title}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </ToggleGroupItem>
+                ))
+              : children}
           </ToggleGroupHighlightPrimitive>
         ) : (
-          children
+          options?.length
+            ? options.map((option) => (
+                <ToggleGroupItem
+                  aria-label={option['aria-label']}
+                  className={option.className}
+                  disabled={option.disabled}
+                  key={option.value}
+                  title={option.title}
+                  value={option.value}
+                >
+                  {option.label}
+                </ToggleGroupItem>
+              ))
+            : children
         )}
       </ToggleGroupProvider>
     </ToggleGroupPrimitive>
@@ -89,6 +133,7 @@ function ToggleGroupItem({
 export {
   ToggleGroup,
   ToggleGroupItem,
+  type ToggleGroupOption,
   type ToggleGroupProps,
   type ToggleGroupItemProps,
 };

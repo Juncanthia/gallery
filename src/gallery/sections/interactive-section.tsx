@@ -3,55 +3,25 @@ import { GallerySection, DemoRow, SectionGroup } from "../gallery-section";
 import { Button } from "@/components/base/button";
 import { Label } from "@/components/base/label";
 import { Switch } from "@/components/base/switch";
-import {
-  Tabs, TabsList, TabsTrigger, TabsContents, TabsContent,
-} from "@/components/base/tabs";
-import {
-  Accordion, AccordionItem, AccordionTrigger, AccordionContent,
-} from "@/components/base/accordion";
-import {
-  Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink,
-  BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis,
-} from "@/components/base/breadcrumb";
-import {
-  Pagination, PaginationContent, PaginationItem, PaginationLink,
-  PaginationPrevious, PaginationNext, PaginationEllipsis,
-} from "@/components/base/pagination";
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/base/collapsible";
-import {
-  Dialog, DialogTrigger, DialogContent, DialogHeader,
-  DialogTitle, DialogDescription, DialogFooter,
-} from "@/components/base/dialog";
-import {
-  AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader,
-  AlertDialogTitle, AlertDialogDescription, AlertDialogFooter,
-  AlertDialogCancel, AlertDialogAction,
-} from "@/components/base/alert-dialog";
-import {
-  Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription,
-} from "@/components/base/sheet";
-import {
-  Drawer, DrawerTrigger, DrawerContent, DrawerHeader,
-  DrawerTitle, DrawerDescription, DrawerClose,
-} from "@/components/base/drawer";
-import {
-  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
-  DropdownMenuShortcut, DropdownMenuCheckboxItem,
-} from "@/components/base/dropdown-menu";
-import {
-  ContextMenu, ContextMenuTrigger, ContextMenuContent,
-  ContextMenuItem, ContextMenuLabel, ContextMenuSeparator,
-  ContextMenuShortcut, ContextMenuCheckboxItem,
-} from "@/components/base/context-menu";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/base/popover";
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/base/tooltip";
-import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/base/hover-card";
+import { Tabs } from "@/components/base/tabs";
+import { Accordion } from "@/components/base/accordion";
+import { Breadcrumb } from "@/components/base/breadcrumb";
+import { Pagination } from "@/components/base/pagination";
+import { Collapsible } from "@/components/base/collapsible";
+import { Dialog } from "@/components/base/dialog";
+import { AlertDialog } from "@/components/base/alert-dialog";
+import { Sheet } from "@/components/base/sheet";
+import { Drawer } from "@/components/base/drawer";
+import { DropdownMenu } from "@/components/base/dropdown-menu";
+import { ContextMenu } from "@/components/base/context-menu";
+import { Popover } from "@/components/base/popover";
+import { TooltipProvider, Tooltip } from "@/components/base/tooltip";
+import { HoverCard } from "@/components/base/hover-card";
 import { Progress } from "@/components/base/progress";
 import { Avatar, AvatarFallback } from "@/components/base/avatar";
 import {
   User, Settings, Bell, LogOut, CreditCard, Check, Info,
-  ChevronsUpDown, ChevronDown, Copy, Trash2,
+  ChevronDown, Copy, Trash2,
 } from "lucide-react";
 
 export function InteractiveSection() {
@@ -60,6 +30,7 @@ export function InteractiveSection() {
     typeof document !== "undefined" && document.documentElement.classList.contains("dark")
   );
   const [notifChecked, setNotifChecked] = useState({ status: true, badge: false });
+  const [paginationPage, setPaginationPage] = useState(2);
 
   function toggleDark() {
     document.documentElement.classList.toggle("dark");
@@ -70,116 +41,144 @@ export function InteractiveSection() {
     <TooltipProvider>
       <SectionGroup title="Navigation" description="Wayfinding and structural navigation components.">
         <GallerySection id="tabs" title="Tabs" description="Tabbed content panels.">
-          <DemoRow label="Demo">
-            <Tabs defaultValue="overview" className="w-full max-w-md">
-              <TabsList>
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="reports">Reports</TabsTrigger>
-              </TabsList>
-              <TabsContents>
-                <TabsContent value="overview">
-                  <p className="text-sm text-muted-foreground pt-3">Overview of your project metrics and recent activity.</p>
-                </TabsContent>
-                <TabsContent value="analytics">
-                  <p className="text-sm text-muted-foreground pt-3">Detailed analytics including traffic and conversion data.</p>
-                </TabsContent>
-                <TabsContent value="reports">
-                  <p className="text-sm text-muted-foreground pt-3">Downloadable reports for the selected time period.</p>
-                </TabsContent>
-              </TabsContents>
-            </Tabs>
+          <DemoRow label="Items API">
+            <Tabs
+              defaultActiveKey="overview"
+              className="w-full max-w-md"
+              items={[
+                {
+                  key: "overview",
+                  label: "Overview",
+                  children: <p className="pt-3 text-sm text-muted-foreground">Overview of your project metrics and recent activity.</p>,
+                },
+                {
+                  key: "analytics",
+                  label: "Analytics",
+                  children: <p className="pt-3 text-sm text-muted-foreground">Detailed analytics including traffic and conversion data.</p>,
+                },
+                {
+                  key: "reports",
+                  label: "Reports",
+                  children: <p className="pt-3 text-sm text-muted-foreground">Downloadable reports for the selected time period.</p>,
+                },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Card / disabled">
+            <Tabs
+              type="card"
+              size="small"
+              defaultActiveKey="account"
+              className="w-full max-w-md"
+              items={[
+                { key: "account", label: "Account", icon: <User className="size-3.5" />, children: <p className="pt-3 text-sm text-muted-foreground">Account settings.</p> },
+                { key: "security", label: "Security", icon: <Settings className="size-3.5" />, children: <p className="pt-3 text-sm text-muted-foreground">Security preferences.</p> },
+                { key: "billing", label: "Billing", icon: <CreditCard className="size-3.5" />, disabled: true, children: <p className="pt-3 text-sm text-muted-foreground">Billing is disabled.</p> },
+              ]}
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="accordion" title="Accordion" description="Collapsible content sections — height animates with motion.">
-          <DemoRow label="FAQ">
-            <div className="w-full max-w-md rounded-md border">
-              <Accordion type="single" collapsible>
-                <AccordionItem value="q1">
-                  <AccordionTrigger className="px-4">Is it accessible?</AccordionTrigger>
-                  <AccordionContent className="px-4">
-                    Built on Radix UI — fully keyboard-navigable and ARIA-compliant.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="q2">
-                  <AccordionTrigger className="px-4">Can I open multiple?</AccordionTrigger>
-                  <AccordionContent className="px-4">
-                    Use <code className="text-xs bg-muted px-1 rounded">type="multiple"</code> to allow multiple open items.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="q3">
-                  <AccordionTrigger className="px-4">Is it animated?</AccordionTrigger>
-                  <AccordionContent className="px-4">
-                    Yes — content slides with a smooth height transition.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
+          <DemoRow label="Items API">
+            <Accordion
+              accordion
+              defaultActiveKey="q1"
+              className="w-full max-w-md"
+              items={[
+                {
+                  key: "q1",
+                  label: "Is it accessible?",
+                  children: "Built on Radix UI — fully keyboard-navigable and ARIA-compliant.",
+                },
+                {
+                  key: "q2",
+                  label: "Can I open multiple?",
+                  children: <>Use <code className="rounded bg-muted px-1 text-xs">accordion={false}</code> to allow multiple open items.</>,
+                },
+                {
+                  key: "q3",
+                  label: "Is it animated?",
+                  extra: "motion",
+                  children: "Yes — content slides with a smooth height transition.",
+                },
+              ]}
+            />
+          </DemoRow>
+          <DemoRow label="Ghost / no arrow">
+            <Accordion
+              ghost
+              expandIconPlacement="start"
+              defaultActiveKey={["deploy"]}
+              className="w-full max-w-md"
+              items={[
+                { key: "deploy", label: "Deploy preview", children: "Preview deployment is ready." },
+                { key: "logs", label: "Build logs", showArrow: false, children: "No arrow for this panel." },
+                { key: "disabled", label: "Disabled", disabled: true, children: "Disabled content." },
+              ]}
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="breadcrumb" title="Breadcrumb" description="Navigation location trail.">
-          <DemoRow label="Default">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbLink href="#">Components</BreadcrumbLink></BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+          <DemoRow label="Items API">
+            <Breadcrumb
+              items={[
+                { title: "Home", href: "/" },
+                { title: "Components", href: "/components" },
+                { title: "Breadcrumb" },
+              ]}
+            />
           </DemoRow>
-          <DemoRow label="With ellipsis">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbEllipsis /></BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbLink href="#">Gallery</BreadcrumbLink></BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbPage>Current Page</BreadcrumbPage></BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+          <DemoRow label="Separator / params">
+            <Breadcrumb
+              separator=">"
+              params={{ id: 42 }}
+              items={[
+                { title: "Projects", path: "projects" },
+                { title: "Project :id", path: ":id" },
+                { type: "separator", separator: "…" },
+                { title: "Settings" },
+              ]}
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="pagination" title="Pagination" description="Page navigation controls.">
-          <DemoRow label="Controls">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
-                <PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem>
-                <PaginationItem><PaginationLink href="#" isActive>2</PaginationLink></PaginationItem>
-                <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                <PaginationItem><PaginationEllipsis /></PaginationItem>
-                <PaginationItem><PaginationLink href="#">10</PaginationLink></PaginationItem>
-                <PaginationItem><PaginationNext href="#" /></PaginationItem>
-              </PaginationContent>
-            </Pagination>
+          <DemoRow label="Controlled">
+            <div className="flex w-full max-w-2xl flex-col gap-3">
+              <Pagination
+                current={paginationPage}
+                total={186}
+                pageSize={10}
+                showTotal={(total, range) => `${range[0]}-${range[1]} of ${total}`}
+                onChange={(page) => setPaginationPage(page)}
+              />
+              <p className="text-xs text-muted-foreground text-center">Current page: <strong>{paginationPage}</strong></p>
+            </div>
+          </DemoRow>
+          <DemoRow label="Variants">
+            <Pagination defaultCurrent={6} total={120} showLessItems size="small" />
+            <Pagination simple defaultCurrent={3} total={80} />
+            <Pagination disabled defaultCurrent={4} total={80} />
           </DemoRow>
         </GallerySection>
 
-        <GallerySection id="collapsible" title="Collapsible" description="Toggle visibility of content — content animates open/closed.">
-          <DemoRow label="Demo">
-            <Collapsible className="w-64">
-              <div className="flex items-center justify-between rounded-md border px-4 py-2">
-                <span className="text-sm font-medium">Dependencies</span>
-                <CollapsibleTrigger asChild>
-                  <Button variant="ghost" size="icon" className="size-7">
-                    <ChevronsUpDown className="size-4" />
-                  </Button>
-                </CollapsibleTrigger>
-              </div>
-              <CollapsibleContent className="mt-1 space-y-1">
+        <GallerySection id="collapsible" title="Collapsible" description="Single collapsible block with an API-first header.">
+          <DemoRow label="API">
+            <Collapsible
+              title="Dependencies"
+              defaultOpen
+              className="w-64"
+              extra={<span className="text-xs text-muted-foreground">4 deps</span>}
+            >
+              <div className="space-y-1">
                 {["react", "vite", "tailwindcss", "typescript"].map((dep) => (
-                  <div key={dep} className="rounded-md border px-4 py-2 text-sm font-mono text-muted-foreground">
+                  <div key={dep} className="rounded border bg-background px-3 py-1.5 font-mono">
                     {dep}
                   </div>
                 ))}
-              </CollapsibleContent>
+              </div>
             </Collapsible>
           </DemoRow>
         </GallerySection>
@@ -187,203 +186,186 @@ export function InteractiveSection() {
 
       <SectionGroup title="Overlay" description="Modals, panels, menus, and floating UI elements.">
         <GallerySection id="dialog" title="Dialog" description="Modal overlay with focus trap.">
-          <DemoRow label="Demo">
-            <Dialog>
-              <DialogTrigger asChild><Button variant="outline">Open Dialog</Button></DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Edit Profile</DialogTitle>
-                  <DialogDescription>Make changes to your profile here.</DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-3 py-4">
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="dlg-name">Name</Label>
-                    <input id="dlg-name" defaultValue="Acme Corp" className="rounded-md border px-3 py-1.5 text-sm bg-background outline-none focus:ring-2 focus:ring-ring" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="dlg-email">Email</Label>
-                    <input id="dlg-email" type="email" defaultValue="acme@example.com" className="rounded-md border px-3 py-1.5 text-sm bg-background outline-none focus:ring-2 focus:ring-ring" />
-                  </div>
+          <DemoRow label="API">
+            <Dialog
+              trigger={<Button variant="outlined">Open Dialog</Button>}
+              title="Edit Profile"
+              description="Make changes to your profile here."
+              cancelText="Cancel"
+              okText="Save changes"
+              contentProps={{ className: "sm:max-w-md" }}
+            >
+              <div className="grid gap-3 py-4">
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="dlg-name">Name</Label>
+                  <input id="dlg-name" defaultValue="Acme Corp" className="rounded border bg-background px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring" />
                 </div>
-                <DialogFooter>
-                  <Button variant="outline">Cancel</Button>
-                  <Button>Save changes</Button>
-                </DialogFooter>
-              </DialogContent>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="dlg-email">Email</Label>
+                  <input id="dlg-email" type="email" defaultValue="acme@example.com" className="rounded border bg-background px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+              </div>
             </Dialog>
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="alert-dialog" title="Alert Dialog" description="Confirmation dialog requiring explicit user action.">
-          <DemoRow label="Demo">
-            <AlertDialog>
-              <AlertDialogTrigger asChild><Button variant="destructive">Delete Account</Button></AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. Your account will be permanently deleted.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction>Continue</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+          <DemoRow label="API">
+            <AlertDialog
+              trigger={<Button color="danger" variant="solid">Delete Account</Button>}
+              title="Are you absolutely sure?"
+              description="This action cannot be undone. Your account will be permanently deleted."
+              cancelText="Cancel"
+              okText="Continue"
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="sheet" title="Sheet" description="Slide-in side panel.">
-          <DemoRow label="Sides">
+          <DemoRow label="API">
             {(["left", "right", "top", "bottom"] as const).map((side) => (
-              <Sheet key={side}>
-                <SheetTrigger asChild><Button variant="outline" className="capitalize">{side}</Button></SheetTrigger>
-                <SheetContent side={side}>
-                  <SheetHeader>
-                    <SheetTitle>Settings ({side})</SheetTitle>
-                    <SheetDescription>Configure your preferences in this side panel.</SheetDescription>
-                  </SheetHeader>
-                  <div className="mt-6 space-y-4 px-4">
-                    <div className="flex items-center justify-between">
-                      <Label>Dark Mode</Label>
-                      <Switch checked={darkMode} onCheckedChange={toggleDark} />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label>Notifications</Label>
-                      <Switch defaultChecked />
-                    </div>
+              <Sheet
+                key={side}
+                side={side}
+                trigger={<Button variant="outlined" className="capitalize">{side}</Button>}
+                title={`Settings (${side})`}
+                description="Configure your preferences in this side panel."
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label>Dark Mode</Label>
+                    <Switch checked={darkMode} onCheckedChange={toggleDark} />
                   </div>
-                </SheetContent>
+                  <div className="flex items-center justify-between">
+                    <Label>Notifications</Label>
+                    <Switch defaultChecked />
+                  </div>
+                </div>
               </Sheet>
             ))}
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="drawer" title="Drawer" description="Bottom sheet drawer (mobile-friendly).">
-          <DemoRow label="Demo">
-            <Drawer>
-              <DrawerTrigger asChild><Button variant="outline">Open Drawer</Button></DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>Quick Actions</DrawerTitle>
-                  <DrawerDescription>Select an action to perform.</DrawerDescription>
-                </DrawerHeader>
-                <div className="flex flex-col gap-2 p-4">
-                  <Button variant="outline" className="justify-start gap-2"><Copy className="size-4" /> Duplicate</Button>
-                  <Button variant="outline" className="justify-start gap-2"><Settings className="size-4" /> Settings</Button>
-                  <Button variant="destructive" className="justify-start gap-2"><Trash2 className="size-4" /> Delete</Button>
-                </div>
-                <div className="p-4 pt-0">
-                  <DrawerClose asChild><Button variant="outline" className="w-full">Cancel</Button></DrawerClose>
-                </div>
-              </DrawerContent>
+          <DemoRow label="API">
+            <Drawer
+              trigger={<Button variant="outlined">Open Drawer</Button>}
+              title="Quick Actions"
+              description="Select an action to perform."
+              closeText="Cancel"
+            >
+              <div className="flex flex-col gap-2">
+                <Button variant="outlined" className="justify-start gap-2"><Copy className="size-4" /> Duplicate</Button>
+                <Button variant="outlined" className="justify-start gap-2"><Settings className="size-4" /> Settings</Button>
+                <Button color="danger" variant="solid" className="justify-start gap-2"><Trash2 className="size-4" /> Delete</Button>
+              </div>
             </Drawer>
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="dropdown" title="Dropdown Menu" description="Contextual action menus.">
-          <DemoRow label="Menus">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline"><User className="size-4" /> My Account <ChevronDown className="size-3 ml-1" /></Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-52">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem><User className="size-4" /> Profile <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut></DropdownMenuItem>
-                <DropdownMenuItem><CreditCard className="size-4" /> Billing <DropdownMenuShortcut>⌘B</DropdownMenuShortcut></DropdownMenuItem>
-                <DropdownMenuItem><Settings className="size-4" /> Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive"><LogOut className="size-4" /> Log out</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <DemoRow label="Items API">
+            <DropdownMenu
+              trigger={<Button variant="outlined"><User className="size-4" /> My Account <ChevronDown className="ml-1 size-3" /></Button>}
+              contentProps={{ className: "w-52" }}
+              items={[
+                { type: "label", label: "My Account" },
+                { type: "separator" },
+                { label: "Profile", icon: <User className="size-4" />, shortcut: "⇧⌘P" },
+                { label: "Billing", icon: <CreditCard className="size-4" />, shortcut: "⌘B" },
+                { label: "Settings", icon: <Settings className="size-4" /> },
+                { type: "separator" },
+                { label: "Log out", icon: <LogOut className="size-4" />, danger: true },
+              ]}
+            />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline"><Bell className="size-4" /> Notifications</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-52">
-                <DropdownMenuLabel>Preferences</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem checked={notifChecked.status} onCheckedChange={(v) => setNotifChecked((s) => ({ ...s, status: !!v }))}>
-                  Status Updates
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem checked={notifChecked.badge} onCheckedChange={(v) => setNotifChecked((s) => ({ ...s, badge: !!v }))}>
-                  Badge Alerts
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <DropdownMenu
+              trigger={<Button variant="outlined"><Bell className="size-4" /> Notifications</Button>}
+              contentProps={{ className: "w-52" }}
+              items={[
+                { type: "label", label: "Preferences" },
+                { type: "separator" },
+                {
+                  type: "checkbox",
+                  label: "Status Updates",
+                  checked: notifChecked.status,
+                  onCheckedChange: (v) => setNotifChecked((s) => ({ ...s, status: !!v })),
+                },
+                {
+                  type: "checkbox",
+                  label: "Badge Alerts",
+                  checked: notifChecked.badge,
+                  onCheckedChange: (v) => setNotifChecked((s) => ({ ...s, badge: !!v })),
+                },
+              ]}
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="context-menu" title="Context Menu" description="Right-click contextual actions.">
-          <DemoRow label="Demo">
-            <ContextMenu>
-              <ContextMenuTrigger>
-                <div className="w-72 h-24 rounded-lg border-2 border-dashed flex items-center justify-center text-sm text-muted-foreground select-none cursor-context-menu">
+          <DemoRow label="Items API">
+            <ContextMenu
+              trigger={
+                <div className="flex h-24 w-72 cursor-context-menu select-none items-center justify-center rounded border-2 border-dashed text-sm text-muted-foreground">
                   Right-click here
                 </div>
-              </ContextMenuTrigger>
-              <ContextMenuContent className="w-52">
-                <ContextMenuLabel>Actions</ContextMenuLabel>
-                <ContextMenuSeparator />
-                <ContextMenuItem><Copy className="size-4" /> Copy <ContextMenuShortcut>⌘C</ContextMenuShortcut></ContextMenuItem>
-                <ContextMenuItem><Settings className="size-4" /> Rename</ContextMenuItem>
-                <ContextMenuCheckboxItem checked>Show hidden</ContextMenuCheckboxItem>
-                <ContextMenuSeparator />
-                <ContextMenuItem variant="destructive"><Trash2 className="size-4" /> Delete</ContextMenuItem>
-              </ContextMenuContent>
-            </ContextMenu>
+              }
+              contentProps={{ className: "w-52" }}
+              items={[
+                { type: "label", label: "Actions" },
+                { type: "separator" },
+                { label: "Copy", icon: <Copy className="size-4" />, shortcut: "⌘C" },
+                { label: "Rename", icon: <Settings className="size-4" /> },
+                { type: "checkbox", label: "Show hidden", checked: true },
+                { type: "separator" },
+                { label: "Delete", icon: <Trash2 className="size-4" />, danger: true },
+              ]}
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="popover" title="Popover" description="Floating content panels.">
-          <DemoRow label="Demo">
-            <Popover>
-              <PopoverTrigger asChild><Button variant="outline">Open Popover</Button></PopoverTrigger>
-              <PopoverContent className="w-60">
+          <DemoRow label="API">
+            <Popover
+              trigger={<Button variant="outlined">Open Popover</Button>}
+              contentProps={{ className: "w-60" }}
+              content={
                 <div className="space-y-2">
                   <p className="text-sm font-medium">Quick Actions</p>
                   <p className="text-xs text-muted-foreground">Choose an action to perform.</p>
                   <div className="flex gap-2 pt-1">
-                    <Button size="sm" variant="outline" className="flex-1">Cancel</Button>
-                    <Button size="sm" className="flex-1">Apply</Button>
+                    <Button size="small" variant="outlined" className="flex-1">Cancel</Button>
+                    <Button size="small" className="flex-1">Apply</Button>
                   </div>
                 </div>
-              </PopoverContent>
-            </Popover>
+              }
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="tooltip" title="Tooltip" description="Short contextual hints on hover.">
-          <DemoRow label="Placement">
-            <Tooltip>
-              <TooltipTrigger asChild><Button variant="outline" size="icon"><Check className="size-4" /></Button></TooltipTrigger>
-              <TooltipContent>Confirm selection</TooltipContent>
+          <DemoRow label="API">
+            <Tooltip title="Confirm selection">
+              <Button variant="outlined" shape="square"><Check className="size-4" /></Button>
             </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild><Button variant="outline" size="icon"><Info className="size-4" /></Button></TooltipTrigger>
-              <TooltipContent side="bottom">More information</TooltipContent>
+            <Tooltip title="More information" contentProps={{ side: "bottom" }}>
+              <Button variant="outlined" shape="square"><Info className="size-4" /></Button>
             </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild><Button variant="outline" size="icon"><Settings className="size-4" /></Button></TooltipTrigger>
-              <TooltipContent side="right">Open settings</TooltipContent>
+            <Tooltip title="Open settings" contentProps={{ side: "right" }}>
+              <Button variant="outlined" shape="square"><Settings className="size-4" /></Button>
             </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild><Button variant="outline" size="icon"><Bell className="size-4" /></Button></TooltipTrigger>
-              <TooltipContent side="left">Notifications</TooltipContent>
+            <Tooltip title="Notifications" contentProps={{ side: "left" }}>
+              <Button variant="outlined" shape="square"><Bell className="size-4" /></Button>
             </Tooltip>
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="hover-card" title="Hover Card" description="Rich preview on hover.">
-          <DemoRow label="Demo">
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Button variant="link" className="p-0 h-auto text-base">@acme_corp</Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-72">
+          <DemoRow label="API">
+            <HoverCard
+              trigger={<Button variant="link" className="h-auto p-0 text-base">@acme_corp</Button>}
+              contentProps={{ className: "w-72" }}
+              content={
                 <div className="flex gap-3">
                   <Avatar><AvatarFallback>AC</AvatarFallback></Avatar>
                   <div>
@@ -392,20 +374,20 @@ export function InteractiveSection() {
                     <p className="text-xs text-muted-foreground mt-1">Joined June 2024</p>
                   </div>
                 </div>
-              </HoverCardContent>
-            </HoverCard>
+              }
+            />
           </DemoRow>
         </GallerySection>
 
         <GallerySection id="progress" title="Progress" description="Visual completion indicators — bar animates with spring physics.">
           <DemoRow label="Sizes">
             <div className="w-full max-w-md space-y-3">
-              <Progress value={progress} className="h-1.5" />
-              <Progress value={progress} className="h-2.5" />
-              <Progress value={progress} className="h-4 rounded-sm" />
+              <Progress percent={progress} size="small" />
+              <Progress percent={progress} showInfo />
+              <Progress percent={progress} size="large" status={progress >= 80 ? "success" : "active"} />
               <div className="flex gap-2 items-center">
-                <Button size="sm" variant="outline" onClick={() => setProgress((p) => Math.max(0, p - 10))}>-10</Button>
-                <Button size="sm" variant="outline" onClick={() => setProgress((p) => Math.min(100, p + 10))}>+10</Button>
+                <Button size="small" variant="outlined" onClick={() => setProgress((p) => Math.max(0, p - 10))}>-10</Button>
+                <Button size="small" variant="outlined" onClick={() => setProgress((p) => Math.min(100, p + 10))}>+10</Button>
                 <span className="text-sm tabular-nums text-muted-foreground">{progress}%</span>
               </div>
             </div>

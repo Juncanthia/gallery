@@ -1,12 +1,81 @@
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
+import { Button } from "@/components/base/button"
 import { cn } from "@/lib/utils"
 
+type DrawerProps = React.ComponentProps<typeof DrawerPrimitive.Root> & {
+  trigger?: React.ReactNode
+  title?: React.ReactNode
+  description?: React.ReactNode
+  footer?: React.ReactNode
+  closeText?: React.ReactNode
+  contentProps?: React.ComponentProps<typeof DrawerPrimitive.Content>
+}
+
+function renderDrawerTrigger(trigger: React.ReactNode) {
+  if (trigger === undefined) return null
+
+  return (
+    <DrawerTrigger asChild>
+      {React.isValidElement(trigger) ? trigger : <Button>{trigger}</Button>}
+    </DrawerTrigger>
+  )
+}
+
 function Drawer({
+  trigger,
+  title,
+  description,
+  footer,
+  closeText,
+  contentProps,
+  children,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
+}: DrawerProps) {
+  const hasApiContent =
+    trigger !== undefined ||
+    title !== undefined ||
+    description !== undefined ||
+    footer !== undefined ||
+    closeText !== undefined ||
+    contentProps !== undefined
+
+  if (!hasApiContent) {
+    return (
+      <DrawerPrimitive.Root data-slot="drawer" {...props}>
+        {children}
+      </DrawerPrimitive.Root>
+    )
+  }
+
+  const footerNode =
+    footer ??
+    (closeText !== undefined && (
+      <DrawerClose asChild>
+        <Button variant="outlined" className="w-full">
+          {closeText}
+        </Button>
+      </DrawerClose>
+    ))
+
+  return (
+    <DrawerPrimitive.Root data-slot="drawer" {...props}>
+      {renderDrawerTrigger(trigger)}
+      <DrawerContent {...contentProps}>
+        {(title !== undefined || description !== undefined) && (
+          <DrawerHeader>
+            {title !== undefined && <DrawerTitle>{title}</DrawerTitle>}
+            {description !== undefined && (
+              <DrawerDescription>{description}</DrawerDescription>
+            )}
+          </DrawerHeader>
+        )}
+        <div className="px-4 pb-4">{children}</div>
+        {footerNode && <DrawerFooter>{footerNode}</DrawerFooter>}
+      </DrawerContent>
+    </DrawerPrimitive.Root>
+  )
 }
 
 function DrawerTrigger({
@@ -126,4 +195,5 @@ export {
   DrawerFooter,
   DrawerTitle,
   DrawerDescription,
+  type DrawerProps,
 }

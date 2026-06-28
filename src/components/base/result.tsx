@@ -7,11 +7,14 @@ export type ResultStatus =
   | "error"
   | "info"
   | "warning"
+  | 404
   | "404"
+  | 403
   | "403"
+  | 500
   | "500";
 
-const statusIcons: Record<ResultStatus, React.ReactNode> = {
+const statusIcons: Record<string, React.ReactNode> = {
   success: <CheckCircle2 className="text-green-500" />,
   error: <XCircle className="text-destructive" />,
   info: <Info className="text-blue-500" />,
@@ -36,7 +39,7 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
     { status = "info", title, subTitle, icon, extra, children, className },
     ref
   ) => {
-    const displayIcon = icon || statusIcons[status];
+    const displayIcon = icon === false || icon === null ? null : icon || statusIcons[String(status)];
 
     return (
       <div

@@ -199,8 +199,8 @@ export function Tour({
               <div className="flex gap-2">
                 {current > 0 && (
                   <Button
-                    size="sm"
-                    variant="outline"
+                    size="small"
+                    variant="outlined"
                     onClick={handlePrev}
                     className={step.prevButtonProps?.className}
                   >
@@ -208,7 +208,7 @@ export function Tour({
                   </Button>
                 )}
                 <Button
-                  size="sm"
+                  size="small"
                   onClick={handleNext}
                   className={step.nextButtonProps?.className}
                 >

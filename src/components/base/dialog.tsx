@@ -1,5 +1,7 @@
+import * as React from 'react';
 import { X } from 'lucide-react';
 
+import { Button } from '@/components/base/button';
 import {
   Dialog as DialogPrimitive,
   DialogTrigger as DialogTriggerPrimitive,
@@ -24,10 +26,100 @@ import {
 } from '@/primitives/radix/dialog';
 import { cn } from '@/lib/utils';
 
-type DialogProps = DialogPrimitiveProps;
+type DialogProps = DialogPrimitiveProps & {
+  trigger?: React.ReactNode;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  footer?: React.ReactNode;
+  okText?: React.ReactNode;
+  cancelText?: React.ReactNode;
+  confirmLoading?: boolean;
+  showCloseButton?: boolean;
+  contentProps?: Omit<DialogContentProps, 'children'>;
+  onOk?: React.MouseEventHandler<HTMLButtonElement>;
+  onCancel?: React.MouseEventHandler<HTMLButtonElement>;
+};
 
-function Dialog(props: DialogProps) {
-  return <DialogPrimitive {...props} />;
+function renderDialogTrigger(trigger: React.ReactNode) {
+  if (trigger === undefined) return null;
+
+  return (
+    <DialogTrigger asChild>
+      {React.isValidElement(trigger) ? trigger : <Button>{trigger}</Button>}
+    </DialogTrigger>
+  );
+}
+
+function Dialog({
+  trigger,
+  title,
+  description,
+  footer,
+  okText,
+  cancelText,
+  confirmLoading,
+  showCloseButton,
+  contentProps,
+  onOk,
+  onCancel,
+  children,
+  ...props
+}: DialogProps) {
+  const hasApiContent =
+    trigger !== undefined ||
+    title !== undefined ||
+    description !== undefined ||
+    footer !== undefined ||
+    okText !== undefined ||
+    cancelText !== undefined ||
+    confirmLoading !== undefined ||
+    showCloseButton !== undefined ||
+    contentProps !== undefined ||
+    onOk !== undefined ||
+    onCancel !== undefined;
+
+  if (!hasApiContent) {
+    return <DialogPrimitive {...props}>{children}</DialogPrimitive>;
+  }
+
+  const footerNode =
+    footer ??
+    ((okText !== undefined ||
+      cancelText !== undefined ||
+      onOk !== undefined ||
+      onCancel !== undefined ||
+      confirmLoading !== undefined) && (
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button variant="outlined" onClick={onCancel}>
+            {cancelText ?? 'Cancel'}
+          </Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button loading={confirmLoading} onClick={onOk}>
+            {okText ?? 'OK'}
+          </Button>
+        </DialogClose>
+      </DialogFooter>
+    ));
+
+  return (
+    <DialogPrimitive {...props}>
+      {renderDialogTrigger(trigger)}
+      <DialogContent showCloseButton={showCloseButton} {...contentProps}>
+        {(title !== undefined || description !== undefined) && (
+          <DialogHeader>
+            {title !== undefined && <DialogTitle>{title}</DialogTitle>}
+            {description !== undefined && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
+          </DialogHeader>
+        )}
+        {children}
+        {footerNode}
+      </DialogContent>
+    </DialogPrimitive>
+  );
 }
 
 type DialogTriggerProps = DialogTriggerPrimitiveProps;
