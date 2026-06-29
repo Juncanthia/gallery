@@ -26,8 +26,9 @@ function Code({ className, code, ...props }: CodeProps) {
   return (
     <CodeProvider value={{ code }}>
       <div
+        data-canthia-ignore=""
         className={cn(
-          'relative flex flex-col overflow-hidden border bg-accent/50 rounded-lg',
+          'not-prose relative flex flex-col overflow-hidden rounded border border-[var(--code-border-color)] bg-[var(--code-bg-color)]',
           className,
         )}
         {...props}
@@ -53,7 +54,7 @@ function CodeHeader({
   return (
     <div
       className={cn(
-        'bg-accent shrink-0 gap-x-2 border-b border-border/75 dark:border-border/50 text-sm flex text-muted-foreground items-center px-4 w-full h-10',
+        'bg-muted/20 shrink-0 gap-x-2 border-b border-[var(--code-border-color)] text-sm flex text-muted-foreground items-center px-4 w-full h-10',
         className,
       )}
       {...props}

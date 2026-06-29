@@ -1,0 +1,18 @@
+@layer base {
+  .canthia-mdx :where(details):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 1.2rem 0;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--canthia-border-soft);
+    border-radius: var(--radius);
+    background: var(--canthia-code-bg);
+  }
+
+  .canthia-mdx :where(summary):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .canthia-mdx :where(details > :last-child):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-bottom: 0;
+  }
+}

@@ -283,32 +283,34 @@ export const Descriptions = React.forwardRef<HTMLDivElement, DescriptionsProps>(
           }}
         >
           {bordered ? (
-            <table className="w-full overflow-hidden rounded border border-collapse border-border">
-              <tbody>
-                {items ? (
-                  rows.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {row.map((item, colIndex) => (
-                        <DescriptionsItem
-                          key={item.key ?? colIndex}
-                          label={item.label}
-                          span={item.span}
-                          className={item.className}
-                          labelStyle={item.labelStyle ?? labelStyle}
-                          contentStyle={item.contentStyle ?? contentStyle}
-                          labelClassName={item.labelClassName}
-                          contentClassName={item.contentClassName}
-                        >
-                          {item.content ?? item.children}
-                        </DescriptionsItem>
-                      ))}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>{children}</tr>
-                )}
-              </tbody>
-            </table>
+            <div className="rounded border border-border overflow-hidden">
+              <table className="w-full border-collapse">
+                <tbody>
+                  {items ? (
+                    rows.map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                        {row.map((item, colIndex) => (
+                          <DescriptionsItem
+                            key={item.key ?? colIndex}
+                            label={item.label}
+                            span={item.span}
+                            className={item.className}
+                            labelStyle={item.labelStyle ?? labelStyle}
+                            contentStyle={item.contentStyle ?? contentStyle}
+                            labelClassName={item.labelClassName}
+                            contentClassName={item.contentClassName}
+                          >
+                            {item.content ?? item.children}
+                          </DescriptionsItem>
+                        ))}
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>{children}</tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <div
               className="grid gap-x-6"

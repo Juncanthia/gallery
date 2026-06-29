@@ -1,0 +1,15 @@
+diff --git a/lib/handlers/element.js b/lib/handlers/element.js
+index 0567b6e700441e2465b73b19c330716ca2657447..6f4ed35af7e1d6e1059510e1402e6a12a5348f2a 100644
+--- a/lib/handlers/element.js
++++ b/lib/handlers/element.js
+@@ -229,8 +229,9 @@ export function element(node, state) {
+  *   Properties.
+  */
+ function parseStyle(value, tagName) {
++  const parseFn = typeof styleToJs === 'function' ? styleToJs : (styleToJs && styleToJs.default) || styleToJs;
+   try {
+-    return styleToJs(value, {reactCompat: true})
++    return parseFn(value, {reactCompat: true})
+   } catch (error) {
+     const cause = /** @type {Error} */ (error)
+     const exception = new Error(

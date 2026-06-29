@@ -30,6 +30,7 @@ type TabsItem = {
 };
 
 type TabsProps = TabsPrimitiveProps & {
+  variant?: 'default' | 'skeuomorphic';
   activeKey?: string;
   centered?: boolean;
   defaultActiveKey?: string;
@@ -69,7 +70,10 @@ function isTabsExtraContentObject(
   );
 }
 
+const TabsContext = React.createContext<{ variant?: 'default' | 'skeuomorphic' }>({ variant: 'default' });
+
 function Tabs({
+  variant = 'default',
   activeKey,
   centered,
   className,
@@ -144,40 +148,58 @@ function Tabs({
     );
 
     return (
+      <TabsContext.Provider value={{ variant }}>
+        <TabsPrimitive
+          className={cn('flex gap-2', tabsRootPlacementClasses[tabPlacement], className)}
+          defaultValue={mergedValue === undefined ? mergedDefaultValue : undefined}
+          orientation={orientation}
+          value={mergedValue}
+          onValueChange={handleValueChange}
+          {...props}
+        >
+          {tabPlacement === 'bottom' ? contents : list}
+          {tabPlacement === 'bottom' ? list : contents}
+        </TabsPrimitive>
+      </TabsContext.Provider>
+    );
+  }
+
+  return (
+    <TabsContext.Provider value={{ variant }}>
       <TabsPrimitive
-        className={cn('flex gap-2', tabsRootPlacementClasses[tabPlacement], className)}
+        className={cn('flex flex-col gap-2', className)}
         defaultValue={mergedValue === undefined ? mergedDefaultValue : undefined}
         orientation={orientation}
         value={mergedValue}
         onValueChange={handleValueChange}
         {...props}
-      >
-        {tabPlacement === 'bottom' ? contents : list}
-        {tabPlacement === 'bottom' ? list : contents}
-      </TabsPrimitive>
-    );
-  }
-
-  return (
-    <TabsPrimitive
-      className={cn('flex flex-col gap-2', className)}
-      defaultValue={mergedValue === undefined ? mergedDefaultValue : undefined}
-      orientation={orientation}
-      value={mergedValue}
-      onValueChange={handleValueChange}
-      {...props}
-    />
+      />
+    </TabsContext.Provider>
   );
 }
 
-type TabsListProps = TabsListPrimitiveProps;
+type TabsListProps = TabsListPrimitiveProps & {
+  variant?: 'default' | 'skeuomorphic';
+};
 
-function TabsList({ className, ...props }: TabsListProps) {
+function TabsList({ className, variant, ...props }: TabsListProps) {
+  const context = React.useContext(TabsContext);
+  const mergedVariant = variant ?? context.variant;
+  const isSkeuomorphic = mergedVariant === 'skeuomorphic';
   return (
-    <TabsHighlightPrimitive className="absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm">
+    <TabsHighlightPrimitive
+      className={cn(
+        "absolute z-0 inset-0 rounded-md transition-all duration-200",
+        isSkeuomorphic
+          ? "bg-linear-to-b from-white to-neutral-100 dark:from-zinc-700 dark:to-zinc-800 border border-neutral-300 dark:border-zinc-600 shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]"
+          : "border border-transparent bg-background dark:border-input dark:bg-input/30 shadow-sm"
+      )}
+    >
       <TabsListPrimitive
         className={cn(
-          'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px] data-[orientation=vertical]:h-fit data-[orientation=vertical]:w-full data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
+          isSkeuomorphic
+            ? 'bg-neutral-100 dark:bg-zinc-950 border border-neutral-300 dark:border-zinc-700 shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.1)] text-neutral-500 dark:text-zinc-400 inline-flex h-9 w-fit items-center justify-center p-[3px] data-[orientation=vertical]:h-fit data-[orientation=vertical]:w-full data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch'
+            : 'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px] data-[orientation=vertical]:h-fit data-[orientation=vertical]:w-full data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
           className,
         )}
         {...props}
@@ -186,14 +208,21 @@ function TabsList({ className, ...props }: TabsListProps) {
   );
 }
 
-type TabsTriggerProps = TabsTriggerPrimitiveProps;
+type TabsTriggerProps = TabsTriggerPrimitiveProps & {
+  variant?: 'default' | 'skeuomorphic';
+};
 
-function TabsTrigger({ className, ...props }: TabsTriggerProps) {
+function TabsTrigger({ className, variant, ...props }: TabsTriggerProps) {
+  const context = React.useContext(TabsContext);
+  const mergedVariant = variant ?? context.variant;
+  const isSkeuomorphic = mergedVariant === 'skeuomorphic';
   return (
     <TabsHighlightItemPrimitive value={props.value} className="flex-1">
       <TabsTriggerPrimitive
         className={cn(
-          "data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+          isSkeuomorphic
+            ? "data-[state=active]:text-neutral-800 dark:data-[state=active]:text-white focus-visible:border-blue-500 focus-visible:ring-blue-500/50 focus-visible:outline-blue-500 text-neutral-500 dark:text-zinc-400 inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-200 focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+            : "data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
           className,
         )}
         {...props}

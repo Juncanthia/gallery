@@ -53,16 +53,19 @@ function CodeTabs({
     async function loadHighlightedCode() {
       try {
         const { codeToHtml } = await import('shiki');
+        const { createCssVariablesTheme } = await import('shiki/core');
+        const cssVariablesTheme = createCssVariablesTheme({
+          name: "css-variables",
+          variablePrefix: "--shiki-",
+          variableDefaults: {},
+          fontStyle: true,
+        });
         const newHighlightedCodes: Record<string, string> = {};
 
         for (const [command, val] of Object.entries(codes)) {
           const highlighted = await codeToHtml(val, {
             lang,
-            themes: {
-              light: themes.light,
-              dark: themes.dark,
-            },
-            defaultColor: resolvedTheme === 'dark' ? 'dark' : 'light',
+            theme: cssVariablesTheme,
           });
 
           newHighlightedCodes[command] = highlighted;
@@ -80,8 +83,9 @@ function CodeTabs({
   return (
     <Tabs
       data-slot="install-tabs"
+      data-canthia-ignore=""
       className={cn(
-        'w-full gap-0 bg-muted/50 rounded-xl border overflow-hidden',
+        'not-prose w-full gap-0 bg-muted/50 rounded border overflow-hidden',
         className,
       )}
       {...props}

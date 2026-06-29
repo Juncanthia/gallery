@@ -13,6 +13,8 @@ const inputRootVariants = cva(
           "rounded-md border-transparent bg-transparent shadow-none focus-visible:ring-0",
         underlined:
           "rounded-none border-x-0 border-t-0 border-b-input bg-transparent px-0 shadow-none focus-visible:border-b-ring focus-visible:ring-0",
+        skeuomorphic:
+          "rounded border-neutral-300 dark:border-zinc-700 bg-neutral-50 dark:bg-zinc-900 shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.08)] dark:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.3)] focus-visible:border-blue-500 focus-visible:ring-blue-500/20 focus-visible:bg-white dark:focus-visible:bg-zinc-950",
       },
       size: {
         small: "h-8 px-2 text-xs",
@@ -48,6 +50,8 @@ const inputAffixWrapperVariants = cva(
           "rounded-md border-transparent bg-transparent shadow-none focus-within:ring-0",
         underlined:
           "rounded-none border-x-0 border-t-0 border-b-input bg-transparent px-0 shadow-none focus-within:border-b-ring focus-within:ring-0",
+        skeuomorphic:
+          "rounded border-neutral-300 dark:border-zinc-700 bg-neutral-50 dark:bg-zinc-900 shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.08)] dark:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.3)] focus-within:border-blue-500 focus-within:ring-blue-500/20 focus-within:bg-white dark:focus-within:bg-zinc-950",
       },
       size: {
         small: "h-8 gap-1 px-2 text-xs",
@@ -99,6 +103,8 @@ const textareaVariants = cva(
           "rounded-md border-transparent bg-transparent shadow-none focus-visible:ring-0",
         underlined:
           "rounded-none border-x-0 border-t-0 border-b-input bg-transparent px-0 shadow-none focus-visible:border-b-ring focus-visible:ring-0",
+        skeuomorphic:
+          "rounded border-neutral-300 dark:border-zinc-700 bg-neutral-50 dark:bg-zinc-900 shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.08)] dark:shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.3)] focus-visible:border-blue-500 focus-visible:ring-blue-500/20 focus-visible:bg-white dark:focus-visible:bg-zinc-950",
       },
       size: {
         small: "min-h-14 px-2 py-1.5 text-xs",

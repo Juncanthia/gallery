@@ -1,0 +1,288 @@
+/* ── Diagrams: dark mode color overrides ── */
+/* Strategy: fix visibility without killing Mermaid's native colors.
+   - Neutral fills for structural elements (nodes, actors, notes)
+   - Visible strokes for lines/edges/borders
+   - Preserve colored fills (pie slices, gantt tasks, journey tasks, timeline)
+   - High-specificity text override for all label types */
+
+/* ═══ 1. STRUCTURAL BACKGROUNDS (neutral dark fill) ═══ */
+
+/* Flowchart nodes */
+.md-diagram-panel svg .node rect:not(#_):not(#_),
+.md-diagram-panel svg .node circle:not(#_):not(#_),
+.md-diagram-panel svg .node ellipse:not(#_):not(#_),
+.md-diagram-panel svg .node polygon:not(#_):not(#_),
+.md-diagram-panel svg .node path:not(#_):not(#_),
+.md-diagram-panel-preview svg .node rect:not(#_):not(#_),
+.md-diagram-panel-preview svg .node circle:not(#_):not(#_),
+.md-diagram-panel-preview svg .node ellipse:not(#_):not(#_),
+.md-diagram-panel-preview svg .node polygon:not(#_):not(#_),
+.md-diagram-panel-preview svg .node path:not(#_):not(#_) {
+    fill: var(--code-bg-color) !important;
+    stroke: var(--line-color) !important;
+}
+
+/* Cluster/subgraph */
+.md-diagram-panel svg .cluster rect:not(#_):not(#_),
+.md-diagram-panel-preview svg .cluster rect:not(#_):not(#_) {
+    fill: var(--bg-color) !important;
+    stroke: var(--line-color) !important;
+}
+
+/* Sequence: actors, notes, activation, label boxes */
+.md-diagram-panel svg rect.actor:not(#_):not(#_),
+.md-diagram-panel-preview svg rect.actor:not(#_):not(#_),
+.md-diagram-panel svg .note rect:not(#_):not(#_),
+.md-diagram-panel svg .note path:not(#_):not(#_),
+.md-diagram-panel-preview svg .note rect:not(#_):not(#_),
+.md-diagram-panel-preview svg .note path:not(#_):not(#_),
+.md-diagram-panel svg .activation:not(#_):not(#_),
+.md-diagram-panel-preview svg .activation:not(#_):not(#_),
+.md-diagram-panel svg .labelBox:not(#_):not(#_),
+.md-diagram-panel-preview svg .labelBox:not(#_):not(#_) {
+    fill: var(--code-bg-color) !important;
+    stroke: var(--line-color) !important;
+}
+
+/* ER diagram: entity boxes, attribute boxes */
+.md-diagram-panel svg .er.entityBox:not(#_):not(#_),
+.md-diagram-panel-preview svg .er.entityBox:not(#_):not(#_),
+.md-diagram-panel svg .er.attributeBoxOdd:not(#_):not(#_),
+.md-diagram-panel svg .er.attributeBoxEven:not(#_):not(#_),
+.md-diagram-panel-preview svg .er.attributeBoxOdd:not(#_):not(#_),
+.md-diagram-panel-preview svg .er.attributeBoxEven:not(#_):not(#_) {
+    fill: var(--code-bg-color) !important;
+    stroke: var(--line-color) !important;
+}
+
+/* Class diagram */
+.md-diagram-panel svg .classGroup rect:not(#_):not(#_),
+.md-diagram-panel-preview svg .classGroup rect:not(#_):not(#_) {
+    fill: var(--code-bg-color) !important;
+    stroke: var(--line-color) !important;
+}
+
+.md-diagram-panel svg .divider:not(#_):not(#_),
+.md-diagram-panel-preview svg .divider:not(#_):not(#_) {
+    stroke: var(--line-color) !important;
+}
+
+/* State diagram */
+.md-diagram-panel svg .stateGroup rect:not(#_):not(#_),
+.md-diagram-panel svg .stateGroup polygon:not(#_):not(#_),
+.md-diagram-panel-preview svg .stateGroup rect:not(#_):not(#_),
+.md-diagram-panel-preview svg .stateGroup polygon:not(#_):not(#_) {
+    fill: var(--code-bg-color) !important;
+    stroke: var(--line-color) !important;
+}
+
+/* Diagram background — transparent */
+.md-diagram-panel svg .background:not(#_):not(#_),
+.md-diagram-panel svg > rect:first-child,
+.md-diagram-panel-preview svg .background:not(#_):not(#_),
+.md-diagram-panel-preview svg > rect:first-child {
+    fill: transparent !important;
+}
+
+/* ═══ 2. LINES & EDGES ═══ */
+
+/* Flowchart edges */
+.md-diagram-panel svg .edge path:not(#_):not(#_),
+.md-diagram-panel svg .flowchart-link:not(#_):not(#_),
+.md-diagram-panel-preview svg .edge path:not(#_):not(#_),
+.md-diagram-panel-preview svg .flowchart-link:not(#_):not(#_) {
+    stroke: var(--muted-text-color) !important;
+}
+
+/* Generic lines (lifelines, grid, etc.) */
+.md-diagram-panel svg line:not(#_):not(#_),
+.md-diagram-panel-preview svg line:not(#_):not(#_) {
+    stroke: var(--line-color) !important;
+}
+
+/* Sequence message lines */
+.md-diagram-panel svg .messageLine0:not(#_):not(#_),
+.md-diagram-panel svg .messageLine1:not(#_):not(#_),
+.md-diagram-panel-preview svg .messageLine0:not(#_):not(#_),
+.md-diagram-panel-preview svg .messageLine1:not(#_):not(#_) {
+    stroke: var(--muted-text-color) !important;
+}
+
+/* Sequence loop line */
+.md-diagram-panel svg .loopLine:not(#_):not(#_),
+.md-diagram-panel-preview svg .loopLine:not(#_):not(#_) {
+    stroke: var(--line-color) !important;
+}
+
+/* ER relationship lines */
+.md-diagram-panel svg .er.relationshipLine:not(#_):not(#_),
+.md-diagram-panel-preview svg .er.relationshipLine:not(#_):not(#_) {
+    stroke: var(--muted-text-color) !important;
+}
+
+/* Class/state relation lines */
+.md-diagram-panel svg .relation:not(#_):not(#_),
+.md-diagram-panel-preview svg .relation:not(#_):not(#_) {
+    stroke: var(--muted-text-color) !important;
+}
+
+/* Arrowhead markers */
+.md-diagram-panel svg marker path:not(#_):not(#_),
+.md-diagram-panel svg marker polygon:not(#_):not(#_),
+.md-diagram-panel-preview svg marker path:not(#_):not(#_),
+.md-diagram-panel-preview svg marker polygon:not(#_):not(#_) {
+    fill: var(--muted-text-color) !important;
+    stroke: none !important;
+}
+
+/* ═══ 3. COLORED ELEMENTS (preserve fill, fix stroke/contrast) ═══ */
+
+/* Pie slices — keep original colors, fix border */
+.md-diagram-panel svg .pieCircle:not(#_):not(#_),
+.md-diagram-panel-preview svg .pieCircle:not(#_):not(#_) {
+    stroke: var(--bg-color) !important;
+}
+
+/* Gantt tasks — keep Mermaid colors, fix stroke */
+.md-diagram-panel svg rect.task:not(#_):not(#_),
+.md-diagram-panel-preview svg rect.task:not(#_):not(#_) {
+    stroke: var(--line-color) !important;
+}
+
+/* Gantt section backgrounds — subtle alternating */
+.md-diagram-panel svg rect.section0:not(#_):not(#_),
+.md-diagram-panel svg rect.section2:not(#_):not(#_),
+.md-diagram-panel-preview svg rect.section0:not(#_):not(#_),
+.md-diagram-panel-preview svg rect.section2:not(#_):not(#_) {
+    fill: rgba(161, 161, 170, 0.08) !important;
+}
+
+.md-diagram-panel svg rect.section1:not(#_):not(#_),
+.md-diagram-panel svg rect.section3:not(#_):not(#_),
+.md-diagram-panel-preview svg rect.section1:not(#_):not(#_),
+.md-diagram-panel-preview svg rect.section3:not(#_):not(#_) {
+    fill: rgba(161, 161, 170, 0.04) !important;
+}
+
+/* Gantt grid */
+.md-diagram-panel svg .grid .tick line:not(#_):not(#_),
+.md-diagram-panel-preview svg .grid .tick line:not(#_):not(#_) {
+    stroke: var(--soft-line-color) !important;
+}
+
+/* Journey task boxes — keep colors, reduce brightness */
+.md-diagram-panel svg [class^="task-type-"]:not(#_):not(#_),
+.md-diagram-panel-preview svg [class^="task-type-"]:not(#_):not(#_) {
+    opacity: 0.75 !important;
+    stroke: var(--line-color) !important;
+}
+
+/* Journey section backgrounds — very subtle */
+.md-diagram-panel svg [class^="section-type-"]:not(#_):not(#_),
+.md-diagram-panel-preview svg [class^="section-type-"]:not(#_):not(#_) {
+    opacity: 0.15 !important;
+}
+
+/* Mindmap nodes — keep colors, fix stroke */
+.md-diagram-panel svg .section-root rect:not(#_):not(#_),
+.md-diagram-panel svg .section-root circle:not(#_):not(#_),
+.md-diagram-panel-preview svg .section-root rect:not(#_):not(#_),
+.md-diagram-panel-preview svg .section-root circle:not(#_):not(#_) {
+    stroke: var(--line-color) !important;
+}
+
+/* Timeline nodes — keep colors, fix stroke */
+.md-diagram-panel svg .timeline-node rect:not(#_):not(#_),
+.md-diagram-panel-preview svg .timeline-node rect:not(#_):not(#_) {
+    stroke: var(--line-color) !important;
+}
+
+/* ═══ 4. TEXT & LABELS (highest priority) ═══ */
+
+/* All SVG text — EXCEPT timeline nodes (Mermaid calculates correct
+   contrast colors for timeline based on background brightness) */
+.md-diagram-panel svg text:not(#_):not(#_),
+.md-diagram-panel svg tspan:not(#_):not(#_),
+.md-diagram-panel-preview svg text:not(#_):not(#_),
+.md-diagram-panel-preview svg tspan:not(#_):not(#_) {
+    fill: var(--text-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* Timeline: restore Mermaid's own text colors (it picks black/white
+   based on section background brightness — don't override) */
+.md-diagram-panel svg[aria-roledescription="timeline"] .section--1 text:not(#_):not(#_):not(#_) { fill: #ffffff !important; }
+.md-diagram-panel svg[aria-roledescription="timeline"] .section-0 text:not(#_):not(#_):not(#_) { fill: black !important; }
+.md-diagram-panel svg[aria-roledescription="timeline"] .section-1 text:not(#_):not(#_):not(#_) { fill: black !important; }
+.md-diagram-panel svg[aria-roledescription="timeline"] .section-2 text:not(#_):not(#_):not(#_) { fill: #ffffff !important; }
+.md-diagram-panel svg[aria-roledescription="timeline"] .section-3 text:not(#_):not(#_):not(#_) { fill: black !important; }
+.md-diagram-panel svg[aria-roledescription="timeline"] .section-4 text:not(#_):not(#_):not(#_) { fill: #ffffff !important; }
+.md-diagram-panel-preview svg[aria-roledescription="timeline"] .section--1 text:not(#_):not(#_):not(#_) { fill: #ffffff !important; }
+.md-diagram-panel-preview svg[aria-roledescription="timeline"] .section-0 text:not(#_):not(#_):not(#_) { fill: black !important; }
+.md-diagram-panel-preview svg[aria-roledescription="timeline"] .section-1 text:not(#_):not(#_):not(#_) { fill: black !important; }
+.md-diagram-panel-preview svg[aria-roledescription="timeline"] .section-2 text:not(#_):not(#_):not(#_) { fill: #ffffff !important; }
+.md-diagram-panel-preview svg[aria-roledescription="timeline"] .section-3 text:not(#_):not(#_):not(#_) { fill: black !important; }
+.md-diagram-panel-preview svg[aria-roledescription="timeline"] .section-4 text:not(#_):not(#_):not(#_) { fill: #ffffff !important; }
+
+/* Gantt: task text outside bars (on dark background, needs light color) */
+.md-diagram-panel svg[aria-roledescription="gantt"] .taskTextOutsideRight:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gantt"] .taskTextOutsideLeft:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gantt"] .taskTextOutside0:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gantt"] .taskTextOutside1:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gantt"] .taskTextOutside2:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gantt"] .taskTextOutside3:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] .taskTextOutsideRight:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] .taskTextOutsideLeft:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] .taskTextOutside0:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] .taskTextOutside1:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] .taskTextOutside2:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] .taskTextOutside3:not(#_):not(#_):not(#_) {
+    fill: var(--text-color) !important;
+}
+
+/* Gantt: active/done/crit text (Mermaid uses fill:black!important) */
+.md-diagram-panel svg[aria-roledescription="gantt"] [class*="activeText"]:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gantt"] [class*="doneText"]:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gantt"] [class*="doneCritText"]:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] [class*="activeText"]:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] [class*="doneText"]:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gantt"] [class*="doneCritText"]:not(#_):not(#_):not(#_) {
+    fill: var(--text-color) !important;
+}
+
+/* Gitgraph: branch labels that are black need to be light */
+.md-diagram-panel svg[aria-roledescription="gitGraph"] [class*="branch-label"]:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gitGraph"] [class*="branch-label"]:not(#_):not(#_):not(#_) {
+    fill: var(--text-color) !important;
+}
+
+/* Gitgraph: commit labels already lightgrey — boost to full text color */
+.md-diagram-panel svg[aria-roledescription="gitGraph"] .commit-id:not(#_):not(#_):not(#_),
+.md-diagram-panel svg[aria-roledescription="gitGraph"] .commit-msg:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gitGraph"] .commit-id:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gitGraph"] .commit-msg:not(#_):not(#_):not(#_) {
+    fill: var(--muted-text-color) !important;
+}
+
+/* Gitgraph: tag labels */
+.md-diagram-panel svg[aria-roledescription="gitGraph"] .tag-label:not(#_):not(#_):not(#_),
+.md-diagram-panel-preview svg[aria-roledescription="gitGraph"] .tag-label:not(#_):not(#_):not(#_) {
+    fill: var(--text-color) !important;
+}
+
+/* foreignObject labels (flowchart nodes, edge labels) */
+.md-diagram-panel svg span:not(#_):not(#_),
+.md-diagram-panel svg p:not(#_):not(#_),
+.md-diagram-panel-preview svg span:not(#_):not(#_),
+.md-diagram-panel-preview svg p:not(#_):not(#_) {
+    fill: var(--text-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* Edge label background pill (span and inner p) */
+.md-diagram-panel svg span.edgeLabel:not(#_):not(#_),
+.md-diagram-panel svg .edgeLabel p:not(#_):not(#_),
+.md-diagram-panel-preview svg span.edgeLabel:not(#_):not(#_),
+.md-diagram-panel-preview svg .edgeLabel p:not(#_):not(#_) {
+    background-color: var(--code-bg-color) !important;
+}

@@ -1,0 +1,120 @@
+@layer base {
+  [data-slot="code-block"] {
+    --code-bg-color: #fbfbfc;
+    --code-border-color: rgba(24, 24, 27, 0.14);
+    --text-color: #27272a;
+    --syntax-keyword-color: #57525e;
+    --syntax-string-color: #4d6a4f;
+    --syntax-number-color: #5b4f6e;
+    --syntax-type-color: #3b6363;
+    --syntax-comment-color: #8a8a92;
+    --syntax-diff-add-color: #3b6b4a;
+    --syntax-diff-remove-color: #8c3a3a;
+    --shiki-foreground: var(--text-color);
+    --shiki-background: transparent;
+    --shiki-token-comment: var(--syntax-comment-color);
+    --shiki-token-keyword: var(--syntax-keyword-color);
+    --shiki-token-string: var(--syntax-string-color);
+    --shiki-token-string-expression: var(--syntax-string-color);
+    --shiki-token-constant: var(--syntax-number-color);
+    --shiki-token-function: var(--syntax-type-color);
+    --shiki-token-parameter: var(--text-color);
+    --shiki-token-punctuation: var(--text-color);
+    --shiki-token-link: var(--text-color);
+    --shiki-token-inserted: var(--syntax-diff-add-color);
+    --shiki-token-deleted: var(--syntax-diff-remove-color);
+    --shiki-token-changed: var(--syntax-type-color);
+  }
+
+  .dark [data-slot="code-block"],
+  [data-theme="dark"] [data-slot="code-block"] {
+    --code-bg-color: #1f1f23;
+    --code-border-color: rgba(255, 255, 255, 0.14);
+    --text-color: #d4d4d8;
+    --syntax-keyword-color: #c6c2d6;
+    --syntax-string-color: #8bb98e;
+    --syntax-number-color: #b9a7d8;
+    --syntax-type-color: #86b8b8;
+    --syntax-comment-color: #71717a;
+    --syntax-diff-add-color: #7aab7e;
+    --syntax-diff-remove-color: #c07070;
+  }
+
+  .canthia-mdx :where(code, tt):not(:where(pre code, .not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    padding: 0.08em 0.35em;
+    border: 1px solid color-mix(in oklch, var(--canthia-inline-code-border) 72%, transparent);
+    border-radius: 2px;
+    background-color: color-mix(in oklch, var(--canthia-inline-code-bg) 78%, transparent);
+    color: var(--canthia-text);
+    font-size: var(--canthia-inline-code-font-size);
+    line-height: 1.45;
+    font-variant-ligatures: contextual;
+  }
+
+  .canthia-mdx :where(pre):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 1.5em 0;
+    padding: 0.9rem 1rem;
+    border: 1px solid color-mix(in oklch, var(--canthia-code-border) 70%, transparent);
+    border-radius: 2px;
+    background: color-mix(in oklch, var(--canthia-code-bg) 82%, transparent);
+    color: var(--canthia-text);
+    font-size: var(--canthia-code-font-size);
+    line-height: 1.5;
+    overflow-x: auto;
+    overflow-y: visible;
+    white-space: pre;
+    max-width: 100%;
+    max-height: none;
+    height: auto;
+    tab-size: 4;
+    text-align: left;
+    hyphens: none;
+  }
+
+  .canthia-mdx :where(pre code):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  .canthia-mdx :where(.shiki):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    --shiki-foreground: var(--canthia-text);
+    --shiki-background: transparent;
+    --shiki-token-comment: var(--canthia-syntax-comment);
+    --shiki-token-keyword: var(--canthia-syntax-keyword);
+    --shiki-token-string: var(--canthia-syntax-string);
+    --shiki-token-string-expression: var(--canthia-syntax-string);
+    --shiki-token-constant: var(--canthia-syntax-number);
+    --shiki-token-function: var(--canthia-syntax-type);
+    --shiki-token-parameter: var(--canthia-text);
+    --shiki-token-punctuation: var(--canthia-text);
+    --shiki-token-link: var(--canthia-link);
+    --shiki-token-inserted: var(--canthia-syntax-diff-add);
+    --shiki-token-deleted: var(--canthia-syntax-diff-remove);
+    --shiki-token-changed: var(--canthia-syntax-type);
+    background: transparent !important;
+  }
+
+  .canthia-mdx :where(.line.diff.add):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-syntax-diff-add);
+  }
+
+  .canthia-mdx :where(.line.diff.remove):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-syntax-diff-remove);
+  }
+
+  .canthia-mdx :where(kbd):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    display: inline-block;
+    min-width: 1.65em;
+    padding: 0.12em 0.4em;
+    border: 1px solid var(--canthia-border);
+    border-radius: 2px;
+    background-color: color-mix(in oklch, var(--canthia-code-bg) 82%, transparent);
+    color: var(--canthia-text);
+    font-size: 0.85em;
+    line-height: 1.2;
+    text-align: center;
+  }
+}

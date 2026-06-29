@@ -6,6 +6,7 @@ import {
   useIsInView,
   type UseIsInViewOptions,
 } from '@/hooks/use-is-in-view';
+import { cn } from '@/lib/utils';
 
 type CodeBlockProps = React.ComponentProps<'div'> & {
   code: string;
@@ -38,6 +39,7 @@ function CodeBlock({
   inView = false,
   inViewOnce = true,
   inViewMargin = '0px',
+  className,
   ...props
 }: CodeBlockProps) {
   const { ref: localRef, isInView } = useIsInView(
@@ -59,11 +61,17 @@ function CodeBlock({
     const loadHighlightedCode = async () => {
       try {
         const { codeToHtml } = await import('shiki');
+        const { createCssVariablesTheme } = await import('shiki/core');
+        const cssVariablesTheme = createCssVariablesTheme({
+          name: "css-variables",
+          variablePrefix: "--shiki-",
+          variableDefaults: {},
+          fontStyle: true,
+        });
 
         const highlighted = await codeToHtml(visibleCode, {
           lang,
-          themes,
-          defaultColor: theme,
+          theme: cssVariablesTheme,
         });
 
         setHighlightedCode(highlighted);
@@ -150,6 +158,8 @@ function CodeBlock({
       data-slot="code-block"
       data-writing={writing}
       data-done={isDone}
+      data-canthia-ignore=""
+      className={cn("not-prose", className)}
       dangerouslySetInnerHTML={{ __html: highlightedCode }}
       {...props}
     />

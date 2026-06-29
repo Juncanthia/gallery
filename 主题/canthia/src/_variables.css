@@ -1,0 +1,125 @@
+/* ── Design tokens ── */
+
+:root {
+    /* Typography scale (正文小四 12pt, 固定 20pt 行距) */
+    --doc-font-size: 12pt;
+    --doc-line-height: 20pt;
+    --table-font-size: 10.5pt;
+    --table-line-height: 1.42;
+    --code-font-size: 10pt;
+    --inline-code-font-size: 0.88em;
+    --footnote-font-size: 10pt;
+    --caption-font-size: 10pt;
+
+    /* Page geometry */
+    --page-width: 210mm;
+    --page-screen-margin: 24px;
+    --page-padding-x: 1.27cm;
+    --page-padding-y: 1.27cm;
+
+    /* Surfaces */
+    --bg-color: #f4f4f5;
+    --surface-color: #ffffff;
+    --panel-bg-color: #ffffff;
+
+    /* Text */
+    --text-color: #18181b;
+    --muted-text-color: #52525b;
+    --meta-text-color: #71717a;
+
+    /* Lines & borders */
+    --line-color: #e4e4e7;
+    --strong-line-color: #18181b;
+    --soft-line-color: #f1f1f3;
+
+    /* Selection */
+    --selection-color: rgba(24, 24, 27, 0.12);
+    --select-text-bg-color: var(--selection-color);
+    --select-text-font-color: var(--text-color);
+
+    /* Links — zinc-700 / zinc-800 */
+    --link-color: #3f3f46;
+    --link-hover-color: #27272a;
+
+    /* Highlights — zinc-compatible warm */
+    --mark-bg-color: #e4e4e7;
+    --mark-text-color: var(--text-color);
+
+    /* Code — zinc-50 / zinc-100 */
+    --code-bg-color: #fafafa;
+    --code-border-color: #e4e4e7;
+    --inline-code-bg-color: #f4f4f5;
+    --inline-code-border-color: #e4e4e7;
+
+    /* Blockquote */
+    --quote-bg-color: transparent;
+    --quote-border-color: rgba(0, 0, 0, 0.28);
+
+    /* Alerts — low-saturation, zinc-compatible */
+    --alert-note-accent: #3f3f46;
+    --alert-note-bg-color: #f4f4f5;
+    --alert-tip-accent: #52625a;
+    --alert-tip-bg-color: #f5f7f6;
+    --alert-important-accent: #57525e;
+    --alert-important-bg-color: #f6f5f7;
+    --alert-warning-accent: #6b5c3e;
+    --alert-warning-bg-color: #f8f6f2;
+    --alert-caution-accent: #7f4040;
+    --alert-caution-bg-color: #f9f4f4;
+
+
+    /* Syntax highlighting — desaturated, zinc-compatible */
+    --syntax-keyword-color: #3f3f46;
+    --syntax-string-color: #4d6a4f;
+    --syntax-number-color: #5b4f6e;
+    --syntax-type-color: #3b6363;
+    --syntax-comment-color: #a1a1aa;
+    --syntax-diff-add-color: #3b6b4a;
+    --syntax-diff-remove-color: #8c3a3a;
+
+    /* Font stacks */
+    --font-family:
+        "佳宋", "Canthia New Computer Modern", "Canthia Latin Modern Roman",
+        "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC",
+        "Times New Roman", serif;
+    --heading-font:
+        "佳宋", "Canthia New Computer Modern", "Canthia Latin Modern Roman",
+        "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC",
+        "Times New Roman", serif;
+    --math-font:
+        "Canthia New Computer Modern", "Canthia Latin Modern Roman",
+        "Times New Roman", "STIX Two Math", "STIXGeneral", serif;
+    --sans-font:
+        "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+        "Hiragino Sans GB", sans-serif;
+    --monospace:
+        "Fira Code", "FiraCode Nerd Font", "FiraCode Nerd Font Mono",
+        "SFMono-Regular", Menlo, Consolas, "Canthia Latin Modern Mono", monospace;
+
+    /* Typora UI chrome */
+    --side-bar-bg-color: #f4f4f5;
+    --active-file-bg-color: #ffffff;
+    --active-file-text-color: var(--text-color);
+    --active-file-border-color: rgba(0, 0, 0, 0.28);
+    --item-hover-bg-color: #e4e4e7;
+    --item-hover-text-color: var(--text-color);
+    --window-border: 1px solid var(--line-color);
+    --control-text-color: var(--muted-text-color);
+    --control-border-color: var(--line-color);
+    --control-hover-bg-color: rgba(0, 0, 0, 0.05);
+    --primary-color: #18181b;
+    --primary-btn-text-color: #ffffff;
+    --primary-btn-border-color: #18181b;
+    --focus-ring-color: rgba(0, 0, 0, 0.22);
+
+    /* Mermaid */
+    --mermaid-theme: canthia;
+    --mermaid-font-family: "OPPOSans UI", sans-serif;
+    --mermaid-sequence-numbers: off;
+    --mermaid-flowchart-curve: basis;
+    --sequence-theme: simple;
+    --mermaid-background: #ffffff;
+    --node-fill: #f4f4f5;
+    --node-text-color: #18181b;
+    --cluster-fill: #fafafa;
+}

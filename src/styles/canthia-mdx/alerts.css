@@ -1,0 +1,77 @@
+@layer base {
+  .canthia-mdx :where(blockquote.md-alert, blockquote:has(.md-alert-text-container)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    padding: 1em 1.2em 1em 1.35em;
+    border-left-width: 1px;
+    background-color: var(--canthia-surface);
+    color: var(--canthia-text);
+    font-size: 1em;
+  }
+
+  .canthia-mdx :where(blockquote.md-alert :is(p, ul, ol), blockquote:has(.md-alert-text-container) :is(p, ul, ol)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: inherit;
+  }
+
+  .canthia-mdx :where(.md-alert-text-note, .md-alert-text-tip, .md-alert-text-important, .md-alert-text-warning, .md-alert-text-caution):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+    margin-bottom: 0.45em;
+  }
+
+  .canthia-mdx :where(.md-alert-text-container):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    font-size: 0.82em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .canthia-mdx :where(.md-alert-text-note, .md-alert-text-tip, .md-alert-text-important, .md-alert-text-warning, .md-alert-text-caution):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) :is(svg, path) {
+    fill: currentColor;
+    stroke: currentColor;
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-note, blockquote:has(.md-alert-text-note)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    background-color: var(--canthia-alert-note-bg);
+    border-left-color: var(--canthia-alert-note-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-tip, blockquote:has(.md-alert-text-tip)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    background-color: var(--canthia-alert-tip-bg);
+    border-left-color: var(--canthia-alert-tip-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-important, blockquote:has(.md-alert-text-important)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    background-color: var(--canthia-alert-important-bg);
+    border-left-color: var(--canthia-alert-important-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-warning, blockquote:has(.md-alert-text-warning)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    background-color: var(--canthia-alert-warning-bg);
+    border-left-color: var(--canthia-alert-warning-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-caution, blockquote:has(.md-alert-text-caution)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    background-color: var(--canthia-alert-caution-bg);
+    border-left-color: var(--canthia-alert-caution-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-note :is(.md-alert-text-note, .md-alert-text-container), blockquote:has(.md-alert-text-note) :is(.md-alert-text-note, .md-alert-text-container)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-alert-note-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-tip :is(.md-alert-text-tip, .md-alert-text-container), blockquote:has(.md-alert-text-tip) :is(.md-alert-text-tip, .md-alert-text-container)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-alert-tip-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-important :is(.md-alert-text-important, .md-alert-text-container), blockquote:has(.md-alert-text-important) :is(.md-alert-text-important, .md-alert-text-container)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-alert-important-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-warning :is(.md-alert-text-warning, .md-alert-text-container), blockquote:has(.md-alert-text-warning) :is(.md-alert-text-warning, .md-alert-text-container)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-alert-warning-accent);
+  }
+
+  .canthia-mdx :where(blockquote.md-alert-caution :is(.md-alert-text-caution, .md-alert-text-container), blockquote:has(.md-alert-text-caution) :is(.md-alert-text-caution, .md-alert-text-container)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-alert-caution-accent);
+  }
+}

@@ -11,6 +11,14 @@ import {
   type CodeOptionsMultipleThemes,
   codeToHtml,
 } from "shiki";
+import { createCssVariablesTheme } from "shiki/core";
+
+const cssVariablesTheme = createCssVariablesTheme({
+  name: "css-variables",
+  variablePrefix: "--shiki-",
+  variableDefaults: {},
+  fontStyle: true,
+});
 
 export type CodeBlockContentProps = HTMLAttributes<HTMLDivElement> & {
   themes?: CodeOptionsMultipleThemes["themes"];
@@ -21,18 +29,16 @@ export type CodeBlockContentProps = HTMLAttributes<HTMLDivElement> & {
 
 export const CodeBlockContent = async ({
   children,
-  themes,
+  themes: _themes,
   language,
   syntaxHighlighting = true,
   ...props
 }: CodeBlockContentProps) => {
+  void _themes;
   const html = syntaxHighlighting
     ? await codeToHtml(children as string, {
         lang: language ?? "typescript",
-        themes: themes ?? {
-          light: "vitesse-light",
-          dark: "vitesse-dark",
-        },
+        theme: cssVariablesTheme,
         transformers: [
           transformerNotationDiff({
             matchAlgorithm: "v3",

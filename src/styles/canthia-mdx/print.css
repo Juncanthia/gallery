@@ -1,0 +1,48 @@
+@media print {
+  .canthia-mdx {
+    color: inherit !important;
+    background-color: inherit !important;
+  }
+
+  .canthia-mdx *:not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .canthia-mdx :where(h1, h2, h3, h4, h5, h6, table, pre, blockquote, figure, .katex-display, mjx-container[display="true"]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .canthia-mdx :where(h1, h2, h3, h4, h5, h6):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .canthia-mdx :where(a, .katex, mjx-container, sup.md-footnote, .footnotes, .md-footnotes):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: inherit !important;
+  }
+
+  .canthia-mdx :where(a):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    border-bottom: none;
+  }
+
+  .canthia-mdx :where(pre, code, tt, table):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    background-color: var(--canthia-surface) !important;
+    color: var(--canthia-text) !important;
+  }
+
+  .canthia-mdx :where(blockquote, hr, .footnotes, .md-footnotes):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    border-color: var(--canthia-border-strong) !important;
+  }
+
+  .canthia-mdx :where(blockquote.md-alert, blockquote:has(.md-alert-text-container)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-text) !important;
+  }
+
+  @page {
+    margin: 22mm 20mm;
+  }
+}

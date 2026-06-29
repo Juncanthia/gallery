@@ -1,0 +1,273 @@
+/* ── UI chrome: sidebar, TOC, details, source view, raw blocks ── */
+
+/* TOC */
+.md-toc {
+    font-family: var(--sans-font);
+    font-size: 0.95em;
+    margin: 2em 0;
+    color: var(--muted-text-color);
+}
+
+.md-toc-content {
+    margin: 0;
+}
+
+a.md-toc-inner {
+    color: var(--text-color);
+    border-bottom: 0;
+}
+
+.md-toc-h1 .md-toc-inner {
+    font-weight: 700;
+}
+
+/* Footnotes */
+.footnotes,
+.md-footnotes {
+    margin-top: 3em;
+    padding-top: 1em;
+    border-top: 1px solid var(--strong-line-color);
+    color: var(--muted-text-color);
+    font-size: var(--footnote-font-size);
+}
+
+sup.md-footnote {
+    padding: 0 0.15em;
+    background: transparent;
+    color: var(--text-color);
+}
+
+.footnote-line {
+    margin-top: 0.45rem;
+}
+
+.md-def-name {
+    font-weight: 700;
+}
+
+.md-def-name:before,
+.md-def-name:after {
+    color: var(--meta-text-color);
+}
+
+/* Details / summary */
+details {
+    margin: 1.2rem 0;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--soft-line-color);
+    border-radius: 2px;
+    background: var(--code-bg-color);
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 700;
+}
+
+details > :last-child {
+    margin-bottom: 0;
+}
+
+/* HTML raw blocks */
+.md-rawblock-control,
+.md-rawblock-tooltip,
+.md-htmlblock .md-rawblock-tooltip {
+    font-family: var(--sans-font);
+}
+
+.md-htmlblock .md-rawblock-tooltip,
+.md-htmlblock .md-rawblock-control:not(.md-rawblock-tooltip),
+.md-htmlblock:hover > .md-rawblock-container,
+.md-htmlblock:hover > .md-rawblock-tooltip,
+.md-htmlblock.md-rawblock-on-edit > .md-rawblock-tooltip {
+    background: var(--code-bg-color);
+    transition: none !important;
+    animation: none !important;
+}
+
+.md-htmlblock > .md-rawblock-container,
+.md-htmlblock > .md-rawblock-tooltip {
+    transition: none !important;
+    animation: none !important;
+}
+
+.md-htmlblock:hover > .md-rawblock-container,
+.md-htmlblock.md-rawblock-on-edit > .md-rawblock-container {
+    border: 1px solid var(--line-color);
+    border-radius: 2px;
+    box-shadow: none;
+}
+
+.md-htmlblock .md-rawblock-input,
+.md-htmlblock .CodeMirror,
+.md-htmlblock .CodeMirror-scroll,
+.md-htmlblock .CodeMirror-lines,
+.md-htmlblock .CodeMirror-gutters {
+    background: var(--code-bg-color);
+    color: var(--text-color);
+}
+
+.md-htmlblock .md-rawblock-tooltip {
+    border: 1px solid var(--line-color);
+    border-radius: 2px;
+    color: var(--meta-text-color);
+}
+
+.md-htmlblock .md-rawblock-tooltip-name {
+    opacity: 0.8;
+}
+
+.md-htmlblock .md-rawblock-before,
+.md-htmlblock .md-rawblock-after {
+    color: var(--meta-text-color);
+}
+
+/* Sidebar */
+#typora-sidebar {
+    font-family: var(--sans-font);
+    font-size: 0.9em;
+    color: var(--muted-text-color);
+    border-right: 1px solid var(--line-color);
+}
+
+#typora-sidebar .file-node-content,
+#typora-sidebar .outline-item,
+#typora-sidebar .ty-sidebar-footer {
+    background-color: var(--panel-bg-color);
+}
+
+#typora-sidebar .file-node-content:hover,
+#typora-sidebar .outline-item:hover,
+#typora-sidebar .ty-sidebar-footer-item:hover {
+    background-color: var(--item-hover-bg-color);
+    color: var(--item-hover-text-color);
+    box-shadow: inset 0 0 0 1px var(--focus-ring-color);
+}
+
+#typora-sidebar .active,
+#typora-sidebar .file-node.active > .file-node-content,
+#typora-sidebar .outline-item.active {
+    background-color: var(--active-file-bg-color);
+    color: var(--active-file-text-color);
+    box-shadow: inset 0 0 0 1px var(--active-file-border-color);
+}
+
+.file-list-item {
+    font-family: var(--sans-font);
+}
+
+.file-list-item-summary {
+    color: var(--meta-text-color);
+}
+
+.file-list-item.active {
+    border-color: var(--active-file-border-color);
+}
+
+/* Source view */
+#typora-source {
+    font-family: var(--monospace);
+    color: var(--text-color);
+}
+
+#typora-source .CodeMirror-lines {
+    max-width: 960px;
+    font-family: var(--monospace);
+}
+
+/* Source-mode CodeMirror */
+.cm-s-inner,
+.cm-s-typora-default {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+}
+
+.cm-s-inner .cm-header,
+.cm-s-inner .cm-variable,
+.cm-s-inner .cm-variable-2,
+.cm-s-inner .cm-variable-3,
+.cm-s-inner .cm-operator,
+.cm-s-inner .cm-tag,
+.cm-s-typora-default .cm-header,
+.cm-s-typora-default .cm-variable,
+.cm-s-typora-default .cm-variable-2,
+.cm-s-typora-default .cm-variable-3,
+.cm-s-typora-default .cm-operator,
+.cm-s-typora-default .cm-tag {
+    color: var(--text-color);
+}
+
+.cm-s-typora-default .cm-link,
+.cm-s-inner .cm-link {
+    color: var(--link-color);
+    text-decoration: underline;
+}
+
+.cm-s-inner .cm-string,
+.cm-s-inner .cm-string-2,
+.cm-s-typora-default .cm-string,
+.cm-s-typora-default .cm-string-2 {
+    color: var(--syntax-string-color);
+}
+
+.cm-s-inner .cm-number,
+.cm-s-inner .cm-atom,
+.cm-s-typora-default .cm-number,
+.cm-s-typora-default .cm-atom {
+    color: var(--syntax-number-color);
+}
+
+.cm-s-inner .cm-attribute,
+.cm-s-inner .cm-property,
+.cm-s-inner .cm-builtin,
+.cm-s-inner .cm-def,
+.cm-s-inner .cm-keyword,
+.cm-s-inner .cm-qualifier,
+.cm-s-inner .cm-type,
+.cm-s-typora-default .cm-attribute,
+.cm-s-typora-default .cm-property,
+.cm-s-typora-default .cm-builtin,
+.cm-s-typora-default .cm-def,
+.cm-s-typora-default .cm-keyword,
+.cm-s-typora-default .cm-qualifier,
+.cm-s-typora-default .cm-type {
+    color: var(--syntax-keyword-color);
+}
+
+.cm-s-inner .cm-meta,
+.cm-s-inner .cm-comment,
+.cm-s-typora-default .cm-meta,
+.cm-s-typora-default .cm-comment {
+    color: var(--syntax-comment-color);
+}
+
+.cm-s-inner .cm-comment,
+.cm-s-typora-default .cm-comment {
+    font-style: italic;
+}
+
+.cm-s-inner .cm-positive,
+.cm-s-typora-default .cm-positive {
+    color: var(--syntax-diff-add-color);
+}
+
+.cm-s-inner .cm-negative,
+.cm-s-typora-default .cm-negative {
+    color: var(--syntax-diff-remove-color);
+}
+
+.cm-s-inner .cm-error,
+.cm-s-typora-default .cm-error {
+    color: inherit;
+    background-color: transparent;
+}
+
+.cm-s-inner .CodeMirror-cursor,
+.cm-s-typora-default .CodeMirror-cursor {
+    border-left: 1px solid var(--text-color);
+}
+
+.cm-s-inner .CodeMirror-activeline-background,
+.cm-s-typora-default .CodeMirror-activeline-background {
+    background-color: transparent;
+}

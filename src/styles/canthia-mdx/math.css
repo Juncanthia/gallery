@@ -1,0 +1,17 @@
+@layer base {
+  .canthia-mdx :where(.katex, mjx-container, .math-inline, .math-display):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-text);
+  }
+
+  .canthia-mdx :where(.katex-display, mjx-container[display="true"], .math-display):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 1.4rem 0;
+    padding: 0.75em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .canthia-mdx :where(.math-inline):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    padding: 0 0.08em;
+    background: transparent;
+  }
+}

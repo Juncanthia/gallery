@@ -1,0 +1,803 @@
+Button 用于触发一个即时操作。它是当前组件库里最基础的操作入口，设计目标是保留 Ant Design 级别的调用效率，同时使用本地的 Radix Slot、Tailwind CSS、CVA 和 motion 实现，不引入 rc-component、ConfigProvider 或 css-in-js。
+
+本组件不是 Ant Design Button 的兼容层。它采用更直接的 API：以 `color + variant` 作为主要表达方式，不提供 AntD 历史遗留的 `type` 语法糖，也不提供 `danger` 语法糖。调用侧应优先写出明确意图。
+
+<h2 id="when-to-use">何时使用</h2>
+
+标记一个操作命令，响应用户点击行为，触发相应的业务逻辑。
+
+常见场景：
+
+- 页面、表单、弹窗中的主操作，例如提交、保存、创建。
+- 一组操作中的次操作，例如取消、重置、查看详情。
+- 危险操作，例如删除、移除、禁用账号。
+- 异步操作，例如提交中、导出中、上传中。
+- 链接式操作，例如跳转到外部页面或内部路由。
+- 图标操作，例如搜索、下载、刷新、更多。
+
+本地 Button 通过两组核心属性表达视觉语义：
+
+- `color`：表达操作语义，例如 `primary`、`danger`、`success`、`warning`、`info`。
+- `variant`：表达视觉层级，例如 `solid`、`outlined`、`dashed`、`filled`、`text`、`link`。
+
+推荐使用方式：
+
+- 主操作：`color="primary" variant="solid"`。
+- 普通操作：默认按钮，或者 `color="default" variant="outlined"`。
+- 危险操作：`color="danger"`，必要时结合二次确认组件。
+- 低强调操作：`variant="text"` 或 `variant="link"`。
+- 暗色或复杂背景上的按钮：`ghost`，仅用于 `solid`、`outlined`、`dashed`、`filled`，不用于 `text`/`link`。
+- 异步操作：`loading`，必要时配合 `loadingText`。
+
+不推荐：
+
+- 同一个操作区域放置多个主按钮。
+- 用颜色表达与业务语义无关的装饰需求。
+- 使用 `text`/`link` 承载高风险操作，除非上下文非常明确。
+- 为了兼容 AntD 心智而新增 `type`、`danger` 等别名；本地组件刻意不做这层语法糖。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础按钮
+
+默认按钮是 `color="default" variant="outlined" size="middle" shape="default"`。
+
+<ComponentShowcase
+  id="button"
+  path="button/basic"
+/>
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button>Default</Button>
+      <Button color="primary" variant="solid">
+        Primary
+      </Button>
+      <Button color="danger" variant="solid">
+        Danger
+      </Button>
+      <Button color="success" variant="solid">
+        Success
+      </Button>
+      <Button color="warning" variant="solid">
+        Warning
+      </Button>
+      <Button color="info" variant="solid">
+        Info
+      </Button>
+    </div>
+  )
+}
+```
+
+### 颜色与变体
+
+同时设置 `color` 和 `variant` 可以组合出完整的按钮视觉层级。本地支持 6 种颜色和 6 种变体。
+
+<ComponentShowcase
+  id="variants"
+  path="button/variants"
+/>
+
+```tsx
+import { Button } from "@/components/base/button"
+
+const colors = ["default", "primary", "danger", "success", "warning", "info"] as const
+const variants = ["solid", "outlined", "dashed", "filled", "text", "link"] as const
+
+export default function Demo() {
+  return (
+    <div className="space-y-3">
+      {colors.map((color) => (
+        <div key={color} className="flex flex-wrap items-center gap-2">
+          {variants.map((variant) => (
+            <Button key={variant} color={color} variant={variant}>
+              {color} {variant}
+            </Button>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+### 主按钮
+
+主按钮用于页面或操作区内的最高优先级动作。一个操作区域通常只放一个主按钮。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-2">
+      <Button color="primary" variant="solid">
+        保存
+      </Button>
+      <Button>取消</Button>
+    </div>
+  )
+}
+```
+
+### 危险按钮
+
+危险按钮使用 `color="danger"`，不要使用 AntD 的 `danger` 语法糖。本地刻意只保留一种表达方式。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button color="danger" variant="solid">
+        删除
+      </Button>
+      <Button color="danger" variant="outlined">
+        移除成员
+      </Button>
+      <Button color="danger" variant="text">
+        清空
+      </Button>
+    </div>
+  )
+}
+```
+
+### 按钮尺寸
+
+按钮有小、中、大三种尺寸。默认是 `middle`。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button size="small">Small</Button>
+      <Button size="middle">Middle</Button>
+      <Button size="large">Large</Button>
+    </div>
+  )
+}
+```
+
+### 按钮形状
+
+`shape` 控制按钮外形。`circle` 和 `square` 适合图标按钮，`round` 适合更强调胶囊感的操作。
+
+```tsx
+import { Search } from "lucide-react"
+
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button shape="default">Default</Button>
+      <Button shape="round">Round</Button>
+      <Button shape="circle" icon={<Search />} aria-label="搜索" />
+      <Button shape="square" icon={<Search />} aria-label="搜索" />
+    </div>
+  )
+}
+```
+
+### 图标按钮
+
+通过 `icon` 添加图标。图标默认位于文字前方。没有 children 且存在 icon 时，组件会把默认形状自动收敛为等宽的图标按钮。
+
+```tsx
+import { Download, Search } from "lucide-react"
+
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button color="primary" icon={<Search />} variant="solid">
+        搜索
+      </Button>
+      <Button color="primary" icon={<Download />} variant="outlined">
+        下载
+      </Button>
+      <Button color="primary" icon={<Search />} variant="solid" aria-label="搜索" />
+    </div>
+  )
+}
+```
+
+### 图标位置
+
+通过 `iconPlacement` 设置图标位置。默认是 `start`。
+
+```tsx
+import { ArrowRight, Download } from "lucide-react"
+
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button icon={<Download />}>下载</Button>
+      <Button icon={<ArrowRight />} iconPlacement="end">
+        下一步
+      </Button>
+    </div>
+  )
+}
+```
+
+### 不可用状态
+
+设置 `disabled` 后，button 会使用原生 `disabled` 属性；link button 会移除 `href`，设置 `aria-disabled`，并从 Tab 顺序中移除。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button disabled>Default disabled</Button>
+      <Button color="primary" disabled variant="solid">
+        Primary disabled
+      </Button>
+      <Button color="danger" disabled variant="outlined">
+        Danger disabled
+      </Button>
+      <Button disabled href="https://example.com" variant="link">
+        Link disabled
+      </Button>
+    </div>
+  )
+}
+```
+
+### 加载中状态
+
+设置 `loading` 后，按钮进入加载状态，自动禁用点击，显示旋转图标，并设置 `aria-busy`。如果提供 `loadingText`，加载期间会用它替换 children。
+
+<ComponentShowcase
+  id="loading"
+  path="button/loading"
+/>
+
+```tsx
+import { useState } from "react"
+
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  const [loading, setLoading] = useState(false)
+
+  function submit() {
+    setLoading(true)
+    window.setTimeout(() => setLoading(false), 1500)
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button color="primary" loading variant="solid">
+        Loading
+      </Button>
+      <Button color="primary" loading loadingText="提交中" variant="outlined">
+        提交
+      </Button>
+      <Button color="primary" loading={loading} loadingText="保存中" onClick={submit} variant="solid">
+        保存
+      </Button>
+    </div>
+  )
+}
+```
+
+### Block 按钮
+
+`block` 让按钮宽度撑满父容器。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="w-full space-y-2">
+      <Button block color="primary" variant="solid">
+        提交
+      </Button>
+      <Button block>取消</Button>
+    </div>
+  )
+}
+```
+
+### 幽灵按钮
+
+`ghost` 使按钮背景透明，适用于深色、图片或复杂背景。它只对 `solid`、`outlined`、`dashed`、`filled` 生效；对于 `text`、`link` 会被忽略，因为这两种本来就是透明背景。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2 bg-slate-900 p-4">
+      <Button ghost color="primary" variant="solid">
+        Primary
+      </Button>
+      <Button ghost variant="outlined">
+        Default
+      </Button>
+      <Button ghost color="danger" variant="dashed">
+        Danger
+      </Button>
+    </div>
+  )
+}
+```
+
+### 链接按钮
+
+传入 `href` 后，Button 会渲染为 `motion.a`，保留按钮样式，同时具备链接行为。外链应显式传入 `target` 和 `rel`。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button href="/components/button" variant="link">
+        查看文档
+      </Button>
+      <Button href="https://example.com" rel="noreferrer" target="_blank">
+        打开外链
+      </Button>
+    </div>
+  )
+}
+```
+
+### asChild 组合
+
+`asChild` 使用 Radix Slot，把 Button 的样式和状态属性合并到子元素上。它适合与路由 Link 等组件组合。
+
+注意：`asChild` 模式下组件不会自动插入 `icon`、`loadingText` 或内部内容结构，子元素内容由调用侧完全负责。`loading` 仍会设置状态属性并阻止点击。
+
+```tsx
+import { Link } from "@tanstack/react-router"
+
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <Button asChild color="primary" variant="solid">
+      <Link to="/components/$slug" params={{ slug: "button" }}>
+        打开 Button 文档
+      </Link>
+    </Button>
+  )
+}
+```
+
+### 原生提交按钮
+
+由于 React 的 `type` 容易和 AntD 的 `type` 语法糖冲突，本地组件使用 `htmlType` 表达原生 button type。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <form className="flex gap-2" onSubmit={(event) => event.preventDefault()}>
+      <Button htmlType="submit" color="primary" variant="solid">
+        提交
+      </Button>
+      <Button htmlType="reset">重置</Button>
+    </form>
+  )
+}
+```
+
+### 动效控制
+
+Button 默认使用 `motion/react` 提供轻量的 hover/tap 缩放反馈。可用 `hoverScale` 和 `tapScale` 控制幅度。
+
+```tsx
+import { Button } from "@/components/base/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button color="primary" variant="solid">
+        Default Motion
+      </Button>
+      <Button color="primary" hoverScale={1} tapScale={1} variant="outlined">
+        No Scale
+      </Button>
+      <Button color="primary" hoverScale={1.04} tapScale={0.95} variant="filled">
+        Stronger Motion
+      </Button>
+    </div>
+  )
+}
+```
+
+### 按钮组合
+
+本地没有实现 AntD 的 `Button.Group` 兼容写法，但提供独立的 `ButtonGroup`、`ButtonGroupText`、`ButtonGroupSeparator`，用于紧凑排列多个按钮或按钮相关控件。
+
+```tsx
+import { MoreHorizontal } from "lucide-react"
+
+import { Button } from "@/components/base/button"
+import { ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from "@/components/base/button-group"
+
+export default function Demo() {
+  return (
+    <ButtonGroup>
+      <Button>保存</Button>
+      <ButtonGroupSeparator />
+      <ButtonGroupText>草稿</ButtonGroupText>
+      <Button aria-label="更多" icon={<MoreHorizontal />} />
+    </ButtonGroup>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Button
+
+通过设置 Button 的属性产生不同的按钮样式。推荐顺序为：`color` -> `variant` -> `shape` -> `size` -> `loading` -> `disabled`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 设置按钮颜色语义 | `default` \| `primary` \| `danger` \| `success` \| `warning` \| `info` | `default` |
+| variant | 设置按钮视觉变体 | `solid` \| `outlined` \| `dashed` \| `filled` \| `text` \| `link` | `outlined` |
+| size | 设置按钮尺寸 | `small` \| `middle` \| `large` | `middle` |
+| shape | 设置按钮形状 | `default` \| `round` \| `circle` \| `square` | `default`；纯图标按钮会自动从 `default` 收敛为 `square` |
+| block | 将按钮宽度调整为父容器宽度 | `boolean` | `false` |
+| ghost | 幽灵按钮，使背景透明；对 `text`/`link` 无效 | `boolean` | `false` |
+| asChild | 使用 Radix Slot，把样式合并到子元素 | `boolean` | `false` |
+| htmlType | 原生 button 的 `type` | `button` \| `submit` \| `reset` | `button` |
+| loading | 设置加载状态；加载时自动禁用点击 | `boolean` | `false` |
+| loadingText | 加载时替换按钮内容的文本 | `string` | - |
+| icon | 设置按钮图标 | `React.ReactNode` | - |
+| iconPlacement | 设置图标位置 | `start` \| `end` | `start` |
+| hoverScale | hover 时 motion 缩放值；仅非 `asChild` 分支由 Button 内部应用 | `number` | `1.02` |
+| tapScale | tap/click 时 motion 缩放值；仅非 `asChild` 分支由 Button 内部应用 | `number` | `0.97` |
+| href | 存在时渲染为链接按钮 | `string` | - |
+| target | 链接打开方式，`href` 存在时生效 | `string` | - |
+| rel | 链接关系，`href` 存在时生效 | `string` | - |
+| download | 下载属性，`href` 存在时生效 | `HTMLAnchorElement['download']` | - |
+| disabled | 禁用按钮；button 使用原生 disabled，link/asChild 使用 aria-disabled 和点击拦截 | `boolean` | `false` |
+| onClick | 点击回调；禁用或加载时不会触发 | `(event: React.MouseEvent<HTMLButtonElement \| HTMLAnchorElement>) => void` | - |
+| className | 附加 className，会通过 `cn` 与 CVA 结果合并 | `string` | - |
+| children | 按钮内容 | `React.ReactNode` | - |
+
+支持大多数原生 button 属性，以及链接分支的 `href`、`target`、`rel`、`download`。原生 button 的 `type` 被有意替换为 `htmlType`，避免和 AntD 历史 `type` 语法糖混淆。原生 `color` 被组件自己的 `color` 语义占用。
+
+### ButtonGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 按钮组方向 | `horizontal` \| `vertical` | `horizontal` |
+| className | 附加 className | `string` | - |
+| children | 组合内容 | `React.ReactNode` | - |
+
+### ButtonGroupText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 使用 Radix Slot 合并到子元素 | `boolean` | `false` |
+| className | 附加 className | `string` | - |
+| children | 文本内容 | `React.ReactNode` | - |
+
+### ButtonGroupSeparator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 分隔线方向 | `horizontal` \| `vertical` | `vertical` |
+| className | 附加 className | `string` | - |
+
+<h2 id="antd-differences">与 Ant Design Button 的取舍</h2>
+
+本地 Button 的目标是借鉴 AntD 的 API 组织能力，不是复制 AntD 的所有历史兼容层。
+
+| AntD 能力 | 本地决策 | 本地写法 / 原因 |
+| --- | --- | --- |
+| `type="primary"`、`type="dashed"`、`type="text"`、`type="link"` | 不做 | 使用 `color + variant`，避免双 API |
+| `danger` 语法糖 | 不做 | 使用 `color="danger"` |
+| `color` + `variant` | 保留并作为主 API | `color="primary" variant="solid"` |
+| `shape` | 保留并扩展 | `default`、`round`、`circle`、`square` |
+| `size` | 保留 | `small`、`middle`、`large` |
+| `block` | 保留 | 常用且低成本 |
+| `ghost` | 保留但简化 | 仅影响非 text/link 的背景透明化 |
+| `loading` | 保留但简化 | 只支持 boolean 和 `loadingText`，不支持 delay / custom loading icon object |
+| `icon` | 保留 | 使用 ReactNode |
+| `iconPlacement` | 保留 | `start` / `end` |
+| `href` / `target` | 保留 | `href` 存在时渲染为 `motion.a` |
+| `htmlType` | 保留 | 原生 button type 使用 `htmlType` |
+| `autoInsertSpace` | 不做 | 中文两字自动空格是 AntD 历史行为，本地不需要 |
+| `classNames` / `styles` Semantic DOM 插槽 | 不做 | 本地不是公共库，不需要复杂语义插槽逃生口 |
+| `ConfigProvider` 全局配置 | 不做 | 本项目不引入 ConfigProvider 和 css-in-js |
+| wave 点击波纹配置 | 不做 | 本地已有 motion 动效，且用户动画不能被干掉 |
+| Button.Group 兼容写法 | 不做 | 使用独立 `ButtonGroup` 组件 |
+| Design Token API | 不做 AntD 版 | 使用 Tailwind 主题变量和 CVA compound variants |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+Button 通过 `data-*` 属性暴露稳定语义，便于测试、样式定位和 LLM 理解。
+
+### button 分支
+
+没有 `href` 且 `asChild=false` 时渲染为：
+
+```tsx
+<motion.button
+  data-slot="button"
+  data-color="primary"
+  data-variant="solid"
+  data-size="middle"
+  data-shape="default"
+  data-loading={loading || undefined}
+  aria-busy={loading || undefined}
+  disabled={disabled || loading}
+  type={htmlType}
+>
+  <span data-icon="inline-start">...</span>
+  {children}
+</motion.button>
+```
+
+### link 分支
+
+传入 `href` 时渲染为：
+
+```tsx
+<motion.a
+  data-slot="button"
+  data-color="primary"
+  data-variant="outlined"
+  data-size="middle"
+  data-shape="default"
+  data-loading={loading || undefined}
+  aria-busy={loading || undefined}
+  aria-disabled={disabled || loading || undefined}
+  href={disabled || loading ? undefined : href}
+  tabIndex={disabled || loading ? -1 : tabIndex}
+>
+  ...
+</motion.a>
+```
+
+### asChild 分支
+
+传入 `asChild` 时渲染为 Radix Slot：
+
+```tsx
+<Slot.Root
+  data-slot="button"
+  data-color="primary"
+  data-variant="solid"
+  data-size="middle"
+  data-shape="default"
+  data-loading={loading || undefined}
+  aria-busy={loading || undefined}
+  aria-disabled={disabled || loading || undefined}
+>
+  {children}
+</Slot.Root>
+```
+
+### 图标结构
+
+内部图标使用 `span` 包裹：
+
+```tsx
+<span data-icon="inline-start" className="inline-flex shrink-0 items-center justify-center">
+  {iconNode}
+</span>
+```
+
+当 `iconPlacement="end"` 时，`data-icon="inline-end"`。
+
+<h2 id="styling-model">样式模型</h2>
+
+样式由 `src/components/base/button-variants.ts` 中的 `buttonVariants` 管理，底层是 CVA + Tailwind CSS。
+
+基础类负责：
+
+- inline-flex 布局。
+- shrink-0，避免在紧凑布局中被压缩。
+- border、font-medium、whitespace-nowrap。
+- focus-visible ring。
+- disabled / aria-disabled 禁用态。
+- aria-invalid 错误态。
+- svg 默认尺寸和 pointer-events。
+
+颜色和变体通过 compound variants 组合：
+
+| color | solid | outlined / dashed | filled | text / link |
+| --- | --- | --- | --- | --- |
+| default | `bg-foreground text-background` | `border-border bg-background text-foreground` | `bg-secondary text-secondary-foreground` | `text-foreground hover:bg-muted` |
+| primary | `bg-primary text-primary-foreground` | `border-primary/60 text-primary` | `bg-primary/10 text-primary` | `text-primary hover:bg-primary/10` |
+| danger | `bg-destructive text-white` | `border-destructive/50 text-destructive` | `bg-destructive/10 text-destructive` | `text-destructive hover:bg-destructive/10` |
+| success | `bg-emerald-600 text-white` | `text-emerald-700` | `bg-emerald-500/10` | `text-emerald-700` |
+| warning | `bg-amber-500 text-white` | `text-amber-700` | `bg-amber-500/10` | `text-amber-700` |
+| info | `bg-sky-600 text-white` | `text-sky-700` | `bg-sky-500/10` | `text-sky-700` |
+
+尺寸：
+
+| size | 高度 | 文本 | 横向内边距 | 图标尺寸 |
+| --- | --- | --- | --- | --- |
+| small | `h-8` | `text-xs` | `px-2.5` | `size-3.5` |
+| middle | `h-9` | `text-sm` | `px-3` | `size-4` |
+| large | `h-10` | `text-sm` | `px-4` | `size-4` |
+
+形状：
+
+| shape | 效果 |
+| --- | --- |
+| default | `rounded-md` |
+| round | `rounded-full` |
+| circle | `rounded-full px-0`，并按 size 设置等宽高 |
+| square | `rounded-md px-0`，并按 size 设置等宽高 |
+
+<h2 id="design-token">主题变量</h2>
+
+本项目不实现 AntD 的 Design Token 表格和运行时 token 注入。Button 消费 Tailwind 主题变量和语义色 class。
+
+常用变量来源：
+
+| 语义 | Tailwind / CSS token |
+| --- | --- |
+| 主色背景 | `bg-primary` |
+| 主色文本 | `text-primary` / `text-primary-foreground` |
+| 危险色背景 | `bg-destructive` |
+| 危险色文本 | `text-destructive` |
+| 默认背景 | `bg-background` |
+| 默认文本 | `text-foreground` |
+| 默认边框 | `border-border` |
+| 次级背景 | `bg-secondary` |
+| 次级文本 | `text-secondary-foreground` |
+| 弱背景 | `bg-muted` |
+| 聚焦环 | `ring-ring/50` |
+
+如果需要全局调整 Button 的设计语言，应优先调整 Tailwind 主题变量或 `buttonVariants`，而不是在调用处堆叠大量 className。
+
+<h2 id="accessibility">可访问性</h2>
+
+- button 分支使用原生 `<button>`，默认 `htmlType="button"`，避免表单内误提交。
+- `loading` 时设置 `aria-busy`，同时禁用点击。
+- link 分支禁用时设置 `aria-disabled`，移除 `href`，并设置 `tabIndex={-1}`。
+- asChild 分支禁用时设置 `aria-disabled` 并阻止点击，但子元素语义仍由调用侧负责。
+- 纯图标按钮必须提供 `aria-label` 或可访问名称。
+- 危险操作建议与 `Popconfirm`、`AlertDialog` 等二次确认组件组合使用。
+
+<h2 id="implementation-notes">实现说明</h2>
+
+核心文件：
+
+- `src/components/base/button.tsx`：渲染分支、loading、icon、href、asChild、motion 行为。
+- `src/components/base/button-variants.ts`：CVA variant、size、shape、color、ghost 样式。
+- `src/components/base/button-group.tsx`：按钮组、按钮组文本、按钮组分隔线。
+
+关键行为：
+
+1. `loading` 会合并进 disabled 状态。
+2. disabled 或 loading 时，`onClick` 不会触发。
+3. `href !== undefined` 时使用 `<motion.a>`。
+4. 普通按钮使用 `<motion.button>`。
+5. `asChild` 使用 `<Slot.Root>`，不应用 motion 缩放，不自动插入图标结构。
+6. 纯图标按钮在 `shape="default"` 时自动转为 `square`。
+7. `ghost` 对 `text` 和 `link` 无效。
+8. 所有视觉组合由 CVA 产出，不依赖运行时 CSS-in-JS。
+
+<h2 id="faq">FAQ</h2>
+
+### 为什么没有 `type="primary"`？
+
+`type` 是 AntD 的历史语法糖。它把颜色和变体混在一个属性里，例如 `type="primary"` 实际等价于 `color="primary" variant="solid"`。本地组件选择只保留 `color + variant`，减少 API 分叉。
+
+```tsx
+<Button color="primary" variant="solid">
+  保存
+</Button>
+```
+
+### 为什么没有 `danger` 属性？
+
+`danger` 也是语法糖。本地使用 `color="danger"` 表达危险语义。
+
+```tsx
+<Button color="danger" variant="solid">
+  删除
+</Button>
+```
+
+### 如何写链接按钮？
+
+如果要保留按钮外观并执行链接跳转，传入 `href`。
+
+```tsx
+<Button href="/components/button" variant="link">
+  查看文档
+</Button>
+```
+
+如果要组合路由组件，使用 `asChild`。
+
+```tsx
+<Button asChild>
+  <Link to="/components/$slug" params={{ slug: "button" }}>
+    查看文档
+  </Link>
+</Button>
+```
+
+### 如何关闭按钮动画？
+
+把 `hoverScale` 和 `tapScale` 设为 `1`。
+
+```tsx
+<Button hoverScale={1} tapScale={1}>
+  无缩放反馈
+</Button>
+```
+
+不要删除组件内部 motion 支持；这是本地 Button 的既有交互能力。
+
+### 如何做加载按钮？
+
+使用 `loading`。如果需要加载期间替换文案，使用 `loadingText`。
+
+```tsx
+<Button loading loadingText="提交中" color="primary" variant="solid">
+  提交
+</Button>
+```
+
+### 如何做图标按钮？
+
+传入 `icon` 且不传 children。必须补充 `aria-label`。
+
+```tsx
+<Button icon={<Search />} aria-label="搜索" />
+```
+
+### 如何自定义样式？
+
+优先使用 `color`、`variant`、`size`、`shape`。确实需要局部调整时使用 `className`。如果同类样式反复出现，应回到 `buttonVariants` 中扩展，而不是在业务侧复制 className。
+
+### 如何和表单一起用？
+
+提交按钮使用 `htmlType="submit"`，不要使用原生 `type`。
+
+```tsx
+<Button htmlType="submit" color="primary" variant="solid">
+  提交
+</Button>
+```
+
+### 和 AntD Button 最大区别是什么？
+
+AntD Button 是面向公共生态的完整组件，包含历史兼容、ConfigProvider、Design Token、wave、语义化 class/style 插槽等能力。本地 Button 是自用组件，目标是 API 清晰、上下文节省、实现可控，因此删除了兼容层和全局配置层，只保留高频能力。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+当 AI 生成本项目 Button 代码时，应遵守：
+
+1. 从 `@/components/base/button` 导入 Button。
+2. 使用 `color + variant`，不要生成 `type="primary"`。
+3. 使用 `color="danger"`，不要生成 `danger` 属性。
+4. 表单按钮使用 `htmlType`，不要使用原生 `type`。
+5. 图标使用 `icon`，图标位置使用 `iconPlacement`。
+6. 纯图标按钮必须生成 `aria-label`。
+7. 链接按钮优先使用 `href`；路由组件组合使用 `asChild`。
+8. 加载状态使用 `loading` 和可选 `loadingText`。
+9. 不要引入 `ConfigProvider`、`antd-style`、`@ant-design/icons` 或 rc-component。
+10. 不要删除或绕开 Button 内部 motion 动效；如需禁用缩放，使用 `hoverScale={1}` 和 `tapScale={1}`。

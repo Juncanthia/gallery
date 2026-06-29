@@ -8,12 +8,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
 const checkboxVariants = cva(
-  'peer shrink-0 flex items-center justify-center outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-500 focus-visible:ring-offset-2 [&[data-state=checked],&[data-state=indeterminate]]:bg-primary [&[data-state=checked],&[data-state=indeterminate]]:text-primary-foreground',
+  'peer shrink-0 flex items-center justify-center outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 focus-visible:ring-offset-2',
   {
     variants: {
       variant: {
-        default: 'bg-background border',
-        accent: 'bg-input',
+        default: 'bg-background border border-input [&[data-state=checked],&[data-state=indeterminate]]:bg-primary [&[data-state=checked],&[data-state=indeterminate]]:text-primary-foreground',
+        accent: 'bg-input border border-transparent [&[data-state=checked],&[data-state=indeterminate]]:bg-primary [&[data-state=checked],&[data-state=indeterminate]]:text-primary-foreground',
+        skeuomorphic: 'border border-neutral-300 dark:border-zinc-700 bg-gradient-to-b from-white to-neutral-50 dark:from-zinc-800 dark:to-zinc-900 shadow-[0_1px_2px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.05)] [&[data-state=checked],&[data-state=indeterminate]]:bg-gradient-to-b [&[data-state=checked],&[data-state=indeterminate]]:from-blue-400 [&[data-state=checked],&[data-state=indeterminate]]:to-blue-600 [&[data-state=checked],&[data-state=indeterminate]]:border-blue-500 [&[data-state=checked],&[data-state=indeterminate]]:text-white [&[data-state=checked],&[data-state=indeterminate]]:shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.08)] [&[data-state=checked],&[data-state=indeterminate]]:translate-y-[0.5px]',
       },
       size: {
         small: 'size-4.5 rounded-[5px]',

@@ -1,0 +1,93 @@
+@layer base {
+  .canthia-mdx {
+    --canthia-doc-font-size: 12pt;
+    --canthia-doc-line-height: 20pt;
+    --canthia-table-font-size: 10.5pt;
+    --canthia-table-line-height: 1.42;
+    --canthia-code-font-size: 10pt;
+    --canthia-inline-code-font-size: 0.88em;
+    --canthia-footnote-font-size: 10pt;
+    --canthia-caption-font-size: 10pt;
+
+    --canthia-surface: #ffffff;
+    --canthia-panel: #ffffff;
+    --canthia-text: #18181b;
+    --canthia-muted: #52525b;
+    --canthia-meta: #71717a;
+    --canthia-border: #e4e4e7;
+    --canthia-border-strong: #a1a1aa;
+    --canthia-border-soft: #f1f1f3;
+    --canthia-selection: rgba(24, 24, 27, 0.12);
+    --canthia-link: #3f3f46;
+    --canthia-link-hover: #27272a;
+    --canthia-mark-bg: #e4e4e7;
+    --canthia-mark-text: var(--canthia-text);
+    --canthia-code-bg: #fafafa;
+    --canthia-code-border: #e4e4e7;
+    --canthia-inline-code-bg: #f4f4f5;
+    --canthia-inline-code-border: #e4e4e7;
+    --canthia-quote-bg: transparent;
+    --canthia-quote-border: rgba(0, 0, 0, 0.28);
+
+    --canthia-alert-note-accent: #3f3f46;
+    --canthia-alert-note-bg: #f4f4f5;
+    --canthia-alert-tip-accent: #52625a;
+    --canthia-alert-tip-bg: #f5f7f6;
+    --canthia-alert-important-accent: #57525e;
+    --canthia-alert-important-bg: #f6f5f7;
+    --canthia-alert-warning-accent: #6b5c3e;
+    --canthia-alert-warning-bg: #f8f6f2;
+    --canthia-alert-caution-accent: #7f4040;
+    --canthia-alert-caution-bg: #f9f4f4;
+
+    --canthia-syntax-keyword: #3f3f46;
+    --canthia-syntax-string: #4d6a4f;
+    --canthia-syntax-number: #5b4f6e;
+    --canthia-syntax-type: #3b6363;
+    --canthia-syntax-comment: #a1a1aa;
+    --canthia-syntax-diff-add: #3b6b4a;
+    --canthia-syntax-diff-remove: #8c3a3a;
+  }
+
+  .dark .canthia-mdx,
+  [data-theme="dark"] .canthia-mdx {
+    --canthia-surface: #1f1f23;
+    --canthia-panel: #1f1f23;
+    --canthia-text: #e4e4e7;
+    --canthia-muted: #a1a1aa;
+    --canthia-meta: #71717a;
+    --canthia-border: #3f3f46;
+    --canthia-border-strong: #52525b;
+    --canthia-border-soft: #27272a;
+    --canthia-selection: rgba(228, 228, 231, 0.15);
+    --canthia-link: #a1a1aa;
+    --canthia-link-hover: #d4d4d8;
+    --canthia-mark-bg: #3f3f46;
+    --canthia-mark-text: var(--canthia-text);
+    --canthia-code-bg: #27272a;
+    --canthia-code-border: #3f3f46;
+    --canthia-inline-code-bg: #27272a;
+    --canthia-inline-code-border: #3f3f46;
+    --canthia-quote-bg: transparent;
+    --canthia-quote-border: rgba(255, 255, 255, 0.22);
+
+    --canthia-alert-note-accent: #a1a1aa;
+    --canthia-alert-note-bg: #27272a;
+    --canthia-alert-tip-accent: #7a9e8a;
+    --canthia-alert-tip-bg: #1e2722;
+    --canthia-alert-important-accent: #a898b5;
+    --canthia-alert-important-bg: #23202a;
+    --canthia-alert-warning-accent: #c4b590;
+    --canthia-alert-warning-bg: #262318;
+    --canthia-alert-caution-accent: #c07070;
+    --canthia-alert-caution-bg: #2a1e1e;
+
+    --canthia-syntax-keyword: #d4d4d8;
+    --canthia-syntax-string: #7aab7e;
+    --canthia-syntax-number: #b09ad0;
+    --canthia-syntax-type: #6aabab;
+    --canthia-syntax-comment: #52525b;
+    --canthia-syntax-diff-add: #6aab78;
+    --canthia-syntax-diff-remove: #c07070;
+  }
+}

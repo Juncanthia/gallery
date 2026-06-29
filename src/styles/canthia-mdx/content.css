@@ -1,0 +1,71 @@
+@layer base {
+  .canthia-doc-title {
+    color: var(--canthia-text, var(--foreground));
+    font-size: 2rem;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .canthia-mdx {
+    max-width: 100%;
+    color: var(--canthia-text);
+    font-size: var(--canthia-doc-font-size);
+    line-height: var(--canthia-doc-line-height);
+    text-rendering: optimizeLegibility;
+    overflow-wrap: break-word;
+  }
+
+  .canthia-mdx :where(*):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *))::selection {
+    background: var(--canthia-selection);
+    color: var(--canthia-text);
+  }
+
+  .canthia-mdx :where(p):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 0.65em 0;
+    line-height: var(--canthia-doc-line-height);
+  }
+
+  .canthia-mdx :where(p, li, blockquote, td, th):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    font-variant-ligatures: common-ligatures;
+  }
+
+  .canthia-mdx :where(strong, b):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    font-weight: 700;
+  }
+
+  .canthia-mdx :where(em, i):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    font-style: italic;
+  }
+
+  .canthia-mdx :where(del):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-meta);
+  }
+
+  .canthia-mdx :where(mark):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    background: var(--canthia-mark-bg);
+    color: var(--canthia-mark-text);
+    padding: 0.05em 0.18em;
+  }
+
+  .canthia-mdx :where(a):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-link);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: color 0.2s;
+  }
+
+  .canthia-mdx :where(a:hover):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-link-hover);
+  }
+
+  .canthia-mdx :where(a img):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    border: 0;
+  }
+
+  .canthia-mdx :where(hr):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    height: 0;
+    margin: 2.5rem 0;
+    border: 0;
+    border-top: 1px solid var(--canthia-border-strong);
+  }
+}

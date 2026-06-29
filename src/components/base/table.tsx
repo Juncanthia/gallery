@@ -330,11 +330,11 @@ function Table<T extends TableRecord = TableRecord>({
       data-slot="table-container"
       className={cn(
         "relative w-full overflow-x-auto",
-        bordered && "rounded-md border"
+        bordered && "rounded border"
       )}
     >
       {titleNode ? (
-        <div data-slot="table-title" className={cn("border-b p-3 text-sm font-medium", !bordered && "rounded-t border")}>
+        <div data-slot="table-title" className={cn("border-b p-3 text-sm font-medium", !bordered && "border")}>
           {titleNode}
         </div>
       ) : null}
@@ -635,7 +635,7 @@ function Table<T extends TableRecord = TableRecord>({
         />
       )}
       {footerNode ? (
-        <div data-slot="table-footer" className={cn("border-t p-3 text-sm text-muted-foreground", !bordered && "rounded-b border")}>
+        <div data-slot="table-footer" className={cn("border-t p-3 text-sm text-muted-foreground", !bordered && "border")}>
           {footerNode}
         </div>
       ) : null}

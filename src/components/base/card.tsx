@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/base/skeleton"
 import { cn } from "@/lib/utils"
 
 type CardSize = "default" | "sm" | "small"
-type CardVariant = "outlined" | "borderless"
+type CardVariant = "outlined" | "borderless" | "skeuomorphic"
 type CardType = "inner"
 
 type CardTabItem = {
@@ -103,12 +103,16 @@ function Card({
     <div
       data-slot="card"
       data-size={mergedSize}
+      data-variant={mergedVariant}
       className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-xs [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
-        mergedVariant === "outlined" && "ring-1 ring-foreground/10",
+        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded bg-card py-(--card-spacing) text-sm text-card-foreground [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded *:[img:last-child]:rounded",
+        mergedVariant === "outlined" && "ring-1 ring-foreground/10 shadow-xs",
         mergedVariant === "borderless" && "shadow-none ring-0",
+        mergedVariant === "skeuomorphic" && "bg-gradient-to-b from-white to-neutral-50/90 dark:from-zinc-800 dark:to-zinc-900/90 border border-neutral-200/80 dark:border-zinc-700/80 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_20px_-5px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),0_10px_20px_-5px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.05)]",
         type === "inner" && "[--card-spacing:--spacing(4)] bg-muted/20",
-        hoverable && "transition-shadow hover:shadow-md",
+        hoverable && (mergedVariant === "skeuomorphic"
+          ? "transition-all duration-300 hover:shadow-[0_2px_5px_rgba(0,0,0,0.08),0_15px_30px_-5px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.6)] dark:hover:shadow-[0_2px_5px_rgba(0,0,0,0.3),0_15px_30px_-5px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)] hover:-translate-y-[1px]"
+          : "transition-shadow hover:shadow-md"),
         className
       )}
       {...props}
@@ -189,7 +193,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-header"
       className={cn(
-        "group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)",
+        "group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) group-data-[variant=skeuomorphic]/card:bg-gradient-to-b group-data-[variant=skeuomorphic]/card:from-neutral-50/50 group-data-[variant=skeuomorphic]/card:to-neutral-100/50 group-data-[variant=skeuomorphic]/card:border-b group-data-[variant=skeuomorphic]/card:border-neutral-200/80 group-data-[variant=skeuomorphic]/card:pb-3 group-data-[variant=skeuomorphic]/card:mb-2 dark:group-data-[variant=skeuomorphic]/card:from-zinc-800 dark:group-data-[variant=skeuomorphic]/card:to-zinc-850 dark:group-data-[variant=skeuomorphic]/card:border-zinc-700/80",
         className
       )}
       {...props}
@@ -248,7 +252,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center rounded-b-xl px-(--card-spacing) [.border-t]:pt-(--card-spacing)",
+        "flex items-center rounded-b px-(--card-spacing) [.border-t]:pt-(--card-spacing)",
         className
       )}
       {...props}

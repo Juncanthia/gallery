@@ -1,0 +1,64 @@
+@layer base {
+  .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    max-width: 100%;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    color: var(--canthia-text);
+  }
+
+  .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg *:not(text):not(tspan):not(title):not(desc):not(defs):not(defs *) {
+    stroke-width: 1px;
+  }
+
+  .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg :is(text, tspan, .edge-thickness-invisible) {
+    stroke-width: 0;
+  }
+
+  .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg marker :is(path, polygon) {
+    stroke-width: 0;
+  }
+
+  .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg .pieOuterCircle {
+    stroke: none;
+    stroke-width: 0;
+  }
+
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg .node :is(rect, circle, ellipse, polygon, path),
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg .cluster rect,
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg :is(rect.actor, .note rect, .note path, .activation, .labelBox, .er.entityBox, .er.attributeBoxOdd, .er.attributeBoxEven, .classGroup rect, .stateGroup rect, .stateGroup polygon) {
+    fill: var(--canthia-code-bg);
+    stroke: var(--canthia-border);
+  }
+
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg :is(.edge path, .flowchart-link, .messageLine0, .messageLine1, .er.relationshipLine, .relation) {
+    stroke: var(--canthia-muted);
+  }
+
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg line,
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg .divider {
+    stroke: var(--canthia-border);
+  }
+
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg marker :is(path, polygon) {
+    fill: var(--canthia-muted);
+    stroke: none;
+  }
+
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg :is(text, tspan) {
+    fill: var(--canthia-text);
+    color: var(--canthia-text);
+  }
+
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg :is(span, p) {
+    color: var(--canthia-text);
+  }
+
+  .dark .canthia-mdx :where(.mermaid, .md-diagram-panel, .md-diagram-panel-preview, [data-diagram]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) svg .edgeLabel :is(span, p) {
+    background-color: var(--canthia-code-bg);
+  }
+}

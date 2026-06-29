@@ -1,0 +1,28 @@
+@layer base {
+  .canthia-mdx :where(.footnotes, .md-footnotes):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 3em;
+    padding-top: 1em;
+    border-top: 1px solid var(--canthia-border-strong);
+    color: var(--canthia-muted);
+    font-size: var(--canthia-footnote-font-size);
+  }
+
+  .canthia-mdx :where(sup.md-footnote, sup[id^="fnref"]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    padding: 0 0.15em;
+    background: transparent;
+    color: var(--canthia-text);
+  }
+
+  .canthia-mdx :where(.footnote-line):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 0.45rem;
+  }
+
+  .canthia-mdx :where(.md-def-name):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    font-weight: 700;
+  }
+
+  .canthia-mdx :where(.md-def-name):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *))::before,
+  .canthia-mdx :where(.md-def-name):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *))::after {
+    color: var(--canthia-meta);
+  }
+}

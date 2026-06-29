@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, type ReactNode } from "react";
+import { useState, useRef, useEffect, useCallback, type ReactNode, type RefObject } from "react";
 import { cn } from "@/lib/utils";
 
 export type MentionsOptionType = {
@@ -50,7 +50,7 @@ export function Mentions({
   const [activeIndex, setActiveIndex] = useState(0);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const prefixes = Array.isArray(prefix) ? prefix : [prefix];
@@ -70,7 +70,7 @@ export function Mentions({
     if (!inputRef.current) return;
 
     const textarea = inputRef.current;
-    const { selectionStart } = textarea;
+    const selectionStart = textarea.selectionStart ?? 0;
 
     const textBeforeCursor = inputValue.substring(0, selectionStart);
     const lines = textBeforeCursor.split("\n");
@@ -209,7 +209,7 @@ export function Mentions({
     <div className="relative" data-slot="mentions">
       {rows === 1 ? (
         <input
-          ref={inputRef as any}
+          ref={inputRef as RefObject<HTMLInputElement>}
           type="text"
           value={inputValue}
           onChange={handleInputChange}
@@ -224,7 +224,7 @@ export function Mentions({
         />
       ) : (
         <textarea
-          ref={inputRef}
+          ref={inputRef as RefObject<HTMLTextAreaElement>}
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}

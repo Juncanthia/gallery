@@ -23,6 +23,7 @@ type ProgressSuccess = {
 };
 
 type ProgressProps = Omit<ProgressPrimitiveProps, 'children'> & {
+  variant?: 'default' | 'skeuomorphic';
   indicatorClassName?: string;
   percent?: number;
   showInfo?: boolean;
@@ -136,6 +137,7 @@ function getInfoNode(
 }
 
 function Progress({
+  variant = 'default',
   className,
   indicatorClassName,
   percent,
@@ -204,6 +206,7 @@ function Progress({
 
   return (
     <LineProgress
+      variant={variant}
       className={className}
       indicatorClassName={indicatorClassName}
       percent={mergedValue}
@@ -224,6 +227,7 @@ function Progress({
 }
 
 type LineProgressProps = ProgressPrimitiveProps & {
+  variant?: 'default' | 'skeuomorphic';
   className?: string;
   indicatorClassName?: string;
   percent: number;
@@ -240,6 +244,7 @@ type LineProgressProps = ProgressPrimitiveProps & {
 };
 
 function LineProgress({
+  variant = 'default',
   className,
   indicatorClassName,
   percent,
@@ -256,7 +261,8 @@ function LineProgress({
   style,
   ...props
 }: LineProgressProps) {
-  const height = getLineHeight(size, strokeWidth);
+  const isSkeuomorphic = variant === 'skeuomorphic';
+  const height = getLineHeight(size, strokeWidth) ?? (isSkeuomorphic ? 12 : undefined);
   const width = getLineWidth(size);
   const rounded = strokeLinecap === 'round';
   const infoInside = showInfo && percentPosition?.type === 'inner';
@@ -265,7 +271,10 @@ function LineProgress({
   const progressNode = (
     <ProgressPrimitive
       className={cn(
-        'relative h-2 w-full flex-1 overflow-hidden bg-primary/20',
+        'relative w-full flex-1 overflow-hidden transition-all duration-200',
+        isSkeuomorphic
+          ? 'bg-neutral-100 dark:bg-zinc-800 border border-neutral-200/80 dark:border-zinc-700/80 shadow-[inset_0_2px_4px_rgba(0,0,0,0.12)] h-3'
+          : 'bg-primary/20 h-2',
         rounded ? 'rounded-full' : 'rounded-none',
         !showInfo && className,
       )}
@@ -281,9 +290,16 @@ function LineProgress({
       )}
       <ProgressIndicatorPrimitive
         className={cn(
-          'relative h-full w-full flex-1',
+          'relative h-full w-full flex-1 transition-all duration-200',
           rounded ? 'rounded-full' : 'rounded-none',
-          !gradientStyle && progressStatusClassName[status],
+          isSkeuomorphic
+            ? cn(
+                'shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]',
+                status === 'success' && 'bg-linear-to-b from-emerald-400 to-emerald-600',
+                status === 'exception' && 'bg-linear-to-b from-red-400 to-red-600',
+                (status === 'normal' || status === 'active') && 'bg-linear-to-b from-blue-400 to-blue-600'
+              )
+            : !gradientStyle && progressStatusClassName[status],
           status === 'active' && 'animate-pulse',
           indicatorClassName,
         )}

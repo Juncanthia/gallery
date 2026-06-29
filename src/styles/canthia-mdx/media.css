@@ -1,0 +1,31 @@
+@layer base {
+  .canthia-mdx :where(img, video, canvas, svg):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    max-width: 100%;
+  }
+
+  .canthia-mdx :where(img):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    display: block;
+    height: auto;
+    margin: 2em auto;
+  }
+
+  .canthia-mdx :where(p > img:only-child, p .md-image:only-child):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    display: block;
+    margin: 1.5rem auto;
+    text-align: center;
+  }
+
+  .canthia-mdx :where(figure):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    box-sizing: border-box;
+    max-width: 100%;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  .canthia-mdx :where(figcaption):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 0.45rem;
+    color: var(--canthia-meta);
+    font-size: var(--canthia-caption-font-size);
+    text-align: center;
+  }
+}

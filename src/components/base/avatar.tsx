@@ -7,6 +7,7 @@ type AvatarShape = "circle" | "square"
 type AvatarSize = "sm" | "small" | "default" | "middle" | "lg" | "large" | number
 
 type AvatarProps = Omit<React.ComponentProps<typeof AvatarPrimitive.Root>, "children"> & {
+  variant?: 'default' | 'skeuomorphic'
   size?: AvatarSize
   shape?: AvatarShape
   src?: string
@@ -68,6 +69,7 @@ function getSizeName(size: AvatarSize) {
 }
 
 function Avatar({
+  variant = 'default',
   className,
   size = "default",
   shape = "circle",
@@ -99,19 +101,34 @@ function Avatar({
     }
   }, [onError, src])
 
+  const isSkeuomorphic = variant === 'skeuomorphic'
+
   return (
     <AvatarPrimitive.Root
       data-slot="avatar"
       data-size={getSizeName(size)}
       data-shape={shape}
       className={cn(
-        "group/avatar relative flex shrink-0 select-none after:absolute after:inset-0 after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten",
-        shape === "circle" ? "rounded-full after:rounded-full" : "rounded after:rounded",
+        "group/avatar relative flex shrink-0 select-none",
+        isSkeuomorphic
+          ? (shape === "circle"
+              ? "rounded-full border border-neutral-300 dark:border-zinc-700 shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1px_2px_rgba(0,0,0,0.15)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.35),inset_0_1px_2px_rgba(0,0,0,0.3)] bg-neutral-100 dark:bg-zinc-800"
+              : "rounded border border-neutral-300 dark:border-zinc-700 shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1px_2px_rgba(0,0,0,0.15)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.35),inset_0_1px_2px_rgba(0,0,0,0.3)] bg-neutral-100 dark:bg-zinc-800")
+          : cn(
+              "after:absolute after:inset-0 after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten",
+              shape === "circle" ? "rounded-full after:rounded-full" : "rounded after:rounded"
+            ),
         className
       )}
       style={{ width: sizeValue, height: sizeValue, fontSize: Math.max(12, Math.floor((sizeValue - gap * 2) / 2)), ...style }}
       {...props}
     >
+      {isSkeuomorphic && (
+        <div className={cn(
+          "pointer-events-none absolute inset-0 z-10 border border-neutral-300/30 shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.15)]",
+          shape === "circle" ? "rounded-full" : "rounded"
+        )} />
+      )}
       {isComposed ? (
         children
       ) : (

@@ -12,9 +12,13 @@ import {
 import { cn } from '@/lib/utils';
 
 const radioGroupItemVariants = cva(
-  'border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+  'aspect-square shrink-0 rounded-full outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200',
   {
     variants: {
+      variant: {
+        default: 'border border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 shadow-xs',
+        skeuomorphic: 'border border-neutral-300 dark:border-zinc-700 bg-linear-to-b from-white to-neutral-50 dark:from-zinc-800 dark:to-zinc-900 shadow-[inset_0_1.5px_2px_rgba(0,0,0,0.08)] dark:shadow-[inset_0_1.5px_2px_rgba(0,0,0,0.25)] text-blue-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/50 [&[data-state=checked]]:bg-linear-to-b [&[data-state=checked]]:from-white [&[data-state=checked]]:to-neutral-100 [&[data-state=checked]]:border-neutral-300 dark:[&[data-state=checked]]:from-zinc-800 dark:[&[data-state=checked]]:to-zinc-900 dark:[&[data-state=checked]]:border-zinc-700',
+      },
       size: {
         small: 'size-3.5',
         middle: 'size-4',
@@ -22,6 +26,7 @@ const radioGroupItemVariants = cva(
       },
     },
     defaultVariants: {
+      variant: 'default',
       size: 'middle',
     },
   },
@@ -60,6 +65,7 @@ type RadioGroupProps = Omit<RadioGroupPrimitiveProps, 'children'> & {
   children?: React.ReactNode;
   options?: RadioGroupOption[];
   size?: RadioGroupSize;
+  variant?: 'default' | 'skeuomorphic';
   direction?: 'horizontal' | 'vertical';
   optionClassName?: string;
   labelClassName?: string;
@@ -70,6 +76,7 @@ function RadioGroup({
   children,
   options,
   size = 'middle',
+  variant = 'default',
   direction = 'vertical',
   optionClassName,
   labelClassName,
@@ -105,6 +112,7 @@ function RadioGroup({
                 id={option.id}
                 required={option.required}
                 size={size}
+                variant={variant}
                 value={option.value}
               />
               <span className={cn('select-none', labelClassName, option.labelClassName)}>
@@ -119,16 +127,29 @@ function RadioGroup({
 
 type RadioGroupItemProps = RadioGroupItemPrimitiveProps & {
   size?: RadioGroupSize;
+  variant?: 'default' | 'skeuomorphic';
 };
 
-function RadioGroupItem({ className, size = 'middle', ...props }: RadioGroupItemProps) {
+function RadioGroupItem({ className, size = 'middle', variant = 'default', ...props }: RadioGroupItemProps) {
+  const isSkeuomorphic = variant === 'skeuomorphic';
   return (
     <RadioGroupItemPrimitive
-      className={cn(radioGroupItemVariants({ size }), className)}
+      className={cn(radioGroupItemVariants({ variant, size }), className)}
       {...props}
     >
       <RadioGroupIndicatorPrimitive className="relative flex items-center justify-center">
-        <CircleIcon className={radioGroupIndicatorVariants({ size })} />
+        {isSkeuomorphic ? (
+          <span
+            className={cn(
+              "rounded-full bg-linear-to-tr from-blue-600 to-blue-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_2px_rgba(0,0,0,0.2)]",
+              size === 'small' && 'size-1.5',
+              size === 'middle' && 'size-2',
+              size === 'large' && 'size-2.5'
+            )}
+          />
+        ) : (
+          <CircleIcon className={radioGroupIndicatorVariants({ size })} />
+        )}
       </RadioGroupIndicatorPrimitive>
     </RadioGroupItemPrimitive>
   );

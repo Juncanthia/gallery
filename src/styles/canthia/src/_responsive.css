@@ -1,0 +1,27 @@
+/* ── Responsive breakpoints ── */
+
+@media screen and (max-width: 900px) {
+    #write {
+        max-width: none;
+        padding: var(--page-padding-y) var(--page-padding-x);
+    }
+}
+
+@media screen and (max-width: 560px) {
+    #write {
+        padding: 2rem 1.25rem 5rem;
+    }
+
+    h1 {
+        font-size: 1.65rem;
+    }
+
+    h2 {
+        font-size: 1.35rem;
+    }
+
+    th,
+    td {
+        padding: 0.22rem 0.5rem;
+    }
+}

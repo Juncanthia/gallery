@@ -1,0 +1,195 @@
+## 一、 导言
+
+在现代 Web 应用与文档系统的设计中，排版（Typography）与组件（Components）的视觉呈现直接影响着信息传递的效率与阅读体验。然而，随着近年来各类 UI 框架的泛滥，一种被称为 **“AI 味设计”** 的审美倾向逐渐流行：过度使用大阴影（`shadow-lg`）、大圆角（`rounded-xl`）以及多层卡片（Card）的嵌套。这种设计在展示高密度、学术性或专业技术内容时，往往会造成视觉上的冗余与信息噪音。
+
+本研究旨在探索一种**“简洁大方、克制内敛”**的学术级排版与组件设计系统。我们通过引入古典书籍排版（如 LaTeX 与 Booktabs 风格）的精髓，结合直角或极小圆角、超轻阴影（`shadow-sm`）以及高对比度的双色高亮，构建了一套兼具古典美感与现代 Web 交互性能的文档渲染方案。
+
+> **设计原则 (Design Philosophy)**
+> 真正的优雅不在于无法再添加任何东西，而在于无法再删减任何东西。在学术与专业技术写作中，排版应当作为信息的隐形载体，让读者专注于内容本身，而非华丽的视觉装饰。
+
+---
+
+## 二、 排版与布局测试
+
+学术排版的核心在于严谨的层级关系与舒适的行高。以下展示了系统内置的各种基础排版元素在 `Canthia` 主题下的实际渲染效果：
+
+### 1. 列表层级与嵌套
+
+在撰写复杂论述时，多级列表是不可或缺的结构化工具：
+
+* **基础要点一**：学术排版应当遵循经典比例，行高建议在 `1.5` 至 `1.7` 之间。
+* **基础要点二**：段落间距不宜过大，通常采用 `0.65em` 的段后距，以保持阅读的连贯性。
+  * **子级要点 A**：中文字体首选高质量的宋体（如华文宋体、思源宋体），英文首选 Computer Modern 或 Times New Roman。
+  * **子级要点 B**：衬线字体（Serif）在长文阅读中能有效缓解眼部疲劳。
+    1. **三级细分 1**：字号大小需严格对齐黄金分割比。
+    2. **三级细分 2**：行宽应当限制在 `60-70` 个半角字符之间，避免视线跨度过大。
+
+### 2. 文本强调与行内元素
+
+我们在段落中可以自由地使用各种行内样式。例如，**粗体文本（Strong）**用于强调核心概念，*斜体文本（Italic）*用于外来语或书名，~~删除线（Delete）~~用于表示废弃的定义。
+
+对于键盘操作，可以使用快捷键元素，例如按下 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> 唤醒命令面板。
+
+对于行内代码，我们使用轻量化的直角边框进行包裹，例如 `const lambda = 0.05`，其背景色为 `var(--inline-code-bg-color)`，边框为 `var(--inline-code-border-color)`，确保其在段落中清晰可见却不突兀。
+
+---
+
+## 三、 数学公式渲染 (LaTeX)
+
+在理工科及学术研究文档中，数学公式的排版质量至关重要。本系统原生支持 LaTeX 数学公式，通过 `remark-math` 与 `rehype-katex` 插件，在编译期将其转换为高精度的矢量数学符号。
+
+### 1. 行内公式 (Inline Math)
+
+行内公式能够完美嵌入段落中，且不破坏当前的行高与排版对齐。例如：
+已知一维薛定谔方程的核心算符为哈密顿量 $H = -\frac{\hbar^2}{2m}\nabla^2 + V(\mathbf{r})$，当粒子的总能量为 $E$ 时，其波函数 $\psi(x)$ 满足关系式 $H\psi = E\psi$。在热力学中，自由能的改变量可以表示为 $dF = -SdT - PdV$。
+
+### 2. 块级公式 (Block Math)
+
+对于复杂的公式或推导过程，应当使用独占一行的块级公式进行展示。以下是广义相对论中经典的爱因斯坦场方程：
+
+$$G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$$
+
+在量子力学中，含时薛定谔方程（Time-Dependent Schrödinger Equation）描述了物理系统波函数随时间演化的规律：
+
+$$i\hbar \frac{\partial}{\partial t}\Psi(\mathbf{r},t) = \left[-\frac{\hbar^2}{2m}\nabla^2 + V(\mathbf{r},t)\right]\Psi(\mathbf{r},t)$$
+
+此外，在概率论与数理统计中，多元正态分布的概率密度函数具有极其对称的数学美感：
+
+$$f(\mathbf{x}) = \frac{1}{\sqrt{(2\pi)^k |\boldsymbol{\Sigma}|}} \exp\left( -\frac{1}{2} (\mathbf{x}-\boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{x}-\boldsymbol{\mu}) \right)$$
+
+---
+
+## 四、 代码块展示
+
+代码是现代技术文档的核心。我们摒弃了传统的“深色代码块强行嵌入浅色网页”的割裂设计，而是让代码块的背景色（`--code-bg-color`）和边框（`--code-border-color`）与当前主题（Light/Dark）完全融合。
+
+以下展示了 Markdown 内建代码块的渲染效果，它由 Shiki 驱动，并自动应用了我们精细调校的 `css-variables` 语法高亮主题：
+
+### 1. TypeScript 示例
+
+```typescript
+import { useState, useEffect } from "react";
+
+interface UserProfile {
+  id: string;
+  name: string;
+  role: "admin" | "editor" | "viewer";
+  joinedAt: Date;
+}
+
+export function useFetchProfile(userId: string) {
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    
+    async function loadData() {
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+        if (isMounted) {
+          setProfile(data);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+      }
+    }
+
+    loadData();
+    return () => { isMounted = false; };
+  }, [userId]);
+
+  return { profile, loading };
+}
+```
+
+### 2. Python 示例
+
+```python
+import math
+from typing import List, Tuple
+
+def calculate_eigenvalues(matrix: List[List[float]]) -> Tuple[float, float]:
+    """
+    计算一个 2x2 矩阵的特征值。
+    公式: det(A - lambda * I) = 0
+    """
+    a, b = matrix[0][0], matrix[0][1]
+    c, d = matrix[1][0], matrix[1][1]
+    
+    # 特征方程: lambda^2 - tr(A)*lambda + det(A) = 0
+    trace = a + d
+    determinant = a * d - b * c
+    
+    discriminant = trace**2 - 4 * determinant
+    if discriminant < 0:
+        raise ValueError("本函数仅支持实数特征值。")
+        
+    lambda1 = (trace + math.sqrt(discriminant)) / 2
+    lambda2 = (trace - math.sqrt(discriminant)) / 2
+    
+    return lambda1, lambda2
+```
+
+---
+
+## 五、 学术三线表与图表
+
+### 1. 学术三线表 (Booktabs Table)
+
+在学术论文中，表格的设计有着极其严格的规范。标准的学术表格被称为 **“三线表（Three-line Table）”**。其特征是：**只有三条粗细不同的横线（顶线、栏目线、底线），坚决不使用任何竖线，也绝不在单元格周围套用多余的边框。**
+
+以下是使用标准 Markdown 语法书写的表格，在我们的系统下被自动渲染为优雅的学术三线表样式：
+
+| 算法模型 (Algorithm) | 参数量 (Params) | 准确率 (Accuracy) | 训练耗时 (Epoch/s) | 备注 (Notes) |
+| :--- | :---: | :---: | :---: | :--- |
+| **ResNet-50** | 25.6 M | 76.15% | 142.5 | 经典残差网络，基准模型 |
+| **ViT-Base/16** | 86.4 M | 84.53% | 385.2 | 视觉 Transformer，收敛较慢 |
+| **Swin-Transformer** | 88.0 M | 86.10% | 312.0 | 滑动窗口机制，局部注意力 |
+| **Canthia-Net (Ours)** | **18.2 M** | **88.45%** | **98.1** | **本研究提出，轻量且高效** |
+
+### 2. 矢量系统架构图 (Inline SVG Diagram)
+
+为了避免使用低清晰度的位图，本系统提倡直接在 MDX 中嵌入矢量图形（SVG）。以下展示了一个使用直角、细线、无投影设计的系统架构图，完美契合克制内敛的古典美学：
+
+<div className="flex justify-center my-6">
+  <svg width="640" height="180" viewBox="0 0 640 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-foreground">
+    {/* Background Grid Lines (Subtle) */}
+    <line x1="0" y1="90" x2="640" y2="90" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 4" className="opacity-20" />
+    
+    {/* Node 1: Input Source */}
+    <rect x="20" y="50" width="120" height="80" stroke="currentColor" strokeWidth="1" fill="var(--code-bg-color)" />
+    <text x="80" y="85" fill="currentColor" fontSize="12" fontFamily="var(--monospace)" textAnchor="middle" fontWeight="bold">Markdown/MDX</text>
+    <text x="80" y="105" fill="currentColor" fontSize="10" className="opacity-70" textAnchor="middle">输入源文档</text>
+    
+    {/* Arrow 1 */}
+    <path d="M 140 90 L 190 90" stroke="currentColor" strokeWidth="1" />
+    <polygon points="190,90 182,86 182,94" fill="currentColor" />
+    
+    {/* Node 2: Compiler Core */}
+    <rect x="200" y="30" width="240" height="120" stroke="currentColor" strokeWidth="1" fill="var(--code-bg-color)" />
+    <text x="320" y="65" fill="currentColor" fontSize="13" fontFamily="var(--monospace)" textAnchor="middle" fontWeight="bold">Vite + MDX Compiler</text>
+    <text x="320" y="90" fill="currentColor" fontSize="11" className="opacity-80" textAnchor="middle">remark-math (公式解析)</text>
+    <text x="320" y="110" fill="currentColor" fontSize="11" className="opacity-80" textAnchor="middle">rehype-katex (公式渲染)</text>
+    <text x="320" y="130" fill="currentColor" fontSize="11" className="opacity-80" textAnchor="middle">Shiki (CSS 变量高亮)</text>
+    
+    {/* Arrow 2 */}
+    <path d="M 440 90 L 490 90" stroke="currentColor" strokeWidth="1" />
+    <polygon points="490,90 482,86 482,94" fill="currentColor" />
+    
+    {/* Node 3: Rendered Output */}
+    <rect x="500" y="50" width="120" height="80" stroke="currentColor" strokeWidth="1" fill="var(--code-bg-color)" />
+    <text x="560" y="85" fill="currentColor" fontSize="12" fontFamily="var(--monospace)" textAnchor="middle" fontWeight="bold">Canthia UI</text>
+    <text x="560" y="105" fill="currentColor" fontSize="10" className="opacity-70" textAnchor="middle">学术级排版页面</text>
+  </svg>
+</div>
+
+---
+
+## 六、 结论
+
+本实验性测试页全面展示了 `Canthia` 主题在处理复杂学术与技术文档时的卓越表现。通过对 Shiki 语法高亮变量的精密映射，Markdown 内建代码块呈现出了极具古典美感的低饱和度双色对比；结合 `remark-math` 插件，LaTeX 数学公式得以在网页端以印刷级的质量完美呈现；而学术三线表与矢量架构图的引入，则彻底消除了传统网页设计中“卡片堆叠、边框繁复”的凌乱感。
+
+本系统不仅为技术文档提供了一套高可读性的视觉标准，也为未来数字出版与学术成果的 Web 化传播提供了一条行之有效的技术路径。

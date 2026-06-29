@@ -96,6 +96,14 @@ import {
   type CodeOptionsMultipleThemes,
   codeToHtml,
 } from "shiki";
+import { createCssVariablesTheme } from "shiki/core";
+
+const cssVariablesTheme = createCssVariablesTheme({
+  name: "css-variables",
+  variablePrefix: "--shiki-",
+  variableDefaults: {},
+  fontStyle: true,
+});
 import {
   Select,
   SelectContent,
@@ -192,34 +200,24 @@ const lineNumberClassNames = cn(
   "[&_.line]:before:[counter-increment:line]",
   "[&_.line]:before:w-4",
   "[&_.line]:before:mr-4",
-  "[&_.line]:before:text-[13px]",
+  "[&_.line]:before:text-[11px]",
   "[&_.line]:before:text-right",
-  "[&_.line]:before:text-muted-foreground/50",
-  "[&_.line]:before:font-mono",
+  "[&_.line]:before:text-muted-foreground/40",
   "[&_.line]:before:select-none"
 );
 
-const darkModeClassNames = cn(
-  "dark:[&_.shiki]:!text-[var(--shiki-dark)]",
-  // "dark:[&_.shiki]:!bg-[var(--shiki-dark-bg)]",
-  "dark:[&_.shiki]:![font-style:var(--shiki-dark-font-style)]",
-  "dark:[&_.shiki]:![font-weight:var(--shiki-dark-font-weight)]",
-  "dark:[&_.shiki]:![text-decoration:var(--shiki-dark-text-decoration)]",
-  "dark:[&_.shiki_span]:!text-[var(--shiki-dark)]",
-  "dark:[&_.shiki_span]:![font-style:var(--shiki-dark-font-style)]",
-  "dark:[&_.shiki_span]:![font-weight:var(--shiki-dark-font-weight)]",
-  "dark:[&_.shiki_span]:![text-decoration:var(--shiki-dark-text-decoration)]"
-);
+const darkModeClassNames = "";
 
 const lineHighlightClassNames = cn(
-  "[&_.line.highlighted]:bg-blue-50",
-  "[&_.line.highlighted]:after:bg-blue-500",
+  "[&_.line.highlighted]:bg-zinc-100/50",
+  "[&_.line.highlighted]:after:bg-zinc-400",
   "[&_.line.highlighted]:after:absolute",
   "[&_.line.highlighted]:after:left-0",
   "[&_.line.highlighted]:after:top-0",
   "[&_.line.highlighted]:after:bottom-0",
   "[&_.line.highlighted]:after:w-0.5",
-  "dark:[&_.line.highlighted]:!bg-blue-500/10"
+  "dark:[&_.line.highlighted]:!bg-zinc-800/50",
+  "dark:[&_.line.highlighted]:after:!bg-zinc-500"
 );
 
 const lineDiffClassNames = cn(
@@ -228,12 +226,10 @@ const lineDiffClassNames = cn(
   "[&_.line.diff]:after:top-0",
   "[&_.line.diff]:after:bottom-0",
   "[&_.line.diff]:after:w-0.5",
-  "[&_.line.diff.add]:bg-emerald-50",
-  "[&_.line.diff.add]:after:bg-emerald-500",
-  "[&_.line.diff.remove]:bg-rose-50",
-  "[&_.line.diff.remove]:after:bg-rose-500",
-  "dark:[&_.line.diff.add]:!bg-emerald-500/10",
-  "dark:[&_.line.diff.remove]:!bg-rose-500/10"
+  "[&_.line.diff.add]:bg-[color-mix(in_oklch,var(--syntax-diff-add-color)_8%,transparent)]",
+  "[&_.line.diff.add]:after:bg-[var(--syntax-diff-add-color)]",
+  "[&_.line.diff.remove]:bg-[color-mix(in_oklch,var(--syntax-diff-remove-color)_8%,transparent)]",
+  "[&_.line.diff.remove]:after:bg-[var(--syntax-diff-remove-color)]"
 );
 
 const lineFocusedClassNames = cn(
@@ -242,14 +238,13 @@ const lineFocusedClassNames = cn(
 );
 
 const wordHighlightClassNames = cn(
-  "[&_.highlighted-word]:bg-blue-50",
-  "dark:[&_.highlighted-word]:!bg-blue-500/10"
+  "[&_.highlighted-word]:bg-zinc-100",
+  "dark:[&_.highlighted-word]:!bg-zinc-800"
 );
 
 const codeBlockClassName = cn(
-  "mt-0 bg-background text-sm",
+  "mt-0 bg-[var(--code-bg-color)] text-[var(--text-color)] text-[13px] leading-relaxed",
   "[&_pre]:py-4",
-  // "[&_.shiki]:!bg-[var(--shiki-bg)]",
   "[&_.shiki]:!bg-transparent",
   "[&_code]:w-full",
   "[&_code]:grid",
@@ -262,15 +257,11 @@ const codeBlockClassName = cn(
 
 const highlight = (
   html: string,
-  language?: BundledLanguage,
-  themes?: CodeOptionsMultipleThemes["themes"]
+  language?: BundledLanguage
 ) =>
   codeToHtml(html, {
     lang: language ?? "typescript",
-    themes: themes ?? {
-      light: "github-light",
-      dark: "github-dark-default",
-    },
+    theme: cssVariablesTheme,
     transformers: [
       transformerNotationDiff({
         matchAlgorithm: "v3",
@@ -321,6 +312,7 @@ export const CodeBlock = ({
   defaultValue,
   className,
   data,
+  style,
   ...props
 }: CodeBlockProps) => {
   const [value, onValueChange] = useControllableState({
@@ -332,7 +324,13 @@ export const CodeBlock = ({
   return (
     <CodeBlockContext.Provider value={{ value, onValueChange, data }}>
       <div
-        className={cn("size-full overflow-hidden rounded-md border", className)}
+        data-canthia-ignore=""
+        data-slot="code-block"
+        className={cn(
+          "not-prose size-full overflow-hidden rounded border border-[var(--code-border-color)] bg-[var(--code-bg-color)] text-[var(--text-color)]",
+          className
+        )}
+        style={style}
         {...props}
       />
     </CodeBlockContext.Provider>
@@ -347,7 +345,7 @@ export const CodeBlockHeader = ({
 }: CodeBlockHeaderProps) => (
   <div
     className={cn(
-      "flex flex-row items-center border-b bg-secondary p-1",
+      "flex h-9 flex-row items-center justify-between border-b border-[var(--code-border-color)] bg-muted/20 px-3 py-1.5",
       className
     )}
     {...props}
@@ -399,17 +397,17 @@ export const CodeBlockFilename = ({
   })?.[1];
   const Icon = icon ?? defaultIcon;
 
-  if (value !== activeValue) {
+  if (value !== undefined && value !== activeValue) {
     return null;
   }
 
   return (
     <div
-      className="flex items-center gap-2 bg-secondary px-4 py-1.5 text-muted-foreground text-xs"
+      className={cn("flex items-center gap-2 text-muted-foreground text-xs font-medium", className)}
       {...props}
     >
-      {Icon && <Icon className="h-4 w-4 shrink-0" />}
-      <span className="flex-1 truncate">{children}</span>
+      {Icon && <Icon className="h-4 w-4 shrink-0 text-muted-foreground/80" />}
+      <span className="truncate">{children}</span>
     </div>
   );
 };
@@ -576,23 +574,24 @@ export type CodeBlockContentProps = HTMLAttributes<HTMLDivElement> & {
 
 export const CodeBlockContent = ({
   children,
-  themes,
+  themes: _themes,
   language,
   syntaxHighlighting = true,
   ...props
 }: CodeBlockContentProps) => {
   const [html, setHtml] = useState<string | null>(null);
+  void _themes;
 
   useEffect(() => {
     if (!syntaxHighlighting) {
       return;
     }
 
-    highlight(children as string, language, themes)
+    highlight(children as string, language)
       .then(setHtml)
       // biome-ignore lint/suspicious/noConsole: "it's fine"
       .catch(console.error);
-  }, [children, themes, syntaxHighlighting, language]);
+  }, [children, syntaxHighlighting, language]);
 
   if (!(syntaxHighlighting && html)) {
     return <CodeBlockFallback>{children}</CodeBlockFallback>;

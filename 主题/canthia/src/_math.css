@@ -1,0 +1,96 @@
+/* ── Math (MathJax / LaTeX) ── */
+
+.md-math-block,
+.md-inline-math {
+    color: var(--text-color);
+}
+
+.mathjax-block,
+.mathjax-block .md-rawblock-control,
+.mathjax-block .md-rawblock-tooltip,
+.mathjax-block .md-rawblock-container,
+.mathjax-block .md-mathblock-panel,
+.mathjax-block .md-math-container {
+    color: var(--text-color);
+    background-color: var(--surface-color);
+}
+
+.mathjax-block .md-math-container,
+.md-inline-math,
+.md-mathjax-midline {
+    font-family: var(--math-font);
+}
+
+.mathjax-block .md-math-container {
+    padding: 0.75em 0;
+}
+
+.mathjax-block .md-mathblock-panel,
+.md-math-block .md-mathblock-panel {
+    border: 1px solid var(--line-color);
+    border-radius: 2px;
+    background: var(--surface-color);
+    color: var(--text-color);
+    font-family: var(--monospace);
+    box-shadow: none;
+}
+
+.mathjax-block .md-mathblock-panel .md-rawblock-before,
+.mathjax-block .md-mathblock-panel .md-rawblock-after {
+    padding: 0.45em 1.2em;
+    color: var(--meta-text-color);
+}
+
+.mathjax-block .md-mathblock-panel .md-rawblock-input {
+    padding: 0 1.2em;
+    background-color: var(--surface-color);
+}
+
+.mathjax-block .md-mathblock-panel .CodeMirror,
+.mathjax-block .md-mathblock-panel .cm-s-inner,
+.mathjax-block .md-mathblock-panel .CodeMirror-scroll,
+.mathjax-block .md-mathblock-panel .CodeMirror-lines,
+.mathjax-block .md-mathblock-panel .CodeMirror-gutters,
+.md-math-block .md-mathblock-panel .CodeMirror,
+.md-math-block .md-mathblock-panel .CodeMirror-scroll,
+.md-math-block .md-mathblock-panel .CodeMirror-lines,
+.md-math-block .md-mathblock-panel .CodeMirror-gutters {
+    background: var(--surface-color);
+    color: var(--text-color);
+    font-family: var(--monospace);
+}
+
+.mathjax-block .md-mathblock-panel .CodeMirror-gutters {
+    border-right: none;
+}
+
+.mathjax-block .md-mathblock-panel .CodeMirror-cursor,
+.md-math-block .md-mathblock-panel .CodeMirror-cursor {
+    border-left: 1px solid var(--text-color);
+}
+
+.mathjax-block .md-mathblock-panel .CodeMirror-selected,
+.mathjax-block .md-mathblock-panel .CodeMirror-selectedtext,
+.md-math-block .md-mathblock-panel .CodeMirror-selected,
+.md-math-block .md-mathblock-panel .CodeMirror-selectedtext {
+    background: var(--select-text-bg-color);
+    color: var(--select-text-font-color);
+}
+
+.mathjax-block > .code-tooltip,
+.md-math-block > .code-tooltip {
+    bottom: 0.375rem;
+    box-shadow: none;
+}
+
+.md-inline-math {
+    padding: 0 0.08em;
+    background: transparent;
+    color: var(--text-color);
+}
+
+.md-mathjax-midline {
+    background: transparent;
+    border-bottom: 1px solid var(--line-color);
+    color: var(--muted-text-color);
+}

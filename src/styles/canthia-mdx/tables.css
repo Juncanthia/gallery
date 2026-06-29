@@ -1,0 +1,58 @@
+@layer base {
+  .canthia-mdx :where(.md-table-wrap):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    max-width: 100%;
+    margin: 1.6rem 0;
+    overflow-x: auto;
+  }
+
+  .canthia-mdx :where(table):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    width: 100%;
+    margin: 1.6rem auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-top: 1px solid var(--canthia-border-strong);
+    border-bottom: 1px solid var(--canthia-border-strong);
+    background: transparent;
+    font-size: var(--canthia-table-font-size);
+    line-height: var(--canthia-table-line-height);
+    page-break-inside: avoid;
+  }
+
+  .canthia-mdx :where(thead tr):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    border-bottom: 1px solid var(--canthia-border-strong);
+  }
+
+  .canthia-mdx :where(th, td):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    padding: 0.5em 1.5em;
+    border: 0;
+    background-color: transparent;
+    vertical-align: top;
+  }
+
+  .canthia-mdx :where(th):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .canthia-mdx :where(td):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-text);
+  }
+
+  .canthia-mdx :where(caption):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-bottom: 0.6rem;
+    color: var(--canthia-muted);
+    font-size: 0.9rem;
+  }
+
+  @media screen and (max-width: 560px) {
+    .canthia-mdx :where(table):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .canthia-mdx :where(th, td):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+      padding: 0.22rem 0.5rem;
+    }
+  }
+}

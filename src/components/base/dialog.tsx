@@ -27,6 +27,7 @@ import {
 import { cn } from '@/lib/utils';
 
 type DialogProps = DialogPrimitiveProps & {
+  variant?: 'default' | 'skeuomorphic';
   trigger?: React.ReactNode;
   title?: React.ReactNode;
   description?: React.ReactNode;
@@ -57,7 +58,10 @@ function renderDialogTrigger(trigger: React.ReactNode) {
   );
 }
 
+const DialogContext = React.createContext<{ variant?: 'default' | 'skeuomorphic' }>({ variant: 'default' });
+
 function Dialog({
+  variant = 'default',
   trigger,
   title,
   description,
@@ -100,10 +104,15 @@ function Dialog({
     onCancel !== undefined;
 
   if (!hasApiContent) {
-    return <DialogPrimitive {...props}>{children}</DialogPrimitive>;
+    return (
+      <DialogContext.Provider value={{ variant }}>
+        <DialogPrimitive {...props}>{children}</DialogPrimitive>
+      </DialogContext.Provider>
+    );
   }
 
   const mergedClosable = closable ?? showCloseButton;
+  const isSkeuomorphic = variant === 'skeuomorphic';
   const footerNode = footer === null
     ? null
     : (footer ??
@@ -117,7 +126,7 @@ function Dialog({
       <DialogFooter>
         <DialogClose asChild>
           <Button
-            variant="outlined"
+            variant={isSkeuomorphic ? "skeuomorphic" : "outlined"}
             {...cancelButtonProps}
             onClick={onCancel}
           >
@@ -125,7 +134,7 @@ function Dialog({
           </Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button loading={confirmLoading} {...okButtonProps} onClick={onOk}>
+          <Button variant={isSkeuomorphic ? "skeuomorphic" : "solid"} loading={confirmLoading} {...okButtonProps} onClick={onOk}>
             {okText ?? 'OK'}
           </Button>
         </DialogClose>
@@ -133,28 +142,34 @@ function Dialog({
     )));
 
   return (
-    <DialogPrimitive {...props}>
-      {renderDialogTrigger(trigger)}
-      <DialogContent
-        closable={mergedClosable}
-        closeIcon={closeIcon}
-        mask={mask}
-        maskClosable={maskClosable}
-        width={width}
-        {...contentProps}
-      >
-        {(title !== undefined || description !== undefined) && (
-          <DialogHeader>
-            {title !== undefined && <DialogTitle>{title}</DialogTitle>}
-            {description !== undefined && (
-              <DialogDescription>{description}</DialogDescription>
-            )}
-          </DialogHeader>
-        )}
-        {children}
-        {footerNode}
-      </DialogContent>
-    </DialogPrimitive>
+    <DialogContext.Provider value={{ variant }}>
+      <DialogPrimitive {...props}>
+        {renderDialogTrigger(trigger)}
+        <DialogContent
+          closable={mergedClosable}
+          closeIcon={closeIcon}
+          mask={mask}
+          maskClosable={maskClosable}
+          width={width}
+          {...contentProps}
+        >
+          {(title !== undefined || description !== undefined) && (
+            <DialogHeader>
+              {title !== undefined && <DialogTitle>{title}</DialogTitle>}
+              {description !== undefined && (
+                <DialogDescription>{description}</DialogDescription>
+              )}
+            </DialogHeader>
+          )}
+          {children && (
+            <div className={cn(isSkeuomorphic && "px-6 py-6 bg-white dark:bg-zinc-950 text-neutral-700 dark:text-zinc-300")}>
+              {children}
+            </div>
+          )}
+          {footerNode}
+        </DialogContent>
+      </DialogPrimitive>
+    </DialogContext.Provider>
   );
 }
 
@@ -203,6 +218,8 @@ function DialogContent({
   onInteractOutside,
   ...props
 }: DialogContentProps) {
+  const { variant } = React.useContext(DialogContext);
+  const isSkeuomorphic = variant === 'skeuomorphic';
   const mergedClosable = closable ?? showCloseButton ?? true;
   const mergedStyle = {
     width,
@@ -214,7 +231,9 @@ function DialogContent({
       {mask && <DialogOverlay />}
       <DialogContentPrimitive
         className={cn(
-          'bg-background fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg sm:max-w-lg',
+          isSkeuomorphic
+            ? 'bg-background fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-xl border border-neutral-300 dark:border-zinc-700 bg-linear-to-b from-white to-neutral-50 dark:from-zinc-800 dark:to-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.1)] p-0 overflow-hidden gap-0 sm:max-w-lg'
+            : 'bg-background fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg sm:max-w-lg',
           className,
         )}
         style={mergedStyle}
@@ -228,7 +247,12 @@ function DialogContent({
       >
         {children}
         {mergedClosable && (
-          <DialogClosePrimitive className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+          <DialogClosePrimitive className={cn(
+            "absolute rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+            isSkeuomorphic
+              ? "top-4.5 right-4.5 text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-white"
+              : "ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground top-4 right-4"
+          )}>
             {closeIcon ?? <X />}
             <span className="sr-only">Close</span>
           </DialogClosePrimitive>
@@ -247,9 +271,16 @@ function DialogClose(props: DialogCloseProps) {
 type DialogHeaderProps = DialogHeaderPrimitiveProps;
 
 function DialogHeader({ className, ...props }: DialogHeaderProps) {
+  const { variant } = React.useContext(DialogContext);
+  const isSkeuomorphic = variant === 'skeuomorphic';
   return (
     <DialogHeaderPrimitive
-      className={cn('flex flex-col gap-2 text-center sm:text-left', className)}
+      className={cn(
+        isSkeuomorphic
+          ? 'flex flex-col gap-1 text-left bg-linear-to-b from-neutral-50 to-neutral-100/80 dark:from-zinc-800 dark:to-zinc-900 border-b border-neutral-200 dark:border-zinc-700 px-6 py-4'
+          : 'flex flex-col gap-2 text-center sm:text-left',
+        className
+      )}
       {...props}
     />
   );
@@ -258,10 +289,14 @@ function DialogHeader({ className, ...props }: DialogHeaderProps) {
 type DialogFooterProps = DialogFooterPrimitiveProps;
 
 function DialogFooter({ className, ...props }: DialogFooterProps) {
+  const { variant } = React.useContext(DialogContext);
+  const isSkeuomorphic = variant === 'skeuomorphic';
   return (
     <DialogFooterPrimitive
       className={cn(
-        'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
+        isSkeuomorphic
+          ? 'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end bg-linear-to-b from-neutral-50 to-neutral-100/80 dark:from-zinc-800 dark:to-zinc-900 border-t border-neutral-200 dark:border-zinc-700 px-6 py-4'
+          : 'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
         className,
       )}
       {...props}

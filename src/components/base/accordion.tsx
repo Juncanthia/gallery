@@ -45,6 +45,7 @@ type AccordionProps = Omit<
   AccordionPrimitiveProps,
   'collapsible' | 'defaultValue' | 'onValueChange' | 'type' | 'value'
 > & {
+  variant?: 'default' | 'skeuomorphic';
   accordion?: boolean;
   activeKey?: AccordionKey | AccordionKey[];
   bordered?: boolean;
@@ -68,7 +69,11 @@ const accordionTriggerSizeClasses: Record<AccordionSize, string> = {
   large: 'px-4 py-4',
 };
 
+import * as React from 'react';
+const AccordionContext = React.createContext<{ variant?: 'default' | 'skeuomorphic' }>({ variant: 'default' });
+
 function Accordion({
+  variant = 'default',
   accordion,
   activeKey,
   bordered = true,
@@ -98,75 +103,90 @@ function Accordion({
     onChange?.(nextValue);
   };
 
+  const isSkeuomorphic = variant === 'skeuomorphic';
+
   if (items?.length) {
     return (
+      <AccordionContext.Provider value={{ variant }}>
+        <AccordionPrimitive
+          className={cn(
+            isSkeuomorphic
+              ? 'rounded-lg border border-neutral-300 dark:border-zinc-700 bg-linear-to-b from-white to-neutral-50 dark:from-zinc-800 dark:to-zinc-900 shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-hidden'
+              : bordered && !ghost && 'rounded-md border',
+            (ghost || !bordered) && !isSkeuomorphic && 'border-none',
+            className,
+          )}
+          type={mergedType}
+          value={mergedValue as never}
+          defaultValue={mergedValue === undefined ? (mergedDefaultValue as never) : undefined}
+          onValueChange={handleValueChange as never}
+          collapsible={mergedType === 'single' ? rootCollapsible : undefined}
+          {...props}
+        >
+          {items.map((item) => {
+            const itemCollapsible = item.collapsible ?? triggerCollapsible;
+
+            return (
+              <AccordionItem
+                key={item.key}
+                value={item.key}
+                disabled={item.disabled || itemCollapsible === 'disabled'}
+                className={cn((ghost || !bordered) && 'border-b-0', item.className)}
+              >
+                <AccordionTrigger
+                  arrowPlacement={expandIconPlacement}
+                  className={accordionTriggerSizeClasses[size]}
+                  collapsible={itemCollapsible}
+                  disabled={item.disabled}
+                  expandIcon={expandIcon}
+                  extra={item.extra}
+                  itemKey={item.key}
+                  showArrow={item.showArrow}
+                >
+                  {item.label}
+                </AccordionTrigger>
+                <AccordionContent
+                  keepRendered={item.forceRender}
+                  className={cn('px-4', size === 'small' && 'px-3')}
+                >
+                  {item.children}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </AccordionPrimitive>
+      </AccordionContext.Provider>
+    );
+  }
+
+  return (
+    <AccordionContext.Provider value={{ variant }}>
       <AccordionPrimitive
-        className={cn(
-          bordered && !ghost && 'rounded-md border',
-          (ghost || !bordered) && 'border-none',
-          className,
-        )}
+        className={cn(className)}
         type={mergedType}
         value={mergedValue as never}
         defaultValue={mergedValue === undefined ? (mergedDefaultValue as never) : undefined}
         onValueChange={handleValueChange as never}
         collapsible={mergedType === 'single' ? rootCollapsible : undefined}
         {...props}
-      >
-        {items.map((item) => {
-          const itemCollapsible = item.collapsible ?? triggerCollapsible;
-
-          return (
-            <AccordionItem
-              key={item.key}
-              value={item.key}
-              disabled={item.disabled || itemCollapsible === 'disabled'}
-              className={cn((ghost || !bordered) && 'border-b-0', item.className)}
-            >
-              <AccordionTrigger
-                arrowPlacement={expandIconPlacement}
-                className={accordionTriggerSizeClasses[size]}
-                collapsible={itemCollapsible}
-                disabled={item.disabled}
-                expandIcon={expandIcon}
-                extra={item.extra}
-                itemKey={item.key}
-                showArrow={item.showArrow}
-              >
-                {item.label}
-              </AccordionTrigger>
-              <AccordionContent
-                keepRendered={item.forceRender}
-                className={cn('px-4', size === 'small' && 'px-3')}
-              >
-                {item.children}
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-      </AccordionPrimitive>
-    );
-  }
-
-  return (
-    <AccordionPrimitive
-      className={cn(className)}
-      type={mergedType}
-      value={mergedValue as never}
-      defaultValue={mergedValue === undefined ? (mergedDefaultValue as never) : undefined}
-      onValueChange={handleValueChange as never}
-      collapsible={mergedType === 'single' ? rootCollapsible : undefined}
-      {...props}
-    />
+      />
+    </AccordionContext.Provider>
   );
 }
 
 type AccordionItemProps = AccordionItemPrimitiveProps;
 
 function AccordionItem({ className, ...props }: AccordionItemProps) {
+  const { variant } = React.useContext(AccordionContext);
+  const isSkeuomorphic = variant === 'skeuomorphic';
   return (
     <AccordionItemPrimitive
-      className={cn('border-b last:border-b-0', className)}
+      className={cn(
+        isSkeuomorphic
+          ? 'border-b border-neutral-200 dark:border-zinc-700 last:border-b-0'
+          : 'border-b last:border-b-0',
+        className
+      )}
       {...props}
     />
   );
@@ -194,6 +214,8 @@ function AccordionTrigger({
   ...props
 }: AccordionTriggerProps) {
   const { isOpen, value } = useAccordionItem();
+  const { variant } = React.useContext(AccordionContext);
+  const isSkeuomorphic = variant === 'skeuomorphic';
   const mergedItemKey = itemKey ?? value;
   const triggerDisabled = disabled || collapsible === 'disabled';
   const arrow = showArrow ? (
@@ -217,7 +239,9 @@ function AccordionTrigger({
         {arrowPlacement === 'start' && arrow && (
           <AccordionTriggerPrimitive
             className={cn(
-              'focus-visible:border-ring focus-visible:ring-ring/50 flex shrink-0 items-center justify-center rounded-md outline-none transition-all focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
+              isSkeuomorphic
+                ? 'focus-visible:border-blue-500 focus-visible:ring-blue-500/50 flex shrink-0 items-center justify-center rounded-md outline-none transition-all focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50'
+                : 'focus-visible:border-ring focus-visible:ring-ring/50 flex shrink-0 items-center justify-center rounded-md outline-none transition-all focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
               className,
             )}
             disabled={triggerDisabled}
@@ -237,7 +261,9 @@ function AccordionTrigger({
         {arrowPlacement === 'end' && arrow && (
           <AccordionTriggerPrimitive
             className={cn(
-              'focus-visible:border-ring focus-visible:ring-ring/50 flex shrink-0 items-center justify-center rounded-md outline-none transition-all focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
+              isSkeuomorphic
+                ? 'focus-visible:border-blue-500 focus-visible:ring-blue-500/50 flex shrink-0 items-center justify-center rounded-md outline-none transition-all focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50'
+                : 'focus-visible:border-ring focus-visible:ring-ring/50 flex shrink-0 items-center justify-center rounded-md outline-none transition-all focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
               className,
             )}
             disabled={triggerDisabled}
@@ -251,10 +277,15 @@ function AccordionTrigger({
   }
 
   return (
-    <AccordionHeaderPrimitive className="flex items-start">
+    <AccordionHeaderPrimitive className={cn(
+      "flex items-start w-full",
+      isSkeuomorphic && "hover:bg-neutral-50/50 dark:hover:bg-zinc-800/20 transition-colors duration-150"
+    )}>
       <AccordionTriggerPrimitive
         className={cn(
-          'focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
+          isSkeuomorphic
+            ? 'focus-visible:border-blue-500 focus-visible:ring-blue-500/50 flex flex-1 items-start justify-between gap-4 py-4 text-left text-sm font-semibold transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 text-neutral-800 dark:text-zinc-200'
+            : 'focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
           className,
         )}
         disabled={triggerDisabled}
@@ -280,9 +311,16 @@ function AccordionContent({
   children,
   ...props
 }: AccordionContentProps) {
+  const { variant } = React.useContext(AccordionContext);
+  const isSkeuomorphic = variant === 'skeuomorphic';
   return (
     <AccordionContentPrimitive {...props}>
-      <div className={cn('pt-0 pb-4 text-sm', className)}>{children}</div>
+      <div className={cn(
+        isSkeuomorphic
+          ? 'pt-3 pb-5 text-sm px-4 bg-neutral-50/40 dark:bg-zinc-950/20 border-t border-neutral-100 dark:border-zinc-800/50 text-neutral-600 dark:text-zinc-300'
+          : 'pt-0 pb-4 text-sm',
+        className
+      )}>{children}</div>
     </AccordionContentPrimitive>
   );
 }

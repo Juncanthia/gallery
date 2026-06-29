@@ -1,0 +1,58 @@
+@layer base {
+  .canthia-mdx :where(ul, ol):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 0.55rem;
+    margin-bottom: 0.75rem;
+    padding-left: 2rem;
+  }
+
+  .canthia-mdx :where(li):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 0.15rem 0;
+  }
+
+  .canthia-mdx :where(li):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) > :where(p):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 0.3rem 0;
+  }
+
+  .canthia-mdx :where(ol):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    list-style-type: decimal;
+  }
+
+  .canthia-mdx :where(ol ol):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    list-style-type: lower-alpha;
+  }
+
+  .canthia-mdx :where(ol ol ol):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    list-style-type: lower-roman;
+  }
+
+  .canthia-mdx :where(ol ol ol ol):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    list-style-type: decimal;
+  }
+
+  .canthia-mdx :where(ul.task-list, ul.contains-task-list):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    padding-left: 1.5rem;
+  }
+
+  .canthia-mdx :where(li.task-list-item):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    list-style: none;
+  }
+
+  .canthia-mdx :where(li.task-list-item > input[type="checkbox"]):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    width: 0.95rem;
+    height: 0.95rem;
+    margin: 0 0.55rem 0 -1.5rem;
+    vertical-align: baseline;
+    transform: translateY(0.4em);
+    accent-color: var(--canthia-text);
+  }
+
+  .canthia-mdx :where(li.task-list-done, li.task-list-item:has(input[type="checkbox"]:checked)):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-meta);
+  }
+
+  .canthia-mdx :where(li.task-list-done p, li.task-list-item:has(input[type="checkbox"]:checked) p):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    text-decoration: line-through;
+    text-decoration-color: var(--canthia-border);
+    text-decoration-thickness: 1px;
+  }
+}

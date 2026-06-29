@@ -490,7 +490,7 @@ export const TagsEmpty = ({
   className,
   ...props
 }: TagsEmptyProps) => (
-  <CommandEmpty {...props}>{children ?? "No tags found."}</CommandEmpty>
+  <CommandEmpty className={className} {...props}>{children ?? "No tags found."}</CommandEmpty>
 );
 
 export type TagsGroupProps = ComponentProps<typeof CommandGroup>;

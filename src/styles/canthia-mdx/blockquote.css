@@ -1,0 +1,35 @@
+@layer base {
+  .canthia-mdx :where(blockquote):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 1.5em 2em;
+    padding: 0.9em 1.2em 0.9em 1.4em;
+    border-left: 1px solid var(--canthia-quote-border);
+    background: var(--canthia-quote-bg);
+    color: var(--canthia-muted);
+    font-size: 0.95em;
+    line-height: 1.65;
+  }
+
+  .canthia-mdx :where(blockquote > :first-child):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 0;
+  }
+
+  .canthia-mdx :where(blockquote > :last-child):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-bottom: 0;
+  }
+
+  .canthia-mdx :where(blockquote blockquote):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 0.75rem 0 0.75rem 0.2rem;
+    padding: 0.55rem 0 0.55rem 0.9rem;
+    border-left: 1px solid var(--canthia-border);
+    background: transparent;
+    color: var(--canthia-meta);
+    font-size: 0.98em;
+  }
+
+  @media screen and (max-width: 560px) {
+    .canthia-mdx :where(blockquote):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+}

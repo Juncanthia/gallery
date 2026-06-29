@@ -19,6 +19,7 @@ const buttonVariants = cva(
         filled: "",
         text: "border-transparent bg-transparent shadow-none",
         link: "text-primary underline-offset-4 hover:underline",
+        skeuomorphic: "",
       },
       size: {
         small:
@@ -52,6 +53,36 @@ const buttonVariants = cva(
       ghost: false,
     },
     compoundVariants: [
+      {
+        variant: "skeuomorphic",
+        color: "default",
+        className: "bg-gradient-to-b from-white to-neutral-50 hover:to-neutral-100 active:from-neutral-200 active:to-neutral-50 text-neutral-700 border-neutral-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(0,0,0,0.03)] active:shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)] active:translate-y-[1px] transition-all duration-75 dark:from-zinc-800 dark:to-zinc-900 dark:hover:to-zinc-950 dark:active:from-zinc-950 dark:active:to-zinc-900 dark:text-zinc-300 dark:border-zinc-700 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_1px_2px_rgba(0,0,0,0.15)]",
+      },
+      {
+        variant: "skeuomorphic",
+        color: "primary",
+        className: "bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 active:from-blue-700 active:to-blue-500 text-white border-blue-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.08)] active:shadow-[inset_0_1px_3px_rgba(0,0,0,0.2)] active:translate-y-[1px] transition-all duration-75 dark:from-blue-600 dark:to-blue-800 dark:hover:from-blue-700 dark:hover:to-blue-900 dark:active:from-blue-900 dark:active:to-blue-700 dark:border-blue-700",
+      },
+      {
+        variant: "skeuomorphic",
+        color: "success",
+        className: "bg-gradient-to-b from-emerald-400 to-emerald-600 hover:from-emerald-500 hover:to-emerald-700 active:from-emerald-700 active:to-emerald-500 text-white border-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.08)] active:shadow-[inset_0_1px_3px_rgba(0,0,0,0.2)] active:translate-y-[1px] transition-all duration-75 dark:from-emerald-600 dark:to-emerald-800 dark:hover:from-emerald-700 dark:hover:to-emerald-900 dark:active:from-emerald-900 dark:active:to-emerald-700 dark:border-emerald-700",
+      },
+      {
+        variant: "skeuomorphic",
+        color: "warning",
+        className: "bg-gradient-to-b from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 active:from-amber-600 active:to-amber-500 text-white border-amber-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_1px_2px_rgba(0,0,0,0.08)] active:shadow-[inset_0_1px_3px_rgba(0,0,0,0.15)] active:translate-y-[1px] transition-all duration-75 dark:from-amber-500 dark:to-amber-700 dark:hover:from-amber-600 dark:hover:to-amber-800 dark:active:from-amber-800 dark:active:from-amber-600 dark:border-amber-700",
+      },
+      {
+        variant: "skeuomorphic",
+        color: "danger",
+        className: "bg-gradient-to-b from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 active:from-red-700 active:to-red-500 text-white border-red-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.08)] active:shadow-[inset_0_1px_3px_rgba(0,0,0,0.2)] active:translate-y-[1px] transition-all duration-75 dark:from-red-600 dark:to-red-800 dark:hover:from-red-700 dark:hover:to-red-900 dark:active:from-red-900 dark:active:from-red-700 dark:border-red-700",
+      },
+      {
+        variant: "skeuomorphic",
+        color: "info",
+        className: "bg-gradient-to-b from-sky-400 to-sky-600 hover:from-sky-500 hover:to-sky-700 active:from-sky-700 active:to-sky-500 text-white border-sky-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.08)] active:shadow-[inset_0_1px_3px_rgba(0,0,0,0.2)] active:translate-y-[1px] transition-all duration-75 dark:from-sky-600 dark:to-sky-800 dark:hover:from-sky-700 dark:hover:to-sky-900 dark:active:from-sky-900 dark:active:to-sky-700 dark:border-sky-700",
+      },
       {
         variant: "solid",
         color: "default",

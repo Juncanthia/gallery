@@ -1,0 +1,59 @@
+:root {
+  --syntax-keyword-color: #0550ae;
+  --syntax-string-color: #116329;
+  --syntax-number-color: #0550ae;
+  --syntax-type-color: #6f42c1;
+  --syntax-comment-color: #6e7781;
+  --syntax-diff-add-color: #116329;
+  --syntax-diff-remove-color: #cf222e;
+
+  --shiki-foreground: var(--foreground);
+  --shiki-background: transparent;
+  --shiki-token-comment: var(--syntax-comment-color);
+  --shiki-token-keyword: var(--syntax-keyword-color);
+  --shiki-token-string: var(--syntax-string-color);
+  --shiki-token-string-expression: var(--syntax-string-color);
+  --shiki-token-constant: var(--syntax-number-color);
+  --shiki-token-function: var(--syntax-type-color);
+  --shiki-token-parameter: var(--foreground);
+  --shiki-token-punctuation: var(--foreground);
+  --shiki-token-link: var(--link-color);
+  --shiki-token-inserted: var(--syntax-diff-add-color);
+  --shiki-token-deleted: var(--syntax-diff-remove-color);
+  --shiki-token-changed: var(--syntax-type-color);
+
+  --code-bg-color: #f9fafb;
+  --code-border-color: #e5e7eb;
+  --inline-code-bg-color: #f3f4f6;
+  --inline-code-border-color: #e5e7eb;
+}
+
+.dark {
+  --syntax-keyword-color: #ff7b72;
+  --syntax-string-color: #7ee787;
+  --syntax-number-color: #79c0ff;
+  --syntax-type-color: #d2a8ff;
+  --syntax-comment-color: #8b949e;
+  --syntax-diff-add-color: #7ee787;
+  --syntax-diff-remove-color: #ff7b72;
+
+  --shiki-foreground: var(--foreground);
+  --shiki-background: transparent;
+  --shiki-token-comment: var(--syntax-comment-color);
+  --shiki-token-keyword: var(--syntax-keyword-color);
+  --shiki-token-string: var(--syntax-string-color);
+  --shiki-token-string-expression: var(--syntax-string-color);
+  --shiki-token-constant: var(--syntax-number-color);
+  --shiki-token-function: var(--syntax-type-color);
+  --shiki-token-parameter: var(--foreground);
+  --shiki-token-punctuation: var(--foreground);
+  --shiki-token-link: var(--link-color);
+  --shiki-token-inserted: var(--syntax-diff-add-color);
+  --shiki-token-deleted: var(--syntax-diff-remove-color);
+  --shiki-token-changed: var(--syntax-type-color);
+
+  --code-bg-color: #18181b;
+  --code-border-color: #27272a;
+  --inline-code-bg-color: #27272a;
+  --inline-code-border-color: #27272a;
+}

@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 AntD-API-搬迁对比报告.md
 完整改进记录.md
+
+# TanStack Router
+.tanstack/

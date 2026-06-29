@@ -1,0 +1,60 @@
+@layer base {
+  .canthia-mdx :where(h1, h2, h3, h4, h5, h6):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-text);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: 0;
+    scroll-margin-top: 6rem;
+    page-break-after: avoid;
+  }
+
+  .canthia-mdx :where(h1):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin: 0 0 2.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--canthia-border-strong);
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .canthia-mdx :where(h2):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 2.6rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--canthia-border);
+    font-size: 1.55rem;
+  }
+
+  .canthia-mdx :where(h3):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.28rem;
+  }
+
+  .canthia-mdx :where(h4):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 1.55rem;
+    margin-bottom: 0.55rem;
+    font-size: 1.08rem;
+  }
+
+  .canthia-mdx :where(h5, h6):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    margin-top: 1.3rem;
+    margin-bottom: 0.45rem;
+    font-size: 1rem;
+  }
+
+  .canthia-mdx :where(h6):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+    color: var(--canthia-muted);
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 560px) {
+    .canthia-doc-title,
+    .canthia-mdx :where(h1):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+      font-size: 1.65rem;
+    }
+
+    .canthia-mdx :where(h2):not(:where(.not-prose, .not-prose *, [data-canthia-ignore], [data-canthia-ignore] *)) {
+      font-size: 1.35rem;
+    }
+  }
+}
