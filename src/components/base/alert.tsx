@@ -27,7 +27,7 @@ const alertVariants = cva(
 )
 
 type AlertType = "success" | "info" | "warning" | "error"
-type AlertVariant = "outlined" | "filled" | "skeuomorphic"
+type AlertVariant = "outlined" | "filled"
 type AlertClosable =
   | boolean
   | {
@@ -66,13 +66,6 @@ const alertFilledClasses: Record<AlertType, string> = {
   info: "border-blue-500/40 bg-blue-500/10 text-blue-700 dark:text-blue-400",
   warning: "border-yellow-500/40 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
   error: "border-destructive/40 bg-destructive/10 text-destructive *:data-[slot=alert-description]:text-destructive/90",
-}
-
-const alertSkeuomorphicClasses: Record<AlertType, string> = {
-  success: "border-emerald-300 dark:border-emerald-800 bg-linear-to-b from-emerald-50 to-emerald-100/50 dark:from-emerald-950/20 dark:to-emerald-900/10 text-emerald-800 dark:text-emerald-400 shadow-[0_2px_4px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.05)]",
-  info: "border-blue-300 dark:border-blue-800 bg-linear-to-b from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10 text-blue-800 dark:text-blue-400 shadow-[0_2px_4px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.05)]",
-  warning: "border-amber-300 dark:border-amber-800 bg-linear-to-b from-amber-50 to-amber-100/50 dark:from-amber-950/20 dark:to-amber-900/10 text-amber-800 dark:text-amber-400 shadow-[0_2px_4px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.05)]",
-  error: "border-red-300 dark:border-red-800 bg-linear-to-b from-red-50 to-red-100/50 dark:from-red-950/20 dark:to-red-900/10 text-red-800 dark:text-red-400 shadow-[0_2px_4px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.05)] *:data-[slot=alert-description]:text-red-900/80 dark:*:data-[slot=alert-description]:text-red-400/80",
 }
 
 const alertIcons: Record<AlertType, React.ReactNode> = {
@@ -117,7 +110,7 @@ function Alert({
     afterClose !== undefined ||
     banner !== undefined
   const mergedType = type ?? (variant === "destructive" ? "error" : banner ? "warning" : "info")
-  const mergedVariant: AlertVariant = variant === "filled" ? "filled" : variant === "skeuomorphic" ? "skeuomorphic" : "outlined"
+  const mergedVariant: AlertVariant = variant === "filled" ? "filled" : "outlined"
   const legacyVariant = variant === "destructive" ? "destructive" : "default"
   const closableConfig = typeof closable === "object" ? closable : undefined
   const isClosable =
@@ -167,9 +160,7 @@ function Alert({
         alertVariants({ variant: mergedType === "error" ? "destructive" : legacyVariant }),
         mergedVariant === "filled"
           ? alertFilledClasses[mergedType]
-          : mergedVariant === "skeuomorphic"
-            ? alertSkeuomorphicClasses[mergedType]
-            : alertOutlinedClasses[mergedType],
+          : alertOutlinedClasses[mergedType],
         banner && "rounded-none border-x-0",
         isClosable && "pr-10",
         className

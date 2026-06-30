@@ -1,8 +1,0 @@
-{
-  "name": "smartisan-mall-api-mock",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "start": "node server.mjs"
-  }
-}

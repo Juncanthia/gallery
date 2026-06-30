@@ -32,7 +32,6 @@ const switchPressedWidths: Record<SwitchSize, number> = {
 };
 
 type SwitchProps = Omit<SwitchPrimitiveProps, 'onChange'> & {
-  variant?: 'default' | 'skeuomorphic';
   size?: SwitchSize;
   loading?: boolean;
   pressedWidth?: number;
@@ -43,7 +42,6 @@ type SwitchProps = Omit<SwitchPrimitiveProps, 'onChange'> & {
 };
 
 function Switch({
-  variant = 'default',
   className,
   size = 'middle',
   loading,
@@ -76,9 +74,7 @@ function Switch({
     <SwitchPrimitive
       className={cn(
         'relative peer focus-visible:border-ring focus-visible:ring-ring/50 flex px-px shrink-0 items-center justify-start rounded-full border outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200',
-        variant === 'skeuomorphic'
-          ? 'border-neutral-300 dark:border-zinc-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.12)] data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-600 dark:data-[state=checked]:bg-emerald-600 dark:data-[state=checked]:border-emerald-700 data-[state=unchecked]:bg-neutral-200 dark:data-[state=unchecked]:bg-zinc-800'
-          : 'border-transparent shadow-xs data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 data-[state=checked]:justify-end',
+        'border-transparent shadow-xs data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 data-[state=checked]:justify-end',
         hasContent ? switchWithContentSizeClasses[size] : switchSizeClasses[size],
         className,
       )}
@@ -89,16 +85,11 @@ function Switch({
       <SwitchThumbPrimitive
         className={cn(
           'relative z-10 pointer-events-none block rounded-full ring-0 transition-all duration-200',
-          variant === 'skeuomorphic'
-            ? 'bg-linear-to-b from-white to-neutral-50 dark:from-zinc-700 dark:to-zinc-800 border border-neutral-300 dark:border-zinc-600 shadow-[0_2px_4px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]'
-            : 'bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground',
+          'bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground',
           switchThumbSizeClasses[size],
         )}
         pressedAnimation={{ width: pressedWidth ?? switchPressedWidths[size] }}
       >
-        {variant === 'skeuomorphic' && (
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-1 rounded-full bg-neutral-300 dark:bg-zinc-500 shadow-[inset_0_0.5px_1px_rgba(0,0,0,0.2)]" />
-        )}
         {mergedThumbIcon && (
           <SwitchIconPrimitive
             position="thumb"

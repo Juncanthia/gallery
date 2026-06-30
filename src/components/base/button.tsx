@@ -69,8 +69,8 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
   const effectiveGhost = Boolean(ghost) && !isTextLikeVariant(mergedVariant)
   const isIconOnly = !children && !!icon
   const mergedShape = isIconOnly && normalizedShape === "default" ? "square" : normalizedShape
-  const effectiveHoverScale = mergedVariant === "skeuomorphic" ? 1 : hoverScale
-  const effectiveTapScale = mergedVariant === "skeuomorphic" ? 0.99 : tapScale
+  const effectiveHoverScale = hoverScale
+  const effectiveTapScale = tapScale
   const content = loading && loadingText ? loadingText : children
   const iconNode = loading ? (
     <LoaderCircle className="animate-spin" />

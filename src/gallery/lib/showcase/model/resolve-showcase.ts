@@ -114,7 +114,7 @@ export async function resolveShowcase(
       preview: Boolean(asset),
       api: Boolean(apiDoc && item && anchor === item.id),
       examples: false,
-      source: Boolean(asset?.sourceFiles.length),
+      source: false,
     },
   }
 }

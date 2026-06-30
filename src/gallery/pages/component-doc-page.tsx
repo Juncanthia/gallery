@@ -13,6 +13,7 @@ import { GALLERY_DOCS } from "../catalog"
 import { MdxDocPage } from "../components/mdx/mdx-doc-page"
 import { PreviewCode } from "../components/preview/code"
 import { ComponentShowcase } from "../components/showcase/component/component-showcase"
+import { SourceViewer } from "../components/showcase/component/source-viewer"
 import { loadComponentMdx } from "../runtime/mdx-registry"
 
 type ComponentDocPageProps = {
@@ -92,6 +93,7 @@ function MdxPre({ children, ...props }: ComponentPropsWithoutRef<"pre">) {
 
 const mdxComponents: MDXComponents = {
   ComponentShowcase,
+  SourceViewer,
   h1: (props) => <h1 className="sr-only" {...props} />,
   pre: MdxPre,
 }

@@ -123,9 +123,7 @@ export function ComponentShowcase({ id, path, source }: ComponentShowcaseProps) 
     </div>
   )
 
-  const codeContent = has.preview && asset ? (
-    <CodePane code={asset.parsedCode} filename={asset.filename} />
-  ) : null
+  const codeContent = null
 
   const sourceContent = has.source && asset ? (
     <div className="space-y-4">

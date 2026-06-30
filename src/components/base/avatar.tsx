@@ -7,7 +7,7 @@ type AvatarShape = "circle" | "square"
 type AvatarSize = "sm" | "small" | "default" | "middle" | "lg" | "large" | number
 
 type AvatarProps = Omit<React.ComponentProps<typeof AvatarPrimitive.Root>, "children"> & {
-  variant?: 'default' | 'skeuomorphic'
+  variant?: 'default'
   size?: AvatarSize
   shape?: AvatarShape
   src?: string
@@ -69,7 +69,6 @@ function getSizeName(size: AvatarSize) {
 }
 
 function Avatar({
-  variant = 'default',
   className,
   size = "default",
   shape = "circle",
@@ -101,7 +100,7 @@ function Avatar({
     }
   }, [onError, src])
 
-  const isSkeuomorphic = variant === 'skeuomorphic'
+  const useDefaultVariant = false
 
   return (
     <AvatarPrimitive.Root
@@ -110,7 +109,7 @@ function Avatar({
       data-shape={shape}
       className={cn(
         "group/avatar relative flex shrink-0 select-none",
-        isSkeuomorphic
+        useDefaultVariant
           ? (shape === "circle"
               ? "rounded-full border border-neutral-300 dark:border-zinc-700 shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1px_2px_rgba(0,0,0,0.15)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.35),inset_0_1px_2px_rgba(0,0,0,0.3)] bg-neutral-100 dark:bg-zinc-800"
               : "rounded border border-neutral-300 dark:border-zinc-700 shadow-[0_2px_4px_rgba(0,0,0,0.12),inset_0_1px_2px_rgba(0,0,0,0.15)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.35),inset_0_1px_2px_rgba(0,0,0,0.3)] bg-neutral-100 dark:bg-zinc-800")
@@ -123,7 +122,7 @@ function Avatar({
       style={{ width: sizeValue, height: sizeValue, fontSize: Math.max(12, Math.floor((sizeValue - gap * 2) / 2)), ...style }}
       {...props}
     >
-      {isSkeuomorphic && (
+      {useDefaultVariant && (
         <div className={cn(
           "pointer-events-none absolute inset-0 z-10 border border-neutral-300/30 shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.15)]",
           shape === "circle" ? "rounded-full" : "rounded"

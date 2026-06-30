@@ -8,7 +8,7 @@ type TagColor = "default" | "blue" | "green" | "red" | "orange" | "purple" | "cy
 
 type TagProps = {
   /** Tag variant. @default "default" */
-  variant?: "default" | "skeuomorphic"
+  variant?: "default"
   /** Tag color. @default "default" */
   color?: TagColor | string
   /** Whether to show a close button. */
@@ -38,7 +38,7 @@ const tagColorMap: Record<TagColor, string> = {
   magenta: "border-pink-200 bg-pink-50 text-pink-700 dark:border-pink-800 dark:bg-pink-950 dark:text-pink-300",
 }
 
-const skeuomorphicTagColorMap: Record<TagColor, string> = {
+const defaultTagColorMap: Record<TagColor, string> = {
   default: "border-neutral-300 bg-gradient-to-b from-white to-neutral-100 text-neutral-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_1px_rgba(0,0,0,0.02)] dark:border-zinc-700 dark:from-zinc-800 dark:to-zinc-900 dark:text-zinc-300 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]",
   blue: "border-blue-500 bg-gradient-to-b from-blue-400 to-blue-600 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_1px_1px_rgba(0,0,0,0.05)]",
   green: "border-emerald-500 bg-gradient-to-b from-emerald-400 to-emerald-600 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_1px_1px_rgba(0,0,0,0.05)]",
@@ -49,9 +49,9 @@ const skeuomorphicTagColorMap: Record<TagColor, string> = {
   magenta: "border-pink-500 bg-gradient-to-b from-pink-400 to-pink-600 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_1px_1px_rgba(0,0,0,0.05)]",
 }
 
-function resolveTagColor(color?: TagColor | string, variant: "default" | "skeuomorphic" = "default") {
-  if (!color) return variant === "skeuomorphic" ? skeuomorphicTagColorMap.default : tagColorMap.default
-  const map = variant === "skeuomorphic" ? skeuomorphicTagColorMap : tagColorMap
+function resolveTagColor(color?: TagColor | string, variant: "default" = "default") {
+  if (!color) return variant === "default" ? defaultTagColorMap.default : tagColorMap.default
+  const map = variant === "default" ? defaultTagColorMap : tagColorMap
   return map[color as TagColor] ?? map.default
 }
 
@@ -71,7 +71,7 @@ function Tag({
     <span
       className={cn(
         "inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium",
-        variant === "skeuomorphic" ? "rounded-full" : "rounded",
+        variant === "default" ? "rounded-full" : "rounded",
         bordered ? "border" : "border-transparent",
         resolveTagColor(color, variant),
         closable && "pr-1",

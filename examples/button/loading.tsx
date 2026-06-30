@@ -1,22 +1,32 @@
-import { Download } from "lucide-react"
+import { useState } from "react"
 
 import { Button } from "@/components/base/button"
 
 export default function ButtonLoadingExample() {
+  const [saving, setSaving] = useState(false)
+
+  function handleSave() {
+    setSaving(true)
+    setTimeout(() => setSaving(false), 1500)
+  }
+
   return (
-    <>
+    <div className="flex flex-wrap items-center gap-2">
       <Button color="primary" loading variant="solid">
         Loading
       </Button>
-      <Button color="primary" loading loadingText="Submitting" variant="outlined">
-        Submit
+      <Button color="primary" loading loadingText="提交中" variant="outlined">
+        提交
       </Button>
-      <Button color="primary" icon={<Download />} variant="solid">
-        Download
+      <Button
+        color="primary"
+        loading={saving}
+        loadingText="保存中"
+        onClick={handleSave}
+        variant="solid"
+      >
+        保存
       </Button>
-      <Button color="primary" icon={<Download />} iconPlacement="end" variant="filled">
-        Export
-      </Button>
-    </>
+    </div>
   )
 }

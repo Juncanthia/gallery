@@ -264,46 +264,6 @@ export function GalleryShell({
           </nav>
         </div>
 
-        <nav
-          aria-label="主导航"
-          className="absolute left-1/2 hidden -translate-x-1/2 justify-center sm:flex"
-        >
-          <div className="flex items-center gap-1 rounded-lg border border-border/40 bg-muted/40 p-1">
-            {primaryNavItems.map((item) => {
-              const active = isPrimaryActive(item.href)
-
-              return (
-                <GalleryLink
-                  className={cn(
-                    "group flex h-8 shrink-0 items-center gap-2 rounded-md px-3 text-[13px] transition-all",
-                    active
-                      ? "bg-background font-medium text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                  key={item.href}
-                  title={item.description}
-                  to={item.href}
-                >
-                  <span className="font-medium">{item.label}</span>
-                  <span className="text-[10px] text-muted-foreground/60 transition-colors group-hover:text-muted-foreground/80">
-                    {item.en}
-                  </span>
-                  <span
-                    className={cn(
-                      "ml-0.5 rounded px-1.5 py-0.5 font-mono text-[10px] font-medium transition-colors",
-                      active
-                        ? "bg-muted text-muted-foreground"
-                        : "bg-background/50 text-muted-foreground/70 group-hover:bg-background group-hover:text-foreground"
-                    )}
-                  >
-                    {item.count}
-                  </span>
-                </GalleryLink>
-              )
-            })}
-          </div>
-        </nav>
-
         <div className="flex flex-1 items-center justify-end gap-2">
           <button
             aria-label="Toggle dark mode"

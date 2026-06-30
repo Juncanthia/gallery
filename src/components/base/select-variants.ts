@@ -13,8 +13,6 @@ const selectTriggerVariants = cva(
           "rounded-md border-transparent bg-transparent shadow-none focus-visible:ring-0",
         underlined:
           "rounded-none border-x-0 border-t-0 border-b-input bg-transparent px-0 shadow-none focus-visible:border-b-ring focus-visible:ring-0",
-        skeuomorphic:
-          "rounded border-neutral-300 dark:border-zinc-700 bg-linear-to-b from-white to-neutral-50 dark:from-zinc-800 dark:to-zinc-900 shadow-[0_1px_2px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.05)] focus-visible:border-blue-500 focus-visible:ring-blue-500/20 hover:from-neutral-50 hover:to-neutral-100 dark:hover:from-zinc-750 dark:hover:to-zinc-850 active:translate-y-[0.5px] transition-all duration-100",
       },
       size: {
         small: "h-8 px-2 text-xs",

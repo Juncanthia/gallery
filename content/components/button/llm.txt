@@ -16,7 +16,16 @@ source:
   examples:
     - examples/button/basic.tsx
     - examples/button/variants.tsx
+    - examples/button/icon.tsx
+    - examples/button/size.tsx
+    - examples/button/shape.tsx
+    - examples/button/disabled.tsx
     - examples/button/loading.tsx
+    - examples/button/ghost.tsx
+    - examples/button/block.tsx
+    - examples/button/link.tsx
+    - examples/button/group.tsx
+    - examples/button/motion.tsx
 stack:
   react: true
   tailwindcss: true

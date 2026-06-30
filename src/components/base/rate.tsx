@@ -5,7 +5,6 @@ import { Star as StarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type RateProps = {
-  variant?: 'default' | 'skeuomorphic'
   /** Current value (controlled). */
   value?: number
   /** Default value (uncontrolled). */
@@ -29,7 +28,6 @@ type RateProps = {
 }
 
 function Rate({
-  variant = 'default',
   value: controlledValue,
   defaultValue = 0,
   onChange,
@@ -69,7 +67,7 @@ function Rate({
 
   const activeValue = hoverValue ?? value
 
-  const isSkeuomorphic = variant === 'skeuomorphic'
+  const useDefaultVariant = false
   const renderCharacter = (index: number) => {
     const filled = index < Math.floor(activeValue)
     const half = !filled && index === Math.floor(activeValue) && activeValue % 1 !== 0
@@ -81,17 +79,17 @@ function Rate({
     return (
       <span className={cn(
         "relative inline-flex transition-all duration-150",
-        isSkeuomorphic && !disabled && "hover:scale-125 active:scale-95"
+        useDefaultVariant && !disabled && "hover:scale-125 active:scale-95"
       )}>
         <StarIcon
           className={cn(
-            isSkeuomorphic ? "size-5" : "size-4",
+            useDefaultVariant ? "size-5" : "size-4",
             "transition-all duration-150",
             (filled || half)
-              ? (isSkeuomorphic
+              ? (useDefaultVariant
                   ? "fill-amber-400 text-amber-500 filter drop-shadow-[0_1.5px_2px_rgba(245,158,11,0.35)]"
                   : "fill-amber-400 text-amber-400")
-              : (isSkeuomorphic
+              : (useDefaultVariant
                   ? "fill-neutral-100 dark:fill-zinc-800 text-neutral-300 dark:text-zinc-700"
                   : "text-muted-foreground/30"),
             !disabled && "cursor-pointer",
@@ -101,8 +99,8 @@ function Rate({
           <span className="absolute inset-0 overflow-hidden w-1/2">
             <StarIcon
               className={cn(
-                isSkeuomorphic ? "size-5" : "size-4",
-                isSkeuomorphic
+                useDefaultVariant ? "size-5" : "size-4",
+                useDefaultVariant
                   ? "fill-amber-400 text-amber-500 filter drop-shadow-[0_1.5px_2px_rgba(245,158,11,0.35)]"
                   : "fill-amber-400 text-amber-400"
               )}
@@ -128,7 +126,7 @@ function Rate({
           className={cn(
             "rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 transition-all duration-150",
             disabled && "cursor-not-allowed opacity-50",
-            isSkeuomorphic && "p-0.5"
+            useDefaultVariant && "p-0.5"
           )}
           disabled={disabled}
           onClick={(e) => {

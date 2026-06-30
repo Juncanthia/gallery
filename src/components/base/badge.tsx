@@ -99,7 +99,7 @@ function Badge({
     )
   }
 
-  const isSkeuomorphic = variant === "skeuomorphic"
+  const useDefaultVariant = false
   const displayCount = dot ? null : getDisplayCount(count, overflowCount)
   const hidden = !dot && (displayCount === null || displayCount === undefined || displayCount === false || (isZero(displayCount) && !showZero))
   const titleValue = title === false || title === null ? undefined : title ?? (typeof displayCount === "string" || typeof displayCount === "number" ? String(displayCount) : undefined)
@@ -113,12 +113,12 @@ function Badge({
       title={titleValue}
       className={cn(
         "absolute z-10 inline-flex translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xs font-medium text-white",
-        isSkeuomorphic
+        useDefaultVariant
           ? "bg-linear-to-b from-red-400 to-red-600 border border-red-500 shadow-[0_1.5px_3px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.45)] dark:shadow-[0_1.5px_3px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.15)] ring-0"
           : "ring-2 ring-background bg-destructive",
         dot ? "top-0 right-0 size-2.5 p-0" : "top-0 right-0 h-5 min-w-5 px-1.5",
         size === "small" && !dot && "h-4 min-w-4 px-1 text-[10px]",
-        !isSkeuomorphic && (status ? statusClasses[status] : "bg-destructive")
+        !useDefaultVariant && (status ? statusClasses[status] : "bg-destructive")
       )}
       style={indicatorStyle}
     >
@@ -139,7 +139,7 @@ function Badge({
             data-slot="badge-status-dot"
             className={cn(
               "relative inline-flex size-2 rounded-full",
-              isSkeuomorphic
+              useDefaultVariant
                 ? cn(
                     "border shadow-[0_1px_2px_rgba(0,0,0,0.15),inset_0_0.5px_0_rgba(255,255,255,0.4)]",
                     status === "success" && "bg-linear-to-b from-emerald-400 to-emerald-600 border-emerald-500",
@@ -162,7 +162,7 @@ function Badge({
         data-slot="badge"
         className={cn(
           "relative inline-flex min-h-5 min-w-5 items-center justify-center rounded-full text-xs font-medium text-white px-1.5",
-          isSkeuomorphic
+          useDefaultVariant
             ? "bg-linear-to-b from-red-400 to-red-600 border border-red-500 shadow-[0_1.5px_3px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.45)] dark:shadow-[0_1.5px_3px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.15)]"
             : "bg-destructive",
           size === "small" && "min-h-4 min-w-4 text-[10px]",

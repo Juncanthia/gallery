@@ -19,7 +19,17 @@ export const Calculator = ({ className }: CalculatorProps) => {
   const playClickSound = useCallback((isOperator = false) => {
     try {
       if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const AudioContextConstructor =
+          window.AudioContext ||
+          (window as Window & typeof globalThis & {
+            webkitAudioContext?: typeof AudioContext;
+          }).webkitAudioContext;
+
+        if (!AudioContextConstructor) {
+          return;
+        }
+
+        audioCtxRef.current = new AudioContextConstructor();
       }
       const ctx = audioCtxRef.current;
       if (ctx.state === "suspended") {
@@ -60,7 +70,7 @@ export const Calculator = ({ className }: CalculatorProps) => {
         osc.start();
         osc.stop(ctx.currentTime + 0.04);
       }
-    } catch (e) {
+    } catch {
       // Audio context blocked or unsupported
     }
   }, []);
@@ -133,7 +143,7 @@ export const Calculator = ({ className }: CalculatorProps) => {
           setDisplay(resultStr);
         }
       }
-    } catch (e) {
+    } catch {
       setDisplay("Error");
     }
     setEquation("");

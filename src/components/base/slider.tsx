@@ -43,7 +43,7 @@ type SliderSharedProps = Omit<
   | "step"
   | "value"
 > & {
-  variant?: 'default' | 'skeuomorphic'
+  variant?: 'default'
   className?: string
   dots?: boolean
   included?: boolean
@@ -289,7 +289,7 @@ function Slider({
           data-slot="slider-track"
           className={cn(
             "relative grow overflow-hidden rounded-full transition-all duration-200",
-            variant === 'skeuomorphic'
+            variant === 'default'
               ? "bg-neutral-100 dark:bg-zinc-800 border border-neutral-200/80 dark:border-zinc-700/80 shadow-[inset_0_1.5px_2.5px_rgba(0,0,0,0.12)] data-horizontal:h-2.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-2.5"
               : "bg-muted data-horizontal:h-1.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-1.5"
           )}
@@ -314,7 +314,7 @@ function Slider({
             className={cn(
               "absolute select-none data-horizontal:h-full data-vertical:w-full transition-all duration-200",
               included
-                ? (variant === 'skeuomorphic'
+                ? (variant === 'default'
                     ? "bg-linear-to-b from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]"
                     : "bg-primary")
                 : "bg-transparent"
@@ -329,7 +329,7 @@ function Slider({
                 key={index}
                 className={cn(
                   "block shrink-0 rounded-full select-none focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 transition-all duration-200",
-                  variant === 'skeuomorphic'
+                  variant === 'default'
                     ? "size-5 bg-linear-to-b from-white to-neutral-50 dark:from-zinc-700 dark:to-zinc-800 border border-neutral-300 dark:border-zinc-600 shadow-[0_2px_4px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95"
                     : "size-4 border border-primary bg-white shadow-sm ring-ring/50 hover:ring-4 focus-visible:ring-4"
                 )}

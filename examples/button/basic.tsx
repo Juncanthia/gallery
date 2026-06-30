@@ -2,7 +2,7 @@ import { Button } from "@/components/base/button"
 
 export default function ButtonBasicExample() {
   return (
-    <>
+    <div className="flex flex-wrap items-center gap-2">
       <Button>Default</Button>
       <Button color="primary" variant="solid">
         Primary
@@ -19,6 +19,6 @@ export default function ButtonBasicExample() {
       <Button color="info" variant="solid">
         Info
       </Button>
-    </>
+    </div>
   )
 }
