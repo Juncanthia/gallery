@@ -1,0 +1,284 @@
+---
+category: Blocks
+title: FeatureCalendar
+subtitle: 功能日历
+description: 基于月视图的功能发布日历，支持多月切换、状态标记和条目展示，适用于发布计划、迭代排期等场景。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 10
+source:
+  component: src/components/blocks/feature-calendar/index.tsx
+  docs: content/components/feature-calendar/index.mdx
+  examples:
+    - content/components/feature-calendar/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# FeatureCalendar 功能日历
+
+基于月视图的功能发布日历，由 `CalendarProvider`、`CalendarHeader`、`CalendarBody` 等多个子组件组合而成。支持月份/年份切换、自定义起始星期、国际化日期格式、状态色标记和多条目展示。全局年月状态通过 Jotai atom 管理，子组件可独立访问。
+
+本组件为项目本地复合组件（blocks），无 Ant Design 直接对应。
+
+## 何时使用 {#when-to-use}
+
+当需要以日历月视图展示带时间范围的功能项、发布计划或迭代排期时使用。
+
+常见场景：
+
+- 产品发布日历，按日期展示即将发布的功能。
+- 迭代排期视图，标记每个功能的开始/结束日期。
+- 项目里程碑跟踪，按状态颜色区分进度。
+
+不推荐：
+
+- 作为通用日期选择器使用——应使用 `Calendar` 或 `DatePicker` 组件。
+- 展示大量条目（每月超过 10 条）——日历格子空间有限，仅显示前 3 条。
+- 需要周视图或日视图的场景——本组件仅支持月视图。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+组合 `CalendarProvider`、`CalendarHeader`、`CalendarBody` 和 `CalendarItem` 构建完整日历。
+
+```tsx
+import {
+  CalendarProvider,
+  CalendarHeader,
+  CalendarBody,
+  CalendarItem,
+} from "@/components/ui/feature-calendar"
+
+const features = [
+  {
+    id: "1",
+    name: "首页改版",
+    startAt: new Date(2025, 0, 6),
+    endAt: new Date(2025, 0, 15),
+    status: { id: "success", name: "已完成", color: "#22c55e" },
+  },
+  {
+    id: "2",
+    name: "API 优化",
+    startAt: new Date(2025, 0, 10),
+    endAt: new Date(2025, 0, 20),
+    status: { id: "processing", name: "进行中", color: "#3b82f6" },
+  },
+]
+
+export default function Demo() {
+  return (
+    <CalendarProvider>
+      <CalendarHeader />
+      <CalendarBody features={features}>
+        {({ feature }) => <CalendarItem feature={feature} />}
+      </CalendarBody>
+    </CalendarProvider>
+  )
+}
+```
+
+> 说明：`CalendarBody` 通过 render props 模式渲染每个 feature 条目，调用侧可使用 `CalendarItem` 或自定义渲染。
+
+## API {#api}
+
+### CalendarProvider
+
+日历上下文提供者，设置 locale 和起始星期。所有子组件必须在 `CalendarProvider` 内部使用。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| locale | 国际化语言环境，影响月份和星期名称 | `Intl.LocalesArgument` | `"en-US"` |
+| startDay | 一周起始日，0=周日, 1=周一 | `number` | `0` |
+| children | 子组件内容 | `ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+### CalendarHeader
+
+渲染星期标题行。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+### CalendarBody
+
+日历主体，渲染日期网格和 feature 条目。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| features | 要展示的功能项列表 | `Feature[]` | 必填 |
+| children | render props，接收 `{ feature: Feature }` 返回 ReactNode | `(props: { feature: Feature }) => ReactNode` | 必填 |
+
+### CalendarItem
+
+单个 feature 条目的默认渲染组件，显示状态色圆点和名称。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| feature | 功能项数据 | `Feature` | 必填 |
+| className | 附加 className | `string` | - |
+
+### CalendarMonthPicker
+
+月份下拉选择器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+### CalendarYearPicker
+
+年份下拉选择器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| start | 可选年份起始值 | `number` | 必填 |
+| end | 可选年份结束值 | `number` | 必填 |
+| className | 附加 className | `string` | - |
+
+### CalendarDatePagination
+
+月份前后翻页按钮。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+### CalendarDatePicker
+
+日期选择器区域的布局容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| children | 子组件内容 | `ReactNode` | 必填 |
+
+### CalendarDate
+
+日历顶部栏的布局容器，通常放置月份/年份选择器和翻页按钮。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 子组件内容 | `ReactNode` | 必填 |
+
+### Feature
+
+功能项数据结构。
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| id | 唯一标识 | `string` |
+| name | 功能名称 | `string` |
+| startAt | 开始日期 | `Date` |
+| endAt | 结束日期（用于确定在日历中展示的日期） | `Date` |
+| status | 状态信息 | `Status` |
+
+### Status
+
+状态数据结构。
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| id | 状态标识 | `string` |
+| name | 状态名称 | `string` |
+| color | 状态颜色（CSS 颜色值） | `string` |
+
+### CalendarState
+
+日历年月状态类型。
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| month | 月份（0-11） | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 \| 11` |
+| year | 年份 | `number` |
+
+### Hooks
+
+| Hook | 说明 | 返回值 |
+| --- | --- | --- |
+| `useCalendarMonth()` | 读写当前月份 | `[CalendarState["month"], (m: CalendarState["month"]) => void]` |
+| `useCalendarYear()` | 读写当前年份 | `[CalendarState["year"], (y: CalendarState["year"]) => void]` |
+
+### 工具函数
+
+| 函数 | 说明 | 签名 |
+| --- | --- | --- |
+| `monthsForLocale` | 根据 locale 获取 12 个月份名称数组 | `(locale: Intl.LocalesArgument, format?: "long" \| "short") => string[]` |
+| `daysForLocale` | 根据 locale 和起始日获取 7 天星期名称数组 | `(locale: Intl.LocalesArgument, startDay: number) => string[]` |
+
+## 样式模型 {#styling-model}
+
+- 使用 Tailwind CSS 和项目主题变量。
+- 日历网格使用 `grid-cols-7` 七列布局，日期格子 `aspect-square` 保持正方形。
+- 越界日期（上月/下月）使用 `bg-secondary text-muted-foreground` 弱化显示。
+- 当前月日期格子使用 `text-muted-foreground text-xs`。
+- 超过 3 条 feature 时显示 `+N more` 省略提示。
+- 状态圆点通过内联 `style.backgroundColor` 渲染，颜色完全由 `Feature.status.color` 控制。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/feature-calendar/index.tsx`
+
+直接依赖摘要：
+
+- `date-fns`（getDay、getDaysInMonth、isSameDay）
+- `jotai`（atom、useAtom）——全局年月状态管理
+- `lucide-react`（ChevronLeft、ChevronRight 图标）
+- `@/components/ui/button`（翻页按钮）
+- `@/components/ui/select`（月份/年份下拉选择器）
+- `@/lib/utils`（cn 样式合并）
+
+实现注意：
+
+1. 年月状态通过 Jotai atom 全局共享，`CalendarMonthPicker`、`CalendarYearPicker`、`CalendarDatePagination` 和 `CalendarBody` 均读取同一状态，无需手动传递。
+2. `CalendarBody` 使用 render props 模式渲染每个 feature，调用侧可自定义条目外观。
+3. 日期计算（`getDay`、`getDaysInMonth`、`isSameDay`）已使用 `useMemo` 缓存，避免重复计算。
+4. `CalendarItem` 使用 `React.memo` 包裹，减少不必要的重渲染。
+5. Feature 在日历中的位置由 `endAt` 决定（与当日 `isSameDay` 匹配），而非 `startAt`。
+6. 各子组件独立导出，可按需组合到 `CalendarDate` + `CalendarDatePicker` 等布局容器中。
+
+## 可访问性 {#accessibility}
+
+- 翻页按钮为 `<button>` 元素，提供原生键盘交互。
+- 下拉选择器由 `Select` 组件提供 ARIA 支持。
+- 状态颜色圆点仅作为视觉辅助，名称文本提供等效信息。
+- 建议为 `CalendarProvider` 设置合适的 `locale` 以确保屏幕阅读器正确朗读日期。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件（blocks），无 Ant Design 直接对应。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 组件性质 | 项目本地复合组件，非通用日历 |
+| API 来源 | 以 `src/components/blocks/feature-calendar/index.tsx` 为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 状态管理 | 使用 Jotai atom，非 AntD ConfigProvider |
+| 日历模式 | 仅月视图，不提供 AntD Calendar 的 year/month/date 多模式 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 FeatureCalendar 代码时，应遵守：
+
+1. 从 `@/components/ui/feature-calendar` 导入所有子组件。
+2. 所有子组件必须在 `CalendarProvider` 内部使用，否则无法获取 locale 和 startDay 上下文。
+3. `CalendarBody` 必须同时传入 `features`（Feature 数组）和 `children`（render props 函数）。
+4. Feature 的 `endAt` 决定它在日历中显示的日期位置，不是 `startAt`。
+5. 每个 Feature 必须包含完整的 `status` 对象（`id`、`name`、`color`），颜色为 CSS 颜色字符串。
+6. 典型组合顺序：`CalendarProvider` > `CalendarDate` > (`CalendarMonthPicker` + `CalendarYearPicker` + `CalendarDatePagination`) + `CalendarHeader` + `CalendarBody`。
+7. 不要引入 `antd` 的 Calendar 或 DatePicker 替代本组件。
+8. 年月状态通过 Jotai 自动同步，不要手动传递 month/year props 给子组件。
+9. 各布局容器（`CalendarDate`、`CalendarDatePicker`）仅提供布局，不渲染具体控件，需手动组合子组件。

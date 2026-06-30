@@ -1,0 +1,45 @@
+Combobox 组合输入框与下拉选择，支持搜索和自由输入，基于 Radix Combobox 实现。
+
+<ComponentShowcase id="combobox" path="combobox/basic" />
+
+```tsx
+import { Combobox } from "@/components/ui/combobox"
+export default function Demo() { return <Combobox options={[{ label: "选项一", value: "1" }, { label: "选项二", value: "2" }]} placeholder="选择或搜索..." className="w-48" /> }
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| options | 候选项 | `SelectOption[]` |
+| value | 受控值 | `string \| string[]` |
+| mode | `"multiple"` 启用多选 | `string` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/combobox` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `combobox-chip` | - |
+| `combobox-chip-input` | - |
+| `combobox-chip-remove` | - |
+| `combobox-chips` | - |
+| `combobox-clear` | - |
+| `combobox-collection` | - |
+| `combobox-content` | - |
+| `combobox-empty` | - |
+| `combobox-group` | - |
+| `combobox-item` | - |
+| `combobox-label` | - |
+| `combobox-list` | - |
+| `combobox-separator` | - |
+| `combobox-trigger` | - |
+| `combobox-value` | - |
+| `input-group-button` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="combobox" />

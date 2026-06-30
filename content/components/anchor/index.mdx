@@ -1,0 +1,91 @@
+Anchor 用于页面内锚点导航，点击后平滑滚动到目标区域，并高亮当前激活项。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当页面内容较长需要内部导航时使用，例如文档页的目录导航、单页应用的区块跳转。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 `items` 数组，每个 item 包含 `key`、`href`、`title`。
+
+<ComponentShowcase
+  id="anchor"
+  path="anchor/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { Anchor } from "@/components/ui/anchor"
+
+export default function Demo() {
+  const [active, setActive] = useState("about")
+
+  return (
+    <Anchor
+      items={[
+        { key: "about", href: "#about", title: "关于" },
+        { key: "features", href: "#features", title: "功能特性" },
+        { key: "api", href: "#api", title: "API" },
+        { key: "faq", href: "#faq", title: "常见问题" },
+      ]}
+      activeKey={active}
+      onChange={setActive}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Anchor
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 锚点列表 | `AnchorLink[]` | 必填 |
+| activeKey | 受控的当前激活 key | `string` | - |
+| defaultActiveKey | 默认激活 key | `string` | - |
+| onChange | 激活项变化回调 | `(key: string) => void` | - |
+| showInk | 显示激活指示条 | `boolean` | `true` |
+| offsetTop | 滚动偏移量 | `number` | `0` |
+
+### AnchorLink
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| key | 唯一标识 | `string` |
+| href | 目标元素的 CSS 选择器 | `string` |
+| title | 显示文本 | `React.ReactNode` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何使用受控模式？
+
+传入 `activeKey` 和 `onChange`：
+
+```tsx
+const [active, setActive] = useState("section1")
+<Anchor items={items} activeKey={active} onChange={setActive} />
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Anchor 代码时：
+
+1. 从 `@/components/ui/anchor` 导入。
+2. `items` 的 `href` 需要是有效的 CSS 选择器（如 `#id`）。
+3. 不要引入 Ant Design 的 `Anchor`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `anchor` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="anchor" />

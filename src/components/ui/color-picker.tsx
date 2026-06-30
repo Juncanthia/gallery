@@ -1,13 +1,39 @@
 "use client"
 
 import {
-  ColorPicker as ColorPickerBase,
+  ColorPicker,
+  ColorPickerSelection,
+  ColorPickerHue,
+  ColorPickerAlpha,
+  ColorPickerEyeDropper,
+  ColorPickerOutput,
+  ColorPickerFormat,
+  useColorPicker,
   type ColorPickerProps,
+  type ColorPickerSelectionProps,
+  type ColorPickerHueProps,
+  type ColorPickerAlphaProps,
+  type ColorPickerEyeDropperProps,
+  type ColorPickerOutputProps,
+  type ColorPickerFormatProps,
 } from "@/components/blocks/color-picker"
 
-function ColorPicker(props: ColorPickerProps) {
-  return <ColorPickerBase {...props} />
+export {
+  ColorPicker,
+  ColorPickerSelection,
+  ColorPickerHue,
+  ColorPickerAlpha,
+  ColorPickerEyeDropper,
+  ColorPickerOutput,
+  ColorPickerFormat,
+  useColorPicker,
 }
-
-export { ColorPicker }
-export type { ColorPickerProps }
+export type {
+  ColorPickerProps,
+  ColorPickerSelectionProps,
+  ColorPickerHueProps,
+  ColorPickerAlphaProps,
+  ColorPickerEyeDropperProps,
+  ColorPickerOutputProps,
+  ColorPickerFormatProps,
+}

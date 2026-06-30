@@ -1,0 +1,39 @@
+Affix 将页面元素固定在可视范围内，支持设置偏移量。
+
+<ComponentShowcase id="affix" path="affix/basic" />
+
+```tsx
+import { Affix } from "@/components/ui/affix"
+import { Button } from "@/components/ui/button"
+export default function Demo() {
+  return (
+    <div className="relative h-32 overflow-auto rounded border p-2">
+      <p className="text-sm text-muted-foreground">滚动查看固钉效果</p>
+      <Affix offsetTop={0}><Button size="small" color="primary" variant="solid">置顶按钮</Button></Affix>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| offsetTop | 顶部偏移 | `number` | `0` |
+| offsetBottom | 底部偏移 | `number` | - |
+| target | 滚动容器 | `() => HTMLElement` | `window` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/affix` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `affix` | - |
+| `affix-content` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="affix" />

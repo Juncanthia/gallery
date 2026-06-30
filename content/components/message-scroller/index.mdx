@@ -1,0 +1,30 @@
+MessageScroller 消息滚动容器，自动滚到底部并在新消息时保持可见。
+
+<ComponentShowcase id="message-scroller" path="message-scroller/basic" />
+
+```tsx
+import { MessageScroller } from "@/components/ui/message-scroller"
+export default function Demo() { return <MessageScroller className="h-40 w-64 rounded border p-2"><div className="text-sm text-muted-foreground">消息列表</div></MessageScroller> }
+```
+
+<h2 id="api">API</h2>
+滚动容器组件，内部放置消息列表。支持 `className` 控制样式。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/message-scroller` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `message-scroller` | - |
+| `message-scroller-button` | - |
+| `message-scroller-content` | - |
+| `message-scroller-item` | - |
+| `message-scroller-viewport` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="message-scroller" />

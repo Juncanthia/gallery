@@ -15,17 +15,17 @@ source:
   docs: content/components/button/index.mdx
   examples:
     - content/components/button/examples/basic.tsx
-    - content/components/button/examples/variants.tsx
-    - content/components/button/examples/icon.tsx
-    - content/components/button/examples/size.tsx
-    - content/components/button/examples/shape.tsx
-    - content/components/button/examples/disabled.tsx
-    - content/components/button/examples/loading.tsx
-    - content/components/button/examples/ghost.tsx
     - content/components/button/examples/block.tsx
-    - content/components/button/examples/link.tsx
+    - content/components/button/examples/disabled.tsx
+    - content/components/button/examples/ghost.tsx
     - content/components/button/examples/group.tsx
+    - content/components/button/examples/icon.tsx
+    - content/components/button/examples/link.tsx
+    - content/components/button/examples/loading.tsx
     - content/components/button/examples/motion.tsx
+    - content/components/button/examples/shape.tsx
+    - content/components/button/examples/size.tsx
+    - content/components/button/examples/variants.tsx
 stack:
   react: true
   tailwindcss: true

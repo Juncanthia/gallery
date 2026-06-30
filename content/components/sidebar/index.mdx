@@ -1,0 +1,194 @@
+Sidebar 提供完整的侧边栏系统，包含展开/折叠、图标模式、移动端抽屉、快捷键等能力。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为应用提供侧边导航栏时使用。Sidebar 封装了布局行为、响应式适配、状态持久化和动画。
+
+常见场景：
+
+- 管理后台的侧边导航栏。
+- 文档站点的目录导航。
+- 需要折叠/展开的辅助信息面板。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`SidebarProvider` 包裹整个布局，内部使用 `Sidebar` + `SidebarTrigger` 组合。
+
+<ComponentShowcase
+  id="sidebar"
+  path="sidebar/basic"
+/>
+
+```tsx
+import { Home, Inbox, Settings, Users } from "lucide-react"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
+
+function NavSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>导航</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive>
+                  <Home /><span>首页</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <Inbox /><span>收件箱</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <Users /><span>用户</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <Settings /><span>设置</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  )
+}
+
+export default function Demo() {
+  return (
+    <SidebarProvider defaultOpen className="h-64 overflow-hidden rounded border">
+      <NavSidebar />
+      <main className="flex flex-1 items-center justify-center p-4">
+        <SidebarTrigger />
+      </main>
+    </SidebarProvider>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### SidebarProvider
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| defaultOpen | 默认展开 | `boolean` | `true` |
+| open | 受控展开状态 | `boolean` | - |
+| onOpenChange | 展开状态变化回调 | `(open: boolean) => void` | - |
+
+### Sidebar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 侧边位置 | `left` \| `right` | `left` |
+| variant | 视觉变体 | `sidebar` \| `floating` \| `inset` | `sidebar` |
+| collapsible | 折叠模式 | `offcanvas` \| `icon` \| `none` | `offcanvas` |
+| animateOnHover | hover 高亮动画 | `boolean` | `true` |
+
+### 布局子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| SidebarTrigger | 切换侧边栏展开/折叠的按钮 |
+| SidebarHeader | 侧边栏顶部区域 |
+| SidebarContent | 侧边栏主体滚动区域 |
+| SidebarFooter | 侧边栏底部区域 |
+| SidebarSeparator | 侧边栏内部分隔线 |
+| SidebarInput | 侧边栏内搜索输入框 |
+| SidebarInset | 主内容区域容器 |
+| SidebarRail | 侧边栏折叠后的窄条触发区 |
+
+### 菜单子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| SidebarGroup | 菜单分组容器 |
+| SidebarGroupLabel | 分组标题 |
+| SidebarGroupContent | 分组内容 |
+| SidebarMenu | 菜单列表 `<ul>` |
+| SidebarMenuItem | 菜单项 `<li>` |
+| SidebarMenuButton | 菜单按钮，支持 `isActive` 和 `asChild` |
+| SidebarMenuBadge | 菜单项的角标 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何切换折叠模式？
+
+设置 `collapsible` 属性：
+- `offcanvas`：折叠时完全隐藏，展开时覆盖内容。
+- `icon`：折叠时显示图标，展开时显示完整侧边栏。
+- `none`：不折叠。
+
+### 如何自定义侧边栏宽度？
+
+通过 CSS 变量 `--sidebar-width` 和 `--sidebar-width-icon` 控制。默认值分别为 `16rem` 和 `3rem`。
+
+### 如何使用键盘快捷键？
+
+默认 `⌘B` 切换侧边栏展开/折叠。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Sidebar 代码时：
+
+1. 从 `@/components/ui/sidebar` 导入所有需要的组件。
+2. 顶层必须使用 `SidebarProvider` 包裹。
+3. `SidebarMenuButton` 支持 `asChild`，可与路由 Link 组合。
+4. 移动端自动使用 Sheet 抽屉模式，无需额外处理。
+5. 不要引入 Ant Design 的 `Layout.Sider`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `sidebar` | - |
+| `sidebar-container` | - |
+| `sidebar-content` | - |
+| `sidebar-footer` | - |
+| `sidebar-gap` | - |
+| `sidebar-group` | - |
+| `sidebar-group-action` | - |
+| `sidebar-group-content` | - |
+| `sidebar-group-label` | - |
+| `sidebar-header` | - |
+| `sidebar-inner` | - |
+| `sidebar-input` | - |
+| `sidebar-inset` | - |
+| `sidebar-menu` | - |
+| `sidebar-menu-action` | - |
+| `sidebar-menu-badge` | - |
+| `sidebar-menu-button` | - |
+| `sidebar-menu-item` | - |
+| `sidebar-menu-skeleton` | - |
+| `sidebar-menu-sub` | - |
+| `sidebar-menu-sub-button` | - |
+| `sidebar-menu-sub-item` | - |
+| `sidebar-rail` | - |
+| `sidebar-separator` | - |
+| `sidebar-trigger` | - |
+| `sidebar-wrapper` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="sidebar" />

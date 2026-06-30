@@ -1,0 +1,47 @@
+ContextMenu 右键弹出菜单，基于 Radix ContextMenu 实现。
+
+<ComponentShowcase id="context-menu" path="context-menu/basic" />
+
+```tsx
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu"
+export default function Demo() {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger className="flex h-32 w-64 items-center justify-center rounded border border-dashed text-sm text-muted-foreground">右键点击此处</ContextMenuTrigger>
+      <ContextMenuContent><ContextMenuItem>复制</ContextMenuItem><ContextMenuSeparator /><ContextMenuItem>删除</ContextMenuItem></ContextMenuContent>
+    </ContextMenu>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+子组件：`ContextMenuTrigger`、`ContextMenuContent`、`ContextMenuItem`、`ContextMenuSeparator`、`ContextMenuSub`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/context-menu` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `context-menu` | - |
+| `context-menu-checkbox-item` | - |
+| `context-menu-content` | - |
+| `context-menu-group` | - |
+| `context-menu-item` | - |
+| `context-menu-label` | - |
+| `context-menu-portal` | - |
+| `context-menu-radio-group` | - |
+| `context-menu-radio-item` | - |
+| `context-menu-separator` | - |
+| `context-menu-shortcut` | - |
+| `context-menu-sub` | - |
+| `context-menu-sub-content` | - |
+| `context-menu-sub-trigger` | - |
+| `context-menu-trigger` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="context-menu" />

@@ -1,0 +1,26 @@
+---
+category: Components
+title: notification
+description: notification 组件。
+demo:
+  cols: 2
+source:
+  component: src/components/ui/notification.tsx
+  examples:
+    - content/components/notification/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---
+
+# notification
+
+<ComponentShowcase id="notification" path="notification/basic" />
+
+## API
+
+See source for props interface.
+
+## LLM 使用规则
+
+AI 生成代码时从 `@/components/ui/notification` 导入。

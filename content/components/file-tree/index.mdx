@@ -1,0 +1,50 @@
+Files 展示目录和文件的层级结构，基于 Radix FileTree 实现。支持展开折叠和文件选择。
+
+<ComponentShowcase id="file-tree" path="file-tree/basic" />
+
+```tsx
+import { Files } from "@/components/ui/file-tree"
+
+export default function Demo() {
+  return (
+    <Files
+      treeData={[
+        { key: "src", title: "src", children: [
+          { key: "app", title: "app.tsx" },
+          { key: "index", title: "index.ts" },
+        ]},
+        { key: "package", title: "package.json" },
+      ]}
+      className="w-48"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Files
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| treeData | 文件树数据 | `FileTreeDataNode[]` |
+| selectedKeys | 选中项的 key 列表 | `React.Key[]` |
+| expandedKeys | 展开项的 key 列表 | `React.Key[]` |
+| onSelect | 选中回调 | `(keys, info) => void` |
+| selectable | 是否可选择 | `boolean` |
+
+子组件：`FolderItem`、`FolderTrigger`、`FolderContent`、`FileItem`、`SubFiles`。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `files` | 根容器 |
+| `folder-item` / `folder-trigger` / `folder-content` | 文件夹相关 |
+| `file-item` | 文件项 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/file-tree` 导入 `Files`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="file-tree" />

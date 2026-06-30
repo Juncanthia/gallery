@@ -1,0 +1,34 @@
+Message 全局展示操作反馈信息，支持 success、error、warning、info 等类型。
+
+<ComponentShowcase id="message" path="message/basic" />
+
+```tsx
+import { Message } from "@/components/ui/message"
+import { Button } from "@/components/ui/button"
+export default function Demo() {
+  return <div className="flex gap-2"><Button size="small" onClick={() => Message.success("操作成功")}>成功</Button><Button size="small" onClick={() => Message.error("操作失败")}>错误</Button></div>
+}
+```
+
+<h2 id="api">API</h2>
+`Message.success(content)`、`Message.error(content)`、`Message.warning(content)`、`Message.info(content)`。静态方法，自动消失。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/message` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `message` | - |
+| `message-avatar` | - |
+| `message-content` | - |
+| `message-footer` | - |
+| `message-group` | - |
+| `message-header` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="message" />

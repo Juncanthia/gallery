@@ -1,0 +1,74 @@
+DatePicker 用于选择日期，提供日历面板进行日期选取。支持占位提示、清除和禁用态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要用户输入或选择日期时使用。相比原生 `<input type="date">`，DatePicker 提供统一的跨平台日历交互。
+
+- 表单中的日期字段（生日、入职日期、合同日期等）。
+- 数据筛选的起始/截止日期。
+- 需要确保日期格式正确的场景。
+
+如果需要选择时间（时分秒），使用 TimePicker；如果需要同时选择日期和时间，可组合 DatePicker + TimePicker。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`value` 和 `onChange` 使用 `Date` 类型控制选中日期。
+
+<ComponentShowcase id="date-picker" path="date-picker/basic" />
+
+```tsx
+import { useState } from "react"
+import { DatePicker } from "@/components/ui/date-picker"
+
+export default function Demo() {
+  const [date, setDate] = useState<Date>()
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <DatePicker value={date} onChange={setDate} placeholder="选择日期" />
+      <DatePicker placeholder="禁用" disabled />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控选中日期 | `Date` | - |
+| defaultValue | 默认选中日期 | `Date` | - |
+| onChange | 日期变化回调 | `(date: Date) => void` | - |
+| placeholder | 占位提示文本 | `string` | `"选择日期"` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| allowClear | 是否显示清除按钮 | `boolean` | `true` |
+| format | 日期展示格式字符串 | `string` | - |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `date-picker-trigger` | 日期选择器触发器 |
+| `calendar` | 弹出的日历面板 |
+| `calendar-wrapper` | 日历外层包裹 |
+| `calendar-cell-extra` | 日历单元格额外内容 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何设置日期范围选择？
+
+当前 DatePicker 为单日期选择。如需范围选择，可组合两个 DatePicker 或使用 Calendar 组件配合自定义逻辑。
+
+### 如何自定义日期格式？
+
+使用 `format` 属性指定展示格式（如 `"YYYY-MM-DD"`）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/date-picker` 导入。
+2. `value` 和 `onChange` 使用 `Date` 类型，不是字符串。
+3. 不要引入 Ant Design 的 `DatePicker`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="date-picker" />

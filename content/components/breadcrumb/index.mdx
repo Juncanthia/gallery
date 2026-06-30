@@ -1,0 +1,123 @@
+Breadcrumb 显示当前页面在系统层级中的位置，支持路由自动生成、路由参数和下拉菜单。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 当页面层级较深，需要让用户知道当前位置并能向上返回时。
+- 管理后台中从首页到当前页面的路径导航。
+- 文件系统的目录路径展示。
+- 多级路由的动态面包屑生成。
+
+Breadcrumb 支持两种构建方式：手动组合子组件（灵活）、`items` 数组自动生成（简洁）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+子组件模式：`BreadcrumbList` → `BreadcrumbItem` → `BreadcrumbLink`/`BreadcrumbPage`。
+
+<ComponentShowcase id="breadcrumb" path="breadcrumb/basic" />
+
+```tsx
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+
+export default function Demo() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem><BreadcrumbLink href="/">首页</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbLink href="/components">组件</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  )
+}
+```
+
+### 路由生成
+
+`items` 模式：传入路径数组自动拼接，支持 `menu` 下拉菜单。
+
+<ComponentShowcase id="routes" path="breadcrumb/routes" />
+
+```tsx
+import { Breadcrumb } from "@/components/ui/breadcrumb"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <Breadcrumb items={[
+        { title: "首页", path: "/" },
+        { title: "组件", path: "components" },
+        { title: "Breadcrumb" },
+      ]} />
+      <Breadcrumb items={[
+        { title: "首页", path: "/" },
+        { title: "订单管理", path: "orders", menu: { items: [
+          { label: "全部订单", path: "all" },
+          { label: "待处理", path: "pending" },
+        ]}},
+        { title: "订单详情" },
+      ]} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Breadcrumb
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 自动生成面包屑的路由数据 | `BreadcrumbItemOption[]` | - |
+| params | 路由参数占位替换 | `Record<string, string \| number>` | `{}` |
+| separator | 自定义分隔符 | `ReactNode` | `<ChevronRight />` |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| BreadcrumbList | `<ol>` 面包屑列表 |
+| BreadcrumbItem | `<li>` 面包屑项 |
+| BreadcrumbLink | 可点击链接，支持 `asChild` 配合路由 |
+| BreadcrumbPage | 当前页面，加粗且不可点击 |
+| BreadcrumbSeparator | 分隔符（默认右箭头） |
+| BreadcrumbEllipsis | 折叠省略号 |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `breadcrumb` | 根容器 |
+| `breadcrumb-list` | 面包屑列表 |
+| `breadcrumb-item` | 面包屑单项 |
+| `breadcrumb-link` | 链接项 |
+| `breadcrumb-page` | 当前页 |
+| `breadcrumb-separator` | 分隔符 |
+| `breadcrumb-ellipsis` | 省略号 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何配合 TanStack Router 使用？
+
+`BreadcrumbLink` 支持 `asChild`：
+
+```tsx
+<BreadcrumbLink asChild>
+  <Link to="/components">组件</Link>
+</BreadcrumbLink>
+```
+
+### 当前页和链接项的区别？
+
+链接项使用 `BreadcrumbLink`，当前页使用 `BreadcrumbPage`（不可点击、加粗）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/breadcrumb` 导入。
+2. 简单场景用子组件；动态路径用 `items`。
+3. 当前页必须用 `BreadcrumbPage`，不要用 `BreadcrumbLink`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="breadcrumb" />

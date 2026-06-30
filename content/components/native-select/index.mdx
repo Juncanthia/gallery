@@ -1,0 +1,38 @@
+NativeSelect 基于原生 `<select>` 元素的样式化下拉选择器，适合移动端或简单选择场景。
+
+<ComponentShowcase id="native-select" path="native-select/basic" />
+
+```tsx
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
+export default function Demo() {
+  return (
+    <NativeSelect className="w-44">
+      <NativeSelectOption value="">请选择</NativeSelectOption>
+      <NativeSelectOption value="1">选项一</NativeSelectOption>
+      <NativeSelectOption value="2">选项二</NativeSelectOption>
+    </NativeSelect>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+子组件：`NativeSelect`、`NativeSelectOption`、`NativeSelectOptGroup`。继承原生 select 属性。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/native-select` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `native-select` | - |
+| `native-select-icon` | - |
+| `native-select-optgroup` | - |
+| `native-select-option` | - |
+| `native-select-wrapper` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="native-select" />

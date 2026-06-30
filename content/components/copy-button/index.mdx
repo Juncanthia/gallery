@@ -1,0 +1,93 @@
+CopyButton 一键复制文本内容并给出视觉反馈，点击后图标切换为对勾并在数秒后恢复。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要用户快速复制代码片段、链接、命令或其他文本时使用。点击后自动调用 `navigator.clipboard.writeText`，并展示复制成功动效。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 `content` 指定要复制的文本。
+
+<ComponentShowcase
+  id="copy-button"
+  path="copy-button/basic"
+/>
+
+```tsx
+import { CopyButton } from "@/components/ui/copy-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <div className="flex items-center gap-2">
+        <code className="rounded bg-muted px-2 py-1 text-sm">
+          npm install @project/ui
+        </code>
+        <CopyButton content="npm install @project/ui" />
+      </div>
+      <div className="flex items-center gap-2">
+        <code className="rounded bg-muted px-2 py-1 text-sm">
+          https://example.com/share/abc123
+        </code>
+        <CopyButton content="https://example.com/share/abc123" variant="outlined" />
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CopyButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| content | 要复制的文本内容 | `string` | 必填 |
+| copied | 受控的已复制状态 | `boolean` | - |
+| onCopiedChange | 复制状态变化回调 | `(copied: boolean, content?: string) => void` | - |
+| delay | 复制成功后图标恢复的延迟（毫秒） | `number` | `3000` |
+
+继承 Button 的所有属性（`size`、`shape`、`variant`、`color` 等），默认 `size="small"` `shape="square"` `variant="text"`。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义复制成功后的反馈时长？
+
+通过 `delay` 属性设置毫秒数：
+
+```tsx
+<CopyButton content="text" delay={1500} />
+```
+
+### 如何改变按钮外观？
+
+CopyButton 继承 Button 的所有样式属性：
+
+```tsx
+<CopyButton content="text" variant="outlined" size="middle" shape="default" />
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 CopyButton 代码时：
+
+1. 从 `@/components/ui/copy-button` 导入。
+2. 必须提供 `content` 属性。
+3. CopyButton 是 Button 的封装，支持所有 Button 的视觉属性，不需要再包一层 Button。
+4. 不要引入 Ant Design 相关依赖。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `copy-button` | - |
+| `copy-button-icon` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="copy-button" />

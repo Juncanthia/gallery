@@ -1,0 +1,74 @@
+Rate 用于评分操作，支持半星、清除、自定义字符和 Tooltip 提示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要收集用户对某事物的评分时使用，例如：
+
+- 商品或服务的星级评价。
+- 内容质量评分。
+- 满意度调查。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认 5 颗星，`allowHalf` 支持半星选择。
+
+<ComponentShowcase
+  id="rate"
+  path="rate/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { Rate } from "@/components/ui/rate"
+
+export default function Demo() {
+  const [value, setValue] = useState(3)
+
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Rate value={value} onChange={setValue} />
+      <Rate defaultValue={2.5} allowHalf />
+      <Rate defaultValue={4} disabled />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Rate
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控值 | `number` | - |
+| defaultValue | 默认值 | `number` | `0` |
+| onChange | 值变化回调 | `(value: number) => void` | - |
+| count | 星星数量 | `number` | `5` |
+| allowHalf | 支持半星 | `boolean` | `false` |
+| allowClear | 再次点击清除 | `boolean` | `false` |
+| disabled | 只读模式 | `boolean` | `false` |
+| character | 自定义字符 | `ReactNode \| (props) => ReactNode` | 星形图标 |
+| tooltips | 每颗星的提示文本 | `string[]` | - |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Rate 代码时：
+
+1. 从 `@/components/ui/rate` 导入。
+2. 半星评分使用 `allowHalf`。
+3. 不要引入 Ant Design 的 `Rate`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `rate` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rate" />

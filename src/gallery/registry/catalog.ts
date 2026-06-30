@@ -5,6 +5,10 @@ export type GalleryNavItem = {
   to: string
   summary: string
   keywords: string[]
+  /** 是否有 Ant Design 对应组件 */
+  antd?: boolean
+  /** Ant Design API 迁移覆盖率 (0-100) */
+  migration?: number
 }
 
 export type GalleryNavGroup = {
@@ -32,6 +36,52 @@ type ComponentSeed = {
   label: string
   summary?: string
   keywords?: string[]
+  /** 是否有 Ant Design 对应组件。默认根据 id 自动判断 */
+  antd?: boolean
+  /** Ant Design API 迁移覆盖率 (0-100)。有 antd 映射时默认 90 */
+  migration?: number
+}
+
+/** 无 Ant Design 对应组件的 id 列表 */
+const NON_ANTD_IDS = new Set([
+  "button-group", "copy-button", "kbd", "label", "marker",
+  "aspect-ratio", "direction", "resizable", "scroll-area", "sidebar",
+  "combobox", "command", "input-group", "native-select",
+  "accordion", "attachment", "chart", "chat-bubble",
+  "file-tree", "hover-card", "link-preview", "list-item",
+  "alert-dialog", "message-scroller", "toaster",
+  "context-menu", "sheet", "toggle", "toggle-group",
+  "notification-api", "mdx-test",
+])
+
+/** 复杂组件的迁移覆盖率略低 */
+const MIGRATION_OVERRIDES: Record<string, number> = {
+  "date-picker": 85,
+  dialog: 85,
+  "form-field": 85,
+  menubar: 85,
+  "navigation-menu": 85,
+  table: 85,
+  transfer: 80,
+  tree: 85,
+  "tree-select": 85,
+  cascader: 85,
+  mentions: 85,
+  "color-picker": 90,
+  calendar: 90,
+  carousel: 90,
+  "dropdown-menu": 90,
+  "float-button": 90,
+  pagination: 90,
+  select: 90,
+  slider: 90,
+  tabs: 90,
+}
+
+function resolveAntd(id: string): { antd: boolean; migration: number } {
+  if (NON_ANTD_IDS.has(id)) return { antd: false, migration: 0 }
+  const migration = MIGRATION_OVERRIDES[id] ?? 95
+  return { antd: true, migration }
 }
 
 function componentItem({
@@ -40,7 +90,13 @@ function componentItem({
   label,
   summary,
   keywords = [],
+  antd,
+  migration,
 }: ComponentSeed): GalleryNavItem {
+  const resolved = antd !== undefined
+    ? { antd, migration: migration ?? (antd ? 90 : 0) }
+    : resolveAntd(id)
+
   return {
     id,
     label,
@@ -48,6 +104,8 @@ function componentItem({
     to: `/components/${id}`,
     summary: summary ?? `${label}，对齐 Ant Design ${en} 的组件用法。`,
     keywords: [id, en, en.toLowerCase(), label, ...keywords],
+    antd: resolved.antd,
+    migration: resolved.migration,
   }
 }
 
@@ -259,6 +317,57 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
     ],
   },
   {
+    group: "复合组件",
+    groupEn: "Blocks",
+    items: [
+      componentItem({ id: "announcement", en: "Announcement", label: "公告条" }),
+      componentItem({ id: "avatar-stack", en: "AvatarStack", label: "头像堆叠" }),
+      componentItem({ id: "avatar-tooltip-group", en: "AvatarTooltipGroup", label: "头像提示组" }),
+      componentItem({ id: "banner", en: "Banner", label: "横幅" }),
+      componentItem({ id: "calculator", en: "Calculator", label: "计算器" }),
+      componentItem({ id: "choicebox", en: "Choicebox", label: "选择框" }),
+      componentItem({ id: "code-block", en: "CodeBlock", label: "代码块" }),
+      componentItem({ id: "code-panel", en: "CodePanel", label: "代码面板" }),
+      componentItem({ id: "code-tabs", en: "CodeTabs", label: "代码标签页" }),
+      componentItem({ id: "comparison", en: "Comparison", label: "对比滑块" }),
+      componentItem({ id: "contribution-graph", en: "ContributionGraph", label: "贡献图" }),
+      componentItem({ id: "credit-card", en: "CreditCard", label: "信用卡" }),
+      componentItem({ id: "cursor-follow", en: "CursorFollow", label: "光标跟随" }),
+      componentItem({ id: "data-table", en: "DataTable", label: "数据表格" }),
+      componentItem({ id: "deck", en: "Deck", label: "卡片堆叠" }),
+      componentItem({ id: "dialog-stack", en: "DialogStack", label: "对话框堆叠" }),
+      componentItem({ id: "dropzone", en: "Dropzone", label: "拖拽上传" }),
+      componentItem({ id: "editor", en: "Editor", label: "富文本编辑器" }),
+      componentItem({ id: "feature-calendar", en: "FeatureCalendar", label: "功能日历" }),
+      componentItem({ id: "gantt", en: "Gantt", label: "甘特图" }),
+      componentItem({ id: "github-stars-wheel", en: "GitHubStarsWheel", label: "GitHub 星标" }),
+      componentItem({ id: "glimpse", en: "Glimpse", label: "一瞥效果" }),
+      componentItem({ id: "image-crop", en: "ImageCrop", label: "图片裁剪" }),
+      componentItem({ id: "image-zoom", en: "ImageZoom", label: "图片缩放" }),
+      componentItem({ id: "kanban", en: "Kanban", label: "看板" }),
+      componentItem({ id: "marquee", en: "Marquee", label: "跑马灯" }),
+      componentItem({ id: "masonry", en: "Masonry", label: "瀑布流" }),
+      componentItem({ id: "mini-calendar", en: "MiniCalendar", label: "迷你日历" }),
+      componentItem({ id: "pill", en: "Pill", label: "药丸标签" }),
+      componentItem({ id: "presence-cursor", en: "PresenceCursor", label: "协作光标" }),
+      componentItem({ id: "rating", en: "Rating", label: "评分组件" }),
+      componentItem({ id: "reel", en: "Reel", label: "卷轴滑动" }),
+      componentItem({ id: "relative-time", en: "RelativeTime", label: "相对时间" }),
+      componentItem({ id: "sandbox", en: "Sandbox", label: "沙箱预览" }),
+      componentItem({ id: "snippet", en: "Snippet", label: "代码片段" }),
+      componentItem({ id: "spinner", en: "Spinner", label: "加载旋转" }),
+      componentItem({ id: "status", en: "Status", label: "状态指示" }),
+      componentItem({ id: "stories", en: "Stories", label: "快拍轮播" }),
+      componentItem({ id: "tabs-motion", en: "TabsMotion", label: "动效标签页" }),
+      componentItem({ id: "tags", en: "Tags", label: "标签组" }),
+      componentItem({ id: "theme-switcher", en: "ThemeSwitcher", label: "主题切换" }),
+      componentItem({ id: "ticker", en: "Ticker", label: "滚动条" }),
+      componentItem({ id: "tooltip-motion", en: "TooltipMotion", label: "动效提示" }),
+      componentItem({ id: "tour", en: "Tour", label: "引导漫游" }),
+      componentItem({ id: "video-player", en: "VideoPlayer", label: "视频播放器" }),
+    ],
+  },
+  {
     group: "测试",
     groupEn: "Test",
     items: [
@@ -274,6 +383,15 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   },
 ]
 
+const genericComponentToc = [
+  { id: "when-to-use", title: "何时使用", depth: 2 },
+  { id: "examples", title: "代码演示", depth: 2 },
+  { id: "api", title: "API", depth: 2 },
+  { id: "faq", title: "常见问题", depth: 2 },
+  { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+  { id: "source", title: "源码", depth: 2 },
+] satisfies GalleryTocItem[]
+
 const defaultDocs = Object.fromEntries(
   GALLERY_NAV_GROUPS.flatMap((group) =>
     group.items.map((item) => [
@@ -282,7 +400,7 @@ const defaultDocs = Object.fromEntries(
         title: item.label,
         en: item.en,
         description: item.summary,
-        toc: [],
+        toc: genericComponentToc,
       } satisfies GalleryDocMeta,
     ])
   )
@@ -310,6 +428,131 @@ export const GALLERY_DOCS: Record<string, GalleryDocMeta> = {
       { id: "link", title: "链接与路由", depth: 3 },
       { id: "group", title: "按钮组合", depth: 3 },
       { id: "motion", title: "动效控制", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  breadcrumb: {
+    title: "面包屑",
+    en: "Breadcrumb",
+    description: "显示当前页面在系统层级结构中的位置。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "breadcrumb", title: "基础用法", depth: 3 },
+      { id: "routes", title: "路由生成", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  "button-group": {
+    title: "按钮组",
+    en: "ButtonGroup",
+    description: "将多个按钮紧凑排列为一个视觉整体。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "button-group", title: "基础组合", depth: 3 },
+      { id: "form", title: "表单与方向", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  "float-button": {
+    title: "悬浮按钮",
+    en: "FloatButton",
+    description: "悬浮于页面内容上方，提供快捷操作入口。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "float-button", title: "基础用法", depth: 3 },
+      { id: "badge", title: "角标", depth: 3 },
+      { id: "group", title: "按钮组", depth: 3 },
+      { id: "back-top", title: "回到顶部", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  kbd: {
+    title: "键盘按键",
+    en: "Kbd",
+    description: "展示键盘按键或快捷键组合。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "kbd", title: "基础用法", depth: 3 },
+      { id: "group", title: "按键组合", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  typography: {
+    title: "排版",
+    en: "Typography",
+    description: "提供文本排版能力：Text、Title、Paragraph 和 Link。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "typography-text", title: "行内文本", depth: 3 },
+      { id: "typography-title", title: "标题", depth: 3 },
+      { id: "typography-paragraph", title: "段落与链接", depth: 3 },
+      { id: "typography-copyable", title: "可复制", depth: 3 },
+      { id: "typography-ellipsis", title: "溢出省略", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  input: {
+    title: "输入框",
+    en: "Input",
+    description: "基础表单控件，支持前后缀、清除、校验、尺寸和 TextArea。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "input", title: "基础用法", depth: 3 },
+      { id: "sizes", title: "尺寸与变体", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  table: {
+    title: "表格",
+    en: "Table",
+    description: "展示结构化行列数据，支持表头、表体和状态单元格。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "table", title: "基础用法", depth: 3 },
+      { id: "states", title: "完整数据展示", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  select: {
+    title: "选择器",
+    en: "Select",
+    description: "下拉选择器，支持单选、多选、标签、搜索和分组。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "select", title: "基础用法", depth: 3 },
+      { id: "groups", title: "分组与尺寸", depth: 3 },
       { id: "api", title: "API", depth: 2 },
       { id: "faq", title: "常见问题", depth: 2 },
       { id: "llm-rules", title: "LLM 使用规则", depth: 2 },

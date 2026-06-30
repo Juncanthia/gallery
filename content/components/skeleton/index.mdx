@@ -1,0 +1,39 @@
+Skeleton 在加载时提供占位图形，改善加载体验。
+
+<ComponentShowcase id="skeleton" path="skeleton/basic" />
+
+```tsx
+import { Skeleton } from "@/components/ui/skeleton"
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-3">
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-3/4" />
+      <Skeleton className="h-20 w-full" />
+      <div className="flex items-center gap-3">
+        <Skeleton className="size-10 rounded-full" />
+        <div className="flex-1 space-y-2"><Skeleton className="h-4 w-1/3" /><Skeleton className="h-3 w-1/2" /></div>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+通过 `className` 控制形状和尺寸，无特殊 props。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/skeleton` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `skeleton` | - |
+| `skeleton-root` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="skeleton" />

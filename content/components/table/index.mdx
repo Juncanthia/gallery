@@ -1,0 +1,176 @@
+Table 用于展示结构化行列数据。基于原生 `<table>` 元素封装，提供语义化子组件和统一样式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 当有大量结构化的数据需要展现时。
+- 当需要对数据进行对比、浏览或批量操作时。
+- 当需要展示字段较多、无法用列表或卡片承载时。
+
+注意：本 Table 专注于数据展示的视觉结构，不内置排序、筛选、分页等逻辑。这些功能应在数据层处理，结合 Pagination 组件使用。
+
+如果你需要 Ant Design 风格的 `columns`/`dataSource` 配置式表格，请考虑使用 ProTable 或在业务层封装。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`Table` 搭配 `TableHeader`、`TableBody`、`TableRow`、`TableHead`、`TableCell` 构建表格。
+
+<ComponentShowcase
+  id="table"
+  path="table/basic"
+/>
+
+```tsx
+import {
+  Table, TableBody, TableCaption, TableCell,
+  TableHead, TableHeader, TableRow,
+} from "@/components/ui/table"
+
+const data = [
+  { id: "1", name: "张三", department: "技术部", status: "在职" },
+  { id: "2", name: "李四", department: "产品部", status: "在职" },
+  { id: "3", name: "王五", department: "设计部", status: "休假" },
+]
+
+export default function Demo() {
+  return (
+    <Table className="w-full max-w-md">
+      <TableCaption>员工列表</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>姓名</TableHead>
+          <TableHead>部门</TableHead>
+          <TableHead>状态</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((row) => (
+          <TableRow key={row.id}>
+            <TableCell>{row.name}</TableCell>
+            <TableCell>{row.department}</TableCell>
+            <TableCell>{row.status}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+```
+
+### 完整数据展示
+
+含 Badge 状态、多列对齐和行计数。
+
+<ComponentShowcase
+  id="states"
+  path="table/states"
+/>
+
+```tsx
+import {
+  Table, TableBody, TableCaption, TableCell,
+  TableHead, TableHeader, TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+
+const data = [
+  { id: "1", name: "张三", email: "zhang@example.com", role: "管理员", status: "活跃" },
+  { id: "2", name: "李四", email: "li@example.com", role: "编辑", status: "活跃" },
+  { id: "3", name: "王五", email: "wang@example.com", role: "访客", status: "禁用" },
+]
+
+export default function Demo() {
+  return (
+    <Table className="w-full max-w-lg">
+      <TableCaption>用户列表 · 共 {data.length} 条</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-24">姓名</TableHead>
+          <TableHead>邮箱</TableHead>
+          <TableHead>角色</TableHead>
+          <TableHead className="text-right">状态</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((row) => (
+          <TableRow key={row.id}>
+            <TableCell className="font-medium">{row.name}</TableCell>
+            <TableCell className="text-muted-foreground">{row.email}</TableCell>
+            <TableCell>{row.role}</TableCell>
+            <TableCell className="text-right">
+              <Badge variant={row.status === "活跃" ? "default" : "secondary"}>
+                {row.status}
+              </Badge>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+所有子组件均继承对应原生 HTML 元素的属性。
+
+| 组件 | 对应 HTML | 说明 |
+| --- | --- | --- |
+| Table | `<table>` | 表格根容器，`w-full caption-bottom text-sm` |
+| TableHeader | `<thead>` | 表头区域，`[&_tr]:border-b` |
+| TableBody | `<tbody>` | 表体区域 |
+| TableFooter | `<tfoot>` | 表尾区域，`border-t bg-muted/50` |
+| TableRow | `<tr>` | 表格行，`border-b transition-colors hover:bg-muted/50` |
+| TableHead | `<th>` | 表头单元格，`h-12 px-4 text-left font-medium text-muted-foreground` |
+| TableCell | `<td>` | 数据单元格，`p-4 align-middle` |
+| TableCaption | `<caption>` | 表格标题/脚注，`mt-4 text-sm text-muted-foreground` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `table` | 表格根容器 |
+| `table-header` | 表头区域 |
+| `table-head` | 表头单元格 |
+| `table-body` | 表体区域 |
+| `table-footer` | 表尾区域 |
+| `table-row` | 数据行 |
+| `table-cell` | 数据单元格 |
+| `table-caption` | 表格标题 |
+| `table-container` | 外层滚动容器 |
+| `table-expanded-row` | 展开行 |
+| `table-title` | 表格标题区域 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现排序、筛选、分页？
+
+Table 专注于视觉结构，不内置交互逻辑。实现方式：
+
+- **排序**：在数据层用 `Array.sort()` 排序后重新渲染。
+- **筛选**：在数据层用 `Array.filter()` 过滤后渲染。
+- **分页**：使用 Pagination 组件，数据层用 `Array.slice()` 切片。
+
+### 如何固定表头或列？
+
+- 固定表头：给 Table 容器设置 `max-height` + `overflow-auto`，`TableHeader` 设 `sticky top-0 bg-background`。
+- 固定列：使用 `sticky left-0 bg-background` 配合 `z-10`。
+
+### 如何展示加载、空数据、错误等状态？
+
+Table 只负责数据展示。加载/空/错误状态应在 Table 外层处理：加载时显示 Spin/Skeleton，空数据时显示 EmptyState，错误时显示 Result。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Table 代码时：
+
+1. 从 `@/components/ui/table` 导入所需子组件。
+2. 使用 `map` 遍历数据数组生成 `TableRow`，始终设置 `key`。
+3. 状态、标签等字段使用 Badge 或 Tag 组件展示，不要裸写文本。
+4. Table 不内置排序/筛选/分页，不要生成 Ant Design 的 `columns`/`dataSource` 配置。
+5. 需要响应式时，外层用 `overflow-auto` 包裹 Table。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="table" />

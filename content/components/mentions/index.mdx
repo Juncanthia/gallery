@@ -1,0 +1,26 @@
+Mentions 提及组件，输入 `@` 触发用户列表选择。
+
+<ComponentShowcase id="mentions" path="mentions/basic" />
+
+```tsx
+import { Mentions } from "@/components/ui/mentions"
+export default function Demo() { return <Mentions options={[{ label: "张三", value: "zhangsan" }]} placeholder="@ 提及用户" className="w-64" /> }
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| options | 提及候选项 | `MentionsOption[]` |
+| value | 受控值 | `string` |
+| onChange | 变化回调 | `(value: string) => void` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/mentions` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="mentions" />

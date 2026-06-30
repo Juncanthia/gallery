@@ -1,0 +1,66 @@
+Badge 用于展示状态标签、徽标数字或小型标记。支持 `variant` 视觉变体、`dot` 圆点模式、`status` 状态颜色和 Ribbon 缎带。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 列表项或表格行的状态标记（成功、处理中、错误、警告）。
+- 图标或按钮上的未读消息计数。
+- 商品标签（新品、促销、热门）。
+- 用 `dot` 模式仅提示用户有更新而非具体数字。
+- Ribbon 缎带用于卡片或图片角标。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`variant` 切换视觉样式，`count` 显示数字。
+
+<ComponentShowcase id="badge" path="badge/basic" />
+
+```tsx
+import { Badge } from "@/components/ui/badge"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Badge>默认</Badge>
+      <Badge variant="secondary">次要</Badge>
+      <Badge variant="destructive">危险</Badge>
+      <Badge variant="outline">边框</Badge>
+      <Badge>99+</Badge>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 视觉变体 | `default` \| `secondary` \| `destructive` \| `outline` | `default` |
+| size | 尺寸 | `default` \| `small` | `default` |
+| dot | 不显示数字，仅展示圆点 | `boolean` | `false` |
+| count | 展示的数字 | `ReactNode` | - |
+| overflowCount | 超出此值时显示为 `{count}+` | `number` | `99` |
+| showZero | 值为 0 时是否显示 | `boolean` | `false` |
+| status | 状态点颜色 | `success` \| `processing` \| `default` \| `error` \| `warning` | - |
+| color | 自定义颜色 | `string` | - |
+| text | 当用作状态点时，额外的文字说明 | `ReactNode` | - |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `badge` | Badge 根元素 |
+| `badge-indicator` | 指示器 |
+| `badge-status` / `badge-status-dot` | 状态点相关 |
+| `badge-text` | 文本区域 |
+| `badge-ribbon` / `badge-ribbon-wrapper` / `badge-ribbon-corner` | Ribbon 缎带相关 |
+| `badge-wrapper` | 外层包裹 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/badge` 导入。
+2. 状态语义用 `status`，通用标记用 `variant`。
+3. 需要计数组件时用 `count + overflowCount`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="badge" />

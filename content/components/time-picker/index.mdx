@@ -1,0 +1,26 @@
+TimePicker 时间选择器，用于选择时分秒。
+
+<ComponentShowcase id="time-picker" path="time-picker/basic" />
+
+```tsx
+import { TimePicker } from "@/components/ui/time-picker"
+export default function Demo() { return <TimePicker placeholder="选择时间" /> }
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| value | 受控时间值 | `string \| Date` |
+| onChange | 变化回调 | `(time) => void` |
+| format | 显示格式 | `string` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/time-picker` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="time-picker" />

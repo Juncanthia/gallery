@@ -1,0 +1,53 @@
+Tag 用于标记和分类，支持 6 种颜色和可关闭模式。适合展示属性标签、筛选条件和分类标记。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 展示事物的属性标签（如文章类型、任务优先级）。
+- 筛选条件的可视化展示（可关闭的筛选 Tag）。
+- 列表中的分类标记。
+- 需要标签式勾选时，使用 `CheckableTag`（可勾选 Tag）。
+
+与 Badge 的区别：Tag 用于分类标记，Badge 用于状态/计数。
+
+<ComponentShowcase id="tag" path="tag/basic" />
+
+```tsx
+import { Tag } from "@/components/ui/tag"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Tag>默认</Tag>
+      <Tag color="primary">主要</Tag>
+      <Tag color="success">成功</Tag>
+      <Tag color="warning">警告</Tag>
+      <Tag color="danger">危险</Tag>
+      <Tag color="info">信息</Tag>
+      <Tag closable onClose={() => {}}>可关闭</Tag>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 颜色语义 | `default` \| `primary` \| `success` \| `warning` \| `danger` \| `info` | `default` |
+| closable | 是否可关闭（显示 X 按钮） | `boolean` | `false` |
+| onClose | 关闭按钮点击回调 | `() => void` | - |
+| icon | 标签前图标 | `ReactNode` | - |
+| bordered | 是否显示边框 | `boolean` | `true` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `tag` | Tag 根元素 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/tag` 导入。
+2. 用 `color` 表达语义，不要手动写颜色 class。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tag" />

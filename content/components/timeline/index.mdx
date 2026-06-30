@@ -1,0 +1,39 @@
+Timeline 垂直展示时间流信息，按时间顺序排列事件节点。
+
+<ComponentShowcase id="timeline" path="timeline/basic" />
+
+```tsx
+import { Timeline } from "@/components/ui/timeline"
+export default function Demo() {
+  return (
+    <Timeline
+      items={[
+        { label: "2024-01-01", children: "项目启动" },
+        { label: "2024-02-15", children: "第一阶段上线" },
+        { label: "2024-03-30", color: "gray", children: "等待第二阶段" },
+      ]}
+      className="max-w-sm"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| items | 时间线项 | `{ label?, children, color? }[]` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/timeline` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `timeline` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="timeline" />

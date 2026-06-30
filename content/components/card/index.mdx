@@ -1,0 +1,90 @@
+Card 通用卡片容器，用于信息分组和展示。提供标题、描述、内容、操作区和封面图等结构化的子组件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中将一组相关信息聚合展示时使用。Card 是最常用的信息容器之一。
+
+- 列表页的条目卡片（如商品卡片、文章卡片）。
+- 仪表盘的数据指标卡片。
+- 设置页面的分组面板。
+- 详情页的信息区块。
+
+与单纯用 `div` + `border` 的区别：Card 提供统一间距、结构语义和暗色模式适配。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+Header 放标题和描述，Content 放主体，Footer 放操作按钮。
+
+<ComponentShowcase id="card" path="card/basic" />
+
+```tsx
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle>卡片标题</CardTitle>
+        <CardDescription>卡片的描述信息，用于补充说明。</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground">卡片主体内容区域。</p>
+      </CardContent>
+      <CardFooter className="flex gap-2">
+        <Button size="small" variant="outlined">取消</Button>
+        <Button size="small" color="primary" variant="solid">确认</Button>
+      </CardFooter>
+    </Card>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 组件 | 说明 |
+| --- | --- |
+| Card | 卡片根容器，`rounded border bg-card text-card-foreground shadow-sm` |
+| CardHeader | 卡片头部，`flex flex-col space-y-1.5 p-6` |
+| CardTitle | 卡片标题，`text-2xl font-semibold leading-none tracking-tight` |
+| CardDescription | 卡片描述，`text-sm text-muted-foreground` |
+| CardContent | 卡片主体内容区，`p-6 pt-0` |
+| CardFooter | 卡片底部操作区，`flex items-center p-6 pt-0` |
+| CardCover | 卡片封面图区域 |
+| CardMeta | 元信息区域（头像 + 标题 + 描述） |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `card` | 卡片根容器 |
+| `card-header` | 头部区域 |
+| `card-title` | 标题 |
+| `card-description` | 描述文本 |
+| `card-content` | 主体内容 |
+| `card-footer` | 底部操作区 |
+| `card-cover` | 封面图区 |
+| `card-meta` / `card-meta-avatar` / `card-meta-title` / `card-meta-description` | 元信息区 |
+| `card-action` | 操作区 |
+| `card-grid` | 网格布局 |
+| `card-tabs` | 卡片内嵌 Tab |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何让卡片可点击？
+
+直接给 Card 添加 `onClick` 或使用 `asChild` 包裹为 `<a>` 或路由 Link。
+
+### 如何在 Card 内嵌 Tabs？
+
+Card 的子组件 `CardTabs` 提供卡片内嵌的 Tabs 容器。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/card` 导入。
+2. 遵循 CardHeader → CardContent → CardFooter 的结构顺序。
+3. 不要用 Divider + div 拼凑卡片。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="card" />

@@ -1,0 +1,47 @@
+Statistic 展示统计数值，支持前缀、后缀、精度和标题。
+
+<ComponentShowcase id="statistic" path="statistic/basic" />
+
+```tsx
+import { Statistic } from "@/components/ui/statistic"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-8">
+      <Statistic title="活跃用户" value={112893} />
+      <Statistic title="账户余额" value={112893} prefix="$" precision={2} />
+      <Statistic title="完成率" value={86.5} suffix="%" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 标题 | `ReactNode` | - |
+| value | 数值 | `number \| string` | - |
+| prefix | 前缀 | `ReactNode` | - |
+| suffix | 后缀 | `ReactNode` | - |
+| precision | 小数精度 | `number` | - |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/statistic` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `statistic` | - |
+| `statistic-content` | - |
+| `statistic-diff` | - |
+| `statistic-prefix` | - |
+| `statistic-suffix` | - |
+| `statistic-title` | - |
+| `statistic-value` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="statistic" />

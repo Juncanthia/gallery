@@ -1,0 +1,25 @@
+Notification 全局展示通知提醒，在屏幕右上角弹出，支持多种类型。
+
+<ComponentShowcase id="notification" path="notification/basic" />
+
+```tsx
+import { notification } from "@/components/ui/notification-api"
+import { Button } from "@/components/ui/button"
+export default function Demo() {
+  return <Button size="small" variant="outlined" onClick={() => notification.success({ message: "操作成功", description: "内容已保存" })}>发送通知</Button>
+}
+```
+
+<h2 id="api">API</h2>
+`notification.success(config)`、`notification.error(config)`、`notification.info(config)`、`notification.warning(config)`。config: `{ message, description?, duration? }`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/notification-api` 导入（注意导入路径）。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="notification" />

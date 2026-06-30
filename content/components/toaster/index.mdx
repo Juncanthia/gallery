@@ -1,0 +1,23 @@
+Toaster 吐司（Toast）通知容器，为 Sonner 库提供样式化的通知渲染。
+
+<ComponentShowcase id="toaster" path="toaster/basic" />
+
+```tsx
+import { Toaster } from "@/components/ui/toaster"
+import { Button } from "@/components/ui/button"
+export default function Demo() { return <div><Toaster /><Button size="small" variant="outlined">触发</Button></div> }
+```
+
+<h2 id="api">API</h2>
+`Toaster` 是 Sonner 的包装组件，在应用根组件中放置一次即可。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/toaster` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="toaster" />

@@ -1,0 +1,83 @@
+RadioGroup 用于在多个互斥选项中选中单个值。支持 `horizontal`/`vertical` 排列、三种尺寸和 `options` 声明式配置。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 选项互斥且所有选项立即可见时（如性别、支付方式）。
+- 设置页面的单选组。
+- 表单中的必选字段。
+
+当选项少于 5 个时 RadioGroup 是最佳选择。如果需要多选，使用 CheckboxGroup。如果选项很多（> 5）或空间有限，使用 Select。
+
+<ComponentShowcase id="radio-group" path="radio-group/basic" />
+
+```tsx
+import { useState } from "react"
+import { RadioGroup } from "@/components/ui/radio-group"
+
+export default function Demo() {
+  const [value, setValue] = useState("a")
+  return (
+    <RadioGroup
+      options={[
+        { label: "选项 A", value: "a" },
+        { label: "选项 B", value: "b" },
+        { label: "选项 C（禁用）", value: "c", disabled: true },
+      ]}
+      value={value}
+      onValueChange={setValue}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### RadioGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 选项配置列表 | `RadioGroupOption[]` | - |
+| value | 受控选中值 | `string` | - |
+| defaultValue | 默认选中值 | `string` | - |
+| onValueChange | 选中值变化回调 | `(value: string) => void` | - |
+| direction | 排列方向 | `horizontal` \| `vertical` | `vertical` |
+| size | 尺寸 | `small` \| `middle` \| `large` | `middle` |
+| disabled | 全部禁用 | `boolean` | `false` |
+
+### RadioGroupItem
+
+单独使用时可自定义布局（如与其他组件混排），必须指定 `value`。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `radio-group` | 单选组容器 |
+| `radio-group-item` | 单个单选项 |
+| `radio-group-indicator` | 选中指示圆点 |
+
+<h2 id="faq">常见问题</h2>
+
+### RadioGroup 和 Select 怎么选？
+
+- **RadioGroup**：选项 ≤5 个，所有选项立即可见，用户可快速对比选择。
+- **Select**：选项多、空间有限、需要搜索时。
+
+### 如何单独使用 RadioGroupItem？
+
+```tsx
+<RadioGroup value={value} onValueChange={setValue}>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="a" />
+    <Label>自定义布局选项 A</Label>
+  </div>
+</RadioGroup>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/radio-group` 导入。
+2. 优先使用 `options` 声明模式。
+3. 选项 ≤5 个时用 RadioGroup 代替 Select。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="radio-group" />

@@ -1,0 +1,90 @@
+Attachment 文件附件组件，采用复合组件模式展示文件信息。`Attachment` 为容器，内部组合 `AttachmentMedia`、`AttachmentContent`、`AttachmentTitle`、`AttachmentDescription`、`AttachmentActions` 构成完整附件条目。同时提供 `AttachmentUpload` 上传区域。
+
+<h2 id="when-to-use">何时使用</h2>
+用于展示已上传的文件列表项，或提供文件拖拽/点击上传区域。
+
+<ComponentShowcase id="attachment" path="attachment/basic" />
+
+```tsx
+import { FileIcon, X } from "lucide-react"
+import {
+  Attachment, AttachmentActions, AttachmentContent,
+  AttachmentDescription, AttachmentMedia, AttachmentTitle,
+} from "@/components/ui/attachment"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <div className="space-y-2">
+      <Attachment>
+        <AttachmentMedia><FileIcon className="size-4" /></AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>document.pdf</AttachmentTitle>
+          <AttachmentDescription>2.3 MB</AttachmentDescription>
+        </AttachmentContent>
+        <AttachmentActions>
+          <Button size="small" variant="text" icon={<X className="size-3.5" />} aria-label="移除" />
+        </AttachmentActions>
+      </Attachment>
+      <Attachment state="uploading">
+        <AttachmentMedia><FileIcon className="size-4" /></AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>image.png</AttachmentTitle>
+          <AttachmentDescription>上传中...</AttachmentDescription>
+        </AttachmentContent>
+      </Attachment>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Attachment（容器）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| state | 文件状态 | `idle` \| `uploading` \| `processing` \| `error` \| `done` | `done` |
+| size | 尺寸 | `default` \| `sm` \| `xs` | `default` |
+| orientation | 排列方向 | `horizontal` \| `vertical` | `horizontal` |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| AttachmentMedia | 文件图标/缩略图区域 |
+| AttachmentContent | 文件信息容器 |
+| AttachmentTitle | 文件名 |
+| AttachmentDescription | 文件大小或状态描述 |
+| AttachmentActions | 操作按钮区域（下载、删除等） |
+| AttachmentUpload | 上传区域（拖拽/点击上传） |
+
+### AttachmentUpload
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| fileList | 已上传文件列表 | `AttachmentFile[]` |
+| onChange | 文件变化回调 | `(info) => void` |
+| accept | 允许的文件类型 | `string` |
+| multiple | 是否支持多选 | `boolean` |
+| maxCount | 最大文件数量 | `number` |
+| drag | 是否启用拖拽上传 | `boolean` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `attachment` | 附件条目容器 |
+| `attachment-media` | 图标/缩略图 |
+| `attachment-content` | 信息区 |
+| `attachment-title` | 文件名 |
+| `attachment-description` | 描述/大小 |
+| `attachment-actions` | 操作区 |
+| `attachment-upload` / `attachment-upload-trigger` | 上传区 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/attachment` 导入所需子组件。
+2. 展示文件用 `Attachment` + 子组件组合，上传用 `AttachmentUpload`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="attachment" />

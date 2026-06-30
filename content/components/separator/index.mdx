@@ -1,0 +1,78 @@
+Separator 用于在内容之间插入水平或垂直分隔线，基于 Radix Separator 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+
+在布局中需要视觉分隔时使用，例如：
+
+- 段落或区块之间的水平线。
+- 工具栏按钮之间的垂直线。
+- 菜单项之间的分隔。
+- 卡片中各部分的划分。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+水平分隔线分割上下内容，垂直分隔线分割左右内容。
+
+<ComponentShowcase
+  id="separator"
+  path="separator/basic"
+/>
+
+```tsx
+import { Separator } from "@/components/ui/separator"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-4">
+      <div>
+        <p className="text-sm">上方内容</p>
+        <Separator className="my-2" />
+        <p className="text-sm">下方内容</p>
+      </div>
+      <div className="flex h-8 items-center gap-2">
+        <span className="text-sm">左</span>
+        <Separator orientation="vertical" />
+        <span className="text-sm">中</span>
+        <Separator orientation="vertical" />
+        <span className="text-sm">右</span>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Separator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 分隔线方向 | `horizontal` \| `vertical` | `horizontal` |
+| decorative | 是否为纯装饰元素 | `boolean` | `true` |
+| className | 附加样式类名 | `string` | - |
+
+支持 Radix Separator 的所有属性。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Separator 代码时：
+
+1. 从 `@/components/ui/separator` 导入。
+2. 水平分隔默认，垂直分隔需显式设置 `orientation="vertical"`。
+3. 作为纯装饰元素时不要添加 `role`（默认 `decorative=true`）。
+4. 不要引入 Ant Design 的 `Divider`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `separator` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="separator" />

@@ -1,0 +1,51 @@
+Carousel 轮播走马灯，展示一组可滑动的卡片或图片。
+
+<ComponentShowcase id="carousel" path="carousel/basic" />
+
+```tsx
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { Card, CardContent } from "@/components/ui/card"
+
+export default function Demo() {
+  return (
+    <Carousel className="w-full max-w-xs">
+      <CarouselContent>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <CarouselItem key={i}>
+            <Card>
+              <CardContent className="flex aspect-square items-center justify-center p-6">
+                <span className="text-2xl font-semibold">{i}</span>
+              </CardContent>
+            </Card>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious /><CarouselNext />
+    </Carousel>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+子组件：`Carousel`、`CarouselContent`、`CarouselItem`、`CarouselPrevious`、`CarouselNext`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/carousel` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `carousel` | - |
+| `carousel-content` | - |
+| `carousel-dot` | - |
+| `carousel-dots` | - |
+| `carousel-item` | - |
+| `carousel-next` | - |
+| `carousel-previous` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="carousel" />

@@ -1,0 +1,50 @@
+Item 列表项组件，提供标题、描述、图标和操作区等结构化子组件。
+
+<ComponentShowcase id="list-item" path="list-item/basic" />
+
+```tsx
+import { Item, ItemTitle, ItemDescription, ItemContent } from "@/components/ui/list-item"
+
+export default function Demo() {
+  return (
+    <div className="w-64 space-y-1 rounded border p-2">
+      <Item>
+        <ItemContent>
+          <ItemTitle>列表项标题</ItemTitle>
+          <ItemDescription>列表项描述信息</ItemDescription>
+        </ItemContent>
+      </Item>
+      <Item>
+        <ItemContent>
+          <ItemTitle>另一条列表项</ItemTitle>
+        </ItemContent>
+      </Item>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+子组件：`Item`、`ItemMedia`、`ItemContent`、`ItemActions`、`ItemGroup`、`ItemSeparator`、`ItemTitle`、`ItemDescription`、`ItemHeader`、`ItemFooter`。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `item` | 列表项根 |
+| `item-title` | 标题 |
+| `item-description` | 描述 |
+| `item-content` | 内容区 |
+| `item-actions` | 操作区 |
+| `item-media` | 媒体区 |
+| `item-header` | 头部 |
+| `item-footer` | 底部 |
+| `item-group` | 分组 |
+| `item-separator` | 分隔 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/list-item` 导入 `Item`、`ItemTitle` 等。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="list-item" />

@@ -1,0 +1,109 @@
+Space 控制子元素之间的间距，支持水平和垂直排列，以及分隔符。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在多个元素之间保持统一间距时使用，避免逐个设置 margin 或 gap。
+
+常见场景：
+
+- 按钮组之间的间距。
+- 表单字段之间的排列。
+- 带分隔符的标签列表。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+支持水平和垂直排列，内置 `small`、`default`、`large` 三种预设间距。
+
+<ComponentShowcase
+  id="space"
+  path="space/basic"
+/>
+
+```tsx
+import { Space } from "@/components/ui/space"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">水平排列</p>
+        <Space>
+          <Button size="small">按钮一</Button>
+          <Button size="small">按钮二</Button>
+          <Badge>徽标</Badge>
+        </Space>
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">垂直 + 分隔符</p>
+        <Space direction="vertical" size="small" separator="|">
+          <span className="text-sm">项目 A</span>
+          <span className="text-sm">项目 B</span>
+          <span className="text-sm">项目 C</span>
+        </Space>
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">大间距</p>
+        <Space size="large">
+          <Button size="small">确认</Button>
+          <Button size="small" variant="outlined">取消</Button>
+        </Space>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Space
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| direction | 排列方向 | `horizontal` \| `vertical` | `horizontal` |
+| size | 间距 | `small` \| `default` \| `large` \| `number` \| `[rowGap, colGap]` | `default` |
+| align | 交叉轴对齐 | `start` \| `center` \| `end` \| `baseline` | 水平居中，垂直靠左 |
+| separator | 分隔符 | `React.ReactNode` | - |
+| block | 是否占满父容器宽度 | `boolean` | `false` |
+| wrap | 是否换行 | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+
+### Space 与 Flex 有什么区别？
+
+`Space` 专注间距管理，适合已有顺序的元素排列。`Flex` 更通用，覆盖完整的 Flexbox 属性。通常在简单间距场景用 `Space`，复杂布局用 `Flex`。
+
+### 如何使用自定义间距值？
+
+传入数字即可（单位 px）：
+
+```tsx
+<Space size={24}>...</Space>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Space 代码时：
+
+1. 从 `@/components/ui/space` 导入。
+2. 间距通过 `size` 属性统一管理，不要手动给子元素加 margin。
+3. 带分隔符的列表使用 `separator` 属性。
+4. 不要引入 Ant Design 的 `Space`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `space` | - |
+| `space-item` | - |
+| `space-separator` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="space" />

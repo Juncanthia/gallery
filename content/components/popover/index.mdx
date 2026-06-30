@@ -1,0 +1,43 @@
+Popover 点击或悬停元素时弹出气泡卡片，用于展示额外信息或操作。
+
+<ComponentShowcase id="popover" path="popover/basic" />
+
+```tsx
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outlined">打开气泡</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-60">
+        <div className="space-y-2">
+          <h4 className="font-medium text-sm">气泡标题</h4>
+          <p className="text-sm text-muted-foreground">可放置任意内容。</p>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| placement | 弹出位置 | `top` \| `bottom` \| `left` \| `right` 等 | `bottom` |
+
+子组件：`PopoverTrigger`、`PopoverContent`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/popover` 导入。
+2. `PopoverTrigger` 使用 `asChild`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="popover" />

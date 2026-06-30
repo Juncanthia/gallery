@@ -1,0 +1,81 @@
+Tooltip 在鼠标悬停或聚焦时展示简短的提示文本。基于 Radix Tooltip 和 motion 实现，支持延迟触发和四个方向的弹出位置。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 为纯图标按钮提供文字说明（如工具栏按钮）。
+- 为截断文本展示完整内容。
+- 为缩写、专业术语提供解释。
+
+Tooltip 仅展示简短文本（建议 10 字以内）。需要展示更多内容时使用 Popover 或 HoverCard。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`TooltipProvider` 在应用顶层包裹一次，后续每个 `Tooltip` 只需 `TooltipTrigger` + `TooltipContent`。
+
+<ComponentShowcase id="tooltip" path="tooltip/basic" />
+
+```tsx
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <TooltipProvider>
+      <div className="flex flex-wrap items-center gap-4">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outlined">悬停我</Button>
+          </TooltipTrigger>
+          <TooltipContent><p>提示文本</p></TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="text" size="small">上方</Button>
+          </TooltipTrigger>
+          <TooltipContent side="top">顶部弹出</TooltipContent>
+        </Tooltip>
+      </div>
+    </TooltipProvider>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性/组件 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 简洁提示文本 | `ReactNode` | - |
+| placement | 弹出方向 | `top` \| `bottom` \| `left` \| `right` 等 | `top` |
+| open | 受控显隐 | `boolean` | - |
+| TooltipProvider | 全局配置容器，`delayDuration` 控制延迟 | - | - |
+| TooltipTrigger | 触发器，常用 `asChild` | - | - |
+| TooltipContent | 弹出内容面板 | - | - |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `tooltip` | Tooltip 根 |
+| `tooltip-trigger` | 触发器 |
+| `tooltip-content` | 弹出内容 |
+
+<h2 id="faq">常见问题</h2>
+
+### Tooltip 和 Popover 的区别？
+
+- **Tooltip**：简短提示文本，用户 hover 后短暂延迟出现，点击后消失。
+- **Popover**：可容纳更多内容（标题、描述、操作按钮等），点击触发。
+
+### 如何禁用全局的 Tooltip 延迟？
+
+在 `TooltipProvider` 上设置 `delayDuration={0}`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/tooltip` 导入。
+2. 全局一次 `TooltipProvider`。
+3. `TooltipTrigger` 使用 `asChild`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tooltip" />

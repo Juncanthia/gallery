@@ -1,0 +1,32 @@
+Watermark 为页面内容添加水印，支持自定义文本、旋转角度和间距。
+
+<ComponentShowcase id="watermark" path="watermark/basic" />
+
+```tsx
+import { Watermark } from "@/components/ui/watermark"
+export default function Demo() {
+  return <Watermark content="机密文档" className="h-40 rounded border"><div className="flex h-full items-center justify-center p-4 text-sm">受保护内容</div></Watermark>
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| content | 水印文本 | `string \| string[]` | - |
+| rotate | 旋转角度 | `number` | `-22` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/watermark` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `watermark` | - |
+| `watermark-overlay` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="watermark" />

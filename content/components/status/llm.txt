@@ -1,0 +1,232 @@
+---
+category: Blocks
+title: Status
+subtitle: 状态指示
+description: 展示系统或服务的在线、离线、维护中、降级等运行状态。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 37
+source:
+  component: src/components/blocks/status/index.tsx
+  docs: content/components/status/index.mdx
+  examples:
+    - content/components/status/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Status 状态指示
+
+Status 是一个复合组件，用于展示系统或服务的运行状态。它基于 Badge 构建，通过 CSS `group` 机制将状态类名向下传递给 StatusIndicator（状态圆点）和 StatusLabel（状态文本），实现一致的视觉联动。
+
+本组件是项目本地复合块，没有直接对应的 Ant Design 组件。
+
+## 何时使用 {#when-to-use}
+
+适合在需要展示系统、服务或节点运行状态的场景中使用。
+
+常见场景：
+
+- 仪表盘、监控面板中展示服务健康状态。
+- 管理后台的节点、实例、连接状态列表中作为行级状态指示。
+- 用户在线/离线/忙碌状态的轻量展示。
+- 需要状态圆点 + 文本联动的场景（如 Dropdown 菜单项、列表项、表格列）。
+
+不推荐：
+
+- 用 Status 代替 Badge 做数字徽标、通知计数等用途。
+- 为了照搬 Ant Design 的 `Badge.status` API 而在 Status 上新增不存在的 props。
+- 在调用侧绕过 `group` 机制，直接复写子组件的 className 控制颜色。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Status } from "@/components/ui/status"
+
+export default function Demo() {
+  return <Status className="w-full max-w-sm" />
+}
+```
+
+### 带自定义标签
+
+```tsx
+import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Status status="online">
+        <StatusIndicator />
+        <StatusLabel>服务正常</StatusLabel>
+      </Status>
+      <Status status="offline">
+        <StatusIndicator />
+        <StatusLabel>服务离线</StatusLabel>
+      </Status>
+    </div>
+  )
+}
+```
+
+### 完整示例（指示器 + 默认标签）
+
+```tsx
+import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-3">
+      <Status status="online">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+      <Status status="offline">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+      <Status status="maintenance">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+      <Status status="degraded">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+    </div>
+  )
+}
+```
+
+> 说明：StatusLabel 不传 children 时会自动根据父级 status 显示对应的英文标签（Online/Offline/Maintenance/Degraded）。
+
+## 核心导出 {#exports}
+
+- `Status`
+- `StatusIndicator`
+- `StatusLabel`
+- `StatusProps`
+- `StatusIndicatorProps`
+- `StatusLabelProps`
+
+## API {#api}
+
+### Status
+
+Status 基于 Badge 构建，继承 Badge 除 `status` 外的全部 props，并固定 `variant="secondary"`。
+
+```ts
+type StatusProps = Omit<ComponentProps<typeof Badge>, "status"> & {
+  status: "online" | "offline" | "maintenance" | "degraded"
+}
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| status | 运行状态，通过 CSS group 传递给子组件 | `"online"` \| `"offline"` \| `"maintenance"` \| `"degraded"` | - |
+| className | 根元素额外样式类 | `string` | - |
+| children | 通常放置 StatusIndicator 和 StatusLabel | `ReactNode` | - |
+
+> 注：Status 还继承 Badge 的 `asChild`、`count`、`dot`、`color`、`text`、`size`、`offset` 等 props。生成代码时以 `src/components/ui/badge.tsx` 的 BadgeProps 为准（排除 Badge 自身的 `status` 属性）。
+
+### StatusIndicator
+
+渲染一个带脉冲动画的状态圆点，颜色由父级 Status 的 `status` 值通过 `group-[.online]` 等 Tailwind 变体控制。
+
+```ts
+type StatusIndicatorProps = HTMLAttributes<HTMLSpanElement>
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 额外样式类 | `string` | - |
+
+颜色映射：
+- `online` → 翠绿色（emerald-500）
+- `offline` → 红色（red-500）
+- `maintenance` → 蓝色（blue-500）
+- `degraded` → 琥珀色（amber-500）
+
+### StatusLabel
+
+渲染状态文本。不传 children 时内置默认英文字符串（Online/Offline/Maintenance/Degraded），通过 `group-[.online]:block` 等变体控制显示。
+
+```ts
+type StatusLabelProps = HTMLAttributes<HTMLSpanElement>
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 额外样式类 | `string` | - |
+| children | 自定义标签文本，覆盖默认英文标签 | `ReactNode` | 根据 status 自动显示 |
+
+## 样式模型 {#styling-model}
+
+- 样式主要通过 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 核心机制：Status 根元素同时携带 `group` 类和状态值类（如 `online`），子组件使用 `group-[.online]:` 等 Tailwind 变体根据父级状态切换样式。
+- StatusIndicator 的双层 span 结构：外层做脉冲动画（`animate-ping`），内层做实心圆点，两者颜色一致。
+- 文本颜色使用 `text-muted-foreground` 项目级语义变量。
+- Status 固定 variant 为 `secondary`，不可通过 props 覆盖。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/status/index.tsx`
+
+直接依赖：
+
+- `@/components/ui/badge` — Status 底层基于 Badge 渲染
+- `@/lib/utils` — `cn` 类名合并工具
+
+实现注意：
+
+1. Status 是复合组件，由 Status + StatusIndicator + StatusLabel 三个子组件构成。
+2. 状态传递不依赖 React Context 或 prop drilling，而是利用 CSS `group` 机制——父元素的 class 上写状态值，子元素通过 `group-[.{status}]:` 变体响应。
+3. Status 固定 `variant="secondary"`，如需其他 Badge 表现应直接使用 Badge 而非 Status。
+4. StatusIndicator 使用 `animate-ping` 实现呼吸灯效果，适合表示"在线"等活跃状态。
+5. 该组件没有对应的 Ant Design 等效物，是项目本地设计的复合块。
+
+## 可访问性 {#accessibility}
+
+- Status 根元素保留 Badge 的基础 ARIA 语义。
+- 纯图标使用时（仅 StatusIndicator 无文本），应通过 `aria-label` 提供可访问名称。
+- 状态颜色不仅依赖视觉：每个状态有独立的 CSS class 名（`online`/`offline`/`maintenance`/`degraded`），可通过辅助技术或自动化工具识别。
+- StatusLabel 若被覆盖为自定义文本，建议使用简短、语义明确的中文状态词。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Status 是项目本地复合组件，Ant Design 没有直接对应的组件。AntD 的 Badge 支持 `status` 属性实现类似的状态圆点，但本项目的 Status 提供了更完整的复合体验（圆点 + 文本联动、脉冲动画、group 机制），且 API 设计独立。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 对应 AntD 组件 | 无直接对应；AntD Badge.status 为部分相似功能 |
+| API 来源 | 以 `src/components/blocks/status/index.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | Tailwind CSS + group 变体机制 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 本地复合块，不承诺与任何 AntD API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Status 代码时，应遵守：
+
+1. 从 `@/components/ui/status` 导入，不要从 `antd` 导入。
+2. Status 的 `status` prop 取值为 `"online"` | `"offline"` | `"maintenance"` | `"degraded"`，不要使用 Badge 的 `status` 枚举值（`success`/`processing`/`default`/`error`/`warning`）。
+3. Status 固定 variant 为 `secondary`，不要尝试传入 `variant` prop 覆盖。
+4. 子组件 StatusIndicator 和 StatusLabel 必须作为 Status 的 children 嵌套使用，不要独立使用，因为其样式依赖父级的 `group` 和状态 class。
+5. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
+6. 需要自定义样式时，优先使用 Badge 继承的 props；最后才使用 `className`。
+7. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/status/index.tsx`，不要凭 AntD 记忆生成。

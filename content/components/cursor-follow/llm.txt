@@ -1,0 +1,212 @@
+---
+category: Blocks
+title: CursorFollow
+subtitle: 光标跟随
+description: 光标跟随效果，支持自定义光标图形和跟随标签。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 3
+source:
+  component: src/components/blocks/cursor-follow/index.tsx
+  docs: content/components/cursor-follow/index.mdx
+  examples:
+    - content/components/cursor-follow/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# CursorFollow 光标跟随
+
+光标跟随效果组件，基于 motion/react 弹簧动画实现，支持自定义光标 SVG 图形和跟随标签内容。
+
+本组件是由多个 primitive 组合而成的复合组件（Blocks），无直接 Ant Design 对应项。实现以本地源码为准。
+
+## 何时使用 {#when-to-use}
+
+当需要在页面或局部区域展示自定义光标效果，并在光标附近显示跟随标签（如提示文字、状态信息）时使用。
+
+常见场景：
+
+- 增强页面视觉交互，用自定义图形替换系统默认光标。
+- 在光标附近展示上下文信息，如悬停元素的名称或状态。
+- 全局光标效果（`global` 模式），覆盖整个页面。
+
+不推荐：
+
+- 纯功能性提示场景，应优先使用 Tooltip。
+- 性能敏感的低端设备上同时使用大量全局光标实例。
+- 在调用侧绕过组件 API，直接操作底层 primitive 的 DOM 结构。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { CursorProvider, Cursor, CursorFollow } from "@/components/ui/cursor-follow"
+
+export default function Demo() {
+  return (
+    <CursorProvider className="w-full max-w-sm">
+      <div className="relative flex h-32 items-center justify-center rounded border bg-muted/20 p-4">
+        <p className="text-sm text-muted-foreground">移动鼠标查看光标跟随效果</p>
+        <CursorFollow>
+          <Cursor />
+        </CursorFollow>
+      </div>
+    </CursorProvider>
+  )
+}
+```
+
+> 说明：`CursorProvider` 必须作为最外层容器包裹光标区域。`Cursor` 渲染自定义 SVG 光标图形，`CursorFollow` 渲染跟随标签内容。二者通过 `CursorProvider` 共享光标位置上下文。
+
+## 核心导出 {#exports}
+
+- `CursorProvider`
+- `Cursor`
+- `CursorFollow`
+- `CursorProviderProps`
+- `CursorProps`
+- `CursorFollowProps`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+### CursorProviderProps
+
+```ts
+type CursorProviderProps = {
+  global?: boolean
+} & HTMLMotionProps<'div'> & { asChild?: boolean }
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| global | 是否全局模式，跟踪整个窗口的指针位置 | `boolean` | `false` |
+| className | 容器样式类 | `string` | - |
+| asChild | 是否渲染为子元素 | `boolean` | `false` |
+
+全局模式下光标使用 `fixed` 定位并跟踪全窗口指针；局部模式下光标使用 `absolute` 定位，跟踪父容器的指针位置。
+
+### CursorProps
+
+```ts
+type CursorProps = HTMLMotionProps<'div'>
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 光标容器样式类，与默认 `size-6 text-foreground` 合并 | `string` | - |
+| style | 内联样式，与默认定位样式合并 | `React.CSSProperties` | - |
+
+> `Cursor` 组件固定渲染为发式子元素（`asChild`），其子元素为默认的 SVG 箭头光标图形。如需自定义光标图形，需修改源码中的 SVG path。
+
+### CursorFollowProps
+
+```ts
+type CursorFollowProps = Omit<HTMLMotionProps<'div'>, 'transition'> & {
+  side?: 'top' | 'right' | 'bottom' | 'left'
+  sideOffset?: number
+  align?: 'start' | 'center' | 'end'
+  alignOffset?: number
+  transition?: SpringOptions
+  children: React.ReactNode
+}
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 跟随标签相对于光标的位置 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| sideOffset | 跟随标签距离光标的间距（px） | `number` | `15` |
+| align | 跟随标签的对齐方式 | `'start' \| 'center' \| 'end'` | `'end'` |
+| alignOffset | 对齐偏移量（px） | `number` | `5` |
+| transition | spring 弹簧动画配置 | `SpringOptions` | `{ stiffness: 500, damping: 50, bounce: 0 }` |
+| className | 标签容器样式类，与默认 `bg-foreground rounded-md text-background px-2 py-1 text-sm` 合并 | `string` | - |
+| children | 跟随标签内容 | `React.ReactNode` | - |
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `cursor-container`
+- `cursor`
+- `cursor-follow`
+
+额外状态属性：
+
+- `data-slot`
+- `data-global`
+- `data-active`
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 光标跟随组件基于 motion/react 实现；定位（`absolute`/`fixed`）、动画（`initial`/`animate`/`exit`）和弹簧物理效果来自 motion，本地组件负责视觉和 API 收敛。
+- 主题颜色优先使用 `text-foreground`、`bg-foreground`、`text-background` 等项目级语义变量。
+- 组件属性在 className 合并链中位于默认样式之后，可通过 className 覆盖。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/cursor-follow/index.tsx`（复合组件定义）
+- `src/components/ui/cursor-follow.tsx`（再导出入口）
+- `src/primitives/animate/cursor.tsx`（底层 primitive 实现）
+
+直接依赖摘要：
+
+- `motion/react`（`motion`、`useMotionValue`、`useSpring`、`AnimatePresence`、`SpringOptions`）
+- `@/primitives/animate/slot`（Slot 组件，asChild 模式）
+- `@/lib/get-strict-context`（强类型 React Context）
+- `@/lib/utils`（cn 样式合并）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. `CursorProvider` 必须包裹所有 `Cursor` 和 `CursorFollow` 实例，提供光标位置上下文。
+3. 组件内置了隐藏原生光标的样式注入（`.animate-ui-cursor-none`），通过 `data-active` 属性在光标活跃时自动切换。
+4. 如果需要新增能力，应先修改该组件源码，再更新本 llm 文档。
+5. 不要把第三方文档中的全量 API 视为本地已支持能力。
+
+## 可访问性 {#accessibility}
+
+- 组件为非交互型视觉增强组件，不影响原生元素的键盘语义。
+- `Cursor` 和 `CursorFollow` 设置了 `pointerEvents: 'none'`，不会阻挡底层元素的指针事件。
+- 如需在跟随标签中放置交互内容，需移除对应元素的 `pointerEvents: 'none'` 样式。
+- 全局模式下提供了 `visibilitychange` 和 `pointerout` 事件处理，确保标签页切换时光标状态正确。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/cursor-follow/index.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| AntD 对应 | 无直接 Ant Design 对应项，为项目本地复合组件 |
+| 定位方式 | 基于 motion/react 弹簧物理，非 CSS transition |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 CursorFollow 代码时，应遵守：
+
+1. 从 `@/components/ui/cursor-follow` 导入，不要从 `antd` 导入。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. `CursorProvider` 必须包裹所有 `Cursor` 和 `CursorFollow` 子组件，否则它们无法获取光标位置上下文。
+4. `CursorFollow` 必须包含 `children` prop，放置跟随标签的内容（可以包含 `Cursor` 或其他自定义内容）。
+5. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
+6. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+7. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/cursor-follow/index.tsx`，不要凭 AntD 记忆生成。

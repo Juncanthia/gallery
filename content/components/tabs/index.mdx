@@ -1,0 +1,121 @@
+Tabs 在同一区域内切换展示不同内容面板。基于 Radix Tabs 实现，支持 `line`/`card` 样式、`small`/`middle`/`large` 尺寸、`top`/`bottom`/`start`/`end` 四个标签位置和居中布局。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在有限空间内组织多组内容，让用户在不同视图间切换时使用。
+
+- 设置页面的分类（如"个人信息"、"安全设置"、"通知偏好"）。
+- 数据仪表盘的不同指标视图（如"日"、"周"、"月"）。
+- 详情页的多 Tab 信息展示（如"基本信息"、"操作日志"、"关联数据"）。
+- 当内容分组清晰且用户需要频繁切换时，Tabs 比 Accordion 更直观。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`TabsList` 包含 `TabsTrigger`，`TabsContents` 包含 `TabsContent`，两者的 `value` 需匹配。
+
+<ComponentShowcase
+  id="tabs"
+  path="tabs/basic"
+/>
+
+```tsx
+import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+export default function Demo() {
+  return (
+    <Tabs defaultActiveKey="tab1" className="w-full max-w-sm">
+      <TabsList>
+        <TabsTrigger value="tab1">标签一</TabsTrigger>
+        <TabsTrigger value="tab2">标签二</TabsTrigger>
+        <TabsTrigger value="tab3">标签三</TabsTrigger>
+      </TabsList>
+      <TabsContents>
+        <TabsContent value="tab1">
+          <p className="p-4 text-sm text-muted-foreground">标签一的内容</p>
+        </TabsContent>
+        <TabsContent value="tab2">
+          <p className="p-4 text-sm text-muted-foreground">标签二的内容</p>
+        </TabsContent>
+        <TabsContent value="tab3">
+          <p className="p-4 text-sm text-muted-foreground">标签三的内容</p>
+        </TabsContent>
+      </TabsContents>
+    </Tabs>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Tabs
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| activeKey | 受控激活的 tab 的 key | `string` | - |
+| defaultActiveKey | 默认激活的 tab 的 key | `string` | 第一个 |
+| onChange | 切换 tab 时的回调 | `(key: string) => void` | - |
+| items | 声明式配置，替代子组件写法 | `TabsItem[]` | - |
+| type | 样式类型，`card` 为卡片式 | `line` \| `card` | `line` |
+| size | 标签尺寸 | `small` \| `middle` \| `large` | `middle` |
+| tabPlacement | 标签位置 | `top` \| `bottom` \| `start` \| `end` | `top` |
+| centered | 标签栏是否居中 | `boolean` | `false` |
+| tabBarExtraContent | 标签栏额外内容 | `ReactNode \| { left?, right? }` | - |
+
+### TabsItem（items 模式）
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| key | 唯一标识 | `string` |
+| label | 标签文本 | `ReactNode` |
+| children | 对应内容面板的内容 | `ReactNode` |
+| disabled | 是否禁用该标签 | `boolean` |
+| icon | 标签图标 | `ReactNode` |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| TabsList | 标签栏容器 |
+| TabsTrigger | 单个标签按钮，`value` 匹配 `TabsContent` |
+| TabsContents | 内容面板容器 |
+| TabsContent | 单个内容面板，`value` 匹配 `TabsTrigger` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `tabs` | Tabs 根元素 |
+| `tabs-list` | 标签栏 |
+| `tabs-trigger` | 单个标签按钮 |
+| `tabs-content` | 内容面板 |
+
+<h2 id="faq">常见问题</h2>
+
+### 何时使用 items 模式 vs 子组件模式？
+
+- **items 模式**：标签结构简单、无复杂交互时，代码更简洁。
+- **子组件模式**：需要在标签栏插入额外元素（如搜索框、按钮）或自定义内容面板结构时使用。
+
+### 如何实现动态增减标签？
+
+使用 `items` 数组，通过 `splice`/`push` 操控数组并用 `activeKey` 控制激活项。关闭标签时需处理"当前激活标签被关闭"的回退逻辑。
+
+### 如何使用垂直标签？
+
+设置 `tabPlacement="start"` 或 `tabPlacement="end"`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Tabs 代码时：
+
+1. 从 `@/components/ui/tabs` 导入。
+2. 使用 `activeKey` 控制激活项（非 `value`）。
+3. `TabsTrigger` 的 `value` 和 `TabsContent` 的 `value` 必须一一对应。
+4. 简单场景优先使用 `items` 声明模式。
+5. 不要引入 Ant Design 的 `Tabs`。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="tabs" />

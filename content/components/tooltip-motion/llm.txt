@@ -1,0 +1,230 @@
+---
+category: Blocks
+title: TooltipMotion
+subtitle: 动效提示
+description: 带布局动画和弹性动效的提示组件，进出场伴随位移/缩放过渡，内容变更时自动布局变形。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 52
+source:
+  component: src/components/blocks/tooltip-motion/index.tsx
+  docs: content/components/tooltip-motion/index.mdx
+  examples:
+    - content/components/tooltip-motion/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# TooltipMotion 动效提示
+
+带布局动画和弹性动效的提示组件，基于 `@/primitives/animate/tooltip` 构建，额外叠加 `motion/react-client` 的 `layout` 动画能力。Tooltip 显示/隐藏时带有位移和缩放入场动画，内容变化时自动触发布局变形过渡。
+
+本组件为项目本地复合组件，无 Ant Design 直接对应。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
+
+## 何时使用 {#when-to-use}
+
+当需要提示信息（Tooltip）并期望提示框具有流畅的进出场动效和内容布局过渡时使用。
+
+常见场景：
+
+- 需要提示框出现/消失时伴随弹性缩放和位移动画，提升交互感知。
+- Tooltip 内容动态变化（如切换文案、加载状态）时需要平滑布局过渡。
+- 需要和本项目已有的动画提示体系保持一致，共享 `TooltipProvider` 的延迟和过渡配置。
+
+不推荐：
+
+- 纯静态提示且不在意动效开销——可使用 `@/components/ui/tooltip` 基础版。
+- 在性能敏感的大批量渲染场景中频繁触发。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Tooltip } from "@/components/ui/tooltip-motion"
+
+export default function Demo() {
+  return <Tooltip className="w-full max-w-sm" />
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。完整用法需组合 `TooltipProvider`、`Tooltip`、`TooltipTrigger`、`TooltipContent`，结合下方 API 摘要补全必需 props。
+
+## 核心导出 {#exports}
+
+- `TooltipProvider`
+- `Tooltip`
+- `TooltipTrigger`
+- `TooltipContent`
+- `TooltipProviderProps`
+- `TooltipProps`
+- `TooltipTriggerProps`
+- `TooltipContentProps`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+### TooltipProvider
+
+```ts
+type TooltipProviderProps = {
+  children: React.ReactNode;
+  /** 可选 ID，用于 layoutId 去重 */
+  id?: string;
+  /** 打开延迟（ms），默认 0 */
+  openDelay?: number;
+  /** 关闭延迟（ms），默认 300 */
+  closeDelay?: number;
+  /** motion Transition 配置，默认 spring */
+  transition?: Transition;
+}
+```
+
+`TooltipProvider` 必须包裹在所有 Tooltip 组件的最外层。
+
+### Tooltip
+
+```ts
+type TooltipProps = {
+  children: React.ReactNode;
+  /** 弹出方向，默认 'top' */
+  side?: 'top' | 'bottom' | 'left' | 'right';
+  /** 主轴偏移量，默认 10 */
+  sideOffset?: number;
+  /** 对齐方式，默认 'center' */
+  align?: 'start' | 'center' | 'end';
+  /** 交叉轴偏移量，默认 0 */
+  alignOffset?: number;
+}
+```
+
+`Tooltip` 作为单个提示实例的容器，内部放置 `TooltipTrigger` 和 `TooltipContent`。
+
+### TooltipTrigger
+
+```ts
+type TooltipTriggerProps = {
+  /** 是否透传 Slot 渲染，默认 false */
+  asChild?: boolean;
+  children?: React.ReactNode;
+  /** 透传所有 HTMLMotionProps<'div'>，含 className、style、事件等 */
+}
+```
+
+`TooltipTrigger` 监听鼠标进入/离开、聚焦/失焦事件以控制提示的显示与隐藏。
+
+### TooltipContent
+
+```ts
+type TooltipContentProps = {
+  children: React.ReactNode;
+  /** layout 动画模式，默认 'preserve-aspect' */
+  layout?: boolean | 'position' | 'size' | 'preserve-aspect';
+  /** 透传所有 HTMLMotionProps<'div'>，含 className、style 等 */
+}
+```
+
+`TooltipContent` 不再支持 `asChild`（已移除），始终渲染为独立的 `motion.div` 容器，内部嵌套带 `layout` 动画的 `motion.div`。
+
+内置结构：
+
+- 外层 `motion.div`：`overflow-hidden px-3 py-1.5 text-xs text-balance`，承载进出场动画。
+- 内层 `motion.div`：根据 `layout` prop 控制内容变化时的布局过渡。
+- `TooltipArrow`：自动渲染的箭头，带 `fill-primary` 和 `tipRadius={2}`，根据弹出方向自动调整位移和旋转。
+
+核心样式：`z-50 w-fit bg-primary text-primary-foreground rounded-md`。
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位（来自底层 primitive）：
+
+- `data-slot="tooltip-overlay"` — 浮动层容器
+- `data-slot="tooltip-content"` — 内容根节点
+- `data-slot="tooltip-trigger"` — 触发器
+- `data-slot="tooltip-arrow"` — 箭头
+
+额外状态属性：
+
+- `data-state`：`'open'` | `'closed'`
+- `data-side`：`'top'` | `'bottom'` | `'left'` | `'right'`
+- `data-align`：`'start'` | `'center'` | `'end'`
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 组件包装 `@/primitives/animate/tooltip` primitive，交互状态、键盘行为、ARIA 基础和浮动定位能力来自底层 primitive；本地复合组件负责视觉收敛和 motion 动画叠加。
+- 进出场动画由 primitive 内置的 `motion.div`（带 `AnimatePresence`）控制，使用 spring 过渡（stiffness: 300, damping: 35）。
+- 内容布局动画由复合层添加的 `motion.div layout` prop 控制。
+- 主题颜色使用 `bg-primary`、`text-primary-foreground`、`fill-primary` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/tooltip-motion/index.tsx`（复合组件）
+- `src/components/ui/tooltip-motion.tsx`（barrel 导出）
+
+直接依赖摘要：
+
+- `@/primitives/animate/tooltip` — 动画 Tooltip primitive（基于 `@floating-ui/react` 定位 + `motion/react` 动画）
+- `motion/react-client` — 布局动画 `motion.div`
+- `@/lib/utils` — `cn` 样式合并工具
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 复合组件在 primitive 基础上增加了默认 `openDelay={0}`（即时响应）和 `sideOffset={10}`。
+3. `TooltipContent` 的 `asChild` 已被移除——内容始终渲染为独立的动画容器，不可复用 Slot 模式。
+4. 箭头样式通过 `data-side` 属性做方向微调（translate 偏移），使用 `fill-primary` 匹配主题色。
+5. 如需调整动效参数（弹性、阻尼），应在 `TooltipProvider` 的 `transition` prop 中配置。
+6. 如果需要新增能力，应先修改 `src/components/blocks/tooltip-motion/index.tsx`，再更新本 llm 文档。
+
+## 可访问性 {#accessibility}
+
+- 底层 primitive 保留鼠标悬停和键盘聚焦触发能力，Escape 键可即时关闭提示。
+- 提示内容通过 `FloatingPortal` 渲染至 body，保持 DOM 层级合理。
+- 交互状态通过 `data-state` 属性暴露，可用于屏幕阅读器和测试脚本。
+- 纯图标触发器必须提供明确的可访问名称（`aria-label` 或可见文本）。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，无 Ant Design 直接对应。其基于 `@floating-ui/react`（非 AntD 的 rc-tooltip）和 `motion/react-client`（非 AntD 的 rc-motion）实现。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 组件来源 | 项目本地复合，非 AntD 封装 |
+| API 来源 | 以 `src/components/blocks/tooltip-motion/index.tsx` 的 TypeScript 类型为准 |
+| 动画方案 | 使用 motion/react-client layout 动画 + spring 过渡 |
+| 定位方案 | 基于 @floating-ui/react，非 AntD 的 rc-trigger |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 TooltipMotion 代码时，应遵守：
+
+1. 从 `@/components/ui/tooltip-motion` 导入，不要从 `antd` 导入。
+2. 必须用 `TooltipProvider` 包裹所有 Tooltip 实例，推荐在应用根布局中放置。
+3. 每个 Tooltip 内部放置 `TooltipTrigger` 和 `TooltipContent` 两个子组件，顺序不限。
+4. 只使用本文件 API 摘要和源码中存在的 props。
+5. `TooltipContent` 不支持 `asChild`，不要尝试传入该 prop。
+6. 需要自定义动效时，在 `TooltipProvider` 上配置 `transition` prop，使用 motion Transition 对象。
+7. 需要自定义箭头样式时，通过 `TooltipContent` 的 `className` 或源码中箭头的 Tailwind class 覆盖；箭头由组件自动渲染，无需手动添加。
+8. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
+9. 交互组件必须保留键盘和 ARIA 语义，纯图标触发器必须补 `aria-label`。
+10. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/tooltip-motion/index.tsx`，不要凭 AntD 记忆生成。

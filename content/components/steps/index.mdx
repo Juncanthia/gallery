@@ -1,0 +1,99 @@
+Steps 引导用户按流程完成多步任务。每个步骤包含状态图标（等待/进行中/完成/错误）、标题和描述信息。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当任务需要多个步骤依次完成时使用。
+
+- 多步骤表单引导（填写信息 → 验证 → 完成注册）。
+- 订单物流进度展示（已下单 → 已发货 → 已送达）。
+- 向导式配置流程。
+- 任务审核进度（提交 → 审核中 → 通过/驳回）。
+
+Steps 的 `current` 从 0 开始计数，每个步骤根据与 `current` 的位置关系自动计算状态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`items` 定义步骤列表，`current` 控制当前步骤。配合 Button 实现前进/后退。
+
+<ComponentShowcase id="steps" path="steps/basic" />
+
+```tsx
+import { useState } from "react"
+import { Steps } from "@/components/ui/steps"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [current, setCurrent] = useState(1)
+  const items = [
+    { title: "第一步", description: "填写基本信息" },
+    { title: "第二步", description: "验证身份" },
+    { title: "第三步", description: "完成注册" },
+  ]
+  return (
+    <div className="w-full space-y-4">
+      <Steps current={current} items={items} />
+      <div className="flex gap-2">
+        <Button size="small" disabled={current <= 0} onClick={() => setCurrent(current - 1)}>上一步</Button>
+        <Button size="small" color="primary" variant="solid" disabled={current >= 2} onClick={() => setCurrent(current + 1)}>下一步</Button>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Steps
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 步骤配置列表（必填） | `StepItem[]` | - |
+| current | 当前激活步骤索引（从 0 开始） | `number` | `0` |
+| initial | 起始偏移量（步骤编号 = initial + index） | `number` | `0` |
+| direction | 排列方向 | `horizontal` \| `vertical` | `horizontal` |
+| size | 尺寸 | `default` \| `small` | `default` |
+| type | 类型：`navigation` 可点击导航，`inline` 内联模式，`panel` 面板模式 | `default` \| `navigation` \| `inline` \| `panel` | `default` |
+| status | 当前步骤默认状态 | `wait` \| `process` \| `finish` \| `error` | `process` |
+| progressDot | 圆点模式，`true` 或用函数自定义圆点渲染 | `boolean \| ProgressDotRender` | `false` |
+| titlePlacement | 标题位置（相对图标） | `horizontal` \| `vertical` | `vertical` |
+
+### StepItem
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| title | 步骤标题 | `ReactNode` |
+| description | 步骤描述（显示在标题下方） | `ReactNode` |
+| subTitle | 副标题 | `ReactNode` |
+| icon | 自定义步骤图标 | `ReactNode` |
+| status | 单独指定该步骤的状态 | `StepStatus` |
+| disabled | 是否禁用点击 | `boolean` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `steps` | Steps 根容器 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何标记某步骤为失败？
+
+在对应 `StepItem` 中设置 `status: "error"`。
+
+### `type` 属性的各模式有什么区别？
+
+- `default`：标准步骤条，只读展示。
+- `navigation`：步骤标题变为可点击按钮，配合 `onChange` 实现点击跳转。
+- `dot`：点状步骤条，适合空间紧凑的场景（也可用 `progressDot`）。
+- `inline`：内联模式，步骤以卡片方式展示。
+- `panel`：面板模式，步骤带有背景面板。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/steps` 导入。
+2. `current` 从 0 开始计数。
+3. `items` 中每个 item 至少需提供 `title`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="steps" />

@@ -1,0 +1,81 @@
+Slider 滑动型输入器，展示当前值和可选范围。支持单值、双值范围、刻度标记、步进圆点和 Tooltip 提示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 当需要在连续或离散的数值范围内进行选择时。
+- 音量、亮度等精确度要求不高的调节。
+- 价格区间、年龄段等范围筛选。
+- 评分或权重等数值调校。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+单值、范围、刻度标记三种典型模式。
+
+<ComponentShowcase id="slider" path="slider/basic" />
+
+```tsx
+import { useState } from "react"
+import { Slider } from "@/components/ui/slider"
+
+export default function Demo() {
+  const [value, setValue] = useState(30)
+  return (
+    <div className="w-full max-w-sm space-y-6">
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">基础: {value}</p>
+        <Slider value={value} onChange={setValue} />
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">范围</p>
+        <Slider range defaultValue={[20, 60]} />
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">刻度</p>
+        <Slider marks={{ 0: "0", 25: "25", 50: "50", 75: "75", 100: "100" }} defaultValue={40} />
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控值 | `number`（单值）/ `number[]`（范围） | - |
+| defaultValue | 默认值 | 同上 | `0` / `[0, 100]` |
+| onChange | 值变化回调，单值返回 `number`，范围返回 `number[]` | `(value) => void` | - |
+| onChangeComplete | 拖拽结束后的回调 | `(value) => void` | - |
+| range | 是否启用双滑块范围模式 | `boolean` | `false` |
+| min | 最小值 | `number` | `0` |
+| max | 最大值 | `number` | `100` |
+| step | 步长，`null` 表示连续滑动 | `number \| null` | `1` |
+| marks | 刻度标记，键为数值，值为展示文本或配置 | `Record<number, SliderMark>` | - |
+| dots | 是否显示步进圆点 | `boolean` | `false` |
+| tooltip | 拖拽时浮层提示配置，`false` 关闭 | `{ formatter?, placement? } \| false` | 显示数值 |
+| included | 轨道已选部分是否高亮 | `boolean` | `true` |
+| reverse | 是否反向 | `boolean` | `false` |
+| vertical | 是否垂直模式 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `slider-wrapper` | 外层包裹（用于刻度标记定位） |
+| `slider` | Slider 根元素 |
+| `slider-track` | 轨道 |
+| `slider-range` | 已选范围高亮 |
+| `slider-thumb` | 拖拽滑块 |
+| `slider-dot` | 步进圆点 |
+| `slider-mark` / `slider-marks` | 刻度标记 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/slider` 导入。
+2. 单值不设 `range`，范围必须设 `range`。
+3. 需要停顿点用 `marks`，需要均匀步进点用 `dots`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="slider" />

@@ -1,0 +1,98 @@
+Checkbox 用于收集用户的多项选择。`Checkbox` 为单选框（常用于协议勾选），`CheckboxGroup` 管理一组复选框的选中值。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 在一组可选项中进行多项选择时，使用 CheckboxGroup。
+- 单个勾选确认时（如"同意用户协议"），使用 Checkbox。
+- 需要"全选/反选"操作时，可组合 Checkbox + CheckboxGroup。
+- 仅需选择一个选项时，使用 RadioGroup 更合适。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+单个 Checkbox 配合 `label`，多选用 `CheckboxGroup` + `options`。
+
+<ComponentShowcase id="checkbox" path="checkbox/basic" />
+
+```tsx
+import { useState } from "react"
+import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox"
+
+export default function Demo() {
+  const [checked, setChecked] = useState(false)
+  const [groupValue, setGroupValue] = useState<string[]>([])
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-4">
+        <Checkbox checked={checked} onChange={setChecked} label="同意条款" />
+        <Checkbox defaultChecked label="默认选中" />
+        <Checkbox disabled label="禁用" />
+      </div>
+      <CheckboxGroup options={[
+        { label: "选项 A", value: "a" },
+        { label: "选项 B", value: "b" },
+        { label: "选项 C", value: "c" },
+      ]} value={groupValue} onValueChange={setGroupValue} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Checkbox
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| checked | 是否选中（受控） | `boolean \| "indeterminate"` | - |
+| defaultChecked | 默认选中 | `boolean` | `false` |
+| onChange | 选中状态变化回调，参数为 `boolean` | `(checked: boolean) => void` | - |
+| label | 复选框后的文本标签 | `ReactNode` | - |
+| size | 尺寸 | `small` \| `middle` \| `large` | `middle` |
+| variant | 样式变体 | `default` \| `accent` | `default` |
+| disabled | 是否禁用 | `boolean` | `false` |
+
+### CheckboxGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 复选框选项列表 | `(CheckboxOption \| string \| number)[]` | `[]` |
+| value | 受控选中值列表 | `CheckboxValue[]` | - |
+| defaultValue | 默认选中值列表 | `CheckboxValue[]` | - |
+| onValueChange | 选中值变化回调 | `(value: CheckboxValue[]) => void` | - |
+| direction | 排列方向 | `horizontal` \| `vertical` | `horizontal` |
+| disabled | 是否全部禁用 | `boolean` | `false` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `checkbox` | Checkbox 根元素 |
+| `checkbox-group` | CheckboxGroup 容器 |
+| `checkbox-indicator` | 选中指示器（勾选图标） |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现全选/反选？
+
+在 CheckboxGroup 外部添加一个独立的 Checkbox，通过操作 `value` 数组实现：
+
+```tsx
+const allValues = options.map(o => o.value)
+<Checkbox checked={value.length === allValues.length}
+  onChange={(c) => setValue(c ? allValues : [])} label="全选" />
+<CheckboxGroup options={options} value={value} onValueChange={setValue} />
+```
+
+### `onChange` 返回什么？
+
+`Checkbox.onChange` 返回 `boolean`（表示是否选中），不是事件对象。`CheckboxGroup.onValueChange` 返回 `CheckboxValue[]`（当前所有选中值）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/checkbox` 导入。
+2. 多用 CheckboxGroup + options，单选用 Checkbox + label。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="checkbox" />

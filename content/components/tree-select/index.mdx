@@ -1,0 +1,26 @@
+TreeSelect 树形选择器，从树状数据中选择一个或多个值。
+
+<ComponentShowcase id="tree-select" path="tree-select/basic" />
+
+```tsx
+import { TreeSelect } from "@/components/ui/tree-select"
+export default function Demo() { return <TreeSelect treeData={[{ key: "1", title: "根节点", children: [{ key: "1-1", title: "子节点" }] }]} placeholder="请选择" className="w-48" /> }
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| treeData | 树数据 | `TreeNode[]` |
+| value | 选中值 | `string \| string[]` |
+| onChange | 变化回调 | `(value) => void` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/tree-select` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tree-select" />

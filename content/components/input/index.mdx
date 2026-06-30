@@ -1,0 +1,163 @@
+Input 通过鼠标或键盘输入内容，是最基础的表单控件。支持前后缀、清除按钮、密码显隐、数字步进、字数统计和 TextArea 模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 需要用户输入文本、数字、密码等单行内容时，使用 Input。
+- 需要多行输入时，使用 TextArea（`autoSize` 自适应高度）。
+- 需要带前后缀的输入时（如 URL 的 `https://`），使用 `prefix` / `suffix`。
+- 需要搜索框时，配合 `prefix` 图标和 `allowClear`。
+- 需要数字步进时，使用 Input 的 number 变体。
+
+当选项固定且数量少时（< 5 项），使用 Select 或 RadioGroup 可能更合适。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+支持前后缀、清除按钮、校验状态和禁用态。
+
+<ComponentShowcase
+  id="input"
+  path="input/basic"
+/>
+
+```tsx
+import { Input } from "@/components/ui/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-start gap-4">
+      <Input placeholder="请输入内容" className="w-48" />
+      <Input placeholder="搜索..." prefix={<span>🔍</span>} className="w-48" />
+      <Input placeholder="URL..." suffix={<span>.com</span>} allowClear className="w-48" />
+      <Input status="error" placeholder="错误状态" className="w-48" />
+      <Input disabled defaultValue="禁用内容" className="w-48" />
+    </div>
+  )
+}
+```
+
+### 尺寸与变体
+
+三种尺寸 + `filled` 变体。
+
+<ComponentShowcase
+  id="sizes"
+  path="input/sizes"
+/>
+
+```tsx
+import { Input } from "@/components/ui/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-end gap-4">
+      <Input size="small" placeholder="小尺寸" className="w-36" />
+      <Input placeholder="中尺寸（默认）" className="w-44" />
+      <Input size="large" placeholder="大尺寸" className="w-52" />
+      <Input variant="filled" placeholder="filled 变体" className="w-44" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Input
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 视觉变体，`filled` 有背景色 | `default` \| `filled` | `default` |
+| size | 输入框尺寸 | `small` \| `middle` \| `large` | `middle` |
+| status | 校验状态，设 `error` 时显示红色边框 | `error` \| `warning` | - |
+| prefix | 输入框前部的内容，常用于图标 | `ReactNode` | - |
+| suffix | 输入框尾部的内容 | `ReactNode` | - |
+| allowClear | 是否显示清除按钮，有值时可一键清空 | `boolean \| { clearIcon?: ReactNode }` | - |
+| count | 字数统计配置 | `{ show?, max?, strategy?, formatter? }` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| placeholder | 占位提示文本 | `string` | - |
+| type | 原生 `<input>` 的 type 属性 | `string` | `text` |
+| onChange | 输入值变化回调 | `(e: ChangeEvent) => void` | - |
+| onPressEnter | 按下回车键时的回调 | `(e: KeyboardEvent) => void` | - |
+
+继承原生 `<input>` 所有 HTML 属性。额外通过 ref 暴露 `focus()`、`blur()`、`select()` 等命令式方法。
+
+### TextArea
+
+Input 模块同时导出 TextArea，用于多行文本输入：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| autoSize | 自适应内容高度 | `boolean \| { minRows?, maxRows? }` | `false` |
+| showCount | 显示字数统计 | `boolean` | `false` |
+| maxLength | 最大输入长度 | `number` | - |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `input` | Input 根元素 |
+| `input-wrapper` | 输入框外层包裹 |
+| `input-prefix` | 前缀区域 |
+| `input-suffix` | 后缀区域 |
+| `input-addon-wrapper` | 附加内容包裹 |
+| `input-count` | 字数统计区域 |
+| `input-number` | 数字输入框 |
+| `input-number-control` | 数字步进控件 |
+| `input-otp` | OTP 输入组 |
+| `input-otp-slot` | OTP 单个字符槽 |
+| `input-otp-separator` | OTP 分隔符 |
+| `input-otp-group` | OTP 字符组 |
+| `textarea` | TextArea 元素 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现密码显隐切换？
+
+Input 内置密码类型支持。也可以使用原生 `type="password"`：
+
+```tsx
+<Input type="password" placeholder="请输入密码" />
+```
+
+### 如何实现数字步进？ 
+
+Input 导出 number 变体，自动展示 +/- 步进按钮。
+
+### 如何配合表单校验和 Feedback？
+
+使用 `status="error"` + FormItem 展示校验状态：
+
+```tsx
+<FormItem validateStatus="error">
+  <FormItemLabel>邮箱</FormItemLabel>
+  <FormItemControl>
+    <Input status="error" placeholder="请输入邮箱" />
+  </FormItemControl>
+  <FormItemMessage>邮箱格式不正确</FormItemMessage>
+</FormItem>
+```
+
+### 如何获取 Input 的 DOM 引用？
+
+通过 ref 获取命令式方法：
+
+```tsx
+const ref = useRef<InputRef>(null)
+ref.current?.focus()
+ref.current?.input // 原生 HTMLInputElement
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Input 代码时：
+
+1. 从 `@/components/ui/input` 导入 Input 和 TextArea。
+2. 使用 `prefix` / `suffix` 添加图标和装饰，不要在外层额外包裹。
+3. 校验状态使用 `status` 属性，配合 FormItem 展示错误信息。
+4. 多行输入使用 TextArea，设置 `autoSize` 自适应内容高度。
+5. 不要引入 Ant Design 的 `Input` 或 `Input.TextArea`。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="input" />

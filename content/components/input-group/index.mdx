@@ -1,0 +1,84 @@
+InputGroup 将输入框与前后缀、按钮等元素紧凑组合，提供统一的聚焦和禁用样式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在输入框前后附加文本标签、图标、按钮或快捷键提示时使用。InputGroup 自动处理边框圆角衔接和聚焦态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 `InputGroupAddon` 添加入口前后缀，`align` 控制位置。
+
+<ComponentShowcase
+  id="input-group"
+  path="input-group/basic"
+/>
+
+```tsx
+import { InputGroup, InputGroupAddon } from "@/components/ui/input-group"
+import { Button } from "@/components/ui/button"
+import { Kbd } from "@/components/ui/kbd"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-3">
+      <InputGroup>
+        <InputGroupAddon align="inline-start">https://</InputGroupAddon>
+        <input className="flex-1 bg-transparent px-2 py-1.5 text-sm outline-none" placeholder="example.com" />
+      </InputGroup>
+      <InputGroup>
+        <input className="flex-1 bg-transparent px-2 py-1.5 text-sm outline-none" placeholder="搜索..." />
+        <InputGroupAddon align="inline-end">
+          <Kbd>⌘K</Kbd>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <input className="flex-1 bg-transparent px-2 py-1.5 text-sm outline-none" placeholder="输入内容" />
+        <InputGroupAddon align="inline-end">
+          <Button size="small" variant="text">发送</Button>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### InputGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式 | `string` | - |
+| children | 输入框和附加元素 | `ReactNode` | - |
+
+### InputGroupAddon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| align | 附加位置 | `inline-start` \| `inline-end` \| `block-start` \| `block-end` | `inline-start` |
+| className | 附加样式 | `string` | - |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 InputGroup 代码时：
+
+1. 从 `@/components/ui/input-group` 导入。
+2. 内部的 input 使用 `flex-1 bg-transparent` 确保填满空间。
+3. 不要引入 Ant Design 的 `Input.Group`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `input-group` | - |
+| `input-group-addon` | - |
+| `input-group-control` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="input-group" />

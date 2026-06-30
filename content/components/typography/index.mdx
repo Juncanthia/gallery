@@ -1,0 +1,276 @@
+Typography 提供文本排版能力：Text（行内文本）、Title（标题）、Paragraph（段落）和 Link（链接）。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对文本进行统一的语义化排版时使用。Typography 提供类型、尺寸、字重、装饰等标准化样式，以及复制、溢出省略等交互能力。
+
+常见场景：
+
+- 页面标题层级（H1-H5）。
+- 正文段落的语义区分（主文本、次要文本、成功、警告、危险）。
+- 行内代码、键盘按键、高亮标记等特殊文本。
+- 可复制的标题或段落。
+- 单行/多行文本溢出省略。
+
+<h2 id="examples">代码演示</h2>
+
+### 行内文本
+
+`Text` 支持 5 种语义类型和 7 种文本装饰。
+
+<ComponentShowcase
+  id="typography-text"
+  path="typography/text"
+/>
+
+```tsx
+import { Text } from "@/components/ui/typography"
+
+export default function Demo() {
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-2">
+        <Text>默认文本</Text>
+        <Text type="secondary">次要文本</Text>
+        <Text type="success">成功文本</Text>
+        <Text type="warning">警告文本</Text>
+        <Text type="danger">危险文本</Text>
+        <Text disabled>禁用文本</Text>
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <Text underline>下划线</Text>
+        <Text italic>斜体</Text>
+        <Text delete>删除线</Text>
+        <Text mark>高亮标记</Text>
+        <Text code>code</Text>
+        <Text keyboard>⌘K</Text>
+        <Text strong>加粗</Text>
+      </div>
+    </div>
+  )
+}
+```
+
+### 标题
+
+`Title` 支持 5 个层级，对应 `h1`-`h5`。
+
+<ComponentShowcase
+  id="typography-title"
+  path="typography/title"
+/>
+
+```tsx
+import { Title } from "@/components/ui/typography"
+
+export default function Demo() {
+  return (
+    <div className="space-y-2">
+      <Title level={1}>一级标题</Title>
+      <Title level={2}>二级标题</Title>
+      <Title level={3}>三级标题</Title>
+      <Title level={4}>四级标题</Title>
+      <Title level={5}>五级标题</Title>
+    </div>
+  )
+}
+```
+
+### 段落与链接
+
+`Paragraph` 承载正文内容，支持类型和加粗；`Link` 提供主题色链接。
+
+<ComponentShowcase
+  id="typography-paragraph"
+  path="typography/paragraph"
+/>
+
+```tsx
+import { Paragraph, Link } from "@/components/ui/typography"
+
+export default function Demo() {
+  return (
+    <div className="max-w-md space-y-4">
+      <Paragraph>
+        这是正文段落，用于承载长文本内容。
+      </Paragraph>
+      <Paragraph type="secondary">
+        次要文本段落，用于辅助说明。
+      </Paragraph>
+      <Paragraph strong>加粗段落，用于强调。</Paragraph>
+      <Paragraph>
+        段落中可嵌入 <Link href="#">链接</Link>，
+        自动使用主题色。
+      </Paragraph>
+    </div>
+  )
+}
+```
+
+### 可复制
+
+Text 和 Title 设置 `copyable` 后，右侧出现复制按钮。
+
+<ComponentShowcase
+  id="typography-copyable"
+  path="typography/copyable"
+/>
+
+```tsx
+import { Text, Title } from "@/components/ui/typography"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <div>
+        <Text copyable>点击图标复制这段文本</Text>
+      </div>
+      <div>
+        <Title level={3} copyable>可复制的标题</Title>
+      </div>
+    </div>
+  )
+}
+```
+
+### 溢出省略
+
+`ellipsis` 支持单行截断和多行展开/收起。
+
+<ComponentShowcase
+  id="typography-ellipsis"
+  path="typography/ellipsis"
+/>
+
+```tsx
+import { Text, Paragraph } from "@/components/ui/typography"
+
+export default function Demo() {
+  return (
+    <div className="max-w-xs space-y-6">
+      <div>
+        <Text ellipsis className="block w-full">
+          单行溢出省略：超出容器宽度时自动截断并显示省略号。
+        </Text>
+      </div>
+      <div>
+        <Paragraph ellipsis={{ rows: 2, expandable: true }}>
+          多行溢出省略。文本超过指定行数时自动截断并显示展开按钮。
+          点击展开可查看完整内容，点击收起恢复省略状态。
+        </Paragraph>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Text
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 文本类型 | `default` \| `secondary` \| `success` \| `warning` \| `danger` | - |
+| size | 文本尺寸 | `xs` \| `sm` \| `base` \| `lg` \| `xl` | `base` |
+| weight | 字重 | `normal` \| `medium` \| `semibold` \| `bold` | `normal` |
+| disabled | 禁用状态 | `boolean` | `false` |
+| underline | 下划线 | `boolean` | `false` |
+| italic | 斜体 | `boolean` | `false` |
+| delete | 删除线 | `boolean` | `false` |
+| mark | 高亮标记 | `boolean` | `false` |
+| code | 代码样式 | `boolean` | `false` |
+| keyboard | 键盘按键样式 | `boolean` | `false` |
+| strong | 加粗 | `boolean` | `false` |
+| copyable | 是否可复制 | `boolean` \| `CopyableConfig` | - |
+| ellipsis | 溢出省略配置 | `boolean` \| `EllipsisConfig` | - |
+| asChild | 合并样式到子元素 | `boolean` | `false` |
+
+### Title
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| level | 标题层级 | `1` \| `2` \| `3` \| `4` \| `5` | `1` |
+| type | 文本类型 | 同 Text | - |
+| disabled | 禁用 | `boolean` | `false` |
+| copyable | 是否可复制 | `boolean` \| `CopyableConfig` | - |
+| ellipsis | 溢出省略 | `boolean` \| `EllipsisConfig` | - |
+
+### Paragraph
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 文本类型 | 同 Text | - |
+| disabled | 禁用 | `boolean` | `false` |
+| strong | 加粗 | `boolean` | `false` |
+| copyable | 是否可复制 | `boolean` \| `CopyableConfig` | - |
+| ellipsis | 溢出省略 | `boolean` \| `EllipsisConfig` | - |
+
+### Link
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| href | 链接地址 | `string` | - |
+| disabled | 禁用 | `boolean` | `false` |
+
+### CopyableConfig
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 自定义复制文本 | `string` \| `() => string` | 自动取 children |
+| onCopy | 复制回调 | `(event?) => void` | - |
+| icon | 自定义图标 | `ReactNode` \| `[ReactNode, ReactNode]` | 复制/对勾 |
+| tooltips | 提示文本 | `ReactNode` \| `[ReactNode, ReactNode]` \| `false` | - |
+
+### EllipsisConfig
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| rows | 省略行数 | `number` | `1` |
+| expandable | 是否可展开 | `boolean` \| `"collapsible"` | `false` |
+| symbol | 展开/收起符号 | `ReactNode` \| `(expanded) => ReactNode` | `More`/`Collapse` |
+| defaultExpanded | 默认展开 | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+
+### Text、Paragraph、Title 什么时候用哪个？
+
+- **Text**：行内文本，不产生块级换行。
+- **Paragraph**：块级段落，自带上下间距。
+- **Title**：页面或区块标题，映射到 h1-h5 语义标签。
+
+### 如何禁用 copyable 的提示气泡？
+
+传入 `copyable={{ tooltips: false }}`。
+
+### ellipsis 的 expandable 与 collapsible 有何区别？
+
+`expandable: true` 点击展开后不可收起；`expandable: "collapsible"` 点击可在展开/收起间切换。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Typography 代码时：
+
+1. 从 `@/components/ui/typography` 导入 Text、Title、Paragraph、Link。
+2. 文本语义使用 `type` 属性（`secondary`/`success`/`warning`/`danger`），不要手动拼颜色 class。
+3. 标题使用 `Title level={N}` 而非手动写 `<h1>`-`<h5>`。
+4. 行内代码用 `Text code`，键盘按键用 `Text keyboard`。
+5. 不要引入 Ant Design 的 `Typography` 组件。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `link` | - |
+| `paragraph` | - |
+| `paragraph-copyable` | - |
+| `text` | - |
+| `text-copyable` | - |
+| `title` | - |
+| `title-copyable` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="typography" />

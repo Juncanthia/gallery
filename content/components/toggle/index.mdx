@@ -1,0 +1,35 @@
+Toggle 切换按钮，用于在两种状态间切换，基于 Radix Toggle 实现。
+
+<ComponentShowcase id="toggle" path="toggle/basic" />
+
+```tsx
+import { Toggle } from "@/components/ui/toggle"
+import { Bold, Italic, Underline } from "lucide-react"
+export default function Demo() {
+  return (
+    <div className="flex gap-2">
+      <Toggle aria-label="加粗"><Bold className="size-4" /></Toggle>
+      <Toggle aria-label="斜体"><Italic className="size-4" /></Toggle>
+      <Toggle aria-label="下划线"><Underline className="size-4" /></Toggle>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| pressed | 受控按下状态 | `boolean` | - |
+| defaultPressed | 默认状态 | `boolean` | `false` |
+| onPressedChange | 状态回调 | `(pressed: boolean) => void` | - |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/toggle` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="toggle" />

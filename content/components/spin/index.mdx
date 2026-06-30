@@ -1,0 +1,31 @@
+Spin 用于页面和区块的加载中状态，支持多种尺寸和自定义描述。
+
+<ComponentShowcase id="spin" path="spin/basic" />
+
+```tsx
+import { Spin } from "@/components/ui/spin"
+export default function Demo() {
+  return <div className="flex gap-4"><Spin /><Spin size="small" /><Spin size="large" /><Spin><span className="ml-2 text-sm">加载中...</span></Spin></div>
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| size | 尺寸 | `small` \| `default` \| `large` | `default` |
+| children | 自定义描述 | `ReactNode` | - |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/spin` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `spin` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="spin" />

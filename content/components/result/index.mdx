@@ -1,0 +1,44 @@
+Result 用于反馈操作结果，支持成功、失败、警告等状态。
+
+<ComponentShowcase id="result" path="result/basic" />
+
+```tsx
+import { Result } from "@/components/ui/result"
+import { Button } from "@/components/ui/button"
+import { CheckCircle } from "lucide-react"
+export default function Demo() {
+  return (
+    <Result icon={<CheckCircle className="size-12 text-green-500" />} title="操作成功" description="预计 5 分钟后生效。">
+      <Button color="primary" variant="solid">返回首页</Button>
+    </Result>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| icon | 状态图标 | `ReactNode` |
+| title | 标题 | `ReactNode` |
+| description | 描述 | `ReactNode` |
+| children | 操作区 | `ReactNode` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/result` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `result` | - |
+| `result-content` | - |
+| `result-extra` | - |
+| `result-icon` | - |
+| `result-subtitle` | - |
+| `result-title` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="result" />

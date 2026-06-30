@@ -1,0 +1,54 @@
+Empty 用于展示空数据、无结果或引导用户创建首个内容的场景。
+
+<h2 id="when-to-use">何时使用</h2>
+当列表、表格、搜索结果为空时，向用户说明原因并引导操作。
+
+<ComponentShowcase id="empty-state" path="empty-state/basic" />
+
+```tsx
+import { Empty, EmptyTitle } from "@/components/ui/empty-state"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <Empty
+      description="当前列表为空，创建第一条记录开始使用。"
+      actions={<Button size="small" color="primary" variant="solid">立即创建</Button>}
+    >
+      <EmptyTitle>暂无数据</EmptyTitle>
+    </Empty>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Empty
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| image | 空状态插图，`false` 隐藏 | `ReactNode \| string \| false` | 默认图标 |
+| description | 描述文本 | `ReactNode` | - |
+| actions | 操作按钮区域 | `ReactNode` | - |
+| simple | 紧凑模式 | `boolean` | `false` |
+| children | 标题等内容 | `ReactNode` | - |
+
+子组件：`EmptyHeader`、`EmptyTitle`、`EmptyDescription`、`EmptyContent`、`EmptyMedia`。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `empty` | 根容器 |
+| `empty-header` | 头部 |
+| `empty-title` | 标题 |
+| `empty-description` | 描述 |
+| `empty-content` | 内容区 |
+| `empty-icon` | 图标区 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/empty-state` 导入 `Empty`。
+2. 使用 `actions` 放置按钮，`description` 放置说明文字。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="empty-state" />

@@ -1,0 +1,227 @@
+Select 下拉选择器，基于 Radix Select 和 Base UI Combobox 实现。支持单选、多选、标签创建、搜索过滤、选项分组、自定义渲染和多种尺寸变体。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 弹出一个下拉菜单给用户选择操作，用于代替原生的选择器，或者需要一个更优雅的多选器时。
+- 当选项少于 5 项时，建议直接将选项平铺，使用 RadioGroup 是更好的选择。
+- 如果你需要一个可输可选的输入框，使用 Combobox 或设置 `mode="combobox"`。
+- 如果你需要级联层级选择，使用 Cascader 或 TreeSelect。
+
+相比原生 `<select>`，Select 提供一致的跨平台样式、搜索过滤、多选标签、键盘导航和自定义渲染。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+单选、多选和搜索模式。`mode="multiple"` 启用多选，`showSearch` 启用搜索过滤。
+
+<ComponentShowcase
+  id="select"
+  path="select/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { Select } from "@/components/ui/select"
+
+export default function Demo() {
+  const [value, setValue] = useState<string>()
+  const [multi, setMulti] = useState<string[]>()
+
+  return (
+    <div className="flex flex-wrap items-start gap-4">
+      <Select
+        options={[
+          { label: "选项一", value: "1" },
+          { label: "选项二", value: "2" },
+          { label: "选项三（禁用）", value: "3", disabled: true },
+        ]}
+        placeholder="请选择"
+        value={value}
+        onValueChange={setValue}
+        className="w-44"
+      />
+      <Select
+        mode="multiple"
+        allowClear
+        options={[
+          { label: "苹果", value: "apple" },
+          { label: "香蕉", value: "banana" },
+          { label: "橘子", value: "orange" },
+        ]}
+        placeholder="多选"
+        value={multi}
+        onValueChange={setMulti}
+        className="w-48"
+      />
+      <Select
+        showSearch
+        options={[
+          { label: "北京", value: "beijing" },
+          { label: "上海", value: "shanghai" },
+          { label: "广州", value: "guangzhou" },
+        ]}
+        placeholder="搜索城市"
+        className="w-44"
+      />
+    </div>
+  )
+}
+```
+
+### 分组与尺寸
+
+`SelectOptionGroup` 将选项分组展示，分组标题不可选中。
+
+<ComponentShowcase
+  id="groups"
+  path="select/groups"
+/>
+
+```tsx
+import { Select } from "@/components/ui/select"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-start gap-4">
+      <Select
+        options={[
+          { label: "水果", options: [
+            { label: "苹果", value: "apple" },
+            { label: "香蕉", value: "banana" },
+          ]},
+          { label: "蔬菜", options: [
+            { label: "白菜", value: "cabbage" },
+            { label: "萝卜", value: "radish" },
+          ]},
+        ]}
+        placeholder="选择食物"
+        className="w-44"
+      />
+      <Select size="small" options={[{ label: "小", value: "s" }]} placeholder="小" className="w-32" />
+      <Select size="large" options={[{ label: "大", value: "l" }]} placeholder="大" className="w-40" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Select
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 选项列表，支持 `SelectOption` 和 `SelectOptionGroup` | `SelectOptionItem[]` | - |
+| value | 受控值；单选为 `string`，多选/标签模式为 `string[]` | `string \| string[]` | - |
+| defaultValue | 非受控默认值 | 同 `value` | - |
+| onValueChange | 选中值变化回调；单选返回 `string \| undefined`，多选返回 `string[]` | `(value) => void` | - |
+| mode | 选择模式：`"multiple"` 多选，`"tags"` 可自由输入标签，`"combobox"` 可搜索可输入 | `"multiple"` \| `"tags"` \| `"combobox"` | 单选 |
+| placeholder | 未选中时的占位文本 | `ReactNode` | - |
+| showSearch | 是否显示搜索输入框，大量选项时建议开启 | `boolean` | `false` |
+| searchPlaceholder | 搜索输入框的占位文本 | `string` | - |
+| allowClear | 是否显示清除按钮，允许清空已选值 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| size | 尺寸 | `small` \| `middle` \| `large` | `middle` |
+| variant | 视觉变体 | `default` \| `filled` | `default` |
+| status | 校验状态，`error` 显示红色边框 | `error` \| `warning` | - |
+| placement | 下拉菜单弹出位置 | `bottomLeft` \| `bottomRight` \| `topLeft` \| `topRight` | `bottomLeft` |
+| maxCount | 多选模式下的最大选中数量 | `number` | - |
+| filterOption | 自定义搜索过滤逻辑，`false` 关闭过滤 | `boolean \| ((input, option) => boolean)` | 内置过滤 |
+| notFoundContent | 搜索无匹配时的展示内容 | `ReactNode` | - |
+| optionRender | 自定义下拉选项的渲染函数 | `(option, info) => ReactNode` | - |
+| labelRender | 自定义选中后在触发器中展示的标签 | `(option) => ReactNode` | - |
+| onSearch | 搜索文本变化回调，用于远程搜索 | `(value: string) => void` | - |
+| onSelect | 选中选项时的回调 | `(value, option) => void` | - |
+| onDeselect | 取消选中选项时的回调 | `(value, option) => void` | - |
+| onClear | 点击清除按钮时的回调 | `() => void` | - |
+| open | 受控展开下拉菜单 | `boolean` | - |
+| onOpenChange | 下拉菜单展开/收起回调 | `(open: boolean) => void` | - |
+| name | 表单字段名称 | `string` | - |
+
+### SelectOption
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| label | 选项展示文本 | `ReactNode` |
+| value | 选项值，作为 `onValueChange` 的值 | `string` |
+| disabled | 是否禁用该选项 | `boolean` |
+| searchText | 搜索时匹配的文本；不设置则使用 `label` | `string` |
+
+### SelectOptionGroup
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| label | 分组标题 | `ReactNode` |
+| options | 分组内的选项列表 | `SelectOption[]` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件内部使用 `data-slot` 暴露语义化结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `select` | 选择器根元素 |
+| `select-trigger` | 触发器按钮 |
+| `select-value` | 选中的值显示区域 |
+| `select-content` | 下拉面板 |
+| `select-group` | 选项分组容器 |
+| `select-label` | 分组标题 |
+| `select-item` | 选项 |
+| `select-separator` | 分隔线 |
+| `select-scroll-up-button` | 向上滚动按钮 |
+| `select-scroll-down-button` | 向下滚动按钮 |
+
+<h2 id="faq">常见问题</h2>
+
+### 单选、多选、标签和搜索模式如何选择？
+
+- **单选（默认）**：适合从有限选项中选一个，如表单中的性别、状态。
+- `mode="multiple"`：从预设选项中选多个，如筛选面板。
+- `mode="tags"`：用户可自由输入任意文本并回车创建标签，如邮件收件人。
+- `mode="combobox"`：单选 + 可搜索 + 可自由输入，如搜索式选择框。
+- `showSearch`：不改变模式，仅增强单选/多选的搜索过滤体验。
+
+### 大量选项时如何优化体验？
+
+1. 开启 `showSearch`，利用内置的 `filterOption` 按 label 搜索过滤。
+2. 如果选项超过 1000 条，考虑使用 `optionRender` + 虚拟列表，或将搜索逻辑移到服务端。
+3. 使用 `notFoundContent` 自定义搜索无结果的兜底内容。
+
+### 如何自定义选项的展示？
+
+使用 `optionRender` 自定义下拉选项中每一项的渲染，使用 `labelRender` 自定义选中后在触发器中的渲染。
+
+```tsx
+<Select
+  options={data}
+  optionRender={(option, { index }) => (
+    <div className="flex items-center gap-2">
+      <img src={option.avatar} className="size-5 rounded-full" />
+      <span>{option.label}</span>
+    </div>
+  )}
+/>
+```
+
+### 如何实现级联选择？
+
+Select 本身不支持级联。请使用 Cascader（级联选择器）或 TreeSelect（树型选择器）。
+
+### 为什么我的下拉菜单宽度和触发器不一致？
+
+默认为 `popupMatchSelectWidth`，下拉菜单最小宽度与触发器一致。可使用 `contentClassName` 设置自定义宽度。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Select 代码时：
+
+1. 从 `@/components/ui/select` 导入，不要从 `antd` 导入。
+2. 优先使用 `options` 声明式配置，而非拼接子组件。
+3. 多选用 `mode="multiple"`；标签输入用 `mode="tags"`；搜索单选用 `mode="combobox"`。
+4. `onValueChange` 回调：单选返回 `string \| undefined`，多选/标签返回 `string[]`。
+5. 大量选项时配合 `showSearch`，不要将所有选项平铺在 DOM 中。
+6. 需要校验状态时使用 `status="error"`，不要手动写红色边框 class。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="select" />

@@ -1,0 +1,53 @@
+Accordion 手风琴折叠面板，点击标题展开/收起内容区域，支持单选和多选模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将内容分组收纳在可折叠的面板中时使用，例如 FAQ 页面、设置面板分组。
+
+<ComponentShowcase id="accordion" path="accordion/basic" />
+
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+
+export default function Demo() {
+  return (
+    <Accordion type="single" collapsible className="w-full max-w-sm">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>什么是组件库？</AccordionTrigger>
+        <AccordionContent>
+          组件库是一套可复用的 UI 组件集合，提供统一的视觉风格和交互行为。
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>如何安装？</AccordionTrigger>
+        <AccordionContent>
+          通过 npm 安装依赖后，直接从 @/components/ui 导入即可使用。
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 选择模式 | `single` \| `multiple` | `single` |
+| collapsible | 是否可全部折叠 | `boolean` | `false` |
+| defaultValue | 默认展开项 | `string \| string[]` | - |
+| value | 受控展开项 | `string \| string[]` | - |
+| onValueChange | 展开变化回调 | `(value) => void` | - |
+
+子组件：`AccordionItem`、`AccordionTrigger`、`AccordionContent`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/accordion` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="accordion" />

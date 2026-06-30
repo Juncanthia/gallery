@@ -1,0 +1,230 @@
+FloatButton 悬浮于页面内容上方，提供快捷操作入口。支持基础悬浮按钮、按钮组和回到顶部三种形态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+适合需要始终可见的快捷操作入口，如编辑、收藏、分享、回到顶部等。
+
+常见场景：
+
+- 页面右下角的全局操作入口（新建、编辑、帮助）。
+- 可展开的悬浮按钮组（分享、收藏、评论）。
+- 长页面的回到顶部按钮。
+- 带角标通知的悬浮按钮。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`FloatButton` 支持 `default` 和 `primary` 两种类型，`circle` 和 `square` 两种形状。通过 `tooltip` 添加提示。
+
+<ComponentShowcase
+  id="float-button"
+  path="float-button/basic"
+/>
+
+```tsx
+import { Edit, Heart } from "lucide-react"
+import { FloatButton } from "@/components/ui/float-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <FloatButton icon={<Edit className="size-5" />} tooltip="编辑" />
+      <FloatButton type="primary" icon={<Heart className="size-5" />} tooltip="收藏" />
+      <FloatButton icon={<Edit className="size-5" />} content="编辑" />
+      <FloatButton type="primary" icon={<Heart className="size-5" />} content="支持" />
+    </div>
+  )
+}
+```
+
+### 角标
+
+通过 `badge` 属性在按钮右上角展示数字或圆点角标。
+
+<ComponentShowcase
+  id="badge"
+  path="float-button/badge"
+/>
+
+```tsx
+import { ShoppingCart } from "lucide-react"
+import { FloatButton } from "@/components/ui/float-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <FloatButton
+        type="primary"
+        icon={<ShoppingCart className="size-5" />}
+        badge={5}
+        tooltip="购物车"
+      />
+      <FloatButton
+        type="primary"
+        icon={<ShoppingCart className="size-5" />}
+        badge={{ count: 99, color: "red" }}
+        tooltip="99+"
+      />
+      <FloatButton
+        icon={<ShoppingCart className="size-5" />}
+        badge={{ dot: true, color: "green" }}
+        tooltip="有新通知"
+      />
+    </div>
+  )
+}
+```
+
+### 按钮组
+
+`FloatButtonGroup` 提供可展开/收起的悬浮按钮组。`trigger="click"` 点击触发，`trigger="hover"` 悬停触发。
+
+<ComponentShowcase
+  id="group"
+  path="float-button/group"
+/>
+
+```tsx
+import { Edit, Heart, MessageCircle, Share2 } from "lucide-react"
+import { FloatButtonGroup } from "@/components/ui/float-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-start gap-8">
+      <FloatButtonGroup
+        placement="top"
+        type="primary"
+        items={[
+          { icon: <Edit className="size-5" />, tooltip: "编辑" },
+          { icon: <Heart className="size-5" />, tooltip: "收藏" },
+          { icon: <MessageCircle className="size-5" />, tooltip: "评论" },
+        ]}
+      />
+      <FloatButtonGroup
+        trigger="hover"
+        placement="right"
+        shape="square"
+        items={[
+          { icon: <Share2 className="size-5" />, tooltip: "分享" },
+          { icon: <Heart className="size-5" />, tooltip: "收藏" },
+        ]}
+      />
+    </div>
+  )
+}
+```
+
+### 回到顶部
+
+`FloatButtonBackTop` 监听滚动位置，超出 `visibilityHeight` 后显示，点击平滑回到顶部。
+
+<ComponentShowcase
+  id="back-top"
+  path="float-button/back-top"
+/>
+
+```tsx
+import { FloatButtonBackTop } from "@/components/ui/float-button"
+
+export default function Demo() {
+  return (
+    <div className="relative h-48 overflow-auto rounded border p-4">
+      <div className="space-y-2">
+        {Array.from({ length: 20 }, (_, i) => (
+          <p key={i} className="text-sm text-muted-foreground">
+            第 {i + 1} 行：滚动以触发回到顶部按钮。
+          </p>
+        ))}
+      </div>
+      <FloatButtonBackTop className="sticky bottom-4 ml-auto" visibilityHeight={100} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### FloatButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 颜色类型 | `default` \| `primary` | `default` |
+| size | 尺寸 | `default` \| `sm` \| `lg` | `default` |
+| shape | 形状 | `circle` \| `square` | `circle` |
+| icon | 图标 | `ReactNode` | 无内容时默认文件图标 |
+| content | 按钮文字，不传则为纯图标模式 | `ReactNode` | - |
+| tooltip | 提示内容 | `ReactNode` \| `TooltipConfig` | - |
+| href | 链接地址，传入后渲染为 `<a>` | `string` | - |
+| badge | 角标 | `string` \| `number` \| `BadgeProps` | - |
+| htmlType | 原生 button type | `button` \| `submit` \| `reset` | `button` |
+
+### FloatButtonGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| trigger | 展开触发方式 | `click` \| `hover` | `click` |
+| placement | 展开方向 | `top` \| `right` \| `bottom` \| `left` | `top` |
+| type | 子按钮颜色类型 | `default` \| `primary` | `primary` |
+| shape | 子按钮形状 | `circle` \| `square` | `circle` |
+| items | 子按钮配置列表 | `FloatButtonProps[]` | - |
+| triggerIcon | 触发器图标 | `ReactNode` | 加号 |
+| closeIcon | 关闭图标 | `ReactNode` | 叉号 |
+| open | 受控展开状态 | `boolean` | - |
+| onOpenChange | 展开状态变化回调 | `(open: boolean) => void` | - |
+
+### FloatButtonBackTop
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| visibilityHeight | 触发显示的滚动高度 | `number` | `400` |
+| duration | 滚动动画时长（毫秒），0 为瞬间 | `number` | `450` |
+| target | 获取滚动目标 | `() => Window \| HTMLElement \| Document` | `window` |
+
+继承 FloatButton 的其他属性。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何只显示图标不显示文字？
+
+不传 `content` 属性即可。按钮会自动应用等宽高样式。
+
+### 如何改变展开方向？
+
+设置 `placement` 属性：`top`（向上）、`bottom`（向下）、`left`（向左）、`right`（向右）。
+
+### 如何控制 FloatButtonGroup 的展开状态？
+
+使用受控模式：
+
+```tsx
+const [open, setOpen] = useState(false)
+<FloatButtonGroup open={open} onOpenChange={setOpen} ... />
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FloatButton 代码时：
+
+1. 从 `@/components/ui/float-button` 导入。
+2. 使用 `icon` 传入图标；`content` 控制是否显示文字。
+3. 按钮组使用 `items` 数组配置，子按钮自动继承 `type` 和 `shape`。
+4. 回到顶部使用 `FloatButtonBackTop`，内置滚动监听和动画。
+5. 不要引入 Ant Design 的 `FloatButton`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `float-button` | - |
+| `float-button-content` | - |
+| `float-button-group` | - |
+| `float-button-group-list` | - |
+| `float-button-icon` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="float-button" />

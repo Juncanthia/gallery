@@ -1,0 +1,38 @@
+Progress 展示操作的当前进度，支持百分比和不确定进度。
+
+<ComponentShowcase id="progress" path="progress/basic" />
+
+```tsx
+import { Progress } from "@/components/ui/progress"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-4">
+      <Progress value={30} />
+      <Progress value={60} />
+      <Progress value={100} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 进度百分比 | `number` | `0` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/progress` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `progress-circle` | - |
+| `progress-steps` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="progress" />

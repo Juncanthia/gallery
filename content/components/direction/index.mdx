@@ -1,0 +1,87 @@
+Direction 提供 RTL/LTR 文本方向切换能力，基于 Radix Direction 实现。包含 `DirectionProvider` 和 `useDirection` hook。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要支持从右到左（RTL）的文本方向时使用。通过 `DirectionProvider` 包裹应用或组件树，内部使用 `useDirection` 获取当前方向。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`DirectionProvider` 设置 `dir` 属性，子组件通过 `useDirection` 获取当前方向。
+
+<ComponentShowcase
+  id="direction"
+  path="direction/basic"
+/>
+
+```tsx
+import { DirectionProvider, useDirection } from "@/components/ui/direction"
+
+function DirDisplay() {
+  const dir = useDirection()
+  return (
+    <span className="rounded bg-muted px-2 py-1 font-mono text-sm">
+      当前方向：{dir}
+    </span>
+  )
+}
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">LTR（默认）</p>
+        <DirectionProvider dir="ltr">
+          <div className="flex items-center gap-2 rounded border p-3">
+            <span className="text-sm">→</span>
+            <DirDisplay />
+            <span className="text-sm">→</span>
+          </div>
+        </DirectionProvider>
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">RTL</p>
+        <DirectionProvider dir="rtl">
+          <div className="flex items-center gap-2 rounded border p-3">
+            <span className="text-sm">←</span>
+            <DirDisplay />
+            <span className="text-sm">←</span>
+          </div>
+        </DirectionProvider>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DirectionProvider
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dir | 文本方向 | `ltr` \| `rtl` | `ltr` |
+| children | 子组件树 | `React.ReactNode` | - |
+
+### useDirection
+
+返回当前文本方向 `"ltr"` 或 `"rtl"`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Direction 代码时：
+
+1. 从 `@/components/ui/direction` 导入。
+2. 在应用顶层使用 `DirectionProvider` 包裹。
+3. 子组件中通过 `useDirection()` 获取方向。
+4. 不要引入 Ant Design 的 `ConfigProvider` 的 `direction`。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="direction" />

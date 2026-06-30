@@ -1,0 +1,111 @@
+Marker 用于文本标记、分隔提示和信息展示。支持默认、分隔线和带下边框三种变体。
+
+<h2 id="when-to-use">何时使用</h2>
+
+适合在列表、卡片或页面中插入带图标的分隔标注，或在两个内容区块之间放置文本分隔线。
+
+常见场景：
+
+- 列表中的"没有更多了"、"以上为最新消息"等提示。
+- 区块间的文本分隔线。
+- 带图标的提示信息。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+三种变体：默认（带图标提示）、`separator`（两侧横线）、`border`（下边框）。
+
+<ComponentShowcase
+  id="marker"
+  path="marker/basic"
+/>
+
+```tsx
+import { Info } from "lucide-react"
+import { Marker, MarkerIcon, MarkerContent } from "@/components/ui/marker"
+
+export default function Demo() {
+  return (
+    <div className="w-full space-y-4">
+      <Marker>
+        <MarkerIcon><Info /></MarkerIcon>
+        <MarkerContent>
+          提示信息，可包含 <a href="#">链接</a>。
+        </MarkerContent>
+      </Marker>
+
+      <Marker variant="separator">
+        <MarkerContent>我是分隔文本</MarkerContent>
+      </Marker>
+
+      <Marker variant="border">
+        <MarkerContent>下方有分隔线的标记</MarkerContent>
+      </Marker>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Marker
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 变体样式 | `default` \| `separator` \| `border` | `default` |
+| asChild | 将样式合并到子元素 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+| children | 标记内容 | `React.ReactNode` | - |
+
+### MarkerIcon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| children | 图标元素 | `React.ReactNode` | - |
+
+### MarkerContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| children | 文本或 HTML 内容 | `React.ReactNode` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何只显示分隔线不要文字？
+
+使用 `variant="separator"` 且不传 `children`：
+
+```tsx
+<Marker variant="separator" />
+```
+
+### Marker 支持 asChild 吗？
+
+支持。传入 `asChild` 时，样式会合并到直接子元素，适合与路由 Link 等组件配合。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Marker 代码时：
+
+1. 从 `@/components/ui/marker` 导入。
+2. 图标使用 `MarkerIcon` 包裹，文本使用 `MarkerContent` 包裹。
+3. 分隔线使用 `variant="separator"`，带下划线使用 `variant="border"`。
+4. 不要引入 Ant Design 相关依赖。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `marker` | - |
+| `marker-content` | - |
+| `marker-icon` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="marker" />

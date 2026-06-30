@@ -1,0 +1,31 @@
+Descriptions 以键值对形式展示只读字段，常用于详情页信息展示。
+
+<ComponentShowcase id="descriptions" path="descriptions/basic" />
+
+```tsx
+import { Descriptions, DescriptionsItem } from "@/components/ui/descriptions"
+export default function Demo() {
+  return <Descriptions className="w-80" bordered><DescriptionsItem label="姓名">张三</DescriptionsItem><DescriptionsItem label="部门">技术部</DescriptionsItem></Descriptions>
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| bordered | 带边框 | `boolean` | `false` |
+| column | 列数 | `number` | `3` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/descriptions` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `descriptions` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="descriptions" />

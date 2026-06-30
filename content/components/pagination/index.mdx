@@ -1,0 +1,78 @@
+Pagination 用于分隔长列表，每次只加载一个页面。支持页码导航、每页条数切换、快速跳转、简洁模式和总数展示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 当数据量较大无法在一页中完整展示时。
+- 配合 Table 或 List 组件实现分页浏览。
+- 当需要用户切换每页显示数量时，开启 `showSizeChanger`。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 `total` 和 `current`，`onChange` 回调参数为 `(page, pageSize)`。
+
+<ComponentShowcase id="pagination" path="pagination/basic" />
+
+```tsx
+import { useState } from "react"
+import { Pagination } from "@/components/ui/pagination"
+
+export default function Demo() {
+  const [current, setCurrent] = useState(3)
+  return (
+    <Pagination total={200} current={current} onChange={(page) => setCurrent(page)} />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| total | 数据总数 | `number` | `0` |
+| current | 当前页码（受控） | `number` | - |
+| defaultCurrent | 默认当前页码 | `number` | `1` |
+| pageSize | 每页条数 | `number` | `10` |
+| onChange | 页码变化回调，参数 `(page, pageSize)` | `(page: number, pageSize: number) => void` | - |
+| size | 分页器尺寸 | `small` \| `middle` | `middle` |
+| align | 对齐方式 | `start` \| `center` \| `end` | `center` |
+| simple | 简洁模式，只显示当前页/总页数 | `boolean \| { readOnly?: boolean }` | `false` |
+| showSizeChanger | 是否显示每页条数切换下拉框 | `boolean` | `false` |
+| pageSizeOptions | 每页条数备选项 | `Array<number \| string>` | `[10,20,50,100]` |
+| showQuickJumper | 是否显示快速跳转输入框 | `boolean \| { goButton?: ReactNode }` | `false` |
+| showTotal | 自定义总数展示 | `(total: number, [from, to]: [number, number]) => ReactNode` | - |
+| hideOnSinglePage | 只有一页时是否隐藏分页器 | `boolean` | `false` |
+| disabled | 是否禁用整个分页器 | `boolean` | `false` |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `pagination` | 分页器根元素 |
+| `pagination-content` | 页码按钮列表 |
+| `pagination-item` | 单个页码项 |
+| `pagination-link` | 页码链接 |
+| `pagination-ellipsis` | 省略号 |
+| `pagination-total` | 总数展示区 |
+| `pagination-size-changer` | 每页条数切换下拉框 |
+| `pagination-quick-jumper` | 快速跳转区 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何配合服务端分页？
+
+`current` 和 `pageSize` 从服务端获取，`onChange` 触发数据请求：
+
+```tsx
+<Pagination total={total} current={current} pageSize={pageSize}
+  onChange={(page, size) => fetchData(page, size)} />
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/pagination` 导入。
+2. `onChange` 签名为 `(page, pageSize)` 两个参数。
+3. 服务端分页务必使用受控模式。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="pagination" />

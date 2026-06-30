@@ -1,0 +1,41 @@
+Command 命令面板，提供搜索过滤和快捷指令选择，常用于 ⌘K 面板。
+
+<ComponentShowcase id="command" path="command/basic" />
+
+```tsx
+import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+export default function Demo() {
+  return (
+    <Command className="w-64 rounded border">
+      <CommandInput placeholder="搜索命令..." />
+      <CommandList><CommandGroup heading="操作"><CommandItem>新建文件</CommandItem><CommandItem>打开文件夹</CommandItem></CommandGroup></CommandList>
+    </Command>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+子组件：`Command`、`CommandInput`、`CommandList`、`CommandGroup`、`CommandItem`、`CommandEmpty`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/command` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `command` | - |
+| `command-empty` | - |
+| `command-group` | - |
+| `command-input` | - |
+| `command-input-wrapper` | - |
+| `command-item` | - |
+| `command-list` | - |
+| `command-separator` | - |
+| `command-shortcut` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="command" />

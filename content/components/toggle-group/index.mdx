@@ -1,0 +1,28 @@
+ToggleGroup 切换按钮组，支持单选和多选，基于 Radix ToggleGroup 实现。
+
+<ComponentShowcase id="toggle-group" path="toggle-group/basic" />
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { Bold, Italic, Underline } from "lucide-react"
+export default function Demo() {
+  return <ToggleGroup type="multiple"><ToggleGroupItem value="bold" aria-label="加粗"><Bold className="size-4" /></ToggleGroupItem><ToggleGroupItem value="italic" aria-label="斜体"><Italic className="size-4" /></ToggleGroupItem></ToggleGroup>
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 选择模式 | `single` \| `multiple` | `single` |
+| value | 受控值 | `string \| string[]` | - |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/toggle-group` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="toggle-group" />

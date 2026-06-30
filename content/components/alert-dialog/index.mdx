@@ -1,0 +1,42 @@
+AlertDialog 模态警告对话框，用于需要用户确认的关键操作，会锁定页面交互直到用户做出选择。
+
+<ComponentShowcase id="alert-dialog" path="alert-dialog/basic" />
+
+```tsx
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button color="danger" variant="outlined">删除</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>确认删除？</AlertDialogTitle>
+          <AlertDialogDescription>此操作不可撤销。</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>取消</AlertDialogCancel>
+          <AlertDialogAction>确认删除</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+子组件：`AlertDialogTrigger`、`AlertDialogContent`、`AlertDialogHeader`、`AlertDialogTitle`、`AlertDialogDescription`、`AlertDialogFooter`、`AlertDialogCancel`、`AlertDialogAction`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/alert-dialog` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="alert-dialog" />

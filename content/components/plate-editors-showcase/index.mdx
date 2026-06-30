@@ -1,0 +1,60 @@
+PlateEditorsShowcase 展示 Plate.js 编辑器的多个内置模块，支持预览/代码切换和响应式设备预览。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示 Plate.js 富文本编辑器的各种内置模块效果时使用。组件内置了 AI 编辑器、多选编辑器、基础编辑器三个展示模块。
+
+常见场景：
+
+- 文档站点中展示 Plate.js 编辑器能力。
+- 开发选型时对比不同编辑器模块。
+- 作为编辑器组件的示例参考。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件无需传入任何 props，直接渲染三个编辑器展示区块。
+
+<ComponentShowcase
+  id="plate-editors-showcase"
+  path="plate-editors-showcase/basic"
+/>
+
+```tsx
+import { PlateEditorsShowcase } from "@/components/ui/plate-editors-showcase"
+
+export default function Demo() {
+  return <PlateEditorsShowcase />
+}
+```
+
+<h2 id="api">API</h2>
+
+### PlateEditorsShowcase
+
+组件无外部 props，所有数据均为内置展示配置。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 无外部 props | - | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么不需要 props？
+
+组件内置了三个 Plate.js 编辑器模块的展示数据（AI 编辑器、多选编辑器、基础编辑器），作为固定的展示页使用。
+
+### 如何添加新的编辑器展示？
+
+修改 `src/components/base/plate-editors-showcase.tsx` 中的 `blocks` 数组，添加新的 block 配置项。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/plate-editors-showcase` 导入。
+2. 组件无外部 props，直接渲染即可。
+3. 该组件主要用于文档/展示场景，不作为通用编辑器的替代。
+4. 需要实际编辑器能力时，应使用 `Editor` 组件而非此展示组件。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="plate-editors-showcase" />

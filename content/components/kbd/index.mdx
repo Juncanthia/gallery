@@ -1,0 +1,137 @@
+Kbd 用于展示键盘按键或快捷键组合。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要向用户展示键盘操作方式时，例如快捷键提示、命令面板的按键组合、表单中的快捷操作引导。
+
+常见场景：
+
+- 搜索框内提示快捷键（如 `⌘K`）。
+- 命令面板或菜单项的快捷键标注。
+- 文档或教程中的按键操作说明。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入按键名称即可渲染一个键盘按键标签。
+
+<ComponentShowcase
+  id="kbd"
+  path="kbd/basic"
+/>
+
+```tsx
+import { Kbd } from "@/components/ui/kbd"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Kbd>⌘</Kbd>
+      <Kbd>K</Kbd>
+      <Kbd>⌘ + K</Kbd>
+      <Kbd>Ctrl</Kbd>
+      <Kbd>⌥</Kbd>
+      <Kbd>⇧</Kbd>
+      <Kbd>↵</Kbd>
+      <Kbd>Esc</Kbd>
+    </div>
+  )
+}
+```
+
+### 按键组合
+
+`KbdGroup` 将多个 `Kbd` 紧凑排列，适合展示组合快捷键。
+
+<ComponentShowcase
+  id="group"
+  path="kbd/group"
+/>
+
+```tsx
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
+
+export default function Demo() {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <span>搜索</span>
+        <KbdGroup>
+          <Kbd>⌘</Kbd>
+          <Kbd>K</Kbd>
+        </KbdGroup>
+      </div>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <span>撤销</span>
+        <KbdGroup>
+          <Kbd>⌘</Kbd>
+          <Kbd>Z</Kbd>
+        </KbdGroup>
+      </div>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <span>保存</span>
+        <KbdGroup>
+          <Kbd>⌘</Kbd>
+          <Kbd>S</Kbd>
+        </KbdGroup>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Kbd
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| children | 按键文本 | `React.ReactNode` | - |
+
+支持所有原生 `kbd` 元素的属性。
+
+### KbdGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| children | 组合的 Kbd 列表 | `React.ReactNode` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何更改单个按键的视觉样式？
+
+Kbd 使用 `bg-muted` + `text-muted-foreground` 主题色。需要调整时传入 `className`：
+
+```tsx
+<Kbd className="bg-primary text-primary-foreground">⌘</Kbd>
+```
+
+### Kbd 与 KbdGroup 的区别？
+
+`Kbd` 渲染为单个 `<kbd>` 元素。`KbdGroup` 渲染为包含多个 `Kbd` 的容器，子元素间使用 `gap-1` 自动排列，无需手动添加连接符。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Kbd 代码时：
+
+1. 从 `@/components/ui/kbd` 导入。
+2. 快捷键组合使用 `KbdGroup` 包裹多个 `Kbd`，不要手动拼接连字符。
+3. 使用 `children` 传入按键文本，无其他语义 props。
+4. 不要引入 Ant Design 相关依赖。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `kbd` | - |
+| `kbd-group` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="kbd" />

@@ -1,0 +1,41 @@
+Chart 图表组件，封装底层图表库提供统一的配置接口。
+
+<ComponentShowcase id="chart" path="chart/basic" />
+
+```tsx
+import { ChartContainer } from "@/components/ui/chart"
+import { Bar, BarChart } from "recharts"
+
+const data = [
+  { month: "1月", value: 186 },
+  { month: "2月", value: 305 },
+]
+
+export default function Demo() {
+  return (
+    <ChartContainer config={{ value: { label: "销售额" } }} className="h-48 w-full max-w-sm">
+      <BarChart data={data}>
+        <Bar dataKey="value" fill="var(--color-value, #3b82f6)" radius={4} />
+      </BarChart>
+    </ChartContainer>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+图表容器组件，内部嵌入具体图表实例（如 Recharts）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/chart` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `chart` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="chart" />

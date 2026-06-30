@@ -1,0 +1,201 @@
+---
+category: Blocks
+title: Announcement
+subtitle: 公告条
+description: 用于展示全局公告、通知或推广信息的横向横幅，支持标签与标题组合布局。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 1
+source:
+  component: src/components/blocks/announcement/index.tsx
+  examples:
+    - content/components/announcement/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Announcement 公告条
+
+用于展示全局公告、通知或推广信息的横向横幅组件。由 `Announcement`（外层容器，基于 Badge）、`AnnouncementTag`（左侧标签）和 `AnnouncementTitle`（右侧标题文本）三个子组件组合而成。
+
+本组件是项目本地复合块（composite block），无直接 Ant Design 对应组件。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
+
+## 何时使用 {#when-to-use}
+
+适合在页面顶部或内容区上方展示公告、通知、促销信息等横向横幅。优先通过组件自身 props 表达状态和语义。
+
+常见场景：
+
+- 全局系统公告、维护通知、版本升级提示。
+- 运营推广横幅，可搭配 `themed` 属性启用主题化视觉。
+- 需要 `标签 + 标题文本` 组合布局的横向信息条。
+- 需要和本项目 Badge 组件视觉风格保持一致的公告场景。
+
+不推荐：
+
+- 需要复杂交互（如关闭、轮播、展开详情）时，应基于本组件扩展而非强行嵌套。
+- 在调用侧绕过 `AnnouncementTag` / `AnnouncementTitle` 子组件，直接在 `Announcement` children 中手写布局。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import {
+  Announcement,
+  AnnouncementTag,
+  AnnouncementTitle,
+} from "@/components/ui/announcement"
+
+export default function Demo() {
+  return (
+    <Announcement className="w-full max-w-sm">
+      <AnnouncementTag>新功能</AnnouncementTag>
+      <AnnouncementTitle>全新暗色模式现已上线</AnnouncementTitle>
+    </Announcement>
+  )
+}
+```
+
+### 主题化样式
+
+```tsx
+import {
+  Announcement,
+  AnnouncementTag,
+  AnnouncementTitle,
+} from "@/components/ui/announcement"
+
+export default function Demo() {
+  return (
+    <Announcement themed className="w-full max-w-sm">
+      <AnnouncementTag>限时</AnnouncementTag>
+      <AnnouncementTitle>年度订阅享 7 折优惠</AnnouncementTitle>
+    </Announcement>
+  )
+}
+```
+
+> 说明：以上为面向 LLM 的最小导入示例。`Announcement` 继承 Badge 的全部 props（如 `variant`、`count` 等），复杂场景可结合下方 API 摘要补充。
+
+## 核心导出 {#exports}
+
+- `Announcement`
+- `AnnouncementProps`
+- `AnnouncementTag`
+- `AnnouncementTagProps`
+- `AnnouncementTitle`
+- `AnnouncementTitleProps`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码 `src/components/blocks/announcement/index.tsx`，是生成代码时的主要依据：
+
+```ts
+type AnnouncementProps = ComponentProps<typeof Badge> & {
+  themed?: boolean
+}
+```
+
+`Announcement` 继承 `Badge` 的全部 props（含 `variant`、`count`、`showZero`、`overflowCount`、`dot`、`status`、`color`、`text`、`size`、`offset`、`title`、`asChild` 等），并额外增加：
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| themed | `boolean` | `false` | 启用主题化视觉样式，影响容器和内部 AnnouncementTag 的配色 |
+
+默认 `variant` 为 `"outline"`。
+
+```ts
+type AnnouncementTagProps = HTMLAttributes<HTMLDivElement>
+```
+
+`AnnouncementTag` 透传原生 `div` 全部属性，无额外自定义 props。当父级 `Announcement` 设置 `themed` 时，自动切换为浅色背景。
+
+```ts
+type AnnouncementTitleProps = HTMLAttributes<HTMLDivElement>
+```
+
+`AnnouncementTitle` 透传原生 `div` 全部属性，无额外自定义 props。
+
+## Semantic DOM {#semantic-dom}
+
+`Announcement` 底层渲染为 Badge，继承 Badge 的全部语义槽位（`badge`、`badge-indicator`、`badge-status`、`badge-text` 等）。
+
+`AnnouncementTag` 和 `AnnouncementTitle` 为纯 `div` 容器，无额外 `data-slot` 属性。
+
+稳定的样式钩子：
+
+- `.announcement-themed` — 当 `themed` prop 为 `true` 时添加到容器上，可作为子组件样式变体的触发选择器。
+- `group` — 容器自带 `group`，子组件可通过 `group-[.announcement-themed]:*` 响应主题状态。
+
+生成测试、样式定位或自动化脚本时，优先使用 Badge 的语义属性和上述稳定 class；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- `Announcement` 使用 `rounded-full` 圆角胶囊造型、`shadow-sm` 基础阴影和 `hover:shadow-md` 悬浮效果。
+- 组件不依赖 CVA、Radix/Base UI primitive 或 Motion 动画库。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`bg-foreground/5`、`bg-background/60` 等项目级语义变量。
+- `themed` 属性通过 `group` + 条件 className 驱动子组件样式切换。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/announcement/index.tsx` — 组件实现
+- `src/components/ui/announcement.tsx` — 重新导出（供 `@/components/ui/announcement` 导入路径使用）
+
+直接依赖摘要：
+
+- `@/components/ui/badge` — Announcement 基于 Badge 构建，继承其全部 props 和行为
+- `@/lib/utils` — `cn` 工具函数用于 className 合并
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准，Announcement 直接继承 Badge 的 ComponentProps。
+2. `AnnouncementTag` 和 `AnnouncementTitle` 是语义明确的布局子组件，建议始终搭配使用以保持结构一致性。
+3. 样式应优先通过组件 props（如 `themed`、Badge 的 `variant`）表达；`className` 用于微调尺寸和间距。
+4. 如果需要新增能力，应先修改 `src/components/blocks/announcement/index.tsx`，再更新本 llm 文档。
+5. 不要把第三方文档中的全量 API 视为本地已支持能力。
+
+## 可访问性 {#accessibility}
+
+- `Announcement` 底层 Badge 渲染为 `<span>` 元素，适合内联或块级公告场景。
+- `AnnouncementTag` 和 `AnnouncementTitle` 为 `<div>` 容器，语义中性。
+- 如需增强可访问性，可在 `Announcement` 上添加 `role="status"` 或 `aria-live="polite"` 以支持屏幕阅读器动态播报。
+- 标签文本（AnnouncementTag）应保持简短明确；标题文本（AnnouncementTitle）应概括公告核心信息。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| AntD 对应 | 无直接对应组件。AntD 无 Announcement 组件，此为项目本地复合块 |
+| 构建方式 | 基于本地 Badge 组件组合 AnnouncementTag / AnnouncementTitle 子组件 |
+| API 来源 | 以 `src/components/blocks/announcement/index.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 无 AntD 兼容包袱，完全按本地设计体系定义 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Announcement 代码时，应遵守：
+
+1. 从 `@/components/ui/announcement` 导入，按需引入 `Announcement`、`AnnouncementTag`、`AnnouncementTitle`。
+2. 只使用本文件 API 摘要和源码中存在的 props；Announcement 可使用的 Badge props 以 Badge 源码为准。
+3. 始终搭配 `AnnouncementTag`（标签）和 `AnnouncementTitle`（标题）作为公告内容结构，不要直接在 Announcement children 中手写布局。
+4. 需要主题化视觉时使用 `themed` prop，不要在业务侧通过 className 模拟主题样式。
+5. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
+6. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+7. 如果不确定某个 props 是否存在，先检查 `src/components/blocks/announcement/index.tsx` 和 `src/components/ui/badge.tsx`，不要凭 AntD 或 Badge 记忆生成。

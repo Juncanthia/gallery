@@ -1,0 +1,42 @@
+List 通用列表组件，提供统一的列表容器和列表项样式。
+
+<ComponentShowcase id="list" path="list/basic" />
+
+```tsx
+import { List } from "@/components/ui/list"
+import { Item, ItemContent, ItemTitle } from "@/components/ui/list-item"
+
+export default function Demo() {
+  return (
+    <List className="w-60">
+      <Item><ItemContent><ItemTitle>列表项 1</ItemTitle></ItemContent></Item>
+      <Item><ItemContent><ItemTitle>列表项 2</ItemTitle></ItemContent></Item>
+    </List>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### List
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| size | 尺寸 | `small` \| `default` \| `large` |
+
+列表项请使用 `list-item` 组件中的 `Item` 等子组件。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/list` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `list` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="list" />

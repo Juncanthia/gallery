@@ -1,0 +1,63 @@
+Avatar 用于代表用户或事物，支持图片、图标或字符回退。包含 AvatarGroup 组件用于堆叠展示多人头像。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 用户头像展示（导航栏、评论区、个人中心）。
+- 品牌标识展示。
+- 当图片加载失败时，自动显示文字回退（AvatarFallback）。
+- 需要展示多个头像时使用 AvatarGroup 堆叠布局。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`AvatarImage` 设置图片源，`AvatarFallback` 作为加载失败回退。通过 `className` 控制尺寸。
+
+<ComponentShowcase id="avatar" path="avatar/basic" />
+
+```tsx
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Avatar>
+        <AvatarImage src="https://github.com/shadcn.png" alt="User" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+      <Avatar><AvatarFallback>JD</AvatarFallback></Avatar>
+      <Avatar className="size-8"><AvatarFallback className="text-xs">S</AvatarFallback></Avatar>
+      <Avatar className="size-12"><AvatarFallback className="text-lg">L</AvatarFallback></Avatar>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Avatar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 控制尺寸（`size-10` 等） | `string` | `size-10` |
+
+子组件：`AvatarImage`（`<img>` 封装）、`AvatarFallback`（文字/图标回退）、`AvatarGroup`（堆叠组）、`AvatarBadge`（角标）。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `avatar` | 头像根元素 |
+| `avatar-image` | 图片层 |
+| `avatar-fallback` | 文字回退层 |
+| `avatar-group` | 头像组容器 |
+| `avatar-group-count` | 头像组溢出计数 |
+| `avatar-badge` | 头像角标 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/avatar` 导入。
+2. 始终提供 `AvatarFallback` 作为图片加载失败时的回退。
+3. 通过 `className` 控制尺寸，不要包裹外层 div。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="avatar" />

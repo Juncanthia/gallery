@@ -1,0 +1,64 @@
+ColorPicker 颜色选择器，采用复合组件模式。`ColorPicker` 为根容器，内部组合 `ColorPickerSelection`、`ColorPickerHue`、`ColorPickerAlpha`、`ColorPickerOutput` 等子组件构成完整取色面板。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要用户选择或输入颜色值时使用，例如主题色配置、标注颜色等场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`ColorPicker` 包裹子组件构成完整面板。
+
+<ComponentShowcase id="color-picker" path="color-picker/basic" />
+
+```tsx
+import {
+  ColorPicker, ColorPickerSelection,
+  ColorPickerHue, ColorPickerAlpha, ColorPickerOutput,
+} from "@/components/ui/color-picker"
+
+export default function Demo() {
+  return (
+    <ColorPicker defaultValue="#1677ff" className="w-60 gap-3">
+      <ColorPickerSelection className="h-32 rounded-md" />
+      <ColorPickerHue />
+      <ColorPickerAlpha />
+      <ColorPickerOutput />
+    </ColorPicker>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ColorPicker（根容器）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控颜色值 | `string \| Color` | - |
+| defaultValue | 默认颜色 | `string \| Color` | `#000000` |
+| onChange | 颜色变化回调 | `(rgba: [r,g,b,a]) => void` | - |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| ColorPickerSelection | 色相-饱和度选择面板 |
+| ColorPickerHue | 色相滑动条 |
+| ColorPickerAlpha | 透明度滑动条 |
+| ColorPickerOutput | 当前颜色值输出展示 |
+| ColorPickerEyeDropper | 吸管取色按钮 |
+| ColorPickerFormat | 颜色格式切换 |
+
+所有子组件需在 `ColorPicker` 内部使用，通过 Context 获取颜色状态。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，通过 Context 和标签名定位。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/color-picker` 导入 `ColorPicker` 及所需子组件。
+2. `ColorPicker` 为必选根容器，子组件按需组合使用。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="color-picker" />

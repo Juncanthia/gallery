@@ -1,0 +1,66 @@
+Switch 用于在两个互斥状态间即时切换，如开/关、启用/禁用。相比 Checkbox，Switch 更适合无需二次确认即生效的设置项。
+
+<h2 id="when-to-use">何时使用</h2>
+
+- 需要表示开关状态（如启用/禁用通知）。
+- 切换后结果立即生效的设置（如暗色模式切换）。
+- 需要加载中的异步切换（如开启某个服务需要等待）。
+
+当操作需要用户确认或存在多选项时，使用 Checkbox 或 RadioGroup。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+支持 `small`/`middle` 尺寸、`loading` 加载态和 `checkedChildren`/`unCheckedChildren` 自定义内容。
+
+<ComponentShowcase id="switch" path="switch/basic" />
+
+```tsx
+import { useState } from "react"
+import { Switch } from "@/components/ui/switch"
+
+export default function Demo() {
+  const [on, setOn] = useState(true)
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Switch checked={on} onChange={setOn} />
+      <Switch defaultChecked />
+      <Switch disabled />
+      <Switch defaultChecked disabled />
+      <Switch size="small" />
+      <Switch loading />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| checked | 开关状态（受控） | `boolean` | - |
+| defaultChecked | 默认开关状态 | `boolean` | `false` |
+| onChange | 状态变化回调，参数 `boolean` | `(checked: boolean) => void` | - |
+| size | 尺寸 | `small` \| `middle` | `middle` |
+| loading | 加载中状态，开关不可操作 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| checkedChildren | 开启时显示的内联内容 | `ReactNode` | - |
+| unCheckedChildren | 关闭时显示的内联内容 | `ReactNode` | - |
+| thumbIcon | 滑块上的自定义图标 | `ReactElement` | - |
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `switch` | Switch 根元素 |
+| `switch-thumb` | 滑块 |
+| `switch-icon` | 滑块图标 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/switch` 导入。
+2. `onChange` 回调参数是 `boolean`（不是事件对象）。
+3. 异步操作使用 `loading`，禁用使用 `disabled`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="switch" />

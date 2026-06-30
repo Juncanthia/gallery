@@ -1,0 +1,24 @@
+HoverCard 悬停卡片，鼠标悬浮时弹出信息面板，基于 Radix HoverCard 实现。
+
+<ComponentShowcase id="hover-card" path="hover-card/basic" />
+
+```tsx
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+export default function Demo() {
+  return <HoverCard><HoverCardTrigger className="text-sm underline cursor-pointer">悬停查看</HoverCardTrigger><HoverCardContent className="w-60"><div className="text-sm">额外信息</div></HoverCardContent></HoverCard>
+}
+```
+
+<h2 id="api">API</h2>
+子组件：`HoverCardTrigger`、`HoverCardContent`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/hover-card` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="hover-card" />

@@ -1,0 +1,39 @@
+Image 增强的图片组件，支持占位、加载状态和错误回退。
+
+<ComponentShowcase id="image" path="image/basic" />
+
+```tsx
+import { Image } from "@/components/ui/image"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-end gap-4">
+      <Image src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=200&h=200&fit=crop" alt="示例" width={100} height={100} className="rounded" />
+      <Image src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=200&h=200&fit=crop" alt="圆形" width={80} height={80} className="rounded-full" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| src | 图片地址 | `string` |
+| alt | 替代文本 | `string` |
+| width / height | 尺寸 | `number` |
+| fallback | 加载失败回退 | `ReactNode` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/image` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `image` | - |
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="image" />

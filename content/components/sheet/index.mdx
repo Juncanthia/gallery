@@ -1,0 +1,38 @@
+Sheet 从屏幕边缘滑出的面板，基于 Radix Dialog 实现，常用于移动端的菜单或详情面板。
+
+<ComponentShowcase id="sheet" path="sheet/basic" />
+
+```tsx
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+
+export default function Demo() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild><Button variant="outlined">打开面板</Button></SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>面板标题</SheetTitle>
+          <SheetDescription>侧边滑出面板</SheetDescription>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 滑出方向 | `top` \| `bottom` \| `left` \| `right` | `right` |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/sheet` 导入。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="sheet" />

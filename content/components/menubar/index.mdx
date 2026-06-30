@@ -1,0 +1,115 @@
+Menubar 提供桌面应用风格的顶部菜单栏，支持多级菜单、子菜单、分隔线和快捷键，基于 Radix Menubar 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为应用提供桌面风格的菜单栏时使用，例如编辑器、IDE 或管理后台的顶部导航。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`Menubar` 包含多个 `MenubarMenu`，每个菜单有独立的 `MenubarTrigger` 和 `MenubarContent`。
+
+<ComponentShowcase
+  id="menubar"
+  path="menubar/basic"
+/>
+
+```tsx
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@/components/ui/menubar"
+
+export default function Demo() {
+  return (
+    <Menubar>
+      <MenubarMenu>
+        <MenubarTrigger>文件</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>新建</MenubarItem>
+          <MenubarItem>打开</MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>保存</MenubarItem>
+          <MenubarItem>另存为</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>编辑</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>撤销</MenubarItem>
+          <MenubarItem>重做</MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>剪切</MenubarItem>
+          <MenubarItem>复制</MenubarItem>
+          <MenubarItem>粘贴</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Menubar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 通过配置数组声明菜单 | `MenubarItemOption[]` | - |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| MenubarMenu | 单个菜单（文件、编辑等） |
+| MenubarTrigger | 菜单栏标签触发器 |
+| MenubarContent | 下拉内容面板 |
+| MenubarItem | 菜单项 |
+| MenubarSeparator | 分隔线 |
+| MenubarLabel | 分组标题 |
+| MenubarGroup | 菜单分组 |
+| MenubarShortcut | 快捷键标注 |
+| MenubarSub | 子菜单 |
+| MenubarCheckboxItem | 复选菜单项 |
+| MenubarRadioGroup / MenubarRadioItem | 单选项 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Menubar 代码时：
+
+1. 从 `@/components/ui/menubar` 导入。
+2. 使用 `MenubarMenu` 包裹每个顶级菜单。
+3. 不要引入 Ant Design 的 `Menu`（horizontal 模式）。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `menubar` | - |
+| `menubar-checkbox-item` | - |
+| `menubar-content` | - |
+| `menubar-group` | - |
+| `menubar-item` | - |
+| `menubar-label` | - |
+| `menubar-menu` | - |
+| `menubar-portal` | - |
+| `menubar-radio-group` | - |
+| `menubar-radio-item` | - |
+| `menubar-separator` | - |
+| `menubar-shortcut` | - |
+| `menubar-sub` | - |
+| `menubar-sub-content` | - |
+| `menubar-sub-trigger` | - |
+| `menubar-trigger` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="menubar" />

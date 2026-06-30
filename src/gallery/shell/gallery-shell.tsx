@@ -137,6 +137,7 @@ export function GalleryShell({
     select: (state) => state.location.pathname,
   })
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarTab, setSidebarTab] = useState<"components" | "blocks">("components")
   const [darkMode, setDarkMode] = useState(() =>
     document.documentElement.classList.contains("dark")
   )
@@ -180,9 +181,24 @@ export function GalleryShell({
     [pathname]
   )
 
+  const { componentGroups, blockGroups } = useMemo(() => {
+    const components: GalleryNavGroup[] = []
+    const blocks: GalleryNavGroup[] = []
+    for (const group of navGroups) {
+      if (group.group === "复合组件" || group.groupEn === "Blocks") {
+        blocks.push(group)
+      } else {
+        components.push(group)
+      }
+    }
+    return { componentGroups: components, blockGroups: blocks }
+  }, [navGroups])
+
+  const visibleGroups = sidebarTab === "components" ? componentGroups : blockGroups
+
   const flatItems = useMemo(
-    () => navGroups.flatMap((group) => group.items),
-    [navGroups]
+    () => visibleGroups.flatMap((group) => group.items),
+    [visibleGroups]
   )
   const currentIndex = flatItems.findIndex((item) => item.to === pathname)
   const prevItem = currentIndex > 0 ? flatItems[currentIndex - 1] : null
@@ -321,8 +337,37 @@ export function GalleryShell({
             />
           </div>
 
+          {blockGroups.length > 0 ? (
+            <div className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-muted p-1">
+              <button
+                className={cn(
+                  "rounded-md px-2 py-1 text-xs font-medium transition-colors",
+                  sidebarTab === "components"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                onClick={() => setSidebarTab("components")}
+                type="button"
+              >
+                组件
+              </button>
+              <button
+                className={cn(
+                  "rounded-md px-2 py-1 text-xs font-medium transition-colors",
+                  sidebarTab === "blocks"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                onClick={() => setSidebarTab("blocks")}
+                type="button"
+              >
+                复合组件
+              </button>
+            </div>
+          ) : null}
+
           <nav className="flex scrollbar-thin flex-col gap-px">
-            {navGroups.map((group, groupIndex) => (
+            {visibleGroups.map((group, groupIndex) => (
               <div key={group.group}>
                 {groupIndex > 0 ? (
                   <div className="my-1.5 h-px bg-border" />
@@ -353,6 +398,16 @@ export function GalleryShell({
                         {item.en ? (
                           <span className="min-w-0 truncate text-xs text-muted-foreground">
                             {item.en}
+                          </span>
+                        ) : null}
+                        {item.antd && item.migration ? (
+                          <span className={cn(
+                            "ml-auto shrink-0 rounded-full px-1.5 py-px text-[10px] font-medium leading-tight",
+                            isActive(item.to)
+                              ? "bg-primary/15 text-primary"
+                              : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                          )}>
+                            {item.migration}%
                           </span>
                         ) : null}
                       </GalleryLink>

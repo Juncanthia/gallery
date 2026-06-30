@@ -1,0 +1,99 @@
+FormField 为表单控件提供统一的标签、校验状态和帮助文本包装。`FormItem` 组合 Label + Control + Message 构成完整的表单项。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对表单输入控件进行统一的标签布局、校验反馈和错误展示时使用。每个 FormItem 可独立配置：
+
+- 标签文本和必填标记（`label` + `required`）。
+- 校验状态和错误信息（`validateStatus` + `errors`）。
+- 帮助文本或额外说明（`help` / `extra`）。
+- 水平或垂直布局。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`FormItem` 包含 `FieldLabel`、`Field`、`FieldDescription`。
+
+<ComponentShowcase id="form-field" path="form-field/basic" />
+
+```tsx
+import { FormItem, Field, FieldLabel, FieldDescription } from "@/components/ui/form-field"
+import { Input } from "@/components/ui/input"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-4">
+      <FormItem>
+        <FieldLabel required>用户名</FieldLabel>
+        <Field><Input placeholder="请输入用户名" /></Field>
+      </FormItem>
+      <FormItem>
+        <FieldLabel>邮箱</FieldLabel>
+        <Field><Input placeholder="请输入邮箱" /></Field>
+        <FieldDescription>请输入有效的邮箱地址</FieldDescription>
+      </FormItem>
+      <FormItem validateStatus="error">
+        <FieldLabel>密码</FieldLabel>
+        <Field><Input placeholder="请输入密码" /></Field>
+        <FieldDescription>密码长度不能少于 6 位</FieldDescription>
+      </FormItem>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### FormItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 标签文本 | `ReactNode` | - |
+| required | 是否显示必填星号（红色 `*`） | `boolean` | `false` |
+| help | 帮助文本（显示在控件下方） | `ReactNode` | - |
+| extra | 额外信息（显示在控件右侧） | `ReactNode` | - |
+| errors | 校验错误信息列表 | `{ message?: string }[]` | - |
+| validateStatus | 校验状态，控制边框和消息颜色 | `success` \| `warning` \| `error` | - |
+| htmlFor | 关联表单控件的 id | `string` | - |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| FieldLabel | 标签，基于 Label 组件 |
+| Field | 控件插入区域 |
+| FieldDescription | 帮助/错误信息文本（`error` 状态自动变红色） |
+
+### Form（容器）
+
+`Form` 组件提供 `layout`（`vertical` / `horizontal` / `inline`）属性和 `items` 数组模式快速构建表单。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `form` | Form 容器 |
+| `field-set` | 字段组 |
+| `field-legend` | 字段组标题 |
+| `field` / `field-label` / `field-content` / `field-description` / `field-error` | 表单项相关 |
+| `field-group` / `field-separator` | 字段分组 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现水平表单布局？
+
+在 `Form` 容器上设置 `layout="horizontal"`，每个 FormItem 会自动将 label 和 control 水平排列。
+
+### 如何展示多个校验错误？
+
+`errors` 数组中的每条错误会依次渲染。通常配合表单校验库（如 Zod）使用。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/form-field` 导入。
+2. 每个输入控件用 `FormItem` 包裹，遵循 Label → Control → Message 结构。
+3. 必填字段用 `required` 属性标记星号。
+4. 校验状态用 `validateStatus="error"`，不要手动写红色边框。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="form-field" />

@@ -1,0 +1,119 @@
+NavigationMenu 为站点提供顶级导航菜单，支持下拉面板和链接项，基于 Radix NavigationMenu 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为网站或应用提供主导航栏时使用，通常置于页面顶部。支持带下拉面板的多级导航。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`NavigationMenuList` 包含多个 `NavigationMenuItem`，可带 `NavigationMenuTrigger` 展开下拉面板。
+
+<ComponentShowcase
+  id="navigation-menu"
+  path="navigation-menu/basic"
+/>
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+
+export default function Demo() {
+  return (
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>产品</NavigationMenuTrigger>
+          <NavigationMenuContent className="w-48 p-2">
+            <NavigationMenuLink href="#">Web 端</NavigationMenuLink>
+            <br />
+            <NavigationMenuLink href="#">移动端</NavigationMenuLink>
+            <br />
+            <NavigationMenuLink href="#">桌面端</NavigationMenuLink>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>资源</NavigationMenuTrigger>
+          <NavigationMenuContent className="w-48 p-2">
+            <NavigationMenuLink href="#">文档</NavigationMenuLink>
+            <br />
+            <NavigationMenuLink href="#">API</NavigationMenuLink>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="#">定价</NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### NavigationMenu
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 通过配置数组声明菜单 | `NavigationMenuItemOption[]` | - |
+| viewport | 显示 viewport 容器 | `boolean` | `true` |
+| selectedKeys | 受控选中项 | `React.Key[]` | - |
+| onSelect | 选中回调 | `(info: SelectInfo) => void` | - |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| NavigationMenuList | 导航链接列表 |
+| NavigationMenuItem | 单个导航项 |
+| NavigationMenuTrigger | 带下拉面板的触发器 |
+| NavigationMenuContent | 下拉面板内容 |
+| NavigationMenuLink | 导航链接，支持 `asChild` |
+| NavigationMenuIndicator | 下拉指示器 |
+| NavigationMenuViewport | 下拉面板视口容器 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何配合路由使用？
+
+`NavigationMenuLink` 支持 `asChild`：
+
+```tsx
+<NavigationMenuLink asChild>
+  <Link to="/products">产品</Link>
+</NavigationMenuLink>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 NavigationMenu 代码时：
+
+1. 从 `@/components/ui/navigation-menu` 导入。
+2. 不要引入 Ant Design 的 `Menu`（horizontal 模式）。
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `navigation-menu` | - |
+| `navigation-menu-content` | - |
+| `navigation-menu-indicator` | - |
+| `navigation-menu-item` | - |
+| `navigation-menu-link` | - |
+| `navigation-menu-list` | - |
+| `navigation-menu-trigger` | - |
+| `navigation-menu-viewport` | - |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="navigation-menu" />
