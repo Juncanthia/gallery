@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: GridDistortion
+subtitle: 网格扭曲
+description: 基于 Three.js 的网格扭曲图片效果，鼠标交互产生 DataTexture 形变。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 15 }
+source: { component: src/components/react-bits/grid-distortion.tsx, docs: content/components/rb/grid-distortion/index.mdx, examples: [content/components/rb/grid-distortion/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, threejs: true }
+---

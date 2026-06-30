@@ -1,0 +1,93 @@
+TextType 打字机文字组件，模拟逐字打印和删除动画，支持多段文字循环切换、变速打印、彩色文字和反向输出模式。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要模拟打字机逐字输出文本动画时使用。
+常见场景：
+- 首页动态标语，循环展示多个关键词或 Slogan
+- 终端/代码风格的逐字输出效果
+- 对话式 AI 的输出动画模拟
+不推荐：
+- 长段落文本（打字动画耗时长，用户不耐等待）
+- 需要 SEO 索引的关键文字（动画过程中的文字不可被爬虫抓取）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/text-type" path="rb/text-type/basic" />
+
+```tsx
+import { TextType } from "@/components/ui/rb-text-type"
+
+export default function Demo() {
+  return (
+    <div className="flex justify-center p-8">
+      <TextType />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+```tsx
+import { TextType } from "@/components/ui/rb-text-type"
+
+export default function Demo() {
+  return (
+    <div className="flex justify-center p-8 text-2xl">
+      <TextType
+        text={["Build faster.", "Ship smarter.", "Scale bigger."]}
+        typingSpeed={60}
+        deletingSpeed={25}
+        pauseDuration={1500}
+        loop
+        textColors={["#ff4444", "#44ff44", "#4488ff"]}
+        cursorCharacter="▌"
+        cursorBlinkDuration={0.3}
+        reverseMode={false}
+        startOnVisible
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### TextType
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 文本内容（单段或多段循环） | `string \| string[]` | `"Text Type Animation"` |
+| as | 渲染的 HTML 标签 | `keyof JSX.IntrinsicElements` | `"div"` |
+| typingSpeed | 打字速度（毫秒/字符） | `number` | `50` |
+| initialDelay | 初始延迟（毫秒） | `number` | `0` |
+| pauseDuration | 每段文字打完后的暂停（毫秒） | `number` | `2000` |
+| deletingSpeed | 删除速度（毫秒/字符） | `number` | `30` |
+| loop | 是否循环播放 | `boolean` | `true` |
+| showCursor | 是否显示闪烁光标 | `boolean` | `true` |
+| hideCursorWhileTyping | 打字进行时隐藏光标 | `boolean` | `false` |
+| cursorCharacter | 光标字符 | `string` | `"\|"` |
+| cursorClassName | 光标元素的自定义类名 | `string` | - |
+| cursorBlinkDuration | 光标闪烁周期（秒） | `number` | `0.5` |
+| textColors | 每段文字的独立颜色 | `string[]` | `[]` |
+| variableSpeed | 随机变速打印范围 | `{ min: number; max: number }` | - |
+| onSentenceComplete | 每段文字完成回调 | `(sentence, index) => void` | - |
+| startOnVisible | 仅在元素可见时开始动画 | `boolean` | `false` |
+| reverseMode | 反向输出文字 | `boolean` | `false` |
+| className | 自定义类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+### 如何实现多段文字循环切换？
+传入 `text` 为 `string[]` 数组并设置 `loop={true}`，每段文字依次打印、暂停、删除，然后切换到下一段。
+
+### 如何让文字具有打字机的不均匀速度感？
+设置 `variableSpeed={{ min: 30, max: 120 }}`，每个字符的打印间隔将在 30-120ms 之间随机波动，模拟真人打字效果。
+
+### 如何在页面滚动到组件时才启动动画？
+设置 `startOnVisible={true}`，组件使用 IntersectionObserver 监听可见性，仅在元素进入视口时开始打印。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-text-type` 导入。
+2. 依赖 `gsap`（用于光标闪烁动画），确保项目中已安装。
+3. `text` 属性支持 `string` 或 `string[]`，数组模式会循环播放。
+4. 通过 `as` 属性可渲染为任意 HTML 标签（如 `"h1"`、`"p"`、`"span"`）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-text-type" />

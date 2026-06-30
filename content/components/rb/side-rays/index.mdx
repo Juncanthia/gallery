@@ -1,0 +1,78 @@
+SideRays 基于 OGL（WebGL）的侧向射线光效背景组件，从角落发射动态光线，支持颜色、强度、衰减、倾斜和饱和度等全面视觉参数调节，带 IntersectionObserver 性能优化。
+
+<h2 id="when-to-use">何时使用</h2>
+需要从角落发射光线的动态背景时使用。
+常见场景：
+- 页面 Hero 区域的背景光效
+- 卡片/面板的装饰性光影
+- 暗色主题页面的视觉亮点
+不推荐：
+- 光线方向与页面内容冲突的场景（如右上角有重要信息被光覆盖）
+- 需要纯色简洁背景的场景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+<ComponentShowcase id="rb/side-rays" path="rb/side-rays/basic" />
+
+```tsx
+import { SideRays } from "@/components/ui/rb-side-rays"
+export default function Demo() { return <div className="w-full h-64 relative bg-black"><SideRays /></div> }
+```
+
+### 左下角蓝色冷光
+```tsx
+import { SideRays } from "@/components/ui/rb-side-rays"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-80 relative bg-gray-950">
+      <SideRays
+        origin="bottom-left"
+        rayColor1="#3b82f6"
+        rayColor2="#06b6d4"
+        intensity={3}
+        spread={1.5}
+        tilt={15}
+        saturation={2.0}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### SideRays
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| speed | 光线动画速度 | `number` | `2.5` |
+| rayColor1 | 光线颜色 1（hex 格式） | `string` | `"#EAB308"` |
+| rayColor2 | 光线颜色 2（hex 格式） | `string` | `"#96c8ff"` |
+| intensity | 光线强度，值越大光线越亮 | `number` | `2` |
+| spread | 光线扩散角度，值越大光束越宽 | `number` | `2` |
+| origin | 光源起始角落 | `"top-right" \| "top-left" \| "bottom-right" \| "bottom-left"` | `"top-right"` |
+| tilt | 光线倾斜角度（度），微调光束方向 | `number` | `0` |
+| saturation | 颜色饱和度，>1 增强饱和度，<1 降低 | `number` | `1.5` |
+| blend | 两种光线的混合比例（0=仅 color1，1=仅 color2） | `number` | `0.75` |
+| falloff | 光线衰减指数，值越大衰减越快 | `number` | `1.6` |
+| opacity | 整体不透明度 | `number` | `1.0` |
+| className | 容器的自定义类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+### 光线显示不全或被截断？
+组件渲染为 `div`，宽高继承自父容器。确保父容器有明确的宽高设置。光线从指定角落向外辐射，光源位置在容器边界外 `(1.1*w, -0.5*h)`，确保容器边界外仍有绘制空间。
+
+### 性能如何？会持续消耗 GPU 吗？
+组件使用 IntersectionObserver 检测可见性：不可见时自动销毁 WebGL 上下文停止渲染，进入视口时重新初始化。这大幅降低了不可见时的性能开销。所有 props 变化都会触发 WebGL uniform 更新（无需重新创建上下文）。
+
+### blend 参数如何影响视觉效果？
+`blend` 混合的是两个独立的光线层。rayColor1 的贡献为 `(1-blend)*0.9`，rayColor2 的贡献为 `blend*0.9`。设为 0.5 时两者等量混合。调整 blend 可以微调光线的色调倾向。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-side-rays` 导入。
+2. 依赖 OGL（`ogl`），确保项目已安装。
+3. 组件需要父容器设置明确的宽高。
+4. 使用 IntersectionObserver 自动管理渲染生命周期，无需手动控制可见性。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-side-rays" />

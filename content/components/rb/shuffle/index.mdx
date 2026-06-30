@@ -1,0 +1,96 @@
+Shuffle 字符洗牌动画组件，每个字符通过 GSAP 驱动逐位翻转显示真实字符，支持四个方向的滚动效果、随机延迟和循环播放。
+
+<h2 id="when-to-use">何时使用</h2>
+需要展示字符逐个翻转/洗牌的动画效果。
+常见场景：
+- 页面首屏标题的炫酷入场动画
+- 品牌名称/Logo 的动态展示
+- 游戏化界面的得分或成就展示
+不推荐：
+- 正文段落（逐字动画过长影响阅读效率）
+- 需要无障碍访问的文字（乱码期间不可读）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/shuffle" path="rb/shuffle/basic" />
+
+```tsx
+import { Shuffle } from "@/components/ui/rb-shuffle"
+
+export default function Demo() {
+  return (
+    <div className="flex justify-center p-8">
+      <Shuffle />
+    </div>
+  )
+}
+```
+
+### 向上洗牌 + 二进制风格乱码
+```tsx
+import { Shuffle } from "@/components/ui/rb-shuffle"
+
+export default function Demo() {
+  return (
+    <div className="flex justify-center p-8 bg-black">
+      <Shuffle
+        text="ENCRYPTED"
+        shuffleDirection="up"
+        shuffleTimes={3}
+        scrambleCharset="01"
+        animationMode="random"
+        maxDelay={0.5}
+        loop
+        loopDelay={2000}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Shuffle
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 文本内容 | `string` | `"SHUFFLE"` |
+| className | 自定义样式类名 | `string` | `""` |
+| style | 自定义内联样式 | `React.CSSProperties` | `{}` |
+| shuffleDirection | 洗牌滚动方向 | `"right" \| "left" \| "up" \| "down"` | `"right"` |
+| duration | 每个字符的动画持续时间（秒） | `number` | `0.35` |
+| maxDelay | 随机模式下的最大随机延迟（秒） | `number` | `0` |
+| ease | GSAP 缓动函数名称 | `string` | `"power3.out"` |
+| threshold | ScrollTrigger 触发阈值（0-1） | `number` | `0.1` |
+| rootMargin | ScrollTrigger rootMargin | `string` | `"-100px"` |
+| tag | 渲染的 HTML 标签 | `keyof JSX.IntrinsicElements` | `"p"` |
+| textAlign | 文字对齐方式 | `React.CSSProperties["textAlign"]` | `"center"` |
+| onShuffleComplete | 洗牌完成回调 | `() => void` | - |
+| shuffleTimes | 每个字符的乱码层数（越大翻转越久） | `number` | `1` |
+| animationMode | 动画模式：evenodd=奇偶交错，random=随机延迟 | `"evenodd" \| "random"` | `"evenodd"` |
+| loop | 是否循环播放 | `boolean` | `false` |
+| loopDelay | 循环间隔（秒） | `number` | `0` |
+| stagger | evenodd 模式下的交错延迟（秒） | `number` | `0.03` |
+| scrambleCharset | 乱码字符集（空串则使用原文复制） | `string` | `""` |
+| colorFrom | 动画起始颜色 | `string` | - |
+| colorTo | 动画结束颜色 | `string` | - |
+| triggerOnce | ScrollTrigger 是否只触发一次 | `boolean` | `true` |
+| respectReducedMotion | 是否尊重系统的减少动效设置 | `boolean` | `true` |
+| triggerOnHover | 完成后是否支持鼠标悬停重播 | `boolean` | `true` |
+
+<h2 id="faq">常见问题</h2>
+### 动画不触发？
+组件通过 ScrollTrigger 驱动首次播放。检查页面是否有足够滚动空间，或降低 `threshold` 值。如果元素在首屏内且上方无内容，可能需要向上滚动一点触发。可通过减小 `rootMargin` 的负值来提前触发。
+
+### evenodd 和 random 模式的区别？
+evenodd：奇偶索引字符分两组，奇数先播放、偶数在奇数完成 70% 后开始。整体紧凑有序。random：每个字符有独立的随机延迟（0 到 `maxDelay`），效果更随机自然。
+
+### scrambleCharset 为空时显示什么？
+空字符串时，乱码层使用原始字符的克隆（即实际显示的可读文字），而不是随机乱码。这会让翻转动画看起来像"字符卡片翻转"而非"乱码破译"。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-shuffle` 导入。
+2. 依赖 `gsap`、`gsap/ScrollTrigger` 和 `@gsap/react`，确保全部已安装。
+3. 首次播放由 ScrollTrigger 驱动，播放完成后支持 hover 重播。
+4. 当 `respectReducedMotion=true` 且用户系统设置了减少动画时，组件直接显示最终文本跳过动画。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-shuffle" />

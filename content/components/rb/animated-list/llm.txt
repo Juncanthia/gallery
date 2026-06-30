@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: AnimatedList
+subtitle: 动画列表
+description: 带动画效果的列表组件，支持键盘导航和渐变遮罩。
+demo: { cols: 1 }
+group: { title: Components, order: 1 }
+source: { component: src/components/react-bits/animated-list.tsx, docs: content/components/rb/animated-list/index.mdx, examples: [content/components/rb/animated-list/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, motion: true }
+---

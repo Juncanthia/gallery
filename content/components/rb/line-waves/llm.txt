@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: LineWaves
+subtitle: 线波
+description: 彩色线条波动画背景。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 0 }
+source: { component: src/components/react-bits/line-waves.tsx, docs: content/components/rb/line-waves/index.mdx, examples: [content/components/rb/line-waves/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, webgl: true }
+---

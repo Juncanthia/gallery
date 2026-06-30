@@ -1,0 +1,19 @@
+---
+category: react-bits
+title: AnimatedContent
+subtitle: 滚动动画内容
+description: 基于 Intersection Observer 的滚动触发内容动画组件。
+demo:
+  cols: 1
+group:
+  title: Animations
+  order: 1
+source:
+  component: src/components/react-bits/animated-content.tsx
+  docs: content/components/rb/animated-content/index.mdx
+  examples:
+    - content/components/rb/animated-content/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---

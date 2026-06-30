@@ -1,0 +1,19 @@
+---
+category: react-bits
+title: LaserFlow
+subtitle: 激光流
+description: 垂直激光光束动画效果，带有光束粒子流和体积雾气。
+demo:
+  cols: 1
+group:
+  title: Animations
+  order: 13
+source:
+  component: src/components/react-bits/laser-flow.tsx
+  docs: content/components/rb/laser-flow/index.mdx
+  examples:
+    - content/components/rb/laser-flow/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---

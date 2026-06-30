@@ -1,0 +1,83 @@
+ReflectiveCard 反射金属卡片，利用摄像头画面和 SVG 滤镜生成液态金属反射效果，适合安全/科技风格展示。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要高级安全/科技感的卡片展示时使用。
+常见场景：
+- 门禁卡/会员卡模拟展示
+- 安全产品特性卡片
+- 身份验证页面装饰
+不推荐：
+- 用户可能拒绝摄像头权限的场景
+- 无摄像头的桌面设备
+- 隐私敏感的页面
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/reflective-card" path="rb/reflective-card/basic" />
+
+```tsx
+import { ReflectiveCard } from "@/components/ui/rb-reflective-card"
+
+export default function Demo() {
+  return <ReflectiveCard />
+}
+```
+
+### 自定义金属质感
+
+```tsx
+import { ReflectiveCard } from "@/components/ui/rb-reflective-card"
+
+export default function Demo() {
+  return (
+    <ReflectiveCard
+      color="gold"
+      metalness={1.2}
+      roughness={0.3}
+      displacementStrength={15}
+      specularConstant={1.5}
+      overlayColor="rgba(255, 215, 0, 0.15)"
+      blurStrength={8}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ReflectiveCard
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| blurStrength | 模糊强度（px） | number | 12 |
+| color | 文字颜色 | string | "white" |
+| metalness | 金属感强度 | number | 1 |
+| roughness | 表面粗糙度 | number | 0.4 |
+| overlayColor | 覆盖层颜色 | string | "rgba(255,255,255,0.1)" |
+| displacementStrength | SVG 置换贴图强度 | number | 20 |
+| noiseScale | 噪点纹理缩放 | number | 1 |
+| specularConstant | 镜面反射常数 | number | 1.2 |
+| grayscale | 灰度化程度（0-1，1=完全灰度） | number | 1 |
+| glassDistortion | 玻璃扭曲强度 | number | 0 |
+| className | 额外的 CSS 类名 | string | "" |
+| style | 内联样式 | React.CSSProperties | {} |
+
+<h2 id="faq">常见问题</h2>
+
+### 摄像头权限被拒绝怎么办？
+组件会静默处理错误并在控制台输出警告。卡片仍会渲染，但金属反射效果将不可见（显示为无纹理的静态卡片）。
+
+### 如何调节金属反射的强度？
+`metalness` 和 `roughness` 控制 PBR 属性。metalness 越高越像金属，roughness 越高表面越粗糙（反射越模糊）。
+
+### 什么是 glassDistortion？
+玻璃扭曲效果在金属反射层之上额外叠加基于 Alpha 通道的置换，产生类似毛玻璃的折射感。设为 0 则禁用。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-reflective-card` 导入。
+2. 需要用户授权摄像头权限才能看到完整的金属反射效果。
+3. 依赖 `lucide-react` 图标库，请确保项目已安装。
+4. 使用 SVG 滤镜实现，需要 `reflective-card-container` 和相关 CSS 类的样式支持。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-reflective-card" />

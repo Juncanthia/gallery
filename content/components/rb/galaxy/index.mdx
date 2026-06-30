@@ -1,0 +1,87 @@
+Galaxy 基于 OGL（WebGL）的星空/星系背景组件，多层星星动画支持色调偏移、旋转、鼠标排斥/吸引和闪烁效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要星空、银河或太空主题的动态背景时使用。
+常见场景：
+- 太空/天文主题的页面背景
+- 科幻品牌或产品的视觉装饰
+- 需要鼠标交互的星空动态效果
+不推荐：
+- 移动端低性能设备（WebGL 开销较大）
+- 需要纯色静态背景的场景
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/galaxy" path="rb/galaxy/basic" />
+
+```tsx
+import { Galaxy } from "@/components/ui/rb-galaxy"
+export default function Demo() { return <Galaxy /> }
+```
+
+### 自定义色调与排斥
+
+```tsx
+import { Galaxy } from "@/components/ui/rb-galaxy"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <Galaxy
+        hueShift={200}
+        density={1.5}
+        rotationSpeed={0.2}
+        twinkleIntensity={0.6}
+        className="h-64 w-full"
+      />
+      <Galaxy
+        mouseRepulsion={false}
+        autoCenterRepulsion={1.5}
+        transparent={false}
+        className="h-64 w-full"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Galaxy
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| focal | 星空焦点位置（归一化坐标 [x, y]） | `[number, number]` | `[0.5, 0.5]` |
+| rotation | 星空旋转向量 | `[number, number]` | `[1.0, 0.0]` |
+| starSpeed | 星星流动速度 | `number` | `0.5` |
+| density | 星星密度，值越大越密 | `number` | `1` |
+| hueShift | 色调偏移角度（度） | `number` | `140` |
+| disableAnimation | 完全禁用动画（冻结所有运动） | `boolean` | `false` |
+| speed | 动画整体播放速度 | `number` | `1.0` |
+| mouseInteraction | 是否启用鼠标交互 | `boolean` | `true` |
+| glowIntensity | 星星发光强度 | `number` | `0.3` |
+| saturation | 颜色饱和度（0=灰度） | `number` | `0.0` |
+| mouseRepulsion | 鼠标排斥模式（true=排斥, false=吸引） | `boolean` | `true` |
+| repulsionStrength | 鼠标排斥/吸引的强度 | `number` | `2` |
+| twinkleIntensity | 星星闪烁强度（0=不闪烁） | `number` | `0.3` |
+| rotationSpeed | 自动旋转速度 | `number` | `0.1` |
+| autoCenterRepulsion | 自动从中心排斥（>0 启用，值=强度） | `number` | `0` |
+| transparent | 是否使用透明背景（支持叠加） | `boolean` | `true` |
+
+<h2 id="faq">常见问题</h2>
+### mouseRepulsion 和 autoCenterRepulsion 有什么区别？
+`mouseRepulsion=true` 时星星从鼠标位置被推开（使用 `repulsionStrength` 控制强度）。`autoCenterRepulsion>0` 时星星始终从画面中心被推开，不受鼠标影响。两者互斥，`autoCenterRepulsion>0` 优先。
+
+### transparent 什么时候应该设为 false？
+当 Galaxy 作为独立背景（非叠加在内容之上）时，`transparent=false` 会使用黑色不透明背景。作为叠加层使用时，`transparent=true` 让下层内容可见。
+
+### hueShift 如何影响星星颜色？
+片段着色器以 HSL 模型计算星星颜色，`hueShift` 对色相进行偏移（360 度为一个周期）。默认值 140 产生偏蓝紫的星空色调。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-galaxy` 导入。
+2. 依赖 `ogl`（OGL WebGL 框架），确保项目中已安装。
+3. 组件返回纯 div 容器，需通过 `className` 设置宽高。
+4. 使用 4 层星星渲染，每层有不同的缩放和透明度，模拟景深效果。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-galaxy" />

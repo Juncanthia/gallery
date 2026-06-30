@@ -1,0 +1,89 @@
+Balatro 基于 OGL 的迷幻漩涡着色器背景组件，鼠标交互驱动彩色漩涡旋转效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要创建类似 Balatro 游戏风格的迷幻旋转色轮背景效果时使用。
+
+常见场景：
+- 音乐可视化界面、DJ 页面的动态背景
+- 需要视觉冲击力的品牌页面 Hero 区
+- 等待/加载页面的催眠式动画背景
+
+不推荐：
+- 移动端性能敏感场景（每帧执行复杂片段着色器）
+- 需要传达清晰前景信息时（适合做背景层）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/balatro" path="rb/balatro/basic" />
+
+```tsx
+import { Balatro } from "@/components/ui/rb-balatro"
+
+export default function Demo() {
+  return <Balatro />
+}
+```
+
+### 自定义配色与自动旋转
+
+```tsx
+import { Balatro } from "@/components/ui/rb-balatro"
+
+export default function CustomDemo() {
+  return (
+    <Balatro
+      color1="#FF6B6B"
+      color2="#4ECDC4"
+      color3="#1A1A2E"
+      isRotate
+      spinSpeed={10}
+      contrast={4.0}
+      mouseInteraction={false}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Balatro
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| spinRotation | 旋转系数 | `number` | `-2.0` |
+| spinSpeed | 旋转基础速度 | `number` | `7.0` |
+| offset | 着色器 UV 偏移 [x, y] | `[number, number]` | `[0.0, 0.0]` |
+| color1 | 第一种颜色 | `string` | `"#DE443B"` |
+| color2 | 第二种颜色 | `string` | `"#006BB4"` |
+| color3 | 第三种颜色 | `string` | `"#162325"` |
+| contrast | 对比度系数 | `number` | `3.5` |
+| lighting | 光照强度 | `number` | `0.4` |
+| spinAmount | 旋转量 | `number` | `0.25` |
+| pixelFilter | 像素滤镜系数（值越小越像素化） | `number` | `745.0` |
+| spinEase | 旋转缓动系数 | `number` | `1.0` |
+| isRotate | 是否持续自动旋转 | `boolean` | `false` |
+| mouseInteraction | 是否响应鼠标位置 | `boolean` | `true` |
+
+<h2 id="faq">常见问题</h2>
+
+### pixelFilter 参数如何影响效果？
+
+值越小色块越大（更像素化），值越大过渡越平滑。默认 745 接近平滑过渡，设为 100 左右可看到明显的像素块效果。
+
+### isRotate 为 false 时图案会变化吗？
+
+仅在鼠标移动时根据鼠标位置偏移 UV，图案本身不会自动旋转。`isRotate={true}` 时才会持续旋转。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-balatro` 导入。
+2. 依赖 `ogl` 库，确保已安装。
+3. 组件使用 `h-full w-full`，父容器需有明确尺寸。
+4. 颜色支持 6 位和 8 位（含 alpha）十六进制格式。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-balatro" />

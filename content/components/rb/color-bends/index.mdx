@@ -1,0 +1,87 @@
+ColorBends 基于 Three.js ShaderMaterial 的渐变色彩扭曲背景组件，通过多层噪声迭代生成色彩波纹，支持鼠标视差交互和自动旋转。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要炫酷的多彩渐变扭曲全屏背景时使用。
+常见场景：
+- 首页 Hero 区域的动态背景
+- 品牌页面的视觉冲击增强
+- 创意作品展示的沉浸式背景
+不推荐：
+- 低性能设备大量使用（需 GPU 支持 WebGL）
+- 需要静态、不分散注意力的表单页面
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/color-bends" path="rb/color-bends/basic" />
+
+```tsx
+import { ColorBends } from "@/components/ui/rb-color-bends"
+export default function Demo() { return <ColorBends /> }
+```
+
+### 自定义配置
+
+```tsx
+import { ColorBends } from "@/components/ui/rb-color-bends"
+
+export default function Demo() {
+  return (
+    <ColorBends
+      colors={["#ff0080", "#7928ca", "#0070f3", "#00dfd8"]}
+      speed={0.3}
+      rotation={45}
+      autoRotate={0.1}
+      warpStrength={1.5}
+      frequency={1.2}
+      mouseInfluence={1.5}
+      intensity={2}
+      iterations={2}
+      transparent={false}
+      className="w-full h-screen"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ColorBends
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+| style | 附加内联样式 | `React.CSSProperties` | - |
+| rotation | 初始旋转角度（度） | `number` | `90` |
+| speed | 动画播放速度倍率 | `number` | `0.2` |
+| colors | 颜色数组，最多 8 种颜色混合 | `string[]` | `[]` |
+| transparent | 背景是否透明（透明时仅显示色带区域） | `boolean` | `true` |
+| autoRotate | 每秒自动旋转的度数 | `number` | `0` |
+| scale | 纹理缩放值，影响波纹密度 | `number` | `1` |
+| frequency | 噪声频率，值越大波纹越密集 | `number` | `1` |
+| warpStrength | 扭曲强度，>1 时有额外增益效果 | `number` | `1` |
+| mouseInfluence | 鼠标移动对视差偏移的影响强度 | `number` | `1` |
+| parallax | 鼠标视差的基准强度 | `number` | `0.5` |
+| noise | 画面随机噪点强度 | `number` | `0.15` |
+| iterations | 噪声迭代层数，越高细节越丰富 | `number` | `1` |
+| intensity | 颜色输出亮度倍率 | `number` | `1.5` |
+| bandWidth | 色带边界锐度，值越大边缘越清晰 | `number` | `6` |
+
+<h2 id="faq">常见问题</h2>
+
+### colors 数组为空时会怎样？
+不传入 `colors` 或传入空数组时，shader 退化为基于 `uColorCount=0` 的灰度模式，使用 `bandWidth` 控制黑白对比度，生成单色有机纹理效果。
+
+### transparent 模式有何区别？
+`transparent=true` 时背景完全透明，只有色彩波纹区域可见；`transparent=false` 时色彩会铺满整个 Canvas。适合叠加在其他背景上使用。
+
+### 性能如何？
+渲染在 GPU 上完成，使用 `requestAnimationFrame` 循环。`iterations` 对性能影响最大，建议不超过 3。组件卸载时自动释放 Three.js 资源。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-color-bends` 导入。
+2. 组件依赖 Three.js，需确保项目中已安装 `three` 包。
+3. `colors` 最多支持 8 种颜色，超出部分会被忽略，建议 3~5 种颜色效果最佳。
+4. 若需全屏背景，设置 `className="w-full h-screen fixed inset-0"`，并将内容放在单独的定位层上。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-color-bends" />

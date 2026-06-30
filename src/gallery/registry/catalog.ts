@@ -17,6 +17,7 @@ export type GalleryNavGroup = {
   group: string
   groupEn: string
   items: GalleryNavItem[]
+  libraryId?: string
 }
 
 export type GalleryTocItem = {
@@ -44,6 +45,20 @@ type ComponentSeed = {
   migration?: number
   /** 是否具有单入口 props 驱动的 API（非 compound/composition 模式） */
   api?: boolean
+}
+
+function rbItem(id: string, en: string, label: string): GalleryNavItem {
+  return {
+    id,
+    label,
+    en,
+    to: `/components/rb/${id}`,
+    summary: `${label}，React Bits 组件。`,
+    keywords: [id, en, en.toLowerCase(), label],
+    antd: false,
+    migration: 0,
+    api: true,
+  }
 }
 
 /** 无 Ant Design 对应组件的 id 列表 */
@@ -127,6 +142,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "通用",
     groupEn: "General",
+    libraryId: "kibo-ui",
     items: [
       componentItem({
         id: "button",
@@ -163,6 +179,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "布局",
     groupEn: "Layout",
+    libraryId: "kibo-ui",
     items: [
       componentItem({ id: "aspect-ratio", en: "AspectRatio", label: "宽高比",
         api: true,
@@ -187,6 +204,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "导航",
     groupEn: "Navigation",
+    libraryId: "kibo-ui",
     items: [
       componentItem({ id: "anchor", en: "Anchor", label: "锚点",
         api: true,
@@ -217,6 +235,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "数据录入",
     groupEn: "Data Entry",
+    libraryId: "kibo-ui",
     items: [
       componentItem({
         id: "auto-complete",
@@ -288,6 +307,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "数据展示",
     groupEn: "Data Display",
+    libraryId: "kibo-ui",
     items: [
       componentItem({ id: "accordion", en: "Accordion", label: "手风琴" }),
       componentItem({ id: "attachment", en: "Attachment", label: "附件" }),
@@ -364,6 +384,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "反馈",
     groupEn: "Feedback",
+    libraryId: "kibo-ui",
     items: [
       componentItem({ id: "alert", en: "Alert", label: "警告提示",
         api: true,
@@ -411,6 +432,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "其他",
     groupEn: "Other",
+    libraryId: "kibo-ui",
     items: [
       componentItem({ id: "affix", en: "Affix", label: "固钉",
         api: true,
@@ -437,6 +459,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
   {
     group: "复合组件",
     groupEn: "Blocks",
+    libraryId: "kibo-ui",
     items: [
       componentItem({ id: "announcement", en: "Announcement", label: "公告条",
         api: true,
@@ -532,8 +555,31 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
     ],
   },
   {
+    group: "文本动效",
+    groupEn: "Text Animations",
+    libraryId: "react-bits",
+    items: [
+      rbItem("glitch-text", "GlitchText", "故障文字"),
+      rbItem("gradient-text", "GradientText", "渐变动画文字"),
+      rbItem("rotating-text", "RotatingText", "旋转切换文字"),
+      rbItem("scrambled-text", "ScrambledText", "乱码文字"),
+      rbItem("scroll-float", "ScrollFloat", "滚动浮现文字"),
+      rbItem("scroll-reveal", "ScrollReveal", "滚动揭示文字"),
+      rbItem("scroll-velocity", "ScrollVelocity", "滚动速度文字"),
+      rbItem("shiny-text", "ShinyText", "闪光文字"),
+      rbItem("shuffle", "Shuffle", "字符洗牌"),
+      rbItem("split-text", "SplitText", "文字拆分动画"),
+      rbItem("text-cursor", "TextCursor", "文字光标拖尾"),
+      rbItem("text-pressure", "TextPressure", "压力感文字"),
+      rbItem("text-type", "TextType", "打字机文字"),
+      rbItem("true-focus", "TrueFocus", "焦点文字"),
+      rbItem("variable-proximity", "VariableProximity", "可变字体邻近感应"),
+    ],
+  },
+  {
     group: "测试",
     groupEn: "Test",
+    libraryId: "kibo-ui",
     items: [
       componentItem({
         id: "mdx-test",
@@ -543,8 +589,171 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
           "测试排版、布局、数学公式、Markdown 内建代码块及高级 MDX 组件的渲染效果。",
         keywords: ["test", "mdx", "math", "code", "table"],
       }),
-                                                                                              ],
+    ],
   },
+{
+  group: "Components",
+  groupEn: "Components",
+  libraryId: "react-bits",
+  items: [
+    rbItem("animated-list", "AnimatedList", "动画列表"),
+    rbItem("border-glow", "BorderGlow", "边框发光"),
+    rbItem("bounce-cards", "BounceCards", "弹跳卡片"),
+    rbItem("bubble-menu", "BubbleMenu", "气泡菜单"),
+    rbItem("card-nav", "CardNav", "卡片导航"),
+    rbItem("card-swap", "CardSwap", "卡片交换"),
+    rbItem("carousel-rb", "Carousel", "轮播"),
+    rbItem("chroma-grid", "ChromaGrid", "色彩网格"),
+    rbItem("circular-gallery", "CircularGallery", "环形画廊"),
+    rbItem("counter", "Counter", "计数器"),
+    rbItem("decay-card", "DecayCard", "衰减卡片"),
+    rbItem("dock", "Dock", "Dock栏"),
+    rbItem("dome-gallery", "DomeGallery", "穹顶画廊"),
+    rbItem("elastic-slider", "ElasticSlider", "弹性滑块"),
+    rbItem("flowing-menu", "FlowingMenu", "流动菜单"),
+    rbItem("fluid-glass", "FluidGlass", "流体玻璃"),
+    rbItem("flying-posters", "FlyingPosters", "飞行海报"),
+    rbItem("folder", "Folder", "文件夹"),
+    rbItem("glass-icons", "GlassIcons", "玻璃图标"),
+    rbItem("glass-surface", "GlassSurface", "玻璃表面"),
+    rbItem("gooey-nav", "GooeyNav", "粘性导航"),
+    rbItem("infinite-menu", "InfiniteMenu", "无限菜单"),
+    rbItem("lanyard", "Lanyard", "挂绳效果"),
+    rbItem("magic-bento", "MagicBento", "魔法便当"),
+    rbItem("masonry-rb", "Masonry", "瀑布流"),
+    rbItem("model-viewer", "ModelViewer", "3D模型"),
+    rbItem("pill-nav", "PillNav", "胶囊导航"),
+    rbItem("pixel-card", "PixelCard", "像素卡片"),
+    rbItem("profile-card", "ProfileCard", "个人卡片"),
+    rbItem("reflective-card", "ReflectiveCard", "反射卡片"),
+    rbItem("scroll-stack", "ScrollStack", "滚动堆叠"),
+    rbItem("spotlight-card", "SpotlightCard", "聚光卡片"),
+    rbItem("stack", "Stack", "堆叠"),
+    rbItem("staggered-menu", "StaggeredMenu", "交错菜单"),
+    rbItem("stepper", "Stepper", "步骤器"),
+    rbItem("tilted-card", "TiltedCard", "倾斜卡片"),
+  ],
+},
+{
+  group: "Animations",
+  groupEn: "Animations",
+  libraryId: "react-bits",
+  items: [
+    rbItem("animated-content", "AnimatedContent", "动画内容"),
+    rbItem("antigravity", "Antigravity", "反重力"),
+    rbItem("blob-cursor", "BlobCursor", "斑点光标"),
+    rbItem("click-spark", "ClickSpark", "点击火花"),
+    rbItem("crosshair", "Crosshair", "十字准星"),
+    rbItem("cubes", "Cubes", "立方体"),
+    rbItem("electric-border", "ElectricBorder", "电光边框"),
+    rbItem("fade-content", "FadeContent", "淡入内容"),
+    rbItem("ghost-cursor", "GhostCursor", "幽灵光标"),
+    rbItem("glare-hover", "GlareHover", "眩光悬浮"),
+    rbItem("gradual-blur", "GradualBlur", "渐进模糊"),
+    rbItem("image-trail", "ImageTrail", "图片拖尾"),
+    rbItem("laser-flow", "LaserFlow", "激光流"),
+    rbItem("logo-loop", "LogoLoop", "Logo循环"),
+    rbItem("magic-rings", "MagicRings", "魔法圆环"),
+    rbItem("magnet", "Magnet", "磁吸"),
+    rbItem("magnet-lines", "MagnetLines", "磁吸线条"),
+    rbItem("metaballs", "MetaBalls", "元球"),
+    rbItem("metallic-paint", "MetallicPaint", "金属漆面"),
+    rbItem("noise", "Noise", "噪点"),
+    rbItem("orbit-images", "OrbitImages", "轨道图片"),
+    rbItem("pixel-trail", "PixelTrail", "像素拖尾"),
+    rbItem("pixel-transition", "PixelTransition", "像素过渡"),
+    rbItem("ribbons", "Ribbons", "丝带"),
+    rbItem("shape-blur", "ShapeBlur", "形状模糊"),
+    rbItem("splash-cursor", "SplashCursor", "飞溅光标"),
+    rbItem("star-border", "StarBorder", "星光边框"),
+    rbItem("sticker-peel", "StickerPeel", "贴纸剥离"),
+    rbItem("strands", "Strands", "缕线"),
+    rbItem("target-cursor", "TargetCursor", "靶心光标"),
+  ],
+},
+{
+  group: "Backgrounds",
+  groupEn: "Backgrounds",
+  libraryId: "react-bits",
+  items: [
+    rbItem("aurora", "Aurora", "极光"),
+    rbItem("balatro", "Balatro", "Balatro特效"),
+    rbItem("ballpit", "Ballpit", "球池"),
+    rbItem("beams", "Beams", "光束"),
+    rbItem("color-bends", "ColorBends", "色彩弯曲"),
+    rbItem("dark-veil", "DarkVeil", "暗幕"),
+    rbItem("dither", "Dither", "抖动"),
+    rbItem("dot-field", "DotField", "点阵场"),
+    rbItem("dot-grid", "DotGrid", "点阵网格"),
+    rbItem("evil-eye", "EvilEye", "邪眼"),
+    rbItem("faulty-terminal", "FaultyTerminal", "故障终端"),
+    rbItem("ferrofluid", "Ferrofluid", "磁流体"),
+    rbItem("floating-lines", "FloatingLines", "浮动线条"),
+    rbItem("galaxy", "Galaxy", "星系"),
+    rbItem("gradient-blinds", "GradientBlinds", "渐变百叶窗"),
+    rbItem("grainient", "Grainient", "颗粒渐变"),
+    rbItem("grid-distortion", "GridDistortion", "网格扭曲"),
+    rbItem("grid-motion", "GridMotion", "网格运动"),
+    rbItem("grid-scan", "GridScan", "网格扫描"),
+    rbItem("hyperspeed", "Hyperspeed", "超速"),
+    rbItem("iridescence", "Iridescence", "虹彩"),
+    rbItem("letter-glitch", "LetterGlitch", "字母故障"),
+    rbItem("lightfall", "Lightfall", "光落"),
+    rbItem("lightning", "Lightning", "闪电"),
+    rbItem("light-pillar", "LightPillar", "光柱"),
+    rbItem("light-rays", "LightRays", "光线"),
+    rbItem("line-waves", "LineWaves", "线波"),
+    rbItem("liquid-chrome", "LiquidChrome", "液态铬"),
+    rbItem("liquid-ether", "LiquidEther", "液态以太"),
+    rbItem("orb", "Orb", "球体"),
+    rbItem("particles", "Particles", "粒子"),
+    rbItem("pixel-blast", "PixelBlast", "像素爆炸"),
+    rbItem("pixel-snow", "PixelSnow", "像素雪花"),
+    rbItem("plasma", "Plasma", "等离子体"),
+    rbItem("plasma-wave", "PlasmaWave", "等离子波"),
+    rbItem("prism", "Prism", "棱镜"),
+    rbItem("prismatic-burst", "PrismaticBurst", "棱镜爆发"),
+    rbItem("radar", "Radar", "雷达"),
+    rbItem("ripple-grid", "RippleGrid", "波纹网格"),
+    rbItem("shape-grid", "ShapeGrid", "形状网格"),
+    rbItem("side-rays", "SideRays", "侧射线"),
+    rbItem("silk", "Silk", "丝绸"),
+    rbItem("soft-aurora", "SoftAurora", "柔光极光"),
+    rbItem("threads", "Threads", "线缕"),
+    rbItem("waves", "Waves", "波浪"),
+  ],
+},
+{
+  group: "TextAnimations",
+  groupEn: "TextAnimations",
+  libraryId: "react-bits",
+  items: [
+    rbItem("ascii-text", "ASCIIText", "ASCII文本"),
+    rbItem("blur-text", "BlurText", "模糊文本"),
+    rbItem("circular-text", "CircularText", "环形文本"),
+    rbItem("count-up", "CountUp", "数字递增"),
+    rbItem("curved-loop", "CurvedLoop", "曲线循环"),
+    rbItem("decrypted-text", "DecryptedText", "解密文本"),
+    rbItem("falling-text", "FallingText", "坠落文本"),
+    rbItem("fuzzy-text", "FuzzyText", "模糊文本"),
+    rbItem("glitch-text", "GlitchText", "故障文本"),
+    rbItem("gradient-text", "GradientText", "渐变文本"),
+    rbItem("rotating-text", "RotatingText", "旋转文本"),
+    rbItem("scrambled-text", "ScrambledText", "乱码文本"),
+    rbItem("scroll-float", "ScrollFloat", "滚动浮起"),
+    rbItem("scroll-reveal", "ScrollReveal", "滚动揭示"),
+    rbItem("scroll-velocity", "ScrollVelocity", "滚动速度"),
+    rbItem("shiny-text", "ShinyText", "闪光文本"),
+    rbItem("shuffle", "Shuffle", "洗牌"),
+    rbItem("split-text", "SplitText", "分裂文本"),
+    rbItem("text-cursor", "TextCursor", "文本光标"),
+    rbItem("text-pressure", "TextPressure", "文本压力"),
+    rbItem("text-type", "TextType", "打字效果"),
+    rbItem("true-focus", "TrueFocus", "真实聚焦"),
+    rbItem("variable-proximity", "VariableProximity", "可变邻近"),
+  ],
+},
+
 ]
 
 const genericComponentToc = [

@@ -1,0 +1,20 @@
+---
+category: react-bits
+title: ShinyText
+subtitle: 闪光文字
+description: 带光泽扫过动效的文字组件，模拟金属反光效果，支持速度和方向控制。
+demo:
+  cols: 1
+group:
+  title: 文本动效
+  order: 8
+source:
+  component: src/components/react-bits/shiny-text.tsx
+  docs: content/components/rb/shiny-text/index.mdx
+  examples:
+    - content/components/rb/shiny-text/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+---

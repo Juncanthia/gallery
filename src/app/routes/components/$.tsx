@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/react-router"
 
 import { ComponentDocPage } from "../../../gallery/docs/component-doc-page"
 
-export const Route = createFileRoute("/components/$slug")({
+export const Route = createFileRoute("/components/$")({
   component: ComponentPage,
 })
 
 function ComponentPage() {
-  const { slug } = Route.useParams()
+  const { _splat } = Route.useParams()
 
-  return <ComponentDocPage slug={slug} />
+  return <ComponentDocPage slug={_splat} />
 }

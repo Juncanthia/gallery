@@ -5,10 +5,10 @@ type PreviewModule = {
 }
 
 const previews = import.meta.glob<PreviewModule>(
-  "../../../content/components/*/examples/*.tsx"
+  "../../../content/components/**/examples/*.tsx"
 )
 const sources = import.meta.glob<string>(
-  "../../../content/components/*/examples/*.tsx",
+  "../../../content/components/**/examples/*.tsx",
   {
     import: "default",
     query: "?raw",
@@ -16,7 +16,9 @@ const sources = import.meta.glob<string>(
 )
 
 const resolveExampleKey = (path: string) => {
-  const [component, example] = path.split("/")
+  const parts = path.split("/")
+  const example = parts.pop()
+  const component = parts.join("/")
 
   if (!component || !example) {
     return null

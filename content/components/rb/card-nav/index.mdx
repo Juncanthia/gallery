@@ -1,0 +1,116 @@
+CardNav 卡片式可展开导航栏组件，支持分类卡片展示和 GSAP 动画。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要提供一个可展开的卡片式导航栏，点击汉堡菜单后展开彩色卡片区域展示分类导航链接时使用。
+
+常见场景：
+- 产品文档站点的分类导航
+- 作品集/服务页面的快速入口
+- 替代传统下拉菜单的视觉化导航方案
+
+不推荐：
+- 链接数量超过 3 个分类（内部仅渲染前 3 个 NavItem）
+- 需要多级嵌套菜单的场景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/card-nav" path="rb/card-nav/basic" />
+
+```tsx
+import { CardNav } from "@/components/ui/rb-card-nav"
+
+const items = [
+  {
+    label: "Products",
+    bgColor: "#3b82f6",
+    textColor: "#fff",
+    links: [
+      { label: "Analytics", href: "#" },
+      { label: "Dashboard", href: "#" },
+    ],
+  },
+  {
+    label: "Services",
+    bgColor: "#10b981",
+    textColor: "#fff",
+    links: [
+      { label: "Consulting", href: "#" },
+      { label: "Support", href: "#" },
+    ],
+  },
+]
+
+export default function Demo() {
+  return <CardNav items={items} />
+}
+```
+
+### 自定义颜色主题
+
+```tsx
+import { CardNav } from "@/components/ui/rb-card-nav"
+
+export default function CustomDemo() {
+  return (
+    <CardNav
+      logo="/logo.svg"
+      baseColor="#0f172a"
+      menuColor="#38bdf8"
+      buttonBgColor="#3b82f6"
+      buttonTextColor="#fff"
+      ease="power4.out"
+      items={[...]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CardNav
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| logo | Logo 图片 URL | `string` | - |
+| logoAlt | Logo 图片的 alt 文本 | `string` | `"Logo"` |
+| items | 导航卡片数组（最多渲染前 3 个） | `NavItem[]` | - |
+| className | 容器额外样式类名 | `string` | - |
+| ease | 展开/收起动画缓动 | `string` | `"power3.out"` |
+| baseColor | 导航栏背景色 | `string` | `"#fff"` |
+| menuColor | 汉堡菜单图标颜色 | `string` | - |
+| buttonBgColor | CTA 按钮背景色 | `string` | - |
+| buttonTextColor | CTA 按钮文字颜色 | `string` | - |
+
+NavItem 类型：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| label | 卡片标题 | `string` |
+| bgColor | 卡片背景色 | `string` |
+| textColor | 卡片文字颜色 | `string` |
+| links | 链接数组 | `{ label: string; href: string; ariaLabel?: string }[]` |
+
+<h2 id="faq">常见问题</h2>
+
+### 展开高度如何计算？
+
+桌面端固定为 260px。移动端（<768px）动态测量内容高度，保留顶部 60px 的导航栏 + 16px padding 的额外空间。
+
+### 为什么只渲染前 3 个 NavItem？
+
+组件内部通过 `items.slice(0, 3)` 限制，设计上卡片式导航适合展示 3 个以内的分类。如需更多，需修改源码。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-card-nav` 导入。
+2. 依赖 `gsap` 和 `lucide-react`。
+3. 附带样式表 `card-nav.css`。
+4. 导航栏初始高度 60px，展开后根据内容计算。
+5. CTA 按钮文本固定为 "Get Started"（硬编码）。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-card-nav" />

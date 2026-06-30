@@ -1,0 +1,100 @@
+DecryptedText 文字解密/加密动画组件，字符逐位从随机字符集变化到目标文字，支持多种触发方式和解密方向。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要文字从乱码解密为目标文本的动画效果时使用。
+常见场景：
+- 代码或密文展示效果
+- 页面加载时的品牌标题动画
+- 悬停揭示隐藏文字的游戏化交互
+不推荐：
+- 长段落文本（逐字解密耗时长，体验不佳）
+- 需要 SEO 索引的关键文字（建议搭配 sr-only 提供原始文本）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/decrypted-text" path="rb/decrypted-text/basic" />
+
+```tsx
+import { DecryptedText } from "@/components/ui/rb-decrypted-text"
+export default function Demo() { return <DecryptedText text="Hello World" className="text-2xl font-mono" animateOn="hover" /> }
+```
+
+### 自定义配置
+
+```tsx
+import { DecryptedText } from "@/components/ui/rb-decrypted-text"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-6">
+      <DecryptedText
+        text="Click to reveal"
+        className="text-3xl font-bold text-green-400 font-mono"
+        animateOn="click"
+        clickMode="toggle"
+        revealDirection="center"
+        speed={30}
+      />
+      <DecryptedText
+        text="Scroll into view"
+        className="text-2xl text-blue-400 font-mono"
+        animateOn="view"
+        sequential={true}
+        revealDirection="start"
+        maxIterations={5}
+      />
+      <DecryptedText
+        text="Custom chars only"
+        className="text-xl font-mono"
+        animateOn="hover"
+        useOriginalCharsOnly={true}
+        encryptedClassName="text-gray-600"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DecryptedText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 要解密展示的目标文字 | `string` | (必填) |
+| speed | 每帧动画间隔毫秒数 | `number` | `50` |
+| maxIterations | 非 sequential 模式下的最大随机迭代次数 | `number` | `10` |
+| sequential | 是否逐字按顺序解密 | `boolean` | `false` |
+| revealDirection | sequential 模式下的解密顺序方向 | `"start"` \| `"end"` \| `"center"` | `"start"` |
+| useOriginalCharsOnly | 随机字符集是否仅限于原文中出现的字符 | `boolean` | `false` |
+| characters | 用于随机替换的加密字符集 | `string` | 大小写字母+特殊符号 |
+| className | 已解密字符的 CSS 类名 | `string` | `""` |
+| parentClassName | 外层容器的 CSS 类名 | `string` | `""` |
+| encryptedClassName | 尚未解密字符的 CSS 类名 | `string` | `""` |
+| animateOn | 触发动画的方式 | `"hover"` \| `"click"` \| `"view"` \| `"inViewHover"` | `"hover"` |
+| clickMode | click 模式下的行为 | `"once"` \| `"toggle"` | `"once"` |
+
+<h2 id="faq">常见问题</h2>
+
+### sequential 和非 sequential 模式有什么区别？
+非 sequential 模式：所有字符同时随机变化，经过 `maxIterations` 次迭代后一次性全部显示目标文字。sequential 模式：字符按 `revealDirection` 顺序逐个解密，前一个解密后下一个才开始。
+
+### 各种 animateOn 模式如何工作？
+- `hover`：鼠标悬停触发解密，离开恢复原文
+- `click`：点击触发，`clickMode="once"` 仅解密一次不可逆，`clickMode="toggle"` 可在解密/加密间切换
+- `view`：组件进入视口时自动解密一次
+- `inViewHover`：在视口内时悬停解密，离开视口或鼠标移出恢复原文
+
+### encryptedClassName 和 className 如何配合？
+`encryptedClassName` 应用于尚未解密的字符（乱码态），`className` 应用于已解密的字符（最终态）。可用来区分视觉样式，如解密态用亮色、加密态用暗色。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-decrypted-text` 导入。
+2. `text` 为必填属性。
+3. 组件依赖 `motion/react` 的 `motion.span` 包裹外层容器。
+4. 组件内置 `srOnly` 的隐藏 span 用于屏幕阅读器，保留原始 `displayText` 的可访问性。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-decrypted-text" />

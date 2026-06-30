@@ -1,0 +1,88 @@
+Dock 基于 Motion 的 macOS 风格程序坞组件，图标随鼠标距离动态放大，并显示浮动标签提示。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要提供 macOS Dock 风格的图标导航栏，带有放大悬停效果时使用。
+常见场景：
+- 桌面风格 Web 应用的任务栏
+- 创意个人网站的快捷导航
+- 作品集页面的图标式入口导航
+不推荐：
+- 需要大量导航项的场景（Dock 在项目过多时体验下降）
+- 移动端布局（Dock 依赖精确的鼠标悬停，触摸屏无法触发放大）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/dock" path="rb/dock/basic" />
+
+```tsx
+import { Dock } from "@/components/ui/rb-dock"
+const items = [
+  { icon: <span>🏠</span>, label: "Home", onClick: () => {} },
+  { icon: <span>📁</span>, label: "Files", onClick: () => {} },
+]
+export default function Demo() { return <Dock items={items} /> }
+```
+
+### 自定义配置
+
+```tsx
+import { Dock } from "@/components/ui/rb-dock"
+
+const items = [
+  { icon: <span className="text-2xl">🏠</span>, label: "首页" },
+  { icon: <span className="text-2xl">📁</span>, label: "项目" },
+  { icon: <span className="text-2xl">✉️</span>, label: "联系" },
+  { icon: <span className="text-2xl">⚙️</span>, label: "设置" },
+]
+
+export default function Demo() {
+  return (
+    <Dock
+      items={items}
+      magnification={80}
+      distance={180}
+      baseItemSize={48}
+      panelHeight={72}
+      dockHeight={280}
+      spring={{ mass: 0.15, stiffness: 180, damping: 10 }}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Dock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 程序坞项目列表 | `{ icon: ReactNode; label: string; onClick?: () => void; className?: string }[]` | (必填) |
+| className | 附加到面板上的 CSS 类名 | `string` | `""` |
+| spring | Motion Spring 弹性参数配置 | `{ mass: number; stiffness: number; damping: number }` | `{ mass: 0.1, stiffness: 150, damping: 12 }` |
+| magnification | 鼠标悬停时图标的最大放大尺寸 | `number` | `70` |
+| distance | 放大效果的影响距离（自图标中心） | `number` | `200` |
+| panelHeight | Dock 面板的默认高度 | `number` | `68` |
+| dockHeight | Dock 外容器最大高度（悬停时扩展到该高度） | `number` | `256` |
+| baseItemSize | 图标基础尺寸（未悬停时） | `number` | `50` |
+
+<h2 id="faq">常见问题</h2>
+
+### Dock 项目如何定义？
+每个 item 对象包含：`icon`（React 节点，用于展示图标）、`label`（字符串，悬停时显示的浮动提示）、可选的 `onClick`（点击回调）和 `className`。
+
+### spring 参数如何影响动画？
+- `mass`：质量，值越小图标响应越快
+- `stiffness`：刚度，值越大回弹越快
+- `damping`：阻尼，值越大振荡越少。macOS Dock 风格建议低 mass + 高 stiffness
+
+### dockHeight 和 panelHeight 的区别？
+`panelHeight` 是 Dock 栏常态高度，`dockHeight` 是悬停时外容器扩展到的最大高度。这个高度应足够容纳放大的图标（>= magnification），否则图标放大后可能被裁剪。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-dock` 导入。
+2. `items` 为必填属性，每项需提供 `icon` 和 `label`。
+3. 组件依赖 `motion/react` 的 `useMotionValue`、`useSpring`、`useTransform` 和 `AnimatePresence`。
+4. Dock 通过 `isHovered` MotionValue 在子组件间传递悬停状态，`DockLabel` 订阅该值控制 tooltip 显隐。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-dock" />

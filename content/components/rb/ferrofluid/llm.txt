@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Ferrofluid
+subtitle: 磁流体
+description: 基于 OGL 的磁流体模拟背景，多层噪声驱动流动效果。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 10 }
+source: { component: src/components/react-bits/ferrofluid.tsx, docs: content/components/rb/ferrofluid/index.mdx, examples: [content/components/rb/ferrofluid/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, ogl: true }
+---

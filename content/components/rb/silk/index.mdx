@@ -1,0 +1,69 @@
+Silk 基于 React Three Fiber 的丝绸纹理着色器效果组件，使用 GLSL 自定义着色器生成周期性纹理图案，支持速度、缩放、颜色、噪声强度和旋转角度调节。
+
+<h2 id="when-to-use">何时使用</h2>
+需要柔和的丝绸/布料纹理背景时使用。
+常见场景：
+- 高端品牌页面的奢华纹理背景
+- 卡片或面板的装饰性底纹
+- 暗色主题的质感增强
+不推荐：
+- 纯功能性界面（纹理可能分散注意力）
+- 需要透明背景叠加的场景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+<ComponentShowcase id="rb/silk" path="rb/silk/basic" />
+
+```tsx
+import { Silk } from "@/components/ui/rb-silk"
+export default function Demo() { return <div className="w-full h-64 relative"><Silk /></div> }
+```
+
+### 暖色调 + 高噪声纹理
+```tsx
+import { Silk } from "@/components/ui/rb-silk"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-80 relative">
+      <Silk
+        color="#8B4513"
+        speed={3}
+        scale={1.5}
+        noiseIntensity={2.5}
+        rotation={45}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Silk
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| speed | 纹理流动速度，值越大变化越快 | `number` | `5` |
+| scale | UV 坐标缩放比例，控制纹理密度（值越大纹理越密） | `number` | `1` |
+| color | 纹理颜色（hex 格式） | `string` | `"#7B7481"` |
+| noiseIntensity | 噪声强度，控制纹理的颗粒感和不规则程度 | `number` | `1.5` |
+| rotation | UV 坐标旋转角度（度） | `number` | `0` |
+
+<h2 id="faq">常见问题</h2>
+### 纹理看起来太密集/太稀疏？
+调整 `scale` 参数。增大 `scale` 值（如 2-3）会让纹理更密集，减小（如 0.5）会让纹理更稀疏。`scale` 作用于着色器的 UV 坐标。
+
+### 颜色设置后看起来和预期不同？
+着色器内部会对颜色应用 pattern 乘法（0.6+0.4*sin(...)），最终颜色会比输入的 hex 值更暗。如需更亮的效果，可选择比目标色更亮的 hex 值。
+
+### 性能如何？会持续渲染吗？
+组件使用 `@react-three/fiber` 的 `Canvas` 和 `frameloop="always"`，持续以 60fps 渲染动画。如果组件不在视口内，建议通过条件渲染卸载以节省资源。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-silk` 导入。
+2. 依赖 `@react-three/fiber` 和 `three`，确保项目已安装。
+3. 组件需要父容器设置明确的宽高。
+4. Canvas 默认 `frameloop="always"`，持续逐帧渲染，非视口内建议条件渲染。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-silk" />

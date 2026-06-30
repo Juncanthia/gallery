@@ -1,0 +1,78 @@
+Lanyard 3D 挂绳卡片，使用 Three.js/R3F 实现可拖拽的物理模拟挂绳卡片效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要展示带有 3D 物理模拟的卡片时使用。
+常见场景：
+- 展示名片、身份卡或邀请函
+- 产品标签/吊牌的创意展示
+- NFT/数字收藏品的 3D 预览
+不推荐：
+- 需要快速加载的页面（依赖多个 3D 库，bundle 较大）
+- 移动端为主要场景（物理模拟 + 3D 渲染性能开销大）
+- 功能性表单或数据录入界面
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/lanyard" path="rb/lanyard/basic" />
+```tsx
+import { Lanyard } from "@/components/ui/rb-lanyard"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96">
+      <Lanyard />
+    </div>
+  )
+}
+```
+
+### 自定义卡片内容
+```tsx
+import { Lanyard } from "@/components/ui/rb-lanyard"
+
+export default function Demo() {
+  return (
+    <Lanyard
+      position={[0, 0, 20]}
+      fov={25}
+      frontImage="https://example.com/front.png"
+      backImage="https://example.com/back.png"
+      lanyardWidth={1.5}
+      gravity={[0, -30, 0]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Lanyard
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| position | 相机位置 | `[number, number, number]` | `[0, 0, 30]` |
+| gravity | 重力方向/强度 | `[number, number, number]` | `[0, -40, 0]` |
+| fov | 相机视角（度） | `number` | `20` |
+| transparent | 背景是否透明 | `boolean` | `true` |
+| frontImage | 卡片正面图片 URL | `string \| null` | `null` |
+| backImage | 卡片反面图片 URL | `string \| null` | `null` |
+| imageFit | 图片填充模式 | `"cover" \| "contain"` | `"cover"` |
+| lanyardImage | 挂绳纹理图片 URL | `string \| null` | `null` |
+| lanyardWidth | 挂绳宽度 | `number` | `1` |
+
+<h2 id="faq">常见问题</h2>
+### 为什么组件显示的是占位文本？
+当前实现为简化包装器（placeholder wrapper）。完整的 3D 交互版本需要安装 `@react-three/fiber`、`@react-three/drei`、`@react-three/rapier` 和 `meshline` 四个依赖包，并从 React Bits 参考实现中导入完整组件。
+
+### 如何启用拖拽交互？
+完整版（安装 R3F + Rapier 后）的 Lanyard 使用 `@react-three/rapier` 进行物理模拟，卡片作为刚体（RigidBody），挂绳通过 `meshline` 绘制，自然支持拖拽旋转。
+
+### 能在 Next.js 中使用吗？
+可以，但需要注意这些库依赖 `window` 和 `canvas`，需要使用 `next/dynamic` 配合 `ssr: false` 动态导入。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-lanyard` 导入。
+2. 基础版为占位组件，完整版需要额外依赖：`@react-three/fiber`、`@react-three/drei`、`@react-three/rapier`、`meshline`。
+3. 使用 `next/dynamic` 动态导入以避免 SSR 问题。
+4. `position`、`gravity` 使用 Three.js 坐标系（Y 轴向上）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-lanyard" />

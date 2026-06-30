@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Masonry
+subtitle: 瀑布流
+description: 响应式瀑布流图片网格，支持入场动画和 hover 交互效果。
+demo: { cols: 2 }
+group: { title: Components, order: 8 }
+source: { component: src/components/react-bits/masonry-rb.tsx, docs: content/components/rb/masonry-rb/index.mdx, examples: [content/components/rb/masonry-rb/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, gsap: true }
+---

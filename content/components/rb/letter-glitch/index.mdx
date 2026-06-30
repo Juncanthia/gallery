@@ -1,0 +1,76 @@
+LetterGlitch 随机字符闪烁的故障风格背景，基于 Canvas 2D 实现字符随机切换和颜色平滑过渡。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要故障/黑客风格的字符背景时使用。
+常见场景：
+- 赛博朋克/黑客主题页面的全屏背景
+- 终端/命令行风格界面的装饰层
+- 技术活动/黑客马拉松的视觉背景
+不推荐：
+- 需要清晰阅读文字的区域（闪烁字符会分散注意力）
+- 对光敏感用户的页面（快速闪烁可能不适）
+- 传统/正式的企业官网
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/letter-glitch" path="rb/letter-glitch/basic" />
+```tsx
+import { LetterGlitch } from "@/components/ui/rb-letter-glitch"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <LetterGlitch />
+    </div>
+  )
+}
+```
+
+### 自定义颜色和字符集
+```tsx
+import { LetterGlitch } from "@/components/ui/rb-letter-glitch"
+
+export default function Demo() {
+  return (
+    <LetterGlitch
+      glitchColors={["#00FF41", "#003B00", "#008F11"]}
+      glitchSpeed={30}
+      characters="01アイウエオカキクケコ"
+      outerVignette={false}
+      centerVignette
+      smooth={false}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### LetterGlitch
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| glitchColors | 故障颜色调色板 | `string[]` | `["#2b4539","#61dca3","#61b3dc"]` |
+| glitchSpeed | 字符刷新间隔（ms） | `number` | `50` |
+| centerVignette | 中心暗角效果 | `boolean` | `false` |
+| outerVignette | 边缘暗角效果 | `boolean` | `true` |
+| smooth | 颜色平滑过渡 | `boolean` | `true` |
+| characters | 随机字符集 | `string` | 大小写字母+数字+特殊符号 |
+| className | 自定义样式类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+### 如何显示日文/中文/特殊字符？
+通过 `characters` 属性传入自定义字符集字符串，如 `"漢字テスト01"`。组件会从该字符串中随机选择字符显示。
+
+### 如何控制闪烁速度？
+`glitchSpeed` 控制每次字符刷新的间隔（毫秒）。值越小刷新越快（如 `10` 非常快，`200` 较慢）。设为 `0` 会让字符几乎不闪烁。
+
+### 暗角效果有什么区别？
+`outerVignette` 在边缘添加径向渐变（外暗内亮），模拟旧显示器的边缘变暗效果。`centerVignette` 相反（内暗外亮），营造聚光灯效果。两者可同时启用。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-letter-glitch` 导入。
+2. 纯 Canvas 2D 实现，无额外依赖。
+3. 组件需要放在有明确宽高的容器中，背景色固定为黑色。
+4. `characters` 为可选自定义字符集，默认包含英文大小写、数字和常见符号。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-letter-glitch" />

@@ -1,0 +1,105 @@
+GlareHover 鼠标悬停时产生光泽扫描效果的卡片容器组件，光泽位置跟随鼠标移动。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要为卡片或容器添加悬停光泽效果时使用。
+常见场景：
+- 产品卡片、功能卡片的质感增强
+- 模拟材质反光效果的 UI 元素
+- 悬停交互的视觉反馈强化
+不推荐：
+- 大量列表项同时使用（每个实例独立监听 mousemove）
+- 需要禁用悬停效果的场景
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/glare-hover" path="rb/glare-hover/basic" />
+
+```tsx
+import { GlareHover } from "@/components/ui/rb-glare-hover"
+export default function Demo() {
+  return (
+    <GlareHover>
+      <div className="flex h-full items-center justify-center text-white">Hover me</div>
+    </GlareHover>
+  )
+}
+```
+
+### 自定义光泽
+
+```tsx
+import { GlareHover } from "@/components/ui/rb-glare-hover"
+
+export default function Demo() {
+  return (
+    <div className="grid grid-cols-2 gap-4 p-8">
+      <GlareHover
+        width="300px"
+        height="200px"
+        background="#1a1a2e"
+        borderRadius="16px"
+        glareColor="#FF6F37"
+        glareOpacity={0.6}
+        glareAngle={30}
+        glareSize={200}
+        transitionDuration={400}
+      >
+        <div className="flex h-full items-center justify-center text-white">Orange Glare</div>
+      </GlareHover>
+      <GlareHover
+        width="300px"
+        height="200px"
+        background="#0d1117"
+        borderRadius="24px"
+        borderColor="#30363d"
+        glareColor="#58a6ff"
+        glareOpacity={0.4}
+        glareAngle={-60}
+        glareSize={150}
+        playOnce
+      >
+        <div className="flex h-full items-center justify-center text-white">Play Once</div>
+      </GlareHover>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### GlareHover
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片内容节点 | `React.ReactNode` | - |
+| width | 卡片宽度 | `string` | `"500px"` |
+| height | 卡片高度 | `string` | `"500px"` |
+| background | 卡片背景色 | `string` | `"#000"` |
+| borderRadius | 卡片圆角 | `string` | `"10px"` |
+| borderColor | 边框颜色 | `string` | `"#333"` |
+| glareColor | 光泽颜色（hex） | `string` | `"#ffffff"` |
+| glareOpacity | 光泽最大透明度 | `number` | `0.5` |
+| glareAngle | 光泽渐变角度（度） | `number` | `-45` |
+| glareSize | 光泽区域大小（百分比） | `number` | `250` |
+| transitionDuration | 光泽淡入/淡出过渡时长（ms） | `number` | `650` |
+| playOnce | 仅播放一次，之后光泽隐藏 | `boolean` | `false` |
+| className | 外层容器附加样式类名 | `string` | `""` |
+| style | 外层容器内联样式 | `React.CSSProperties` | `{}` |
+
+<h2 id="faq">常见问题</h2>
+### 光泽效果是如何实现的？
+组件内部使用一个绝对定位的子 div，设置 `linear-gradient` 背景模拟光泽。`onMouseMove` 时根据鼠标在容器内的相对位置动态调整 `backgroundPosition`，`onMouseEnter/Leave` 控制 `opacity` 淡入淡出。
+
+### playOnce 的效果是什么？
+`playOnce=true` 时，组件会自动添加 CSS 类 `[&_.glare]:after:animate-none` 禁用 after 伪元素的动画。悬停一次后光泽效果生效，之后不再重复。
+
+### glareColor 支持哪些格式？
+支持 hex 格式（3 位或 6 位），组件内部将其转换为 `rgba()` 格式以应用 `glareOpacity` 透明度。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-glare-hover` 导入。
+2. 纯 CSS + DOM 事件实现，无额外第三方依赖。
+3. `children` 包裹在 `z-10` 层中，确保在光泽层之上显示。
+4. 所有尺寸和颜色属性接受 CSS 合法值，`width`/`height` 建议使用具体单位（如 px）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-glare-hover" />

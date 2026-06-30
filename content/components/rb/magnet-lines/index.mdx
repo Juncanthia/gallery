@@ -1,0 +1,84 @@
+MagnetLines 磁吸线条组件，网格排列的线段会跟随鼠标指针方向旋转，产生类似磁场线指向鼠标的视觉效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要创建动态跟随鼠标指针的线条网格背景或装饰效果时使用。
+常见场景：
+- 首页或 Hero 区域的交互式背景装饰
+- 科技感页面的背景点缀
+- 配合其他动画组件的背景层
+不推荐：
+- 内容密集区域上方（线条可能干扰可读性）
+- 需要静态背景的场景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/magnet-lines" path="rb/magnet-lines/basic" />
+
+```tsx
+import { MagnetLines } from "@/components/ui/rb-magnet-lines"
+
+export default function Demo() {
+  return <MagnetLines />
+}
+```
+
+### 自定义配置
+
+```tsx
+import { MagnetLines } from "@/components/ui/rb-magnet-lines"
+
+export default function Demo() {
+  return (
+    <div className="bg-zinc-900 p-8 rounded-xl">
+      <MagnetLines
+        rows={12}
+        columns={12}
+        containerSize="60vmin"
+        lineColor="#6366f1"
+        lineWidth="0.8vmin"
+        lineHeight="4vmin"
+        baseAngle={-15}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### MagnetLines
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| rows | 网格行数 | `number` | `9` |
+| columns | 网格列数 | `number` | `9` |
+| containerSize | 网格容器尺寸（CSS 长度值） | `string` | `"80vmin"` |
+| lineColor | 线条颜色 | `string` | `"#efefef"` |
+| lineWidth | 单条线宽度（CSS 长度值） | `string` | `"1vmin"` |
+| lineHeight | 单条线高度（CSS 长度值） | `string` | `"6vmin"` |
+| baseAngle | 线条基础/默认旋转角度（度） | `number` | `-10` |
+| className | 附加容器 CSS 类名 | `string` | `""` |
+| style | 容器行内样式 | `React.CSSProperties` | `{}` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何调整线条密度？
+通过 `rows` 和 `columns` 设置网格密度。更多行列 = 更密集的线条。总线条数 = rows * columns。
+
+### 线条颜色如何适配暗色背景？
+设置 `lineColor` 为亮色（如 `"#efefef"` 或 `"#6366f1"`），确保与背景有足够对比度。
+
+### 容器尺寸如何控制？
+`containerSize` 接受 CSS 长度值，如 `"80vmin"`、`"400px"`、`"100%"`。也可通过 `style` 属性覆盖。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-magnet-lines` 导入。
+2. 通过 `rows` 和 `columns` 调整网格密度。
+3. `lineWidth`、`lineHeight` 和 `containerSize` 接受 CSS 长度字符串。
+4. `baseAngle` 单位为度，设置线条在鼠标未靠近时的默认旋转角度。
+5. 组件使用 CSS Grid 布局和 CSS 自定义属性 `--rotate`，无需额外依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-magnet-lines" />

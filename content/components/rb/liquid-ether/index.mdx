@@ -1,0 +1,101 @@
+LiquidEther 基于 Three.js 流体模拟的交互式背景，支持鼠标拖拽驱动流体运动、自动演示模式和自定义调色板。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要高级流体模拟效果的背景时使用，适合需要高视觉表现力的场景。
+常见场景：
+- Hero 区域的高级流体动态背景
+- 品牌形象页面
+- 交互式创意展示
+不推荐：
+- 低性能设备（流体模拟计算密集）
+- 页面中有多个流体实例
+- 不需要交互的静态背景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/liquid-ether" path="rb/liquid-ether/basic" />
+
+```tsx
+import { LiquidEther } from "@/components/ui/rb-liquid-ether"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <LiquidEther />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { LiquidEther } from "@/components/ui/rb-liquid-ether"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded">
+      <LiquidEther
+        colors={["#FF6B6B", "#FECA57", "#48DBFB"]}
+        mouseForce={30}
+        cursorSize={80}
+        isViscous
+        viscous={20}
+        resolution={0.6}
+        autoDemo
+        autoSpeed={0.8}
+        autoIntensity={2.5}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LiquidEther
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| mouseForce | 鼠标拖拽力度 | `number` | `20` |
+| cursorSize | 光标影响区域大小 | `number` | `100` |
+| isViscous | 是否启用粘性流体 | `boolean` | `false` |
+| viscous | 粘性系数 | `number` | `30` |
+| iterationsViscous | 粘性求解迭代次数 | `number` | `32` |
+| iterationsPoisson | 压力求解迭代次数 | `number` | `32` |
+| dt | 模拟时间步长 | `number` | `0.014` |
+| BFECC | 是否启用 BFECC 精度增强 | `boolean` | `true` |
+| resolution | 模拟分辨率比例 | `number` | `0.5` |
+| isBounce | 是否启用边界反弹 | `boolean` | `false` |
+| colors | 调色板颜色数组 | `string[]` | `["#5227FF", "#FF9FFC", "#B497CF"]` |
+| style | 容器行内样式 | `React.CSSProperties` | `{}` |
+| className | 附加容器 CSS 类名 | `string` | `""` |
+| autoDemo | 是否启用自动演示模式 | `boolean` | `true` |
+| autoSpeed | 自动演示移动速度 | `number` | `0.5` |
+| autoIntensity | 自动演示强度 | `number` | `2.2` |
+| takeoverDuration | 用户接管动画时长（秒） | `number` | `0.25` |
+| autoResumeDelay | 无交互后恢复自动演示延迟（ms） | `number` | `1000` |
+| autoRampDuration | 自动演示渐入时长（秒） | `number` | `0.6` |
+
+<h2 id="faq">常见问题</h2>
+
+### 流体不流动怎么办？
+如果 `autoDemo` 为 true 且用户无交互，组件会自动驱动流体运动。如需手动控制，设置 `autoDemo={false}` 并通过鼠标拖拽驱动。
+
+### 性能优化建议？
+降低 `resolution` 可显著减少计算量。减少 `iterationsViscous` 和 `iterationsPoisson` 迭代次数。组件使用 IntersectionObserver 和 Page Visibility API 自动管理暂停/恢复。
+
+### 如何调整流体颜色？
+通过 `colors` 数组传入 HEX 颜色值，组件内部会构建调色板纹理，颜色数量决定渐变精度。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-liquid-ether` 导入。
+2. 组件需要放在有明确宽高的容器中，且需要 `position: relative` 和 `overflow: hidden`（组件内部会设置）。
+3. 依赖 `three` 库，确保项目中已安装。
+4. `colors` 使用 HEX 字符串数组。
+5. 组件通过 IntersectionObserver 和 Page Visibility API 自动管理性能。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-liquid-ether" />

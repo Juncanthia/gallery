@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: GridMotion
+subtitle: 网格移动
+description: 基于 GSAP 的网格项鼠标平移交互组件，多行不同惯性延时。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 16 }
+source: { component: src/components/react-bits/grid-motion.tsx, docs: content/components/rb/grid-motion/index.mdx, examples: [content/components/rb/grid-motion/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, gsap: true }
+---

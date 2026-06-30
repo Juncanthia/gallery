@@ -1,0 +1,87 @@
+StaggeredMenu 交错动画全屏菜单，展开时多层彩色面板和菜单项依次交错滑入，带有滚动文字切换和旋转图标。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要...时使用。
+常见场景：
+- 网站全屏导航菜单，需要高级的交错动画打开/关闭体验
+- 品牌展示型网站的主导航，追求视觉冲击力
+- 创意型项目的汉堡菜单替代方案
+不推荐：
+- 简单导航场景（过于复杂，性能开销大）
+- 需要无障碍快速操作的后台系统
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/staggered-menu" path="rb/staggered-menu/basic" />
+```tsx
+import { StaggeredMenu } from "@/components/ui/rb-staggered-menu"
+export default function Demo() { return <StaggeredMenu /> }
+```
+
+### 自定义菜单项
+```tsx
+import { StaggeredMenu } from "@/components/ui/rb-staggered-menu"
+
+export default function Demo() {
+  return (
+    <StaggeredMenu
+      position="left"
+      items={[
+        { label: "Home", link: "/" },
+        { label: "Work", link: "/work" },
+        { label: "About", link: "/about" },
+        { label: "Contact", link: "/contact" },
+      ]}
+      socialItems={[
+        { label: "Twitter", link: "https://twitter.com" },
+        { label: "GitHub", link: "https://github.com" },
+      ]}
+      colors={["#1e1e22", "#35353c", "#5227FF"]}
+      accentColor="#5227FF"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### StaggeredMenu
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| position | 菜单滑出方向 | `"left" \| "right"` | `"right"` |
+| colors | 交错面板颜色数组（最多4个） | `string[]` | `["#B497CF", "#5227FF"]` |
+| items | 菜单项列表 | `MenuEntry[]` | `[]` |
+| socialItems | 社交链接列表 | `SocialEntry[]` | `[]` |
+| displaySocials | 是否显示社交链接区域 | `boolean` | `true` |
+| displayItemNumbering | 是否显示菜单项编号 | `boolean` | `true` |
+| className | 外层容器自定义类名 | `string` | - |
+| logoUrl | Logo 图片地址 | `string` | - |
+| menuButtonColor | 菜单按钮默认颜色 | `string` | `"#fff"` |
+| openMenuButtonColor | 菜单打开时按钮颜色 | `string` | `"#fff"` |
+| accentColor | 强调色（CSS 变量 `--sm-accent`） | `string` | `"#5227FF"` |
+| changeMenuColorOnOpen | 打开时切换按钮颜色 | `boolean` | `true` |
+| isFixed | 菜单按钮是否固定定位 | `boolean` | `false` |
+| closeOnClickAway | 点击外部是否关闭 | `boolean` | `true` |
+| onMenuOpen | 菜单打开回调 | `() => void` | - |
+| onMenuClose | 菜单关闭回调 | `() => void` | - |
+
+**MenuItem** = `{ label: string; link: string; ariaLabel?: string }`
+**SocialItem** = `{ label: string; link: string }`
+
+<h2 id="faq">常见问题</h2>
+### 如何自定义面板颜色？
+通过 `colors` 属性传入颜色数组，组件最多取前 4 个颜色。若数组长度 >= 3，会移除中间位置的颜色以获得更好的视觉层次。
+
+### 如何监听菜单打开/关闭事件？
+使用 `onMenuOpen` 和 `onMenuClose` 回调属性，分别在菜单开始打开和开始关闭时触发。
+
+### 菜单项的无障碍如何实现？
+每个菜单项通过 `ariaLabel` 设置无障碍标签；菜单按钮通过 `aria-label` 和 `aria-expanded` 提供状态信息；面板通过 `aria-hidden` 控制可见性。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-staggered-menu` 导入。
+2. 依赖 `gsap`，确保项目中已安装。
+3. `items` 的类型为 `{ label: string; link: string; ariaLabel?: string }[]`。
+4. 需要对应的 CSS 样式文件支持（`.sm-prelayer`、`.sm-panel-itemLabel` 等类名）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-staggered-menu" />

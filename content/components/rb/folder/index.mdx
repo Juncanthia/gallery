@@ -1,0 +1,72 @@
+Folder 文件夹交互组件，点击可展开/收起内部纸张，纸张支持鼠标悬浮磁吸偏移效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要展示文件夹概念或文档集合，提供展开/收起的交互反馈时使用。
+常见场景：
+- 文件管理界面的文件夹图标
+- 知识库/文档集合的可视化展示
+- 作品集或项目的分类入口卡片
+不推荐：
+- 替代标准文件上传组件（无实际文件操作功能）
+- 需要展示超过 3 个纸张内容时（内部最多展示 3 张）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/folder" path="rb/folder/basic" />
+
+```tsx
+import { Folder } from "@/components/ui/rb-folder"
+export default function Demo() { return <Folder /> }
+```
+
+### 自定义颜色和纸张内容
+
+```tsx
+import { Folder } from "@/components/ui/rb-folder"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-8 p-8">
+      <Folder color="#FF6F37" size={1.5} />
+      <Folder
+        color="#06B6D4"
+        size={1}
+        items={[
+          <span key="1" className="text-xs">Doc1</span>,
+          <span key="2" className="text-xs">Doc2</span>,
+          <span key="3" className="text-xs">Doc3</span>,
+        ]}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Folder
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 文件夹主色调 | `string` | `"#5227FF"` |
+| size | 整体缩放比例（通过 CSS `scale()` 变换） | `number` | `1` |
+| items | 纸张上展示的内容节点数组（最多展示前 3 个） | `React.ReactNode[]` | `[]` |
+| className | 最外层容器附加样式类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+### 纸张的磁吸偏移效果是什么？
+文件夹展开后，鼠标在纸张上移动时，纸张会根据鼠标与纸张中心的偏移量产生轻微的水平/垂直位移（`offsetX * 0.15`），鼠标离开后回弹到原位。
+
+### 最多可以放几张纸？
+内部固定为 3 层纸张（`maxItems = 3`）。`items` 数组如果少于 3 个，剩余层为空纸；超过 3 个的会被忽略。
+
+### 文件夹颜色是如何派生深色的？
+组件内部通过 `darkenColor` 函数将传入的 `color` 按 8% 比例暗化，作为文件夹背面的颜色。三张纸张则基于白色分别暗化 10%、5% 和原始白色。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-folder` 导入。
+2. 纯 CSS 实现，无额外第三方依赖。
+3. `color` 支持 hex 格式（如 `"#5227FF"`），组件会自动生成配套的暗色调。
+4. `size` 通过 CSS `transform: scale()` 实现，不影响布局空间。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-folder" />

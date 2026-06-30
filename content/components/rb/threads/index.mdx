@@ -1,0 +1,76 @@
+Threads 线程纹理背景组件，基于 WebGL (OGL) 和 Perlin 噪声生成动态流动的细线纹理效果，支持鼠标交互控制线条方向。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要...时使用。
+常见场景：
+- 深色背景的科技感/未来感页面装饰
+- 作为 Hero 区域或卡片容器的动态纹理背景
+- 替代静态纹理图片的轻量级 WebGL 方案
+不推荐：
+- 浅色背景场景（白色线条在白色背景上不可见）
+- 移动端低性能设备（WebGL 持续渲染耗电）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/threads" path="rb/threads/basic" />
+
+```tsx
+import { Threads } from "@/components/ui/rb-threads"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 relative bg-gray-900">
+      <Threads />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+```tsx
+import { Threads } from "@/components/ui/rb-threads"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 relative bg-black">
+      <Threads
+        color={[0.2, 0.8, 1]}
+        amplitude={1.5}
+        distance={0.3}
+        enableMouseInteraction
+      />
+      <div className="absolute inset-0 flex items-center justify-center text-white text-2xl z-10">
+        Your Content Here
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Threads
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 线条颜色（RGB 归一化 0-1） | `[number, number, number]` | `[1, 1, 1]` |
+| amplitude | 噪声振幅 | `number` | `1` |
+| distance | 线条间距偏移 | `number` | `0` |
+| enableMouseInteraction | 是否启用鼠标交互（鼠标位置影响线条） | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+### color 参数为什么要用 [number, number, number] 格式？
+这是 OGL 着色器的 `uniform` 约定，RGB 三个通道均为 0-1 归一化值。例如红色为 `[1, 0, 0]`，天蓝色为 `[0.2, 0.8, 1]`。
+
+### 鼠标交互具体影响什么？
+当 `enableMouseInteraction=true` 时，鼠标在容器内的位置会作为 `uMouse` 参数传入着色器，影响 Perlin 噪声的计算，使线条在鼠标附近产生偏移和形变。
+
+### 渲染性能如何优化？
+组件使用 `IntersectionObserver` 在元素不可见时自动跳过渲染，并限制最大渲染分辨率为 1920px（`MAX_RENDER_DIM`），避免在高 DPI 屏幕上过度绘制。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-threads` 导入。
+2. 依赖 `ogl`（Omar's WebGL Library），确保项目中已安装。
+3. 父容器需要明确设置 `width` 和 `height`。
+4. 组件为纯背景，内容需通过绝对定位叠加在组件上方。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-threads" />

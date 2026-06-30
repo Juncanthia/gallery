@@ -1,0 +1,70 @@
+EvilEye 基于 OGL（WebGL）的火焰之眼组件，瞳孔跟踪鼠标移动，噪声纹理驱动虹膜火焰动画。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要瞳孔追踪或火焰眼睛视觉效果的背景时使用。
+常见场景：
+- 恐怖/万圣节主题页面背景
+- 眼球追踪交互的创意着陆页
+- 需要有机流动火焰效果的视觉装饰
+不推荐：
+- 移动端低性能设备（WebGL 有一定开销）
+- 不需要鼠标交互的静态背景（可考虑纯 CSS 方案）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/evil-eye" path="rb/evil-eye/basic" />
+
+```tsx
+import { EvilEye } from "@/components/ui/rb-evil-eye"
+export default function Demo() { return <EvilEye /> }
+```
+
+### 自定义配置
+
+```tsx
+import { EvilEye } from "@/components/ui/rb-evil-eye"
+
+export default function Demo() {
+  return (
+    <div className="grid grid-cols-2 gap-4 p-8">
+      <EvilEye eyeColor="#FF6F37" intensity={2} pupilSize={0.5} flameSpeed={1.5} />
+      <EvilEye eyeColor="#00FF88" intensity={1.2} irisWidth={0.4} glowIntensity={0.5} backgroundColor="#111111" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### EvilEye
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| eyeColor | 眼睛/虹膜主色调（hex） | `string` | `"#FF6F37"` |
+| intensity | 整体视觉强度 | `number` | `1.5` |
+| pupilSize | 瞳孔大小系数 | `number` | `0.6` |
+| irisWidth | 虹膜环宽度系数 | `number` | `0.25` |
+| glowIntensity | 外部光晕强度 | `number` | `0.35` |
+| scale | 眼睛整体缩放系数 | `number` | `0.8` |
+| noiseScale | 噪声纹理的缩放比例 | `number` | `1.0` |
+| pupilFollow | 瞳孔跟随鼠标的强度（0=不跟随） | `number` | `1.0` |
+| flameSpeed | 虹膜火焰动画速度 | `number` | `1.0` |
+| backgroundColor | 背景颜色（hex） | `string` | `"#000000"` |
+
+<h2 id="faq">常见问题</h2>
+### 瞳孔跟随鼠标的原理是什么？
+组件跟踪鼠标在容器内的相对位置，将其映射为 `uMouse` uniform 值，片段着色器根据鼠标偏移量计算 pupilOffset，从而让瞳孔按 `pupilFollow` 强度跟随。
+
+### 为什么容器需要设置固定宽高？
+EvilEye 使用 OGL Renderer，通过 `container.offsetWidth/offsetHeight` 获取渲染尺寸。如果容器没有显式高度（如 `h-64`），则渲染区域为零。建议始终设置 `className` 或包裹在固定尺寸容器中。
+
+### 噪声纹理如何影响视觉效果？
+组件在初始化时生成 256x256 的程序化噪声纹理，注入片段着色器的 `uNoiseTexture` uniform。噪声驱动虹膜环的不规则边界、火焰流动方向和外部光晕细节。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-evil-eye` 导入。
+2. 依赖 `ogl`（OGL WebGL 框架），确保项目中已安装。
+3. 组件返回一个纯 div 容器，需通过 `className` 设置宽高，否则渲染尺寸为零。
+4. 所有颜色参数使用 hex 字符串格式（如 `"#FF6F37"`），背景色同样支持 hex。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-evil-eye" />

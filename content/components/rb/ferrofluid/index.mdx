@@ -1,0 +1,92 @@
+Ferrofluid 基于 OGL（WebGL）的磁流体模拟背景组件，多层噪声驱动流动液态金属效果，支持鼠标交互。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要有机流动、磁流体或液态金属视觉效果的背景时使用。
+常见场景：
+- 科幻/未来主义风格的页面背景
+- 音乐可视化或动态波形展示
+- 需要鼠标交互的液态形变动效
+不推荐：
+- 静态页面的装饰（组件持续运行 requestAnimationFrame 循环）
+- 移动端低性能设备（WebGL 计算量大）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/ferrofluid" path="rb/ferrofluid/basic" />
+
+```tsx
+import { Ferrofluid } from "@/components/ui/rb-ferrofluid"
+export default function Demo() { return <Ferrofluid /> }
+```
+
+### 自定义颜色与流向
+
+```tsx
+import { Ferrofluid } from "@/components/ui/rb-ferrofluid"
+
+export default function Demo() {
+  return (
+    <div className="space-y-8 p-8">
+      <Ferrofluid
+        colors={["#4F46E5", "#06B6D4", "#E0F2FE"]}
+        speed={0.8}
+        turbulence={1.5}
+        flowDirection="right"
+        className="h-48 w-full rounded-lg"
+      />
+      <Ferrofluid
+        colors={["#FF6F37", "#FF3D00"]}
+        flowDirection="up"
+        fluidity={0.3}
+        rimWidth={0.4}
+        glow={3}
+        className="h-48 w-full rounded-lg"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Ferrofluid
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 容器自定义类名 | `string` | `""` |
+| dpr | 设备像素比（默认自动获取） | `number` | - |
+| paused | 是否暂停动画渲染 | `boolean` | `false` |
+| colors | 磁流体颜色渐变数组（最多 8 个） | `string[]` | `["#ffffff","#ffffff","#ffffff"]` |
+| speed | 动画流动速度 | `number` | `0.5` |
+| scale | 噪波采样缩放 | `number` | `1.6` |
+| turbulence | 湍流强度，越大扭曲越剧烈 | `number` | `1` |
+| fluidity | 流动性，控制不同噪波层之间的融合程度 | `number` | `0.1` |
+| rimWidth | 磁流体边缘宽度 | `number` | `0.2` |
+| sharpness | 边缘锐度（pow 指数） | `number` | `2.5` |
+| shimmer | 微光闪烁强度 | `number` | `1.5` |
+| glow | 发光强度系数 | `number` | `2` |
+| flowDirection | 流动方向 | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"down"` |
+| opacity | 整体不透明度 | `number` | `1` |
+| mouseInteraction | 是否启用鼠标交互（靠近时产生光晕） | `boolean` | `true` |
+| mouseStrength | 鼠标交互光晕强度 | `number` | `1` |
+| mouseRadius | 鼠标影响半径 | `number` | `0.35` |
+| mouseDampening | 鼠标位置平滑阻尼（0=无平滑） | `number` | `0.15` |
+| mixBlendMode | CSS mix-blend-mode 混合模式 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+### 最多可以使用几种颜色？
+最多 8 种（`MAX_COLORS = 8`）。如果传入少于 8 种，后面的 uniform 会复制最后一种颜色填充。至少需要 1 种颜色。
+
+### flowDirection 是如何工作的？
+`flowDirection` 控制碎片着色器中时间推进的二维向量方向。例如 `"down"` 使流体向下流动，`"right"` 使流体向右流动。
+
+### mouseDampening 和 mouseInteraction 的关系？
+当 `mouseInteraction=false` 时鼠标不生效。`mouseDampening=0` 时鼠标位置直接映射无平滑，值越大平滑度越高（指数衰减平滑）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-ferrofluid` 导入。
+2. 依赖 `ogl`（OGL WebGL 框架），确保项目中已安装。
+3. 组件返回纯 div 容器，需通过 `className` 设置宽高，否则 Canvas 尺寸为零。
+4. `colors` 为 hex 字符串数组，自动转换为 RGB，最多支持 8 种颜色。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-ferrofluid" />

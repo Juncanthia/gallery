@@ -1,0 +1,81 @@
+TextCursor 文字光标拖尾组件，鼠标移动时产生自定义文字/Emoji 的拖尾跟随效果，支持方向旋转和随机浮动。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要...时使用。
+常见场景：
+- 为页面增加趣味性的光标跟随特效
+- 品牌页面展示自定义符号/Emoji 的拖尾效果
+- 创意型 Hero 区域的交互点缀
+不推荐：
+- 文字较多、需要精确点击的页面（干扰操作）
+- 性能和帧率敏感的场景（motion 动画开销）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/text-cursor" path="rb/text-cursor/basic" />
+
+```tsx
+import { TextCursor } from "@/components/ui/rb-text-cursor"
+
+export default function Demo() {
+  return (
+    <div className="h-64 w-full">
+      <TextCursor />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+```tsx
+import { TextCursor } from "@/components/ui/rb-text-cursor"
+
+export default function Demo() {
+  return (
+    <div className="h-screen w-full bg-neutral-950">
+      <TextCursor
+        text="✦"
+        spacing={80}
+        followMouseDirection={false}
+        randomFloat={false}
+        maxPoints={8}
+        exitDuration={0.8}
+        removalInterval={20}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### TextCursor
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 跟随光标的文本或 Emoji | `string` | `"⚛️"` |
+| spacing | 拖尾点之间的最小间距（像素） | `number` | `100` |
+| followMouseDirection | 文本是否跟随鼠标移动方向旋转 | `boolean` | `true` |
+| randomFloat | 是否启用随机浮动动画 | `boolean` | `true` |
+| exitDuration | 拖尾点消失动画时长（秒） | `number` | `0.5` |
+| removalInterval | 拖尾点移除检查间隔（毫秒） | `number` | `30` |
+| maxPoints | 最大拖尾点数 | `number` | `5` |
+| className | 自定义类名 | `string` | - |
+| style | 自定义 CSS 样式 | `CSSProperties` | - |
+
+<h2 id="faq">常见问题</h2>
+### 拖尾点太少或太多怎么办？
+通过 `maxPoints` 控制最大拖尾点数，通过 `spacing` 控制新点生成密度（值越小越密集）。
+
+### 如何让拖尾效果更流畅？
+增大 `spacing` 和 `maxPoints`、减小 `removalInterval` 可使拖尾更密集流畅，但会带来更多 motion 动画开销。
+
+### 文本不跟随鼠标方向旋转如何设置？
+设置 `followMouseDirection={false}`，文本将始终保持水平朝向。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-text-cursor` 导入。
+2. 父容器需要明确的高度，组件内部使用 `absolute inset-0`。
+3. 依赖 `motion/react`（`motion`、`AnimatePresence`）。
+4. `pointer-events-none` 确保拖尾不阻挡鼠标事件。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-text-cursor" />

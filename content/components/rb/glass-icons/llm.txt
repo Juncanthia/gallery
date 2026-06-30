@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: GlassIcons
+subtitle: 玻璃图标
+description: 玻璃拟态风格的图标按钮组，支持预设渐变色。
+demo: { cols: 2 }
+group: { title: Components, order: 2 }
+source: { component: src/components/react-bits/glass-icons.tsx, docs: content/components/rb/glass-icons/index.mdx, examples: [content/components/rb/glass-icons/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true }
+---

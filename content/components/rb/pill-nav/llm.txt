@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: PillNav
+subtitle: 胶囊导航
+description: hover 时产生圆形背景和文字上浮动效的胶囊风格导航栏。
+demo: { cols: 1 }
+group: { title: Components, order: 10 }
+source: { component: src/components/react-bits/pill-nav.tsx, docs: content/components/rb/pill-nav/index.mdx, examples: [content/components/rb/pill-nav/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, gsap: true }
+---

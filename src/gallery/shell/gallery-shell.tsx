@@ -31,6 +31,7 @@ import {
   type GalleryNavGroup,
   type GalleryNavItem,
 } from "../registry/catalog"
+import { LIBRARIES, getFilteredGroups, type Library } from "../registry/libraries"
 import { PRIMARY_NAV } from "../registry/labels"
 import { buildBreadcrumbSegments } from "../navigation/breadcrumb/build-breadcrumb"
 import {
@@ -70,7 +71,7 @@ function navIconForItem(to: string) {
 }
 
 function componentSlugFromPath(to: string) {
-  const match = /^\/components\/([^/?#]+)/.exec(to)
+  const match = /^\/components\/(.+)/.exec(to)
   return match?.[1]
 }
 
@@ -97,9 +98,9 @@ function GalleryLink({
         aria-label={ariaLabel}
         className={className}
         onClick={onClick}
-        params={{ slug }}
+        params={{ _splat: slug }}
         title={title}
-        to="/components/$slug"
+        to="/components/$"
       >
         {children}
       </Link>
@@ -137,10 +138,12 @@ export function GalleryShell({
     select: (state) => state.location.pathname,
   })
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [activeLibrary, setActiveLibrary] = useState<string>(LIBRARIES[0]?.id ?? "kibo-ui")
   const [sidebarTab, setSidebarTab] = useState<"components" | "blocks">("components")
   const [darkMode, setDarkMode] = useState(() =>
     document.documentElement.classList.contains("dark")
   )
+  const currentLibrary = LIBRARIES.find((lib) => lib.id === activeLibrary) ?? LIBRARIES[0]
   const contentScrollRef = useRef<HTMLDivElement>(null)
   const resizable = useResizableSidebar({
     storageKey: "gallery-nav-width",
@@ -182,9 +185,10 @@ export function GalleryShell({
   )
 
   const { componentGroups, blockGroups } = useMemo(() => {
+    const libraryGroups = getFilteredGroups(navGroups, activeLibrary)
     const components: GalleryNavGroup[] = []
     const blocks: GalleryNavGroup[] = []
-    for (const group of navGroups) {
+    for (const group of libraryGroups) {
       if (group.group === "复合组件" || group.groupEn === "Blocks") {
         blocks.push(group)
       } else {
@@ -192,7 +196,7 @@ export function GalleryShell({
       }
     }
     return { componentGroups: components, blockGroups: blocks }
-  }, [navGroups])
+  }, [navGroups, activeLibrary])
 
   const visibleGroups = sidebarTab === "components" ? componentGroups : blockGroups
 
@@ -281,6 +285,26 @@ export function GalleryShell({
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-2">
+          <div className="flex items-center rounded-lg bg-muted p-0.5">
+            {LIBRARIES.map((lib) => (
+              <button
+                className={cn(
+                  "rounded-md px-2.5 py-1 text-xs font-medium transition-colors",
+                  activeLibrary === lib.id
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                key={lib.id}
+                onClick={() => {
+                  setActiveLibrary(lib.id)
+                  if (!lib.hasBlocks) setSidebarTab("components")
+                }}
+                type="button"
+              >
+                {lib.label}
+              </button>
+            ))}
+          </div>
           <button
             aria-label="Toggle dark mode"
             className="flex size-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -337,7 +361,7 @@ export function GalleryShell({
             />
           </div>
 
-          {blockGroups.length > 0 ? (
+          {blockGroups.length > 0 && currentLibrary.hasBlocks ? (
             <div className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-muted p-1">
               <button
                 className={cn(

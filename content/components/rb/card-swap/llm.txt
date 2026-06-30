@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: CardSwap
+subtitle: 卡片交换
+description: 3D 堆叠卡片自动轮换动画组件。
+demo: { cols: 1 }
+group: { title: Components, order: 6 }
+source: { component: src/components/react-bits/card-swap.tsx, docs: content/components/rb/card-swap/index.mdx, examples: [content/components/rb/card-swap/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, gsap: true }
+---

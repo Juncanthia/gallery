@@ -1,0 +1,81 @@
+FluidGlass 基于 React Three Fiber 的流体玻璃效果组件，支持透镜、立方体和条形三种 3D 模式，具有玻璃折射和色散效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要展示带有玻璃折射和色散效果的 3D 交互场景时使用。
+常见场景：
+- 产品展示页面的 3D 着陆体验
+- 品牌页面的玻璃质感交互区域
+- 需要滚动浏览的沉浸式 3D 场景
+不推荐：
+- 简单的内容展示页面（3D 场景加载开销大）
+- 需要快速首屏加载的页面（需加载 .glb 3D 模型）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/fluid-glass" path="rb/fluid-glass/basic" />
+
+```tsx
+import { FluidGlass } from "@/components/ui/rb-fluid-glass"
+export default function Demo() { return <FluidGlass /> }
+```
+
+### Bar 模式 + 导航
+
+```tsx
+import { FluidGlass } from "@/components/ui/rb-fluid-glass"
+
+export default function Demo() {
+  return (
+    <FluidGlass
+      mode="bar"
+      barProps={{
+        navItems: [
+          { label: "Home", link: "#home" },
+          { label: "Work", link: "#work" },
+          { label: "Contact", link: "#contact" },
+        ],
+      }}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### FluidGlass
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| mode | 3D 显示模式 | `"lens"` \| `"bar"` \| `"cube"` | `"lens"` |
+| lensProps | Lens 模式的配置（包含可选的 `navItems` 和 MeshTransmissionMaterial 属性） | `object` | `{}` |
+| barProps | Bar 模式的配置（包含可选的 `navItems` 和材质属性） | `object` | `{}` |
+| cubeProps | Cube 模式的配置（包含可选的 `navItems` 和材质属性） | `object` | `{}` |
+
+### MeshTransmissionMaterial 相关属性（通过 lensProps/barProps/cubeProps 传入）
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| ior | 折射率 | `number` | `1.15` |
+| thickness | 厚度 | `number` | `5` |
+| anisotropy | 各向异性 | `number` | `0.01` |
+| chromaticAberration | 色散强度 | `number` | `0.1` |
+| scale | 模型缩放比例 | `number` | 自动计算（`0.15`） |
+
+<h2 id="faq">常见问题</h2>
+### 三种模式有什么不同？
+- **lens**: 圆形透镜形状，跟随鼠标指针移动
+- **cube**: 立方体形状，跟随鼠标指针旋转
+- **bar**: 条形玻璃，固定在底部，不跟随鼠标
+
+### Bar 模式的 navItems 如何工作？
+Bar 模式下 navItems 通过 R3F 的 `<Text>` 组件渲染在 3D 场景中，支持点击导航。链接以 `#` 开头时使用 `window.location.hash` 跳转，否则使用 `window.location.href`。
+
+### 为什么需要 3D 模型文件？
+组件依赖 `/assets/3d/lens.glb`、`/assets/3d/bar.glb`、`/assets/3d/cube.glb` 三个 GLB 模型文件。确保这些文件存在于项目的 public 目录中。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-fluid-glass` 导入。
+2. 依赖 `@react-three/fiber`、`@react-three/drei`、`three`、`maath`，确保项目中已安装。
+3. 需要 `/assets/3d/*.glb` 3D 模型文件和 `/assets/demo/*.webp` 演示图片。
+4. Canvas 高度由 ScrollControls 的 `pages=3` 控制，组件占据约 3 倍视口高度的滚动空间。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-fluid-glass" />

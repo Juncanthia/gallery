@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Radar
+subtitle: 雷达扫描
+description: WebGL 雷达扫描动画背景，支持环形和辐条扫描效果。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 2 }
+source: { component: src/components/react-bits/radar.tsx, docs: content/components/rb/radar/index.mdx, examples: [content/components/rb/radar/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, webgl: true, ogl: true }
+---

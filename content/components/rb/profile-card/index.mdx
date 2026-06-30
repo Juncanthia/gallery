@@ -1,0 +1,90 @@
+ProfileCard 个人资料卡片，支持 3D 倾斜效果、光斑跟随、设备陀螺仪交互和自定义装饰元素。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要展示用户个人资料或名片信息并带有高级 3D 交互体验时使用。
+常见场景：
+- 团队介绍页成员卡片
+- 个人主页身份卡片
+- 社交平台资料展示
+不推荐：
+- 卡片内容需要频繁点击交互时（3D 倾斜与内部交互可能冲突）
+- 移动端大量卡片列表（陀螺仪频繁触发影响性能）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/profile-card" path="rb/profile-card/basic" />
+
+```tsx
+import { ProfileCard } from "@/components/ui/rb-profile-card"
+
+export default function Demo() {
+  return <ProfileCard />
+}
+```
+
+### 自定义用户信息
+
+```tsx
+import { ProfileCard } from "@/components/ui/rb-profile-card"
+
+export default function Demo() {
+  return (
+    <ProfileCard
+      name="张三"
+      title="前端工程师"
+      handle="zhangsan_dev"
+      status="在线"
+      avatarUrl="/avatar.png"
+      contactText="联系我"
+      enableMobileTilt={true}
+      onContactClick={() => console.log("contact clicked")}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ProfileCard
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| avatarUrl | 大头像 URL | string | "" |
+| iconUrl | 装饰图标 URL | string | "" |
+| grainUrl | 噪点纹理图片 URL | string | "" |
+| innerGradient | 内部渐变 CSS | string | 内置默认渐变 |
+| behindGlowEnabled | 是否显示背部光晕 | boolean | true |
+| behindGlowColor | 背部光晕颜色 | string | "rgba(125,190,255,0.67)" |
+| behindGlowSize | 背部光晕尺寸 | string | "50%" |
+| className | 额外的 CSS 类名 | string | "" |
+| enableTilt | 是否启用 3D 倾斜 | boolean | true |
+| enableMobileTilt | 是否启用移动端陀螺仪倾斜 | boolean | false |
+| mobileTiltSensitivity | 移动端陀螺仪灵敏度 | number | 5 |
+| miniAvatarUrl | 小头像 URL（底部信息区） | string | - |
+| name | 用户名 | string | "Javi A. Torres" |
+| title | 职位/头衔 | string | "Software Engineer" |
+| handle | 用户标识（显示为 @handle） | string | "javicodes" |
+| status | 在线状态文字 | string | "Online" |
+| contactText | 联系按钮文字 | string | "Contact" |
+| showUserInfo | 是否显示底部用户信息区 | boolean | true |
+| onContactClick | 联系按钮点击回调 | () => void | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 移动端 3D 倾斜不生效？
+需设置 `enableMobileTilt={true}`。在 HTTPS 环境下会请求陀螺仪权限，用户授权后生效。
+
+### 如何隐藏底部用户信息区？
+设置 `showUserInfo={false}`，卡片将仅显示大头像和名称/头衔。
+
+### 倾斜效果与内部按钮点击冲突？
+联系按钮设置了 `pointerEvents: auto` 确保可点击。如需更多内部交互元素，可在对应元素上设置同样的 pointer-events 样式。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-profile-card` 导入。
+2. 建议传入 `avatarUrl` 获得完整的视觉效果。
+3. 3D 倾斜依赖 `pointermove` 事件，桌面端体验最佳。
+4. 组件使用 `memo` 包裹，避免不必要的重渲染。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-profile-card" />

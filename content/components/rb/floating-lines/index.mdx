@@ -1,0 +1,89 @@
+FloatingLines 基于 Three.js 的浮动波纹线条背景组件，ShaderMaterial 生成多层波浪线条，支持鼠标弯曲交互和视差效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要波浪线条或音频可视化风格的动态背景时使用。
+常见场景：
+- 音频可视化/均衡器风格的页面背景
+- 科技感着陆页的动态装饰背景
+- 需要鼠标交互弯曲的线条视觉效果
+不推荐：
+- 静态页面背景（持续 WebGL 计算）
+- 移动端低性能设备（Three.js WebGLRenderer 开销较大）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/floating-lines" path="rb/floating-lines/basic" />
+
+```tsx
+import { FloatingLines } from "@/components/ui/rb-floating-lines"
+export default function Demo() { return <FloatingLines /> }
+```
+
+### 自定义配置
+
+```tsx
+import { FloatingLines } from "@/components/ui/rb-floating-lines"
+
+export default function Demo() {
+  return (
+    <div className="space-y-8 p-8">
+      <FloatingLines
+        linesGradient={["#ff6b6b", "#ffd93d", "#6bcb77"]}
+        enabledWaves={["bottom", "middle"]}
+        lineCount={[10, 15]}
+        lineDistance={[3, 6]}
+        animationSpeed={1.5}
+        bendStrength={-0.8}
+        className="h-64 w-full"
+      />
+      <FloatingLines
+        enabledWaves={["top"]}
+        lineCount={20}
+        topWavePosition={{ x: 5, y: 0.3, rotate: -0.6 }}
+        interactive={false}
+        className="h-64 w-full"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### FloatingLines
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| linesGradient | 线条渐变色数组（hex，最多 8 个） | `string[]` | - |
+| enabledWaves | 启用的波形层 | `string[]` | `["top","middle","bottom"]` |
+| lineCount | 每层线条数量（单值或按层数组） | `number \| number[]` | `[6]` |
+| lineDistance | 线条间距（单值或按层数组，会乘以 0.01） | `number \| number[]` | `[5]` |
+| topWavePosition | 顶层波的位置和旋转配置 | `{ x?: number; y?: number; rotate?: number }` | - |
+| middleWavePosition | 中层波的位置和旋转配置 | `{ x?: number; y?: number; rotate?: number }` | - |
+| bottomWavePosition | 底层波的位置和旋转配置 | `{ x?: number; y?: number; rotate?: number }` | `{ x:2, y:-0.7, rotate:-1 }` |
+| animationSpeed | 动画播放速度 | `number` | `1` |
+| interactive | 是否启用鼠标弯曲交互 | `boolean` | `true` |
+| bendRadius | 鼠标弯曲影响半径 | `number` | `5.0` |
+| bendStrength | 鼠标弯曲强度（负值表示向外推开） | `number` | `-0.5` |
+| mouseDamping | 鼠标位置平滑阻尼 | `number` | `0.05` |
+| parallax | 是否启用视差效果 | `boolean` | `true` |
+| parallaxStrength | 视差移动强度 | `number` | `0.2` |
+| mixBlendMode | CSS 混合模式 | `string` | `"screen"` |
+
+<h2 id="faq">常见问题</h2>
+### lineCount 和 lineDistance 如何按层配置？
+如果传入数组，顺序与 `enabledWaves` 数组中启用的层对应。例如 `enabledWaves={["bottom","top"]}` 配合 `lineCount={[8, 12]}`，bottom 层 8 条线，top 层 12 条线。如果传入单个数值，所有层使用相同值。
+
+### 为什么线条看起来是暗的？
+默认 `mixBlendMode="screen"` 在深色背景上有更好的显示效果。如果放在浅色背景上，可以尝试设置 `mixBlendMode="multiply"` 或不设置混合模式。
+
+### topWavePosition 不传值会怎样？
+每个波形位置有各自的默认值：topWavePosition 默认 `{ x: 10, y: 0.5, rotate: -0.4 }`，middleWavePosition 默认 `{ x: 5, y: 0, rotate: 0.2 }`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-floating-lines` 导入。
+2. 依赖 `three`（Three.js），确保项目中已安装。
+3. 组件返回纯 div 容器，需通过 `className` 设置宽高。
+4. `linesGradient` 默认为不设置，此时使用内置的蓝/粉色渐变（BLUE/PINK），建议显式传入颜色以获得预期效果。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-floating-lines" />

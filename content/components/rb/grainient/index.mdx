@@ -1,0 +1,96 @@
+Grainient 是一个基于 OGL WebGL2 的渐变颗粒背景组件，通过噪声函数和色彩扭曲生成带颗粒感的渐变纹理。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要带颗粒纹理的渐变背景时使用。
+常见场景：
+- 品牌页面的质感背景，替代纯色或基础渐变
+- 创意型着陆页的氛围背景
+- 设计工具类应用的预览画布背景
+不推荐：
+- 需要精确色彩还原的场景（颗粒噪声会影响颜色精度）
+- 内容密集区域的背景（纹理可能干扰文字可读性）
+- 不支持 WebGL2 的旧浏览器
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/grainient" path="rb/grainient/basic" />
+```tsx
+import { Grainient } from "@/components/ui/rb-grainient"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 rounded overflow-hidden">
+      <Grainient className="w-full h-full" />
+    </div>
+  )
+}
+```
+
+### 自定义色彩和纹理
+```tsx
+import { Grainient } from "@/components/ui/rb-grainient"
+
+export default function Demo() {
+  return (
+    <Grainient
+      color1="#1a1a2e"
+      color2="#16213e"
+      color3="#0f3460"
+      grainAmount={0.15}
+      grainAnimated
+      warpStrength={2.0}
+      contrast={1.8}
+      saturation={0.8}
+      zoom={1.0}
+      className="w-full h-full"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Grainient
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| timeSpeed | 时间演进速度 | `number` | `0.25` |
+| colorBalance | 色彩平衡偏移 | `number` | `0.0` |
+| warpStrength | 扭曲强度 | `number` | `1.0` |
+| warpFrequency | 扭曲频率 | `number` | `5.0` |
+| warpSpeed | 扭曲动画速度 | `number` | `2.0` |
+| warpAmplitude | 扭曲幅度 | `number` | `50.0` |
+| blendAngle | 混合角度（度） | `number` | `0.0` |
+| blendSoftness | 混合柔和度 | `number` | `0.05` |
+| rotationAmount | 旋转量 | `number` | `500.0` |
+| noiseScale | 噪声缩放 | `number` | `2.0` |
+| grainAmount | 颗粒量 | `number` | `0.1` |
+| grainScale | 颗粒纹理缩放 | `number` | `2.0` |
+| grainAnimated | 颗粒是否随时间动画 | `boolean` | `false` |
+| contrast | 对比度 | `number` | `1.5` |
+| gamma | Gamma值 | `number` | `1.0` |
+| saturation | 饱和度 | `number` | `1.0` |
+| centerX | 中心偏移X | `number` | `0.0` |
+| centerY | 中心偏移Y | `number` | `0.0` |
+| zoom | 缩放 | `number` | `0.9` |
+| color1 | 颜色1（亮色） | `string` | `"#FF9FFC"` |
+| color2 | 颜色2（中间色） | `string` | `"#5227FF"` |
+| color3 | 颜色3（暗色） | `string` | `"#B497CF"` |
+| className | 附加样式类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+### 为什么我的浏览器看不到效果？
+组件需要 WebGL2 支持。检查浏览器是否启用了 WebGL2（Chrome/Edge/Safari 15+ 均支持）。可在 `chrome://gpu` 查看 WebGL 状态。
+
+### 如何提高性能？
+减少 `grainAnimated` 为 `false` 可降低颗粒更新的开销；增大 `zoom` 值减少计算量；组件使用 IntersectionObserver 自动在不可见时暂停渲染。
+
+### 颜色参数如何影响渐变？
+`color1` 为亮色区域，`color2` 为中间色，`color3` 为暗色区域。三色通过 `blendAngle` 和 `blendSoftness` 控制混合方式。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-grainient` 导入。
+2. 依赖 `ogl` (Omar's WebGL Library)，需要 WebGL2 支持。
+3. 组件会自管理渲染循环和可见性暂停，无需手动控制生命周期。
+4. 通过 `centerX`/`centerY` 调整视觉焦点位置，值范围通常在 `-0.5` 到 `0.5`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-grainient" />

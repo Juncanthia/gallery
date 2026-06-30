@@ -1,0 +1,80 @@
+ElasticSlider 弹性滑块组件，拖动时滑块产生弹性形变和拉伸动画反馈。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要带有弹性形变反馈的滑块控件时使用。
+常见场景：
+- 音量调节、亮度调节等参数设置
+- 需要视觉趣味性的拖动交互
+- 需要步进模式的数值选择
+不推荐：
+- 需要精确数值输入时（建议使用 InputNumber）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/elastic-slider" path="rb/elastic-slider/basic" />
+
+```tsx
+import { ElasticSlider } from "@/components/ui/rb-elastic-slider"
+export default function Demo() { return <ElasticSlider /> }
+```
+
+### 自定义配置
+
+```tsx
+import { ElasticSlider } from "@/components/ui/rb-elastic-slider"
+import { Sun, Moon } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <div className="space-y-8 p-8">
+      <ElasticSlider
+        defaultValue={30}
+        startingValue={10}
+        maxValue={90}
+        leftIcon={<Sun className="icon" />}
+        rightIcon={<Moon className="icon" />}
+      />
+      <ElasticSlider
+        isStepped
+        stepSize={10}
+        defaultValue={50}
+        leftIcon={<span>0</span>}
+        rightIcon={<span>100</span>}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### ElasticSlider
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| defaultValue | 滑块默认值 | `number` | `50` |
+| startingValue | 滑块起始值（最小值） | `number` | `0` |
+| maxValue | 滑块最大值 | `number` | `100` |
+| className | 外层容器自定义类名 | `string` | `""` |
+| isStepped | 是否启用步进模式，值为 true 时按 stepSize 取整 | `boolean` | `false` |
+| stepSize | 步进模式的步长 | `number` | `1` |
+| leftIcon | 滑块左侧图标 | `React.ReactNode` | `<Volume1 />` |
+| rightIcon | 滑块右侧图标 | `React.ReactNode` | `<Volume2 />` |
+
+<h2 id="faq">常见问题</h2>
+### 滑块范围可以超出 startingValue 和 maxValue 吗？
+不可以。滑块值被严格约束在 `startingValue` 到 `maxValue` 的区间内，超出边界时通过弹性动画回弹。
+
+### isStepped 模式下 stepSize 如何工作？
+当 `isStepped` 为 true 时，拖动后的值会按 `stepSize` 取整。例如 `startingValue=0, maxValue=100, stepSize=10`，拖动后值只会是 0, 10, 20, ..., 100。
+
+### 左右图标过渡拖动会有什么效果？
+当鼠标从滑块左侧或右侧拖出时，对应的图标会产生弹性缩放动画（scale 1 到 1.4），滑块轨道也会产生拉伸形变。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-elastic-slider` 导入。
+2. 依赖 `motion`（Motion for React）和 `lucide-react`，确保项目中已安装。
+3. `leftIcon` 和 `rightIcon` 不带默认样式，建议使用 `lucide-react` 图标并添加 `className="icon"` 以匹配内置样式。
+4. 自定义 `className` 应用于外层 `slider-container` 容器，而非滑块轨道本身。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-elastic-slider" />

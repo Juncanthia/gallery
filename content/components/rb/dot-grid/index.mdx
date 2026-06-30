@@ -1,0 +1,85 @@
+DotGrid 基于 Canvas 2D 和 GSAP InertiaPlugin 的网格点阵交互背景，鼠标快速移动或点击时产生惯性推力和弹性回弹效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要交互式网格点阵背景，鼠标快速划过时点如"果冻"般被推开并弹回时使用。
+常见场景：
+- 技术产品着陆页的背景
+- 数据可视化/科技感页面装饰
+- 需要高级物理交互的创意背景
+不推荐：
+- 点阵需要承载文字或图标的场景（Canvas 绘制无法嵌套 HTML）
+- 极高密度的点阵（>1000 个点），GSAP 惯性计算开销较大
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/dot-grid" path="rb/dot-grid/basic" />
+
+```tsx
+import { DotGrid } from "@/components/ui/rb-dot-grid"
+export default function Demo() { return <DotGrid /> }
+```
+
+### 自定义配置
+
+```tsx
+import { DotGrid } from "@/components/ui/rb-dot-grid"
+
+export default function Demo() {
+  return (
+    <DotGrid
+      dotSize={12}
+      gap={24}
+      baseColor="#1e293b"
+      activeColor="#38bdf8"
+      proximity={200}
+      speedTrigger={80}
+      shockRadius={300}
+      shockStrength={8}
+      resistance={500}
+      returnDuration={2}
+      maxSpeed={4000}
+      className="w-full h-96"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DotGrid
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dotSize | 每个点的直径（像素） | `number` | `16` |
+| gap | 点之间的间距 | `number` | `32` |
+| baseColor | 点的基准颜色 | `string` | `"#5227FF"` |
+| activeColor | 鼠标接近时的点颜色 | `string` | `"#5227FF"` |
+| proximity | 鼠标影响范围（像素） | `number` | `150` |
+| speedTrigger | 触发惯性推力的鼠标速度阈值 | `number` | `100` |
+| shockRadius | 点击冲击波的影响半径 | `number` | `250` |
+| shockStrength | 点击冲击波的推力强度 | `number` | `5` |
+| maxSpeed | 鼠标最大追踪速度 | `number` | `5000` |
+| resistance | 惯性阻力，值越大点被推得越远 | `number` | `750` |
+| returnDuration | 点回弹到原位的动画时长（秒） | `number` | `1.5` |
+| className | 外层容器的 CSS 类名 | `string` | `""` |
+| style | 外层容器的内联样式 | `React.CSSProperties` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 惯性推力如何触发？
+鼠标移动时组件逐帧计算速度（dx/dt，单位 px/s）。当速度超过 `speedTrigger` 并且点到鼠标距离在 `proximity` 内时，GSAP InertiaPlugin 根据鼠标速度和方向计算推力，点被弹开后自动回弹。
+
+### baseColor 和 activeColor 如何过渡？
+基于 RGB 线性插值。鼠标接近时，`t = 1 - distance / proximity` 作为混合因子，点在 `baseColor` 和 `activeColor` 之间平滑过渡。两个颜色可以相同以禁用颜色过渡。
+
+### Canvas 如何响应容器尺寸变化？
+组件通过 ResizeObserver 监听外层 `wrapperRef` 的尺寸变化，自动重建点阵网格并调整 Canvas 分辨率（使用 `devicePixelRatio` 保证高清屏清晰度）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-dot-grid` 导入。
+2. 组件依赖 GSAP（`gsap` 包）和 `gsap/InertiaPlugin`，需确保项目已安装并注册插件。
+3. 每个点通过 `Path2D` 预定义圆形路径，绘制时使用 `ctx.translate` + `ctx.fill(path)` 方式，性能优于逐个 arc。
+4. 鼠标事件使用 50ms 节流降低计算频率，`passive: true` 优化滚动性能。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-dot-grid" />

@@ -1,0 +1,79 @@
+ClickSpark 点击火花粒子效果组件，使用 Canvas 2D 在点击位置生成向外扩散的线条火花。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要为点击操作添加炫酷的视觉反馈效果时使用。
+常见场景：
+- 按钮、卡片等交互元素的点击增强效果
+- 游戏化 UI 的点击特效
+- 创意页面中的互动装饰
+不推荐：
+- 高频点击场景（如游戏中），大量粒子可能导致性能问题
+- 需要精确触控的移动端表单，粒子可能遮挡操作区域
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/click-spark" path="rb/click-spark/basic" />
+
+```tsx
+import { ClickSpark } from "@/components/ui/rb-click-spark"
+export default function Demo() { return <ClickSpark><div className="flex h-[300px] w-full items-center justify-center rounded-lg bg-neutral-800 text-neutral-400">Click me</div></ClickSpark> }
+```
+
+### 自定义配置
+
+```tsx
+import { ClickSpark } from "@/components/ui/rb-click-spark"
+
+export default function Demo() {
+  return (
+    <ClickSpark
+      sparkColor="#f59e0b"
+      sparkSize={15}
+      sparkRadius={25}
+      sparkCount={12}
+      duration={600}
+      easing="ease-in-out"
+      extraScale={1.5}
+    >
+      <button className="px-6 py-3 rounded bg-amber-500 text-white font-bold">
+        点击我
+      </button>
+    </ClickSpark>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ClickSpark
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 触发点击的包裹内容 | `React.ReactNode` | - |
+| sparkColor | 火花线条颜色 | `string` | `"#fff"` |
+| sparkSize | 火花线条的最大长度（像素） | `number` | `10` |
+| sparkRadius | 火花向外扩散的最大距离 | `number` | `15` |
+| sparkCount | 每次点击产生的火花线条数量 | `number` | `8` |
+| duration | 动画持续时间（毫秒） | `number` | `400` |
+| easing | 缓动函数，控制火花扩散的速度曲线 | `"ease-out"` \| `"linear"` \| `"ease-in"` \| `"ease-in-out"` | `"ease-out"` |
+| extraScale | 火花扩散半径的额外倍率 | `number` | `1.0` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何调整火花的视觉效果？
+`sparkSize` 影响线条初始长度，`sparkRadius` 影响扩散范围，`sparkCount` 影响密度。增大 `sparkRadius` 会让火花看起来更"炸裂"。`easing` 选择 `"linear"` 会匀速扩散，`"ease-out"` 则先快后慢。
+
+### 性能如何？Canvas 会自动适配父容器大小吗？
+组件通过 ResizeObserver 监听父容器尺寸变化，Canvas 会自动调整。粒子数量由点击次数决定，每次最多 `sparkCount` 条，动画结束后自动清除，不会无限累积。
+
+### 能否在移动端使用？
+可以，组件通过 `onClick` 事件触发，兼容触摸点击。Canvas 设置了 `pointer-events-none`，不会阻挡子元素的交互。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-click-spark` 导入。
+2. `children` 作为点击触发区域，务必提供一个可见的可交互元素。
+3. Canvas 层自动铺满父容器，设置 `pointer-events-none` 确保不阻挡子元素交互。
+4. 火花颜色 `sparkColor` 支持任何 CSS 颜色格式（hex、rgb、named color）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-click-spark" />

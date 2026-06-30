@@ -1,0 +1,80 @@
+ScrollReveal 滚动驱动的文字揭示效果组件，支持旋转、透明度和模糊的同步渐变，基于 GSAP ScrollTrigger 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+需要在页面滚动时从模糊旋转状态逐渐揭示文字。
+常见场景：
+- 长页面的章节标题入场效果
+- 品牌故事叙述页面的文字渐显
+- 产品特色展示区域的视觉增强
+不推荐：
+- 首屏内完全可见的短页面（滚动空间不足）
+- 需要精确控制每词动画时序的场景（组件使用统一 stagger）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/scroll-reveal" path="rb/scroll-reveal/basic" />
+
+```tsx
+import { ScrollReveal } from "@/components/ui/rb-scroll-reveal"
+
+export default function Demo() {
+  return (
+    <div className="flex justify-center p-8">
+      <ScrollReveal />
+    </div>
+  )
+}
+```
+
+### 禁用模糊 + 增强旋转
+```tsx
+import { ScrollReveal } from "@/components/ui/rb-scroll-reveal"
+
+export default function Demo() {
+  return (
+    <div className="flex justify-center p-8">
+      <ScrollReveal
+        enableBlur={false}
+        baseRotation={8}
+        baseOpacity={0}
+      >
+        Creative Reveal Effect
+      </ScrollReveal>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### ScrollReveal
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 文本内容 | `string` | `"Scroll Reveal"` |
+| scrollContainerRef | 自定义滚动容器引用 | `React.RefObject<HTMLElement \| null>` | - |
+| enableBlur | 是否启用模糊过渡效果 | `boolean` | `true` |
+| baseOpacity | 单词初始透明度 | `number` | `0.1` |
+| baseRotation | 整体文本初始旋转角度（度） | `number` | `3` |
+| blurStrength | 单词初始模糊强度（像素） | `number` | `4` |
+| containerClassName | 外层容器 className | `string` | `""` |
+| textClassName | 文本段落 className | `string` | `""` |
+| rotationEnd | 旋转动画 ScrollTrigger 结束位置 | `string` | `"bottom bottom"` |
+| wordAnimationEnd | 单词透明度/模糊动画 ScrollTrigger 结束位置 | `string` | `"bottom bottom"` |
+
+<h2 id="faq">常见问题</h2>
+### 旋转效果和单词渐显是同步的吗？
+不是完全同步。旋转作用于整个文本块，`rotationEnd` 控制其结束位置。单词透明度和模糊使用 `wordAnimationEnd` 独立控制结束位置，两者可以设置不同的 ScrollTrigger 终点。
+
+### 文本包含多个单词时效果不理想？
+组件按空格和空白字符拆分单词，每个单词独立渐显（stagger 0.05 秒）。长文本建议调整 `wordAnimationEnd` 的值，确保所有单词在滚动区间内有足够时间完成动画。
+
+### 为什么我的自定义效果不生效？
+每次修改 props 后组件会重新创建 GSAP 动画。如果发现旧动画残留，刷新页面即可。所有动画依赖项都在 useEffect 的依赖数组中正确声明。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-scroll-reveal` 导入。
+2. 依赖 `gsap` 和 `gsap/ScrollTrigger`，确保项目已安装。
+3. `children` 仅支持纯文本字符串。
+4. 旋转和模糊是两个独立的 GSAP tween，可通过各自的 end 参数独立调校。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-scroll-reveal" />

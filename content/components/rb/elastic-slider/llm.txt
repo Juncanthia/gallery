@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: ElasticSlider
+subtitle: 弹性滑块
+description: 带弹性形变反馈的滑块控件，支持步进和自定义图标。
+demo: { cols: 1 }
+group: { title: Components, order: 14 }
+source: { component: src/components/react-bits/elastic-slider.tsx, docs: content/components/rb/elastic-slider/index.mdx, examples: [content/components/rb/elastic-slider/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, motion: true, lucide: true }
+---

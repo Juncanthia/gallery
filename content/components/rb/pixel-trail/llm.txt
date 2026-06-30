@@ -1,0 +1,22 @@
+---
+category: react-bits
+title: PixelTrail
+subtitle: 像素拖尾
+description: 基于 Three.js 和 R3F 的像素化鼠标拖尾效果。
+demo:
+  cols: 1
+group:
+  title: Animations
+  order: 7
+source:
+  component: src/components/react-bits/pixel-trail.tsx
+  docs: content/components/rb/pixel-trail/index.mdx
+  examples:
+    - content/components/rb/pixel-trail/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: false
+  three: true
+  r3f: true
+---

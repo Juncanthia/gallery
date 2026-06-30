@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Hyperspeed
+subtitle: 极速隧道
+description: 三维隧道穿梭背景动效。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 0 }
+source: { component: src/components/react-bits/hyperspeed.tsx, docs: content/components/rb/hyperspeed/index.mdx, examples: [content/components/rb/hyperspeed/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, webgl: true }
+---

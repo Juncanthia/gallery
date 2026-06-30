@@ -1,0 +1,82 @@
+FallingText 基于 Matter.js 物理引擎的文字下落效果，单词逐个掉落并受鼠标拖拽和重力影响。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要文字物理下落动画或可交互的文字掉落效果时使用。
+常见场景：
+- 着陆页的趣味标题动画
+- 创意型页面的文字交互装饰
+- 特定词语高亮的物理掉落效果
+不推荐：
+- 大量文字或段落展示（物理引擎开销大）
+- 需要精确文字排版的场景（物理模拟会打乱布局）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/falling-text" path="rb/falling-text/basic" />
+
+```tsx
+import { FallingText } from "@/components/ui/rb-falling-text"
+export default function Demo() {
+  return (
+    <FallingText
+      text="React Bits Falling Text Demo"
+      trigger="auto"
+      fontSize="2rem"
+    />
+  )
+}
+```
+
+### 高亮词 + 点击触发
+
+```tsx
+import { FallingText } from "@/components/ui/rb-falling-text"
+
+export default function Demo() {
+  return (
+    <FallingText
+      text="Click me to make the words fall down with gravity"
+      trigger="click"
+      highlightWords={["Click", "gravity"]}
+      highlightClass="text-yellow-400"
+      gravity={2}
+      fontSize="1.5rem"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### FallingText
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 外层容器自定义类名 | `string` | `""` |
+| text | 要显示的完整文字（按空格分词） | `string` | `""` |
+| highlightWords | 需要高亮的词语前缀列表 | `string[]` | `[]` |
+| highlightClass | 高亮词的 CSS 类名 | `string` | `"highlighted"` |
+| trigger | 触发掉落的方式 | `"auto"` \| `"scroll"` \| `"click"` \| `"hover"` | `"auto"` |
+| backgroundColor | Matter.js 渲染器的背景色 | `string` | `"transparent"` |
+| wireframes | Matter.js 线框渲染模式 | `boolean` | `false` |
+| gravity | 物理世界的重力系数 | `number` | `1` |
+| mouseConstraintStiffness | 鼠标与文字之间的约束刚度（0-1） | `number` | `0.2` |
+| fontSize | 文字字号（CSS 值） | `string` | `"1rem"` |
+
+<h2 id="faq">常见问题</h2>
+### highlightWords 的匹配规则是什么？
+使用 `word.startsWith(hw)` 前缀匹配。例如 `highlightWords={["React"]}` 会高亮 "React" 和 "ReactBits"，但不会高亮 "BitsReact"。匹配到高亮词的单词会追加 `highlightClass` 类名。
+
+### 为什么 trigger="auto" 时文字直接掉落？
+`auto` 模式下组件挂载后立即启动物理引擎，文字开始受重力影响下落。其他模式（scroll/click/hover）则需等待用户交互后才触发。
+
+### 文字会掉出容器外吗？
+不会。Matter.js 世界设置了四面边界墙（floor、leftWall、rightWall、ceiling），文字单词会被边界反弹并最终停留在底部。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-falling-text` 导入。
+2. 依赖 `matter-js`，确保项目中已安装。
+3. `text` 属性为必填，组件按空格分词并为每个词创建独立的 Matter.js 刚体。
+4. 组件容器默认 `minHeight: 300px`，建议在使用时确保容器有足够的垂直空间。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-falling-text" />

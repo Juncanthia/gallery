@@ -1,0 +1,88 @@
+Ribbons 彩带组件，基于 OGL 实现的鼠标跟随彩带效果，多条彩色丝带跟随鼠标运动产生流动动画。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要鼠标跟随的彩色丝带/彩带背景效果时使用。
+常见场景：
+- 创意作品集 Hero 区域
+- 互动式品牌页面装饰
+- 艺术/设计类网站背景
+不推荐：
+- 需要精确鼠标操作的交互页面（彩带跟随干扰光标感知）
+- 移动端（丝带跟随依赖鼠标/触摸位置）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/ribbons" path="rb/ribbons/basic" />
+
+```tsx
+import { Ribbons } from "@/components/ui/rb-ribbons"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 relative">
+      <Ribbons />
+    </div>
+  )
+}
+```
+
+### 多彩丝带 + 淡出效果
+
+```tsx
+import { Ribbons } from "@/components/ui/rb-ribbons"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 relative bg-slate-950">
+      <Ribbons
+        colors={["#ff0080", "#7928ca", "#00d4ff", "#f97316"]}
+        baseThickness={20}
+        speedMultiplier={0.8}
+        enableFade={true}
+        enableShaderEffect={true}
+        effectAmplitude={1.5}
+        pointCount={60}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Ribbons
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| colors | 彩带颜色数组（hex），每色一条丝带 | string[] | ["#FC8EAC"] |
+| baseSpring | 弹性系数（越大跟随越快） | number | 0.03 |
+| baseFriction | 摩擦系数（0-1，越大越不流畅） | number | 0.9 |
+| baseThickness | 基础粗细（px） | number | 30 |
+| offsetFactor | 多色彩带之间的偏移因子 | number | 0.05 |
+| maxAge | 拖尾最大寿命（帧数） | number | 500 |
+| pointCount | 每条彩带的控制点数 | number | 50 |
+| speedMultiplier | 彩带跟随速度倍率 | number | 0.6 |
+| enableFade | 是否启用尾部淡出 | boolean | false |
+| enableShaderEffect | 是否启用着色器波浪特效 | boolean | false |
+| effectAmplitude | 着色器波浪振幅 | number | 2 |
+| backgroundColor | 背景颜色 [r, g, b, a]（0-1 范围） | number[] | [0, 0, 0, 0] |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何添加多条不同颜色的丝带？
+在 `colors` 数组中传入多个颜色值，每个颜色会生成一条独立的丝带，且会根据 `offsetFactor` 自动错开位置。
+
+### 丝带跟随不够流畅？
+调高 `baseSpring`（0.05-0.08）增加弹性和响应速度，或调低 `baseFriction`（0.8-0.85）。
+
+### enableShaderEffect 有什么效果？
+启用后每条丝带会叠加正弦波浪动画，通过 `effectAmplitude` 控制波浪幅度，产生更丰富的视觉效果。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-ribbons` 导入。
+2. 该组件依赖 `ogl` 库，请确保项目已安装。
+3. 父容器需要有 `relative` 定位和明确的宽高。
+4. 同时支持鼠标和触摸事件，移动端也可正常交互。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-ribbons" />

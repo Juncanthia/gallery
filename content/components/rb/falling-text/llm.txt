@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: FallingText
+subtitle: 下落文字
+description: 基于Matter.js物理引擎的文字下落效果，支持高亮词和多种触发方式。
+demo: { cols: 1 }
+group: { title: TextAnimations, order: 7 }
+source: { component: src/components/react-bits/falling-text.tsx, docs: content/components/rb/falling-text/index.mdx, examples: [content/components/rb/falling-text/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, matterjs: true }
+---

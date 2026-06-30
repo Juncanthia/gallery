@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Iridescence
+subtitle: 虹彩流光
+description: 基于噪声函数的虹彩渐变背景。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 0 }
+source: { component: src/components/react-bits/iridescence.tsx, docs: content/components/rb/iridescence/index.mdx, examples: [content/components/rb/iridescence/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, webgl: true }
+---

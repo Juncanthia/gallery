@@ -1,0 +1,97 @@
+PixelBlast 像素化风格的交互动效背景，支持多种像素形状、涟漪效果和液态变形。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要像素艺术风格的动态背景或交互背景时使用。
+常见场景：
+- 游戏风格页面的动态背景
+- 像素风作品的 Hero 区域
+- 创意交互式装饰背景
+不推荐：
+- 严肃正式的企业官网
+- 需要精确矢量图形的场景
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/pixel-blast" path="rb/pixel-blast/basic" />
+
+```tsx
+import { PixelBlast } from "@/components/ui/rb-pixel-blast"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <PixelBlast />
+    </div>
+  )
+}
+```
+
+### 圆形像素 + 液态效果
+
+```tsx
+import { PixelBlast } from "@/components/ui/rb-pixel-blast"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded bg-black">
+      <PixelBlast
+        variant="circle"
+        color="#00ff88"
+        liquid={true}
+        liquidStrength={0.15}
+        enableRipples={true}
+        pixelSize={4}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### PixelBlast
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 像素形状 | string（"square" \| "circle" \| "triangle" \| "diamond"） | "square" |
+| pixelSize | 像素大小 | number | 3 |
+| color | 像素主色 | string | "#B497CF" |
+| className | 额外的 CSS 类名 | string | - |
+| style | 内联样式 | React.CSSProperties | - |
+| antialias | 是否启用抗锯齿 | boolean | true |
+| patternScale | 图案缩放 | number | 2 |
+| patternDensity | 图案密度 | number | 1 |
+| liquid | 是否启用液态变形效果 | boolean | false |
+| liquidStrength | 液态变形强度 | number | 0.1 |
+| liquidRadius | 液态触摸半径 | number | 1 |
+| pixelSizeJitter | 像素尺寸抖动幅度 | number | 0 |
+| enableRipples | 是否启用点击涟漪 | boolean | true |
+| rippleIntensityScale | 涟漪强度 | number | 1 |
+| rippleThickness | 涟漪厚度 | number | 0.1 |
+| rippleSpeed | 涟漪扩散速度 | number | 0.3 |
+| liquidWobbleSpeed | 液态波动速度 | number | 4.5 |
+| autoPauseOffscreen | 离屏时自动暂停 | boolean | true |
+| speed | 动画速度 | number | 0.5 |
+| transparent | 背景是否透明 | boolean | true |
+| edgeFade | 边缘淡出幅度 | number | 0.5 |
+| noiseAmount | 噪点强度 | number | 0 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何启用液态效果？
+设置 `liquid={true}` 即可启用。液态效果使用 postprocessing 库，需要 `pointermove` 事件交互。
+
+### 涟漪不响应点击？
+确保 `enableRipples` 为 true。涟漪效果支持点击和触摸事件。
+
+### 性能如何优化？
+调低 `pixelSize`（增大像素块）、禁用 `liquid` 和降噪，并使用 `autoPauseOffscreen={true}`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-pixel-blast` 导入。
+2. 组件需要放在有明确宽高的容器中。
+3. 液态效果需要 `postprocessing` 和 `three` 依赖。
+4. 不需要特殊效果时，仅设置 `color` 和 `variant` 即可。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-pixel-blast" />

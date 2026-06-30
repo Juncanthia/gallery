@@ -1,0 +1,103 @@
+GridScan 是一个基于 Three.js 和 postprocessing 的 3D 网格扫描背景组件，模拟投影到 3D 平面的扫描线和网格效果，支持 Bloom 和色散后处理。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要科幻/扫描风格的 3D 网格背景时使用。
+常见场景：
+- 科技/数据可视化风格页面的背景
+- 安全/监控类 Dashboard 的装饰背景
+- 赛博朋克风格的着陆页
+不推荐：
+- 传统企业官网（风格过于科幻）
+- 需要高对比度文字可读性的区域（网格可能干扰阅读）
+- 性能受限的移动端（Three.js + postprocessing 管线开销较大）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/grid-scan" path="rb/grid-scan/basic" />
+```tsx
+import { GridScan } from "@/components/ui/rb-grid-scan"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded">
+      <GridScan />
+    </div>
+  )
+}
+```
+
+### 自定义扫描线和后处理
+```tsx
+import { GridScan } from "@/components/ui/rb-grid-scan"
+
+export default function Demo() {
+  return (
+    <GridScan
+      linesColor="#00FF41"
+      scanColor="#00FF41"
+      scanOpacity={0.6}
+      lineStyle="dashed"
+      lineJitter={0.2}
+      bloomIntensity={0.8}
+      bloomThreshold={0.3}
+      bloomSmoothing={0.5}
+      chromaticAberration={0.005}
+      scanGlow={0.8}
+      scanDuration={1.5}
+      scanDelay={1.0}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### GridScan
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+| lineThickness | 线条粗细 | `number` | `1` |
+| linesColor | 网格线条颜色 | `string` | `"#2F293A"` |
+| scanColor | 扫描线颜色 | `string` | `"#FF9FFC"` |
+| scanOpacity | 扫描线不透明度 | `number` | `0.4` |
+| gridScale | 网格缩放 | `number` | `0.1` |
+| lineStyle | 线条样式 | `"solid" \| "dashed" \| "dotted"` | `"solid"` |
+| lineJitter | 线条抖动强度（0-1） | `number` | `0.1` |
+| scanDirection | 扫描方向 | `"forward" \| "backward" \| "pingpong"` | `"pingpong"` |
+| scanGlow | 扫描光晕宽度 | `number` | `0.5` |
+| scanSoftness | 扫描线柔和度 | `number` | `2` |
+| scanPhaseTaper | 扫描相位渐变（0-0.49） | `number` | `0.9` |
+| scanDuration | 单次扫描时长（秒） | `number` | `2.0` |
+| scanDelay | 扫描间隔（秒） | `number` | `2.0` |
+| enablePost | 启用后处理 | `boolean` | `true` |
+| bloomIntensity | Bloom 强度 | `number` | `0` |
+| bloomThreshold | Bloom 亮度阈值 | `number` | `0` |
+| bloomSmoothing | Bloom 平滑度 | `number` | `0` |
+| chromaticAberration | 色散强度 | `number` | `0.002` |
+| noiseIntensity | 噪点强度 | `number` | `0.01` |
+| sensitivity | 鼠标交互灵敏度（0-1） | `number` | `0.55` |
+| enableWebcam | 启用面部追踪（实验性） | `boolean` | `false` |
+| showPreview | 显示摄像头预览 | `boolean` | `false` |
+| modelsPath | 面部识别模型路径 | `string` | face-api.js CDN |
+| enableGyro | 启用陀螺仪交互 | `boolean` | `false` |
+| scanOnClick | 点击触发扫描 | `boolean` | `false` |
+| snapBackDelay | 回弹延迟（ms） | `number` | `250` |
+
+<h2 id="faq">常见问题</h2>
+### 如何让扫描线更明显？
+增大 `scanOpacity` 和 `scanGlow`，同时调整 `scanColor` 为更亮的颜色。配合 `bloomIntensity` 开启 Bloom 后处理效果更佳。
+
+### 后处理影响性能吗？
+`enablePost={true}` 时启用了 EffectComposer + Bloom + ChromaticAberration 管线，在移动端可能影响帧率。可设置 `enablePost={false}` 关闭后处理。
+
+### 扫描方向有哪些？
+`forward`（默认从上到下）、`backward`（从下到上）、`pingpong`（往返扫描）。`scanDirection` 属性传入对应的字符串即可。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-grid-scan` 导入。
+2. 依赖 `three` 和 `postprocessing`，确保已安装。
+3. `lineStyle` 仅支持 `"solid"`、`"dashed"`、`"dotted"` 三种值。
+4. 面部追踪功能（`enableWebcam`）需要摄像头权限和 face-api.js 模型文件。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-grid-scan" />

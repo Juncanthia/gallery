@@ -1,0 +1,86 @@
+LiquidChrome 基于 WebGL 的液态金属风格交互式背景，支持鼠标和触摸交互的涟漪扭曲效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要为页面添加液态金属质感、流动感的交互式背景时使用。
+常见场景：
+- 品牌页面的质感背景
+- 创意展示区域的动态点缀
+- 配合暗色主题的液态效果背景
+不推荐：
+- 需要精确色彩还原的场景（WebGL 色彩受 baseColor 影响）
+- 移动端需要高帧率的复杂页面
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/liquid-chrome" path="rb/liquid-chrome/basic" />
+
+```tsx
+import { LiquidChrome } from "@/components/ui/rb-liquid-chrome"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <LiquidChrome />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { LiquidChrome } from "@/components/ui/rb-liquid-chrome"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded">
+      <LiquidChrome
+        baseColor={[0.05, 0.05, 0.15]}
+        speed={0.3}
+        amplitude={0.4}
+        frequencyX={4}
+        frequencyY={3}
+        interactive
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LiquidChrome
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| baseColor | 基础颜色（RGB 归一化数组） | `[number, number, number]` | `[0.1, 0.1, 0.1]` |
+| speed | 动画速度 | `number` | `0.2` |
+| amplitude | 波动振幅 | `number` | `0.3` |
+| frequencyX | X 轴频率 | `number` | `3` |
+| frequencyY | Y 轴频率 | `number` | `3` |
+| interactive | 是否启用鼠标/触摸交互 | `boolean` | `true` |
+
+组件还继承所有 `React.HTMLAttributes<HTMLDivElement>` 属性，可传入 `className`、`style` 等。
+
+<h2 id="faq">常见问题</h2>
+
+### baseColor 如何设置颜色？
+`baseColor` 使用 RGB 归一化数组，每个通道取值 0-1。例如白色为 `[1, 1, 1]`，蓝色为 `[0, 0, 0.5]`。
+
+### 如何调整流动速度？
+通过 `speed` 参数控制，值越大流动越快。`amplitude` 控制波动幅度，`frequencyX/Y` 控制波纹密度。
+
+### 触摸设备支持？
+组件内置 `touchmove` 事件监听，移动端触摸也会产生交互涟漪效果。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-liquid-chrome` 导入。
+2. 组件需要放在有明确宽高的容器中。
+3. 依赖 `ogl` 库，确保项目中已安装。
+4. `baseColor` 使用 RGB 归一化数组格式 `[r, g, b]`，每个通道 0-1。
+5. 组件支持 `...props` 透传，可传入 `className`、`style` 等 HTML 属性。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-liquid-chrome" />

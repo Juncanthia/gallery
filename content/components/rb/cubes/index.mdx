@@ -1,0 +1,85 @@
+Cubes 基于 CSS 3D 变换的立方体倾斜网格，响应鼠标位置产生 3D 翻转，支持点击涟漪效果和自动动画。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要几何感、科技感的交互式 3D 背景效果时使用。
+常见场景：
+- 首页 Hero 区域的动态背景
+- 产品展示页的视觉陈列
+- 技术品牌页面的几何装饰
+不推荐：
+- 弱 GPU 设备上的大面积渲染（仅 CSS 变换，性能开销较低但仍需关注）
+- 需要内容可读性的区域（动画可能分散注意力）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/cubes" path="rb/cubes/basic" />
+
+```tsx
+import { Cubes } from "@/components/ui/rb-cubes"
+export default function Demo() { return <Cubes /> }
+```
+
+### 自定义配置
+
+```tsx
+import { Cubes } from "@/components/ui/rb-cubes"
+
+export default function Demo() {
+  return (
+    <Cubes
+      gridSize={8}
+      cubeSize={40}
+      maxAngle={60}
+      radius={2}
+      faceColor="#1a1a2e"
+      borderStyle="1px solid #16213e"
+      rippleOnClick={true}
+      rippleColor="#e94560"
+      rippleSpeed={1.5}
+      autoAnimate={false}
+      shadow="0 4px 12px rgba(0,0,0,0.3)"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Cubes
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| gridSize | 网格行列数（NxN 的方阵） | `number` | `10` |
+| cubeSize | 每个立方体的像素尺寸。不传时自适应父容器 | `number` | - |
+| maxAngle | 鼠标靠近时立方体的最大倾斜角度 | `number` | `45` |
+| radius | 鼠标影响的立方体范围（单位为格子数） | `number` | `3` |
+| easing | CSS 过渡缓动函数名 | `string` | `"power3.out"` |
+| duration | 进入/离开动画时长配置 | `{ enter: number; leave: number }` | `{ enter: 0.3, leave: 0.6 }` |
+| cellGap | 格子间距，数字或分别指定行列 | `number \| { col?: number; row?: number }` | `"5%"` |
+| borderStyle | 六个面的边框样式 | `string` | `"1px solid #fff"` |
+| faceColor | 六个面的背景色 | `string` | `"#120F17"` |
+| shadow | 面的盒阴影，`true` 使用默认值，传入字符串自定义 | `boolean \| string` | `false` |
+| autoAnimate | 是否开启自动游走动画（无人操作时随机移动焦点） | `boolean` | `true` |
+| rippleOnClick | 点击时是否触发涟漪扩散效果 | `boolean` | `true` |
+| rippleColor | 涟漪扩散时的面颜色 | `string` | `"#fff"` |
+| rippleSpeed | 涟漪扩散速度倍率 | `number` | `2` |
+
+<h2 id="faq">常见问题</h2>
+
+### autoAnimate 和鼠标交互如何协同工作？
+自动动画在用户停止操作 3 秒后激活，随机移动焦点位置使立方体持续翻转。一旦用户移动鼠标进入区域，自动动画暂停，切回鼠标驱动模式。这确保了无人交互时也有动态视觉。
+
+### cubeSize 和 cellGap 怎么搭配？
+不传 `cubeSize` 时，网格使用 CSS Grid 的 `1fr` 等分空间。传入 `cubeSize` 后，网格按固定像素排列，整体容器尺寸 = `gridSize * cubeSize`。`cellGap` 在两种模式下均生效。
+
+### rippleOnClick 的颜色如何工作？
+点击后，从点击位置向外扩散的圆环区域内的立方体面变为 `rippleColor`，经过短暂的保持后渐隐回 `faceColor`。`rippleSpeed` 控制扩散和回退的速度。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-cubes` 导入。
+2. 每个立方体由 6 个 `cube-face` div 组成，通过 CSS 3D `perspective` 实现倾斜效果。
+3. 依赖 `@/lib/utils` 的 `cn` 工具函数进行类名合并。
+4. 组件使用 `useCallback` + `useEffect` 绑定 `pointermove`、`pointerleave`、`click` 事件，注意在 React Strict Mode 下事件绑定的清理。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-cubes" />

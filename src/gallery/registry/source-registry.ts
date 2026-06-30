@@ -96,6 +96,23 @@ import treeSelectTsx from "../../../src/components/ui/tree-select.tsx?raw"
 import typographyTsx from "../../../src/components/ui/typography.tsx?raw"
 import watermarkTsx from "../../../src/components/ui/watermark.tsx?raw"
 
+// React Bits components
+import glitchTextTsx from "../../../src/components/react-bits/glitch-text.tsx?raw"
+import gradientTextTsx from "../../../src/components/react-bits/gradient-text.tsx?raw"
+import rotatingTextTsx from "../../../src/components/react-bits/rotating-text.tsx?raw"
+import scrambledTextTsx from "../../../src/components/react-bits/scrambled-text.tsx?raw"
+import scrollFloatTsx from "../../../src/components/react-bits/scroll-float.tsx?raw"
+import scrollRevealTsx from "../../../src/components/react-bits/scroll-reveal.tsx?raw"
+import scrollVelocityTsx from "../../../src/components/react-bits/scroll-velocity.tsx?raw"
+import shinyTextTsx from "../../../src/components/react-bits/shiny-text.tsx?raw"
+import shuffleTsx from "../../../src/components/react-bits/shuffle.tsx?raw"
+import splitTextTsx from "../../../src/components/react-bits/split-text.tsx?raw"
+import textCursorTsx from "../../../src/components/react-bits/text-cursor.tsx?raw"
+import textPressureTsx from "../../../src/components/react-bits/text-pressure.tsx?raw"
+import textTypeTsx from "../../../src/components/react-bits/text-type.tsx?raw"
+import trueFocusTsx from "../../../src/components/react-bits/true-focus.tsx?raw"
+import variableProximityTsx from "../../../src/components/react-bits/variable-proximity.tsx?raw"
+
 export type ComponentSourceFile = {
   name: string
   source: string
@@ -193,6 +210,23 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "tree-select": [{ name: "tree-select.tsx", source: treeSelectTsx }],
   "typography": [{ name: "typography.tsx", source: typographyTsx }],
   "watermark": [{ name: "watermark.tsx", source: watermarkTsx }],
+
+  // React Bits - Text Animations
+  "glitch-text": [{ name: "glitch-text.tsx", source: glitchTextTsx }],
+  "gradient-text": [{ name: "gradient-text.tsx", source: gradientTextTsx }],
+  "rotating-text": [{ name: "rotating-text.tsx", source: rotatingTextTsx }],
+  "scrambled-text": [{ name: "scrambled-text.tsx", source: scrambledTextTsx }],
+  "scroll-float": [{ name: "scroll-float.tsx", source: scrollFloatTsx }],
+  "scroll-reveal": [{ name: "scroll-reveal.tsx", source: scrollRevealTsx }],
+  "scroll-velocity": [{ name: "scroll-velocity.tsx", source: scrollVelocityTsx }],
+  "shiny-text": [{ name: "shiny-text.tsx", source: shinyTextTsx }],
+  "shuffle": [{ name: "shuffle.tsx", source: shuffleTsx }],
+  "split-text": [{ name: "split-text.tsx", source: splitTextTsx }],
+  "text-cursor": [{ name: "text-cursor.tsx", source: textCursorTsx }],
+  "text-pressure": [{ name: "text-pressure.tsx", source: textPressureTsx }],
+  "text-type": [{ name: "text-type.tsx", source: textTypeTsx }],
+  "true-focus": [{ name: "true-focus.tsx", source: trueFocusTsx }],
+  "variable-proximity": [{ name: "variable-proximity.tsx", source: variableProximityTsx }],
 }
 
 export function getComponentSources(componentId: string): ComponentSourceFile[] {

@@ -1,0 +1,21 @@
+---
+category: react-bits
+title: ScrollReveal
+subtitle: 滚动揭示文字
+description: 滚动驱动的文字揭示效果，支持旋转、透明度和模糊的渐变揭示。
+demo:
+  cols: 1
+group:
+  title: 文本动效
+  order: 6
+source:
+  component: src/components/react-bits/scroll-reveal.tsx
+  docs: content/components/rb/scroll-reveal/index.mdx
+  examples:
+    - content/components/rb/scroll-reveal/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: false
+  gsap: true
+---

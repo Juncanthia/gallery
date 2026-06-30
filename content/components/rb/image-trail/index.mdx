@@ -1,0 +1,56 @@
+ImageTrail 鼠标移动时依次展示图片序列的拖尾效果组件。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要通过鼠标移动依次展示一系列图片时使用。
+常见场景：
+- 图片作品的创意展示
+- 产品图库的交互式浏览
+- 鼠标驱动的视觉叙事
+不推荐：
+- 需要精确定位点击的图片选择器
+- 图片数量非常少（1-2张）时效果不明显
+- 触屏设备（没有鼠标移动事件，仅支持 touchmove 模拟）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/image-trail" path="rb/image-trail/basic" />
+```tsx
+import { ImageTrail } from "@/components/ui/rb-image-trail"
+
+const images = [
+  "https://picsum.photos/200/250?random=1",
+  "https://picsum.photos/200/250?random=2",
+  "https://picsum.photos/200/250?random=3",
+  "https://picsum.photos/200/250?random=4",
+]
+
+export default function Demo() {
+  return <ImageTrail items={images} />
+}
+```
+
+<h2 id="api">API</h2>
+### ImageTrail
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 图片地址数组 | `string[]` | `[]` |
+| variant | 动画变体（保留扩展） | `number` | `1` |
+
+<h2 id="faq">常见问题</h2>
+### 为什么鼠标移动没有反应？
+确保 `items` 数组不为空且包含有效的图片 URL。图片需要支持跨域访问。触屏设备同样支持 `touchmove` 事件模拟。
+
+### 拖尾图片的尺寸如何调整？
+图片固定为 200x250 像素。如需调整，可通过 CSS 覆盖 `.content__img` 的 `width` 和 `height` 样式。
+
+### 如何让拖尾更连续？
+鼠标移动速度越快，图片序列切换越频繁。组件内部使用 `threshold=80` 像素作为距离阈值，只有鼠标移动超过该距离才会展示下一张图片。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-image-trail` 导入。
+2. `items` 为图片 URL 数组，至少传入 3 个以上以获得明显效果。
+3. 组件高度固定为 400px，容器含 `overflow-hidden`。
+4. 同时支持 `mousemove` 和 `touchmove` 事件。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-image-trail" />

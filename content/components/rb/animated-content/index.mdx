@@ -1,0 +1,103 @@
+AnimatedContent 基于 Intersection Observer 的滚动触发入场动画组件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要元素在滚动进入视口时触发位移和透明度过场动画时使用。
+
+常见场景：
+- 页面滚动时触发内容区块的滑入、淡入效果
+- 需要简单入场动画的 Hero 区域或图文段落
+- 替代 GSAP ScrollTrigger 的轻量级方案
+
+不推荐：
+- 需要复杂时间线编排的动画，请使用 motion 或 GSAP
+- 依赖滚动进度控制的视差效果（如 scroll-linked 动画）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/animated-content" path="rb/animated-content/basic" />
+
+```tsx
+import { AnimatedContent } from "@/components/ui/rb-animated-content"
+
+export default function Demo() {
+  return (
+    <AnimatedContent distance={50} direction="vertical">
+      <div className="rounded-lg bg-neutral-800 p-8 text-white">
+        Scroll-triggered content
+      </div>
+    </AnimatedContent>
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { AnimatedContent } from "@/components/ui/rb-animated-content"
+
+export default function CustomDemo() {
+  return (
+    <AnimatedContent
+      direction="horizontal"
+      distance={200}
+      duration={1.2}
+      delay={0.3}
+      scale={0.8}
+      reverse
+    >
+      <div className="rounded-lg bg-neutral-800 p-8 text-white">
+        Horizontal slide from right
+      </div>
+    </AnimatedContent>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### AnimatedContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 包裹的内容 | `React.ReactNode` | - |
+| container | 滚动容器（默认为视口） | `string \| HTMLElement \| null` | - |
+| distance | 动画位移距离（px） | `number` | `100` |
+| direction | 动画方向 | `"vertical" \| "horizontal"` | `"vertical"` |
+| reverse | 是否反向滑动 | `boolean` | `false` |
+| duration | 动画持续时间（秒） | `number` | `0.8` |
+| ease | CSS 缓动函数 | `string` | `"power3.out"` |
+| initialOpacity | 初始透明度 | `number` | `0` |
+| animateOpacity | 是否对透明度做动画 | `boolean` | `true` |
+| scale | 初始缩放比例 | `number` | `1` |
+| threshold | IntersectionObserver 临界值 | `number` | `0.1` |
+| delay | 动画延迟（秒） | `number` | `0` |
+| disappearAfter | 入场后多久开始消失动画（秒），0 表示不消失 | `number` | `0` |
+| disappearDuration | 消失动画时长（秒） | `number` | `0.5` |
+| disappearEase | 消失动画缓动 | `string` | `"power3.in"` |
+| onComplete | 入场动画完成回调 | `() => void` | - |
+| onDisappearanceComplete | 消失动画完成回调 | `() => void` | - |
+| className | 附加样式类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何在指定容器内触发动画而非视口？
+
+通过 `container` 属性传入滚动容器的 DOM 元素或选择器字符串。
+
+### 消失动画的 timing 如何控制？
+
+设置 `disappearAfter` 为大于 0 的值（单位秒），入场完成后等待该时长后播放消失动画。设为 0 则不会消失。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-animated-content` 导入。
+2. 确保包裹子元素有明确的初始尺寸，避免布局抖动。
+3. 在列表中批量使用时，通过 `delay` 属性交错每个元素的入场时序。
+4. 需要消失循环效果时，设置 `disappearAfter` 配合合适的 `disappearDuration`。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-animated-content" />

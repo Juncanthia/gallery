@@ -1,0 +1,79 @@
+Dither 基于 React Three Fiber 的抖动波纹背景，结合 Perlin 噪声波和 Bayer 8x8 抖动后处理，生成复古像素化纹理。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要复古像素化抖动效果的动态背景时使用。
+常见场景：
+- 复古游戏风格的背景装饰
+- 像素艺术风格的创意页面
+- 需要独特后处理效果的视觉设计
+不推荐：
+- 需要高清细腻背景的场景（抖动效果天然降低分辨率感）
+- 不支持 WebGL 的环境
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/dither" path="rb/dither/basic" />
+
+```tsx
+import { Dither } from "@/components/ui/rb-dither"
+export default function Demo() { return <Dither /> }
+```
+
+### 自定义配置
+
+```tsx
+import { Dither } from "@/components/ui/rb-dither"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 rounded-lg overflow-hidden">
+      <Dither
+        waveSpeed={0.08}
+        waveFrequency={4}
+        waveAmplitude={0.5}
+        waveColor={[0.2, 0.8, 0.4]}
+        colorNum={6}
+        pixelSize={4}
+        enableMouseInteraction={true}
+        mouseRadius={0.8}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Dither
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| waveSpeed | 波纹流动速度 | `number` | `0.05` |
+| waveFrequency | 波纹频率，值越大波纹越密集 | `number` | `3` |
+| waveAmplitude | 波纹振幅，影响噪声对比度 | `number` | `0.3` |
+| waveColor | 波纹颜色 RGB 数组，每个分量 0~1 | `[number, number, number]` | `[0.5, 0.5, 0.5]` |
+| colorNum | Bayer 抖动后处理的色阶数量 | `number` | `4` |
+| pixelSize | 抖动像素块大小 | `number` | `2` |
+| disableAnimation | 是否冻结动画（静态纹理） | `boolean` | `false` |
+| enableMouseInteraction | 是否启用鼠标交互（鼠标附近波纹减弱） | `boolean` | `true` |
+| mouseRadius | 鼠标影响的半径范围 | `number` | `1` |
+
+<h2 id="faq">常见问题</h2>
+
+### colorNum 如何影响视觉效果？
+`colorNum` 控制抖动后的色阶数。值越小（如 2~4）越接近二值化复古效果，值越大（如 8~16）过渡越平滑接近原图。Bayer 8x8 矩阵最多支持 64 级色阶，但实际效果受限于抖动算法。
+
+### pixelSize 的作用？
+`pixelSize` 控制抖动像素块的尺寸。值越大，像素块越明显，复古马赛克感越强。设为 1 时抖动最精细但性能稍高。
+
+### enableMouseInteraction 的行为？
+当鼠标移入 Canvas 时，鼠标附近区域的波纹强度会减弱，形成"拨开云雾"的交互效果。`mouseRadius` 控制影响范围。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-dither` 导入。
+2. 组件依赖 React Three Fiber（`@react-three/fiber`）和 postprocessing（`@react-three/postprocessing`、`postprocessing`）。
+3. `waveColor` 需传入 RGB 三元组，每个分量范围为 0~1。
+4. 组件通过 `EffectComposer` 添加后处理，`RetroEffect` 为自定义 `postprocessing` Effect 扩展。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-dither" />

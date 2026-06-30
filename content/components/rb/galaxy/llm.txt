@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Galaxy
+subtitle: 银河星空
+description: 基于 OGL 的银河星空背景，多层星星动画，色调偏移和鼠标交互效果。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 12 }
+source: { component: src/components/react-bits/galaxy.tsx, docs: content/components/rb/galaxy/index.mdx, examples: [content/components/rb/galaxy/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, ogl: true }
+---

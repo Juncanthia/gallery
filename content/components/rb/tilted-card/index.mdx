@@ -1,0 +1,92 @@
+TiltedCard 倾斜卡片组件，鼠标悬停时产生 3D 倾斜和缩放效果，带有跟随鼠标速度的提示标签和可选的覆盖层内容。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要...时使用。
+常见场景：
+- 产品展示、作品集卡片，鼠标悬停倾斜增加立体感
+- 需要增强视觉层次感的图片展示墙
+- 鼠标交互丰富的卡片场景，如专辑封面展示
+不推荐：
+- 移动端主要展示（倾斜效果仅在桌面端生效，移动端显示警告）
+- 信息密集型卡片（倾斜可能影响文字可读性）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/tilted-card" path="rb/tilted-card/basic" />
+
+```tsx
+import { TiltedCard } from "@/components/ui/rb-tilted-card"
+
+export default function Demo() {
+  return (
+    <TiltedCard imageSrc="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&q=80" />
+  )
+}
+```
+
+### 自定义配置
+```tsx
+import { TiltedCard } from "@/components/ui/rb-tilted-card"
+
+export default function Demo() {
+  return (
+    <TiltedCard
+      imageSrc="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&q=80"
+      altText="Retro gaming setup"
+      captionText="Retro Setup 2024"
+      containerHeight="400px"
+      containerWidth="500px"
+      imageHeight="400px"
+      imageWidth="500px"
+      scaleOnHover={1.15}
+      rotateAmplitude={20}
+      showMobileWarning={false}
+      showTooltip
+      displayOverlayContent
+      overlayContent={
+        <div className="text-center text-white">
+          <h3 className="text-xl font-bold">View Project</h3>
+          <p className="text-sm opacity-75 mt-1">Click to open</p>
+        </div>
+      }
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### TiltedCard
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| imageSrc | 图片地址（必填） | `string` | - |
+| altText | 图片替代文本 | `string` | `"Tilted card image"` |
+| captionText | 悬停提示文字 | `string` | `""` |
+| containerHeight | 容器高度（CSS 值） | `string` | `"300px"` |
+| containerWidth | 容器宽度（CSS 值） | `string` | `"100%"` |
+| imageHeight | 图片高度（CSS 值） | `string` | `"300px"` |
+| imageWidth | 图片宽度（CSS 值） | `string` | `"300px"` |
+| scaleOnHover | 悬停时缩放倍数 | `number` | `1.1` |
+| rotateAmplitude | 旋转幅度（最大角度） | `number` | `14` |
+| showMobileWarning | 移动端显示优化提示 | `boolean` | `true` |
+| showTooltip | 是否显示跟随鼠标的提示标签 | `boolean` | `true` |
+| overlayContent | 悬停时覆盖层内容 | `ReactNode` | - |
+| displayOverlayContent | 是否显示覆盖层 | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+### 倾斜效果基于什么物理模型？
+组件使用 `motion/react` 的 `useSpring` 驱动旋转，默认弹簧参数为 `{ damping: 30, stiffness: 100, mass: 2 }`。鼠标位置映射到 rotateX/rotateY，离中心越远旋转角度越大。
+
+### 提示标签（Tooltip）的运动逻辑是什么？
+标签的旋转角度跟随鼠标垂直移动速度（velocityY），乘以系数 0.6 产生惯性跟随效果，模拟物理标签被甩动的感觉。
+
+### 移动端如何适配？
+移动端默认显示 "This effect is not optimized for mobile" 的半透明遮罩。可通过 `showMobileWarning={false}` 隐藏该提示，但倾斜效果在触屏上不会触发。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-tilted-card` 导入。
+2. 依赖 `motion/react`（`motion`、`useMotionValue`、`useSpring`）。
+3. 容器使用 `perspective: "800px"` 创建 3D 空间，`transformStyle: "preserve-3d"` 保持子元素的 3D 关系。
+4. `imageSrc` 为必填属性，不传则无图片显示。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-tilted-card" />

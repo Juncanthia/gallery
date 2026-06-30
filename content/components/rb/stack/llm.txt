@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Stack
+subtitle: 卡片堆叠
+description: 支持拖拽甩出和自动播放的卡片堆叠组件，类似 Tinder 交互。
+demo: { cols: 1 }
+group: { title: Components, order: 16 }
+source: { component: src/components/react-bits/stack.tsx, docs: content/components/rb/stack/index.mdx, examples: [content/components/rb/stack/examples/basic.tsx] }
+stack: { react: true, motion: true }
+---

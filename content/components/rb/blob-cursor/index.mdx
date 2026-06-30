@@ -1,0 +1,100 @@
+BlobCursor 跟随鼠标移动的流体形态自定义光标组件，支持多层级拖尾和 SVG 滤镜效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要替换浏览器默认光标，提供独特的流体形态跟随效果时使用。
+
+常见场景：
+- 创意型网站、作品集页面的交互增强
+- 需要醒目光标效果来引导用户注意力的页面
+- 品牌营销页面的趣味性交互
+
+不推荐：
+- 需要精准点击的表单或数据表格页面（自定义光标可能影响可用性）
+- 移动端（触摸事件不支持光标概念）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/blob-cursor" path="rb/blob-cursor/basic" />
+
+```tsx
+import { BlobCursor } from "@/components/ui/rb-blob-cursor"
+
+export default function Demo() {
+  return (
+    <div className="relative h-[400px] w-full rounded-lg bg-neutral-900">
+      <BlobCursor />
+    </div>
+  )
+}
+```
+
+### 自定义形状与颜色
+
+```tsx
+import { BlobCursor } from "@/components/ui/rb-blob-cursor"
+
+export default function CustomDemo() {
+  return (
+    <div className="relative h-[400px] w-full rounded-lg bg-neutral-900">
+      <BlobCursor
+        blobType="square"
+        fillColor="#ff3366"
+        trailCount={5}
+        sizes={[50, 100, 80, 60, 40]}
+        useFilter={false}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BlobCursor
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| blobType | 光标形状类型 | `"circle" \| "square"` | `"circle"` |
+| fillColor | 光标填充色 | `string` | `"#5227FF"` |
+| trailCount | 拖尾层数 | `number` | `3` |
+| sizes | 各层外尺寸数组（需与 trailCount 一致） | `number[]` | `[60, 125, 75]` |
+| innerSizes | 各层内点尺寸数组 | `number[]` | `[20, 35, 25]` |
+| innerColor | 内点颜色 | `string` | `"rgba(255,255,255,0.8)"` |
+| opacities | 各层透明度数组 | `number[]` | `[0.6, 0.6, 0.6]` |
+| shadowColor | 阴影颜色 | `string` | `"rgba(0,0,0,0.75)"` |
+| shadowBlur | 阴影模糊半径 | `number` | `5` |
+| shadowOffsetX | 阴影 X 偏移 | `number` | `10` |
+| shadowOffsetY | 阴影 Y 偏移 | `number` | `10` |
+| filterId | SVG 滤镜 ID | `string` | `"blob"` |
+| filterStdDeviation | 高斯模糊标准差 | `number` | `30` |
+| filterColorMatrixValues | feColorMatrix 值 | `string` | 默认对比度增强矩阵 |
+| useFilter | 是否启用 SVG 滤镜 | `boolean` | `true` |
+| fastDuration | 主层跟随延迟（秒） | `number` | `0.1` |
+| slowDuration | 拖尾层跟随延迟（秒） | `number` | `0.5` |
+| fastEase | 主层缓动函数 | `string` | `"power3.out"` |
+| slowEase | 拖尾层缓动函数 | `string` | `"power1.out"` |
+| zIndex | 光标容器的 z-index | `number` | `100` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现多层拖尾效果？
+
+第 0 层使用 `fastDuration`（默认 0.1s）紧跟鼠标，后续层使用 `slowDuration`（默认 0.5s）延迟跟随，形成拖尾。
+
+### SVG 滤镜的作用是什么？
+
+通过 `feGaussianBlur` + `feColorMatrix` 组合产生类似"果冻"的流体融合效果，当多个 blob 层重叠时边缘会柔和地融合。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-blob-cursor` 导入。
+2. `sizes`、`innerSizes`、`opacities` 数组长度需与 `trailCount` 一致。
+3. 容器使用 `position: fixed; inset: 0; pointer-events: none`，占据全屏但不阻止点击穿透。
+4. 无需外部依赖，纯 CSS transitions + 内联样式。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-blob-cursor" />

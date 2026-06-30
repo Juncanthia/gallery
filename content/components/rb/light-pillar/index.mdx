@@ -1,0 +1,92 @@
+LightPillar 基于 WebGL 着色器的三维体积光柱渲染背景，支持色彩渐变、鼠标交互和性能自适应。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要为页面添加具有深度感的动态光柱背景时使用。
+常见场景：
+- Hero 区域或首屏视觉焦点背景
+- 科技感品牌页面背景装饰
+- 需要 WebGL 渲染的高质量视觉背景
+不推荐：
+- 低性能设备上同时开启多个实例，建议使用 `quality` 参数降级
+- 需要精确控制布局的容器（组件内部使用绝对定位的画布）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/light-pillar" path="rb/light-pillar/basic" />
+
+```tsx
+import { LightPillar } from "@/components/ui/rb-light-pillar"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <LightPillar />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { LightPillar } from "@/components/ui/rb-light-pillar"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded">
+      <LightPillar
+        topColor="#FF6B35"
+        bottomColor="#004E89"
+        intensity={0.8}
+        rotationSpeed={0.5}
+        interactive
+        pillarWidth={2.5}
+        quality="medium"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LightPillar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| topColor | 光柱顶部颜色（HEX） | `string` | `"#5227FF"` |
+| bottomColor | 光柱底部颜色（HEX） | `string` | `"#FF9FFC"` |
+| intensity | 光柱整体强度 | `number` | `1.0` |
+| rotationSpeed | 自动旋转速度 | `number` | `0.3` |
+| interactive | 是否启用鼠标交互（鼠标控制旋转方向） | `boolean` | `false` |
+| className | 附加容器 CSS 类名 | `string` | `""` |
+| glowAmount | 辉光强度因子 | `number` | `0.005` |
+| pillarWidth | 光柱宽度 | `number` | `3.0` |
+| pillarHeight | 光柱高度波长 | `number` | `0.4` |
+| noiseIntensity | 噪点强度 | `number` | `0.5` |
+| mixBlendMode | CSS 混合模式 | `string` | `"screen"` |
+| pillarRotation | 光柱旋转角度（度） | `number` | `0` |
+| quality | 渲染质量；移动端/low-end 设备会自动降级 | `"low" \| "medium" \| "high"` | `"high"` |
+
+<h2 id="faq">常见问题</h2>
+
+### 组件不显示怎么办？
+检查浏览器是否支持 WebGL。组件内部会检测 WebGL 支持，不支持时显示 "WebGL not supported" 提示。低端移动端设备会自动降级质量。
+
+### 如何让光柱响应鼠标移动？
+设置 `interactive={true}`，光柱的旋转方向将跟随鼠标在容器内的位置变化。
+
+### quality 如何选择？
+`high` 适合桌面端获得最佳画质；`medium` 是平均质量的平衡选择；`low` 适合移动端。组件会自动检测设备类型并降级。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-light-pillar` 导入。
+2. 组件容器必须有明确的宽高（如 `w-full h-64`），组件本身占满容器。
+3. 依赖 `three` 库，确保项目中已安装。
+4. 颜色使用 HEX 字符串格式，如 `"#5227FF"`。
+5. 在移动端场景建议设置 `quality="low"` 以优化性能。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-light-pillar" />

@@ -1,0 +1,20 @@
+---
+category: react-bits
+title: ScrollVelocity
+subtitle: 滚动速度文字
+description: 根据页面滚动速度驱动的文字滚动条幅，正反双向交错排列。
+demo:
+  cols: 1
+group:
+  title: 文本动效
+  order: 7
+source:
+  component: src/components/react-bits/scroll-velocity.tsx
+  docs: content/components/rb/scroll-velocity/index.mdx
+  examples:
+    - content/components/rb/scroll-velocity/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+---

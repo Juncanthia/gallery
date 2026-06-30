@@ -1,0 +1,86 @@
+AnimatedList 带动画入场与键盘导航的可滚动列表组件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示一组列表项，每个项目带有入场缩放动画，并支持鼠标悬停高亮和完整的键盘导航时使用。
+
+常见场景：
+- 聊天消息列表、通知列表等需要逐项动画展示的内容
+- 需要无障碍键盘导航（方向键 + Enter）的列表 UI
+- 带有渐变遮罩暗示可滚动内容的列表
+
+不推荐：
+- 大量数据的虚拟滚动场景（未内置虚拟化）
+- 需要拖拽排序或复杂交互的列表
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/animated-list" path="rb/animated-list/basic" />
+
+```tsx
+import { AnimatedList } from "@/components/ui/rb-animated-list"
+
+export default function Demo() {
+  return (
+    <AnimatedList
+      items={["Apple", "Banana", "Cherry", "Date", "Elderberry"]}
+      onItemSelect={(item, index) => console.log(item, index)}
+    />
+  )
+}
+```
+
+### 禁用渐变与自定义样式
+
+```tsx
+import { AnimatedList } from "@/components/ui/rb-animated-list"
+
+export default function CustomDemo() {
+  return (
+    <AnimatedList
+      items={["通知一", "通知二", "通知三"]}
+      showGradients={false}
+      displayScrollbar={false}
+      itemClassName="bg-blue-900 text-white"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### AnimatedList
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 列表项字符串数组 | `string[]` | 15 个默认占位项 |
+| onItemSelect | 选中回调（item 文本, index） | `(item: string, index: number) => void` | - |
+| showGradients | 是否显示顶部/底部渐变遮罩 | `boolean` | `true` |
+| enableArrowNavigation | 是否启用键盘方向键导航 | `boolean` | `true` |
+| className | 容器额外样式类名 | `string` | - |
+| itemClassName | 每个列表项的额外样式类名 | `string` | - |
+| displayScrollbar | 是否显示原生滚动条 | `boolean` | `true` |
+| initialSelectedIndex | 初始选中索引，-1 表示无选中 | `number` | `-1` |
+
+<h2 id="faq">常见问题</h2>
+
+### 键盘导航支持哪些按键？
+
+ArrowDown / Tab 向下移动，ArrowUp / Shift+Tab 向上移动，Enter 触发 onItemSelect 回调。选中项会自动滚动到可视区域内。
+
+### 渐变遮罩的透明度如何计算？
+
+顶部渐变透明度 = min(scrollTop / 50, 1)，底部渐变透明度在内容不足以滚动时为 0，否则为 min(bottomDistance / 50, 1)。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-animated-list` 导入。
+2. 依赖 `motion`（framer-motion）库。
+3. `items` 为字符串数组，内部渲染为深色背景圆角卡片。
+4. 附带样式表 `animated-list.css`，引入后列表项有默认的深色卡片样式。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-animated-list" />

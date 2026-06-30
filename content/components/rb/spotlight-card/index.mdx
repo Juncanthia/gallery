@@ -1,0 +1,64 @@
+SpotlightCard 鼠标跟随聚光灯卡片组件，鼠标在卡片上移动时通过 CSS 自定义属性驱动径向渐变产生跟随光效。
+
+<h2 id="when-to-use">何时使用</h2>
+需要为卡片添加鼠标跟随的聚光灯高亮效果。
+常见场景：
+- 功能卡片/定价卡片的悬停增强
+- 产品展示卡片的视觉焦点引导
+- 仪表盘面板的交互反馈
+不推荐：
+- 移动端（无 hover 场景，效果无法展示）
+- 高密度信息卡片（光效可能遮盖文字内容）
+- 需要精确色彩控制的品牌展示
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/spotlight-card" path="rb/spotlight-card/basic" />
+
+```tsx
+import { SpotlightCard } from "@/components/ui/rb-spotlight-card"
+export default function Demo() { return <SpotlightCard><div className="p-8">Content</div></SpotlightCard> }
+```
+
+### 蓝色聚光灯 + 自定义内容
+```tsx
+import { SpotlightCard } from "@/components/ui/rb-spotlight-card"
+
+export default function Demo() {
+  return (
+    <SpotlightCard spotlightColor="rgba(59, 130, 246, 0.3)" className="rounded-xl border border-gray-700">
+      <div className="p-8">
+        <h3 className="text-xl font-bold mb-2">高级计划</h3>
+        <p className="text-gray-400">享受所有高级功能和优先支持。</p>
+      </div>
+    </SpotlightCard>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### SpotlightCard
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片内容（任意 React 节点） | `React.ReactNode` | - |
+| className | 自定义样式类名，追加到 `card-spotlight` 之后 | `string` | `""` |
+| spotlightColor | 聚光灯颜色，支持 rgba 以控制透明度 | `string` | `"rgba(255, 255, 255, 0.25)"` |
+
+<h2 id="faq">常见问题</h2>
+### 光效不显示？
+组件通过 CSS 自定义属性 `--mouse-x`、`--mouse-y`、`--spotlight-color` 传递鼠标位置和颜色。实际的径向渐变效果需要在 CSS 中配合 `.card-spotlight` 类编写。组件本身只负责设置这些 CSS 变量，光效样式需要自行定义。
+
+### 如何自定义光效形状和大小？
+在项目的全局 CSS 中为 `.card-spotlight` 添加样式。例如使用 `radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 60%)` 作为背景或伪元素。
+
+### 可以与 Tailwind CSS 的卡片样式结合吗？
+可以。`className` 属性会与 `card-spotlight` 合并，你可以传入 Tailwind 的 `rounded-xl`、`bg-gray-900`、`border` 等类来定义卡片外观，组件只负责注入鼠标跟随的 CSS 变量。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-spotlight-card` 导入。
+2. 组件在 `onMouseMove` 中设置 CSS 自定义属性 `--mouse-x`、`--mouse-y`、`--spotlight-color`，需要在 CSS 中使用这些变量实现光效。
+3. `spotlightColor` 建议使用 rgba 格式以控制透明度，避免光效过亮遮盖内容。
+4. 不包含任何预设样式，外观完全由 `className` 和 CSS 控制。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-spotlight-card" />

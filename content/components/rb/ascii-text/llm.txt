@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: ASCIIText
+subtitle: ASCII 文字
+description: 基于Three.js的ASCII字符渲染文字效果，支持波动动画和色调旋转。
+demo: { cols: 1 }
+group: { title: TextAnimations, order: 1 }
+source: { component: src/components/react-bits/ascii-text.tsx, docs: content/components/rb/ascii-text/index.mdx, examples: [content/components/rb/ascii-text/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, threejs: true }
+---

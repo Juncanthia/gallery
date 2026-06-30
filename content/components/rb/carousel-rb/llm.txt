@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Carousel
+subtitle: 轮播
+description: 3D 翻转轮播组件，支持拖拽、循环和自动播放。
+demo: { cols: 1 }
+group: { title: Components, order: 7 }
+source: { component: src/components/react-bits/carousel-rb.tsx, docs: content/components/rb/carousel-rb/index.mdx, examples: [content/components/rb/carousel-rb/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, motion: true, lucide: true }
+---

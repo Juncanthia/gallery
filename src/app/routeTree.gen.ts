@@ -10,43 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ComponentsSlugRouteImport } from './routes/components/$slug'
+import { Route as ComponentsSplatRouteImport } from './routes/components/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ComponentsSlugRoute = ComponentsSlugRouteImport.update({
-  id: '/components/$slug',
-  path: '/components/$slug',
+const ComponentsSplatRoute = ComponentsSplatRouteImport.update({
+  id: '/components/$',
+  path: '/components/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/components/$slug': typeof ComponentsSlugRoute
+  '/components/$': typeof ComponentsSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/components/$slug': typeof ComponentsSlugRoute
+  '/components/$': typeof ComponentsSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/components/$slug': typeof ComponentsSlugRoute
+  '/components/$': typeof ComponentsSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/components/$slug'
+  fullPaths: '/' | '/components/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/components/$slug'
-  id: '__root__' | '/' | '/components/$slug'
+  to: '/' | '/components/$'
+  id: '__root__' | '/' | '/components/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ComponentsSlugRoute: typeof ComponentsSlugRoute
+  ComponentsSplatRoute: typeof ComponentsSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +58,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/components/$slug': {
-      id: '/components/$slug'
-      path: '/components/$slug'
-      fullPath: '/components/$slug'
-      preLoaderRoute: typeof ComponentsSlugRouteImport
+    '/components/$': {
+      id: '/components/$'
+      path: '/components/$'
+      fullPath: '/components/$'
+      preLoaderRoute: typeof ComponentsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ComponentsSlugRoute: ComponentsSlugRoute,
+  ComponentsSplatRoute: ComponentsSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

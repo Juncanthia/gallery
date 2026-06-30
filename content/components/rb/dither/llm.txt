@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: Dither
+subtitle: 抖动纹理
+description: 基于 React Three Fiber 的抖动波纹背景，Bayer 抖动后处理复古像素化效果。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 5 }
+source: { component: src/components/react-bits/dither.tsx, docs: content/components/rb/dither/index.mdx, examples: [content/components/rb/dither/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, threejs: true, r3f: true, postprocessing: true }
+---

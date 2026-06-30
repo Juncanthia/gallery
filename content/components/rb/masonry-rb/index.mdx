@@ -1,0 +1,100 @@
+Masonry 瀑布流图片网格组件，支持响应式列数自动适配、入场动画、hover 缩放和颜色偏移等交互效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要展示不等高图片网格（瀑布流布局）时使用，适合图片画廊、作品集等场景。
+常见场景：
+- 图片画廊/相册展示
+- 作品集/Portfolio 页面
+- 产品图片展示墙
+- 创意灵感板
+不推荐：
+- 需要等高对齐的网格布局
+- 图片数量极少（少于 3 张）
+- 需要精确排序控制的列表
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/masonry-rb" path="rb/masonry-rb/basic" />
+
+```tsx
+import { Masonry } from "@/components/ui/rb-masonry-rb"
+
+export default function Demo() {
+  return <Masonry />
+}
+```
+
+### 自定义配置
+
+```tsx
+import { Masonry } from "@/components/ui/rb-masonry-rb"
+
+const items = [
+  { id: "1", img: "https://picsum.photos/seed/a/500/600", url: "#", height: 600 },
+  { id: "2", img: "https://picsum.photos/seed/b/500/400", url: "#", height: 400 },
+  { id: "3", img: "https://picsum.photos/seed/c/500/700", url: "#", height: 700 },
+]
+
+export default function Demo() {
+  return (
+    <Masonry
+      items={items}
+      animateFrom="left"
+      scaleOnHover
+      hoverScale={0.92}
+      blurToFocus
+      colorShiftOnHover
+      stagger={0.08}
+      duration={0.5}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Masonry
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 图片数据数组 | `MasonryItem[]` | 内置示例数据 |
+| ease | GSAP 缓动函数名 | `string` | `"power3.out"` |
+| duration | 动画持续时间（秒） | `number` | `0.6` |
+| stagger | 图片交错动画延迟（秒） | `number` | `0.05` |
+| animateFrom | 入场动画起始方向 | `"top" \| "bottom" \| "left" \| "right" \| "center" \| "random"` | `"bottom"` |
+| scaleOnHover | hover 时缩放图片 | `boolean` | `true` |
+| hoverScale | hover 缩放目标值 | `number` | `0.95` |
+| blurToFocus | 入场时从模糊到清晰 | `boolean` | `true` |
+| colorShiftOnHover | hover 时颜色叠加渐变 | `boolean` | `false` |
+
+### MasonryItem
+
+| 属性 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 唯一标识 | `string` | 是 |
+| img | 图片 URL | `string` | 是 |
+| url | 点击跳转链接 | `string` | 是 |
+| height | 图片高度（用于布局计算） | `number` | 是 |
+
+<h2 id="faq">常见问题</h2>
+
+### 响应式列数是如何决定的？
+组件通过 `useMedia` hook 检测视口宽度：>=1500px 显示 5 列，>=1000px 显示 4 列，>=600px 显示 3 列，>=400px 显示 2 列，否则显示 1 列。
+
+### 如何让每张图片以不同方向飞入？
+设置 `animateFrom="random"`，每张图片会随机从 top/bottom/left/right 方向飞入。
+
+### 图片加载慢怎么办？
+组件会自动预加载所有图片（通过 `preloadImages`），加载完成后才触发入场动画，避免卡顿。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-masonry-rb` 导入。
+2. 依赖 `gsap` 库，确保项目中已安装。
+3. 每个 `MasonryItem` 必须提供 `id`、`img`、`url` 和 `height`。
+4. `height` 值用于瀑布流布局计算，应反映图片实际比例。
+5. 点击图片会通过 `window.open` 在新标签页打开 `url`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-masonry-rb" />

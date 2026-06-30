@@ -1,0 +1,109 @@
+ChromaGrid 色度网格卡片组件，以网格形式展示卡片并带有跟随鼠标的聚光灯效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以网格形式展示卡片（如团队成员、作品卡片），并带有随鼠标移动的径向渐变聚光灯效果时使用。
+
+常见场景：
+- 团队成员/贡献者展示页
+- 社交链接或用户名片展示
+- 作品集网格布局
+
+不推荐：
+- 卡片数量不固定的动态列表（Grid 列数由 props 固定）
+- 需要响应式断点自动换行的场景（columns 为固定值）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/chroma-grid" path="rb/chroma-grid/basic" />
+
+```tsx
+import { ChromaGrid } from "@/components/ui/rb-chroma-grid"
+
+export default function Demo() {
+  return <ChromaGrid />
+}
+```
+
+### 自定义数据和布局
+
+```tsx
+import { ChromaGrid } from "@/components/ui/rb-chroma-grid"
+
+const items = [
+  {
+    image: "https://i.pravatar.cc/300?img=1",
+    title: "张三",
+    subtitle: "前端工程师",
+    handle: "@zhangsan",
+    borderColor: "#3b82f6",
+    gradient: "linear-gradient(145deg, #3b82f6, #1e3a5f)",
+    url: "https://github.com/zhangsan",
+    location: "北京",
+  },
+  // ... more items
+]
+
+export default function CustomDemo() {
+  return (
+    <ChromaGrid
+      items={items}
+      columns={4}
+      radius={400}
+      damping={0.3}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ChromaGrid
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 卡片数据数组 | `ChromaGridItem[]` | 6 个演示卡片 |
+| className | 容器额外样式类名 | `string` | - |
+| radius | 聚光灯效果半径（px） | `number` | `300` |
+| columns | 网格列数 | `number` | `3` |
+| rows | 网格行数 | `number` | `2` |
+| damping | 聚光灯跟随鼠标的阻尼系数 | `number` | `0.45` |
+| fadeOut | 鼠标离开后聚光淡出时长（秒） | `number` | `0.6` |
+| ease | 聚光灯移动缓动 | `string` | `"power3.out"` |
+
+ChromaGridItem 类型：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| image | 头像/图片 URL | `string` |
+| title | 卡片标题（姓名） | `string` |
+| subtitle | 副标题（职位/角色） | `string` |
+| handle | 社交媒体账号（显示为 @handle） | `string` |
+| borderColor | 卡片边框高亮色 | `string` |
+| gradient | 卡片背景渐变 CSS | `string` |
+| url | 卡片点击跳转链接 | `string` |
+| location | 地理位置信息 | `string` |
+
+<h2 id="faq">常见问题</h2>
+
+### 聚光灯效果如何实现？
+
+通过 CSS 自定义属性 `--x` 和 `--y`（由 GSAP quickSetter 动态更新）控制径向渐变中心点位置。每张卡片内部通过 `--mouse-x` 和 `--mouse-y` 显示光标在卡片内的具体位置。
+
+### 为什么有 chroma-overlay 和 chroma-fade 两个层？
+
+`chroma-overlay` 负责显示跟随鼠标的聚光区域（混合模式），`chroma-fade` 负责鼠标离开后整体渐暗的过渡效果。两者叠加实现完整的聚光灯效果。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-chroma-grid` 导入。
+2. 依赖 `gsap` 库。
+3. 附带样式表 `chroma-grid.css`。
+4. 点击卡片时若存在 `url` 属性，会通过 `window.open` 新标签页打开。
+5. 通过 CSS 自定义属性 `--cols` 和 `--rows` 控制网格布局。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-chroma-grid" />

@@ -1,0 +1,84 @@
+Noise 基于 Canvas 的动态噪点纹理覆盖组件，为页面添加胶片颗粒质感。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要为页面或组件添加噪点/胶片颗粒纹理效果时使用，增强视觉质感和氛围。
+常见场景：
+- 为整个页面背景添加胶片颗粒质感
+- 搭配暗色主题增强复古/电影感
+- 为 Hero 区域增加纹理层次
+- 配合其他动画组件作为纹理叠加层
+不推荐：
+- 高清文本或细节密集区域上方（噪点会降低可读性）
+- 需要像素级精确渲染的场景
+- 打印场景（噪点为屏幕显示效果）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/noise" path="rb/noise/basic" />
+
+```tsx
+import { Noise } from "@/components/ui/rb-noise"
+
+export default function Demo() {
+  return (
+    <div className="relative w-full h-64 bg-zinc-900 rounded overflow-hidden">
+      <Noise />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { Noise } from "@/components/ui/rb-noise"
+
+export default function Demo() {
+  return (
+    <div className="relative w-full h-96 bg-zinc-900 rounded overflow-hidden">
+      <Noise
+        patternSize={150}
+        patternScaleX={1.5}
+        patternScaleY={1.5}
+        patternRefreshInterval={4}
+        patternAlpha={20}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Noise
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| patternSize | 噪点图案基础尺寸 | `number` | `250` |
+| patternScaleX | X 轴缩放 | `number` | `1` |
+| patternScaleY | Y 轴缩放 | `number` | `1` |
+| patternRefreshInterval | 噪点刷新间隔（帧数），值越大更新越慢 | `number` | `2` |
+| patternAlpha | 噪点透明度（0-255） | `number` | `15` |
+
+<h2 id="faq">常见问题</h2>
+
+### 噪点太明显或太淡？
+通过 `patternAlpha` 控制噪点透明度。值越大噪点越明显，设为 0 则完全不可见。
+
+### 如何让噪点更新更慢？
+增大 `patternRefreshInterval`。默认为 2（每 2 帧刷新一次），设为 10 则每 10 帧刷新一次。
+
+### 父容器需要什么样式？
+Noise 组件使用 `position: absolute; inset: 0`，因此父容器必须设置 `position: relative` 且明确宽高，否则噪点层可能不显示。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-noise` 导入。
+2. Noise 组件为绝对定位覆盖层，父容器需要 `position: relative` 和明确的宽高。
+3. 通过 `patternAlpha`（0-255）控制噪点可见度。
+4. 组件使用 Canvas 2D API，无需额外依赖。
+5. 噪点渲染风格为 `imageRendering: "pixelated"`，适合块状颗粒效果。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-noise" />

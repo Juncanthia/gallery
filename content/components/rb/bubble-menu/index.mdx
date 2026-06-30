@@ -1,0 +1,113 @@
+BubbleMenu 气泡风格导航菜单组件，圆形菜单项以弹性动画展开/收起。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要提供一个独特的圆形气泡风格导航菜单，菜单项以弹性缩放动画展开，支持自定义旋转角度和悬停配色时使用。
+
+常见场景：
+- 创意型网站的独特导航 UI
+- 作品集页面的菜单交互
+- 需要与传统导航栏形成差异化的设计
+
+不推荐：
+- 菜单项数量过多（气泡以弧形排列，项数多时可能重叠）
+- 需要复杂子菜单嵌套的场景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/bubble-menu" path="rb/bubble-menu/basic" />
+
+```tsx
+import { BubbleMenu } from "@/components/ui/rb-bubble-menu"
+
+export default function Demo() {
+  return <BubbleMenu />
+}
+```
+
+### 自定义菜单项
+
+```tsx
+import { BubbleMenu } from "@/components/ui/rb-bubble-menu"
+
+export default function CustomDemo() {
+  return (
+    <BubbleMenu
+      logo="https://example.com/logo.svg"
+      menuBg="#1a1a2e"
+      menuContentColor="#e94560"
+      animationDuration={0.6}
+      items={[
+        {
+          label: "首页", href: "/", ariaLabel: "Home",
+          rotation: -8,
+          hoverStyles: { bgColor: "#e94560", textColor: "#fff" },
+        },
+        {
+          label: "作品", href: "/works", ariaLabel: "Works",
+          rotation: 8,
+          hoverStyles: { bgColor: "#0f3460", textColor: "#fff" },
+        },
+        {
+          label: "关于", href: "/about", ariaLabel: "About",
+          rotation: -5,
+          hoverStyles: { bgColor: "#16213e", textColor: "#fff" },
+        },
+      ]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BubbleMenu
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| logo | Logo 内容（图片 URL 或 React 节点） | `React.ReactNode \| string` | - |
+| onMenuClick | 菜单打开/关闭回调 | `(isOpen: boolean) => void` | - |
+| className | 容器额外样式类名 | `string` | - |
+| style | 容器内联样式 | `React.CSSProperties` | - |
+| menuAriaLabel | Toggle 按钮的无障碍标签 | `string` | `"Toggle menu"` |
+| menuBg | 菜单气泡背景色 | `string` | `"#fff"` |
+| menuContentColor | 菜单文字/线条颜色 | `string` | `"#111"` |
+| useFixedPosition | 是否使用 fixed 定位 | `boolean` | `false` |
+| items | 自定义菜单项数组 | `MenuItem[]` | 5 个默认导航项 |
+| animationEase | 展开动画缓动 | `string` | `"back.out(1.5)"` |
+| animationDuration | 展开动画时长（秒） | `number` | `0.5` |
+| staggerDelay | 菜单项交错延迟（秒） | `number` | `0.12` |
+
+MenuItem 类型：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| label | 菜单项文本 | `string` |
+| href | 链接地址 | `string` |
+| ariaLabel | 无障碍标签 | `string` |
+| rotation | 气泡旋转角度（deg） | `number` |
+| hoverStyles | 悬停时的 bgColor 和 textColor | `{ bgColor: string; textColor: string }` |
+
+<h2 id="faq">常见问题</h2>
+
+### 展开/关闭动画是如何实现的？
+
+使用 GSAP Timeline：展开时每个气泡从 `scale(0)` 弹跳到 `scale(1)`，标签文字从下方 `y: 24` 淡入。关闭时反向执行，所有动画完成后隐藏 overlay。
+
+### 移动端适配如何工作？
+
+ResizeObserver 监听窗口宽度变化，宽度 < 900px 时所有气泡的 rotation 设为 0，避免旋转导致溢出。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-bubble-menu` 导入。
+2. 依赖 `gsap` 库。
+3. 附带样式表 `bubble-menu.css`。
+4. `items` 数组为空时使用内置的 5 个默认导航项。
+5. 菜单通过绝对定位/固定定位叠加渲染。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-bubble-menu" />

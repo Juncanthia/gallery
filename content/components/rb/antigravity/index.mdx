@@ -1,0 +1,91 @@
+Antigravity 基于 Three.js 的粒子反重力交互组件，鼠标吸引粒子形成动态环形轨道。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要高度交互的 3D 粒子背景效果，鼠标移动时粒子被吸引并围绕鼠标形成环形轨道时使用。
+
+常见场景：
+- 首页或着陆页的动态背景装饰
+- 科技感产品展示、品牌页面的视觉吸引元素
+- 需要强调交互感和空间深度的场景
+
+不推荐：
+- 移动端或性能敏感场景（粒子数较多时对 GPU 有要求）
+- 需要传达明确信息时（纯装饰性组件）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/antigravity" path="rb/antigravity/basic" />
+
+```tsx
+import { Antigravity } from "@/components/ui/rb-antigravity"
+
+export default function Demo() {
+  return <Antigravity />
+}
+```
+
+### 自定义粒子外观与行为
+
+```tsx
+import { Antigravity } from "@/components/ui/rb-antigravity"
+
+export default function CustomDemo() {
+  return (
+    <Antigravity
+      count={500}
+      color="#00ff88"
+      particleShape="sphere"
+      ringRadius={12}
+      magnetRadius={15}
+      autoAnimate
+      rotationSpeed={0.2}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Antigravity
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| count | 粒子总数 | `number` | `300` |
+| magnetRadius | 鼠标吸引半径 | `number` | `10` |
+| ringRadius | 环形轨道半径 | `number` | `10` |
+| waveSpeed | 波形变化速度 | `number` | `0.4` |
+| waveAmplitude | 波形振幅 | `number` | `1` |
+| particleSize | 粒子基础尺寸 | `number` | `2` |
+| lerpSpeed | 粒子位置平滑插值速度 | `number` | `0.1` |
+| color | 粒子颜色 | `string` | `"#FF9FFC"` |
+| autoAnimate | 无鼠标操作 2 秒后自动动画 | `boolean` | `false` |
+| particleVariance | 粒子尺寸随机变化幅度 | `number` | `1` |
+| rotationSpeed | 粒子环旋转速度 | `number` | `0` |
+| depthFactor | Z 轴深度因子 | `number` | `1` |
+| pulseSpeed | 粒子脉冲速度 | `number` | `3` |
+| particleShape | 粒子几何形状 | `"capsule" \| "sphere" \| "box" \| "tetrahedron"` | `"capsule"` |
+| fieldStrength | 磁场强度（越大粒子越贴近圆环） | `number` | `10` |
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么组件默认高度是 400px？
+
+内部 Canvas 容器设置了 `h-[400px] w-full`，这是为了确保 Three.js 有明确的渲染尺寸。若需调整，可在外层包裹一个自定义高度的容器。
+
+### 如何提高移动端性能？
+
+降低 `count` 值（如 80-150），减小 `particleSize`，并关闭 `autoAnimate`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/rb-antigravity` 导入。
+2. 需要安装 `@react-three/fiber` 和 `three` 依赖。
+3. 容器必须有明确的宽高，组件内部默认 `h-[400px] w-full`。
+4. 颜色值可以是 CSS 颜色字符串（`#FF9FFC`、`rgb(255,0,0)` 等）。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-antigravity" />

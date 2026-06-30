@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: ModelViewer
+subtitle: 3D 模型查看器
+description: 支持多种 3D 格式的模型查看器，提供旋转、缩放、截图等功能。
+demo: { cols: 1 }
+group: { title: Components, order: 9 }
+source: { component: src/components/react-bits/model-viewer.tsx, docs: content/components/rb/model-viewer/index.mdx, examples: [content/components/rb/model-viewer/examples/basic.tsx] }
+stack: { react: true, threejs: true, r3f: true }
+---

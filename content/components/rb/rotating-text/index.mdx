@@ -1,0 +1,80 @@
+RotatingText 文字轮播切换组件，支持字符/单词/行级别的交错动画，提供丰富的 stagger 模式和完全可控的 transition 配置。
+
+<h2 id="when-to-use">何时使用</h2>
+需要在固定位置轮播切换不同文字内容时使用。
+常见场景：
+- Hero 区域的关键词轮播展示
+- 品牌标语/口号的动态切换
+- 加载等待时的文字提示动画
+不推荐：
+- 需同时展示所有选项的场景（应使用列表或标签组）
+- 文本过长导致换行时（动画效果会受影响）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/rotating-text" path="rb/rotating-text/basic" />
+
+```tsx
+import { RotatingText } from "@/components/ui/rb-rotating-text"
+
+export default function Demo() { return <RotatingText /> }
+```
+
+### 自定义文本和动画参数
+```tsx
+import { RotatingText } from "@/components/ui/rb-rotating-text"
+
+export default function Demo() {
+  return (
+    <RotatingText
+      texts={["设计", "开发", "交付"]}
+      rotationInterval={3000}
+      staggerFrom="center"
+      staggerDuration={0.05}
+      splitBy="words"
+      transition={{ type: "spring", damping: 20, stiffness: 200 }}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### RotatingText
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| texts | 轮播文字数组，按顺序切换 | `string[]` | `["React","Bits","Text","Animations"]` |
+| transition | framer-motion Transition 配置，控制进出动画的物理参数 | `Transition` | `{ type:"spring", damping:25, stiffness:300 }` |
+| initial | 元素入场初始状态 | `Record<string, unknown>` | `{ y: "100%", opacity: 0 }` |
+| animate | 元素入场目标状态 | `Record<string, unknown>` | `{ y: 0, opacity: 1 }` |
+| exit | 元素退场状态 | `Record<string, unknown>` | `{ y: "-120%", opacity: 0 }` |
+| animatePresenceMode | AnimatePresence 模式 | `"wait" \| "popLayout" \| "sync"` | `"wait"` |
+| animatePresenceInitial | 是否在首次挂载时播放入场动画 | `boolean` | `false` |
+| rotationInterval | 自动切换间隔（毫秒） | `number` | `2000` |
+| staggerDuration | 每个子元素交错延迟（秒） | `number` | `0` |
+| staggerFrom | 交错动画起始位置 | `"first" \| "last" \| "center" \| "random" \| number` | `"first"` |
+| loop | 是否循环播放 | `boolean` | `true` |
+| auto | 是否自动轮播 | `boolean` | `true` |
+| splitBy | 文本拆分粒度 | `"characters" \| "words" \| "lines" \| string` | `"characters"` |
+| onNext | 切换到下一项时的回调，参数为当前索引 | `(index: number) => void` | - |
+| mainClassName | 最外层容器 className | `string` | - |
+| splitLevelClassName | 单词/行级别包裹元素的 className | `string` | - |
+| elementLevelClassName | 单个字符元素的 className | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+### 如何手动控制切换？
+通过 ref 获取组件实例，调用 `next()`、`previous()`、`jumpTo(index)`、`reset()` 方法。同时设置 `auto={false}` 关闭自动轮播。ref 类型为 `RotatingTextRef`。
+
+### staggerFrom 为 "random" 时每次切换动画顺序都不同吗？
+是的，每次切换时"random"会重新随机选择一个字符作为起始点，其他字符相对它计算延迟。如需稳定的随机顺序，可传入固定数字。
+
+### 中文字符支持如何？
+组件使用 `Intl.Segmenter` 按 grapheme 拆分字符，对中文、emoji 等复合字符均能正确处理。在旧浏览器中会自动降级为 `Array.from`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/ui/rb-rotating-text` 导入。
+2. `texts` 至少传入 2 个字符串，否则无切换意义。
+3. 如需手动控制切换，使用 `useRef<RotatingTextRef>` 并设置 `auto={false}`。
+4. 组件依赖 `framer-motion`，确保项目已安装该依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-rotating-text" />
