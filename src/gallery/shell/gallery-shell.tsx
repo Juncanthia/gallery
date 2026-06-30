@@ -285,11 +285,11 @@ export function GalleryShell({
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-2">
-          <div className="flex items-center rounded-lg bg-muted p-0.5">
+          <div className="flex max-w-lg flex-nowrap items-center gap-px overflow-x-auto scrollbar-none rounded-lg bg-muted p-0.5">
             {LIBRARIES.map((lib) => (
               <button
                 className={cn(
-                  "rounded-md px-2.5 py-1 text-xs font-medium transition-colors",
+                  "shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap",
                   activeLibrary === lib.id
                     ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
