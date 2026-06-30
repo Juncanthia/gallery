@@ -1,0 +1,147 @@
+---
+category: Blocks
+title: CodeTabs
+subtitle: 代码标签页
+description: 多代码命令切换的标签页复合组件，基于 Shiki 语法高亮，支持一键复制。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 9
+source:
+  component: src/components/blocks/code-tabs/index.tsx
+  docs: content/components/code-tabs/index.mdx
+  examples:
+    - content/components/code-tabs/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# CodeTabs 代码标签页
+
+CodeTabs 是一个支持多段代码切换的标签页复合组件。它以 Tabs 动效 primitive 为导航框架，通过 Shiki 引擎进行客户端语法高亮，并内置一键复制按钮，适合展示同一操作在多种环境下的代码变体。
+
+本组件为项目本地复合组件，无 Ant Design 直接对应。
+
+## 何时使用 {#when-to-use}
+
+适合文档、安装指南、组件库展示中需要为同一操作提供多个代码变体时使用。
+
+常见场景：
+
+- 安装指南中切换 npm、yarn、pnpm 命令。
+- API 文档中切换不同语言的请求示例（curl、Python、JavaScript）。
+- 组件文档中提供多个代码变体的快捷切换。
+
+不推荐：
+
+- 单段代码展示且无需切换 —— 使用 CodePanel 或 CodeBlock。
+- 需要行号、差异标注等高级特性 —— 使用 CodeBlock 复合组件。
+- 代码内容来源不受信 —— 组件使用 `dangerouslySetInnerHTML` 渲染高亮结果。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { CodeTabs } from "@/components/ui/code-tabs"
+
+const codes = {
+  npm: "npm install @canthia/ui",
+  yarn: "yarn add @canthia/ui",
+  pnpm: "pnpm add @canthia/ui",
+}
+
+export default function Demo() {
+  return (
+    <CodeTabs codes={codes} lang="bash" copyButton />
+  )
+}
+```
+
+> `codes` 的 key 作为标签页名称，value 为要展示的代码字符串。`lang` 指定 Shiki 语法高亮语言。复制按钮默认启用。
+
+## API {#api}
+
+### CodeTabs
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| codes | 代码映射表，key 为标签名称，value 为代码字符串 | `Record<string, string>` | 必填 |
+| lang | Shiki 语法高亮语言标识 | `string` | `'bash'` |
+| themes | 语法高亮主题配置（为切换感知预留，当前固定使用 CSS 变量主题） | `{ light: string; dark: string }` | `{ light: 'github-light', dark: 'github-dark' }` |
+| copyButton | 是否显示复制按钮 | `boolean` | `true` |
+| onCopiedChange | 复制状态变化回调 | `(copied: boolean, content?: string) => void` | - |
+| className | 附加样式类 | `string` | - |
+| defaultValue | 默认激活的标签页（非受控模式） | `string` | `codes` 的第一个 key |
+| value | 当前激活的标签页（受控模式） | `string` | - |
+| onValueChange | 标签页切换回调 | `(value: string) => void` | - |
+
+`CodeTabs` 继承 `Omit<TabsProps, 'children'>`，即 Tabs primitive 除 `children` 外的所有 HTML div 属性。标签页导航使用 `TabsHighlight` 动效指示器，内容区使用 `TabsContents` 带高度动画切换。
+
+## 样式模型 {#styling-model}
+
+- 容器：`not-prose w-full gap-0 bg-muted/50 rounded border overflow-hidden`。
+- 标签页列表：`h-10`，通过 `TabsHighlight` 实现底部 `h-0.5` 跟随指示器，`after:bg-black dark:after:bg-white` 适配暗色模式。
+- 标签文字：`text-muted-foreground`，激活态 `text-current`。
+- 代码内容区：`text-[13px]`，通过 `[&>pre,_&_code]:!bg-transparent` 强制透明背景，消除 Shiki 默认主题背景。
+- Shiki 高亮使用 `createCssVariablesTheme` 创建 CSS 变量主题（`--shiki-` 前缀），自动适配暗色/亮色模式。
+- 复制按钮：`bg-transparent hover:bg-black/5 dark:hover:bg-white/10`，位于标签栏右侧。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/code-tabs/index.tsx`：复合组件定义。
+- `src/components/ui/code-tabs.tsx`：re-export barrel。
+- `src/primitives/animate/tabs.tsx`：Tabs 动效 primitive。
+- `src/components/ui/copy-button.tsx`：复制按钮。
+
+直接依赖：React（useState、useEffect）、next-themes（useTheme）、shiki（codeToHtml、createCssVariablesTheme、动态 import）、Tabs primitive 系列、CopyButton、cn。
+
+关键行为：
+
+1. Shiki 在客户端 `useEffect` 中异步加载（dynamic import）。高亮未完成时标签页和内容均不渲染（`highlightedCodes === null`）。
+2. `highlightedCodes` 状态缓存高亮结果，`resolvedTheme`、`lang`、`themes`、`codes` 变化时重新高亮。
+3. `onValueChange` 在内部 `setSelectedCode` 之后调用，确保外部回调获取最新值。
+4. 代码内容通过 `dangerouslySetInnerHTML` 注入，需确保 `codes` 值来源可信。
+5. 高亮失败时回退到原始文本（`setHighlightedCodes(codes)`）。
+
+## 可访问性 {#accessibility}
+
+- 标签页导航继承 Tabs primitive 的 ARIA 语义（`tablist`、`tab`、`tabpanel` 角色）。
+- CopyButton 继承其内置的 ARIA 语义和键盘操作。
+- 容器标记 `data-canthia-ignore=""` 用于自动化扫描排除。
+- `data-slot` 属性（`install-tabs`、`install-tabs-list`、`install-tabs-contents`、`install-tabs-content`）用于测试定位。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，无 Ant Design 直接对应。AntD 的 Tabs 组件不内置代码高亮及命令切换逻辑。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 语法高亮 | Shiki + CSS 变量主题，非 AntD 或 Prism |
+| 标签导航 | 基于项目 Tabs primitive（动效 tab），非 AntD Tabs |
+| API 来源 | 以 `src/components/blocks/code-tabs/index.tsx` TypeScript 类型为准 |
+| 视觉与样式 | Tailwind CSS + 项目主题变量，不依赖 ConfigProvider 或 css-in-js |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 CodeTabs 代码时，应遵守：
+
+1. 从 `@/components/ui/code-tabs` 导入 CodeTabs，不要从 antd 导入。
+2. `codes` 为必填，类型 `Record<string, string>`，key 用作标签名称。
+3. `lang` 指定 Shiki 语法高亮语言，必须是 Shiki 支持的 bundled language。
+4. 复制按钮默认启用（`copyButton={true}`），`onCopiedChange` 可监听复制事件。
+5. 受控模式使用 `value` + `onValueChange`；非受控使用 `defaultValue`。
+6. 只使用源码中存在的 props，不要凭记忆生成不存在的属性。
+7. 代码内容必须安全受信，因为组件使用 `dangerouslySetInnerHTML` 渲染。
+8. 主题色通过 CSS 变量（`--shiki-*` 前缀）自动适配暗色/亮色模式，无需手动处理。
+9. 不要引入 AntD ConfigProvider、AntD Tabs 或 Prism.js 等替代库。
+10. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/code-tabs/index.tsx`。

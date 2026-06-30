@@ -1,0 +1,256 @@
+---
+category: Blocks
+title: DataTable
+subtitle: 数据表格
+description: 基于 @tanstack/react-table 的复合数据表格组件，内置排序、列头下拉菜单，采用 render-props 模式组合。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 14
+source:
+  component: src/components/blocks/data-table/index.tsx
+  docs: content/components/data-table/index.mdx
+  examples:
+    - content/components/data-table/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTable 数据表格
+
+DataTable 是一个基于 @tanstack/react-table 的复合数据表格组件，提供类型安全的列定义、多列排序和列头下拉菜单。采用 render-props 模式组合 TableProvider、TableHeader、TableBody 等子组件，底层渲染为本地 `ui/table` 原生表格元素。排序状态通过 jotai atom 全局管理。
+
+本组件为项目本地复合组件，无 Ant Design 直接对应。实现以本地源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合需要展示结构化数据、支持列排序的表格场景。优先通过 `TableProvider` 传入 `columns` 和 `data`，由组件内部管理排序状态。
+
+常见场景：
+
+- 后台管理系统的数据列表、用户列表、订单列表等。
+- 需要多列排序的表格展示。
+- 需要类型安全的列定义（基于 @tanstack/react-table ColumnDef）的场景。
+- 需要自定义列头渲染（如排序下拉菜单）的表格。
+
+不推荐：
+
+- 简单的静态表格展示 —— 直接使用 `@/components/ui/table` 原始组件更轻量。
+- 需要分页、筛选、行选择等高级功能 —— 应基于 @tanstack/react-table 的对应 feature 扩展，而非在本组件中硬加。
+- 在调用侧绕过 `TableProvider` 直接使用 `TableBody`/`TableHeader` 等子组件。
+- 引入 `antd` 或 `rc-component` 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import type { ColumnDef } from "@/components/ui/data-table"
+import {
+  TableProvider,
+  TableHeader,
+  TableHeaderGroup,
+  TableHead,
+  TableColumnHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/data-table"
+
+type Item = { id: number; name: string; status: string }
+
+const columns: ColumnDef<Item>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => <TableColumnHeader column={column} title="名称" />,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => <TableColumnHeader column={column} title="状态" />,
+  },
+]
+
+const data: Item[] = [
+  { id: 1, name: "项目 A", status: "进行中" },
+  { id: 2, name: "项目 B", status: "已完成" },
+]
+
+export default function Demo() {
+  return (
+    <TableProvider columns={columns} data={data} className="w-full">
+      <TableHeader>
+        {({ headerGroup }) => (
+          <TableHeaderGroup headerGroup={headerGroup}>
+            {({ header }) => <TableHead header={header} />}
+          </TableHeaderGroup>
+        )}
+      </TableHeader>
+      <TableBody>
+        {({ row }) => (
+          <TableRow row={row}>
+            {({ cell }) => <TableCell cell={cell} />}
+          </TableRow>
+        )}
+      </TableBody>
+    </TableProvider>
+  )
+}
+```
+
+> 说明：`TableColumnHeader` 用于可排序列头；不可排序列可在 `header` 回调中直接返回文本。`TableProvider` 内部通过 jotai atom 管理排序状态，同一页面多个 DataTable 实例共享排序状态。
+
+## API {#api}
+
+以下类型来自 `src/components/blocks/data-table/index.tsx` 源码，是生成代码时的主要依据。
+
+### TableProvider
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| columns | 列定义数组，来自 @tanstack/react-table | `ColumnDef<TData, TValue>[]` | 必填 |
+| data | 数据源数组，支持泛型类型推断 | `TData[]` | 必填 |
+| children | 子内容，通常包含 TableHeader 和 TableBody | `ReactNode` | 必填 |
+| className | 透传至底层 Table 元素的 className | `string` | - |
+
+`TableProvider` 泛型 `<TData, TValue>` 自动从 `columns` 和 `data` 推断。内部使用 `useReactTable` 创建 table 实例，配置 `getCoreRowModel` 和 `getSortedRowModel`，通过 jotai `sortingAtom` 管理排序状态。
+
+### TableHeader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 透传至底层 `<thead>` 元素 | `string` | - |
+| children | Render props，接收 `headerGroup` | `(props: { headerGroup: HeaderGroup<unknown> }) => ReactNode` | 必填 |
+
+### TableHeaderGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| headerGroup | 来自 tanstack table 的 headerGroup 对象 | `HeaderGroup<unknown>` | 必填 |
+| children | Render props，接收单个 `header` | `(props: { header: Header<unknown, unknown> }) => ReactNode` | 必填 |
+
+### TableHead
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| header | 来自 tanstack table 的 header 对象 | `Header<unknown, unknown>` | 必填 |
+| className | 透传至底层 `<th>` 元素 | `string` | - |
+
+`TableHead` 使用 `React.memo` 优化渲染。通过 `flexRender` 渲染 columnDef.header 内容。
+
+### TableColumnHeader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| column | 来自 tanstack table 的 column 对象 | `Column<TData, TValue>` | 必填 |
+| title | 列头显示文本 | `string` | 必填 |
+| className | 透传至外层 div | `string` | - |
+
+`TableColumnHeader` 继承 `HTMLAttributes<HTMLDivElement>`。当 column 不可排序（`!column.getCanSort()`）时仅渲染纯文本标题。可排序时渲染带下拉菜单的 Button（variant="text", size="small"），提供升序（Asc）和降序（Desc）切换选项。排序图标使用 lucide-react 的 `ArrowUp`、`ArrowDown`、`ChevronsUpDown`。
+
+### TableBody
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 透传至底层 `<tbody>` 元素 | `string` | - |
+| children | Render props，接收单个 `row` | `(props: { row: Row<unknown> }) => ReactNode` | 必填 |
+
+当无数据时自动渲染 "No results." 空态占位行，`colSpan` 根据 columns 数量自适应。
+
+### TableRow
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| row | 来自 tanstack table 的 row 对象 | `Row<unknown>` | 必填 |
+| className | 透传至底层 `<tr>` 元素 | `string` | - |
+| children | Render props，接收单个 `cell` | `(props: { cell: Cell<unknown, unknown> }) => ReactNode` | 必填 |
+
+选中行自动设置 `data-state="selected"`。
+
+### TableCell
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| cell | 来自 tanstack table 的 cell 对象 | `Cell<unknown, unknown>` | 必填 |
+| className | 透传至底层 `<td>` 元素 | `string` | - |
+
+通过 `flexRender` 渲染 columnDef.cell 内容。
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 底层渲染为标准 `<table>`、`<thead>`、`<tbody>`、`<tr>`、`<th>`、`<td>` 元素，继承 `@/components/ui/table` 的基础样式。
+- `TableColumnHeader` 使用 `@/components/ui/button`（variant="text", size="small"）和 `@/components/ui/dropdown-menu` 渲染可排序列头。
+- 排序图标使用 lucide-react 的 `ArrowUp`、`ArrowDown`、`ChevronsUpDown`。
+- 选中行通过 `data-state="selected"` 属性驱动样式。
+- 空态占位行高度 `h-24`，居中显示 "No results."。
+- 不依赖 CVA、Radix/Base UI primitive 或 Motion 动画库。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/data-table/index.tsx`（组件实现）
+- `src/components/ui/data-table.tsx`（re-export barrel）
+
+直接依赖摘要：
+
+- `@tanstack/react-table`（核心表格逻辑：列定义、排序、行模型；`flexRender`、`getCoreRowModel`、`getSortedRowModel`、`useReactTable`）
+- `jotai`（`atom`、`useAtom`，排序状态全局管理）
+- `lucide-react`（排序图标）
+- `@/components/ui/table`（底层表格原语）
+- `@/components/ui/button`（列头排序按钮）
+- `@/components/ui/dropdown-menu`（列头排序下拉菜单）
+- `@/lib/utils`（`cn` 工具函数）
+- Tailwind CSS
+
+实现注意：
+
+1. 组件采用 render-props 模式，所有 `children` 均为函数 `(props) => ReactNode`。
+2. 排序状态通过全局 jotai atom 管理，同一页面内多个 DataTable 实例共享排序状态。如需隔离，需自行创建独立 atom。
+3. `TableColumnHeader` 仅用于可排序列头；不可排序列的 header 可以直接返回纯文本或自定义 ReactNode。
+4. `TableBody` 内置空数据占位逻辑，无需额外处理空数组情况。
+5. `TableHead` 使用 `React.memo` 优化，`TableColumnHeader` 的排序回调使用 `useCallback` 避免不必要重渲染。
+6. 如需新增能力（分页、筛选等），应先修改 `src/components/blocks/data-table/index.tsx`，再更新本 llm 文档。
+7. 不要把 @tanstack/react-table 官方文档中未在本组件暴露的功能视为已支持。
+
+## 可访问性 {#accessibility}
+
+- 底层渲染为标准 HTML 表格元素，天生支持屏幕阅读器的表格导航（行列关系）。
+- `TableColumnHeader` 使用 `DropdownMenu` 触发器（`<button>`），键盘可操作（Enter/Space 打开，Arrow 键选择）。
+- 排序按钮通过 `DropdownMenuItem` 提供明确的 "Asc"/"Desc" 操作项。
+- 选中行通过 `data-state="selected"` 标记，可由屏幕阅读器或样式层识别。
+- 建议在 `TableProvider` 外层包裹 `<div role="region" aria-label="数据表格">` 以增强区域语义。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合块，无直接 Ant Design 对应。AntD Table 功能更全（分页、筛选、行选择、展开行等），本项目 DataTable 为轻量复合块。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 构建方式 | 基于 @tanstack/react-table + 本地 ui/table 原语组合，render-props 模式 |
+| API 来源 | 以 `src/components/blocks/data-table/index.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 状态管理 | 使用 jotai atom 管理排序状态，非 AntD 内部状态 |
+| 兼容目标 | 无 AntD 兼容包袱，完全按本地设计体系定义 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTable 代码时，应遵守：
+
+1. 从 `@/components/ui/data-table` 导入，不要从 `antd` 导入。
+2. 只使用本文件 API 中存在的 props；@tanstack/react-table 的类型（ColumnDef、Row、Cell、Header 等）以本组件实际暴露的签名和泛型约束为准。
+3. 遵循 render-props 嵌套模式：`TableProvider` > `TableHeader` > `TableHeaderGroup` > `TableHead`（或自定义）；`TableBody` > `TableRow` > `TableCell`。不要在 `TableProvider` children 中混入手写的 `<tr>`/`<td>` 元素。
+4. 列头可排序时使用 `TableColumnHeader`；不可排序时在 `header` 回调中直接返回文本或自定义内容。
+5. `columns` 和 `data` 应定义在组件外部或使用 `useMemo`，避免每次渲染重新创建。
+6. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
+7. 需要扩展功能（分页、筛选等）时，应先检查 @tanstack/react-table 的 feature API，在源码 `useReactTable` 配置中扩展，并更新本文档。
+8. 如果不确定某个 tanstack table 功能是否已在本地组件中暴露，先检查 `src/components/blocks/data-table/index.tsx` 中的 `useReactTable` 调用参数。

@@ -1,21 +1,158 @@
-Announcement 复合组件。
+Announcement 复合公告条组件。由 Badge 作为容器包裹 AnnouncementTag 和 AnnouncementTitle，用于在页面顶部或关键位置展示全局通知、活动公告或系统状态信息。这是一个Blocks 复合组件，非 Ant Design 兼容层。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面顶部、模块上方或内容区域前展示醒目但不干扰的全局性公告信息时使用。
+
+常见场景：
+
+- 系统维护通知、版本更新提醒。
+- 活动宣传条、优惠政策横幅。
+- 状态提示，例如"当前网络不稳定"。
+- 需要带标签分类的公告信息（通过 AnnouncementTag）。
+- 功能上线或改版的通知提示。
+
+推荐使用方式：
+
+- 在 Announcement 内组合 AnnouncementTag 和 AnnouncementTitle，形成"标签 + 文字"的标准公告布局。
+- AnnouncementTag 用于标注公告类型（如"新功能"、"重要"、"公告"）。
+- AnnouncementTitle 承载公告正文内容。
+
+不推荐：
+
+- 用 Announcement 替代 Banner 组件——Banner 提供完整的可关闭、带操作按钮的横幅体验；Announcement 适用于只读的、不关闭的轻量公告。
+- 在 Announcement 中放置交互控件。如需操作入口，请使用 Banner。
+- 将 Announcement 用于需要用户确认的重要通知，应使用 AlertDialog。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+Announcement 包裹 AnnouncementTag 和 AnnouncementTitle 构成标准公告条。
 
 <ComponentShowcase id="announcement" path="announcement/basic" />
 
 ```tsx
-import { Announcement } from "@/components/ui/announcement"
+import { Announcement, AnnouncementTag, AnnouncementTitle } from "@/components/ui/announcement"
 
 export default function Demo() {
-  return <Announcement className="w-full max-w-sm" />
+  return (
+    <Announcement>
+      <AnnouncementTag>新功能</AnnouncementTag>
+      <AnnouncementTitle>智能搜索已上线，试试用自然语言查找数据</AnnouncementTitle>
+    </Announcement>
+  )
+}
+```
+
+### 带主题 (themed)
+
+设置 `themed` 为 true 后，Announcement 启用主题感知的公告样式。
+
+```tsx
+import { Announcement, AnnouncementTag, AnnouncementTitle } from "@/components/ui/announcement"
+
+export default function Demo() {
+  return (
+    <Announcement themed>
+      <AnnouncementTag>重要</AnnouncementTag>
+      <AnnouncementTitle>系统将于今晚 22:00 进行维护升级</AnnouncementTitle>
+    </Announcement>
+  )
+}
+```
+
+### 不同类型标签
+
+AnnouncementTag 支持各种文本内容，用于区分公告类别。
+
+```tsx
+import { Announcement, AnnouncementTag, AnnouncementTitle } from "@/components/ui/announcement"
+
+export default function Demo() {
+  return (
+    <div className="space-y-3 w-full max-w-md">
+      <Announcement>
+        <AnnouncementTag>新功能</AnnouncementTag>
+        <AnnouncementTitle>暗色模式现已支持</AnnouncementTitle>
+      </Announcement>
+      <Announcement themed>
+        <AnnouncementTag>公告</AnnouncementTag>
+        <AnnouncementTitle>五一假期服务安排通知</AnnouncementTitle>
+      </Announcement>
+      <Announcement>
+        <AnnouncementTag>维护</AnnouncementTag>
+        <AnnouncementTitle>数据库升级预计耗时 30 分钟</AnnouncementTitle>
+      </Announcement>
+    </div>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/announcement/index.tsx` 中的 TypeScript 类型为准。
+### Announcement
+
+Announcement 基于 Badge 组件，继承 Badge 的全部 `ComponentProps`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| themed | 是否启用主题感知样式，开启后 Tag 背景半透明、边框变淡 | `boolean` | `false` |
+| variant | 继承自 Badge 的变体属性 | Badge variant | `"outline"` |
+| className | 附加 className，通过 cn 与默认样式合并 | `string` | - |
+| children | 公告内容，通常为 AnnouncementTag + AnnouncementTitle | `React.ReactNode` | - |
+
+同时支持 Badge 的其他 `ComponentProps`。
+
+### AnnouncementTag
+
+纯布局组件，用于展示公告分类标签。支持所有原生 `HTMLAttributes<HTMLDivElement>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式 | `string` | - |
+| children | 标签文本 | `React.ReactNode` | - |
+
+### AnnouncementTitle
+
+纯布局组件，用于展示公告正文内容。支持所有原生 `HTMLAttributes<HTMLDivElement>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式 | `string` | - |
+| children | 公告标题文本 | `React.ReactNode` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### Announcement 和 Banner 有什么区别？
+
+Announcement 是只读的轻量公告条，不可关闭、无操作按钮，适合展示简短的状态信息或通知。Banner 提供完整的可关闭、可带操作按钮的横幅体验，适合需要用户交互的场景。
+
+### 什么时候使用 themed 属性？
+
+当公告属于重要或紧急通知时，设置 `themed` 启用主题感知样式（边框变淡、Tag 背景半透明），视觉上与普通公告区分。普通功能更新通知可以不设置 themed。
+
+### 可以在 Announcement 中添加链接吗？
+
+可以。AnnouncementTitle 内部支持任意 ReactNode，可以嵌入链接：
+
+```tsx
+<AnnouncementTitle>
+  新版本已发布，
+  <a href="/changelog" className="underline">查看更新日志</a>
+</AnnouncementTitle>
+```
+
+但不推荐放置 Button 等交互控件——这会破坏 Announcement 的轻量只读语义。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/announcement` 导入。
+
+1. 从 `@/components/ui/announcement` 导入 Announcement、AnnouncementTag、AnnouncementTitle。
+2. Announcement 内必须包含 AnnouncementTag 和 AnnouncementTitle 子组件以形成完整公告结构。
+3. 使用 `themed` 属性启用主题感知样式，而不是手动覆盖 className。
+4. 不要在 Announcement 内放置 Button 或交互控件；如需操作入口请使用 Banner。
+5. AnnouncementTag 用于展示公告分类标签（如"新功能"、"公告"），AnnouncementTitle 用于展示正文。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="announcement" />

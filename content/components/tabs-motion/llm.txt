@@ -1,0 +1,214 @@
+---
+category: Blocks
+title: TabsMotion
+subtitle: 动效标签页
+description: 带高亮指示器和滑动切换动效的标签页复合组件，支持内容区高度自适应和模糊过渡。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 32
+source:
+  component: src/components/blocks/tabs-motion/index.tsx
+  docs: content/components/tabs-motion/index.mdx
+  examples:
+    - content/components/tabs-motion/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# TabsMotion 动效标签页
+
+基于 motion/react 的自定义标签页复合组件，由 `Tabs`（根容器）、`TabsList`（标签栏 + 高亮指示器）、`TabsTrigger`（标签按钮）、`TabsContents`（内容滑动容器）和 `TabsContent`（单一面板）组成。标签切换时展示高亮指示器平移动效，内容区高度自适应且面板间有模糊过渡。
+
+本组件为项目本地复合组件（Blocks），不使用 Radix Tabs，而是基于 `@/primitives/animate/tabs` 的自定义实现。无 Ant Design 直接对应。
+
+## 何时使用 {#when-to-use}
+
+当需要在界面中实现标签页切换并希望带有动效反馈时使用。
+
+常见场景：
+
+- 设置面板、详情页内的分类信息切换。
+- 仪表盘中的指标分类查看。
+- 登录/注册表单的 Tab 切换。
+- 需要视觉层次清晰的内容分类展示。
+
+推荐使用方式：
+
+- 使用受控模式（`value` + `onValueChange`）或非受控模式（`defaultValue`）。
+- `TabsList` 包裹 `TabsTrigger` 构建标签栏，`TabsContents` 包裹 `TabsContent` 构建内容区。
+- 每个 `TabsTrigger` 和对应 `TabsContent` 的 `value` 必须一致。
+
+不推荐：
+
+- 标签数量超过 6-8 个——应改用下拉选择或垂直导航。
+- 在标签页内嵌套另一层 TabsMotion。
+- 将 `TabsTrigger` 和 `TabsContent` 放在不同容器层级——它们依赖相同的 `Tabs` 祖先上下文。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+非受控模式下通过 `defaultValue` 设置初始激活标签。
+
+```tsx
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContents,
+  TabsContent,
+} from "@/components/ui/tabs-motion"
+
+export default function Demo() {
+  return (
+    <Tabs defaultValue="tab1" className="w-full max-w-sm">
+      <TabsList>
+        <TabsTrigger value="tab1">标签一</TabsTrigger>
+        <TabsTrigger value="tab2">标签二</TabsTrigger>
+        <TabsTrigger value="tab3">标签三</TabsTrigger>
+      </TabsList>
+      <TabsContents>
+        <TabsContent value="tab1">内容一</TabsContent>
+        <TabsContent value="tab2">内容二</TabsContent>
+        <TabsContent value="tab3">内容三</TabsContent>
+      </TabsContents>
+    </Tabs>
+  )
+}
+```
+
+## API {#api}
+
+### Tabs
+
+根容器，管理当前激活标签值的上下文。支持受控和非受控两种模式。
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| value | `string` | - | 受控模式下的当前激活值 |
+| defaultValue | `string` | - | 非受控模式下的初始激活值，默认为第一个注册的 trigger 的值 |
+| onValueChange | `(value: string) => void` | - | 切换标签时的回调，仅受控模式可用 |
+| className | `string` | - | 附加 className，与 `flex flex-col gap-2` 合并 |
+| children | `React.ReactNode` | - | 标签页内容 |
+
+### TabsList
+
+标签按钮容器，内部包裹高亮指示器（TabsHighlight）。渲染为 `role="tablist"` 的 `div`。
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| className | `string` | - | 附加 className，与默认样式合并 |
+| children | `React.ReactNode` | - | 通常放置 `TabsTrigger` |
+
+### TabsTrigger
+
+标签按钮，切换当前激活标签。渲染为 `role="tab"` 的 motion `button`。
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| value | `string` | 必填 | 标签值，需与对应 `TabsContent` 的 `value` 一致 |
+| asChild | `boolean` | `false` | 使用 Slot 合并到子元素 |
+| disabled | `boolean` | `false` | 禁用标签 |
+| className | `string` | - | 附加 className |
+| children | `React.ReactNode` | - | 标签显示内容 |
+
+### TabsContents
+
+内容面板滑动容器，根据当前激活值自动滑动到对应面板，并实现高度自适应动效。
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| transition | `Transition`（motion） | `{ type: 'spring', stiffness: 300, damping: 30, bounce: 0, restDelta: 0.01 }` | 高度和位移的动效配置 |
+| className | `string` | - | 附加 className |
+| children | `React.ReactNode` | - | 通常放置 `TabsContent` |
+
+### TabsContent
+
+单一面板，仅在对应 `value` 激活时可见。非激活面板设置 `inert` 且添加模糊效果。
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| value | `string` | 必填 | 面板值，需与对应 `TabsTrigger` 的 `value` 一致 |
+| asChild | `boolean` | `false` | 使用 Slot 合并到子元素 |
+| className | `string` | - | 附加 className，与 `outline-none` 合并 |
+| children | `React.ReactNode` | - | 面板内容 |
+
+## 样式模型 {#styling-model}
+
+- `Tabs`：`flex flex-col gap-2` 纵向弹性布局。
+- `TabsList`：包裹在 `TabsHighlight`（绝对定位的圆角背景高亮指示器）内，自身使用 `bg-muted text-muted-foreground inline-flex h-9 w-fit rounded-lg p-[3px]`。
+- `TabsTrigger`：包裹在 `TabsHighlightItem` 内，使用 `data-[state=active]:text-foreground` 切换激活态文本色，`transition-colors duration-500 ease-in-out` 实现颜色过渡。
+- `TabsContents`：`overflow: hidden`，通过 `motion.div` 的 `animate={{ height }}` 实现高度自适应，内部使用 `animate={{ x }}` 实现水平滑动。
+- `TabsContent`：非激活面板添加 `filter: blur(4px)` 模糊效果，激活时不模糊。
+- 所有样式使用 Tailwind CSS 和项目主题变量（`bg-background`、`bg-muted`、`text-foreground`、`text-muted-foreground`）。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/tabs-motion/index.tsx` — 完整实现
+- `src/components/ui/tabs-motion.tsx` — 重导出（`"use client"`）
+- `src/primitives/animate/tabs.tsx` — 底层原语（TabsContext、动画逻辑）
+- `src/primitives/effects/highlight.tsx` — 高亮指示器原语
+
+直接依赖摘要：
+
+- `motion/react`（motion.div、motion.button、AnimatePresence、Transition）
+- `@/primitives/animate/tabs`（自定义 Tabs 原语及高亮集成）
+- `@/primitives/effects/highlight`（Highlight、HighlightItem）
+- `@/lib/utils`（cn 样式合并工具）
+- Tailwind CSS
+
+实现注意：
+
+1. 组件基于自定义原语 `@/primitives/animate/tabs`，不使用 Radix Tabs。
+2. `Tabs` 内部管理 `activeValue` 状态，通过 React Context 分发给子组件。
+3. 非受控模式下，第一个注册的 trigger 自动成为默认激活值。
+4. `TabsContents` 使用 `ResizeObserver` 监听内容面板高度变化，动态调整容器高度。
+5. `TabsContents` 内部面板水平排列（`flex`），通过 `translateX` 实现滑动切换。
+6. `TabsContent` 非激活面板设置 `inert` 属性，禁用内部交互和焦点。
+7. 高亮指示器通过 `TabsHighlight` + `TabsHighlightItem` 实现，自动跟随激活标签的位置和尺寸。
+
+## 可访问性 {#accessibility}
+
+- `TabsList` 使用 `role="tablist"`。
+- `TabsTrigger` 使用 `role="tab"`，通过 `data-state` 标记激活/非激活态。
+- `TabsContent` 使用 `role="tabpanel"`，非激活面板设置 `inert` 确保不可聚焦和不可交互。
+- 组件不使用 ARIA `aria-controls` / `aria-labelledby` 自动关联，如需严格关联可结合 `id` 手动设置。
+- 禁用标签通过原生 `disabled` 属性阻止交互。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，无 Ant Design 直接对应。Ant Design 的 `Tabs` 基于 `rc-tabs`，提供丰富的标签位置（top/bottom/left/right）、标签类型（line/card/editable-card）、添加/删除标签等能力。本地 `TabsMotion` 定位于带动效的简单标签切换，不覆盖 AntD Tabs 的全部场景。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 底层实现 | 基于 `@/primitives/animate/tabs` 自定义，非 Radix Tabs 或 rc-tabs |
+| API 来源 | 以 `src/components/blocks/tabs-motion/index.tsx` 的 TypeScript 类型为准 |
+| 标签位置 | 仅顶部（水平），不支持 left/right/bottom |
+| 标签类型 | 仅 pill 风格，不支持 line/card/editable-card |
+| 动效 | motion/react 高亮指示器 + 内容滑动 + 高度自适应 + 模糊过渡 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 添加/删除标签 | 不支持 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 TabsMotion 代码时，应遵守：
+
+1. 从 `@/components/ui/tabs-motion` 导入，不要从 `antd` 或 `radix-ui` 导入 Tabs。
+2. 只使用本文件 API 表格和源码中存在的 props，不要凭 AntD Tabs 的 API 记忆生成（如 `tabPosition`、`type`、`tabBarExtraContent` 等不存在）。
+3. `TabsTrigger` 和 `TabsContent` 的 `value` 属性必须唯一且一一对应。
+4. `TabsContents` 必须包裹所有 `TabsContent`，不要将 `TabsContent` 放在其他容器中。
+5. 标签数控制在 2-6 个，超出建议使用其他导航模式。
+6. 受控模式下使用 `value` + `onValueChange`；非受控模式下只使用 `defaultValue`。
+7. 不要生成 AntD 的 `Tabs.TabPane` 声明式子组件写法。
+8. 按钮的 `disabled` 属性使用原生 boolean，不要使用 AntD 的 `disabled` 配置对象。
+9. `TabsTrigger` 的图标通过 `children` 内联 SVG 或 Icon 组件实现，没有独立的 `icon` prop。

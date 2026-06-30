@@ -73,7 +73,15 @@ export default function Demo() {
 
 以下类型来自本地源码，是生成代码时的主要依据：
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+### QRCode
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 要编码的数据 | `string` | - |
+| foreground | 前景色，支持 CSS 颜色字符串 | `string` | `--foreground` |
+| background | 背景色，支持 CSS 颜色字符串 | `string` | `--background` |
+| robustness | 纠错级别 | `"L"` \| `"M"` \| `"Q"` \| `"H"` | `"M"` |
+| className | 自定义样式类名 | `string` | - |
 
 ## Semantic DOM {#semantic-dom}
 

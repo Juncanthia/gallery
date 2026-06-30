@@ -1,45 +1,282 @@
-Combobox 组合输入框与下拉选择，支持搜索和自由输入，基于 Radix Combobox 实现。
+Combobox 组合框，基于 @base-ui/react 实现，提供搜索过滤的下拉选择能力。支持单选、多选（Chips 模式）、分组，包含完整的子组件体系，可灵活自定义下拉 UI 布局。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当选项数量较多，需要通过键盘输入快速筛选并选择，或需要高度自定义下拉 UI 布局时使用。
+
+常见场景：
+
+- 搜索并选择：在大量候选项中通过关键词实时筛选。
+- 标签输入（Chips 模式）：多选值以 Chip 标签形式展示，支持键盘输入过滤添加新标签。
+- 命令面板：作为 Command 或全局搜索的底层交互组件。
+- 表单自动补全：输入时实时匹配并推荐候选项。
+- 需要高度自定义下拉 UI（如自定义空态、分组样式、异步加载）时。
+
+不推荐：
+
+- 简单下拉选择（少于 10 个选项），优先使用 Select（基于 Combobox 的 API 封装，更简洁）。
+- 纯多选无搜索过滤，使用 Checkbox 组或多选 Tag 组即可。
+- 在移动端大量使用依赖悬停定位的弹出层。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="combobox" path="combobox/basic" />
 
 ```tsx
-import { Combobox } from "@/components/ui/combobox"
-export default function Demo() { return <Combobox options={[{ label: "选项一", value: "1" }, { label: "选项二", value: "2" }]} placeholder="选择或搜索..." className="w-48" /> }
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxEmpty,
+} from "@/components/ui/combobox"
+
+const options = [
+  { label: "Apple", value: "apple" },
+  { label: "Banana", value: "banana" },
+  { label: "Cherry", value: "cherry" },
+]
+
+export default function Demo() {
+  return (
+    <Combobox>
+      <ComboboxInput placeholder="搜索..." className="w-48" />
+      <ComboboxContent>
+        <ComboboxEmpty>No results found.</ComboboxEmpty>
+        <ComboboxList>
+          {options.map((opt) => (
+            <ComboboxItem key={opt.value} value={opt.value}>
+              {opt.label}
+            </ComboboxItem>
+          ))}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  )
+}
+```
+
+### 带分组和清除按钮
+
+```tsx
+import {
+  Combobox, ComboboxInput, ComboboxContent, ComboboxList,
+  ComboboxItem, ComboboxEmpty, ComboboxGroup, ComboboxLabel, ComboboxClear,
+} from "@/components/ui/combobox"
+
+export default function Demo() {
+  return (
+    <Combobox>
+      <ComboboxInput placeholder="搜索水果..." showClear className="w-52" />
+      <ComboboxContent>
+        <ComboboxEmpty>无匹配结果</ComboboxEmpty>
+        <ComboboxGroup>
+          <ComboboxLabel>热带水果</ComboboxLabel>
+          <ComboboxItem value="mango">芒果</ComboboxItem>
+          <ComboboxItem value="pineapple">菠萝</ComboboxItem>
+        </ComboboxGroup>
+        <ComboboxGroup>
+          <ComboboxLabel>浆果类</ComboboxLabel>
+          <ComboboxItem value="strawberry">草莓</ComboboxItem>
+          <ComboboxItem value="blueberry">蓝莓</ComboboxItem>
+        </ComboboxGroup>
+      </ComboboxContent>
+    </Combobox>
+  )
+}
+```
+
+### 多选标签（Chips）模式
+
+```tsx
+import {
+  Combobox, ComboboxChips, ComboboxChip, ComboboxChipsInput,
+  ComboboxContent, ComboboxList, ComboboxItem, ComboboxEmpty,
+} from "@/components/ui/combobox"
+
+export default function Demo() {
+  return (
+    <Combobox multiple className="w-72">
+      <ComboboxChips>
+        <ComboboxChip value="react">React</ComboboxChip>
+        <ComboboxChip value="vue">Vue</ComboboxChip>
+        <ComboboxChipsInput placeholder="添加技术栈..." />
+      </ComboboxChips>
+      <ComboboxContent>
+        <ComboboxEmpty>无结果</ComboboxEmpty>
+        <ComboboxList>
+          <ComboboxItem value="react">React</ComboboxItem>
+          <ComboboxItem value="vue">Vue</ComboboxItem>
+          <ComboboxItem value="angular">Angular</ComboboxItem>
+          <ComboboxItem value="svelte">Svelte</ComboboxItem>
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  )
+}
 ```
 
 <h2 id="api">API</h2>
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| options | 候选项 | `SelectOption[]` |
-| value | 受控值 | `string \| string[]` |
-| mode | `"multiple"` 启用多选 | `string` |
+
+### Combobox (Root)
+
+直接使用 Base UI `ComboboxPrimitive.Root`。接受其所有 props，包括 `multiple`、`value`、`onValueChange`、`defaultValue` 等核心状态管理。
+
+### ComboboxInput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showTrigger | 是否显示下拉箭头触发器 | `boolean` | `true` |
+| showClear | 是否显示清除按钮 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.Input.Props`。渲染为 `InputGroup`，内部包含 Input、可选的 Trigger 按钮和 Clear 按钮。
+
+### ComboboxTrigger
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+| children | 触发器内容 | `React.ReactNode` | - |
+
+继承 Base UI `ComboboxPrimitive.Trigger.Props`。默认渲染 ChevronDown 图标。
+
+### ComboboxContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 弹出方向 | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` |
+| sideOffset | 距触发器偏移量 | `number` | `6` |
+| align | 对齐方式 | `"start"` \| `"center"` \| `"end"` | `"start"` |
+| alignOffset | 对齐偏移量 | `number` | `0` |
+| anchor | 锚点元素引用 | `HTMLElement` \| `null` \| `React.RefObject` | - |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.Popup.Props`。自动通过 Portal + Positioner 提供定位和层叠上下文。
+
+### ComboboxList
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.List.Props`。可滚动选项列表容器，自动处理虚拟滚动和键盘导航。
+
+### ComboboxItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+| children | 选项内容 | `React.ReactNode` | - |
+| value | 选项值 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.Item.Props`。选中项自动显示 CheckIcon。支持 `disabled` 状态。
+
+### ComboboxGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.Group.Props`。选项分组容器。
+
+### ComboboxLabel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.GroupLabel.Props`。分组标签，用于 ComboboxGroup 内部。
+
+### ComboboxValue
+
+渲染当前选中值的文本。继承 Base UI `ComboboxPrimitive.Value.Props`。
+
+### ComboboxClear
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.Clear.Props`。渲染为 X 图标按钮（IconButton variant="text"）。
+
+### ComboboxEmpty
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.Empty.Props`。无选项匹配时显示的内容，默认隐藏，仅在列表为空时展示。
+
+### ComboboxSeparator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 Base UI `ComboboxPrimitive.Separator.Props`。分隔线。
+
+### ComboboxCollection
+
+定义选项集合。继承 Base UI `ComboboxPrimitive.Collection.Props`。
+
+### ComboboxChips
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+多选标签容器，样式为 flex wrap 带 input 边框。继承 Base UI `ComboboxPrimitive.Chips.Props`。
+
+### ComboboxChip
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showRemove | 是否显示移除按钮 | `boolean` | `true` |
+| className | CSS 类名 | `string` | - |
+| children | 标签内容 | `React.ReactNode` | - |
+
+单个多选标签。继承 Base UI `ComboboxPrimitive.Chip.Props`。移除按钮渲染为 X 图标。
+
+### ComboboxChipsInput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+多选标签区域内的输入框。继承 Base UI `ComboboxPrimitive.Input.Props`。
+
+### useComboboxAnchor()
+
+返回 `React.RefObject<HTMLDivElement>`，用于绑定锚点元素。传递给 `ComboboxContent` 的 `anchor` prop 以自定义弹出定位。
+
+<h2 id="faq">常见问题</h2>
+
+### Combobox 和 Select 的区别？
+
+`Combobox` 是基于 @base-ui/react 的底层复合组件，需手动组装所有子组件，灵活度最高，适合需要自定义 UI 和交互的场景。`Select` 是基于同一 primitive 的 API 层封装，通过 `options` 配置使用，更简洁，适合常规下拉选择。
+
+选择建议：需要搜索过滤、自定义下拉布局、异步加载时使用 Combobox；常规下拉选择使用 Select。
+
+### 如何实现异步选项加载？
+
+通过监听输入变化动态更新选项列表。使用受控模式管理 value 和 onInputValueChange，在外部维护 options 状态，当输入变化时异步查询并更新选项数组。
+
+### ComboboxChip 的 showRemove 何时关闭？
+
+当标签不允许用户手动移除时（如系统预置标签），设置 `showRemove={false}` 隐藏移除按钮。此时标签仍然可选，但呈现只读状态。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/combobox` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `combobox-chip` | - |
-| `combobox-chip-input` | - |
-| `combobox-chip-remove` | - |
-| `combobox-chips` | - |
-| `combobox-clear` | - |
-| `combobox-collection` | - |
-| `combobox-content` | - |
-| `combobox-empty` | - |
-| `combobox-group` | - |
-| `combobox-item` | - |
-| `combobox-label` | - |
-| `combobox-list` | - |
-| `combobox-separator` | - |
-| `combobox-trigger` | - |
-| `combobox-value` | - |
-| `input-group-button` | - |
+1. 从 `@/components/ui/combobox` 导入所需子组件。
+2. `ComboboxInput` 必须在 `Combobox` 的直接子级或通过 `ComboboxChips` 使用。
+3. `ComboboxEmpty`、`ComboboxList` 需要包裹在 `ComboboxContent` 内。
+4. `ComboboxContent` 自动创建 Portal + Positioner 定位，无需手动处理。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="combobox" />

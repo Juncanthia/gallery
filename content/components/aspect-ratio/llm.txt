@@ -68,11 +68,16 @@ export default function Demo() {
 
 - `AspectRatio`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### AspectRatio
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| ratio | 宽高比，宽度/高度 | `number` | `1` |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 本组件包装 Radix UI `AspectRatio.Root`，接受其所有 props（包括标准 HTML div 属性）。上表仅列出最常用的自定义属性。
 
 ## Semantic DOM {#semantic-dom}
 

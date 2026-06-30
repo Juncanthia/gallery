@@ -1,14 +1,26 @@
-CopyButton 一键复制文本内容并给出视觉反馈，点击后图标切换为对勾并在数秒后恢复。
+复制按钮 CopyButton。一键复制文本内容并给出视觉反馈，点击后图标从复制图标切换为对勾并在延迟后恢复。基于 Button 封装，继承其所有视觉属性。
 
 <h2 id="when-to-use">何时使用</h2>
 
-当需要用户快速复制代码片段、链接、命令或其他文本时使用。点击后自动调用 `navigator.clipboard.writeText`，并展示复制成功动效。
+当需要用户快速复制代码片段、链接、命令或其他文本时使用。
+
+常见场景：
+- 代码块旁的一键复制按钮。
+- 分享链接旁的复制控件。
+- 安装命令（npm/pip）的复制操作。
+- API Key 或 Token 等敏感信息的安全复制。
+- 文本内容的便捷复制入口。
+
+不推荐：
+- 在 CopyButton 外面再包一层 Button，CopyButton 本身就是 Button 的封装。
+- 复制非文本内容（如图片、二进制数据），CopyButton 仅支持 `navigator.clipboard.writeText`。
+- 不传 `content` 属性，该属性为必填。
 
 <h2 id="examples">代码演示</h2>
 
 ### 基础用法
 
-传入 `content` 指定要复制的文本。
+传入 `content` 指定要复制的文本。CopyButton 是 Button 的封装，支持所有 Button 的视觉属性。
 
 <ComponentShowcase
   id="copy-button"
@@ -38,24 +50,81 @@ export default function Demo() {
 }
 ```
 
+### 自定义外观和延迟
+
+```tsx
+import { CopyButton } from "@/components/ui/copy-button"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <CopyButton
+        content="npm install @project/ui"
+        variant="outlined"
+        size="middle"
+        shape="default"
+        delay={1500}
+      />
+      <CopyButton
+        content="secret-token-abc123"
+        color="primary"
+        variant="solid"
+      />
+    </div>
+  )
+}
+```
+
+### 受控模式
+
+传入 `copied` 和 `onCopiedChange` 实现外部状态管理。
+
+```tsx
+import { useState } from "react"
+import { CopyButton } from "@/components/ui/copy-button"
+
+export default function Demo() {
+  const [copied, setCopied] = useState(false)
+
+  return (
+    <div className="flex items-center gap-2">
+      <code className="rounded bg-muted px-2 py-1 text-sm">secret-api-key-123</code>
+      <CopyButton
+        content="secret-api-key-123"
+        copied={copied}
+        onCopiedChange={(v, content) => setCopied(v)}
+      />
+    </div>
+  )
+}
+```
+
 <h2 id="api">API</h2>
 
 ### CopyButton
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| content | 要复制的文本内容 | `string` | 必填 |
+| content | 要复制的文本内容（必填） | `string` | - |
 | copied | 受控的已复制状态 | `boolean` | - |
 | onCopiedChange | 复制状态变化回调 | `(copied: boolean, content?: string) => void` | - |
 | delay | 复制成功后图标恢复的延迟（毫秒） | `number` | `3000` |
+| size | 按钮尺寸（继承自 Button） | `"small"` \| `"middle"` \| `"large"` | `"small"` |
+| shape | 按钮形状（继承自 Button） | `"default"` \| `"circle"` \| `"square"` | `"square"` |
+| variant | 按钮变体（继承自 Button） | `"solid"` \| `"outlined"` \| `"text"` 等 | `"text"` |
+| color | 按钮颜色（继承自 Button） | `"primary"` \| `"danger"` 等 | - |
+| className | 附加样式类名 | `string` | - |
+| disabled | 是否禁用 | `boolean` | - |
 
-继承 Button 的所有属性（`size`、`shape`、`variant`、`color` 等），默认 `size="small"` `shape="square"` `variant="text"`。
+继承 Button 的所有属性（`icon`、`loading`、`htmlType` 等）。内部使用 `useControlledState` 管理复制状态，支持受控和非受控两种模式。复制动画基于 Motion 的 `AnimatePresence` 实现图标切换。
+
+稳定语义槽位：`data-slot="copy-button"`（按钮容器）、`data-slot="copy-button-icon"`（图标容器）。
 
 <h2 id="faq">常见问题</h2>
 
 ### 如何自定义复制成功后的反馈时长？
 
-通过 `delay` 属性设置毫秒数：
+通过 `delay` 属性设置毫秒数。默认 3000ms（3 秒）。
 
 ```tsx
 <CopyButton content="text" delay={1500} />
@@ -66,28 +135,29 @@ export default function Demo() {
 CopyButton 继承 Button 的所有样式属性：
 
 ```tsx
-<CopyButton content="text" variant="outlined" size="middle" shape="default" />
+<CopyButton content="text" variant="outlined" size="middle" shape="default" color="primary" />
 ```
+
+### 如何在受控模式下使用？
+
+传入 `copied` 和 `onCopiedChange` 实现受控：
+
+```tsx
+const [copied, setCopied] = useState(false)
+<CopyButton content="text" copied={copied} onCopiedChange={(v, content) => setCopied(v)} />
+```
+
+### CopyButton 复制失败时如何处理？
+
+内置了 try-catch 错误处理，复制失败时在控制台输出错误日志。可通过 `onCopiedChange` 回调的第一个参数判断是否成功（`true` 为成功）。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-AI 生成 CopyButton 代码时：
-
 1. 从 `@/components/ui/copy-button` 导入。
-2. 必须提供 `content` 属性。
+2. 必须提供 `content` 属性，该属性为必填。
 3. CopyButton 是 Button 的封装，支持所有 Button 的视觉属性，不需要再包一层 Button。
-4. 不要引入 Ant Design 相关依赖。
-
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `copy-button` | - |
-| `copy-button-icon` | - |
+4. 支持受控和非受控两种模式，通过 `copied`/`onCopiedChange` 实现受控。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
-
 <SourceViewer componentId="copy-button" />

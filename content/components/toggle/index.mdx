@@ -1,10 +1,30 @@
-Toggle 切换按钮，用于在两种状态间切换，基于 Radix Toggle 实现。
+切换按钮 Toggle。基于 Radix Toggle 原语封装的切换按钮组件，支持按压态管理、多种尺寸和变体样式，常用于工具栏中的格式切换。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要按钮在"选中"和"未选中"两种状态间切换时使用，适用于工具栏、过滤器等场景。
+
+常见场景：
+- 文本编辑器工具栏（加粗、斜体、下划线切换）
+- 筛选器/标签的多选切换
+- 视图模式切换（列表/网格）
+- 功能开关按钮
+
+不推荐：
+- 表单中的开关控件——使用 Switch 组件
+- 需要互斥选择的场景——使用 ToggleGroup 或 RadioGroup
+- 需要长文本标签的切换——使用 Checkbox 或 Switch
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="toggle" path="toggle/basic" />
 
 ```tsx
 import { Toggle } from "@/components/ui/toggle"
 import { Bold, Italic, Underline } from "lucide-react"
+
 export default function Demo() {
   return (
     <div className="flex gap-2">
@@ -16,20 +36,115 @@ export default function Demo() {
 }
 ```
 
+### 轮廓变体
+
+```tsx
+import { Toggle } from "@/components/ui/toggle"
+import { Bold, Italic, Underline } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-2">
+      <Toggle variant="outline" aria-label="加粗">
+        <Bold className="size-4" />
+      </Toggle>
+      <Toggle variant="outline" aria-label="斜体">
+        <Italic className="size-4" />
+      </Toggle>
+      <Toggle variant="outline" aria-label="下划线">
+        <Underline className="size-4" />
+      </Toggle>
+    </div>
+  )
+}
+```
+
+### 不同尺寸
+
+```tsx
+import { Toggle } from "@/components/ui/toggle"
+import { Star } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <div className="flex items-center gap-2">
+      <Toggle size="sm" aria-label="收藏"><Star className="size-4" /></Toggle>
+      <Toggle size="default" aria-label="收藏"><Star className="size-4" /></Toggle>
+      <Toggle size="lg" aria-label="收藏"><Star className="size-4" /></Toggle>
+    </div>
+  )
+}
+```
+
+### 受控模式
+
+```tsx
+import { useState } from "react"
+import { Toggle } from "@/components/ui/toggle"
+import { Mic, MicOff } from "lucide-react"
+
+export default function Demo() {
+  const [isMuted, setIsMuted] = useState(false)
+
+  return (
+    <Toggle
+      pressed={isMuted}
+      onPressedChange={setIsMuted}
+      aria-label={isMuted ? "取消静音" : "静音"}
+    >
+      {isMuted ? <MicOff className="size-4" /> : <Mic className="size-4" />}
+    </Toggle>
+  )
+}
+```
+
 <h2 id="api">API</h2>
+
+### Toggle
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| pressed | 受控按下状态 | `boolean` | - |
-| defaultPressed | 默认状态 | `boolean` | `false` |
-| onPressedChange | 状态回调 | `(pressed: boolean) => void` | - |
+| pressed | 受控按压状态 | `boolean` | - |
+| defaultPressed | 默认按压状态（非受控） | `boolean` | `false` |
+| onPressedChange | 按压状态变化回调 | `(pressed: boolean) => void` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| variant | 样式变体 | `"default"` \| `"outline"` | `"default"` |
+| size | 尺寸 | `"default"` \| `"sm"` \| `"lg"` \| `"icon"` | `"default"` |
+| className | 附加样式类名 | `string` | - |
+
+样式变体：
+- `default`：透明背景，`data-[state=on]` 时高亮文字色
+- `outline`：带边框和阴影，激活态背景变化
+
+尺寸映射：
+- `sm`：h-8 px-1.5 min-w-8
+- `default`：h-9 px-2 min-w-9
+- `lg`：h-10 px-2.5 min-w-10
+- `icon`：size-9（正方形图标按钮）
+
+导出：
+- `Toggle` — 组件
+- `ToggleProps` — 组件 Props 类型
+- `toggleVariants` — CVA 变体定义（可用于 `ToggleGroup` 等扩展）
+
+<h2 id="faq">常见问题</h2>
+
+### Toggle 和 Switch 有什么区别？
+Toggle 是一个按钮，在点击时切换"按下/未按下"状态，视觉上类似工具栏的格式按钮。Switch 是一个开关控件，视觉上类似 iOS 的滑动开关。Toggle 适合工具选项，Switch 适合表单设置。
+
+### 如何在 ToggleGroup 中使用 toggleVariants？
+`toggleVariants` 提供了 CVA 变体函数，可用于自定义扩展或 `ToggleGroup` 中统一样式。直接在需要的地方调用 `toggleVariants({ variant, size })` 获取对应 className。
+
+### 纯图标 Toggle 需要补充什么？
+纯图标 Toggle 必须设置 `aria-label`，为屏幕阅读器提供可访问名称。否则视障用户无法理解按钮的功能。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/toggle` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/toggle` 导入，不要从 `antd` 导入。
+2. 受控模式使用 `pressed` + `onPressedChange`；非受控模式使用 `defaultPressed`。
+3. 纯图标 Toggle 必须提供 `aria-label`。
+4. `variant` 支持 `"default"`（透明背景）和 `"outline"`（带边框），`size` 支持 `"sm"`、`"default"`、`"lg"`、`"icon"`。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="toggle" />

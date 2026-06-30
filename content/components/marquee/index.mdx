@@ -1,21 +1,168 @@
-Marquee 复合组件。
+跑马灯 Marquee。基于 react-fast-marquee 的滚动展示复合组件，支持水平无缝滚动、两侧渐隐遮罩和无限循环播放。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以滚动播放方式展示一系列内容时使用。
+
+常见场景：
+- 公告条、通知滚动展示
+- 品牌 Logo 墙的自动轮播
+- 标签、关键词的自动滚动展示
+- 图片画廊的水平自动滚动
+
+不推荐：
+- 需要用户手动控制的轮播——使用 Carousel 组件
+- 只有少量固定内容、无需滚动的场景
+- 在跑马灯中放置交互式控件（按钮、链接等）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="marquee" path="marquee/basic" />
 
 ```tsx
-import { Marquee } from "@/components/ui/marquee"
+import {
+  Marquee,
+  MarqueeContent,
+  MarqueeItem,
+} from "@/components/ui/marquee"
 
 export default function Demo() {
-  return <Marquee className="w-full max-w-sm" />
+  return (
+    <Marquee>
+      <MarqueeContent>
+        <MarqueeItem>公告一：系统将于今晚升级维护</MarqueeItem>
+        <MarqueeItem>公告二：新版本已上线</MarqueeItem>
+        <MarqueeItem>公告三：请及时更新密码</MarqueeItem>
+      </MarqueeContent>
+    </Marquee>
+  )
+}
+```
+
+### 带渐隐遮罩
+
+```tsx
+import {
+  Marquee,
+  MarqueeContent,
+  MarqueeFade,
+  MarqueeItem,
+} from "@/components/ui/marquee"
+
+export default function Demo() {
+  return (
+    <Marquee>
+      <MarqueeFade side="left" />
+      <MarqueeFade side="right" />
+      <MarqueeContent>
+        <MarqueeItem>内容一</MarqueeItem>
+        <MarqueeItem>内容二</MarqueeItem>
+        <MarqueeItem>内容三</MarqueeItem>
+      </MarqueeContent>
+    </Marquee>
+  )
+}
+```
+
+### 控制滚动方向与速度
+
+```tsx
+import {
+  Marquee,
+  MarqueeContent,
+  MarqueeItem,
+} from "@/components/ui/marquee"
+
+export default function Demo() {
+  return (
+    <Marquee>
+      <MarqueeContent direction="right" speed={30}>
+        <MarqueeItem>内容 1</MarqueeItem>
+        <MarqueeItem>内容 2</MarqueeItem>
+        <MarqueeItem>内容 3</MarqueeItem>
+      </MarqueeContent>
+    </Marquee>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/marquee/index.tsx` 中的 TypeScript 类型为准。
+### Marquee
+
+跑马灯最外层容器，提供 `overflow-hidden` 裁剪和相对定位上下文。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `HTMLAttributes<HTMLDivElement>` 的所有原生属性。
+
+### MarqueeContent
+
+滚动内容组件，封装 `react-fast-marquee`，控制滚动行为。`MarqueeContentProps` 等同于 `FastMarqueeProps`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| loop | 循环次数，`0` 表示无限循环 | `number` | `0` |
+| autoFill | 内容不足以覆盖容器宽度时自动重复填充 | `boolean` | `true` |
+| pauseOnHover | 鼠标悬停时暂停滚动 | `boolean` | `true` |
+| speed | 滚动速度（像素/秒） | `number` | - |
+| direction | 滚动方向 | `"left"` \| `"right"` | - |
+| gradient | 是否显示内置渐变遮罩 | `boolean` | - |
+| gradientColor | 渐变遮罩颜色 | `string` | - |
+| gradientWidth | 渐变遮罩宽度 | `number` \| `string` | - |
+| play | 是否播放 | `boolean` | - |
+| delay | 播放延迟（秒） | `number` | - |
+| className | 附加样式类名 | `string` | - |
+| children | 滚动内容（通常为 MarqueeItem） | `ReactNode` | - |
+
+### MarqueeFade
+
+两侧渐隐遮罩，用于在滚动内容边缘产生渐隐效果。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 遮罩位置 | `"left"` \| `"right"` | 必填 |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `HTMLAttributes<HTMLDivElement>` 的所有原生属性。
+
+### MarqueeItem
+
+滚动项的包裹容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `HTMLAttributes<HTMLDivElement>` 的所有原生属性。
+
+<h2 id="faq">常见问题</h2>
+
+### MarqueeFade 和 MarqueeContent 自带的 gradient 有何区别？
+
+推荐使用独立的 `MarqueeFade` 组件而非 `MarqueeContent` 的 `gradient` prop。`MarqueeFade` 提供左右侧独立控制，位置更灵活，且使用项目主题变量（`from-background`）确保与页面背景一致。
+
+### 如何暂停滚动？
+
+`pauseOnHover` 默认为 `true`，鼠标悬停即暂停。如需永久暂停，设置 `play={false}`。
+
+### 可以设置只滚动指定次数吗？
+
+通过 `MarqueeContent` 的 `loop` 属性，传入正整数值即可，例如 `loop={3}` 表示滚动 3 圈后停止。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/marquee` 导入。
+
+1. 从 `@/components/ui/marquee` 导入全部子组件。
+2. `Marquee` 作为最外层容器，内部放置 `MarqueeContent` 和可选的 `MarqueeFade`。
+3. 滚动项使用 `MarqueeItem` 包裹，确保间距一致。
+4. 需要渐隐效果时，同时添加左右两侧的 `MarqueeFade`。
+5. `MarqueeContent` 支持 `react-fast-marquee` 的全部配置，如 `speed`、`direction`。
+6. 不要在跑马灯中放置交互式控件。
+7. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="marquee" />

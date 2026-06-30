@@ -1,26 +1,168 @@
-Transfer 双栏穿梭选择框，在两侧列表间移动选项。
+穿梭框 Transfer。双栏穿梭选择框，在左右两个列表之间移动选项。支持搜索过滤、全选、受控/非受控模式以及单向穿梭。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在两组数据之间进行"选择-移动"操作时使用，左侧为源数据，右侧为已选中数据，通过中间的移动按钮在两栏间穿梭。
+
+常见场景：
+- 权限管理：将可用权限从左栏移动到用户的已授权权限右栏。
+- 列配置：从可用列中选取需要展示的表格列。
+- 人员分配：将候选人员移动到已分配人员列表。
+- 标签/分类管理：从标签池中选取当前文档关联的标签。
+
+不推荐：
+- 选项数量非常大（上百项）——穿梭框的两栏布局在大数据量下操作效率低，应考虑使用 Select 的 multiple 模式配合搜索。
+- 只需简单多选——使用 Checkbox.Group 或 Select multiple 模式更简洁。
+- 选项有复杂层级——Transfer 是扁平列表，无层级概念，使用 Tree 组件替代。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="transfer" path="transfer/basic" />
 
 ```tsx
 import { Transfer } from "@/components/ui/transfer"
-export default function Demo() { return <Transfer dataSource={[{ key: "1", title: "项目一" }, { key: "2", title: "项目二" }]} targetKeys={[]} className="max-w-md" /> }
+
+export default function Demo() {
+  const dataSource = [
+    { key: "1", title: "项目一" },
+    { key: "2", title: "项目二" },
+    { key: "3", title: "项目三" },
+    { key: "4", title: "项目四", disabled: true },
+  ]
+
+  return (
+    <Transfer
+      dataSource={dataSource}
+      defaultTargetKeys={["2"]}
+      titles={["待选", "已选"]}
+      className="max-w-md"
+    />
+  )
+}
+```
+
+### 带搜索
+
+```tsx
+import { Transfer } from "@/components/ui/transfer"
+
+export default function Demo() {
+  const dataSource = [
+    { key: "1", title: "管理员" },
+    { key: "2", title: "编辑者" },
+    { key: "3", title: "观察者" },
+    { key: "4", title: "评论者" },
+  ]
+
+  return (
+    <Transfer
+      dataSource={dataSource}
+      targetKeys={["1"]}
+      showSearch
+      titles={["可用角色", "已分配角色"]}
+      className="max-w-md"
+    />
+  )
+}
+```
+
+### 单向穿梭
+
+`oneWay` 为 `true` 时仅允许从左向右移动，隐藏左移按钮。
+
+```tsx
+import { Transfer } from "@/components/ui/transfer"
+
+export default function Demo() {
+  return (
+    <Transfer
+      dataSource={[
+        { key: "a", title: "选项 A" },
+        { key: "b", title: "选项 B" },
+        { key: "c", title: "选项 C" },
+      ]}
+      defaultTargetKeys={[]}
+      oneWay
+      titles={["来源", "已添加"]}
+      className="max-w-md"
+    />
+  )
+}
+```
+
+### 自定义渲染
+
+```tsx
+import { Transfer, type TransferItem } from "@/components/ui/transfer"
+
+export default function Demo() {
+  return (
+    <Transfer
+      dataSource={[
+        { key: "1", title: "张三", description: "前端团队" },
+        { key: "2", title: "李四", description: "后端团队" },
+        { key: "3", title: "王五", description: "设计团队" },
+      ]}
+      defaultTargetKeys={["1"]}
+      render={(item: TransferItem) => (
+        <span>{item.title} <span className="text-muted-foreground">({item.description})</span></span>
+      )}
+      titles={["候选人", "已分配"]}
+      className="max-w-md"
+    />
+  )
+}
 ```
 
 <h2 id="api">API</h2>
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| dataSource | 数据源 | `TransferItem[]` |
-| targetKeys | 右侧选中项 | `string[]` |
-| onChange | 变化回调 | `(targetKeys) => void` |
+
+### Transfer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataSource | 数据源，必填 | `TransferItem[]` | - |
+| targetKeys | 右侧目标项 key 列表（受控） | `string[]` | - |
+| defaultTargetKeys | 默认目标项 key 列表（非受控） | `string[]` | `[]` |
+| onChange | 穿梭变化回调 | `(targetKeys: string[], direction: 'left' \| 'right', moveKeys: string[]) => void` | - |
+| titles | 左右栏标题 | `[string, string]` | `['Source', 'Target']` |
+| showSearch | 是否显示搜索框 | `boolean` | `false` |
+| filterOption | 自定义搜索过滤函数 | `(inputValue: string, item: TransferItem) => boolean` | 默认按 title 大小写不敏感匹配 |
+| render | 自定义列表项渲染 | `(item: TransferItem) => ReactNode` | 渲染 item.title |
+| disabled | 是否禁用整个穿梭框 | `boolean` | `false` |
+| oneWay | 是否仅允许单向穿梭（仅左到右） | `boolean` | `false` |
+| className | 自定义样式类名 | `string` | - |
+
+### TransferItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| key | 唯一标识 | `string` | - |
+| title | 显示标题 | `string` | - |
+| description | 辅助描述文本 | `string` | - |
+| disabled | 是否禁用该项 | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+
+### Transfer 和 Select multiple 的区别？
+Transfer 提供左右两栏的可视化穿梭界面，适合选项数量适中且需要直观看到"已选/未选"两组的场景。Select multiple 是下拉多选，更节省空间，适合选项较多或界面空间有限的场景。
+
+### 受控和非受控模式如何选择？
+传入 `targetKeys`（不传 `defaultTargetKeys`）为受控模式，需配合 `onChange` 管理状态。传入 `defaultTargetKeys` 为非受控模式，组件内部维护状态。二者互斥，不可同时传入。
+
+### 如何自定义搜索逻辑？
+使用 `filterOption` 传入自定义过滤函数，接收搜索输入值和当前项，返回布尔值决定是否匹配。默认按 `title` 大小写不敏感匹配。设置 `showSearch={true}` 启用搜索。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/transfer` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/transfer` 导入 `Transfer` 和 `TransferItem`，不要从 `antd` 导入。
+2. `dataSource` 必传，每项至少包含 `key` 和 `title`。
+3. 受控模式传 `targetKeys` + `onChange`，非受控模式传 `defaultTargetKeys`，二者互斥。
+4. 需要搜索功能时设置 `showSearch`，复杂匹配用 `filterOption`。
+5. 自定义列表项外观使用 `render` 属性。
+6. 单向场景设置 `oneWay={true}`，隐藏左移按钮。
+7. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="transfer" />

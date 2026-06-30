@@ -73,7 +73,22 @@ export default function Demo() {
 
 以下类型来自本地源码，是生成代码时的主要依据：
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+### TimePicker
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 当前时间值（受控） | `string` | - |
+| defaultValue | 默认时间值（非受控） | `string` | `"00:00:00"` |
+| onChange | 时间变化回调 | `(value: string) => void` | - |
+| format | 时间显示格式 | `"HH:mm:ss"` \| `"HH:mm"` \| `"mm:ss"` | `"HH:mm:ss"` |
+| use12Hours | 是否使用 12 小时制 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| placeholder | 未选择时的占位文本 | `string` | `"Select time"` |
+| hourStep | 小时列步长 | `number` | `1` |
+| minuteStep | 分钟列步长 | `number` | `1` |
+| secondStep | 秒列步长 | `number` | `1` |
+| className | 自定义容器样式类名 | `string` | - |
+| triggerClassName | 自定义触发器样式类名 | `string` | - |
 
 ## Semantic DOM {#semantic-dom}
 

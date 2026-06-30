@@ -1,6 +1,84 @@
-List 通用列表组件，提供统一的列表容器和列表项样式。
+List 列表。通用列表容器组件，提供统一的列表布局、加载状态、空数据展示和分项分割能力。支持 `dataSource` + `renderItem` 声明式渲染和 `children` 自由组合两种用法。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以列表形式展示结构化数据时使用。
+
+常见场景：
+- 搜索结果列表。
+- 消息通知列表。
+- 设置项列表。
+- 评论或动态列表。
+
+不推荐：
+- 少量固定项目直接手写 div 结构，List 更适合动态数据场景。
+- 复杂交互表格使用 List，应使用 Data Table 组件。
+- 在 List 内部嵌套另一个 List 作为子项，可能导致样式冲突。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 children 方式渲染静态列表项，配合 list-item 的子组件构建每条项目。
 
 <ComponentShowcase id="list" path="list/basic" />
+
+```tsx
+import { List } from "@/components/ui/list"
+import { Item, ItemContent, ItemTitle, ItemDescription } from "@/components/ui/list-item"
+
+export default function Demo() {
+  return (
+    <List className="w-72">
+      <Item>
+        <ItemContent>
+          <ItemTitle>列表项标题</ItemTitle>
+          <ItemDescription>列表项描述信息</ItemDescription>
+        </ItemContent>
+      </Item>
+      <Item>
+        <ItemContent>
+          <ItemTitle>另一条列表项</ItemTitle>
+          <ItemDescription>第二项的描述</ItemDescription>
+        </ItemContent>
+      </Item>
+    </List>
+  )
+}
+```
+
+### 声明式渲染
+
+使用 `dataSource` + `renderItem` 从数组数据生成列表项。
+
+```tsx
+import { List } from "@/components/ui/list"
+import { Item, ItemContent, ItemTitle } from "@/components/ui/list-item"
+
+export default function Demo() {
+  const data = [
+    { id: 1, title: "项目 A" },
+    { id: 2, title: "项目 B" },
+    { id: 3, title: "项目 C" },
+  ]
+
+  return (
+    <List
+      dataSource={data}
+      renderItem={(item) => (
+        <Item key={item.id}>
+          <ItemContent>
+            <ItemTitle>{item.title}</ItemTitle>
+          </ItemContent>
+        </Item>
+      )}
+      className="w-72"
+    />
+  )
+}
+```
+
+### 带 header 和 footer
 
 ```tsx
 import { List } from "@/components/ui/list"
@@ -8,10 +86,35 @@ import { Item, ItemContent, ItemTitle } from "@/components/ui/list-item"
 
 export default function Demo() {
   return (
-    <List className="w-60">
-      <Item><ItemContent><ItemTitle>列表项 1</ItemTitle></ItemContent></Item>
-      <Item><ItemContent><ItemTitle>列表项 2</ItemTitle></ItemContent></Item>
+    <List
+      header={<span className="font-semibold">通知列表</span>}
+      footer={<span className="text-muted-foreground">共 3 条通知</span>}
+      className="w-72"
+    >
+      <Item><ItemContent><ItemTitle>通知 1</ItemTitle></ItemContent></Item>
+      <Item><ItemContent><ItemTitle>通知 2</ItemTitle></ItemContent></Item>
+      <Item><ItemContent><ItemTitle>通知 3</ItemTitle></ItemContent></Item>
     </List>
+  )
+}
+```
+
+### 加载和空状态
+
+设置 `loading` 展示加载动画，设置 `emptyText` 自定义空数据提示。
+
+```tsx
+import { List } from "@/components/ui/list"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <List loading className="w-72">
+        <div>加载中的内容</div>
+      </List>
+
+      <List emptyText="暂无数据" className="w-72" />
+    </div>
   )
 }
 ```
@@ -20,23 +123,45 @@ export default function Demo() {
 
 ### List
 
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| size | 尺寸 | `small` \| `default` \| `large` |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataSource | 数据源数组 | `T[]` | - |
+| renderItem | 渲染函数，接收 item 和 index | `(item: T, index: number) => React.ReactNode` | - |
+| header | 头部内容 | `React.ReactNode` | - |
+| footer | 底部内容 | `React.ReactNode` | - |
+| split | 是否展示分割线 | `boolean` | `true` |
+| bordered | 是否展示外边框 | `boolean` | `false` |
+| size | 尺寸 | `"small"` \| `"default"` \| `"large"` | `"default"` |
+| loading | 是否加载中，展示 Spin 组件 | `boolean` | `false` |
+| emptyText | 数据为空时的提示文本 | `React.ReactNode` | - |
+| children | 子节点（替代 dataSource+renderItem） | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+| style | 行内样式 | `React.CSSProperties` | - |
 
-列表项请使用 `list-item` 组件中的 `Item` 等子组件。
+`dataSource` 和 `renderItem` 配合使用可实现声明式渲染。当 `children` 存在时优先使用 `children` 内容。
+空数据时，若设置了 `emptyText` 则展示该文本，否则展示 Empty 组件。
+
+<h2 id="faq">常见问题</h2>
+
+### children 和 dataSource+renderItem 有什么区别？
+
+`children` 适合静态或简单动态内容，直接将 JSX 作为子节点传入。`dataSource` + `renderItem` 适合从数组数据渲染列表，自动处理空状态，代码更简洁。
+
+### 如何自定义加载动画？
+
+List 内置的加载状态通过 `Spin` 组件实现。如需自定义，可在 List 外部包裹自定义加载组件，不设置 `loading` prop。
+
+### 如何实现分页列表？
+
+List 本身不包含分页逻辑。在 `footer` 中放置 Pagination 组件，并在 List 外部管理分页状态和数据切片即可。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/list` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `list` | - |
+1. 从 `@/components/ui/list` 导入 List，不要从 `antd` 导入。
+2. 静态内容使用 `children`，数组数据使用 `dataSource` + `renderItem`。
+3. 列表项使用 `list-item` 组件中的 `Item`、`ItemTitle` 等子组件构建。
+4. 空数据场景务必设置 `emptyText` 或依赖内置 Empty 组件。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="list" />

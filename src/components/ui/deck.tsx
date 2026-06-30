@@ -1,3 +1,15 @@
 "use client"
 
-export * from "@/components/blocks/deck"
+export {
+  Deck,
+  DeckCards,
+  DeckItem,
+  DeckEmpty,
+} from "@/components/blocks/deck"
+
+export type {
+  DeckProps,
+  DeckCardsProps,
+  DeckItemProps,
+  DeckEmptyProps,
+} from "@/components/blocks/deck"

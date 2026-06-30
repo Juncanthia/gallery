@@ -1,21 +1,164 @@
-Tour 复合组件。
+引导漫游 Tour。页面引导组件，通过遮罩层高亮目标元素并弹出步骤卡片，引导用户完成多步操作熟悉流程。使用 `createPortal` 渲染至 `document.body`，结合 `motion/react` 的 `AnimatePresence` 实现卡片进出场动画。本组件为项目本地复合组件，功能类似于 Ant Design Tour 但实现独立。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对用户进行产品功能引导、新功能介绍或操作流程指引时使用。
+
+常见场景：
+- 新用户首次进入页面的功能导览。
+- 新功能上线后的亮点介绍和使用指引。
+- 复杂表单或仪表盘的分步操作指导。
+- 需要视觉聚焦特定 UI 区域并附带文字说明的引导场景。
+
+不推荐：
+- 简单的单条提示——使用 Tooltip 或 Popover 更轻量。
+- 需要用户在引导过程中执行复杂交互（如填写表单）——Tour 仅提供线性浏览模式。
+- 在移动端小屏幕上使用——卡片固定 288px 宽，遮罩效果在小屏体验不佳。
+- 需要焦点陷阱或强模态引导——Tour 不阻断背景操作，如有需要请在外层补充模态逻辑。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="tour" path="tour/basic" />
 
 ```tsx
-import { Tour } from "@/components/ui/tour"
+import { useState } from "react"
+import { Tour, type TourStepConfig } from "@/components/ui/tour"
+
+const steps: TourStepConfig[] = [
+  {
+    title: "欢迎",
+    description: "这是新功能介绍",
+    placement: "center",
+  },
+  {
+    title: "搜索框",
+    description: "在这里搜索你需要的内容",
+    target: () => document.querySelector("#search-input"),
+    placement: "bottom",
+  },
+  {
+    title: "设置",
+    description: "在这里调整你的偏好",
+    target: () => document.querySelector("#settings-panel"),
+    placement: "right",
+  },
+]
 
 export default function Demo() {
-  return <Tour className="w-full max-w-sm" />
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>开始引导</button>
+      <Tour
+        open={open}
+        onClose={() => setOpen(false)}
+        steps={steps}
+        mask
+        gap={{ offset: 10, radius: 4 }}
+      />
+    </>
+  )
+}
+```
+
+### 非受控模式
+
+```tsx
+import { Tour, type TourStepConfig } from "@/components/ui/tour"
+
+const steps: TourStepConfig[] = [
+  { title: "第一步", description: "这是第一步的说明", placement: "center" },
+  { title: "第二步", description: "这是第二步", target: () => document.querySelector("#step-2"), placement: "bottom" },
+  { title: "完成", description: "引导结束", placement: "center" },
+]
+
+export default function Demo() {
+  return (
+    <Tour
+      open
+      steps={steps}
+      defaultCurrent={0}
+      onClose={() => console.log("引导关闭")}
+    />
+  )
+}
+```
+
+### 无遮罩模式
+
+```tsx
+import { Tour, type TourStepConfig } from "@/components/ui/tour"
+
+const steps: TourStepConfig[] = [
+  { title: "新功能", description: "看看我们的新功能区", target: () => document.querySelector("#new-feature"), placement: "bottom" },
+]
+
+export default function Demo() {
+  return (
+    <Tour
+      open
+      steps={steps}
+      mask={false}
+    />
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/tour/index.tsx` 中的 TypeScript 类型为准。
+### Tour
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| open | 是否显示引导 | `boolean` | `false` |
+| onClose | 关闭回调 | `() => void` | - |
+| steps | 步骤配置数组，必填 | `TourStepConfig[]` | - |
+| current | 当前步骤索引（受控） | `number` | - |
+| onChange | 步骤变更回调 | `(current: number) => void` | - |
+| defaultCurrent | 默认起始步骤（非受控） | `number` | `0` |
+| mask | 是否显示遮罩层 | `boolean` | `true` |
+| zIndex | 遮罩 z-index | `number` | `1001` |
+| gap | 目标元素的间距与圆角配置 | `{ offset?: number; radius?: number }` | `{ offset: 10, radius: 0 }` |
+| scrollIntoViewOptions | 目标元素滚动到视图的选项 | `ScrollIntoViewOptions` | `{ behavior: "smooth", block: "center" }` |
+| className | 卡片的附加 className | `string` | - |
+
+### TourStepConfig
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 步骤标题 | `ReactNode` | - |
+| description | 步骤描述文案 | `ReactNode` | - |
+| target | 返回目标 DOM 元素的函数 | `() => HTMLElement \| null` | - |
+| placement | 卡片相对于目标的位置 | `'top' \| 'bottom' \| 'left' \| 'right' \| 'center'` | `'bottom'` |
+| cover | 步骤封面图或内容 | `ReactNode` | - |
+| nextButtonProps | 下一步按钮自定义属性 | `{ children?: ReactNode; className?: string }` | - |
+| prevButtonProps | 上一步按钮自定义属性 | `{ children?: ReactNode; className?: string }` | - |
+| onClose | 本步骤关闭时的回调 | `() => void` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### Tour 和 Tooltip/Popover 的区别？
+Tour 面向多步骤的产品引导场景，提供遮罩层高亮目标元素和步骤导航。Tooltip 是简短的单条文本提示。Popover 是点击触发的富内容浮层。三者定位不同——Tour 用于功能引导，Tooltip 用于即时说明，Popover 用于交互式浮层。
+
+### 受控和非受控模式如何选择？
+受控模式：同时传入 `current` 和 `onChange`，由外部管理步骤状态，适合需要与 URL 参数或后端同步步骤的场景。非受控模式：使用 `defaultCurrent`，组件内部管理步骤状态，适合简单的线性引导。二者不可混用。
+
+### 为什么组件不支持点击遮罩关闭？
+Tour 的遮罩层为 `pointer-events-none`，不拦截底层交互。关闭只能通过步骤导航按钮或调用侧 `onClose` 控制。如需点击遮罩关闭，请在调用侧自行实现。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/tour` 导入。
+
+1. 从 `@/components/ui/tour` 导入 `Tour` 和 `TourStepConfig`，不要从 `antd` 导入。
+2. `steps` 为必填属性，每个 step 至少需提供 `title` 或 `description` 之一。
+3. `target` 必须是一个返回 `HTMLElement | null` 的函数（如 `() => document.querySelector("#id")`），不要传入 ref 或选择器字符串。
+4. 受控模式下同时传入 `current` 和 `onChange`；非受控模式下使用 `defaultCurrent`，二者不可混用。
+5. 组件通过 `open` / `onClose` 控制显隐，不要在组件外条件渲染 `{open && <Tour />}`。
+6. `placement` 支持 `"top"` | `"bottom"` | `"left"` | `"right"` | `"center"`。
+7. 引导期间如需阻断用户其他操作，应在调用侧添加焦点陷阱或模态逻辑——组件本身不提供此能力。
+8. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="tour" />

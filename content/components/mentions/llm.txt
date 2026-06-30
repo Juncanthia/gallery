@@ -70,11 +70,33 @@ export default function Demo() {
 - `MentionsOptionType`
 - `MentionsProps`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### Mentions
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控值 | `string` | - |
+| defaultValue | 非受控默认值 | `string` | `""` |
+| onChange | 值变更回调 | `(value: string) => void` | - |
+| onSelect | 选中选项回调 | `(option: MentionsOptionType, prefix: string) => void` | - |
+| prefix | 触发提及的前缀字符 | `string \| string[]` | `"@"` |
+| options | 候选选项列表 | `MentionsOptionType[]` | `[]` |
+| split | 提及替换后的分隔符 | `string` | `" "` |
+| filterOption | 自定义筛选逻辑 | `(input: string, option: MentionsOptionType) => boolean` | 大小写不敏感包含匹配 |
+| placement | 下拉菜单弹出方向 | `"top" \| "bottom"` | `"bottom"` |
+| rows | 文本框行数（>1 时渲染 textarea） | `number` | `1` |
+| placeholder | 占位文本 | `string` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| className | 自定义样式类名 | `string` | - |
+| maxLength | 最大输入长度 | `number` | - |
+
+### MentionsOptionType
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| value | 选项值 | `string` |
+| label | 选项显示文本 | `ReactNode` |
 
 ## Semantic DOM {#semantic-dom}
 

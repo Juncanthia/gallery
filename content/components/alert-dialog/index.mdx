@@ -1,9 +1,41 @@
-AlertDialog 模态警告对话框，用于需要用户确认的关键操作，会锁定页面交互直到用户做出选择。
+警告对话框 AlertDialog。模态警告对话框，用于需要用户确认的关键操作，会锁定页面交互直到用户做出选择。基于 Radix Alert Dialog 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要中断用户当前操作并要求明确确认时使用，通常用于不可逆或破坏性操作前的二次确认。
+
+常见场景：
+
+- 删除数据前的确认提示。
+- 离开页面时提示未保存内容。
+- 敏感操作（如注销、重置）的二次确认。
+- 需要用户阅读重要信息后才能继续的场景。
+
+不推荐：
+
+- 简短的通知或提示信息，应使用 Toast / Notification。
+- 无需用户确认的纯信息展示，应使用普通 Dialog 或 Sheet。
+- 表单输入类交互，应使用 Dialog 而非 AlertDialog。
+- 多步骤的复杂流程确认，应使用 Dialog 配合自定义内容。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法（组合模式）
 
 <ComponentShowcase id="alert-dialog" path="alert-dialog/basic" />
 
 ```tsx
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 
 export default function Demo() {
@@ -27,16 +59,218 @@ export default function Demo() {
 }
 ```
 
+### API 模式（简化写法）
+
+使用 `AlertDialog` 顶层 props 快速构建，无需手写所有子组件。
+
+```tsx
+import { AlertDialog } from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <AlertDialog
+      trigger={<Button color="danger" variant="outlined">删除</Button>}
+      title="确认删除？"
+      description="此操作不可撤销，确定要继续吗？"
+      okText="确认删除"
+      cancelText="取消"
+      onOk={() => console.log("已确认")}
+      onCancel={() => console.log("已取消")}
+      confirmLoading={false}
+    />
+  )
+}
+```
+
+### 受控模式
+
+通过 `open` 和 `onOpenChange` 完全控制对话框的开闭状态。
+
+```tsx
+import { useState } from "react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button color="danger" variant="outlined" onClick={() => setOpen(true)}>
+        删除
+      </Button>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>确认删除？</AlertDialogTitle>
+            <AlertDialogDescription>此操作不可撤销。</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              console.log("已确认")
+              setOpen(false)
+            }}>
+              确认删除
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  )
+}
+```
+
+### 加载状态
+
+设置 `confirmLoading={true}` 后确认按钮显示加载中状态并禁用。
+
+```tsx
+import { useState } from "react"
+import { AlertDialog } from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [loading, setLoading] = useState(false)
+
+  return (
+    <AlertDialog
+      trigger={<Button color="danger" variant="outlined">删除</Button>}
+      title="确认删除？"
+      description="此操作不可撤销。"
+      okText="确认删除"
+      cancelText="取消"
+      confirmLoading={loading}
+      onOk={async () => {
+        setLoading(true)
+        // 模拟异步操作
+        await new Promise(r => setTimeout(r, 2000))
+        setLoading(false)
+      }}
+    />
+  )
+}
+```
+
 <h2 id="api">API</h2>
-子组件：`AlertDialogTrigger`、`AlertDialogContent`、`AlertDialogHeader`、`AlertDialogTitle`、`AlertDialogDescription`、`AlertDialogFooter`、`AlertDialogCancel`、`AlertDialogAction`。
+
+### AlertDialog
+
+顶层组件，支持两种使用方式：组合模式（传递子组件）和 API 模式（通过 props 快速构建）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| trigger | 触发元素（API 模式） | `React.ReactNode` | - |
+| title | 标题内容（API 模式） | `React.ReactNode` | - |
+| description | 描述内容（API 模式） | `React.ReactNode` | - |
+| footer | 自定义底部内容，传 `null` 隐藏（API 模式） | `React.ReactNode` | - |
+| okText | 确认按钮文本 | `React.ReactNode` | `"Continue"` |
+| cancelText | 取消按钮文本 | `React.ReactNode` | `"Cancel"` |
+| confirmLoading | 确认按钮加载状态 | `boolean` | - |
+| okButtonProps | 确认按钮额外属性 | `ButtonProps` | - |
+| cancelButtonProps | 取消按钮额外属性 | `ButtonProps` | - |
+| contentProps | AlertDialogContent 的额外属性 | `AlertDialogContentProps` | - |
+| onOk | 确认回调 | `React.MouseEventHandler<HTMLButtonElement>` | - |
+| onCancel | 取消回调 | `React.MouseEventHandler<HTMLButtonElement>` | - |
+| open | 受控打开状态 | `boolean` | - |
+| onOpenChange | 打开状态变化回调 | `(open: boolean) => void` | - |
+
+### AlertDialogTrigger
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 将子元素作为触发器，不包裹额外 DOM | `boolean` | - |
+| className | 样式类名 | `string` | - |
+
+### AlertDialogContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+
+### AlertDialogHeader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+
+### AlertDialogFooter
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+
+### AlertDialogTitle
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+
+### AlertDialogDescription
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+
+### AlertDialogAction
+
+确认操作按钮，渲染为 Button。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+| onClick | 点击回调 | `React.MouseEventHandler<HTMLButtonElement>` | - |
+
+### AlertDialogCancel
+
+取消操作按钮，渲染为 `variant="outlined"` 的 Button。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+| onClick | 点击回调 | `React.MouseEventHandler<HTMLButtonElement>` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 组合模式 vs API 模式如何选择？
+
+- **组合模式**：需要完全自定义对话框内容时使用，手动组合子组件。适合复杂布局、自定义 footer、嵌入表单等场景。
+- **API 模式**：标准确认对话框场景，通过 `trigger`/`title`/`description` 等 props 快速构建，无需手写子组件层级。适合简单确认、提示类对话框。
+
+### 如何隐藏底部按钮？
+
+API 模式下传 `footer={null}`；组合模式下不渲染 `AlertDialogFooter`。
+
+### confirmLoading 如何工作？
+
+设置 `confirmLoading={true}` 后确认按钮显示加载状态并禁用，适用于异步操作提交场景。异步操作完成后记得将状态设回 `false`。
+
+### 如何受控打开/关闭？
+
+传入 `open` 和 `onOpenChange` 进行受控，不传则为非受控模式（由 `AlertDialogTrigger` 触发）。
+
+### AlertDialog 和 Dialog 有什么区别？
+
+AlertDialog 专为阻断式确认设计——会锁定页面交互、强制用户做出选择。Dialog 是通用对话框，适合表单输入、多步骤流程等场景。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/alert-dialog` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/alert-dialog` 导入，不要从 `@/primitives/radix/alert-dialog` 或 `antd` 导入。
+2. 简单确认场景优先使用 API 模式（`trigger`/`title`/`description` props）。
+3. 复杂自定义内容使用组合模式（`AlertDialogTrigger` + `AlertDialogContent` 子组件）。
+4. 破坏性操作建议在 `AlertDialogAction` 上设置 `color="danger"`。
+5. 不要忘记为纯图标触发器添加 `aria-label`。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="alert-dialog" />

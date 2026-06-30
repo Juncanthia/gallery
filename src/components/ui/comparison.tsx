@@ -1,3 +1,13 @@
 "use client"
 
-export * from "@/components/blocks/comparison"
+export {
+  Comparison,
+  ComparisonItem,
+  ComparisonHandle,
+} from "@/components/blocks/comparison"
+
+export type {
+  ComparisonProps,
+  ComparisonItemProps,
+  ComparisonHandleProps,
+} from "@/components/blocks/comparison"

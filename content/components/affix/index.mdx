@@ -1,39 +1,157 @@
-Affix 将页面元素固定在可视范围内，支持设置偏移量。
+固钉 Affix。将页面元素固定在可视范围内，支持设置顶部或底部偏移量，滚动时自动切换固定/正常状态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将按钮、工具栏、导航栏等元素固定在视口特定位置，使其在页面滚动时始终可见。
+
+常见场景：
+
+- 固定顶栏操作按钮（如"回到顶部"、"提交"）。
+- 页面底部固定购买栏或操作栏。
+- 长列表中的筛选条件栏随滚动固定。
+- 需要监听固定状态变化以触发其他 UI 逻辑。
+
+不推荐：
+
+- 需要复杂吸附/吸顶逻辑（如多级吸顶）时，Affix 仅支持单次固定切换，应自行实现。
+- 将 Affix 用于非交互型装饰元素，应直接用 CSS `position: sticky`。
+- 在 `target` 指定的容器本身也发生滚动位移的复杂嵌套场景中使用，位置计算可能不准确。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="affix" path="affix/basic" />
 
 ```tsx
 import { Affix } from "@/components/ui/affix"
 import { Button } from "@/components/ui/button"
+
 export default function Demo() {
   return (
     <div className="relative h-32 overflow-auto rounded border p-2">
       <p className="text-sm text-muted-foreground">滚动查看固钉效果</p>
-      <Affix offsetTop={0}><Button size="small" color="primary" variant="solid">置顶按钮</Button></Affix>
+      <Affix offsetTop={0}>
+        <Button size="small" color="primary" variant="solid">置顶按钮</Button>
+      </Affix>
+    </div>
+  )
+}
+```
+
+### 底部固定
+
+使用 `offsetBottom` 将元素固定在视口底部。
+
+```tsx
+import { Affix } from "@/components/ui/affix"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <div className="relative h-48 overflow-auto rounded border p-2">
+      <p className="text-sm text-muted-foreground">滚动查看底部固钉效果</p>
+      <div className="h-64" />
+      <Affix offsetBottom={0}>
+        <Button className="w-full" color="primary" variant="solid">提交订单</Button>
+      </Affix>
+    </div>
+  )
+}
+```
+
+### 监听固定状态
+
+通过 `onChange` 回调响应固定状态变化。
+
+```tsx
+import { useState } from "react"
+import { Affix } from "@/components/ui/affix"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [affixed, setAffixed] = useState(false)
+
+  return (
+    <div className="relative h-32 overflow-auto rounded border p-2">
+      <p className="text-sm text-muted-foreground">
+        当前状态：{affixed ? "已固定" : "未固定"}
+      </p>
+      <Affix offsetTop={16} onChange={setAffixed}>
+        <Button size="small" color={affixed ? "primary" : "secondary"} variant="solid">
+          {affixed ? "已吸附" : "可滚动"}
+        </Button>
+      </Affix>
     </div>
   )
 }
 ```
 
 <h2 id="api">API</h2>
+
+### Affix
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| offsetTop | 顶部偏移 | `number` | `0` |
-| offsetBottom | 底部偏移 | `number` | - |
-| target | 滚动容器 | `() => HTMLElement` | `window` |
+| offsetTop | 触发固定的顶部偏移量（px），滚动超过此距离时固定 | `number` | `0` |
+| offsetBottom | 触发固定的底部偏移量（px），距视口底部小于此距离时固定 | `number` | - |
+| target | 返回滚动容器的函数，默认 `window` | `() => Window \| HTMLElement \| null` | `() => window` |
+| onChange | 固定状态变化时的回调 | `(affixed: boolean) => void` | - |
+| zIndex | 固定时的 `z-index` | `number` | `10` |
+| className | 根元素样式类名 | `string` | - |
+| children | 需要固定的内容 | `React.ReactNode` | - |
+
+### AffixRef
+
+通过 `useRef<AffixRef>` 获取，用于手动触发位置更新。
+
+| 方法 | 说明 | 类型 |
+| --- | --- | --- |
+| updatePosition | 手动触发位置重新计算 | `() => void` |
+
+<h2 id="faq">常见问题</h2>
+
+### offsetTop 和 offsetBottom 可以同时使用吗？
+
+可以同时设置。当 `offsetBottom` 有值时，组件优先使用底部固定逻辑；否则使用顶部固定逻辑。注意两者不会同时生效——这是一个二选一的优先级判断。
+
+### 如何监听固定状态变化？
+
+通过 `onChange` 回调，参数 `affixed` 为 `true` 时表示当前处于固定状态：
+
+```tsx
+<Affix offsetTop={64} onChange={(affixed) => console.log(affixed ? "已固定" : "未固定")}>
+  <Button>操作</Button>
+</Affix>
+```
+
+### 如何在非 window 的滚动容器中使用？
+
+通过 `target` 属性返回目标 DOM 元素：
+
+```tsx
+<Affix target={() => document.getElementById("scroll-container")} offsetTop={0}>
+  <Button>置顶</Button>
+</Affix>
+```
+
+### 固定后元素宽度变化怎么办？
+
+组件内部会自动记录占位元素宽度，并在固定时保持该宽度。如需在内容尺寸动态变化时手动更新，通过 ref 调用 `updatePosition()`：
+
+```tsx
+const affixRef = useRef<AffixRef>(null)
+// 当内容变化时
+affixRef.current?.updatePosition()
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
+
 1. 从 `@/components/ui/affix` 导入。
-
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `affix` | - |
-| `affix-content` | - |
+2. 用 `offsetTop` 或 `offsetBottom` 控制固定触发距离，不要手动监听 scroll 事件。
+3. 需要获取 ref 时使用 `useRef<AffixRef>(null)` 类型注解。
+4. 固定状态下内容会被包裹在 `data-slot="affix-content"` 的 div 中，生成自定义样式时注意 DOM 层级。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="affix" />

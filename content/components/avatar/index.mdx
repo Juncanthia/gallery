@@ -1,19 +1,33 @@
-Avatar 用于代表用户或事物，支持图片、图标或字符回退。包含 AvatarGroup 组件用于堆叠展示多人头像。
+Avatar 头像，用来代表用户或事物。支持图片、图标或字符展示，支持头像组、徽标和图片加载回退，基于 Radix Avatar 实现。
 
 <h2 id="when-to-use">何时使用</h2>
 
-- 用户头像展示（导航栏、评论区、个人中心）。
-- 品牌标识展示。
-- 当图片加载失败时，自动显示文字回退（AvatarFallback）。
-- 需要展示多个头像时使用 AvatarGroup 堆叠布局。
+当需要展示用户、组织或其他实体的头像时使用。
+
+常见场景：
+- 用户列表中的头像展示。
+- 导航栏中的当前用户头像。
+- 评论区中评论者的头像。
+- 协作面板中的参与者头像组。
+- 即时通讯中的联系人头像。
+
+Avatar 通过 `src` 显示图片，通过 `icon` 或 `children` 提供回退内容，通过 `shape` 控制形状（圆形/方形），通过 `size` 控制尺寸（small/default/large 或自定义像素值）。
+
+不推荐：
+- 为了照搬 Ant Design API 而新增兼容别名。
+- 在调用侧绕过组件 API，直接依赖内部 DOM 结构完成业务逻辑。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
 
 <h2 id="examples">代码演示</h2>
 
-### 基础用法
+### 基础头像
 
-`AvatarImage` 设置图片源，`AvatarFallback` 作为加载失败回退。通过 `className` 控制尺寸。
+默认 `shape="circle" size="default"`（32px）。
 
-<ComponentShowcase id="avatar" path="avatar/basic" />
+<ComponentShowcase
+  id="avatar"
+  path="avatar/basic"
+/>
 
 ```tsx
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -33,31 +47,177 @@ export default function Demo() {
 }
 ```
 
+### 尺寸
+
+支持 `small`(24px)、`default`(32px)、`large`(40px) 或自定义数值。
+
+```tsx
+import { Avatar } from "@/components/ui/avatar"
+
+export default function Demo() {
+  return (
+    <div className="flex items-center gap-2">
+      <Avatar size="small">S</Avatar>
+      <Avatar size="default">M</Avatar>
+      <Avatar size="large">L</Avatar>
+      <Avatar size={48}>48</Avatar>
+    </div>
+  )
+}
+```
+
+### 形状与回退
+
+`shape="circle"` 圆形，`shape="square"` 方形。不传 `src` 时显示 `children` 作为回退。
+
+```tsx
+import { Avatar } from "@/components/ui/avatar"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-2">
+      <Avatar shape="circle">圆</Avatar>
+      <Avatar shape="square">方</Avatar>
+      <Avatar icon={<span className="text-xs">?</span>} />
+    </div>
+  )
+}
+```
+
+### 头像组
+
+`AvatarGroup` 堆叠多个头像，`max` 控制最大显示数量。
+
+```tsx
+import { Avatar, AvatarGroup } from "@/components/ui/avatar"
+
+export default function Demo() {
+  return (
+    <AvatarGroup
+      max={3}
+      items={[
+        { children: "A" },
+        { children: "B" },
+        { children: "C" },
+        { children: "D" },
+        { children: "E" }
+      ]}
+    />
+  )
+}
+```
+
+### 徽标
+
+`AvatarBadge` 在头像右下角添加状态指示器。
+
+```tsx
+import { Avatar, AvatarBadge } from "@/components/ui/avatar"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-4">
+      <Avatar size="large">
+        U
+        <AvatarBadge />
+      </Avatar>
+      <Avatar size="default">
+        <img src="https://github.com/shadcn.png" alt="" />
+        <AvatarBadge className="bg-green-500" />
+      </Avatar>
+    </div>
+  )
+}
+```
+
 <h2 id="api">API</h2>
 
 ### Avatar
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| className | 控制尺寸（`size-10` 等） | `string` | `size-10` |
+| src | 图片地址 | `string` | - |
+| srcSet | 响应式图片集 | `string` | - |
+| alt | 图片 alt 文本 | `string` | - |
+| size | 尺寸 | `"small"` \| `"default"` \| `"large"` \| `number` | `"default"` |
+| shape | 形状 | `"circle"` \| `"square"` | `"circle"` |
+| icon | 自定义图标（回退时显示） | `React.ReactNode` | - |
+| gap | 图片与边框间距 (px) | `number` | `4` |
+| onError | 图片加载失败回调，返回 `false` 阻止回退 | `() => boolean \| void` | - |
+| crossOrigin | 跨域属性 | `ImgHTMLAttributes['crossOrigin']` | - |
+| draggable | 图片可拖拽 | `boolean \| "true" \| "false"` | - |
+| imageProps | 图片元素额外属性 | `Omit<ImgHTMLAttributes, "src" \| "srcSet" \| "alt">` | - |
+| fallbackProps | 回退元素额外属性 | `AvatarPrimitive.Fallback` props | - |
+| className | 附加样式 | `string` | - |
+| children | 回退内容（图片加载失败或未提供 `src` 时显示） | `React.ReactNode` | - |
 
-子组件：`AvatarImage`（`<img>` 封装）、`AvatarFallback`（文字/图标回退）、`AvatarGroup`（堆叠组）、`AvatarBadge`（角标）。
+### AvatarImage
 
-<h2 id="semantic-dom">Semantic DOM</h2>
+封装 `<img>` 标签的子组件，继承 `<img>` 原生属性。建议搭配 `AvatarFallback` 使用。
 
-| data-slot | 说明 |
-| --- | --- |
-| `avatar` | 头像根元素 |
-| `avatar-image` | 图片层 |
-| `avatar-fallback` | 文字回退层 |
-| `avatar-group` | 头像组容器 |
-| `avatar-group-count` | 头像组溢出计数 |
-| `avatar-badge` | 头像角标 |
+### AvatarFallback
+
+图片加载失败或未提供 `src` 时的回退显示，通常放文字缩写或图标。
+
+### AvatarGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 头像配置数组 | `AvatarItem[]` | - |
+| max | 最大显示数量，可为数字或含自定义渲染的对象 | `number` \| `{ count?: number; render?: (omittedCount, omittedItems) => ReactNode }` | - |
+| size | 统一尺寸 | `AvatarSize` | `"default"` |
+| shape | 统一形状 | `AvatarShape` | `"circle"` |
+| className | 附加样式 | `string` | - |
+| children | 子元素（Avatar 组件），与 items 二选一 | `React.ReactNode` | - |
+
+### AvatarBadge
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式（用于自定义颜色，如 `bg-green-500`） | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 图片加载失败怎么办？
+
+默认显示 `icon` 或 `children` 作为回退。可通过 `onError` 自定义：
+
+```tsx
+<Avatar src={url} onError={() => { console.log("加载失败"); }}>
+  ?
+</Avatar>
+```
+
+### 如何做文字头像？
+
+不传 `src` 和 `icon`，只传 `children`：
+
+```tsx
+<Avatar>张三</Avatar>
+<Avatar size="large">JD</Avatar>
+```
+
+### 如何在 AvatarGroup 中自定义溢出显示？
+
+```tsx
+<AvatarGroup
+  max={{ count: 3, render: (n) => <div>+{n}</div> }}
+  items={items}
+/>
+```
+
+### 如何控制头像尺寸？
+
+优先使用 `size` 属性（`"small"` / `"default"` / `"large"` 或自定义像素值如 `48`）。也可以通过 `className` 传 `size-*` 类。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/avatar` 导入。
-2. 始终提供 `AvatarFallback` 作为图片加载失败时的回退。
-3. 通过 `className` 控制尺寸，不要包裹外层 div。
+
+1. 从 `@/components/ui/avatar` 导入，不要从 `antd` 导入 Avatar。
+2. 图片头像使用 `src` 和 `alt`，始终提供 `AvatarFallback` 作为回退。
+3. 文字头像使用 `children`，不需要手动计算缩写。
+4. 组头像使用 `AvatarGroup` + `items` 或 `max`。
+5. 头像必须有可访问名称（`alt` 或可见 `children`）。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="avatar" />

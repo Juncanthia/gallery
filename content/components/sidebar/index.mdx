@@ -1,14 +1,19 @@
-Sidebar 提供完整的侧边栏系统，包含展开/折叠、图标模式、移动端抽屉、快捷键等能力。
+Sidebar 侧边栏。提供完整的侧边栏系统，包含展开/折叠、图标模式、移动端抽屉、快捷键切换、菜单高亮动画等能力。基于 Radix Slot、motion/react 和 Tailwind CSS 实现。
 
 <h2 id="when-to-use">何时使用</h2>
 
 当需要为应用提供侧边导航栏时使用。Sidebar 封装了布局行为、响应式适配、状态持久化和动画。
 
 常见场景：
+- 管理后台的侧边导航栏
+- 文档站点的目录导航
+- 需要折叠/展开的辅助信息面板
+- 带搜索和用户信息的复合侧边栏
 
-- 管理后台的侧边导航栏。
-- 文档站点的目录导航。
-- 需要折叠/展开的辅助信息面板。
+不推荐：
+- 将 Sidebar 仅作为视觉装饰而不提供导航功能
+- 在 Sidebar 外部使用 `SidebarTrigger` 而不在 `SidebarProvider` 内部（会找不到 Context）
+- 用固定宽度的 `<aside>` 手动实现类似功能，应使用 Sidebar 系统提供的状态管理和响应式能力
 
 <h2 id="examples">代码演示</h2>
 
@@ -88,107 +93,246 @@ export default function Demo() {
 
 ### SidebarProvider
 
+顶层容器，提供 SidebarContext。展开状态通过 Cookie 持久化（`sidebar_state`，有效期 7 天）。内置 `⌘B` / `Ctrl+B` 键盘快捷键切换。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| defaultOpen | 默认展开 | `boolean` | `true` |
+| defaultOpen | 默认展开状态 | `boolean` | `true` |
 | open | 受控展开状态 | `boolean` | - |
 | onOpenChange | 展开状态变化回调 | `(open: boolean) => void` | - |
 
 ### Sidebar
 
+侧边栏主体。移动端自动使用 Sheet 抽屉模式，无需额外处理。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| side | 侧边位置 | `left` \| `right` | `left` |
-| variant | 视觉变体 | `sidebar` \| `floating` \| `inset` | `sidebar` |
-| collapsible | 折叠模式 | `offcanvas` \| `icon` \| `none` | `offcanvas` |
-| animateOnHover | hover 高亮动画 | `boolean` | `true` |
+| side | 侧边位置 | `"left"` \| `"right"` | `"left"` |
+| variant | 视觉变体：`sidebar` 标准侧栏，`floating` 浮动圆角，`inset` 内嵌模式 | `"sidebar"` \| `"floating"` \| `"inset"` | `"sidebar"` |
+| collapsible | 折叠模式：`offcanvas` 完全隐藏，`icon` 收起为图标，`none` 禁用折叠 | `"offcanvas"` \| `"icon"` \| `"none"` | `"offcanvas"` |
+| animateOnHover | 菜单项 hover 时是否启用 Highlight 高亮动画 | `boolean` | `true` |
+| containerClassName | Highlight 动画容器的样式类名 | `string` | - |
+| transition | Highlight 动画的 motion transition 配置 | `Transition` | `{ type: 'spring', stiffness: 350, damping: 35 }` |
 
-### 布局子组件
+### SidebarTrigger
 
-| 组件 | 说明 |
-| --- | --- |
-| SidebarTrigger | 切换侧边栏展开/折叠的按钮 |
-| SidebarHeader | 侧边栏顶部区域 |
-| SidebarContent | 侧边栏主体滚动区域 |
-| SidebarFooter | 侧边栏底部区域 |
-| SidebarSeparator | 侧边栏内部分隔线 |
-| SidebarInput | 侧边栏内搜索输入框 |
-| SidebarInset | 主内容区域容器 |
-| SidebarRail | 侧边栏折叠后的窄条触发区 |
+展开/折叠切换按钮，渲染为 `variant="text" shape="square"` 的 Button，图标为 `PanelLeft`。
 
-### 菜单子组件
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| 继承 Button | 所有 Button props | `React.ComponentProps<typeof Button>` | - |
 
-| 组件 | 说明 |
-| --- | --- |
-| SidebarGroup | 菜单分组容器 |
-| SidebarGroupLabel | 分组标题 |
-| SidebarGroupContent | 分组内容 |
-| SidebarMenu | 菜单列表 `<ul>` |
-| SidebarMenuItem | 菜单项 `<li>` |
-| SidebarMenuButton | 菜单按钮，支持 `isActive` 和 `asChild` |
-| SidebarMenuBadge | 菜单项的角标 |
+### SidebarRail
+
+折叠后的窄条触发区，hover 时拖拽光标提示可展开。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| 继承 button | 所有 button 属性 | `React.ComponentProps<'button'>` | - |
+
+### SidebarInset
+
+主内容区域容器，渲染为 `<main>`，支持 `inset` 变体的圆角和阴影。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| 继承 main | 所有 main 属性 | `React.ComponentProps<'main'>` | - |
+
+### SidebarHeader
+
+侧边栏顶部区域，渲染为 `<div>`，默认 `flex flex-col gap-2 p-2`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarContent
+
+侧边栏主体滚动区域，`collapsible=icon` 时隐藏溢出内容。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarFooter
+
+侧边栏底部区域，默认 `flex flex-col gap-2 p-2`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarSeparator
+
+侧边栏内部分隔线，基于 Separator 组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| 继承 Separator | 所有 Separator props | `React.ComponentProps<typeof Separator>` | - |
+
+### SidebarInput
+
+侧边栏内搜索输入框，基于 Input 组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| 继承 Input | 所有 Input props | `React.ComponentProps<typeof Input>` | - |
+
+### SidebarGroup
+
+菜单分组容器，渲染为 `<div>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarGroupLabel
+
+分组标题，渲染为 `<div>`，collapsible=icon 时通过负 margin 和 opacity 隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 是否将元素作为子元素的容器 | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+
+### SidebarGroupAction
+
+分组右上角操作按钮，collapsible=icon 时隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 是否作为子元素容器 | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+
+### SidebarGroupContent
+
+分组内容区域。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenu
+
+菜单列表，渲染为 `<ul>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenuItem
+
+菜单项，渲染为 `<li>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenuButton
+
+菜单按钮，渲染为 `<button>`。支持 `isActive`、`asChild`、`tooltip`、`variant`、`size`。折叠为图标模式时自动使用 Tooltip 显示 label。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| isActive | 是否高亮激活 | `boolean` | `false` |
+| asChild | 是否作为子元素容器（配合 Link 路由） | `boolean` | `false` |
+| tooltip | 折叠时的 tooltip 文本或 TooltipContent props | `string` \| `ComponentProps<typeof TooltipContent>` | - |
+| variant | 按钮样式变体 | `"default"` \| `"outline"` | `"default"` |
+| size | 按钮尺寸 | `"default"` \| `"sm"` \| `"lg"` | `"default"` |
+
+### SidebarMenuAction
+
+菜单项右侧操作按钮，支持 `showOnHover` 控制 hover 时显示，collapsible=icon 时隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 是否作为子元素容器 | `boolean` | `false` |
+| showOnHover | 是否仅在 hover 时显示 | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenuBadge
+
+菜单项角标，collapsible=icon 时隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenuSkeleton
+
+菜单项骨架屏加载占位，支持显示图标占位。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showIcon | 是否显示图标骨架占位 | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenuSub
+
+子菜单容器，渲染为 `<ul>`，左侧带边框缩进，collapsible=icon 时隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenuSubItem
+
+子菜单项，渲染为 `<li>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SidebarMenuSubButton
+
+子菜单按钮，渲染为 `<a>`，支持 `isActive`、`asChild`、`size`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| isActive | 是否高亮激活 | `boolean` | `false` |
+| asChild | 是否作为子元素容器 | `boolean` | `false` |
+| size | 按钮尺寸 | `"sm"` \| `"md"` | `"md"` |
+| className | 附加样式类 | `string` | - |
+
+### useSidebar Hook
+
+返回 `SidebarContextProps`：`{ state, open, setOpen, openMobile, setOpenMobile, isMobile, toggleSidebar }`。
 
 <h2 id="faq">常见问题</h2>
 
 ### 如何切换折叠模式？
 
 设置 `collapsible` 属性：
-- `offcanvas`：折叠时完全隐藏，展开时覆盖内容。
-- `icon`：折叠时显示图标，展开时显示完整侧边栏。
-- `none`：不折叠。
+- `"offcanvas"`（默认）：折叠时完全隐藏，展开时覆盖内容。
+- `"icon"`：折叠时缩小为图标条，展开时显示完整侧边栏。`SidebarMenuButton` 的 `tooltip` 属性会在折叠时自动显示提示。
+- `"none"`：不折叠，始终完整显示。
 
 ### 如何自定义侧边栏宽度？
 
-通过 CSS 变量 `--sidebar-width` 和 `--sidebar-width-icon` 控制。默认值分别为 `16rem` 和 `3rem`。
+通过 CSS 变量 `--sidebar-width` 和 `--sidebar-width-icon` 控制。默认值分别为 `16rem` 和 `3rem`。在 SidebarProvider 的 style 中覆盖：
 
-### 如何使用键盘快捷键？
+```tsx
+<SidebarProvider style={{ '--sidebar-width': '20rem', '--sidebar-width-icon': '4rem' } as React.CSSProperties}>
+```
 
-默认 `⌘B` 切换侧边栏展开/折叠。
+### SidebarMenuButton 如何配合路由 Link 使用？
+
+使用 `asChild` 模式将 Link 作为子元素：
+
+```tsx
+<SidebarMenuButton asChild isActive={pathname === '/home'}>
+  <Link to="/home"><Home /><span>首页</span></Link>
+</SidebarMenuButton>
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-AI 生成 Sidebar 代码时：
-
-1. 从 `@/components/ui/sidebar` 导入所有需要的组件。
-2. 顶层必须使用 `SidebarProvider` 包裹。
-3. `SidebarMenuButton` 支持 `asChild`，可与路由 Link 组合。
-4. 移动端自动使用 Sheet 抽屉模式，无需额外处理。
-5. 不要引入 Ant Design 的 `Layout.Sider`。
-
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `sidebar` | - |
-| `sidebar-container` | - |
-| `sidebar-content` | - |
-| `sidebar-footer` | - |
-| `sidebar-gap` | - |
-| `sidebar-group` | - |
-| `sidebar-group-action` | - |
-| `sidebar-group-content` | - |
-| `sidebar-group-label` | - |
-| `sidebar-header` | - |
-| `sidebar-inner` | - |
-| `sidebar-input` | - |
-| `sidebar-inset` | - |
-| `sidebar-menu` | - |
-| `sidebar-menu-action` | - |
-| `sidebar-menu-badge` | - |
-| `sidebar-menu-button` | - |
-| `sidebar-menu-item` | - |
-| `sidebar-menu-skeleton` | - |
-| `sidebar-menu-sub` | - |
-| `sidebar-menu-sub-button` | - |
-| `sidebar-menu-sub-item` | - |
-| `sidebar-rail` | - |
-| `sidebar-separator` | - |
-| `sidebar-trigger` | - |
-| `sidebar-wrapper` | - |
+1. 从 `@/components/ui/sidebar` 导入所有需要的组件，不要从 `antd` 导入。
+2. 顶层必须使用 `SidebarProvider` 包裹，否则 `useSidebar` 和 `SidebarTrigger` 将无法工作。
+3. `SidebarMenuButton` 结合路由时使用 `asChild` + `isActive`，不要手动拼接 active class。
+4. 移动端自动使用 Sheet 抽屉模式，无需额外编写移动端适配代码。
+5. 只使用本地源码中存在的 props，不生成 AntD 专属的 `Layout.Sider` 配置。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
-
 <SourceViewer componentId="sidebar" />

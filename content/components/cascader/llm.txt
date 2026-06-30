@@ -70,11 +70,32 @@ export default function Demo() {
 - `CascaderOption`
 - `CascaderProps`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### Cascader
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 级联数据选项 | `CascaderOption[]` | - |
+| value | 受控选中值（值路径数组） | `string[]` | - |
+| defaultValue | 默认选中值（非受控） | `string[]` | `[]` |
+| onChange | 选中值变化时的回调 | `(value: string[], options: CascaderOption[]) => void` | - |
+| placeholder | 未选择时的占位文本 | `string` | `"Select..."` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| displayRender | 自定义选中项标签的展示格式 | `(labels: string[]) => React.ReactNode` | - |
+| allowClear | 是否显示清除按钮 | `boolean` | `true` |
+| className | 根元素 CSS 类名 | `string` | - |
+| triggerClassName | 触发器按钮的 CSS 类名 | `string` | - |
+
+### CascaderOption
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 选项值 | `string` | - |
+| label | 选项展示文本 | `React.ReactNode` | - |
+| children | 子级选项 | `CascaderOption[]` | - |
+| disabled | 是否禁用该选项 | `boolean` | - |
+| leaf | 是否为叶子节点（点击直接完成选择） | `boolean` | - |
 
 ## Semantic DOM {#semantic-dom}
 

@@ -1,9 +1,34 @@
-Attachment 文件附件组件，采用复合组件模式展示文件信息。`Attachment` 为容器，内部组合 `AttachmentMedia`、`AttachmentContent`、`AttachmentTitle`、`AttachmentDescription`、`AttachmentActions` 构成完整附件条目。同时提供 `AttachmentUpload` 上传区域。
+Attachment 附件组件，用于文件上传、附件列表展示和文件卡片渲染，支持拖拽上传、自定义渲染和文件移除。
 
 <h2 id="when-to-use">何时使用</h2>
-用于展示已上传的文件列表项，或提供文件拖拽/点击上传区域。
 
-<ComponentShowcase id="attachment" path="attachment/basic" />
+当需要用户上传文件或展示已上传的附件列表时使用。
+
+常见场景：
+- 表单中的文件上传入口（单文件/多文件）。
+- 聊天消息中的附件卡片展示。
+- 文档列表中的文件缩略图预览。
+- 拖拽区域的文件上传。
+
+Attachment 提供两部分能力：
+- **展示层**：`Attachment`、`AttachmentMedia`、`AttachmentContent`、`AttachmentTitle`、`AttachmentDescription`、`AttachmentActions`、`AttachmentAction`、`AttachmentTrigger` 用于构建文件卡片 UI。
+- **上传层**：`AttachmentUpload` 封装文件选择、拖拽、校验、移除逻辑。
+
+不推荐：
+- 在上传场景手动拼接 input[type=file] 和列表管理逻辑，应使用 AttachmentUpload。
+- 将非文件附件内容（如纯文本、链接）放入 Attachment 卡片。
+- 引入 `antd`、`@ant-design/icons` 或 rc-component 作为使用该组件的前置条件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础附件卡片
+
+使用展示层子组件构建文件信息卡片。
+
+<ComponentShowcase
+  id="attachment"
+  path="attachment/basic"
+/>
 
 ```tsx
 import { FileIcon, X } from "lucide-react"
@@ -38,53 +63,286 @@ export default function Demo() {
 }
 ```
 
+### 基础上传
+
+`AttachmentUpload` 提供完整的文件选择和列表管理。
+
+```tsx
+import { AttachmentUpload } from "@/components/ui/attachment"
+
+export default function Demo() {
+  return (
+    <AttachmentUpload
+      accept="image/*"
+      multiple
+      maxCount={5}
+      onChange={(info) => console.log(info.fileList)}
+    />
+  )
+}
+```
+
+### 拖拽上传
+
+设置 `drag` 启用拖拽区域。
+
+```tsx
+import { AttachmentUpload } from "@/components/ui/attachment"
+
+export default function Demo() {
+  return (
+    <AttachmentUpload
+      drag
+      accept=".pdf,.doc,.docx"
+      onChange={(info) => console.log(info.fileList)}
+    />
+  )
+}
+```
+
+### 带缩略图的附件
+
+传递 `thumbUrl` 自动切换为图片模式。
+
+```tsx
+import { Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentActions, AttachmentAction } from "@/components/ui/attachment"
+import { X } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Attachment>
+      <AttachmentMedia variant="image">
+        <img src="https://picsum.photos/80/80" alt="" />
+      </AttachmentMedia>
+      <AttachmentContent>
+        <AttachmentTitle>photo.jpg</AttachmentTitle>
+        <AttachmentDescription>1.2 MB</AttachmentDescription>
+      </AttachmentContent>
+      <AttachmentActions>
+        <AttachmentAction aria-label="Remove photo.jpg">
+          <X className="size-3.5" />
+        </AttachmentAction>
+      </AttachmentActions>
+    </Attachment>
+  )
+}
+```
+
+### 附件组
+
+`AttachmentGroup` 横向排列多个附件卡片。
+
+```tsx
+import { FileIcon } from "lucide-react"
+import { Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentGroup } from "@/components/ui/attachment"
+
+export default function Demo() {
+  return (
+    <AttachmentGroup>
+      <Attachment>
+        <AttachmentMedia><FileIcon className="size-4" /></AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>report.pdf</AttachmentTitle>
+          <AttachmentDescription>1.2 MB</AttachmentDescription>
+        </AttachmentContent>
+      </Attachment>
+      <Attachment>
+        <AttachmentMedia><FileIcon className="size-4" /></AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>image.png</AttachmentTitle>
+          <AttachmentDescription>800 KB</AttachmentDescription>
+        </AttachmentContent>
+      </Attachment>
+    </AttachmentGroup>
+  )
+}
+```
+
+### 不同状态
+
+`state` 控制附件卡片视觉状态。
+
+```tsx
+import { FileIcon } from "lucide-react"
+import { Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription } from "@/components/ui/attachment"
+
+export default function Demo() {
+  return (
+    <div className="space-y-2">
+      <Attachment state="idle">
+        <AttachmentMedia><FileIcon className="size-4" /></AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>pending.doc</AttachmentTitle>
+          <AttachmentDescription>等待上传</AttachmentDescription>
+        </AttachmentContent>
+      </Attachment>
+      <Attachment state="uploading">
+        <AttachmentMedia><FileIcon className="size-4" /></AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>uploading.png</AttachmentTitle>
+          <AttachmentDescription>上传中...</AttachmentDescription>
+        </AttachmentContent>
+      </Attachment>
+      <Attachment state="error">
+        <AttachmentMedia><FileIcon className="size-4" /></AttachmentMedia>
+        <AttachmentContent>
+          <AttachmentTitle>failed.jpg</AttachmentTitle>
+          <AttachmentDescription>上传失败</AttachmentDescription>
+        </AttachmentContent>
+      </Attachment>
+    </div>
+  )
+}
+```
+
 <h2 id="api">API</h2>
 
-### Attachment（容器）
+### Attachment
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | state | 文件状态 | `idle` \| `uploading` \| `processing` \| `error` \| `done` | `done` |
 | size | 尺寸 | `default` \| `sm` \| `xs` | `default` |
 | orientation | 排列方向 | `horizontal` \| `vertical` | `horizontal` |
+| className | 附加样式 | `string` | - |
 
-### 子组件
+### AttachmentMedia
 
-| 组件 | 说明 |
-| --- | --- |
-| AttachmentMedia | 文件图标/缩略图区域 |
-| AttachmentContent | 文件信息容器 |
-| AttachmentTitle | 文件名 |
-| AttachmentDescription | 文件大小或状态描述 |
-| AttachmentActions | 操作按钮区域（下载、删除等） |
-| AttachmentUpload | 上传区域（拖拽/点击上传） |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 媒体类型 | `icon` \| `image` | `icon` |
+| className | 附加样式 | `string` | - |
+
+### AttachmentContent
+
+文件信息文本区域容器。
+
+### AttachmentTitle
+
+文件名文本，自动截断。
+
+### AttachmentDescription
+
+文件大小或状态描述文本。
+
+### AttachmentActions
+
+操作按钮区域容器。
+
+### AttachmentAction
+
+操作按钮，继承 `Button` 所有属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 按钮变体 | `Button` variant | `text` |
+| size | 按钮尺寸 | `Button` size | `small` |
+| shape | 按钮形状 | `Button` shape | `square` |
+
+### AttachmentTrigger
+
+覆盖整个卡片的透明触发器，用于实现点击卡片打开文件的交互。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 是否以子元素样式渲染 | `boolean` | `false` |
+
+### AttachmentGroup
+
+横向排列多个附件的容器，支持横向滚动。
 
 ### AttachmentUpload
 
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| fileList | 受控文件列表 | `AttachmentFile[]` | - |
+| defaultFileList | 默认文件列表 | `AttachmentFile[]` | `[]` |
+| onChange | 文件变化回调 | `(info: AttachmentUploadChangeInfo) => void` | - |
+| onRemove | 移除文件回调，返回 `false` 阻止移除 | `(file: AttachmentFile) => boolean \| void \| Promise<boolean \| void>` | - |
+| beforeUpload | 上传前校验，返回 `false` 阻止上传 | `(file: File, fileList: File[]) => BeforeUploadResult` | - |
+| accept | 接受的文件类型（如 `.pdf`、`image/*`） | `string` | - |
+| multiple | 是否多选 | `boolean` | `false` |
+| maxCount | 最大文件数 | `number` | - |
+| disabled | 禁用 | `boolean` | `false` |
+| drag | 拖拽模式，显示拖拽区域 | `boolean` | `false` |
+| showList | 显示文件列表 | `boolean` | `true` |
+| showRemove | 显示移除按钮 | `boolean` | `true` |
+| trigger | 自定义触发元素 | `React.ReactNode` | - |
+| emptyText | 空状态文案 | `React.ReactNode` | `No files selected` |
+| renderItem | 自定义文件卡片渲染 | `(file, fileList, { remove }) => ReactNode` | - |
+| size | 卡片尺寸 | `default` \| `sm` \| `xs` | `default` |
+| orientation | 卡片排列方向 | `horizontal` \| `vertical` | `horizontal` |
+
+### AttachmentFile
+
 | 属性 | 说明 | 类型 |
 | --- | --- | --- |
-| fileList | 已上传文件列表 | `AttachmentFile[]` |
-| onChange | 文件变化回调 | `(info) => void` |
-| accept | 允许的文件类型 | `string` |
-| multiple | 是否支持多选 | `boolean` |
-| maxCount | 最大文件数量 | `number` |
-| drag | 是否启用拖拽上传 | `boolean` |
+| uid | 文件唯一标识 | `string` |
+| name | 文件名 | `string` |
+| size | 文件大小（字节） | `number` |
+| type | MIME 类型 | `string` |
+| status | 文件状态 | `AttachmentState` |
+| url | 文件 URL | `string` |
+| thumbUrl | 缩略图 URL | `string` |
+| description | 描述信息 | `ReactNode` |
+| originFileObj | 原始 File 对象 | `File` |
 
-<h2 id="semantic-dom">Semantic DOM</h2>
+<h2 id="faq">常见问题</h2>
 
-| data-slot | 说明 |
-| --- | --- |
-| `attachment` | 附件条目容器 |
-| `attachment-media` | 图标/缩略图 |
-| `attachment-content` | 信息区 |
-| `attachment-title` | 文件名 |
-| `attachment-description` | 描述/大小 |
-| `attachment-actions` | 操作区 |
-| `attachment-upload` / `attachment-upload-trigger` | 上传区 |
+### 如何限制文件类型？
+
+使用 `accept` 属性：
+
+```tsx
+<AttachmentUpload accept=".pdf,.docx" />
+<AttachmentUpload accept="image/*" />
+```
+
+### 如何限制文件数量？
+
+使用 `maxCount`：
+
+```tsx
+<AttachmentUpload maxCount={1} /> {/* 单文件 */}
+<AttachmentUpload maxCount={5} /> {/* 最多5个 */}
+```
+
+### 如何在上传前校验文件？
+
+使用 `beforeUpload`，返回 `false` 阻止上传：
+
+```tsx
+<AttachmentUpload
+  beforeUpload={(file) => {
+    if (file.size > 5 * 1024 * 1024) return false
+    return true
+  }}
+/>
+```
+
+### 如何自定义文件卡片渲染？
+
+使用 `renderItem`：
+
+```tsx
+<AttachmentUpload
+  renderItem={(file, fileList, { remove }) => (
+    <div className="flex items-center gap-2">
+      <span>{file.name}</span>
+      <button onClick={remove}>删除</button>
+    </div>
+  )}
+/>
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/attachment` 导入所需子组件。
-2. 展示文件用 `Attachment` + 子组件组合，上传用 `AttachmentUpload`。
+
+1. 从 `@/components/ui/attachment` 导入所需子组件，不要从 `antd` 导入 Upload 或 Upload.Dragger。
+2. 展示场景使用 `Attachment` + 子组件（`AttachmentMedia`、`AttachmentContent`、`AttachmentTitle`、`AttachmentDescription`、`AttachmentActions`、`AttachmentAction`）构建卡片。
+3. 上传场景使用 `AttachmentUpload`，传入 `accept` 和 `maxCount` 控制文件限制。
+4. 文件列表项必须设置 `key={file.uid}`。
+5. 移除按钮必须设置 `aria-label`。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="attachment" />

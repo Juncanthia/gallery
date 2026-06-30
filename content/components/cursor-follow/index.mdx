@@ -1,21 +1,151 @@
-CursorFollow 复合组件。
+光标跟随 CursorFollow。光标跟随效果复合组件，支持自定义光标图形和跟随标签，基于 motion/react 弹簧动画实现平滑的指针追踪。由 CursorProvider 容器、Cursor 光标图形和 CursorFollow 跟随标签三部分组成。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面或局部区域展示自定义光标效果，并在光标附近显示跟随标签时使用。
+
+常见场景：
+- 增强页面视觉交互，用自定义 SVG 图形替换系统默认光标。
+- 在光标附近展示上下文信息，如悬停元素的名称或状态。
+- 全局光标效果（`global` 模式），覆盖整个页面窗口。
+- 创意型页面的交互增强。
+
+不推荐：
+- 纯功能性提示场景 —— 应优先使用 Tooltip。
+- 性能敏感的低端设备上同时使用大量全局光标实例。
+- 在调用侧绕过组件 API，直接操作底层 primitive 的 DOM 结构。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="cursor-follow" path="cursor-follow/basic" />
 
 ```tsx
-import { CursorFollow } from "@/components/ui/CursorFollow"
+import { CursorProvider, Cursor, CursorFollow } from "@/components/ui/cursor-follow"
 
 export default function Demo() {
-  return <CursorFollow className="w-full max-w-sm" />
+  return (
+    <CursorProvider className="w-full max-w-sm">
+      <div className="relative flex h-32 items-center justify-center rounded border bg-muted/20 p-4">
+        <p className="text-sm text-muted-foreground">移动鼠标查看光标跟随效果</p>
+        <CursorFollow>
+          <Cursor />
+        </CursorFollow>
+      </div>
+    </CursorProvider>
+  )
+}
+```
+
+### 带标签内容
+
+CursorFollow 支持在光标附近显示自定义标签。
+
+```tsx
+import { CursorProvider, Cursor, CursorFollow } from "@/components/ui/cursor-follow"
+
+export default function Demo() {
+  return (
+    <CursorProvider className="w-full max-w-sm">
+      <div className="relative flex h-32 items-center justify-center rounded border bg-muted/20 p-4">
+        <p className="text-sm text-muted-foreground">悬停查看标签</p>
+        <CursorFollow sideOffset={20}>
+          <span className="text-xs">查看详情</span>
+          <Cursor />
+        </CursorFollow>
+      </div>
+    </CursorProvider>
+  )
+}
+```
+
+### 全局模式
+
+设置 `global` 属性使光标跟踪整个页面的指针位置。
+
+```tsx
+import { CursorProvider, Cursor, CursorFollow } from "@/components/ui/cursor-follow"
+
+export default function Demo() {
+  return (
+    <CursorProvider global>
+      <ul className="space-y-2">
+        <li className="rounded border p-3">
+          <CursorFollow>
+            <span className="text-xs">项目 Alpha</span>
+            <Cursor />
+          </CursorFollow>
+        </li>
+        <li className="rounded border p-3">
+          <CursorFollow sideOffset={24}>
+            <span className="text-xs">项目 Beta</span>
+            <Cursor />
+          </CursorFollow>
+        </li>
+      </ul>
+    </CursorProvider>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/CursorFollow/index.tsx` 中的 TypeScript 类型为准。
+### CursorProvider
+
+光标上下文容器，包裹所有 Cursor 和 CursorFollow 子组件，负责管理光标区域。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| global | 是否全局模式，跟踪整个窗口的指针位置 | `boolean` | `false` |
+| className | 容器样式类 | `string` | - |
+
+全局模式下光标使用 `fixed` 定位跟踪全窗口指针；局部模式下光标使用 `absolute` 定位，跟踪父容器指针位置。
+
+### Cursor
+
+自定义光标图形，渲染为默认 SVG 箭头光标。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 光标容器样式类 | `string` | - |
+
+默认样式 `size-6 text-foreground`，渲染为 SVG 箭头路径（viewBox="0 0 40 40"）。通过 `asChild` 模式工作，底层 primitive 控制定位。
+
+### CursorFollow
+
+光标跟随标签，在光标附近显示额外内容。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| sideOffset | 跟随标签距离光标的间距（px） | `number` | `15` |
+| alignOffset | 对齐偏移量（px） | `number` | `5` |
+| className | 标签容器样式类 | `string` | - |
+| children | 跟随标签内容（可包含 Cursor 或其他自定义内容） | `React.ReactNode` | - |
+
+默认样式 `bg-foreground rounded-md text-background px-2 py-1 text-sm`（深底白字标签）。底层 primitive 通过 motion/react 弹簧动画控制标签位置。
+
+<h2 id="faq">常见问题</h2>
+
+### CursorProvider 和 CursorFollow 之间的关系是什么？
+
+CursorProvider 是必须的最外层容器，它创建光标位置上下文。所有 Cursor 和 CursorFollow 组件必须放在 CursorProvider 内部，否则无法获取光标位置。CursorFollow 包裹标签内容和 Cursor 图形，二者共享位置上下文。
+
+### 如何自定义光标图形？
+
+当前版本的光标图形为内嵌 SVG 路径，如需自定义需修改 `Cursor` 组件源码中的 SVG path。可通过 `className` 调整颜色和尺寸。
+
+### 如何调整跟随标签的显示位置？
+
+通过 `sideOffset` 调整标签与光标的间距，通过 `alignOffset` 调整对齐偏移。底层 primitive 还支持 `side`（top/right/bottom/left）和 `align`（start/center/end）属性，可从 primitive 类型获取。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/CursorFollow` 导入。
+
+1. 从 `@/components/ui/cursor-follow` 导入 CursorProvider、Cursor、CursorFollow。
+2. CursorProvider 必须包裹所有 Cursor 和 CursorFollow 子组件，否则无法获取光标位置上下文。
+3. CursorFollow 必须包含 children prop，放置跟随标签内容（可包含 Cursor 或其他自定义内容）。
+4. 需要自定义样式时，使用组件暴露的 className props。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
-<SourceViewer componentId="CursorFollow" />
+<SourceViewer componentId="cursor-follow" />

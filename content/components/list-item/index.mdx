@@ -1,4 +1,24 @@
-Item 列表项组件，提供标题、描述、图标和操作区等结构化子组件。
+Item 列表项。提供结构化的列表项子组件体系，包括 Item（根容器）、ItemMedia（媒体区域）、ItemContent（内容区）、ItemTitle（标题）、ItemDescription（描述）、ItemActions（操作区）、ItemHeader（头部）、ItemFooter（底部）、ItemGroup（分组容器）、ItemSeparator（分隔线）。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要构建具有统一布局结构的列表项时使用，通常配合 List 组件。
+
+常见场景：
+- 带图标/头像的列表项（ItemMedia + ItemContent）。
+- 带有操作按钮的列表项（ItemActions）。
+- 带标题和描述的列表项（ItemTitle + ItemDescription）。
+- 多层级分组的列表（ItemGroup）。
+
+不推荐：
+- 用原始 div 手动拼接列表项结构，Item 组件提供一致的间距、边框和无障碍支持。
+- 在 Item 外部包裹额外的容器来控制布局，应使用 List 或 ItemGroup。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+最基本的列表项，包含标题和描述。
 
 <ComponentShowcase id="list-item" path="list-item/basic" />
 
@@ -7,7 +27,7 @@ import { Item, ItemTitle, ItemDescription, ItemContent } from "@/components/ui/l
 
 export default function Demo() {
   return (
-    <div className="w-64 space-y-1 rounded border p-2">
+    <div className="w-72 space-y-1 rounded border p-2">
       <Item>
         <ItemContent>
           <ItemTitle>列表项标题</ItemTitle>
@@ -17,6 +37,147 @@ export default function Demo() {
       <Item>
         <ItemContent>
           <ItemTitle>另一条列表项</ItemTitle>
+          <ItemDescription>第二项的描述</ItemDescription>
+        </ItemContent>
+      </Item>
+    </div>
+  )
+}
+```
+
+### 带图标和操作区
+
+使用 ItemMedia 展示图标，ItemActions 放置操作按钮。
+
+```tsx
+import { User, Settings, Trash2 } from "lucide-react"
+import { Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions } from "@/components/ui/list-item"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <div className="w-80 space-y-1 rounded border p-2">
+      <Item>
+        <ItemMedia variant="icon"><User className="size-4" /></ItemMedia>
+        <ItemContent>
+          <ItemTitle>用户管理</ItemTitle>
+          <ItemDescription>管理系统用户和权限</ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Button size="sm" variant="ghost"><Settings className="size-4" /></Button>
+        </ItemActions>
+      </Item>
+      <Item>
+        <ItemMedia variant="icon"><Trash2 className="size-4" /></ItemMedia>
+        <ItemContent>
+          <ItemTitle>回收站</ItemTitle>
+          <ItemDescription>已删除的项目</ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Button size="sm" variant="ghost">恢复</Button>
+        </ItemActions>
+      </Item>
+    </div>
+  )
+}
+```
+
+### 变体和尺寸
+
+Item 支持 `default`/`outline`/`muted` 三种变体和 `default`/`sm`/`xs` 三种尺寸。
+
+```tsx
+import { Item, ItemContent, ItemTitle, ItemDescription } from "@/components/ui/list-item"
+
+export default function Demo() {
+  return (
+    <div className="w-80 space-y-2">
+      <Item variant="default" size="default">
+        <ItemContent>
+          <ItemTitle>默认变体 · 默认尺寸</ItemTitle>
+          <ItemDescription>透明边框，适合简洁列表</ItemDescription>
+        </ItemContent>
+      </Item>
+      <Item variant="outline" size="sm">
+        <ItemContent>
+          <ItemTitle>outline 变体 · sm 尺寸</ItemTitle>
+          <ItemDescription>可见边框，适合卡片式列表</ItemDescription>
+        </ItemContent>
+      </Item>
+      <Item variant="muted" size="xs">
+        <ItemContent>
+          <ItemTitle>muted 变体 · xs 尺寸</ItemTitle>
+          <ItemDescription>灰色背景，适合紧凑场景</ItemDescription>
+        </ItemContent>
+      </Item>
+    </div>
+  )
+}
+```
+
+### 分组和分隔
+
+使用 ItemGroup 将列表项分组，ItemSeparator 插入分隔线。
+
+```tsx
+import { Item, ItemGroup, ItemSeparator, ItemContent, ItemTitle, ItemDescription } from "@/components/ui/list-item"
+
+export default function Demo() {
+  return (
+    <div className="w-80 space-y-4">
+      <ItemGroup>
+        <Item>
+          <ItemContent>
+            <ItemTitle>分组一 · 项一</ItemTitle>
+            <ItemDescription>第一组的描述</ItemDescription>
+          </ItemContent>
+        </Item>
+        <Item>
+          <ItemContent>
+            <ItemTitle>分组一 · 项二</ItemTitle>
+          </ItemContent>
+        </Item>
+      </ItemGroup>
+
+      <ItemSeparator />
+
+      <ItemGroup>
+        <Item>
+          <ItemContent>
+            <ItemTitle>分组二 · 项一</ItemTitle>
+            <ItemDescription>第二组的描述</ItemDescription>
+          </ItemContent>
+        </Item>
+      </ItemGroup>
+    </div>
+  )
+}
+```
+
+### 带头像
+
+ItemMedia 的 `variant="image"` 用于展示头像或缩略图。
+
+```tsx
+import { Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemHeader, ItemFooter } from "@/components/ui/list-item"
+import { Badge } from "@/components/ui/badge"
+
+export default function Demo() {
+  return (
+    <div className="w-80 space-y-1 rounded border p-2">
+      <Item>
+        <ItemMedia variant="image">
+          <img src="/avatar.jpg" alt="头像" />
+        </ItemMedia>
+        <ItemContent>
+          <ItemHeader>
+            <ItemTitle>张三</ItemTitle>
+            <Badge variant="secondary">在线</Badge>
+          </ItemHeader>
+          <ItemDescription>软件工程师 · 北京</ItemDescription>
+          <ItemFooter>
+            <span className="text-xs text-muted-foreground">最后活跃：5 分钟前</span>
+          </ItemFooter>
         </ItemContent>
       </Item>
     </div>
@@ -26,25 +187,130 @@ export default function Demo() {
 
 <h2 id="api">API</h2>
 
-子组件：`Item`、`ItemMedia`、`ItemContent`、`ItemActions`、`ItemGroup`、`ItemSeparator`、`ItemTitle`、`ItemDescription`、`ItemHeader`、`ItemFooter`。
+### Item
 
-<h2 id="semantic-dom">Semantic DOM</h2>
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 列表项样式变体 | `"default"` \| `"outline"` \| `"muted"` | `"default"` |
+| size | 列表项尺寸 | `"default"` \| `"sm"` \| `"xs"` | `"default"` |
+| asChild | 是否渲染为子元素（Radix Slot） | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
 
-| data-slot | 说明 |
-| --- | --- |
-| `item` | 列表项根 |
-| `item-title` | 标题 |
-| `item-description` | 描述 |
-| `item-content` | 内容区 |
-| `item-actions` | 操作区 |
-| `item-media` | 媒体区 |
-| `item-header` | 头部 |
-| `item-footer` | 底部 |
-| `item-group` | 分组 |
-| `item-separator` | 分隔 |
+接受所有标准 HTML `div` 元素属性。带 `data-slot="item"`、`data-variant`、`data-size`。当 `asChild=true` 时使用 Radix Slot 渲染。
+
+### ItemMedia
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 媒体区域样式变体 | `"default"` \| `"icon"` \| `"image"` | `"default"` |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `div` 元素属性。`"icon"` 变体自动设置图标尺寸，`"image"` 变体提供固定容器和图片裁切。
+
+### ItemContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `div` 元素属性。自动占满剩余空间（`flex-1`）。
+
+### ItemTitle
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `div` 元素属性。单行截断（`line-clamp-1`），带 `data-slot="item-title"`。
+
+### ItemDescription
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `<p>` 元素属性。最多两行（`line-clamp-2`），带 `data-slot="item-description"`。
+
+### ItemActions
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `div` 元素属性。操作按钮区域，带 `data-slot="item-actions"`。
+
+### ItemHeader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `div` 元素属性。占满一行，内部可左右分布内容。
+
+### ItemFooter
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `div` 元素属性。占满一行，通常放置元信息。
+
+### ItemGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有标准 HTML `div` 元素属性。`role="list"`，带 `data-slot="item-group"`。
+
+### ItemSeparator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+接受所有 `Separator` 组件的属性。默认 `orientation="horizontal"`，带 `data-slot="item-separator"`。
+
+<h2 id="faq">常见问题</h2>
+
+### Item 的三种 variant 有什么区别？
+
+- `default`：透明边框，适合简洁的纯文本列表。
+- `outline`：可见边框，适合需要视觉边界的卡片式列表。
+- `muted`：灰色背景，适合需要弱化视觉权重的次级信息。
+
+### asChild 何时使用？
+
+当需要将 Item 渲染为 `<a>` 或路由 Link 等非 div 元素时使用。传入 `asChild` 后，样式合并到第一个子元素：
+
+```tsx
+<Item asChild>
+  <a href="/detail">可点击的列表项</a>
+</Item>
+```
+
+### ItemMedia 的 variant="image" 如何处理图片尺寸？
+
+`variant="image"` 自动给容器设置固定尺寸（默认 `10`，`sm` 时 `8`，`xs` 时 `6`），内部 `<img>` 使用 `object-cover` 裁切填充。图片需自行设置 `src` 和 `alt`。
+
+### 如何在 Item 中实现右侧对齐的操作区？
+
+将 `ItemActions` 放在 `ItemContent` 之后，它会自动靠右对齐。通过 Item 的 flex 布局，ItemContent 占用剩余空间：
+
+```tsx
+<Item>
+  <ItemContent>...</ItemContent>
+  <ItemActions>...</ItemActions>
+</Item>
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/list-item` 导入 `Item`、`ItemTitle` 等。
+
+1. 从 `@/components/ui/list-item` 导入 Item、ItemMedia、ItemContent 等子组件。
+2. 列表项使用 `variant` 控制边框样式，使用 `size` 控制间距，不要手写 className 覆盖。
+3. 图标放在 ItemMedia（`variant="icon"`）中，头像放在 ItemMedia（`variant="image"`）中。
+4. 使用 ItemHeader/ItemFooter 组织多行布局，ItemActions 放置操作按钮。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="list-item" />

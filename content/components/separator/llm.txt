@@ -72,7 +72,13 @@ export default function Demo() {
 
 以下类型来自本地源码，是生成代码时的主要依据：
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+### Separator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 分隔方向 | `"horizontal"` \| `"vertical"` | `"horizontal"` |
+| decorative | 是否为纯装饰性元素（为 `true` 时从无障碍树中移除） | `boolean` | `true` |
+| className | 自定义样式类名 | `string` | - |
 
 ## Semantic DOM {#semantic-dom}
 

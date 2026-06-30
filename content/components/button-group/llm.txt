@@ -72,11 +72,34 @@ export default function Demo() {
 - `ButtonGroupText`
 - `buttonGroupVariants`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### ButtonGroup
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 排列方向 | `"horizontal" \| "vertical"` | `"horizontal"` |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受所有标准 HTML `div` 元素属性。
+
+### ButtonGroupText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 是否渲染为子元素而非 div | `boolean` | `false` |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 当 `asChild` 为 `true` 时，使用 Radix `Slot.Root` 渲染子元素；接受所有标准 HTML `div` 元素属性。
+
+### ButtonGroupSeparator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 分隔线方向 | `"horizontal" \| "vertical"` | `"vertical"` |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 `Separator` 组件的所有 props。
 
 ## Semantic DOM {#semantic-dom}
 

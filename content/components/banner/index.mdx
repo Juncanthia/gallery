@@ -1,21 +1,196 @@
-Banner 复合组件。
+Banner 横幅。用于页面顶部展示全局性通知、操作引导，支持图标、标题、操作按钮和关闭功能，通过 BannerContext 提供可关闭的状态管理。
 
-<ComponentShowcase id="banner" path="banner/basic" />
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面顶部或关键位置展示可关闭的全局性通知、操作引导时使用。Banner 采用组合式子组件 API，可灵活组装图标、标题、操作按钮和关闭按钮。
+
+常见场景：
+- 系统维护通知，提供关闭和详情入口。
+- 新功能引导，附带"了解更多"操作按钮。
+- Cookie 同意提示。
+- 账户状态提醒（邮箱未验证、会员即将过期）。
+- 活动促销横幅，带 CTA 按钮。
+
+不推荐：
+- 将 Banner 用于页面级别的错误/警告/信息提示——请使用 Alert 组件。
+- 在 Banner 中嵌套过长文本——Banner 设计为单行横幅。
+- 使用 Banner 替代 Modal 承载复杂交互——Banner 为轻量通知。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+标准横幅，包含图标、文字、操作按钮和关闭按钮。
+
+<ComponentShowcase
+  id="banner"
+  path="banner/basic"
+/>
 
 ```tsx
-import { Banner } from "@/components/ui/banner"
+import { Megaphone } from "lucide-react"
+import {
+  Banner,
+  BannerIcon,
+  BannerTitle,
+  BannerAction,
+  BannerClose,
+} from "@/components/ui/banner"
 
 export default function Demo() {
-  return <Banner className="w-full max-w-sm" />
+  return (
+    <Banner>
+      <BannerIcon icon={Megaphone} />
+      <BannerTitle>新版本 v2.0 已发布，包含多项性能优化</BannerTitle>
+      <BannerAction>查看详情</BannerAction>
+      <BannerClose />
+    </Banner>
+  )
+}
+```
+
+### 受控可见性
+
+通过 `visible` 和 `onClose` 实现外部控制的显示/隐藏。
+
+```tsx
+import { useState } from "react"
+import { Info } from "lucide-react"
+import { Banner, BannerIcon, BannerTitle, BannerClose } from "@/components/ui/banner"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [show, setShow] = useState(true)
+
+  return (
+    <div className="space-y-2">
+      {!show && (
+        <Button onClick={() => setShow(true)}>显示横幅</Button>
+      )}
+      <Banner visible={show} onClose={() => setShow(false)}>
+        <BannerIcon icon={Info} />
+        <BannerTitle>这是一条可受控显示的消息</BannerTitle>
+        <BannerClose />
+      </Banner>
+    </div>
+  )
+}
+```
+
+### 内嵌样式 (inset)
+
+设置 `inset` 使横幅四角圆角，适合卡片内使用。
+
+```tsx
+import { CheckCircle } from "lucide-react"
+import { Banner, BannerIcon, BannerTitle, BannerAction } from "@/components/ui/banner"
+
+export default function Demo() {
+  return (
+    <Banner inset>
+      <BannerIcon icon={CheckCircle} />
+      <BannerTitle>操作已成功完成</BannerTitle>
+      <BannerAction>撤销</BannerAction>
+    </Banner>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/banner/index.tsx` 中的 TypeScript 类型为准。
+### Banner
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| visible | 受控的可见性状态 | `boolean` | - |
+| defaultVisible | 非受控的初始化可见性 | `boolean` | `true` |
+| onClose | 关闭时的回调 | `() => void` | - |
+| inset | 是否使用内嵌圆角样式 | `boolean` | `false` |
+| className | 根元素 CSS 类名 | `string` | - |
+| children | BannerIcon、BannerTitle、BannerAction、BannerClose 子组件 | `React.ReactNode` | - |
+
+支持所有 `HTMLAttributes<HTMLDivElement>`。`visible` 为 `false` 时返回 `null`，组件完全卸载。
+
+### BannerIcon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| icon | Lucide 图标组件 | `LucideIcon` | 必填 |
+| className | 附加 CSS 类名 | `string` | - |
+
+支持所有 `HTMLAttributes<HTMLDivElement>`。
+
+### BannerTitle
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+| children | 标题文本 | `React.ReactNode` | - |
+
+支持所有 `HTMLAttributes<HTMLParagraphElement>`。
+
+### BannerAction
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | Button variant | `Button` 的 variant 类型 | `"outlined"` |
+| size | Button 尺寸 | `Button` 的 size 类型 | `"small"` |
+| className | 附加 CSS 类名 | `string` | - |
+| children | 按钮文本 | `React.ReactNode` | - |
+
+支持 `Button` 的所有 `ComponentProps`。内部 `Button` 带有 `bg-transparent hover:bg-background/10 hover:text-background` 样式。
+
+### BannerClose
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | Button variant | `Button` 的 variant 类型 | `"text"` |
+| size | Button 尺寸 | `Button` 的 size 类型 | `"small"` |
+| shape | Button 形状 | `Button` 的 shape 类型 | `"square"` |
+| onClick | 额外点击回调，关闭之后触发 | `MouseEventHandler<HTMLButtonElement>` | - |
+| className | 附加 CSS 类名 | `string` | - |
+
+支持 `Button` 的所有 `ComponentProps`。内部固定渲染 `XIcon`，点击时先调用 `setShow(false)` 关闭横幅，再触发用户的 `onClick`。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何在 Banner 中使用不同的图标？
+
+`BannerIcon` 的 `icon` 属性接受任意 Lucide 图标组件：
+
+```tsx
+import { Bell, Info, AlertTriangle, CheckCircle } from "lucide-react"
+
+<Banner>
+  <BannerIcon icon={Bell} />
+  <BannerTitle>您有3条新消息</BannerTitle>
+  <BannerClose />
+</Banner>
+```
+
+### 受控和非受控模式如何选择？
+
+- **非受控**（默认）：只传 `defaultVisible` 和 `onClose`，组件内部管理显示状态。
+- **受控**：传入 `visible` + `onClose`，由外部 state 决定是否显示。
+
+### Banner 和 Alert 的区别？
+
+- **Banner**：复合组件，组合式子 API，适合页面顶部的全局通知横幅，包含操作按钮和关闭按钮。
+- **Alert**：单一组件，props-driven API，适合页面内的错误/警告/信息提示。
+
+### 如何在卡片内使用 Banner？
+
+设置 `inset` 属性可使 Banner 四角圆角，适配卡片边框半径。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/banner` 导入。
+
+1. 从 `@/components/ui/banner` 导入 Banner、BannerIcon、BannerTitle、BannerAction、BannerClose。
+2. Banner 内按顺序放置：BannerIcon（可选）、BannerTitle（必填）、BannerAction（可选）、BannerClose（可选）。
+3. BannerIcon 必须传入 `icon` 属性，使用 lucide-react 图标组件。
+4. 受控可见性使用 `visible` + `onClose`；非受控使用 `defaultVisible`。
+5. 不要在 Banner 中放置非预定义的子组件类型。
+6. 卡片内的 Banner 使用 `inset` 属性获取圆角适配。
+7. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="banner" />

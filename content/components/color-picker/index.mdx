@@ -1,29 +1,96 @@
-ColorPicker 颜色选择器，采用复合组件模式。`ColorPicker` 为根容器，内部组合 `ColorPickerSelection`、`ColorPickerHue`、`ColorPickerAlpha`、`ColorPickerOutput` 等子组件构成完整取色面板。
+ColorPicker 颜色选择器，基于 Context 的复合组件模式。`ColorPicker` 为根容器，内部组合 `ColorPickerSelection`、`ColorPickerHue`、`ColorPickerAlpha`、`ColorPickerOutput` 等子组件构成完整取色面板，所有子组件通过 Context 共享颜色状态。
 
 <h2 id="when-to-use">何时使用</h2>
-当需要用户选择或输入颜色值时使用，例如主题色配置、标注颜色等场景。
+
+当需要让用户从色板中选择颜色或通过滑杆精确调整颜色值时使用。
+
+常见场景：
+
+- 主题色设置：品牌色、强调色配置。
+- 设计工具：元素颜色选择与调整。
+- 数据可视化：图表颜色配置。
+- 个性化设置：用户自定义界面颜色。
+- 需要获取多种颜色格式输出（HEX / RGB / CSS / HSL）时。
+
+不推荐：
+
+- 仅需要预设颜色列表选择，使用简单的颜色按钮组即可。
+- 直接在业务侧绕过 Context 操作子组件内部状态。
+- 一次性使用大量 ColorPicker 实例（每个实例独立管理 Context 状态，数量过多会影响性能）。
 
 <h2 id="examples">代码演示</h2>
 
 ### 基础用法
 
-`ColorPicker` 包裹子组件构成完整面板。
-
 <ComponentShowcase id="color-picker" path="color-picker/basic" />
 
 ```tsx
 import {
-  ColorPicker, ColorPickerSelection,
-  ColorPickerHue, ColorPickerAlpha, ColorPickerOutput,
+  ColorPicker,
+  ColorPickerSelection,
+  ColorPickerHue,
+  ColorPickerAlpha,
+  ColorPickerEyeDropper,
+  ColorPickerOutput,
+  ColorPickerFormat,
 } from "@/components/ui/color-picker"
 
 export default function Demo() {
   return (
-    <ColorPicker defaultValue="#1677ff" className="w-60 gap-3">
+    <ColorPicker defaultValue="#3b82f6" className="w-60 gap-3">
       <ColorPickerSelection className="h-32 rounded-md" />
       <ColorPickerHue />
       <ColorPickerAlpha />
-      <ColorPickerOutput />
+      <ColorPickerFormat />
+    </ColorPicker>
+  )
+}
+```
+
+### 受控模式
+
+```tsx
+import { ColorPicker, ColorPickerSelection, ColorPickerHue, ColorPickerAlpha, ColorPickerFormat } from "@/components/ui/color-picker"
+import { useState } from "react"
+
+export default function Demo() {
+  const [color, setColor] = useState("#3b82f6")
+
+  return (
+    <div className="space-y-2">
+      <p className="text-sm text-muted-foreground">当前颜色: {color}</p>
+      <ColorPicker value={color} onChange={([r, g, b, a]) => setColor(`rgba(${r},${g},${b},${a})`)} className="w-60 gap-3">
+        <ColorPickerSelection className="h-32 rounded-md" />
+        <ColorPickerHue />
+        <ColorPickerAlpha />
+        <ColorPickerFormat />
+      </ColorPicker>
+    </div>
+  )
+}
+```
+
+### 带取色器和格式切换
+
+```tsx
+import {
+  ColorPicker, ColorPickerSelection, ColorPickerHue,
+  ColorPickerAlpha, ColorPickerEyeDropper, ColorPickerOutput, ColorPickerFormat,
+} from "@/components/ui/color-picker"
+
+export default function Demo() {
+  return (
+    <ColorPicker defaultValue="#3b82f6" className="w-60 gap-3">
+      <ColorPickerSelection className="h-32 rounded-md" />
+      <div className="flex items-center gap-2">
+        <ColorPickerHue className="flex-1" />
+        <ColorPickerEyeDropper />
+      </div>
+      <ColorPickerAlpha />
+      <div className="flex items-center gap-2">
+        <ColorPickerFormat className="flex-1" />
+        <ColorPickerOutput />
+      </div>
     </ColorPicker>
   )
 }
@@ -35,30 +102,116 @@ export default function Demo() {
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| value | 受控颜色值 | `string \| Color` | - |
-| defaultValue | 默认颜色 | `string \| Color` | `#000000` |
-| onChange | 颜色变化回调 | `(rgba: [r,g,b,a]) => void` | - |
+| value | 受控颜色值，支持 hex 字符串、RGB 数组或 Color 对象 | `Parameters<typeof Color>[0]` | - |
+| defaultValue | 默认颜色值（非受控） | `Parameters<typeof Color>[0]` | `"#000000"` |
+| onChange | 颜色变化回调，返回 RGBA 数组 | `(value: [number, number, number, number]) => void` | - |
+| className | 容器 CSS 类名 | `string` | - |
 
-### 子组件
+继承 `HTMLAttributes<HTMLDivElement>`。提供 Context 给所有子组件。
 
-| 组件 | 说明 |
-| --- | --- |
-| ColorPickerSelection | 色相-饱和度选择面板 |
-| ColorPickerHue | 色相滑动条 |
-| ColorPickerAlpha | 透明度滑动条 |
-| ColorPickerOutput | 当前颜色值输出展示 |
-| ColorPickerEyeDropper | 吸管取色按钮 |
-| ColorPickerFormat | 颜色格式切换 |
+### ColorPickerSelection
 
-所有子组件需在 `ColorPicker` 内部使用，通过 Context 获取颜色状态。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
 
-<h2 id="semantic-dom">Semantic DOM</h2>
+色板区域，通过鼠标拖拽选择饱和度和亮度。继承 `HTMLAttributes<HTMLDivElement>`。使用 `useMemo` 计算渐变背景，`useCallback` 处理 pointer 移动。
 
-组件使用原生元素语义，通过 Context 和标签名定位。
+### ColorPickerHue
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+| max | 滑块最大值 | `number` | `360` |
+| step | 滑块步长 | `number` | `1` |
+| value | 受控色相值 | `number[]` | - |
+| onValueChange | 值变化回调 | `([hue]: number[]) => void` | - |
+
+色相滑杆（0-360 度）。继承 Radix `Slider.Root` 的所有 props。
+
+### ColorPickerAlpha
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+| max | 滑块最大值 | `number` | `100` |
+| step | 滑块步长 | `number` | `1` |
+| value | 受控透明度值 | `number[]` | - |
+| onValueChange | 值变化回调 | `([alpha]: number[]) => void` | - |
+
+透明度滑杆（0-100）。继承 Radix `Slider.Root` 的所有 props。背景使用棋盘格图案区分透明区域。
+
+### ColorPickerEyeDropper
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+取色器按钮，调用浏览器 EyeDropper API（实验性）。继承 `Button` 组件的所有 props。选取颜色后更新 Context 中的色相、饱和度、亮度，并将透明度重置为 100。
+
+### ColorPickerOutput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+颜色格式切换下拉（HEX / RGB / CSS / HSL）。排除 Select 的 `mode`、`onValueChange`、`options`、`value` prop。
+
+### ColorPickerFormat
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+根据当前格式展示颜色只读值 + Alpha 百分比输入。继承 `HTMLAttributes<HTMLDivElement>`。支持的格式：
+- **hex**：显示 hex 字符串 + Alpha %
+- **rgb**：显示 R、G、B 三个只读输入 + Alpha %
+- **css**：显示 `rgba(r, g, b, alpha%)` 字符串
+- **hsl**：显示 H、S、L 三个只读输入 + Alpha %
+
+### useColorPicker()
+
+必须在 `ColorPicker` 内部使用的 hook，返回 Context 中的颜色状态和操作：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| hue | 色相（0-360） | `number` |
+| saturation | 饱和度（0-100） | `number` |
+| lightness | 亮度（0-100） | `number` |
+| alpha | 透明度（0-100） | `number` |
+| mode | 当前格式 | `string` |
+| setHue | 设置色相 | `(hue: number) => void` |
+| setSaturation | 设置饱和度 | `(saturation: number) => void` |
+| setLightness | 设置亮度 | `(lightness: number) => void` |
+| setAlpha | 设置透明度 | `(alpha: number) => void` |
+| setMode | 设置格式 | `(mode: string) => void` |
+
+<h2 id="faq">常见问题</h2>
+
+### ColorPicker 如何布局？
+
+ColorPicker 是 `flex flex-col gap-4` 的容器，直接作为子元素的组装容器使用。常见布局模式：`ColorPickerSelection`（方形容器）+ `ColorPickerHue` + `ColorPickerAlpha` + `ColorPickerFormat`。Selection 需要外部通过 `className` 设置尺寸（如 `h-32 rounded-md`）。
+
+### 如何获取颜色值？
+
+使用 `onChange` 回调，返回 `[r, g, b, alpha]` 格式的 RGBA 数组。注意 alpha 值为 0-100 的百分比，不是 0-1。需自行转换为 hex 或其他格式。
+
+### EyeDropper 为什么可能不工作？
+
+EyeDropper 基于浏览器的 EyeDropper API，该 API 为实验性功能，仅在 Chromium 内核浏览器中可用（Chrome 95+、Edge 95+）。不支持时静默失败（catch 错误并 console.error），不影响其他组件功能。
+
+### Selection 区域的饱和度和亮度如何联动？
+
+Selection 通过二维坐标（x 轴代表饱和度，y 轴代表亮度）换算颜色。公式为：`topLightness = x < 0.01 ? 100 : 50 + 50 * (1 - x)`，`lightness = topLightness * (1 - y)`。这意味着纯白色在左上角（x=0,y=0）。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/color-picker` 导入 `ColorPicker` 及所需子组件。
-2. `ColorPicker` 为必选根容器，子组件按需组合使用。
+
+1. 从 `@/components/ui/color-picker` 导入各子组件。
+2. 所有子组件必须放在 `<ColorPicker>` 容器内部。
+3. 布局由使用方控制，ColorPicker 本身只提供 flex-col + gap-4。
+4. Selection 区域需要外部设置尺寸（如 `className="h-32 rounded-md"`）。
+5. `onChange` 返回 RGBA 数组，不是 hex 字符串。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="color-picker" />

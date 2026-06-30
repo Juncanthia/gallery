@@ -76,11 +76,83 @@ export default function Demo() {
 - `CommandSeparator`
 - `CommandShortcut`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### Command
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 `cmdk` `CommandPrimitive` 的所有 props。
+
+### CommandDialog
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 对话框标题（屏幕阅读器可见） | `string` | `"Command Palette"` |
+| description | 对话框描述（屏幕阅读器可见） | `string` | `"Search for a command to run..."` |
+| showCloseButton | 是否显示关闭按钮 | `boolean` | `false` |
+| className | 对话框内容 CSS 类名 | `string` | - |
+
+> 接受 `Dialog` 组件的所有 props。将 Command 嵌入 Dialog 中使用。
+
+### CommandInput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 输入框 CSS 类名 | `string` | - |
+
+> 接受 `cmdk` `CommandPrimitive.Input` 的所有 props。包裹在 `InputGroup` 中，自动附带搜索图标。
+
+### CommandList
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 `cmdk` `CommandPrimitive.List` 的所有 props。
+
+### CommandEmpty
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 无搜索结果时展示的内容。接受 `cmdk` `CommandPrimitive.Empty` 的所有 props。
+
+### CommandGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 选项分组容器，自动为 `cmdk-group-heading` 子元素应用样式。接受 `cmdk` `CommandPrimitive.Group` 的所有 props。
+
+### CommandItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+| children | 选项内容 | `React.ReactNode` | - |
+
+> 接受 `cmdk` `CommandPrimitive.Item` 的所有 props。选中时自动显示勾选图标。
+
+### CommandShortcut
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 快捷键提示标签。接受所有标准 HTML `span` 元素属性。
+
+### CommandSeparator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 分隔线。接受 `cmdk` `CommandPrimitive.Separator` 的所有 props。
 
 ## Semantic DOM {#semantic-dom}
 

@@ -703,7 +703,7 @@ Button 通过 `data-*` 属性暴露稳定语义，便于测试、样式定位和
 - 纯图标按钮必须提供 `aria-label` 或可访问名称。
 - 危险操作建议与 `Popconfirm`、`AlertDialog` 等二次确认组件组合使用。
 
-## 实现说明 {#implementation-notes}
+## 依赖与实现说明 {#implementation-notes}
 
 核心文件：
 

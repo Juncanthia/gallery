@@ -69,11 +69,91 @@ export default function Demo() {
 - `ColorPicker`
 - `ColorPickerProps`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### ColorPicker
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控颜色值 | `string \| { r: number, g: number, b: number } \| [number, number, number]` | - |
+| defaultValue | 默认颜色值（非受控） | 同上 | `"#000000"` |
+| onChange | 颜色变化时的回调 | `(value: { r: number, g: number, b: number, a?: number }) => void` | - |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受所有标准 HTML `div` 元素属性。
+
+### ColorPickerSelection
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 饱和度/亮度二维选择区域。接受所有标准 HTML `div` 元素属性。
+
+### ColorPickerHue
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+| max | 滑块最大值 | `number` | `360` |
+| step | 滑块步长 | `number` | `1` |
+| value | 受控色相值 | `number[]` | - |
+| onValueChange | 值变化回调 | `([hue]: number[]) => void` | - |
+
+> 接受 Radix `Slider.Root` 的所有 props。
+
+### ColorPickerAlpha
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+| max | 滑块最大值 | `number` | `100` |
+| step | 滑块步长 | `number` | `1` |
+| value | 受控透明度值 | `number[]` | - |
+| onValueChange | 值变化回调 | `([alpha]: number[]) => void` | - |
+
+> 透明度滑块。接受 Radix `Slider.Root` 的所有 props。
+
+### ColorPickerEyeDropper
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 吸管取色按钮。接受 `Button` 组件的所有 props。
+
+### ColorPickerOutput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 颜色格式切换下拉选择器。接受 `Select` 组件的 `SelectSingleApiProps`（不含 `mode`、`onValueChange`、`options`、`value`）。
+
+### ColorPickerFormat
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 颜色值只读输入展示区域，根据当前 mode（hex/rgb/css/hsl）切换格式。接受所有标准 HTML `div` 元素属性。
+
+### useColorPicker
+
+自定义 Hook，必须在 `ColorPicker` 内部使用。返回上下文值：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| hue | 当前色相 | `number` |
+| saturation | 当前饱和度 | `number` |
+| lightness | 当前亮度 | `number` |
+| alpha | 当前透明度 | `number` |
+| mode | 当前格式模式 | `string` |
+| setHue | 设置色相 | `(hue: number) => void` |
+| setSaturation | 设置饱和度 | `(saturation: number) => void` |
+| setLightness | 设置亮度 | `(lightness: number) => void` |
+| setAlpha | 设置透明度 | `(alpha: number) => void` |
+| setMode | 设置格式模式 | `(mode: string) => void` |
 
 ## Semantic DOM {#semantic-dom}
 

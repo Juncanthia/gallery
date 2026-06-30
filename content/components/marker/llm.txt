@@ -71,11 +71,33 @@ export default function Demo() {
 - `MarkerIcon`
 - `markerVariants`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### Marker
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 标记样式变体 | `"default" \| "separator" \| "border"` | `"default"` |
+| asChild | 是否渲染为子元素 | `boolean` | `false` |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。当 `asChild=true` 时使用 Radix Slot 渲染。
+
+### MarkerIcon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"span">` 的所有原生属性。
+
+### MarkerContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"span">` 的所有原生属性。
 
 ## Semantic DOM {#semantic-dom}
 

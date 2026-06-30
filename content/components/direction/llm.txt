@@ -69,11 +69,19 @@ export default function Demo() {
 - `DirectionProvider`
 - `useDirection`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### DirectionProvider
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dir | 文本方向，透传至 Radix Direction.DirectionProvider | `"ltr" \| "rtl"` | - |
+| direction | dir 的别名，优先级高于 dir | `"ltr" \| "rtl"` | - |
+| children | 子内容 | `ReactNode` | - |
+
+### useDirection
+
+Hook，返回当前 Direction 上下文的 dir 值。无参数。
 
 ## Semantic DOM {#semantic-dom}
 

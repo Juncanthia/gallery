@@ -1,0 +1,343 @@
+---
+category: Blocks
+title: Reel
+subtitle: 卷轴滑动
+description: 短视频/图片卷轴滑动复合组件，支持自动播放、进度指示、手势导航与播放控制，适用于移动端内容流展示。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 2
+source:
+  component: src/components/blocks/reel/index.tsx
+  docs: content/components/reel/index.mdx
+  examples:
+    - content/components/reel/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# Reel 卷轴滑动
+
+Reel 是一个复合短视频/图片轮播组件，灵感来源于抖音/TikTok 的全屏滑动浏览模式。它提供完整的播放控制（播放/暂停、静音、上下切换）和视觉布局（进度条、头部、底部控制栏、遮罩层）。通过组合 `Reel`（根容器）、`ReelContent`（过渡动画）、`ReelVideo`/`ReelImage`（媒体渲染）、`ReelProgress`（进度条）、`ReelControls`（控制栏）等子组件，构建完整的滑动浏览体验。
+
+本组件不是 Ant Design 兼容层。Ant Design 没有等效的短视频轮播组件，因此本组件是纯新增能力。它基于 React Context 管理播放状态，使用 motion 处理切换动画，使用 lucide-react 提供控制图标。API 以 `src/components/blocks/reel/index.tsx` 源码为准。
+
+## 何时使用 {#when-to-use}
+
+在需要全屏纵向滑动浏览视频或图片内容的场景中使用。
+
+常见场景：
+
+- 短视频 Feed 流。
+- 产品图片/宣传图轮播。
+- 教程/故事的全屏浏览。
+- 任何需要沉浸式内容浏览的移动端或桌面端场景。
+
+推荐使用方式：
+
+- Reel 作为最外层容器，设置 `data` 和受控/非受控状态。
+- ReelContent 配合 render props 模式渲染当前项内容。
+- ReelVideo / ReelImage 作为媒体元素，自动从 Context 读取播放状态。
+- ReelProgress 显示顶部进度条。
+- ReelControls / ReelHeader / ReelFooter 放置控制按钮和元信息。
+- ReelNavigation 提供点击左右半区切换的交互。
+
+不推荐：
+
+- Reel 嵌套在另一个 Reel 内。
+- 在 Reel 外部直接操作 Context（必须通过 Reel 的 props）。
+- 同时使用受控和非受控模式混用同一状态。
+- 需要横向滑动或自定义复杂布局的场景——本组件固定 9:16 竖屏比例。
+
+## 代码演示 {#examples}
+
+### 基础视频轮播
+
+```tsx
+import {
+  Reel,
+  ReelContent,
+  ReelControls,
+  ReelMuteButton,
+  ReelNextButton,
+  ReelPlayButton,
+  ReelPreviousButton,
+  ReelProgress,
+  ReelVideo,
+} from "@/components/blocks/reel"
+
+const videos = [
+  { id: 1, type: "video" as const, src: "/video1.mp4", duration: 10, title: "Video 1" },
+  { id: 2, type: "video" as const, src: "/video2.mp4", duration: 15, title: "Video 2" },
+  { id: 3, type: "video" as const, src: "/video3.mp4", duration: 12, title: "Video 3" },
+]
+
+export default function Demo() {
+  return (
+    <Reel data={videos} className="w-80">
+      <ReelProgress />
+      <ReelContent>
+        {(item) => <ReelVideo src={item.src} />}
+      </ReelContent>
+      <ReelControls>
+        <ReelPreviousButton />
+        <ReelPlayButton />
+        <ReelNextButton />
+        <ReelMuteButton />
+      </ReelControls>
+    </Reel>
+  )
+}
+```
+
+### 图片轮播
+
+```tsx
+import {
+  Reel,
+  ReelContent,
+  ReelControls,
+  ReelHeader,
+  ReelImage,
+  ReelPlayButton,
+  ReelProgress,
+} from "@/components/blocks/reel"
+
+const images = [
+  { id: 1, type: "image" as const, src: "/img1.jpg", duration: 3, alt: "Image 1", title: "Photo 1" },
+  { id: 2, type: "image" as const, src: "/img2.jpg", duration: 5, alt: "Image 2", title: "Photo 2" },
+]
+
+export default function Demo() {
+  return (
+    <Reel data={images} className="w-80">
+      <ReelProgress />
+      <ReelHeader>
+        <h3 className="text-white font-medium">Gallery</h3>
+      </ReelHeader>
+      <ReelContent>
+        {(item) => <ReelImage alt={item.alt ?? ""} src={item.src} />}
+      </ReelContent>
+      <ReelControls>
+        <ReelPlayButton />
+      </ReelControls>
+    </Reel>
+  )
+}
+```
+
+## API {#api}
+
+### Reel
+
+根容器，提供全局 Context（播放状态、当前索引、进度、静音等），管理受控/非受控状态。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 轮播数据数组 | `ReelItem[]` | 必填 |
+| defaultIndex | 默认起始索引（非受控） | `number` | `0` |
+| index | 当前索引（受控） | `number` | - |
+| onIndexChange | 索引变化回调 | `(index: number) => void` | - |
+| defaultPlaying | 默认播放状态（非受控） | `boolean` | `autoPlay` 的值 |
+| playing | 播放状态（受控） | `boolean` | - |
+| onPlayingChange | 播放状态变化回调 | `(playing: boolean) => void` | - |
+| defaultMuted | 默认静音状态（非受控） | `boolean` | `true` |
+| muted | 静音状态（受控） | `boolean` | - |
+| onMutedChange | 静音状态变化回调 | `(muted: boolean) => void` | - |
+| autoPlay | 是否自动播放 | `boolean` | `true` |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。使用 `@radix-ui/react-use-controllable-state` 实现受控/非受控双模式。
+
+### ReelItem
+
+数据项类型定义。
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 唯一标识 | `string \| number` | 是 |
+| type | 媒体类型 | `"video" \| "image"` | 是 |
+| src | 媒体资源地址 | `string` | 是 |
+| duration | 展示时长（秒） | `number` | 是 |
+| alt | 图片替代文本 | `string` | 否 |
+| title | 标题 | `string` | 否 |
+| description | 描述 | `string` | 否 |
+
+### ReelContent
+
+内容过渡容器，包裹 `AnimatePresence` 实现切换时的淡入淡出动画。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | render props 函数，接收当前 item 和 index | `(item: ReelItem, index: number) => ReactNode` | 必填 |
+| className | 附加 className | `string` | - |
+
+继承 `Omit<HTMLAttributes<HTMLDivElement>, "children">`。使用 `AnimatePresence mode="wait"` + `motion.div` 实现 key-based 淡入淡出切换动画（opacity 0->1，duration 0.3s），`onAnimationComplete` 回调清除过渡状态。
+
+### ReelVideo
+
+继承 `VideoHTMLAttributes<HTMLVideoElement>`。自动从 Context 读取 `isPlaying`、`isMuted`、`currentItem.duration` 等状态，使用 `requestAnimationFrame` 驱动进度更新。组件内部强制设置 `loop`、`muted`、`playsInline`。视频播完后自动切换到下一个或循环到第一个。
+
+### ReelImage
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| alt | 图片替代文本 | `string` | 必填 |
+| duration | 展示时长（秒），覆盖 item 级别的 duration | `number` | `5` |
+| width | 图片宽度 | `number \| string` | - |
+| height | 图片高度 | `number \| string` | - |
+| className | 附加 className | `string` | - |
+
+继承 `Omit<ComponentProps<"img">, "alt">`。
+
+### ReelProgress
+
+进度条组件。支持默认样式（使用 `Progress` 组件）或 render prop 自定义渲染。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | render prop 函数，接收 item、index、isActive、progress | `(item: ReelItem, index: number, isActive: boolean, progress: number) => ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+默认渲染：绝对定位于顶部，`flex gap-1 p-2 z-40`，使用 `Progress` 组件（`h-0.5 bg-white/30`，填充 `bg-white`，无过渡动画）。
+
+### ReelControls / ReelHeader / ReelFooter / ReelOverlay
+
+纯布局容器。ReelHeader 和 ReelFooter 自带渐变遮罩：
+
+- **ReelHeader**：`absolute top-0 z-20 bg-gradient-to-b from-black/60 to-transparent`
+- **ReelFooter**：`absolute bottom-0 z-20 bg-gradient-to-t from-black/60 to-transparent`
+- **ReelControls**：同 ReelFooter 位置，带渐变，flex 两端对齐
+- **ReelOverlay**：`pointer-events-none absolute inset-0 z-30`，指针穿透
+
+以上组件均继承 `HTMLAttributes<HTMLDivElement>`。
+
+### ReelItem
+
+内容包裹容器：`relative size-full overflow-hidden`，继承 `HTMLAttributes<HTMLDivElement>`。
+
+### ReelPreviousButton / ReelNextButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义按钮内容 | `ReactNode` | `ChevronLeft` / `ChevronRight` 图标 |
+| className | 附加 className | `string` | - |
+
+继承 `ComponentProps<typeof Button>`。在边界位置自动 disabled（首项 Previous 禁用，末项 Next 禁用）。`aria-label` 设置为 "Previous" / "Next"。
+
+### ReelPlayButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义按钮内容 | `ReactNode` | `Pause` / `Play` 图标（根据状态切换） |
+| className | 附加 className | `string` | - |
+
+继承 `ComponentProps<typeof Button>`。`aria-label` 根据状态切换 "Pause" / "Play"。
+
+### ReelMuteButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义按钮内容 | `ReactNode` | `VolumeX` / `Volume2` 图标 |
+| className | 附加 className | `string` | - |
+
+继承 `ComponentProps<typeof Button>`。`aria-label` 根据状态切换 "Mute" / "Unmute"。
+
+### ReelNavigation
+
+全屏导航覆盖层。点击左半区域切换到上一项，右半区域切换到下一项。
+
+继承 `HTMLAttributes<HTMLButtonElement>`。使用 `getBoundingClientRect` 和 `clientX` 判断点击位置。边界位置无操作。
+
+## 样式模型 {#styling-model}
+
+- 根容器固定 **9:16 竖屏比例**（`aspect-[9/16]`），黑色背景（`bg-black`），`overflow-hidden`。
+- **进度条**：绝对定位于顶部，`z-40`。默认 Progress 组件白色半透明背景 `bg-white/30`，填充纯白 `bg-white`，无过渡动画。
+- **控制栏**：底部 `z-20`，`bg-gradient-to-t from-black/60 to-transparent` 渐变遮罩。
+- **Header**：顶部 `z-20`，`bg-gradient-to-b from-black/60 to-transparent` 渐变遮罩。
+- **Overlay**：`z-30`，`pointer-events-none`。
+- **导航覆盖层**：全屏 `z-10`，左右各 50% 点击热区。
+- **过渡动画**：`AnimatePresence mode="wait"` + opacity 淡入淡出，duration 0.3s。
+- **媒体渲染**：`object-cover` 填充，`absolute inset-0` 全容器覆盖。
+- 控制按钮：`rounded-full text-white hover:bg-white/10`，`variant="text" shape="square"`。
+- 使用 Tailwind CSS 完成所有视觉表现，无 CVA、无 css-in-js。
+
+| 区域 | 位置 | z-index | 渐变方向 |
+| --- | --- | --- | --- |
+| ReelProgress | top-0 right-0 left-0 | z-40 | 无 |
+| ReelOverlay | inset-0 | z-30 | 无 |
+| ReelHeader | top-0 right-0 left-0 | z-20 | to-bottom |
+| ReelFooter | right-0 bottom-0 left-0 | z-20 | to-top |
+| ReelControls | right-0 bottom-0 left-0 | z-20 | to-top |
+| ReelNavigation | inset-0 | z-10 | 无 |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/reel/index.tsx`：全部组件定义。
+
+直接依赖：
+
+- `@radix-ui/react-use-controllable-state`：受控/非受控状态管理。
+- `motion/react`：`AnimatePresence`、`motion.div` 过渡动画。
+- `lucide-react`：图标（ChevronLeft、ChevronRight、Pause、Play、Volume2、VolumeX）。
+- `@/components/ui/button`：控制按钮。
+- `@/components/ui/progress`：默认进度条。
+- `@/lib/utils`：`cn` 工具函数。
+
+关键行为：
+
+1. 使用 `useControllableState` 为 `index`、`playing`、`muted` 提供受控/非受控双模式。
+2. 进度系统基于 `requestAnimationFrame` + `performance.now()` 驱动，**不依赖视频 `timeupdate` 事件**。视频和图片共享同一套进度计算逻辑：`(elapsed / duration) * 100`。视频元素设置 `loop` 但不依赖它——进度 100% 时由 requestAnimationFrame 逻辑触发切换。
+3. `isTransitioning` 标志防止切换期间进度跳动：切换时 `setProgress(0)` 立即重置，`setIsTransitioning(true)` 阻止播放逻辑。`AnimatePresence` 的 `onAnimationComplete` 回调清除过渡状态。
+4. 播放完毕自动切换到下一项；最后一项播完后循环到第一项。
+5. ReelNavigation 通过 `getBoundingClientRect` 和 `clientX` 判断点击位置在左半区还是右半区。
+6. 默认静音（`defaultMuted = true`），符合浏览器自动播放策略。
+7. 组件为复合结构（14 个子组件），通过 `ReelContext` 分发状态。
+
+## 可访问性 {#accessibility}
+
+- `ReelPreviousButton`、`ReelNextButton`、`ReelPlayButton`、`ReelMuteButton` 均设有 `aria-label`。
+- 按钮在到达边界时自动 `disabled`，防止无效操作。
+- 视频设置 `muted`、`loop`、`playsInline`，确保移动端兼容。
+- 默认静音播放符合移动端自动播放策略。
+- `ReelImage` 的 `alt` 属性为必填。
+- 组件不拦截键盘事件；键盘导航需求需调用侧自行补充。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，无 Ant Design 直接对应。Ant Design 不提供短视频/卷轴滑动类组件。AntD 的 Carousel 是横向轮播，与本组件的纵向全屏滑动浏览模式完全不同。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 组件形态 | 复合组件（14 个子组件组合），非单一组件 |
+| 进度系统 | requestAnimationFrame 合成进度，非原生媒体事件 |
+| 动画方案 | motion/react AnimatePresence，非 AntD 动画体系 |
+| 状态管理 | useControllableState 受控/非受控双模式 |
+| 视觉系统 | Tailwind CSS + 项目主题变量 |
+| API 来源 | 以 `src/components/blocks/reel/index.tsx` 为准 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Reel 代码时，应遵守：
+
+1. 从 `@/components/blocks/reel` 导入所需子组件。
+2. `data` 数组的每项必须包含 `id`、`type`（`"video"` 或 `"image"`）、`src`、`duration` 四个必填字段。
+3. ReelContent 使用 render props 模式：`{(item) => item.type === "video" ? <ReelVideo src={item.src} /> : <ReelImage alt={item.alt} src={item.src} />}`。
+4. 视频项使用 ReelVideo，图片项使用 ReelImage（`alt` 必填）。
+5. 控制按钮（Play/Pause/Mute/Prev/Next）放在 ReelControls 内。
+6. 元信息（标题、描述）放在 ReelHeader 或 ReelFooter 内。
+7. 不要手动创建 Context Provider；所有状态通过 Reel 的 props 管理。
+8. 不要在 Reel 外部直接读写 ReelContext。
+9. 同一状态不要同时使用受控和非受控模式（即不要同时传 `playing` 和 `defaultPlaying`）。
+10. 图片轮播时 ReelImage 的 `duration` 可覆盖 ReelItem 中的值，不传则默认 5 秒。
+11. 进度条受 `duration` 驱动（秒），不依赖真实视频时长。
+12. 不要在 Reel 外部包裹额外的 `AnimatePresence` 或动画容器。

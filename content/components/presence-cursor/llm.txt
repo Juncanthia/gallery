@@ -1,0 +1,144 @@
+---
+category: Blocks
+title: PresenceCursor
+subtitle: 协作光标
+description: 多人协作场景下的用户光标指示器，展示协作者名称、消息及光标位置。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 1
+source:
+  component: src/components/blocks/presence-cursor/index.tsx
+  docs: content/components/presence-cursor/index.mdx
+  examples:
+    - content/components/presence-cursor/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# PresenceCursor 协作光标
+
+PresenceCursor 是一个复合组件，由 Cursor（容器）、CursorPointer（箭头）、CursorBody（气泡）、CursorName（名称）和 CursorMessage（消息）五个子组件构成，用于多人协作场景中渲染协作者的光标位置指示。组件不含同步逻辑，坐标定位由调用侧通过 className 或 style 控制。
+
+本组件不是 Ant Design 兼容层。Ant Design 无等效组件，为纯新增能力。
+
+## 何时使用
+
+在线文档、白板、设计工具等多人实时协作场景，显示其他用户的鼠标位置及身份信息。常见场景：在线文档协作光标、白板协作者位置、代码编辑器多人光标。
+
+推荐：Cursor 作最外层容器，配合 `className="absolute"` + `style` 定位；CursorPointer 通过 `className` 传入 Tailwind 颜色类；CursorBody 内放置 CursorName（名称）和可选的 CursorMessage（状态）。多协作者场景用 `.map()` 遍历，每个用户一个 Cursor。
+
+## 代码演示
+
+### 基础用法（含多协作者遍历）
+
+```tsx
+import {
+  Cursor, CursorBody, CursorMessage, CursorName, CursorPointer,
+} from "@/components/ui/presence-cursor"
+
+const users = [
+  { id: "1", name: "Alice", color: "text-blue-500", x: 20, y: 30 },
+  { id: "2", name: "Bob", color: "text-red-500", x: 120, y: 70 },
+]
+
+export default function Demo() {
+  return (
+    <div className="relative h-48">
+      {users.map((u) => (
+        <Cursor key={u.id} className="absolute" style={{ top: u.y, left: u.x }}>
+          <CursorPointer className={u.color} />
+          <CursorBody>
+            <CursorName>{u.name}</CursorName>
+            <CursorMessage>{u.id === "1" ? "编辑中" : "查看中"}</CursorMessage>
+          </CursorBody>
+        </Cursor>
+      ))}
+    </div>
+  )
+}
+```
+
+## API
+
+### Cursor
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 定位和样式 | `string` | - |
+| children | CursorPointer + CursorBody | `ReactNode` | - |
+
+继承 `HTMLAttributes<HTMLSpanElement>`。默认 `pointer-events-none relative select-none`。
+
+### CursorPointer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 设置颜色 | `string` | `size-3.5` |
+
+继承 `SVGProps<SVGSVGElement>`。内置 20x20 SVG 箭头，`fill="currentColor"`，`aria-hidden="true"`。
+
+### CursorBody
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式 | `string` | - |
+| children | CursorName + 可选 CursorMessage | `ReactNode` | - |
+
+继承 `HTMLAttributes<HTMLSpanElement>`。children > 1 时首子元素 `opacity-70`、顶部左圆角变直角。
+
+### CursorName / CursorMessage
+
+纯展示 `<span>`，继承 `HTMLAttributes<HTMLSpanElement>`，无额外默认样式。
+
+## 样式模型
+
+完全由 Tailwind CSS 工具类控制，无 CVA。
+
+| 子组件 | 核心样式 |
+| --- | --- |
+| Cursor | `pointer-events-none relative select-none` |
+| CursorPointer | `size-3.5`，fill="currentColor" |
+| CursorBody | `ml-3.5 rounded-xl py-1 pr-3 pl-2.5 text-xs bg-secondary text-foreground` |
+
+CursorPointer 固定 14px，颜色通过 className + fill="currentColor" 控制。CursorBody `ml-3.5` 与箭头尖端对齐。`bg-secondary text-foreground` 适配主题。所有 className 经 `cn()` 合并。
+
+## 依赖与实现说明
+
+核心文件：`src/components/blocks/presence-cursor/index.tsx`。不依赖第三方库（仅 React + `cn` 工具）。
+
+关键行为：所有子组件纯展示型，无状态/副作用；Cursor `pointer-events-none` 不阻挡底层交互；CursorPointer 内联 SVG；CursorBody 根据 children 数量自动调整顶部左圆角；不含协作同步逻辑，坐标定位由调用侧完成。
+
+## 可访问性
+
+- CursorPointer：`aria-hidden="true"`、`focusable="false"`，不被屏幕阅读器读取。
+- Cursor：`select-none` 防文本选中，`pointer-events-none` 不干扰导航和鼠标。
+- CursorName / CursorMessage：纯文本 span，屏幕阅读器自然朗读。
+
+## 与 Ant Design 的取舍
+
+Ant Design 无协作光标组件，本组件为项目本地纯新增能力。
+
+| 考量 | 决策 | 原因 |
+| --- | --- | --- |
+| 组件结构 | 5 个子组件组合 | 调用侧自由组合和着色 |
+| 箭头实现 | 内联 SVG + fill="currentColor" | 免图标库依赖 |
+| 定位 | 无内置定位 props | 交由调用侧按同步引擎灵活控制 |
+| 气泡样式 | 仅基础 Tailwind 类 | 各产品设计不同，其余由 className 覆盖 |
+
+## LLM 使用规则
+
+1. 从 `@/components/ui/presence-cursor` 导入 Cursor、CursorPointer、CursorBody、CursorName、CursorMessage。
+2. Cursor 必须设置定位（`className="absolute"` + `style` 坐标）。
+3. CursorPointer 颜色通过 `className` Tailwind 颜色类 + `fill="currentColor"` 控制。
+4. CursorBody 内必须放置 CursorName，可选 CursorMessage。
+5. 不在组件内部实现同步逻辑，仅负责渲染。
+6. 多协作者场景 `.map()` 遍历，每个协作者一个 Cursor。
+7. 不添加 interact 行为，纯展示组件。

@@ -1,21 +1,267 @@
-TableProvider 复合组件。
+数据表格 DataTable。基于 @tanstack/react-table 的复合数据表格组件，内置多列排序和列头下拉菜单，采用 render-props 模式组合，底层渲染为标准 HTML 表格元素。排序状态通过 jotai atom 全局管理。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示结构化数据、支持列排序的表格场景时使用。
+
+常见场景：
+- 后台管理系统的数据列表、用户列表、订单列表。
+- 需要多列排序的表格展示。
+- 需要类型安全的列定义（基于 @tanstack/react-table ColumnDef）的场景。
+- 需要自定义列头渲染（如排序下拉菜单）的表格。
+
+不推荐：
+- 简单的静态表格展示 —— 直接使用 `@/components/ui/table` 原始组件更轻量。
+- 需要分页、筛选、行选择等高级功能 —— 应基于 @tanstack/react-table 的对应 feature 扩展。
+- 在调用侧绕过 TableProvider 直接使用 TableBody/TableHeader 等子组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="data-table" path="data-table/basic" />
 
 ```tsx
-import { TableProvider } from "@/components/ui/data-table"
+import type { ColumnDef } from "@/components/ui/data-table"
+import {
+  TableProvider,
+  TableHeader,
+  TableHeaderGroup,
+  TableHead,
+  TableColumnHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/data-table"
+
+type Item = { id: number; name: string; status: string }
+
+const columns: ColumnDef<Item>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => <TableColumnHeader column={column} title="名称" />,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => <TableColumnHeader column={column} title="状态" />,
+  },
+]
+
+const data: Item[] = [
+  { id: 1, name: "项目 A", status: "进行中" },
+  { id: 2, name: "项目 B", status: "已完成" },
+]
 
 export default function Demo() {
-  return <TableProvider className="w-full max-w-sm" />
+  return (
+    <TableProvider columns={columns} data={data} className="w-full">
+      <TableHeader>
+        {({ headerGroup }) => (
+          <TableHeaderGroup headerGroup={headerGroup}>
+            {({ header }) => <TableHead header={header} />}
+          </TableHeaderGroup>
+        )}
+      </TableHeader>
+      <TableBody>
+        {({ row }) => (
+          <TableRow row={row}>
+            {({ cell }) => <TableCell cell={cell} />}
+          </TableRow>
+        )}
+      </TableBody>
+    </TableProvider>
+  )
+}
+```
+
+### 多列排序
+
+```tsx
+import type { ColumnDef } from "@/components/ui/data-table"
+import {
+  TableProvider,
+  TableHeader,
+  TableHeaderGroup,
+  TableHead,
+  TableColumnHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/data-table"
+
+type Person = { id: number; name: string; age: number; city: string }
+
+const columns: ColumnDef<Person>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => <TableColumnHeader column={column} title="姓名" />,
+  },
+  {
+    accessorKey: "age",
+    header: ({ column }) => <TableColumnHeader column={column} title="年龄" />,
+  },
+  {
+    accessorKey: "city",
+    header: () => "城市",
+  },
+]
+
+const data: Person[] = [
+  { id: 1, name: "张三", age: 28, city: "北京" },
+  { id: 2, name: "李四", age: 35, city: "上海" },
+  { id: 3, name: "王五", age: 22, city: "广州" },
+]
+
+export default function Demo() {
+  return (
+    <TableProvider columns={columns} data={data} className="w-full">
+      <TableHeader>
+        {({ headerGroup }) => (
+          <TableHeaderGroup headerGroup={headerGroup}>
+            {({ header }) => <TableHead header={header} />}
+          </TableHeaderGroup>
+        )}
+      </TableHeader>
+      <TableBody>
+        {({ row }) => (
+          <TableRow row={row}>
+            {({ cell }) => <TableCell cell={cell} />}
+          </TableRow>
+        )}
+      </TableBody>
+    </TableProvider>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/data-table/index.tsx` 中的 TypeScript 类型为准。
+### TableProvider
+
+表格数据提供者，创建 tanstack table 实例并管理排序状态。必须作为最外层包裹组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| columns | 列定义数组 | `ColumnDef<TData, TValue>[]` | 必填 |
+| data | 数据源数组 | `TData[]` | 必填 |
+| children | 子内容（通常包含 TableHeader 和 TableBody） | `ReactNode` | 必填 |
+| className | 透传至底层 table 元素的 className | `string` | - |
+
+泛型 `<TData, TValue>` 自动从 columns 和 data 推断。内部使用 `useReactTable` 配置 `getCoreRowModel` 和 `getSortedRowModel`。
+
+### TableHeader
+
+表头容器，render-props 模式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 透传至底层 thead 元素 | `string` | - |
+| children | Render props，接收 headerGroup | `(props: { headerGroup: HeaderGroup<unknown> }) => ReactNode` | 必填 |
+
+### TableHeaderGroup
+
+单行表头容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| headerGroup | tanstack table 的 headerGroup 对象 | `HeaderGroup<unknown>` | 必填 |
+| children | Render props，接收单个 header | `(props: { header: Header<unknown, unknown> }) => ReactNode` | 必填 |
+
+### TableHead
+
+单个表头单元格。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| header | tanstack table 的 header 对象 | `Header<unknown, unknown>` | 必填 |
+| className | 透传至底层 th 元素 | `string` | - |
+
+使用 `React.memo` 优化渲染，通过 `flexRender` 渲染 columnDef.header 内容。
+
+### TableColumnHeader
+
+带排序功能的列头组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| column | tanstack table 的 column 对象 | `Column<TData, TValue>` | 必填 |
+| title | 列头显示文本 | `string` | 必填 |
+| className | 透传至外层 div | `string` | - |
+
+当 column 不可排序时仅渲染纯文本标题；可排序时渲染带下拉菜单的 Button（升序/降序切换），使用 lucide-react 的 ArrowUp/ArrowDown/ChevronsUpDown 图标。
+
+### TableBody
+
+表体容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 透传至底层 tbody 元素 | `string` | - |
+| children | Render props，接收单个 row | `(props: { row: Row<unknown> }) => ReactNode` | 必填 |
+
+无数据时自动渲染 "No results." 空态占位行，`colSpan` 自适应。
+
+### TableRow
+
+单行容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| row | tanstack table 的 row 对象 | `Row<unknown>` | 必填 |
+| className | 透传至底层 tr 元素 | `string` | - |
+| children | Render props，接收单个 cell | `(props: { cell: Cell<unknown, unknown> }) => ReactNode` | 必填 |
+
+选中行自动设置 `data-state="selected"`。
+
+### TableCell
+
+单个数据单元格。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| cell | tanstack table 的 cell 对象 | `Cell<unknown, unknown>` | 必填 |
+| className | 透传至底层 td 元素 | `string` | - |
+
+通过 `flexRender` 渲染 columnDef.cell 内容。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义单元格内容？
+
+在 `columns` 定义中使用 `cell` 回调：
+
+```tsx
+const columns: ColumnDef<Item>[] = [
+  {
+    accessorKey: "status",
+    header: ({ column }) => <TableColumnHeader column={column} title="状态" />,
+    cell: ({ row }) => <Badge>{row.original.status}</Badge>,
+  },
+]
+```
+
+### 多个 DataTable 实例的排序状态会互相影响吗？
+
+会。排序状态通过全局 jotai atom 管理，同一页面内多个 DataTable 实例共享排序状态。如需隔离，需自行创建独立 atom 并在 `useReactTable` 中使用。
+
+### 如何添加不可排序列？
+
+在 `header` 回调中直接返回文本内容，不使用 `TableColumnHeader`：
+
+```tsx
+{
+  accessorKey: "city",
+  header: () => "城市",
+}
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/data-table` 导入。
+
+1. 从 `@/components/ui/data-table` 导入所需组件和类型。
+2. 遵循 render-props 嵌套模式：TableProvider > TableHeader > TableHeaderGroup > TableHead；TableBody > TableRow > TableCell。
+3. 列头可排序时使用 TableColumnHeader；不可排序时在 header 回调中直接返回文本或自定义内容。
+4. columns 和 data 应定义在组件外部或使用 useMemo，避免每次渲染重新创建。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="data-table" />

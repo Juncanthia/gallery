@@ -73,11 +73,59 @@ export default function Demo() {
 - `InputGroupText`
 - `InputGroupTextarea`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### InputGroup
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### InputGroupAddon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| align | 附加内容对齐方向 | `"inline-start" \| "inline-end" \| "block-start" \| "block-end"` | `"inline-start"` |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### InputGroupButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| htmlType | 按钮 HTML type | `string` | `"button"` |
+| variant | 按钮样式变体，透传至 Button | `string` | `"text"` |
+| size | 按钮尺寸 | `"xs" \| "sm" \| "icon-xs" \| "icon-sm"` | `"xs"` |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<typeof Button>` 的其他属性（不含 `size`）。
+
+### InputGroupText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"span">` 的所有原生属性。
+
+### InputGroupInput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"input">` 的所有原生属性（不含 `ref` 和 `size`）。
+
+### InputGroupTextarea
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"textarea">` 的所有原生属性（不含 `ref`）。
 
 ## Semantic DOM {#semantic-dom}
 

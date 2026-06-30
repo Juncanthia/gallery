@@ -75,11 +75,54 @@ export default function Demo() {
 - `SelectStatus`
 - `SelectVariant`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### AutoComplete
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 输入时建议的可选项列表，支持平铺和分组格式 | `SelectOptionItem[]` | - |
+| placeholder | 未输入值时的占位文本 | `React.ReactNode` | - |
+| size | 输入框尺寸 | `SelectSize` | `"middle"` |
+| variant | 视觉变体 | `SelectVariant` | `"outlined"` |
+| status | 校验状态 | `SelectStatus` | - |
+| disabled | 是否禁用输入框 | `boolean` | - |
+| allowClear | 值非空时是否显示清除按钮 | `boolean` | - |
+| prefix | 输入框前渲染的内容 | `React.ReactNode` | - |
+| suffixIcon | 自定义后缀图标，传入 `null` 隐藏 | `React.ReactNode \| null` | - |
+| notFoundContent | 无匹配选项时展示的内容 | `React.ReactNode` | `"No results found."` |
+| optionRender | 每个选项的自定义渲染 | `(option: SelectOption, info: { index: number }) => React.ReactNode` | - |
+| popupRender | 包装弹出列表节点（如追加底部按钮） | `(originNode: React.ReactNode) => React.ReactNode` | - |
+| labelRender | 选中值展示的自定义渲染，仅在值匹配选项时生效 | `(option: SelectOption) => React.ReactNode` | - |
+| placement | 弹出层相对触发器的位置 | `"bottomLeft" \| "bottomRight" \| "topLeft" \| "topRight"` | `"bottomLeft"` |
+| filterOption | 过滤器函数或布尔值控制本地过滤，设为 `false` 用于异步搜索 | `boolean \| ((input: string, option: SelectOption) => boolean)` | `true` |
+| filterSort | 已过滤选项的自定义排序 | `(a: SelectOption, b: SelectOption, input: string) => number` | - |
+| onSearch | 输入值变化时的回调（用户键入），适合异步搜索场景 | `(value: string) => void` | - |
+| onSelect | 从下拉列表选择选项时的回调 | `(value: string, option: SelectOption) => void` | - |
+| onClear | 值被清除时的回调 | `() => void` | - |
+| open | 受控的打开状态 | `boolean` | - |
+| defaultOpen | 默认打开状态（非受控） | `boolean` | - |
+| onOpenChange | 弹出层打开/关闭时的回调 | `(open: boolean) => void` | - |
+| value | 受控值（自由文本输入，不限于选项） | `string` | - |
+| defaultValue | 默认值（非受控） | `string` | - |
+| onValueChange | 值变化时的回调，每次按键及选择选项时触发 | `(value: string \| undefined) => void` | - |
+| onChange | onValueChange 的别名，兼容 AntD 命名 | `(value: string \| undefined) => void` | - |
+| className | 根触发器元素的 CSS 类名 | `string` | - |
+| contentClassName | 弹出内容区域的 CSS 类名 | `string` | - |
+| listClassName | 选项列表的 CSS 类名 | `string` | - |
+| name | 底层表单 input 的 name 属性 | `string` | - |
+| id | input 元素的 id 属性 | `string` | - |
+| required | 表单上下文中是否为必填 | `boolean` | - |
+| aria-label | input 的无障碍标签 | `string` | - |
+
+### 派生类型
+
+- `AutoCompleteOption` — 选项类型（别名 `SelectOption`）
+- `AutoCompleteOptionGroup` — 选项分组类型（别名 `SelectOptionGroup`）
+- `AutoCompleteOptionItem` — 选项项类型（别名 `SelectOptionItem`）
+- `AutoCompleteSize` — 尺寸类型（别名 `SelectSize`）
+- `AutoCompleteStatus` — 状态类型（别名 `SelectStatus`）
+- `AutoCompleteVariant` — 变体类型（别名 `SelectVariant`）
 
 ## Semantic DOM {#semantic-dom}
 

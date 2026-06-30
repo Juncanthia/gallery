@@ -1,21 +1,179 @@
-VideoPlayer 复合组件。
+视频播放器 VideoPlayer。基于 Media Chrome（`media-chrome`）封装的复合组件，通过 `MediaController` 提供 Material Design 风格的完整播放控制能力，包括播放/暂停、快进快退、时间显示、音量调节和进度条。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中嵌入可播放视频时使用。VideoPlayer 将 `<video>` 元素与标准化的播放控制栏组合，通过 CSS 自定义属性自动对接项目主题。
+
+常见场景：
+
+- 视频教程、产品演示、功能录屏展示。
+- 媒体库中的视频预览与播放。
+- 需要统一风格播放控制栏的任意视频播放场景。
+
+不推荐：
+
+- 嵌入第三方视频平台（YouTube、Bilibili、Vimeo 等）—— 使用对应平台的 iframe 嵌入代码。
+- 直接使用 HTML5 原生 `<video controls>` —— 绕过本组件会导致播放控制栏风格与项目设计系统不一致。
+- 需要直播流、字幕轨道、多音轨等高级媒体能力 —— Media Chrome 原生支持这些，但本地封装仅覆盖基础控制子组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`VideoPlayer` 作为 `MediaController` 的包装组件，内部需组合控制栏子组件方可正常工作。
 
 <ComponentShowcase id="video-player" path="video-player/basic" />
 
 ```tsx
-import { VideoPlayer } from "@/components/ui/video-player"
+import {
+  VideoPlayer,
+  VideoPlayerContent,
+  VideoPlayerControlBar,
+  VideoPlayerPlayButton,
+  VideoPlayerSeekBackwardButton,
+  VideoPlayerSeekForwardButton,
+  VideoPlayerTimeDisplay,
+  VideoPlayerTimeRange,
+  VideoPlayerMuteButton,
+  VideoPlayerVolumeRange,
+} from "@/components/ui/video-player"
 
 export default function Demo() {
-  return <VideoPlayer className="w-full max-w-sm" />
+  return (
+    <VideoPlayer className="w-full max-w-2xl">
+      <VideoPlayerContent
+        slot="media"
+        src="https://example.com/video.mp4"
+        crossOrigin=""
+      />
+      <VideoPlayerControlBar>
+        <VideoPlayerPlayButton />
+        <VideoPlayerSeekBackwardButton />
+        <VideoPlayerSeekForwardButton />
+        <VideoPlayerTimeDisplay />
+        <VideoPlayerTimeRange />
+        <VideoPlayerMuteButton />
+        <VideoPlayerVolumeRange />
+      </VideoPlayerControlBar>
+    </VideoPlayer>
+  )
+}
+```
+
+### 自定义控制栏布局
+
+控制栏子组件可按需选择和排列，打造不同布局的控制栏。
+
+```tsx
+import {
+  VideoPlayer,
+  VideoPlayerContent,
+  VideoPlayerControlBar,
+  VideoPlayerPlayButton,
+  VideoPlayerTimeDisplay,
+  VideoPlayerTimeRange,
+} from "@/components/ui/video-player"
+
+export default function Demo() {
+  return (
+    <VideoPlayer className="w-full max-w-xl">
+      <VideoPlayerContent
+        slot="media"
+        src="https://example.com/video.mp4"
+      />
+      <VideoPlayerControlBar>
+        <VideoPlayerPlayButton />
+        <VideoPlayerTimeRange />
+        <VideoPlayerTimeDisplay />
+      </VideoPlayerControlBar>
+    </VideoPlayer>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/video-player/index.tsx` 中的 TypeScript 类型为准。
+### VideoPlayer
+
+作为顶层容器，包装 `MediaController` 并注入项目主题 CSS 变量。所有属性透传至底层 `MediaController`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| style | 附加内联样式，与内置 CSS 变量合并 | `CSSProperties` | - |
+| className | 自定义样式类名 | `string` | - |
+| ...props | 其他属性全部透传至 `MediaController` | `MediaController` 的所有属性 | - |
+
+### VideoPlayerContent
+
+原生 `<video>` 元素包装，**必须设置 `slot="media"`** 以关联 MediaController。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| slot | 必须设为 `"media"` | `string` | - |
+| className | 附加样式类名 | `string` | - |
+| src | 视频源地址 | `string` | - |
+| crossOrigin | CORS 配置 | `""` \| `"anonymous"` \| `"use-credentials"` | - |
+| ...props | 所有 `<video>` 原生属性透传 | `ComponentProps<"video">` | - |
+
+### VideoPlayerControlBar
+
+控制栏容器，包裹所有控制子组件。所有属性透传至底层 `MediaControlBar`，无额外默认 className。
+
+### 控制子组件
+
+以下子组件均为 Media Chrome 对应元素的薄包装，接受 `className` 并将所有其他属性透传至底层 Web Component。
+
+| 组件 | 对应元素 | 说明 |
+| --- | --- | --- |
+| `VideoPlayerPlayButton` | `MediaPlayButton` | 播放/暂停切换 |
+| `VideoPlayerSeekBackwardButton` | `MediaSeekBackwardButton` | 后退指定秒数 |
+| `VideoPlayerSeekForwardButton` | `MediaSeekForwardButton` | 快进指定秒数 |
+| `VideoPlayerTimeDisplay` | `MediaTimeDisplay` | 当前时间与总时长 |
+| `VideoPlayerTimeRange` | `MediaTimeRange` | 播放进度条 |
+| `VideoPlayerMuteButton` | `MediaMuteButton` | 静音/取消静音切换 |
+| `VideoPlayerVolumeRange` | `MediaVolumeRange` | 音量滑块 |
+
+每个子组件的 Props 类型均为 `ComponentProps<typeof 对应元素>`，默认含 `p-2.5` 内边距。`VideoPlayerContent` 默认含 `mt-0 mb-0`。
+
+<h2 id="faq">常见问题</h2>
+
+### VideoPlayerContent 为什么必须设置 slot="media"？
+
+这是 Media Chrome 的强制约定 —— `MediaController` 通过 `slot="media"` 识别哪个元素是媒体源。如果不设置，视频将无法被控制器管理，播放功能失效。
+
+### 如何自定义播放器主题颜色？
+
+通过 `VideoPlayer` 的 `style` prop 覆盖内置的 `--media-*` CSS 变量。内置变量映射如下：
+
+| CSS 变量 | 项目 token |
+| --- | --- |
+| `--media-primary-color` | `var(--primary)` |
+| `--media-secondary-color` | `var(--background)` |
+| `--media-text-color` | `var(--foreground)` |
+| `--media-background-color` | `var(--background)` |
+| `--media-control-hover-background` | `var(--accent)` |
+| `--media-font-family` | `var(--font-sans)` |
+| `--media-range-track-background` | `var(--border)` |
+
+```tsx
+<VideoPlayer style={{ "--media-primary-color": "#ff0000" } as React.CSSProperties}>
+  {/* ... */}
+</VideoPlayer>
+```
+
+### React 事件能正常在 media-chrome 组件上触发吗？
+
+不能完全依赖。Media Chrome 底层是 Web Components（Custom Elements v1），通过官方 `media-chrome/react` 绑定与 React 交互。React 合成事件行为与原生 DOM 事件不完全一致，不要依赖 React 事件系统处理 media-chrome 的内部事件。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/video-player` 导入。
+
+1. 从 `@/components/ui/video-player` 按需导入所需子组件，不要从 `antd` 导入（AntD 无此组件）。
+2. `VideoPlayerContent` 必须设置 `slot="media"`，否则 MediaController 无法识别媒体源。
+3. 控制按钮必须放置在 `VideoPlayerControlBar` 内部，否则不会出现在控制栏中。
+4. 不要使用 HTML5 原生 `<video controls>` 替代本组件。
+5. 自定义样式优先通过 `style` prop 覆盖 `--media-*` CSS 变量，其次通过子组件 `className` 追加 Tailwind 工具类。
+6. 需要字幕时，将 `<track>` 元素作为 `VideoPlayerContent` 的子元素。
+7. 本组件为复合组件（Blocks），基于 Media Chrome Web Components 封装，不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="video-player" />

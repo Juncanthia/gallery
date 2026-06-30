@@ -378,6 +378,7 @@ export function GalleryShell({
                 <div className="flex flex-col gap-px">
                   {group.items.map((item) => {
                     const Icon = navIconForItem(item.to)
+                    const hasApi = item.api === true
 
                     return (
                       <GalleryLink
@@ -400,9 +401,18 @@ export function GalleryShell({
                             {item.en}
                           </span>
                         ) : null}
-                        {item.antd && item.migration ? (
+                        {hasApi ? (
                           <span className={cn(
                             "ml-auto shrink-0 rounded-full px-1.5 py-px text-[10px] font-medium leading-tight",
+                            "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                          )}>
+                            API
+                          </span>
+                        ) : null}
+                        {item.antd && item.migration ? (
+                          <span className={cn(
+                            "shrink-0 rounded-full px-1.5 py-px text-[10px] font-medium leading-tight",
+                            hasApi ? "" : "ml-auto",
                             isActive(item.to)
                               ? "bg-primary/15 text-primary"
                               : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"

@@ -1,23 +1,143 @@
-Notification API 提供命令式通知调用，在屏幕角落弹出通知。
+Notification API 通知提醒框。提供命令式全局通知 API，在屏幕角落弹出通知提醒信息。基于 sonner 实现，支持 success、info、warning、error 四种类型。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要通过命令式 API 在全局推送通知消息时使用。无需 JSX 组件声明，适合在工具函数、utils 或非 React 上下文中调用。
+
+常见场景：
+
+- API 请求成功后显示操作反馈。
+- 全局错误提示或系统通知。
+- 工具函数中触发通知（如文件导出完成后提示）。
+- 需要在回调或 effects 中触发的临时消息。
+
+不推荐：
+
+- 需要内联展示的提示——使用 Alert。
+- 需要用户做出选择的对话框——使用 Dialog。
+- 在 Toaster 未挂载时调用——通知将无法渲染。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="notification-api" path="notification-api/basic" />
 
 ```tsx
 import { notification } from "@/components/ui/notification-api"
 import { Button } from "@/components/ui/button"
-export default function Demo() { return <Button size="small" variant="outlined" onClick={() => notification.info({ message: "通知", description: "详情" })}>发送通知</Button> }
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.success({
+            title: "操作成功",
+            description: "数据已保存",
+          })
+        }
+      >
+        成功
+      </Button>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.error({
+            title: "操作失败",
+            description: "请稍后重试",
+          })
+        }
+      >
+        错误
+      </Button>
+    </div>
+  )
+}
+```
+
+### 命令式调用
+
+```tsx
+import { notification } from "@/components/ui/notification-api"
+
+// 可在任何地方调用，无需组件上下文
+export async function handleSave() {
+  try {
+    await saveData()
+    notification.success({
+      title: "保存成功",
+      description: "数据已同步到服务器",
+    })
+  } catch {
+    notification.error({
+      title: "保存失败",
+      description: "网络异常，请稍后重试",
+      duration: 0,
+    })
+  }
+}
 ```
 
 <h2 id="api">API</h2>
-`notification.success(config)` / `notification.error(config)` / `notification.info(config)` / `notification.warning(config)`。config: `{ message, description?, duration?, placement? }`。
+
+### notification
+
+| 方法 | 说明 | 签名 |
+| --- | --- | --- |
+| `notification.open(args)` | 通用通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.success(args)` | 成功通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.info(args)` | 信息通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.warning(args)` | 警告通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.error(args)` | 错误通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.destroy(key?)` | 关闭通知（不传 key 关闭全部） | `(key?: string \| number) => void` |
+
+### NotificationArgs
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 通知标题（必填） | `React.ReactNode` | - |
+| description | 通知内容描述 | `React.ReactNode` | - |
+| type | 通知类型 | `"success" \| "info" \| "warning" \| "error"` | `"info"` |
+| key | 唯一标识 | `string \| number` | - |
+| duration | 自动关闭时间（秒）。0 表示不关闭 | `number` | `4.5` |
+| placement | 屏幕位置 | `"top" \| "topLeft" \| "topRight" \| "bottom" \| "bottomLeft" \| "bottomRight"` | `"topRight"` |
+| closable | 显示关闭按钮 | `boolean` | `true` |
+| closeIcon | 自定义关闭图标 | `React.ReactNode` | `✕` |
+| icon | 自定义图标 | `React.ReactNode` | 根据 type 自动选择 |
+| onClose | 关闭回调 | `() => void` | - |
+| onClick | 点击回调 | `() => void` | - |
+| className | 附加样式类名 | `string` | - |
+| style | 附加内联样式 | `React.CSSProperties` | - |
+
+### NotificationClose
+
+`() => void`，调用后关闭对应通知。
+
+<h2 id="faq">常见问题</h2>
+
+### 和 notification 页面有什么区别？
+
+两个页面共享同一源码 `src/components/ui/notification-api.tsx`。`notification-api` 页面聚焦纯 API 命令式调用，`notification` 页面提供更丰富的演示和说明。导入路径分别为 `@/components/ui/notification` 和 `@/components/ui/notification-api`。
+
+### 如何确保通知可见？
+
+必须在页面中挂载 `<Toaster />` 组件（来自 `@/components/ui/toaster`），它是 sonner 的渲染容器。
+
+### duration 为 0 时通知会一直显示吗？
+
+是的。设置 `duration: 0` 后通知不会自动消失，需用户点击关闭按钮或调用 `notification.destroy(key)` 关闭。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
+
 1. 从 `@/components/ui/notification-api` 导入。
-
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+2. `title` 为必填属性，`description` 可选。
+3. 确保 `<Toaster />` 已挂载。
+4. 使用 `duration: 0` 阻止自动关闭。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="notification-api" />

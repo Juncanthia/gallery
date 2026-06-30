@@ -1,5 +1,19 @@
-import { Banner } from "@/components/ui/banner"
+import {
+  Banner,
+  BannerIcon,
+  BannerTitle,
+  BannerAction,
+  BannerClose,
+} from "@/components/ui/banner"
+import { BellIcon } from "lucide-react"
 
 export default function BannerBasicExample() {
-  return <Banner className="w-full max-w-sm" />
+  return (
+    <Banner className="w-full">
+      <BannerIcon icon={BellIcon} />
+      <BannerTitle>A new version of the dashboard is available.</BannerTitle>
+      <BannerAction>Upgrade</BannerAction>
+      <BannerClose />
+    </Banner>
+  )
 }

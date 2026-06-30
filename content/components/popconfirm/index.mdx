@@ -1,29 +1,124 @@
-Popconfirm 气泡确认框，点击触发后弹出确认提示，用户确认或取消后执行回调。
+Popconfirm 气泡确认框。点击元素弹出气泡式的确认框，包含标题、描述、确认和取消按钮，用于需要二次确认的破坏性操作。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在执行危险操作前向用户确认时使用。
+
+常见场景：
+- 删除操作确认（如删除列表项、删除文件）
+- 不可逆操作前的二次确认（如清空数据、禁用账号）
+- 需要附带说明的确认操作（通过 `description` 属性补充信息）
+
+不推荐：
+- 简单的确认/取消操作——使用 `Dialog` 或 `Modal` 组件
+- 不需要确认提示的普通按钮操作
+- 为了照搬 Ant Design Popconfirm API 而引入本组件——API 以本地源码为准
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="popconfirm" path="popconfirm/basic" />
 
 ```tsx
 import { Popconfirm } from "@/components/ui/popconfirm"
 import { Button } from "@/components/ui/button"
+
 export default function Demo() {
-  return <Popconfirm title="确定删除吗？" onConfirm={() => {}}><Button size="small" color="danger" variant="outlined">删除</Button></Popconfirm>
+  return (
+    <Popconfirm
+      title="确定删除吗？"
+      description="删除后不可恢复"
+      onConfirm={() => console.log("confirmed")}
+      onCancel={() => console.log("cancelled")}
+    >
+      <Button size="small" color="danger" variant="outlined">删除</Button>
+    </Popconfirm>
+  )
+}
+```
+
+### 自定义按钮文案和颜色
+
+```tsx
+import { Popconfirm } from "@/components/ui/popconfirm"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <Popconfirm
+      title="确定要禁用此用户吗？"
+      okText="确定禁用"
+      cancelText="再想想"
+      okColor="danger"
+      placement="bottom"
+      onConfirm={() => console.log("disabled")}
+    >
+      <Button size="small" color="danger" variant="solid">禁用</Button>
+    </Popconfirm>
+  )
+}
+```
+
+### 隐藏图标
+
+```tsx
+import { Popconfirm } from "@/components/ui/popconfirm"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <Popconfirm
+      title="确认提交？"
+      icon={null}
+      onConfirm={() => console.log("submitted")}
+    >
+      <Button size="small">提交</Button>
+    </Popconfirm>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
+
+### Popconfirm
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| title | 确认文案 | `ReactNode` | - |
-| onConfirm | 确认回调 | `() => void` | - |
-| onCancel | 取消回调 | `() => void` | - |
+| title | 确认提示标题/文案 | `ReactNode` | 必填 |
+| description | 可选的附加描述文本 | `ReactNode` | - |
+| onConfirm | 点击确认按钮的回调 | `() => void` | - |
+| onCancel | 点击取消或弹窗关闭的回调 | `() => void` | - |
+| okText | 确认按钮文本 | `ReactNode` | `"OK"` |
+| cancelText | 取消按钮文本 | `ReactNode` | `"Cancel"` |
+| okColor | 确认按钮颜色 | `"primary" \| "danger" \| "default"` | `"primary"` |
+| placement | 弹窗弹出位置 | `"top" \| "bottom" \| "left" \| "right" \| "topLeft" \| "topRight" \| "bottomLeft" \| "bottomRight" \| "leftTop" \| "leftBottom" \| "rightTop" \| "rightBottom"` | `"top"` |
+| icon | 自定义图标，传入 `null` 隐藏图标 | `ReactNode \| null` | 警告三角图标 |
+| disabled | 是否禁用触发器 | `boolean` | - |
+| children | 触发器元素（通常为 Button） | `ReactNode` | 必填 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义确认框中的图标？
+
+通过 `icon` 属性传入自定义 ReactNode，或传入 `null` 完全隐藏图标。默认显示 amber 警告三角图标。
+
+### onCancel 何时触发？
+
+点击取消按钮或弹窗关闭（点击外部区域）时触发 `onCancel`。如果设置了 `disabled`，弹窗不会打开，也不会触发 `onCancel`。
+
+### Popconfirm 的定位如何控制？
+
+通过 `placement` 属性控制弹窗相对于触发器的位置，支持 12 种方向（如 `"top"`、`"bottomLeft"` 等），内部映射到 Radix Popover 的 `side` 和 `align` 属性。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/popconfirm` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/popconfirm` 导入，不要从 `antd` 导入。
+2. 只使用本文件 API 表格和源码中存在的 props，不要凭 AntD Popconfirm 记忆生成 API。
+3. `title` 和 `children` 为必填属性。
+4. `okColor` 为 `"danger"` 时确认按钮显示红色，适合删除等危险操作。
+5. 不要在 Popconfirm 上使用 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 等属性。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="popconfirm" />

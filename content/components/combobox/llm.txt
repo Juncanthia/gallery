@@ -83,11 +83,147 @@ export default function Demo() {
 - `ComboboxValue`
 - `useComboboxAnchor`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### Combobox
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+根组件，直接使用 Base UI `Combobox.Root`。接受其所有 props。
+
+### ComboboxInput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showTrigger | 是否显示下拉触发器 | `boolean` | `true` |
+| showClear | 是否显示清除按钮 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Input.Props` 的所有 props。
+
+### ComboboxTrigger
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+| children | 触发器内容 | `React.ReactNode` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Trigger.Props` 的所有 props。
+
+### ComboboxContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 弹出方向 | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"` |
+| sideOffset | 弹出偏移量 | `number` | `6` |
+| align | 对齐方式 | `"start" \| "center" \| "end"` | `"start"` |
+| alignOffset | 对齐偏移量 | `number` | `0` |
+| anchor | 锚点元素引用 | `HTMLElement \| null` | - |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Popup.Props` 的所有 props。
+
+### ComboboxList
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.List.Props` 的所有 props。
+
+### ComboboxItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+| children | 选项内容 | `React.ReactNode` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Item.Props` 的所有 props。
+
+### ComboboxGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Group.Props` 的所有 props。
+
+### ComboboxLabel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.GroupLabel.Props` 的所有 props。
+
+### ComboboxValue
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 渲染当前选中值的文本 | - | - |
+
+> 接受 Base UI `ComboboxPrimitive.Value.Props` 的所有 props。
+
+### ComboboxClear
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Clear.Props` 的所有 props。
+
+### ComboboxEmpty
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Empty.Props` 的所有 props。
+
+### ComboboxSeparator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Separator.Props` 的所有 props。
+
+### ComboboxCollection
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 定义选项集合 | - | - |
+
+> 接受 Base UI `ComboboxPrimitive.Collection.Props` 的所有 props。
+
+### ComboboxChips
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 多选标签容器。接受 Base UI `ComboboxPrimitive.Chips.Props` 的所有 props。
+
+### ComboboxChip
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showRemove | 是否显示移除按钮 | `boolean` | `true` |
+| className | 根元素 CSS 类名 | `string` | - |
+| children | 标签内容 | `React.ReactNode` | - |
+
+> 接受 Base UI `ComboboxPrimitive.Chip.Props` 的所有 props。
+
+### ComboboxChipsInput
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素 CSS 类名 | `string` | - |
+
+> 多选标签中的输入框。接受 Base UI `ComboboxPrimitive.Input.Props` 的所有 props。
+
+### useComboboxAnchor
+
+返回一个 `React.RefObject<HTMLDivElement>`，用于绑定锚点元素。
 
 ## Semantic DOM {#semantic-dom}
 

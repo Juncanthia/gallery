@@ -1,21 +1,148 @@
-Cursor 复合组件。
+PresenceCursor 协作光标。多人协作场景下的用户光标指示器组合组件，由 Cursor（容器）、CursorPointer（箭头）、CursorBody（气泡）、CursorName（名称）和 CursorMessage（消息）五个子组件构成，用于展示协作者名称、消息及光标位置。
+
+<h2 id="when-to-use">何时使用</h2>
+
+在线文档、白板、设计工具等多人实时协作场景中，显示其他用户的鼠标位置及身份信息。
+
+常见场景：
+- 在线文档协作光标（如 Google Docs 风格的协作者光标）
+- 白板/画布协作者位置指示
+- 代码编辑器多人光标
+- 设计工具中的协作者指针
+
+不推荐：
+- 需要交互操作的光标——组件为纯展示型，不处理点击等交互
+- 替代同步引擎——坐标定位由调用侧通过 `style` 控制，组件不负责同步逻辑
+- 单个用户场景——无协作者时无需展示光标
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法（多协作者遍历）
 
 <ComponentShowcase id="presence-cursor" path="presence-cursor/basic" />
 
 ```tsx
-import { Cursor } from "@/components/ui/presence-cursor"
+import {
+  Cursor, CursorBody, CursorMessage, CursorName, CursorPointer,
+} from "@/components/ui/presence-cursor"
+
+const users = [
+  { id: "1", name: "Alice", color: "text-blue-500", x: 20, y: 30 },
+  { id: "2", name: "Bob", color: "text-red-500", x: 120, y: 70 },
+]
 
 export default function Demo() {
-  return <Cursor className="w-full max-w-sm" />
+  return (
+    <div className="relative h-48">
+      {users.map((u) => (
+        <Cursor key={u.id} className="absolute" style={{ top: u.y, left: u.x }}>
+          <CursorPointer className={u.color} />
+          <CursorBody>
+            <CursorName>{u.name}</CursorName>
+            <CursorMessage>{u.id === "1" ? "编辑中" : "查看中"}</CursorMessage>
+          </CursorBody>
+        </Cursor>
+      ))}
+    </div>
+  )
+}
+```
+
+### 单协作者光标
+
+```tsx
+import {
+  Cursor, CursorBody, CursorMessage, CursorName, CursorPointer,
+} from "@/components/ui/presence-cursor"
+
+export default function Demo() {
+  return (
+    <div className="relative h-32">
+      <Cursor className="absolute" style={{ top: 20, left: 40 }}>
+        <CursorPointer className="text-emerald-500" />
+        <CursorBody>
+          <CursorName>小明</CursorName>
+          <CursorMessage>正在输入...</CursorMessage>
+        </CursorBody>
+      </Cursor>
+    </div>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/presence-cursor/index.tsx` 中的 TypeScript 类型为准。
+### Cursor
+
+最外层容器，渲染为 `<span>`，默认设置 `pointer-events-none`（不干扰底层交互）和 `select-none`（防止文本选中）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 定位和样式（通常设置 `absolute` + 坐标） | `string` | - |
+| children | 通常为 CursorPointer + CursorBody | `ReactNode` | - |
+| （其他） | 继承 HTMLAttributes{'<'}HTMLSpanElement{'>'} | - | - |
+
+### CursorPointer
+
+光标箭头，渲染为内联 SVG（20x20），使用 `fill="currentColor"` 通过 `className` 的 Tailwind 颜色类控制颜色。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 设置颜色（如 `text-blue-500`），同时应用 `size-3.5` | `string` | - |
+| （其他） | 继承 SVGProps{'<'}SVGSVGElement{'>'} | - | - |
+
+### CursorBody
+
+协作者信息气泡，渲染为 `<span>`，白色背景，圆角，带左偏移（`ml-3.5`）与箭头尖端对齐。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式 | `string` | - |
+| children | 通常为 CursorName + 可选 CursorMessage | `ReactNode` | - |
+| （其他） | 继承 HTMLAttributes{'<'}HTMLSpanElement{'>'} | - | - |
+
+当 children 超过 1 个时，气泡顶部左圆角自动变为直角，首子元素 `opacity-70`。
+
+### CursorName
+
+协作者名称，纯展示 `<span>`，无额外默认样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| （全部） | 继承 HTMLAttributes{'<'}HTMLSpanElement{'>'} | - | - |
+
+### CursorMessage
+
+协作者状态消息（如"编辑中"、"查看中"），纯展示 `<span>`，无额外默认样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| （全部） | 继承 HTMLAttributes{'<'}HTMLSpanElement{'>'} | - | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何控制光标颜色？
+
+在 `CursorPointer` 上通过 `className` 传入 Tailwind 颜色类（如 `text-blue-500`），箭头 SVG 使用 `fill="currentColor"` 自动跟随文字颜色。
+
+### Cursor 为什么是 `pointer-events-none`？
+
+为了不阻挡底层元素（如文本、按钮）的交互。协作光标是纯展示组件，不应干扰用户操作页面内容。
+
+### 如何实现光标跟随鼠标实时移动？
+
+坐标定位由调用侧负责。通过同步引擎获取协作者位置后，在 `Cursor` 上设置 `className="absolute"` 和 `style={{ top: y, left: x }}` 即可。组件本身不包含同步或动画逻辑。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/presence-cursor` 导入。
+
+1. 从 `@/components/ui/presence-cursor` 导入 Cursor、CursorPointer、CursorBody、CursorName、CursorMessage。
+2. Cursor 必须设置定位（`className="absolute"` + `style` 坐标），否则无法正确定位。
+3. CursorPointer 颜色通过 `className` Tailwind 颜色类 + `fill="currentColor"` 控制。
+4. CursorBody 内必须放置 CursorName，可选 CursorMessage。
+5. 不在组件内部实现同步逻辑，仅负责渲染。
+6. 多协作者场景使用 `.map()` 遍历，每个协作者一个 Cursor。
+7. 不添加交互行为（如点击、拖拽），纯展示组件。
+8. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="presence-cursor" />

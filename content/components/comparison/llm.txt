@@ -1,0 +1,196 @@
+---
+category: Blocks
+title: Comparison
+subtitle: 对比滑块
+description: 图片对比滑块复合组件，支持拖拽和悬停两种交互模式，基于 motion/react 弹簧动画。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 11
+source:
+  component: src/components/blocks/comparison/index.tsx
+  docs: content/components/comparison/index.mdx
+  examples:
+    - content/components/comparison/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# Comparison 对比滑块
+
+Comparison 是一个图片对比滑块复合组件，由 Comparison 容器、ComparisonItem 内容区和 ComparisonHandle 手柄三部分组成。支持拖拽（drag）和悬停（hover）两种交互模式，使用 motion/react 的 spring 弹簧动画实现平滑的滑块过渡效果。
+
+本组件为项目本地复合组件，无 Ant Design 直接对应。实现以本地源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合在图片处理、设计对比、前后效果展示等场景中使用，允许用户通过拖拽手柄直观地对比两张图片的差异。
+
+常见场景：
+
+- 图像处理前后的效果对比（如修图、滤镜）。
+- 设计稿与实现效果的视觉对比。
+- 产品 A/B 版本的差异展示。
+- 地图、建筑等同一视角不同时期的对比。
+
+不推荐：
+
+- 两图并排展示对比 —— 使用普通排版即可，Comparison 适合需要滑动查看边界的场景。
+- 超过两图的对比 —— 本组件只支持左右两张图。
+- 对比内容不是等尺寸的图片 —— 容器内图片应等尺寸以获得正确的滑动效果。
+
+## 代码演示 {#examples}
+
+### 基础用法（拖拽模式）
+
+```tsx
+import { Comparison, ComparisonItem, ComparisonHandle } from "@/components/ui/comparison"
+
+export default function Demo() {
+  return (
+    <Comparison className="h-64 w-full max-w-lg" mode="drag">
+      <ComparisonItem position="left">
+        <img src="/before.jpg" alt="Before" className="h-full w-full object-cover" />
+      </ComparisonItem>
+      <ComparisonItem position="right">
+        <img src="/after.jpg" alt="After" className="h-full w-full object-cover" />
+      </ComparisonItem>
+      <ComparisonHandle />
+    </Comparison>
+  )
+}
+```
+
+> 说明：`Comparison` 提供 `role="slider"` 语义，支持鼠标拖拽和触摸滑动。`ComparisonItem` 通过 `position` 指定左/右位置，`ComparisonHandle` 渲染可拖拽手柄。默认 `mode="drag"`，用户点击并拖动手柄来进行对比。
+
+### 悬停模式
+
+```tsx
+import { Comparison, ComparisonItem } from "@/components/ui/comparison"
+
+export default function Demo() {
+  return (
+    <Comparison className="h-64 w-full max-w-lg" mode="hover">
+      <ComparisonItem position="left">
+        <img src="/before.jpg" alt="Before" className="h-full w-full object-cover" />
+      </ComparisonItem>
+      <ComparisonItem position="right">
+        <img src="/after.jpg" alt="After" className="h-full w-full object-cover" />
+      </ComparisonItem>
+    </Comparison>
+  )
+}
+```
+
+> 悬停模式下，滑块跟随鼠标位置移动，无需点击拖拽。手柄仅显示分割线（不显示拖拽图标）。
+
+## API {#api}
+
+以下类型来自 `src/components/blocks/comparison/index.tsx` 源码，是生成代码时的主要依据。
+
+### Comparison
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| mode | 交互模式：`drag` 为点击拖拽，`hover` 为鼠标跟随 | `'hover' \| 'drag'` | `'drag'` |
+| onDragStart | 拖拽开始回调（仅 drag 模式） | `() => void` | - |
+| onDragEnd | 拖拽结束回调（仅 drag 模式） | `() => void` | - |
+| className | 附加样式类 | `string` | - |
+
+`Comparison` 继承 `HTMLAttributes<HTMLDivElement>`。使用 `role="slider"` 和 `aria-valuenow`/`aria-valuemin`/`aria-valuemax` 提供可访问性语义。Container 响应鼠标（onMouseDown/onMouseMove/onMouseUp/onMouseLeave）和触摸（onTouchStart/onTouchMove/onTouchEnd）事件。
+
+### ComparisonItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| position | 内容区所处位置，决定 clip-path 动画方向 | `'left' \| 'right'` | 必填 |
+| className | 附加样式类 | `string` | - |
+
+`ComparisonItem` 继承 `ComponentProps<typeof motion.div>`，使用 `motion.div` 渲染。`position="left"` 时，clip-path 从左侧裁剪（`inset(0 0 0 {value}%)`）；`position="right"` 时从右侧裁剪（`inset(0 {100-value}% 0 0)`）。使用 `useTransform` 将滑块百分比映射为 CSS clip-path 值。
+
+### ComparisonHandle
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义手柄内容，覆盖默认手柄 UI | `React.ReactNode` | 默认竖线 + GripVertical 图标 |
+| className | 附加样式类 | `string` | - |
+
+`ComparisonHandle` 继承 `ComponentProps<typeof motion.div>`。默认手柄包含一个 1px 宽的分割竖线（`bg-background`），拖拽模式下额外显示 `GripVertical` 图标。手柄位置通过 `useTransform(motionSliderPosition, v => \`${v}%\`)` 跟踪滑块位置。使用 `-translate-x-1/2` 居中定位。
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 容器使用 `relative isolate w-full select-none overflow-hidden`，阻止文本选择和溢出。
+- ComparisonItem 使用 `absolute inset-0 h-full w-full object-cover` 绝对定位覆盖容器。
+- 滑块位置通过 motion `useSpring` 计算，设置 `bounce: 0, duration: 0` 确保即时跟手。
+- Clipboard 动画通过 motion `useTransform` 驱动，性能由 motion 优化。
+- 手柄在 drag 模式下使用 `cursor-grab active:cursor-grabbing` 提供交互反馈。
+- 手柄分割线使用 `bg-background` 确保在图片上有足够对比度。
+- 主题颜色优先使用 `text-muted-foreground`、`bg-background` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/comparison/index.tsx`（复合组件定义）
+- `src/components/ui/comparison.tsx`（re-export barrel）
+
+直接依赖摘要：
+
+- React（`useState`、`createContext`、`useContext`、事件处理）
+- `motion/react`（`motion`、`useMotionValue`、`useSpring`、`useTransform`）
+- `lucide-react`（`GripVertical` 图标）
+- `@/lib/utils`（`cn` 样式合并）
+- Tailwind CSS
+
+实现注意：
+
+1. 组件通过 `ImageComparisonContext` 共享滑块位置和模式信息。
+2. `useSpring` 配置为 `bounce: 0, duration: 0`，使滑块即时跟手无弹性。
+3. 拖拽模式下通过 `isDragging` 状态控制：未按下鼠标时不响应移动。
+4. 触摸事件支持多点触控，取 `touches[0]` 的 clientX。
+5. ComparisonItem 设置 `aria-hidden="true" role="img"`，表明其为装饰性视觉元素。
+6. 如需新增能力，应先修改该组件源码，再更新本 llm 文档。
+
+## 可访问性 {#accessibility}
+
+- Comparison 容器使用 `role="slider"`、`aria-label="Comparison slider"`、`aria-valuenow`、`aria-valuemin={0}`、`aria-valuemax={100}` 提供滑块语义。
+- 容器设置 `tabIndex={0}`，可通过键盘聚焦。键盘操作由浏览器默认 slider 行为提供。
+- ComparisonItem 设置 `aria-hidden="true"` 和 `role="img"`，标记为不暴露给辅助技术的装饰性内容。
+- ComparisonHandle 设置 `aria-hidden="true" role="presentation"`，仅为视觉手柄。
+- 如果对比图片包含重要信息，应在容器外补充文字描述。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，无 Ant Design 直接对应。AntD 无内置图片对比滑块组件。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/comparison/index.tsx` 的 TypeScript 类型为准 |
+| 动画引擎 | 使用 motion/react 弹簧物理，非 CSS transition |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 对比模式 | 支持 hover 和 drag 两种模式，通过 `mode` 切换 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Comparison 代码时，应遵守：
+
+1. 从 `@/components/ui/comparison` 导入，不要从 `antd` 导入。
+2. `Comparison` 必须作为最外层容器，所有子组件必须在其内部使用。
+3. `ComparisonItem` 的 `position` prop 为必填，取值为 `'left'` 或 `'right'`。
+4. 两张对比图片应有相同尺寸，以确保 clip-path 裁剪效果正确。
+5. 默认使用 `mode="drag"`；如需鼠标跟随效果，使用 `mode="hover"`。
+6. `ComparisonHandle` 可选，不提供时使用默认手柄 UI；提供 `children` 可完全自定义。
+7. 只使用本文件 API 摘要和源码中存在的 props，不要凭记忆生成不存在的属性。
+8. 不要删除组件内部的 motion 弹簧动画；这是本地 Comparison 的核心交互。
+9. 不要引入 AntD ConfigProvider、rc-component 或第三方对比库。
+10. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/comparison/index.tsx`。

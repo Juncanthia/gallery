@@ -1,4 +1,23 @@
-Statistic 展示统计数值，支持前缀、后缀、精度和标题。
+Statistic 统计数值，用于展示统计数据和指标，支持数值动画、前缀/后缀、精度控制和加载占位。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在仪表盘、数据面板或卡片中突出展示关键数值指标时使用。
+
+常见场景：
+- 仪表盘中展示活跃用户数、订单量、GMV 等核心指标。
+- 监控面板中展示系统运行时长、QPS、错误率等实时数据。
+- 用户中心的账户余额、积分、优惠券数量展示。
+- 倒计时/计时器场景（配合 `StatisticTimer`）。
+
+不推荐：
+- 展示普通文本信息——使用简单的 `<div>` + 排版 class 即可。
+- 数值变化极快（每秒更新多次）时使用 `AnimatedNumber`——动画时长 1.2 秒，高频更新会导致动画抖动。
+- 将非数值内容传入 `value` 而不设置 `formatter`——组件会自动将数值交由 `AnimatedNumber` 处理，非数值需通过 `formatter` 控制渲染。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="statistic" path="statistic/basic" />
 
@@ -16,32 +35,192 @@ export default function Demo() {
 }
 ```
 
+### 加载状态
+
+设置 `loading` 为 `true` 时，数值区域显示骨架屏占位。
+
+```tsx
+import { Statistic } from "@/components/ui/statistic"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-8">
+      <Statistic title="活跃用户" loading />
+      <Statistic title="今日订单" loading />
+      <Statistic title="转化率" loading />
+    </div>
+  )
+}
+```
+
+### StatisticDiff 差值展示
+
+用于展示环比或同比变化百分比，正值绿色、负值红色。
+
+```tsx
+import { Statistic, StatisticDiff } from "@/components/ui/statistic"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-8">
+      <Statistic title="日活用户" value={52390} suffix={<StatisticDiff value={12.5} />} />
+      <Statistic title="跳出率" value={32.6} suffix={<StatisticDiff value={-5.3} />} />
+      <Statistic title="销售额" value={12800} prefix="$" suffix={<StatisticDiff value={0.8} />} />
+    </div>
+  )
+}
+```
+
+### StatisticTimer 倒计时
+
+`StatisticTimer` 支持倒计时和正计时，使用 `format` 控制时间格式。
+
+```tsx
+import { StatisticTimer } from "@/components/ui/statistic"
+
+export default function Demo() {
+  // 距离目标日期的倒计时
+  const target = new Date("2027-01-01T00:00:00")
+
+  return (
+    <div className="flex flex-wrap gap-8">
+      <StatisticTimer
+        title="距离新年"
+        value={target}
+        type="countdown"
+        format="D 天 HH:mm:ss"
+        onFinish={() => alert("新年快乐！")}
+      />
+      <StatisticTimer
+        title="已启动"
+        value={new Date("2026-06-01T10:00:00")}
+        type="countup"
+        format="D 天 HH:mm:ss"
+      />
+    </div>
+  )
+}
+```
+
+### 自定义格式化
+
+通过 `formatter` 完全控制数值的渲染输出。
+
+```tsx
+import { Statistic } from "@/components/ui/statistic"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-8">
+      <Statistic
+        title="存储空间"
+        value={93.7}
+        formatter={(val) => `${val} GB / 128 GB`}
+      />
+      <Statistic
+        title="排队人数"
+        value={128}
+        formatter={(val) => {
+          const num = Number(val)
+          return num > 100 ? `${num}（拥挤）` : `${num}（正常）`
+        }}
+      />
+    </div>
+  )
+}
+```
+
 <h2 id="api">API</h2>
+
+### Statistic
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | title | 标题 | `ReactNode` | - |
-| value | 数值 | `number \| string` | - |
-| prefix | 前缀 | `ReactNode` | - |
-| suffix | 后缀 | `ReactNode` | - |
-| precision | 小数精度 | `number` | - |
+| value | 数值，number 类型触发动画 | `number \| string \| ReactNode` | `0` |
+| prefix | 数值前缀 | `ReactNode` | - |
+| suffix | 数值后缀，可搭配 StatisticDiff | `ReactNode` | - |
+| precision | 小数精度，配合 `value` 为 number 时生效 | `number` | - |
+| formatter | 自定义格式化函数，传入时覆盖默认渲染逻辑 | `(value: number \| string) => ReactNode` | - |
+| valueRender | 渲染前的二次加工，接收已处理好的 valueNode | `(node: ReactNode) => ReactNode` | - |
+| decimalSeparator | 小数分隔符 | `string` | `"."` |
+| groupSeparator | 千分位分隔符 | `string` | `","` |
+| valueStyle | 数值内联样式 | `CSSProperties` | - |
+| valueClassName | 数值附加 class | `string` | - |
+| titleClassName | 标题附加 class | `string` | - |
+| contentClassName | 内容区域（数值行）附加 class | `string` | - |
+| loading | 加载中，显示骨架屏占位 | `boolean` | - |
+| className | 根容器附加 class | `string` | - |
+
+### StatisticDiff
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 变化百分比数值，正值自动加 `+` 前缀 | `number` | 必填 |
+| className | 附加样式类名 | `string` | - |
+
+正值显示绿色（`text-green-600`），负值显示红色（`text-destructive`）。
+
+### StatisticTimer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 目标时间，Date / 时间戳 / ISO 字符串 | `number \| string \| Date` | `Date.now()` |
+| type | 计时方向 | `"countdown"` \| `"countup"` | `"countdown"` |
+| format | 时间格式模板 | `string` | `"HH:mm:ss"` |
+| onFinish | 倒计时归零回调 | `() => void` | - |
+| onChange | 每秒变化回调，参数为毫秒差值 | `(value: number) => void` | - |
+
+继承 `StatisticProps` 中除 `value`、`formatter`、`valueRender` 外的所有属性。
+
+### 时间格式占位符
+
+| 占位符 | 说明 | 示例 |
+| --- | --- | --- |
+| `D` | 天数（不补零） | `1`, `30` |
+| `DD` | 天数（补零到 2 位） | `01`, `30` |
+| `H` | 小时（不补零） | `1`, `23` |
+| `HH` | 小时（补零到 2 位） | `01`, `23` |
+| `m` | 分钟（不补零） | `5`, `59` |
+| `mm` | 分钟（补零到 2 位） | `05`, `59` |
+| `s` | 秒（不补零） | `3`, `59` |
+| `ss` | 秒（补零到 2 位） | `03`, `59` |
+
+<h2 id="faq">常见问题</h2>
+
+### `value` 为 number 时为什么会有动画？
+
+当 `value` 为 `number` 类型且未设置 `formatter` 时，Statistic 内部使用 `AnimatedNumber`（基于 motion/react 的 `useMotionValue`）渲染数值，默认动画时长 1.2 秒，缓动曲线为自定义贝塞尔。如需禁用动画，传入 `formatter` 或确保 `value` 为 string 类型。
+
+### StatisticTimer 的倒计时归零后如何保持？
+
+倒计时归零后 `onFinish` 只会触发一次（通过 `finishedRef` 防止重复触发）。如果需要归零后重新计时，在外部更新 `value` 即可（组件检测到 `value` 变化会重置 `finishedRef`）。
+
+### `formatter` 和 `valueRender` 有什么区别？
+
+`formatter` 接收原始 `value`（number 或 string），需要返回完整的渲染内容，会完全绕过 `AnimatedNumber`。`valueRender` 接收组件已处理好的 `valueNode`（可能是 `AnimatedNumber` 或 `formatter` 的结果），用于二次加工包装。通常只需使用 `formatter`。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/statistic` 导入。
 
+1. 从 `@/components/ui/statistic` 导入 `Statistic`、`StatisticDiff`、`StatisticTimer`。
+2. `value` 为 number 时自动触发数值动画，通过 `formatter` 可完全控制渲染。
+3. 差值展示使用 `StatisticDiff`，配合 Statistic 的 `suffix` 属性。
+4. 倒计时使用 `StatisticTimer`，通过 `format` 控制时间模板。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="semantic-dom">Semantic DOM</h2>
 
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+组件通过 `data-slot` 属性暴露稳定的语义结构：
 
 | data-slot | 说明 |
 | --- | --- |
-| `statistic` | - |
-| `statistic-content` | - |
-| `statistic-diff` | - |
-| `statistic-prefix` | - |
-| `statistic-suffix` | - |
-| `statistic-title` | - |
-| `statistic-value` | - |
+| `statistic` | 根容器 |
+| `statistic-title` | 标题区域 |
+| `statistic-content` | 数值行容器 |
+| `statistic-prefix` | 前缀元素 |
+| `statistic-value` | 数值元素 |
+| `statistic-suffix` | 后缀元素 |
+| `statistic-diff` | 差值元素 |
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="statistic" />

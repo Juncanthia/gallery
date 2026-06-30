@@ -1,0 +1,147 @@
+---
+category: Blocks
+title: Calculator
+subtitle: 计算器
+description: 拟物风计算器组件，支持四则运算、记忆功能、正负切换和键盘输入，带 LCD 显示屏和物理按键音效。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 5
+source:
+  component: src/components/blocks/calculator/index.tsx
+  docs: content/components/calculator/index.mdx
+  examples:
+    - content/components/calculator/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Calculator 计算器
+
+Calculator 是一个完整的拟物风计算器组件，实现了标准四则运算、记忆功能（mc/m+/m-/mr）、正负切换、小数点输入、退格删除和全清操作。它使用 Web Audio API 生成物理按键点击音效，支持全键盘操作，并配备仿 LCD 显示屏。
+
+本组件是独立的功能组件，无 Ant Design 对应项。
+
+## 何时使用 {#when-to-use}
+
+需要在页面中嵌入一个完整的计算器工具时使用。
+
+常见场景：
+
+- 金融类应用的快速计算工具。
+- 表单中的辅助计算入口。
+- 后台管理系统的数据验算工具。
+- 嵌入页面的小型计算器小部件。
+
+推荐使用方式：
+
+- 直接渲染 `<Calculator />`，无需传入任何必需属性。
+- 通过 `className` 控制外层容器的额外样式（如定位、外边距）。
+
+不推荐：
+
+- 将 Calculator 用作表单输入控件——它是带屏幕的完整计算器，不是 input 的替代品。
+- 在多处同时渲染多个 Calculator 实例——键盘事件监听是全局的，多个实例会冲突。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+渲染一个完整的计算器。
+
+```tsx
+import { Calculator } from "@/components/ui/calculator"
+
+export default function Demo() {
+  return <Calculator />
+}
+```
+
+### 自定义样式
+
+通过 className 控制容器样式。
+
+```tsx
+import { Calculator } from "@/components/ui/calculator"
+
+export default function Demo() {
+  return <Calculator className="mx-auto shadow-2xl" />
+}
+```
+
+## API {#api}
+
+### Calculator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className，会与默认容器样式合并 | `string` | - |
+
+## 样式模型 {#styling-model}
+
+Calculator 完全采用 Tailwind CSS 实现拟物化（Skeuomorphic）视觉风格，不使用任何外部 UI 库。
+
+- 外壳：`rounded-[24px] border border-neutral-300` 提供圆角边框，`bg-linear-to-b from-[#e8e8e8] to-[#d4d4d4]` 渐变模拟金属外壳，多层 `shadow` 包括外部投影和内嵌高光。
+- 屏幕区域：多层嵌套结构实现金属边框（bevel）和 LCD 液晶屏嵌入效果。LCD 屏幕使用 `bg-[#c2c5b4]`（灰绿色液晶底色），内嵌 `inset_0_4px_8px_rgba(0,0,0,0.22)` 模拟凹陷，`font-mono` 等宽字体显示数字，`tracking-widest` 加宽字距模拟真实 LCD。
+- 按键：
+  - 记忆键（mc/m+/m-/mr）：深灰色 `#4d4d4d -> #383838` 渐变。
+  - 功能键（Del/÷/×/-/+）：中灰色 `#6e6e6e -> #595959` 渐变。
+  - 数字键（0-9/.）：浅色 `#fbfbfb -> #ececec` 渐变。
+  - 等号键：橙色 `#f28244 -> #e05d26` 渐变，横跨两行（row-span-2）。
+- 所有按键带 `active:translate-y-[1px]` 按压缩放反馈和 `active:shadow-[inset...]` 按入效果。
+- 玻璃眩光：LCD 屏幕上的 `bg-linear-to-tr from-transparent via-white/10 to-white/20` 模拟玻璃反光。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/calculator/index.tsx`：Calculator 完整定义。
+
+关键行为：
+
+1. 使用 `useState` 管理 display、equation、memory、isFinished、hasMemory 共 5 个状态。
+2. `useRef` 持有 AudioContext 实例，避免每次点击重建。
+3. 数字输入限制 10 位长度（不含小数点），超过后忽略。
+4. 安全运算：使用 `new Function(...)` 替代 eval，对表达式进行字符白名单过滤。
+5. 运算符处理：连续操作时自动替换上一运算符；display 为空时忽略。
+6. 计算结果超过 10 位时使用 `toPrecision(8)` 格式化。
+7. 除以零等异常返回 "Error"。
+8. 键盘支持：映射 0-9、.、+、-、*、x、/、Enter、=、Escape、c、C、Backspace 到对应操作。
+9. 音效：通过 Web Audio API 生成物理按键音——数字键使用 sine wave + bandpass filter（清脆短促），运算符使用 triangle wave + lowpass filter（低沉短促）。AudioContext 暂停时自动 resume。异常静默失败。
+
+## 可访问性 {#accessibility}
+
+- 计算器内部所有按键使用原生 `<button>` 元素，天然支持键盘焦点和 Enter/Space 激活。
+- 键盘快捷键完全映射，数字键、运算符、Enter、Escape、Backspace 均可操作。
+- `select-none` 防止点击按键时选中文本。
+- LCD 显示屏使用 `font-mono` 等宽字体提升可读性。
+- 记忆状态通过 LCD 屏幕上的 "M" 指示器可见。
+- 不足之处：LCD 内容对屏幕阅读器不友好（纯 div 渲染）。如有无障碍需求，建议在容器上添加 `aria-label` 动态反映显示值。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Calculator 是独立功能组件，Ant Design 中无对应组件。AntD 的 InputNumber 为数字输入控件，完全不同。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| InputNumber | 不做 | Calculator 是完整计算器工具，不是表单输入控件 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Calculator 代码时，应遵守：
+
+1. 从 `@/components/ui/calculator` 导入 Calculator。
+2. 直接渲染 `<Calculator />` 即可，无需传入任何属性（className 可选）。
+3. 不要在同一个页面渲染多个 Calculator 实例——全局键盘监听会冲突。
+4. 不要修改 Calculator 内部的拟物化视觉样式——这是组件的核心设计特征。
+5. 不要移除或替换 Web Audio API 按键音效逻辑。
+6. 不要用 eval 替代 `new Function(...)` 运算逻辑——现有安全方案已过滤表达式。
+7. Calculator 不是表单控件，不要尝试将其值绑定到 form state。
+8. 不要将 Calculator 嵌入紧凑空间——组件宽度固定为 340px。

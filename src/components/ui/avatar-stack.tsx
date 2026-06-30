@@ -1,3 +1,5 @@
 "use client"
 
-export * from "@/components/blocks/avatar-stack"
+export { AvatarStack } from "@/components/blocks/avatar-stack"
+
+export type { AvatarStackProps } from "@/components/blocks/avatar-stack"

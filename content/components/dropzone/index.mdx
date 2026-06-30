@@ -1,21 +1,128 @@
-Dropzone 复合组件。
+Dropzone 拖拽上传。基于 react-dropzone 的文件拖拽与点击上传区域，支持文件类型、大小、数量限制。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要用户选择或拖入文件时使用。Dropzone 只负责文件选择交互，上传逻辑由调用侧自行处理。
+
+常见场景：
+
+- 单文件上传（默认 `maxFiles=1`），如头像上传。
+- 多文件批量上传，如文档附件。
+- 文件替换：展示已选文件后，拖入新文件覆盖替换。
+- 带格式/大小约束的文件选择，限制 MIME 类型与体积范围。
+
+不推荐：
+
+- 需要内置上传进度、队列管理——Dropzone 只做文件选择，上传逻辑需在 `onDrop` 中自行实现。
+- 需要复杂预览（缩略图、裁剪）——应在 `onDrop` 回调中扩展。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础文件上传
 
 <ComponentShowcase id="dropzone" path="dropzone/basic" />
 
 ```tsx
-import { Dropzone } from "@/components/ui/dropzone"
+import { Dropzone, DropzoneEmptyState } from "@/components/ui/dropzone"
 
 export default function Demo() {
-  return <Dropzone className="w-full max-w-sm" />
+  return (
+    <Dropzone
+      accept={{ "image/*": [] }}
+      maxSize={5 * 1024 * 1024}
+      onDrop={(files) => console.log(files)}
+    >
+      <DropzoneEmptyState />
+    </Dropzone>
+  )
+}
+```
+
+### 已选文件 + 替换
+
+通过 `src` 和 `onDrop` 实现受控模式，`DropzoneContent` 与 `DropzoneEmptyState` 根据 `src` 自动切换显示。
+
+```tsx
+import { useState } from "react"
+import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/dropzone"
+
+export default function Demo() {
+  const [files, setFiles] = useState<File[]>([])
+
+  return (
+    <Dropzone
+      src={files}
+      maxFiles={3}
+      onDrop={(accepted) => setFiles(accepted)}
+    >
+      <DropzoneContent />
+      <DropzoneEmptyState />
+    </Dropzone>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/dropzone/index.tsx` 中的 TypeScript 类型为准。
+### Dropzone
+
+顶层组件，集成 `useDropzone`，提供拖拽/点击交互。`src` 变化时自动重建 Context 以反映新文件状态。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | 当前已选文件数组，非空时 EmptyState 不显示 | `File[]` | - |
+| accept | 接受的 MIME 类型 | `DropzoneOptions["accept"]` | - |
+| maxFiles | 最大文件数量 | `number` | `1` |
+| maxSize | 单个文件最大字节数 | `number` | - |
+| minSize | 单个文件最小字节数 | `number` | - |
+| onDrop | 文件拖放/选择回调 | `(acceptedFiles: File[], fileRejections: FileRejection[], event: DropEvent) => void` | - |
+| onError | 文件拒绝或错误回调 | `(error: Error) => void` | - |
+| disabled | 禁用拖拽区域 | `boolean` | - |
+| className | 附加 className | `string` | - |
+| children | 内容（通常为 DropzoneContent + DropzoneEmptyState） | `ReactNode` | - |
+
+其余属性透传至 `useDropzone`。
+
+### DropzoneContent
+
+已选文件状态的默认展示。当 `src` 非空且无自定义 children 时展示文件名和替换提示。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义已选文件展示内容 | `ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+### DropzoneEmptyState
+
+空状态展示。当 `src` 为空且无自定义 children 时展示上传引导文案以及 accept/size 约束说明。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义空状态内容 | `ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何在文件被拒绝时获取错误信息？
+
+使用 `onError` 回调，组件会在文件不符合 accept/maxSize/minSize 约束时自动调用，传递 Error 对象。无需在 `onDrop` 中二次判断 fileRejections。
+
+### DropzoneContent 和 DropzoneEmptyState 的显示切换规则是什么？
+
+两者放在 Dropzone 内部作为 children 时，会根据 `src` 状态自动切换：`src` 非空时显示 Content，`src` 为空时显示 EmptyState。传入自定义 children 则会覆盖默认渲染。
+
+### 如何实现多文件上传后的自定义文件列表展示？
+
+给 `DropzoneContent` 传入自定义 children 即可覆盖默认的文件名列表展示，自定义任意布局和交互。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/dropzone` 导入。
+
+1. 从 `@/components/ui/dropzone` 导入 `Dropzone`、`DropzoneContent`、`DropzoneEmptyState`。
+2. 文件选择后 Dropzone 只返回 `File[]` 数组，上传逻辑需调用侧在 `onDrop` 中自行实现。
+3. `DropzoneContent` 和 `DropzoneEmptyState` 放在 Dropzone 内部作为 children，它们会自动根据 `src` 状态切换显示。
+4. 受控模式：传入 `src`（已选文件），`src` 变化会触发 Dropzone 重新挂载。
+5. 限制文件类型使用 `accept`、大小使用 `maxSize`/`minSize`、数量使用 `maxFiles`。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="dropzone" />

@@ -1,21 +1,139 @@
-CodeBlock 复合组件。
+CodePanel 代码面板，由 Code 容器、CodeHeader 标题栏和 CodeBlock 代码块三部分组成。标题栏支持自定义图标和内置复制按钮，代码块基于 Shiki primitive 提供语法高亮和打字光标动画效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在文档、教程、组件展示等场景中渲染带标题区（如文件名、语言标识）和语法高亮的代码片段时使用，尤其是需要复制功能和终端风格光标效果。
+
+常见场景：
+
+- 组件文档中的代码示例，带文件图标和复制按钮。
+- 终端命令展示，启用打字光标效果模拟命令行输出。
+- 嵌入卡片的代码面板，标题栏用于标识代码来源或类型。
+
+不推荐：
+
+- 多文件/多语言切换场景——应使用 CodeBlock 复合组件。
+- 纯文本代码（无语法高亮需求）——使用 `<pre><code>` 即可。
+- 实时编辑代码——CodePanel 仅供展示。
+- 引入 antd 或外部代码高亮库替代 Shiki。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="code-panel" path="code-panel/basic" />
 
 ```tsx
-import { CodeBlock } from "@/components/ui/CodeBlock"
+import { Code, CodeHeader, CodeBlock } from "@/components/ui/code-panel"
+import { Terminal } from "lucide-react"
 
 export default function Demo() {
-  return <CodeBlock className="w-full max-w-sm" />
+  return (
+    <Code code={`const greeting = "Hello World";\nconsole.log(greeting);`}>
+      <CodeHeader icon={Terminal} copyButton>
+        app.tsx
+      </CodeHeader>
+      <CodeBlock cursor />
+    </Code>
+  )
+}
+```
+
+### 无标题栏
+
+不使用 CodeHeader，仅展示纯代码内容。
+
+```tsx
+import { Code, CodeBlock } from "@/components/ui/code-panel"
+
+export default function Demo() {
+  return (
+    <Code code={`import { cn } from "@/lib/utils"\n\nexport function Button({ className, ...props }) {\n  return <button className={cn("btn", className)} {...props} />\n}`}>
+      <CodeBlock />
+    </Code>
+  )
+}
+```
+
+### 搭配外部按钮控制
+
+CodePanel 仅负责展示，外部按钮通过状态控制复制等行为。
+
+```tsx
+import { Code, CodeHeader, CodeBlock } from "@/components/ui/code-panel"
+import { FileCode } from "lucide-react"
+
+const snippet = `npm install @canthia/ui\n# or\nyarn add @canthia/ui`
+
+export default function Demo() {
+  return (
+    <Code code={snippet}>
+      <CodeHeader icon={FileCode} copyButton>
+        安装命令
+      </CodeHeader>
+      <CodeBlock />
+    </Code>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/CodeBlock/index.tsx` 中的 TypeScript 类型为准。
+### Code
+
+顶层容器，通过 `getStrictContext` 创建 CodeContext 向子组件提供 `code`。继承 `React.ComponentProps<'div'>`，必须包裹 CodeHeader 和 CodeBlock。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| code | 要展示的代码字符串，通过 Context 传递给子组件 | `string` | 必填 |
+| className | 附加样式类（默认含 `rounded border overflow-hidden`） | `string` | - |
+
+### CodeHeader
+
+标题栏，展示图标、标题文本和复制按钮。继承 `React.ComponentProps<'div'>`，必须在 Code 内部使用。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| icon | 标题栏图标（传入组件类型，非 React 元素） | `React.ElementType` | - |
+| copyButton | 是否显示复制按钮，点击后复制 Context 中的代码 | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+| children | 标题栏内容（如文件名、语言标签） | `React.ReactNode` | - |
+
+### CodeBlock
+
+代码高亮区域，Code 和 theme 由组件内部自动处理。继承底层 CodeBlock primitive 除 `code` 外的所有属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| cursor | 是否显示打字光标动画（最后一行末尾闪烁竖线） | `boolean` | - |
+| className | 附加样式类（代码区默认 `text-[13px]`） | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### CodePanel 和 CodeBlock 的区别？
+
+- **CodePanel**：简化版代码展示，单文件、带标题栏、复制按钮和光标效果。适合终端风格或简单代码片段。
+- **CodeBlock**：功能最完整的代码展示，支持多文件切换、行号、diff/高亮/聚焦标注、文件图标自动匹配。适合文档中的复杂代码示例。
+
+### CodeHeader 的 icon 属性应该传什么？
+
+传入组件类型（如 `lucide-react` 的 `Terminal`），不是 React 元素实例（不要传 `<Terminal />`）。
+
+### 如何启用复制功能？
+
+在 CodeHeader 上设置 `copyButton={true}`，复制按钮自动获取 Context 中的代码内容，无需额外配置。
+
+### CodeBlock 的 code 和 theme 需要手动传入吗？
+
+不需要。`code` 从 Code 容器的 Context 自动获取，`theme` 通过 `next-themes` 的 `useTheme()` 自动推断暗色/亮色模式。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/CodeBlock` 导入。
+
+1. 从 `@/components/ui/code-panel` 导入 `Code`、`CodeHeader`、`CodeBlock`。
+2. `Code` 必须作为最外层容器，且 `code` prop 为必填。
+3. `CodeHeader` 和 `CodeBlock` 必须在 `Code` 内部使用，依赖 Context 获取代码。
+4. 标题栏图标使用 `icon` prop 传入组件类型（如 `Terminal`），不是 React 元素实例。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
-<SourceViewer componentId="CodeBlock" />
+<SourceViewer componentId="code-panel" />

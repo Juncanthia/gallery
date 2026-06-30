@@ -1,27 +1,36 @@
-Tabs 在同一区域内切换展示不同内容面板。基于 Radix Tabs 实现，支持 `line`/`card` 样式、`small`/`middle`/`large` 尺寸、`top`/`bottom`/`start`/`end` 四个标签位置和居中布局。
+Tabs 标签页。在同一区域内切换展示不同内容面板。基于 Radix Tabs 实现，支持 `line`/`card` 样式、`small`/`middle`/`large` 三种尺寸、`top`/`bottom`/`start`/`end` 四个标签位置、居中布局、声明式 items 配置和标签栏额外内容。
 
 <h2 id="when-to-use">何时使用</h2>
 
-当需要在有限空间内组织多组内容，让用户在不同视图间切换时使用。
+当需要在有限空间内组织多组内容，让用户在不同视图间快速切换时使用。
 
-- 设置页面的分类（如"个人信息"、"安全设置"、"通知偏好"）。
-- 数据仪表盘的不同指标视图（如"日"、"周"、"月"）。
-- 详情页的多 Tab 信息展示（如"基本信息"、"操作日志"、"关联数据"）。
-- 当内容分组清晰且用户需要频繁切换时，Tabs 比 Accordion 更直观。
+常见场景：
+- 设置页面的分类 Tab（个人信息、安全设置、通知偏好）。
+- 数据仪表盘的时间维度切换（日、周、月、年）。
+- 详情页的多 Tab 信息展示（基本信息、操作日志、关联数据）。
+- 表单的分步骤展示（非向导式，各步骤独立）。
+
+不推荐：
+- 标签数量超过 6-8 个——应改用下拉选择或垂直排列。
+- 内容间有严格的前后依赖关系——使用 Steps 向导组件。
+- 仅需展开/收起单块内容——使用 Accordion。
 
 <h2 id="examples">代码演示</h2>
 
-### 基础用法
+### 子组件模式
 
 `TabsList` 包含 `TabsTrigger`，`TabsContents` 包含 `TabsContent`，两者的 `value` 需匹配。
 
-<ComponentShowcase
-  id="tabs"
-  path="tabs/basic"
-/>
+<ComponentShowcase id="tabs" path="tabs/basic" />
 
 ```tsx
-import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Tabs,
+  TabsContent,
+  TabsContents,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 export default function Demo() {
   return (
@@ -47,75 +56,152 @@ export default function Demo() {
 }
 ```
 
+### items 声明式 + 卡片样式
+
+使用 `items` 数组替代子组件，代码更简洁。
+
+```tsx
+import { Tabs } from "@/components/ui/tabs"
+
+export default function Demo() {
+  return (
+    <Tabs
+      type="card"
+      defaultActiveKey="account"
+      items={[
+        { key: "account", label: "账户信息", children: <div className="p-4">账户设置内容</div> },
+        { key: "security", label: "安全设置", children: <div className="p-4">安全设置内容</div> },
+        { key: "notify", label: "通知偏好", icon: <span>🔔</span>, children: <div className="p-4">通知设置内容</div> },
+      ]}
+    />
+  )
+}
+```
+
+### 垂直标签栏 + 额外内容
+
+设置 `tabPlacement="start"` 将标签栏放置到左侧，通过 `tabBarExtraContent` 添加操作按钮。
+
+```tsx
+import { Tabs } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <Tabs
+      tabPlacement="start"
+      tabBarExtraContent={{ right: <Button size="small">新建</Button> }}
+      defaultActiveKey="general"
+      items={[
+        { key: "general", label: "通用", children: <div className="p-4">通用设置</div> },
+        { key: "appearance", label: "外观", children: <div className="p-4">外观设置</div> },
+        { key: "advanced", label: "高级", children: <div className="p-4">高级设置</div> },
+      ]}
+    />
+  )
+}
+```
+
 <h2 id="api">API</h2>
 
 ### Tabs
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| activeKey | 受控激活的 tab 的 key | `string` | - |
-| defaultActiveKey | 默认激活的 tab 的 key | `string` | 第一个 |
-| onChange | 切换 tab 时的回调 | `(key: string) => void` | - |
+| activeKey | 受控激活的 tab key | `string` | - |
+| defaultActiveKey | 默认激活的 tab key | `string` | 第一个 item 的 key |
+| onChange | 切换 tab 回调 | `(key: string) => void` | - |
+| value | Radix 原生受控值（与 activeKey 等效） | `string` | - |
+| defaultValue | Radix 原生默认值 | `string` | - |
+| onValueChange | Radix 原生值变化回调 | `(key: string) => void` | - |
 | items | 声明式配置，替代子组件写法 | `TabsItem[]` | - |
-| type | 样式类型，`card` 为卡片式 | `line` \| `card` | `line` |
-| size | 标签尺寸 | `small` \| `middle` \| `large` | `middle` |
-| tabPlacement | 标签位置 | `top` \| `bottom` \| `start` \| `end` | `top` |
-| centered | 标签栏是否居中 | `boolean` | `false` |
-| tabBarExtraContent | 标签栏额外内容 | `ReactNode \| { left?, right? }` | - |
+| type | 样式类型 | `"line"` \| `"card"` | `"line"` |
+| size | 标签尺寸 | `"small"` \| `"middle"` \| `"large"` | `"middle"` |
+| tabPlacement | 标签栏位置，`start`/`end` 自动切换垂直布局 | `"top"` \| `"bottom"` \| `"start"` \| `"end"` | `"top"` |
+| centered | 标签栏是否居中（仅水平方向有效） | `boolean` | `false` |
+| tabBarExtraContent | 标签栏额外内容 | `React.ReactNode \| { left?: ReactNode; right?: ReactNode }` | - |
+| tabBarGutter | 标签之间的间距（px） | `number` | - |
+| className | 附加 CSS 类名 | `string` | - |
 
-### TabsItem（items 模式）
+### TabsItem
 
 | 属性 | 说明 | 类型 |
 | --- | --- | --- |
-| key | 唯一标识 | `string` |
-| label | 标签文本 | `ReactNode` |
-| children | 对应内容面板的内容 | `ReactNode` |
+| key | 唯一标识（必填） | `string` |
+| label | 标签显示文本 | `React.ReactNode` |
+| children | 标签对应的内容面板 | `React.ReactNode` |
 | disabled | 是否禁用该标签 | `boolean` |
-| icon | 标签图标 | `ReactNode` |
+| forceRender | 是否强制渲染隐藏面板的 DOM | `boolean` |
+| icon | 标签图标 | `React.ReactNode` |
 
 ### 子组件
 
-| 组件 | 说明 |
+| 组件 | 说明 | 关键属性 |
+| --- | --- | --- |
+| `TabsList` | 标签栏容器，内含高亮动画指示器，`role="tablist"` | `className` |
+| `TabsTrigger` | 单个标签按钮，`role="tab"`，`value` 与 `TabsContent` 匹配 | `value`, `disabled`, `className` |
+| `TabsContents` | 内容面板容器 | `className` |
+| `TabsContent` | 单个内容面板，`role="tabpanel"`，`value` 与 `TabsTrigger` 匹配 | `value`, `forceMount`, `className` |
+
+### 类型工具
+
+| 类型 | 值 |
 | --- | --- |
-| TabsList | 标签栏容器 |
-| TabsTrigger | 单个标签按钮，`value` 匹配 `TabsContent` |
-| TabsContents | 内容面板容器 |
-| TabsContent | 单个内容面板，`value` 匹配 `TabsTrigger` |
+| `TabsSize` | `"small"` \| `"middle"` \| `"large"` |
+| `TabsType` | `"line"` \| `"card"` |
+| `TabsPlacement` | `"top"` \| `"bottom"` \| `"start"` \| `"end"` |
 
 <h2 id="semantic-dom">Semantic DOM</h2>
 
 | data-slot | 说明 |
 | --- | --- |
-| `tabs` | Tabs 根元素 |
 | `tabs-list` | 标签栏 |
 | `tabs-trigger` | 单个标签按钮 |
 | `tabs-content` | 内容面板 |
 
 <h2 id="faq">常见问题</h2>
 
-### 何时使用 items 模式 vs 子组件模式？
+### items 模式 vs 子组件模式如何选择？
 
-- **items 模式**：标签结构简单、无复杂交互时，代码更简洁。
-- **子组件模式**：需要在标签栏插入额外元素（如搜索框、按钮）或自定义内容面板结构时使用。
+- **items 模式**：标签结构简单、无复杂交互时，代码更简洁，推荐优先使用。
+- **子组件模式**：需要在标签栏插入额外元素（如搜索框、按钮）或需要自定义内容面板结构时使用。
 
 ### 如何实现动态增减标签？
 
-使用 `items` 数组，通过 `splice`/`push` 操控数组并用 `activeKey` 控制激活项。关闭标签时需处理"当前激活标签被关闭"的回退逻辑。
+使用 `items` 数组配合 `activeKey` 受控：
 
-### 如何使用垂直标签？
+```tsx
+const [tabs, setTabs] = useState([...])
+const [activeKey, setActiveKey] = useState(tabs[0].key)
 
-设置 `tabPlacement="start"` 或 `tabPlacement="end"`。
+const closeTab = (key: string) => {
+  const newTabs = tabs.filter(t => t.key !== key)
+  setTabs(newTabs)
+  if (key === activeKey && newTabs.length > 0) {
+    setActiveKey(newTabs[newTabs.length - 1].key)
+  }
+}
+```
+
+### `activeKey` 和 `value` 有什么区别？
+
+两者等效，都用于受控模式。`activeKey` 是本地封装的便利属性名（对齐 Ant Design 习惯），`value` 是 Radix 原生属性。两者同时传入时 `activeKey` 优先。非受控模式使用 `defaultActiveKey` 或 `defaultValue`。
+
+### `tabPlacement="start"` 和 `tabPlacement="end"` 的区别？
+
+- `"start"`：标签栏在左侧，内容在右侧。
+- `"end"`：标签栏在右侧，内容在左侧。
+- 两种都会自动切换为垂直布局（`orientation="vertical"`）。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-AI 生成 Tabs 代码时：
-
 1. 从 `@/components/ui/tabs` 导入。
-2. 使用 `activeKey` 控制激活项（非 `value`）。
-3. `TabsTrigger` 的 `value` 和 `TabsContent` 的 `value` 必须一一对应。
-4. 简单场景优先使用 `items` 声明模式。
-5. 不要引入 Ant Design 的 `Tabs`。
+2. 使用 `activeKey` 控制激活项（Ant Design 风格），或使用 `value`（Radix 原生）。
+3. `TabsTrigger` 的 `value` 和 `TabsContent` 的 `value` 必须一一对应，否则面板不会切换。
+4. 简单场景优先使用 `items` 声明式模式。
+5. 垂直标签栏设置 `tabPlacement="start"` 或 `"end"`。
+6. 标签栏额外内容使用 `tabBarExtraContent`，不要通过子组件 hack。
+7. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
-
 <SourceViewer componentId="tabs" />

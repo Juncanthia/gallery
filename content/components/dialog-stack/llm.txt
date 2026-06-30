@@ -1,0 +1,300 @@
+---
+category: Blocks
+title: DialogStack
+subtitle: 对话框堆叠
+description: 对话框堆叠系统，支持多步骤对话框的栈式导航、前后步进、可点击回溯。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 2
+source:
+  component: src/components/blocks/dialog-stack/index.tsx
+  docs: content/components/dialog-stack/index.mdx
+  examples:
+    - content/components/dialog-stack/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DialogStack 对话框堆叠
+
+DialogStack 是一套组合式对话框堆叠系统，将多个对话框内容组织为栈式结构。用户可通过 Next/Previous 按钮在对话框之间步进，也支持点击底层对话框回溯切换。组件使用 Portal 渲染叠加层，打开状态下盖在页面内容之上，适合多步骤表单、引导流程、分步确认等场景。
+
+本组件为项目本地复合组件，无 Ant Design 直接对应。
+
+## 何时使用
+
+适用于需要多步骤对话框操作的场景：
+
+- 多步骤表单（注册向导、配置向导）。
+- 分步确认流程（删除确认 -> 后果提示 -> 最终确认）。
+- 引导式 onboarding 教程。
+- 包含多个子操作的复合弹窗。
+
+常见场景：
+
+- 每个步骤有独立标题、描述、操作区域。
+- 需要"上一步 / 下一步"导航。
+- 点击遮罩层关闭或以受控模式由调用侧管理开关。
+
+不推荐：
+
+- 单一步骤的简单确认弹窗，使用 AlertDialog 更合适。
+- 纯内容展示弹窗，不需要步进导航的场景使用 Dialog。
+- 对话框数量超过 5 步的超级向导，建议拆分为独立的多个 Dialog 或专用页面。
+
+## 代码演示
+
+### 基础对话框堆叠
+
+```tsx
+import {
+  DialogStack,
+  DialogStackTrigger,
+  DialogStackOverlay,
+  DialogStackBody,
+  DialogStackContent,
+  DialogStackHeader,
+  DialogStackTitle,
+  DialogStackDescription,
+  DialogStackFooter,
+  DialogStackNext,
+  DialogStackPrevious,
+} from "@/components/ui/dialog-stack"
+
+export default function Demo() {
+  return (
+    <DialogStack>
+      <DialogStackTrigger>打开</DialogStackTrigger>
+      <DialogStackOverlay />
+      <DialogStackBody>
+        <DialogStackContent>
+          <DialogStackHeader>
+            <DialogStackTitle>步骤一</DialogStackTitle>
+            <DialogStackDescription>这是第一步的描述。</DialogStackDescription>
+          </DialogStackHeader>
+          <DialogStackFooter>
+            <DialogStackNext>下一步</DialogStackNext>
+          </DialogStackFooter>
+        </DialogStackContent>
+        <DialogStackContent>
+          <DialogStackHeader>
+            <DialogStackTitle>步骤二</DialogStackTitle>
+            <DialogStackDescription>这是第二步的描述。</DialogStackDescription>
+          </DialogStackHeader>
+          <DialogStackFooter>
+            <DialogStackPrevious>上一步</DialogStackPrevious>
+            <DialogStackNext>完成</DialogStackNext>
+          </DialogStackFooter>
+        </DialogStackContent>
+      </DialogStackBody>
+    </DialogStack>
+  )
+}
+```
+
+### 可点击回溯 + 受控开启
+
+```tsx
+import { useState } from "react"
+import {
+  DialogStack,
+  DialogStackTrigger,
+  DialogStackOverlay,
+  DialogStackBody,
+  DialogStackContent,
+} from "@/components/ui/dialog-stack"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <DialogStack open={open} onOpenChange={setOpen} clickable>
+      <DialogStackTrigger asChild>
+        <Button>受控开启</Button>
+      </DialogStackTrigger>
+      <DialogStackOverlay />
+      <DialogStackBody>
+        <DialogStackContent>
+          <h3>第一步</h3>
+          <p>点击此卡片可回到第一步。</p>
+        </DialogStackContent>
+        <DialogStackContent>
+          <h3>第二步</h3>
+          <p>点击下方第一步卡片可回溯。</p>
+        </DialogStackContent>
+        <DialogStackContent>
+          <h3>第三步</h3>
+          <p>点击前两步卡片可回溯。</p>
+        </DialogStackContent>
+      </DialogStackBody>
+    </DialogStack>
+  )
+}
+```
+
+## API
+
+### DialogStack
+
+顶层容器，管理开启/关闭状态和当前活跃索引。提供 Context 给子组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| open | 受控开启状态 | `boolean` | - |
+| defaultOpen | 非受控默认开启状态 | `boolean` | `false` |
+| onOpenChange | 开启状态变化回调 | `(open: boolean) => void` | - |
+| clickable | 是否允许点击底层对话框回溯 | `boolean` | `false` |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DialogStackTrigger
+
+触发打开对话框堆叠的按钮。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 使用 Slot 模式渲染子元素 | `boolean` | `false` |
+| className | 附加 className | `string` | - |
+
+继承 `ButtonHTMLAttributes<HTMLButtonElement>`。
+
+### DialogStackOverlay
+
+对话框的背景遮罩层，点击可关闭。仅在 `isOpen` 时渲染。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DialogStackBody
+
+对话框内容容器，通过 Portal 渲染，管理子对话框的索引分配。仅在 `isOpen` 时渲染。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| children | 对话框内容（须为 DialogStackContent 元素） | `ReactElement<DialogStackChildProps>[]` \| `ReactElement<DialogStackChildProps>` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DialogStackContent
+
+单个对话框步骤的内容容器。根据与活跃索引的距离计算 Y 位移、宽度、透明度和 z-index。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| index | 对话框在栈中的索引（由 Body 自动分配） | `number` | `0` |
+| offset | 每层偏移距离（px） | `number` | `10` |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DialogStackTitle
+
+对话框标题。渲染为 `<h2>`。继承 `HTMLAttributes<HTMLHeadingElement>`。
+
+### DialogStackDescription
+
+对话框描述文本。继承 `HTMLAttributes<HTMLParagraphElement>`。
+
+### DialogStackHeader
+
+对话框头部容器，通常包裹 Title 和 Description。继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DialogStackFooter
+
+对话框底部操作区容器，通常包裹 Next / Previous 按钮。继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DialogStackNext
+
+下一步按钮。到达最后一步时自动禁用。默认文案 "Next"。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 使用 Slot 模式渲染子元素 | `boolean` | `false` |
+| className | 附加 className | `string` | - |
+
+继承 `ButtonHTMLAttributes<HTMLButtonElement>`。
+
+### DialogStackPrevious
+
+上一步按钮。在第一步时自动禁用。默认文案 "Previous"。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 使用 Slot 模式渲染子元素 | `boolean` | `false` |
+| className | 附加 className | `string` | - |
+
+继承 `ButtonHTMLAttributes<HTMLButtonElement>`。
+
+## 样式模型
+
+全部使用 Tailwind CSS 实现，无 CVA、无 CSS-in-JS。
+
+- Trigger：标准按钮样式，`bg-primary text-primary-foreground`。
+- Overlay：`fixed inset-0 z-50 bg-black/80`。
+- Body 容器：`pointer-events-none fixed inset-0 z-50 mx-auto flex max-w-lg flex-col items-center justify-center`。
+- 内容包装器：`pointer-events-auto relative flex w-full flex-col items-center justify-center`。
+- DialogStackContent：`rounded-lg border bg-background p-6 shadow-lg transition-all duration-300`。
+- 位置计算：通过 inline style 的 `transform: translateY`、`width`、`zIndex`、`position`、`opacity` 控制。
+- 激活内容：`relative`，可见可交互。
+- 非激活内容：`absolute`，透明度 0，`pointer-events-none select-none opacity-0`。
+
+## 依赖与实现说明
+
+核心文件：
+
+- `src/components/blocks/dialog-stack/index.tsx`：全部实现。
+
+关键依赖：
+
+- `@radix-ui/react-use-controllable-state`：`isOpen` 的受控/非受控状态管理。
+- `radix-ui`（Portal）：将对话框内容渲染到 document.body 层级。
+- React `createContext` / `useContext`：步骤间状态共享。
+
+关键行为：
+
+1. `DialogStackBody` 通过 `Children.map` 为每个子 `DialogStackContent` 按序分配 `index` 属性，并通过嵌套的 Context Provider 将 `totalDialogs` 注入。
+2. `DialogStackContent` 根据 `index - activeIndex` 差值计算视觉偏移：当前激活步骤以 `relative` 定位，后续步骤按 `offset` 向下偏移 `absolute` 定位，前序步骤向上偏移。
+3. `clickable` 模式下，点击较低索引内容可将 `activeIndex` 回退到该步骤。
+4. 未开启时 `Overlay` 和 `Body` 均返回 `null`，不渲染任何 DOM。
+5. Next/Previous 按钮在边界处（第一步 / 最后一步）自动通过 `disabled` 属性禁用。
+
+## 可访问性
+
+- Overlay 点击可关闭，但缺少键盘关闭（Escape）——生产环境应补充。
+- 步进按钮使用原生 `<button>`，禁用态使用 `disabled` 属性。
+- 对话框内容不自动聚焦，依赖外部调用侧处理。
+- 无 ARIA 对话框角色标注，适合内部使用场景，公共产品需补充 `role="dialog"`、`aria-modal`、`aria-labelledby`。
+
+## 与 Ant Design 的取舍
+
+Ant Design 不提供等价的对话框堆叠组件。AntD 的 `Modal` 使用 `Modal.method()` 支持多步骤函数式调用，但本地选择显式的组合式 API。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| Modal.method 函数式调用 | 不做 | 显式组合式 API 更清晰，类型安全更好 |
+| Modal.config 全局配置 | 不做 | 本项目不引入 ConfigProvider |
+
+## LLM 使用规则
+
+1. 从 `@/components/ui/dialog-stack` 导入所有需要的子组件。
+2. 组装顺序为：DialogStack > DialogStackTrigger > DialogStackOverlay > DialogStackBody > DialogStackContent[]。
+3. DialogStackContent 按步骤顺序排列，Body 会自动分配索引。
+4. 每个步骤操作区使用 DialogStackFooter 包裹 DialogStackNext / DialogStackPrevious。
+5. 如需允许点击底层步骤回溯，设置 `clickable` 为 true。
+6. 如需受控开关，使用 `open` + `onOpenChange`；不受控场景使用 `defaultOpen`。
+7. 必须显式放置 `DialogStackOverlay`，否则无背景遮罩层。
+8. 单步骤确认弹窗应使用 AlertDialog，多步骤向导使用本组件。

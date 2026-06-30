@@ -1,31 +1,157 @@
-Spin 用于页面和区块的加载中状态，支持多种尺寸和自定义描述。
+Spin 加载中，用于页面和区块的加载中状态展示，支持内联展示和容器包裹两种模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要告知用户当前内容正在加载或处理中时使用。
+
+常见场景：
+- 页面或区块首次加载时的占位状态。
+- 表单提交或数据保存过程中的禁用反馈。
+- 列表或表格数据正在请求时的覆盖层提示。
+- 异步操作的等待期视觉反馈。
+
+不推荐：
+- 加载时间极短（<200ms）时使用，会造成闪烁感。可通过 `delay` 属性设置延迟显示。
+- 将 Spin 用于非加载状态的装饰性旋转动画。
+- 绕过 `spinning` prop 直接操作 DOM 控制显隐。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="spin" path="spin/basic" />
 
 ```tsx
 import { Spin } from "@/components/ui/spin"
+
 export default function Demo() {
-  return <div className="flex gap-4"><Spin /><Spin size="small" /><Spin size="large" /><Spin><span className="ml-2 text-sm">加载中...</span></Spin></div>
+  return (
+    <div className="flex gap-4">
+      <Spin />
+      <Spin size="small" />
+      <Spin size="large" />
+      <Spin tip="加载中..." />
+    </div>
+  )
+}
+```
+
+### 容器包裹模式
+
+当传入 `children` 时，Spin 渲染为覆盖层：子内容降低不透明度并禁止交互，加载指示器居中显示。
+
+```tsx
+import { Spin } from "@/components/ui/spin"
+
+export default function Demo() {
+  return (
+    <Spin spinning tip="数据加载中...">
+      <div className="h-40 w-64 rounded border p-4">
+        <h3 className="font-medium">用户列表</h3>
+        <p className="text-sm text-muted-foreground">张三、李四、王五</p>
+      </div>
+    </Spin>
+  )
+}
+```
+
+### 延迟显示
+
+通过 `delay` 设置延迟毫秒数，避免快速请求时的闪烁。
+
+```tsx
+import { useState } from "react"
+import { Spin } from "@/components/ui/spin"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [spinning, setSpinning] = useState(false)
+
+  const handleLoad = () => {
+    setSpinning(true)
+    setTimeout(() => setSpinning(false), 3000)
+  }
+
+  return (
+    <div className="space-y-4">
+      <Button onClick={handleLoad}>模拟加载 3 秒</Button>
+      <Spin spinning={spinning} delay={500} tip="加载中...">
+        <div className="h-20 w-48 rounded border p-3 text-sm">
+          请求间隔小于 500ms 时不显示 Spin
+        </div>
+      </Spin>
+    </div>
+  )
+}
+```
+
+### 自定义指示器
+
+通过 `indicator` 属性传入自定义的加载图标。
+
+```tsx
+import { Spin } from "@/components/ui/spin"
+import { Loader } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Spin indicator={<Loader className="h-6 w-6 animate-spin text-blue-500" />} tip="正在同步数据..." />
+  )
 }
 ```
 
 <h2 id="api">API</h2>
+
+### Spin
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| size | 尺寸 | `small` \| `default` \| `large` | `default` |
-| children | 自定义描述 | `ReactNode` | - |
+| spinning | 是否显示加载状态 | `boolean` | `true` |
+| size | 加载图标尺寸 | `"small"` \| `"default"` \| `"large"` | `"default"` |
+| tip | 加载提示文案 | `React.ReactNode` | - |
+| indicator | 自定义加载指示器，覆盖默认图标 | `React.ReactNode` | - |
+| delay | 延迟显示毫秒数，期间不渲染加载状态 | `number` | - |
+| children | 包裹的内容，传入后以覆盖层模式渲染 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+| style | 附加内联样式 | `React.CSSProperties` | - |
+
+### SpinSize
+
+| 值 | 对应图标尺寸 |
+| --- | --- |
+| `"small"` | `size-4` (16px) |
+| `"default"` | `size-6` (24px) |
+| `"large"` | `size-8` (32px) |
+
+<h2 id="faq">常见问题</h2>
+
+### Spin 和 Spinner 有什么区别？
+
+`Spin` 是容器型加载组件，支持包裹子内容（覆盖层模式）和独立内联模式，带有 `delay`、`tip` 等交互属性。`Spinner` 是纯展示型加载动画指示器，提供 8 种视觉变体，不带容器能力。需要包裹内容时用 Spin，仅需加载动画图标时用 Spinner。
+
+### 如何让 Spin 只在请求超过一定时间后才显示？
+
+使用 `delay` 属性。例如 `delay={500}` 表示请求发起 500ms 后仍未完成才显示 Spin，500ms 内完成的请求不会触发 Spin 显示，避免闪烁。
+
+### children 模式下如何自定义覆盖层样式？
+
+覆盖层由内部自动生成，不提供独立的 className 扩展点。如需更强的自定义，可直接使用 `indicator` + 手动包裹，不传 `children`。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/spin` 导入。
 
+1. 从 `@/components/ui/spin` 导入。
+2. `spinning` 控制显隐，默认为 `true`，条件渲染时需显式传入。
+3. 包裹内容时传 `children`，Spin 自动切换为居中覆盖层模式。
+4. 快速请求场景使用 `delay` 避免闪烁。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="semantic-dom">Semantic DOM</h2>
 
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+组件通过 `data-slot` 属性暴露稳定的语义结构：
 
 | data-slot | 说明 |
 | --- | --- |
-| `spin` | - |
+| `spin` | 根容器 |
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="spin" />

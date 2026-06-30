@@ -1,3 +1,18 @@
 "use client"
 
-export * from "@/components/blocks/ticker"
+export {
+  useTickerContext,
+  Ticker,
+  TickerIcon,
+  TickerSymbol,
+  TickerPrice,
+  TickerPriceChange,
+} from "@/components/blocks/ticker"
+
+export type {
+  TickerProps,
+  TickerIconProps,
+  TickerSymbolProps,
+  TickerPriceProps,
+  TickerPriceChangeProps,
+} from "@/components/blocks/ticker"

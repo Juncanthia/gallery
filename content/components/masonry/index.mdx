@@ -1,4 +1,23 @@
-Masonry 复合组件。
+瀑布流 Masonry。基于 CSS Columns 的瀑布流布局组件，支持固定列数和响应式断点列数配置，纯 CSS 实现无 JavaScript 布局计算开销。
+
+<h2 id="when-to-use">何时使用</h2>
+
+适合展示高度不一致的内容卡片，利用瀑布流排列减少空白间隙。
+
+常见场景：
+- 图片画廊：图片原始比例不同，瀑布流可避免留白
+- 产品展示：产品卡片高度因描述长度不同而参差不齐
+- 文章列表：摘要长度不一的文章卡片排列
+- 仪表盘面板：高度各异的小部件网格
+
+不推荐：
+- 内容高度完全一致的场景——此时普通 grid 更合适
+- 需要精确行列对齐的表格型数据
+- 项目数量极少（<5）且高度一致的场景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="masonry" path="masonry/basic" />
 
@@ -6,16 +25,78 @@ Masonry 复合组件。
 import { Masonry } from "@/components/ui/masonry"
 
 export default function Demo() {
-  return <Masonry className="w-full max-w-sm" />
+  return (
+    <Masonry columns={3} gap={4}>
+      <div className="bg-muted rounded p-4 h-32">卡片 1</div>
+      <div className="bg-muted rounded p-4 h-48">卡片 2</div>
+      <div className="bg-muted rounded p-4 h-40">卡片 3</div>
+      <div className="bg-muted rounded p-4 h-56">卡片 4</div>
+      <div className="bg-muted rounded p-4 h-36">卡片 5</div>
+      <div className="bg-muted rounded p-4 h-44">卡片 6</div>
+    </Masonry>
+  )
+}
+```
+
+### 响应式列数
+
+```tsx
+import { Masonry } from "@/components/ui/masonry"
+
+export default function Demo() {
+  return (
+    <Masonry columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} gap={4}>
+      <div className="bg-muted rounded p-4 h-32">卡片 1</div>
+      <div className="bg-muted rounded p-4 h-48">卡片 2</div>
+      <div className="bg-muted rounded p-4 h-40">卡片 3</div>
+      <div className="bg-muted rounded p-4 h-56">卡片 4</div>
+    </Masonry>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/masonry/index.tsx` 中的 TypeScript 类型为准。
+### Masonry
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| columns | 列数配置。传数字时为固定列数（1-6）；传对象时为响应式断点列数 | `number` \| `{ sm?: number; md?: number; lg?: number; xl?: number }` | `3` |
+| gap | 间距系数，实际像素值为 `gap * 4`（默认 16px） | `number` | `4` |
+| children | 子内容，每个子元素为一个瀑布流项 | `ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+
+响应式断点对应关系：
+
+| 断点 | Tailwind 前缀 | 最小宽度 |
+| --- | --- | --- |
+| sm | `sm:` | 640px |
+| md | `md:` | 768px |
+| lg | `lg:` | 1024px |
+| xl | `xl:` | 1280px |
+
+<h2 id="faq">常见问题</h2>
+
+### CSS Columns 的列排列顺序是怎样的？
+
+CSS Columns 采用"从上到下逐列排满"的顺序，DOM 顺序与视觉排列一致。屏幕阅读器按列宣读，符合阅读习惯。
+
+### 为什么 `gap` 要乘以 4？
+
+`gap` 属性值会乘以 4 转换为像素，与 Tailwind 间距体系（1=4px）保持一致。例如 `gap={4}` 产生 16px 间距。
+
+### 如何防止卡片内容跨列断裂？
+
+每个子元素自动包裹在 `break-inside-avoid` 容器中，组件内部已处理，无需手动添加。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
+
 1. 从 `@/components/ui/masonry` 导入。
+2. 固定列数使用 `columns={n}`（n 为 1-6）。
+3. 响应式列数使用 `columns={{ sm: 1, md: 2, lg: 3 }}` 对象形式。
+4. 间距使用 `gap` 属性，其值会乘以 4 转为像素。
+5. 不要引入 `react-masonry-css`、`masonry-layout` 等第三方布局库。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="masonry" />

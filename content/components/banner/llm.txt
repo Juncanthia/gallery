@@ -1,0 +1,246 @@
+---
+category: Blocks
+title: Banner
+subtitle: 横幅
+description: 横幅组件，用于页面顶部展示重要通知、操作引导，支持图标、标题、操作按钮和关闭。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 4
+source:
+  component: src/components/blocks/banner/index.tsx
+  docs: content/components/banner/index.mdx
+  examples:
+    - content/components/banner/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Banner 横幅
+
+Banner 是一个可关闭的通知横幅组件，由 BannerContext 提供关闭状态管理。它通过子组件组合模式提供 BannerIcon、BannerTitle、BannerAction 和 BannerClose，支持受控和非受控的显示状态，并利用 `@radix-ui/react-use-controllable-state` 实现可见性控制。
+
+本组件不是 Ant Design Alert 或 Banner 的兼容层。它是本地设计系统的复合组件，采用组合式子组件 API。
+
+## 何时使用 {#when-to-use}
+
+需要在页面顶部或关键位置展示可关闭的全局性通知、操作引导时常使用。
+
+常见场景：
+
+- 系统维护通知，提供关闭和详情入口。
+- 新功能引导，附带"了解更多"操作按钮。
+- Cookie 同意提示。
+- 账户状态提醒（邮箱未验证、会员即将过期）。
+- 活动促销横幅，带 CTA 按钮。
+
+推荐使用方式：
+
+- Banner 内组合 BannerIcon + BannerTitle + BannerAction + BannerClose，形成完整横幅。
+- 使用 `defaultVisible` 控制初始可见性，或 `visible` + `onClose` 实现受控。
+- BannerAction 提供操作入口（如"查看详情"、"立即升级"）。
+- BannerClose 提供关闭能力。
+
+不推荐：
+
+- 将 Banner 用于页面级别的错误/警告/信息提示——请使用 Alert 或 Message。
+- 在 Banner 中嵌套过多文本——Banner 设计为单行横幅。
+- 使用 Banner 替代 Modal 承载复杂交互——Banner 为轻量通知。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+标准横幅，包含图标、文字、操作按钮和关闭按钮。
+
+```tsx
+import { Megaphone } from "lucide-react"
+import {
+  Banner,
+  BannerIcon,
+  BannerTitle,
+  BannerAction,
+  BannerClose,
+} from "@/components/ui/banner"
+
+export default function Demo() {
+  return (
+    <Banner>
+      <BannerIcon icon={Megaphone} />
+      <BannerTitle>新版本 v2.0 已发布，包含多项性能优化</BannerTitle>
+      <BannerAction>查看详情</BannerAction>
+      <BannerClose />
+    </Banner>
+  )
+}
+```
+
+### 受控可见性
+
+通过 `visible` 和 `onClose` 实现外部控制的显示/隐藏。
+
+```tsx
+import { useState } from "react"
+import { Info } from "lucide-react"
+import { Banner, BannerIcon, BannerTitle, BannerClose } from "@/components/ui/banner"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  const [show, setShow] = useState(true)
+
+  return (
+    <div className="space-y-2">
+      {!show && (
+        <Button onClick={() => setShow(true)}>显示横幅</Button>
+      )}
+      <Banner visible={show} onClose={() => setShow(false)}>
+        <BannerIcon icon={Info} />
+        <BannerTitle>这是一条可受控显示的消息</BannerTitle>
+        <BannerClose />
+      </Banner>
+    </div>
+  )
+}
+```
+
+### 内嵌样式 (inset)
+
+设置 `inset` 使横幅四角圆角，适用于卡片内的横幅。
+
+```tsx
+import { CheckCircle } from "lucide-react"
+import { Banner, BannerIcon, BannerTitle, BannerAction } from "@/components/ui/banner"
+
+export default function Demo() {
+  return (
+    <Banner inset>
+      <BannerIcon icon={CheckCircle} />
+      <BannerTitle>操作已成功完成</BannerTitle>
+      <BannerAction>撤销</BannerAction>
+    </Banner>
+  )
+}
+```
+
+## API {#api}
+
+### Banner
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| visible | 受控的可见性状态 | `boolean` | - |
+| defaultVisible | 非受控的初始可见性 | `boolean` | `true` |
+| onClose | 关闭时的回调，同时接收到新的 visible 值 | `() => void` | - |
+| inset | 是否使用内嵌圆角样式 | `boolean` | `false` |
+| className | 附加 className | `string` | - |
+| children | BannerIcon、BannerTitle、BannerAction、BannerClose 子组件 | `React.ReactNode` | - |
+
+支持所有 `HTMLAttributes<HTMLDivElement>`。
+
+### BannerIcon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| icon | Lucide 图标组件 | `LucideIcon` | 必填 |
+| className | 附加 className | `string` | - |
+
+支持所有 `HTMLAttributes<HTMLDivElement>`。
+
+### BannerTitle
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| children | 标题文本 | `React.ReactNode` | - |
+
+支持所有 `HTMLAttributes<HTMLParagraphElement>`。
+
+### BannerAction
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | Button variant | Button 的 variant 类型 | `"outlined"` |
+| size | Button 尺寸 | Button 的 size 类型 | `"small"` |
+| className | 附加 className | `string` | - |
+| children | 按钮文本 | `React.ReactNode` | - |
+
+支持 Button 的所有 `ComponentProps`。
+
+### BannerClose
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | Button variant | Button 的 variant 类型 | `"text"` |
+| size | Button 尺寸 | Button 的 size 类型 | `"small"` |
+| shape | Button 形状 | Button 的 shape 类型 | `"square"` |
+| onClick | 额外点击回调，在关闭操作之后触发 | `MouseEventHandler<HTMLButtonElement>` | - |
+| className | 附加 className | `string` | - |
+
+支持 Button 的所有 `ComponentProps`。
+
+## 样式模型 {#styling-model}
+
+样式通过 Tailwind CSS 内联，使用 BannerContext 管理显示状态。
+
+- Banner 容器：`flex w-full items-center justify-between` 全宽横向布局，`bg-primary text-primary-foreground` 主题色背景，`px-4 py-2` 紧凑内边距。`inset` 模式添加 `rounded-lg`。
+- BannerIcon：`rounded-full border border-background/20 bg-background/10 p-1 shadow-sm` 提供圆形容器包裹图标。
+- BannerTitle：`flex-1 text-sm` 占据剩余空间。
+- BannerAction 和 BannerClose：通过 Button 组件渲染，`bg-transparent hover:bg-background/10` 实现半透明交互效果。BannerClose 内部固定渲染 XIcon。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/banner/index.tsx`：Banner 及全部子组件定义。
+- 依赖 `@radix-ui/react-use-controllable-state` 实现受控/非受控可见性。
+- 依赖 `lucide-react` 提供 BannerClose 内的 XIcon。
+
+关键行为：
+
+1. visible 为 false 时返回 null，组件完全卸载。
+2. BannerContext 在 Banner 内部传递 setShow，供 BannerClose 消费。
+3. BannerClose 的 onClick 先调用 setShow(false) 关闭，再触发用户回调。
+4. 使用 `useControllableState` 支持受控和非受控两种模式。
+5. defaultVisible 仅在非受控模式下生效。
+
+## 可访问性 {#accessibility}
+
+- Banner 使用原生 div 元素。如需提升语义，调用侧可设置 `role="banner"`。
+- BannerClose 使用 Button 组件，天然支持键盘操作和焦点管理。
+- BannerAction 同样通过 Button 实现，具备完整的键盘可访问性。
+- 图标和信息文本应有 clear 语义关联。
+- 关闭按钮默认渲染 XIcon，无需额外 aria-label（Button 组件自身处理）。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Banner 是本地复合组件。Ant Design 中 Alert 组件的 `type="info"` + `banner` 属性可产生类似横幅效果，但本地选择独立封装。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| Alert banner 模式 | 不做 Alert 兼容 | 本地 Banner 采用组合式子组件 API，更灵活且语义明确 |
+| Alert type (info/success/warning/error) | 不做 | 本地通过 BannerIcon 的 icon 自由选择图标表达语义 |
+| Alert closable | 保留 | 通过 BannerClose 子组件显式控制关闭能力 |
+| Alert action | 保留 | 通过 BannerAction 子组件提供操作按钮 |
+| Alert message + description 双行 | 不做 | 本地 Banner 设计为单行紧凑横幅 |
+| Alert icon | 保留 | 通过 BannerIcon 显式传入任意 LucideIcon |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Banner 代码时，应遵守：
+
+1. 从 `@/components/ui/banner` 导入 Banner、BannerIcon、BannerTitle、BannerAction、BannerClose。
+2. Banner 内按顺序放置：BannerIcon（可选）、BannerTitle（必填）、BannerAction（可选）、BannerClose（可选）。
+3. BannerIcon 必须传入 `icon` 属性，使用 lucide-react 图标组件。
+4. 如需受控可见性，使用 `visible` + `onClose`；非受控使用 `defaultVisible`。
+5. BannerAction 的 children 应为简短的操作文案（不超过 4 个字）。
+6. 不要在 Banner 中放置非预定义的子组件类型。
+7. 不要手动管理 Banner 的显示状态（如自行编写 useState），使用组件提供的 visible/onClose 机制。
+8. 卡片内的 Banner 使用 `inset` 属性获取圆角适配。
+9. 不使用 AntD 的 Alert 或 message 组件来覆盖 Banner 的功能范围。

@@ -1,45 +1,113 @@
-InputGroup 将输入框与前后缀、按钮等元素紧凑组合，提供统一的聚焦和禁用样式。
+输入框组合 将输入框与前后缀、按钮、文本提示等元素紧凑组合，提供统一的聚焦、禁用和校验状态样式。
 
 <h2 id="when-to-use">何时使用</h2>
 
-当需要在输入框前后附加文本标签、图标、按钮或快捷键提示时使用。InputGroup 自动处理边框圆角衔接和聚焦态。
+当需要在输入框前后附加文本标签、图标、按钮或快捷键提示时使用。InputGroup 自动处理边框圆角衔接、聚焦态 ring 效果和各子元素的间距。
+
+常见场景：
+- URL 输入：前面附加 `https://`，后面附加域名后缀。
+- 搜索框：后面附带搜索按钮或快捷键提示（如 `Cmd+K`）。
+- 复制输入框：后面附加复制按钮。
+- 组合控件：`InputGroupInput` + `InputGroupButton` + `InputGroupAddon` 的灵活组合。
+- 带上下标签的 textarea 场景。
+
+不推荐：
+- 简单的单个输入框——直接使用 Input 组件即可。
+- 需要复杂表单布局——使用 Form 组件体系。
+- 仅需要前后缀装饰——Input 自身的 `prefix`/`suffix` 已足够。
 
 <h2 id="examples">代码演示</h2>
 
 ### 基础用法
 
-使用 `InputGroupAddon` 添加入口前后缀，`align` 控制位置。
-
-<ComponentShowcase
-  id="input-group"
-  path="input-group/basic"
-/>
+<ComponentShowcase id="input-group" path="input-group/basic" />
 
 ```tsx
-import { InputGroup, InputGroupAddon } from "@/components/ui/input-group"
-import { Button } from "@/components/ui/button"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupButton,
+  InputGroupText,
+} from "@/components/ui/input-group"
 import { Kbd } from "@/components/ui/kbd"
+import { Search } from "lucide-react"
 
 export default function Demo() {
   return (
     <div className="w-full max-w-sm space-y-3">
       <InputGroup>
         <InputGroupAddon align="inline-start">https://</InputGroupAddon>
-        <input className="flex-1 bg-transparent px-2 py-1.5 text-sm outline-none" placeholder="example.com" />
+        <InputGroupInput placeholder="example.com" />
+        <InputGroupAddon align="inline-end">.com</InputGroupAddon>
       </InputGroup>
+
       <InputGroup>
-        <input className="flex-1 bg-transparent px-2 py-1.5 text-sm outline-none" placeholder="搜索..." />
+        <InputGroupInput placeholder="搜索..." />
         <InputGroupAddon align="inline-end">
-          <Kbd>⌘K</Kbd>
+          <Kbd>Cmd+K</Kbd>
         </InputGroupAddon>
       </InputGroup>
+
       <InputGroup>
-        <input className="flex-1 bg-transparent px-2 py-1.5 text-sm outline-none" placeholder="输入内容" />
+        <InputGroupInput placeholder="输入内容" />
         <InputGroupAddon align="inline-end">
-          <Button size="small" variant="text">发送</Button>
+          <InputGroupButton size="icon-xs" shape="square">
+            <Search />
+          </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
     </div>
+  )
+}
+```
+
+### Textarea 与块级布局
+
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupTextarea,
+  InputGroupText,
+} from "@/components/ui/input-group"
+
+export default function Demo() {
+  return (
+    <InputGroup className="w-80">
+      <InputGroupAddon align="block-start">
+        <InputGroupText>描述</InputGroupText>
+      </InputGroupAddon>
+      <InputGroupTextarea placeholder="请输入描述..." rows={3} />
+      <InputGroupAddon align="block-end">
+        <InputGroupText>0 / 200</InputGroupText>
+      </InputGroupAddon>
+    </InputGroup>
+  )
+}
+```
+
+### 带按钮的组合
+
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupButton,
+} from "@/components/ui/input-group"
+import { Copy, Check } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <InputGroup className="w-64">
+      <InputGroupInput defaultValue="https://example.com/share/abc123" readOnly />
+      <InputGroupAddon align="inline-end">
+        <InputGroupButton size="icon-xs" shape="square">
+          <Copy />
+        </InputGroupButton>
+      </InputGroupAddon>
+    </InputGroup>
   )
 }
 ```
@@ -48,37 +116,104 @@ export default function Demo() {
 
 ### InputGroup
 
+根容器，渲染为 `<div role="group">`。自动处理聚焦、禁用、非法状态的边框和 ring 样式。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| className | 附加样式 | `string` | - |
-| children | 输入框和附加元素 | `ReactNode` | - |
+| className | CSS 类名 | `string` | - |
+| children | 子元素组合 | `ReactNode` | - |
+
+继承 `React.ComponentProps<"div">` 的全部原生属性。
 
 ### InputGroupAddon
 
+附加内容容器。点击容器空白区域会自动聚焦到内部 input。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| align | 附加位置 | `inline-start` \| `inline-end` \| `block-start` \| `block-end` | `inline-start` |
-| className | 附加样式 | `string` | - |
+| align | 附加位置 | `"inline-start"` \| `"inline-end"` \| `"block-start"` \| `"block-end"` | `"inline-start"` |
+| className | CSS 类名 | `string` | - |
+
+- `inline-start`：输入框前方的水平内联附加（如 URL 前缀）
+- `inline-end`：输入框后方的水平内联附加（如后缀、按钮）
+- `block-start`：输入框上方的块级附加（如 textarea 顶部标签）
+- `block-end`：输入框下方的块级附加（如底部计数、帮助文本）
+
+继承 `React.ComponentProps<"div">` 的全部原生属性。
+
+### InputGroupInput
+
+输入控件。继承 Input 组件，自带无边框、无 ring、flex-1 填满样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 `Omit<React.ComponentProps<"input">, "ref" | "size">` 的全部原生属性。
+
+### InputGroupTextarea
+
+多行文本输入控件。继承 Input.TextArea，适合 block 布局场景。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 `Omit<React.ComponentProps<"textarea">, "ref">` 的全部原生属性。
+
+### InputGroupButton
+
+组合内的按钮。基于 Button 组件，提供适合紧凑组合的尺寸预设。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| htmlType | 按钮 HTML type | `"button"` \| `"submit"` \| `"reset"` | `"button"` |
+| variant | Button 变体 | `string` | `"text"` |
+| size | 按钮尺寸 | `"xs"` \| `"sm"` \| `"icon-xs"` \| `"icon-sm"` | `"xs"` |
+| className | CSS 类名 | `string` | - |
+
+- `icon-xs` / `icon-sm` 为正方形图标按钮尺寸，适合在 InputGroup 内放置图标操作。
+- 继承 `Omit<React.ComponentProps<typeof Button>, "size">` 的全部属性。
+
+### InputGroupText
+
+纯文本附加元素，渲染为 `<span>`。适合展示不可交互的标签文本。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 `React.ComponentProps<"span">` 的全部原生属性。
+
+<h2 id="faq">常见问题</h2>
+
+### InputGroupAddon 的 align 如何选择？
+
+- `inline-start`：输入框前方的内联内容（如 URL 的 `https://`）。
+- `inline-end`：输入框后方的内联内容（如 `.com`、Kbd、按钮）。
+- `block-start`：输入框上方的块级内容（如 textarea 顶部标签）。
+- `block-end`：输入框下方的块级内容（如底部计数、帮助文本）。
+
+### InputGroup 内部可以放什么？
+
+常见组合包括：
+- `InputGroupInput` / `InputGroupTextarea`：输入控件（必需的）。
+- `InputGroupAddon`：包装文本、图标、Kbd、按钮等装饰。
+- `InputGroupButton`：带尺寸预设的图标按钮。
+- `InputGroupText`：不可交互的纯文本标签。
+
+### InputGroup 和 Input 的 prefix/suffix 有什么区别？
+
+Input 的 `prefix`/`suffix` 适合简单的图标或文本装饰。InputGroup 适合更复杂的组合场景：多个附加元素、按钮交互、快捷键提示、块级布局（textarea 的上下标签）等。InputGroup 提供了更丰富的布局控制和统一的边框/聚焦衔接。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-AI 生成 InputGroup 代码时：
-
-1. 从 `@/components/ui/input-group` 导入。
-2. 内部的 input 使用 `flex-1 bg-transparent` 确保填满空间。
-3. 不要引入 Ant Design 的 `Input.Group`。
-
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `input-group` | - |
-| `input-group-addon` | - |
-| `input-group-control` | - |
+1. 从 `@/components/ui/input-group` 导入所需组件。
+2. 内部的 input 使用 `InputGroupInput` 确保填满空间和正确的无边框样式。
+3. 附加元素放入 `InputGroupAddon`，通过 `align` 控制位置。
+4. 交互按钮使用 `InputGroupButton`，纯文本标签使用 `InputGroupText`。
+5. 多行文本场景使用 `InputGroupTextarea` 配合 `block-start` / `block-end` 对齐。
+6. 不要引入 Ant Design 的 `Input.Group` 或相关依赖。
 
 <h2 id="source">源码</h2>
-
 <SourceViewer componentId="input-group" />

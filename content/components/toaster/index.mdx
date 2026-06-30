@@ -1,23 +1,121 @@
-Toaster 吐司（Toast）通知容器，为 Sonner 库提供样式化的通知渲染。
+通知容器 Toaster。基于 Sonner 库封装的全局 Toast 通知容器，提供与项目主题一致的样式化通知渲染，支持成功、信息、警告、错误和加载五种类型的图标。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在应用中提供全局通知/消息提示能力时，在应用根组件中放置一次即可。
+
+常见场景：
+- 操作结果反馈（成功/失败提示）
+- 系统级消息通知
+- 表单提交后的状态提示
+- 需要统一视觉风格和动画的全局消息展示
+
+不推荐：
+- 页面内嵌的通知区块——使用 Alert 或 Banner 组件
+- 需要用户交互确认的对话框——使用 Dialog/Modal 组件
+- 需要持久展示的静态消息——使用 Alert 组件
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="toaster" path="toaster/basic" />
 
 ```tsx
 import { Toaster } from "@/components/ui/toaster"
 import { Button } from "@/components/ui/button"
-export default function Demo() { return <div><Toaster /><Button size="small" variant="outlined">触发</Button></div> }
+import { toast } from "sonner"
+
+export default function Demo() {
+  return (
+    <div>
+      <Toaster />
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() => toast("操作成功", { description: "数据已保存" })}
+      >
+        触发通知
+      </Button>
+    </div>
+  )
+}
+```
+
+### 不同类型通知
+
+```tsx
+import { Toaster } from "@/components/ui/toaster"
+import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+
+export default function Demo() {
+  return (
+    <div>
+      <Toaster richColors />
+      <div className="flex gap-2">
+        <Button size="small" onClick={() => toast.success("操作成功")}>
+          成功
+        </Button>
+        <Button size="small" onClick={() => toast.error("操作失败")}>
+          失败
+        </Button>
+        <Button size="small" onClick={() => toast.info("新消息")}>
+          信息
+        </Button>
+        <Button size="small" onClick={() => toast.warning("请注意")}>
+          警告
+        </Button>
+      </div>
+    </div>
+  )
+}
 ```
 
 <h2 id="api">API</h2>
-`Toaster` 是 Sonner 的包装组件，在应用根组件中放置一次即可。
+
+### Toaster
+
+`Toaster` 是对 Sonner `<Toaster>` 的本地化封装，继承 Sonner 的全部属性，并预设了项目主题样式和图标集。在应用根组件中放置一次即可，通过 `sonner` 的 `toast` 函数触发通知。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| theme | 主题模式 | `"light"` \| `"dark"` \| `"system"` | `"system"` |
+| position | 通知浮现位置 | `"top-left"` \| `"top-right"` \| `"bottom-left"` \| `"bottom-right"` \| `"top-center"` \| `"bottom-center"` | `"bottom-right"` |
+| richColors | 是否使用富色样式 | `boolean` | `false` |
+| expand | 是否展开所有通知 | `boolean` | `false` |
+| duration | 通知默认持续时间（毫秒） | `number` | `4000` |
+| gap | 通知间距（像素） | `number` | `8` |
+| visibleToasts | 同时可见的最大通知数 | `number` | `3` |
+| closeButton | 是否显示关闭按钮 | `boolean` | `false` |
+| invert | 是否反转视觉效果 | `boolean` | `false` |
+| hotkey | 聚焦快捷键 | `string[]` | `["altKey", "KeyT"]` |
+| icons | 自定义图标集 | `ToastIcons` | 内置 lucide 图标 |
+| className | 自定义样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+| offset | 相对视口的偏移量 | `string` \| `number` | - |
+| dir | 文本方向 | `"rtl"` \| `"ltr"` \| `"auto"` | `"ltr"` |
+
+内置图标：success → `CircleCheck`、info → `Info`、warning → `TriangleAlert`、error → `OctagonX`、loading → `Loader`（带 `animate-spin`）。
+
+<h2 id="faq">常见问题</h2>
+
+### Toaster 应该放在哪里？
+在应用根布局组件中放置 `<Toaster />` 一次即可。它自动渲染到 body，不需要在每个页面重复放置。
+
+### 如何调用 toast 通知？
+使用 `sonner` 库的 `toast` 函数：`toast("消息")`、`toast.success("成功")`、`toast.error("错误")`、`toast.info("信息")`、`toast.warning("警告")`、`toast.loading("加载中")`。
+
+### 自定义图标不生效？
+`icons` 属性接收 `ToastIcons` 类型对象，需提供完整的五类图标（success/info/warning/error/loading）。部分替换可能导致回退到默认图标。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/toaster` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/toaster` 导入 Toaster；从 `sonner` 导入 `toast` 函数。
+2. 在应用根布局中放置 `<Toaster />` **仅一次**，通过 `toast()` 函数在各处触发通知。
+3. `theme` 默认为 `"system"`，自动跟随系统主题。
+4. 通知容器本身不可见，通过 sonner 的 toast 函数调用来展示具体通知内容。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="toaster" />

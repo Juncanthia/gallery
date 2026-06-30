@@ -1,6 +1,33 @@
-Bubble 聊天气泡组件，基于 `BubbleGroup`、`Bubble`、`BubbleContent` 构建对话界面。
+Bubble 聊天气泡组件，基于 `BubbleGroup`、`Bubble`、`BubbleContent` 构建对话界面，支持多种视觉变体、对齐方式和快捷回复。
 
-<ComponentShowcase id="chat-bubble" path="chat-bubble/basic" />
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示对话消息、聊天记录或类似消息流的界面时使用。
+
+常见场景：
+
+- 即时通讯界面中的消息气泡。
+- AI 对话中的问答展示。
+- 客服对话窗口。
+- 评论区的对话线程。
+
+Bubble 的核心概念：
+
+- `BubbleGroup`：消息列表容器，提供间距。
+- `Bubble`：单条消息的容器，通过 `variant` 控制视觉样式，`align` 控制左右对齐。
+- `BubbleContent`：消息内容，支持 `asChild` 扩展为按钮或链接。
+- `BubbleReactions`：快捷回复/表情反应区域。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础对话
+
+`BubbleGroup` 包裹多条 `Bubble`，`align` 控制发送方/接收方对齐。
+
+<ComponentShowcase
+  id="chat-bubble"
+  path="chat-bubble/basic"
+/>
 
 ```tsx
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/chat-bubble"
@@ -21,31 +48,147 @@ export default function Demo() {
 }
 ```
 
+### 多种变体
+
+`variant` 支持 `default`、`secondary`、`muted`、`tinted`、`outline`、`ghost`、`destructive`。
+
+```tsx
+import { Bubble, BubbleContent } from "@/components/ui/chat-bubble"
+
+export default function Demo() {
+  return (
+    <div className="w-80 space-y-2">
+      <Bubble><BubbleContent>默认样式</BubbleContent></Bubble>
+      <Bubble variant="secondary"><BubbleContent>次要样式</BubbleContent></Bubble>
+      <Bubble variant="muted"><BubbleContent>弱化样式</BubbleContent></Bubble>
+      <Bubble variant="outline"><BubbleContent>边框样式</BubbleContent></Bubble>
+      <Bubble variant="destructive"><BubbleContent>危险样式</BubbleContent></Bubble>
+    </div>
+  )
+}
+```
+
+### 快捷回复
+
+`BubbleReactions` 在气泡旁展示回复按钮。
+
+```tsx
+import { BubbleGroup, Bubble, BubbleContent, BubbleReactions } from "@/components/ui/chat-bubble"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <BubbleGroup>
+      <Bubble align="start" variant="secondary">
+        <BubbleContent>这条消息需要回复吗？</BubbleContent>
+        <BubbleReactions>
+          <Button variant="text" size="small">👍</Button>
+          <Button variant="text" size="small">❤️</Button>
+        </BubbleReactions>
+      </Bubble>
+    </BubbleGroup>
+  )
+}
+```
+
+### asChild 模式
+
+`BubbleContent` 设置 `asChild` 可将内容变为可点击的按钮或链接。
+
+```tsx
+import { Bubble, BubbleContent } from "@/components/ui/chat-bubble"
+
+export default function Demo() {
+  return (
+    <Bubble variant="default">
+      <BubbleContent asChild>
+        <button onClick={() => alert("clicked")}>点击我</button>
+      </BubbleContent>
+    </Bubble>
+  )
+}
+```
+
 <h2 id="api">API</h2>
+
+### BubbleGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式 | `string` | - |
+
+消息列表容器，提供 `flex flex-col gap-2` 布局。
 
 ### Bubble
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| variant | 气泡样式变体 | `default` \| `secondary` \| `muted` \| `tinted` \| `outline` \| `ghost` \| `destructive` | `default` |
-| align | 气泡对齐方向 | `start` \| `end` | `start` |
+| variant | 视觉变体 | `default` \| `secondary` \| `muted` \| `tinted` \| `outline` \| `ghost` \| `destructive` | `default` |
+| align | 对齐方向 | `start` \| `end` | `start` |
+| className | 附加样式 | `string` | - |
 
-子组件：`BubbleGroup`、`BubbleContent`、`BubbleReactions`。
+### BubbleContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 合并样式到子元素 | `boolean` | `false` |
+| className | 附加样式 | `string` | - |
+
+### BubbleReactions
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 垂直位置 | `top` \| `bottom` | `bottom` |
+| align | 水平对齐 | `start` \| `end` | `end` |
+| className | 附加样式 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何区分发送方和接收方？
+
+使用 `align="end"` 表示自己发送的消息（右对齐），`align="start"` 表示收到的消息（左对齐）。配合不同的 `variant`：
+
+```tsx
+<Bubble align="start" variant="secondary">收到</Bubble>
+<Bubble align="end" variant="default">发送</Bubble>
+```
+
+### 如何展示代码块或富文本？
+
+在 `BubbleContent` 的 children 中传入格式化内容即可：
+
+```tsx
+<BubbleContent>
+  <p>你好</p>
+  <pre><code>console.log("hello")</code></pre>
+</BubbleContent>
+```
+
+### 如何添加头像和时间戳？
+
+Bubble 组件本身不包含头像和时间戳，需在 `Bubble` 外层自行添加：
+
+```tsx
+<div className="flex items-start gap-2">
+  <Avatar size="small">U</Avatar>
+  <div>
+    <Bubble><BubbleContent>你好</BubbleContent></Bubble>
+    <span className="text-xs text-muted-foreground">10:30</span>
+  </div>
+</div>
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成聊天气泡代码时：
+
 1. 从 `@/components/ui/chat-bubble` 导入。
-
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `bubble` | - |
-| `bubble-content` | - |
-| `bubble-group` | - |
-| `bubble-reactions` | - |
+2. 多条消息包裹在 `BubbleGroup` 中。
+3. 自己的消息用 `align="end"` + `variant="default"`，对方消息用 `align="start"` + `variant="secondary"`。
+4. 快捷回复使用 `BubbleReactions`，不要手动定位。
+5. 如需可点击内容，使用 `BubbleContent` 的 `asChild`。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
+
 <SourceViewer componentId="chat-bubble" />

@@ -1,24 +1,167 @@
-HoverCard 悬停卡片，鼠标悬浮时弹出信息面板，基于 Radix HoverCard 实现。
+HoverCard 悬停卡片，鼠标悬浮时弹出信息面板。基于 Radix HoverCard primitive 封装，支持快捷 API（trigger/content/placement/arrow）和完整的 Radix HoverCard 原始用法两种模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在鼠标悬停时展示补充信息而不打断当前操作流时使用。
+
+常见场景：
+
+- 链接或文本的悬停预览。
+- 用户头像悬停显示用户名片。
+- 图标或按钮的悬停说明。
+- 术语或缩写悬停显示完整含义。
+
+不推荐：
+
+- 需要点击才能打开的场景——使用 Popover。
+- 需要在弹出内容中交互（如表单输入、按钮操作）——HoverCard 会在鼠标离开时自动关闭。
+- 移动端主要交互路径——HoverCard 依赖 mouse 事件，无 touch 支持。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="hover-card" path="hover-card/basic" />
 
 ```tsx
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+
 export default function Demo() {
-  return <HoverCard><HoverCardTrigger className="text-sm underline cursor-pointer">悬停查看</HoverCardTrigger><HoverCardContent className="w-60"><div className="text-sm">额外信息</div></HoverCardContent></HoverCard>
+  return (
+    <HoverCard>
+      <HoverCardTrigger className="text-sm underline cursor-pointer">
+        悬停查看
+      </HoverCardTrigger>
+      <HoverCardContent className="w-60">
+        <div className="text-sm">额外信息</div>
+      </HoverCardContent>
+    </HoverCard>
+  )
+}
+```
+
+### 快捷 API 模式
+
+通过 `trigger`、`content`、`placement` 和 `arrow` 属性快速构建 HoverCard，无需分别声明子组件。
+
+```tsx
+import { HoverCard } from "@/components/ui/hover-card"
+
+export default function Demo() {
+  return (
+    <HoverCard
+      trigger={<span className="underline cursor-pointer">悬停查看</span>}
+      content={<div>快捷模式内容</div>}
+      placement="top"
+      arrow
+    />
+  )
+}
+```
+
+### 带箭头的定位
+
+```tsx
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+
+export default function Demo() {
+  return (
+    <HoverCard>
+      <HoverCardTrigger className="underline cursor-pointer">
+        带箭头
+      </HoverCardTrigger>
+      <HoverCardContent arrow className="w-48">
+        <p className="text-sm">箭头指向触发元素</p>
+      </HoverCardContent>
+    </HoverCard>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
-子组件：`HoverCardTrigger`、`HoverCardContent`。
+
+### HoverCard
+
+顶层容器组件。继承 Radix HoverCard 所有属性，同时新增快捷 API 属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| trigger | 快捷模式：触发元素 | `React.ReactNode` | - |
+| content | 快捷模式：弹出内容 | `React.ReactNode` | - |
+| placement | 快捷模式：弹出位置 | `"top"` \| `"bottom"` \| `"left"` \| `"right"` \| `"topLeft"` \| `"topRight"` \| `"bottomLeft"` \| `"bottomRight"` \| `"leftTop"` \| `"leftBottom"` \| `"rightTop"` \| `"rightBottom"` | - |
+| arrow | 快捷模式：是否显示箭头 | `boolean` | `false` |
+| contentProps | 快捷模式：传入 content 的额外属性 | `HoverCardContentProps` | - |
+| open | 受控开启状态 | `boolean` | - |
+| defaultOpen | 默认开启状态 | `boolean` | - |
+| onOpenChange | 开启状态变化回调 | `(open: boolean) => void` | - |
+| openDelay | 悬停到打开的延迟（ms） | `number` | - |
+| closeDelay | 移开到关闭的延迟（ms） | `number` | - |
+
+两种使用模式：
+- **标准模式**：嵌套 `HoverCardTrigger` + `HoverCardContent` 子组件，获得完全控制。
+- **快捷模式**：使用 `trigger` + `content` + `placement` 属性，适合简单场景。传入任意一个快捷属性后，组件自动包裹 `HoverCardTrigger` 和 `HoverCardContent`。
+
+### HoverCardTrigger
+
+触发元素。继承 Radix `HoverCardTrigger` 所有属性。通常使用 `asChild` 模式包裹自定义触发元素。
+
+### HoverCardContent
+
+弹出内容面板。继承 Radix `HoverCardContent` 属性，同时新增：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| arrow | 是否显示指向触发元素的箭头 | `boolean` | `false` |
+| side | 弹出方向 | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | - |
+| align | 对齐方式 | `"start"` \| `"center"` \| `"end"` | `"center"` |
+| sideOffset | 与触发元素的间距 | `number` | `4` |
+| className | 附加 className | `string` | - |
+
+HoverCardContent 自动包裹在 `HoverCardPortal` 中，确保内容渲染在 DOM body 层级。
+
+### HoverCardArrow
+
+可选箭头元素。继承 Radix `HoverCardArrow` 所有属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+### HoverCardPlacement
+
+```ts
+type HoverCardPlacement =
+  | "top" | "bottom" | "left" | "right"
+  | "topLeft" | "topRight" | "bottomLeft" | "bottomRight"
+  | "leftTop" | "leftBottom" | "rightTop" | "rightBottom"
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 快捷模式和标准模式如何选择？
+
+对于简单的"悬停某元素 -> 显示一段内容"场景，使用快捷模式（`trigger` + `content` + `placement`）可减少代码量。需要自定义触发元素的交互行为或弹出内容的复杂结构时，使用标准模式手动嵌套子组件。
+
+### HoverCard 和 Popover 有什么区别？
+
+HoverCard 仅在鼠标悬停时触发，内容为辅助信息展示，不包含可交互元素。Popover 支持 click/hover/focus 多种触发方式，弹出内容可包含表单、按钮等交互元素。
+
+### 如何设置箭头？
+
+在 `HoverCardContent` 上设置 `arrow` 属性，或在快捷模式下的 `HoverCard` 上设置 `arrow`。箭头自动指向触发元素。
+
+### 移动端如何处理？
+
+HoverCard 无 touch 事件支持，不适合移动端。在移动端应使用 Popover 组件的 click 触发模式作为替代方案。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/hover-card` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/hover-card` 导入，不要从 `antd` 导入。
+2. 简单场景使用快捷 API：`trigger` + `content` + `placement`。
+3. 复杂场景使用标准模式：嵌套 `HoverCardTrigger` 和 `HoverCardContent` 子组件。
+4. `HoverCardContent` 中传递 `arrow` 属性可显示指向触发元素的箭头。
+5. `placement` 支持 12 种位置组合（8 方向 x 居中 + 4 方向 x 偏置）。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="hover-card" />

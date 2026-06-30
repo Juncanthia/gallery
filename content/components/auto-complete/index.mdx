@@ -1,26 +1,169 @@
-AutoComplete 输入自动完成，根据用户输入匹配选项并提示。
+AutoComplete 自动完成，输入框自动完成功能。本质是对 Select（combobox 模式）的封装，支持自由文本输入和选项过滤。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当用户需要在输入框中输入文本，系统根据输入内容动态匹配并提示候选选项时使用。
+
+常见场景：
+- 搜索联想：输入关键词自动提示搜索结果。
+- 地址补全：输入地址前缀匹配完整地址。
+- 标签输入：自由输入文本同时可从下拉列表选择预设标签。
+- 异步搜索：用户键入时触发远程接口查询。
+
+不推荐：
+- 选项固定且数量少的场景，优先使用 Select。
+- 仅展示不涉及输入的场景，优先使用 Dropdown 或 Popover。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+AutoComplete 本质是对 Select（combobox 模式）的封装，通过 `showSearch` 和 `mode="combobox"` 实现自由输入+选项过滤。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="auto-complete" path="auto-complete/basic" />
 
 ```tsx
 import { AutoComplete } from "@/components/ui/auto-complete"
-export default function Demo() { return <AutoComplete options={[{ label: "Apple", value: "apple" }, { label: "Banana", value: "banana" }]} placeholder="搜索..." className="w-48" /> }
+
+export default function Demo() {
+  return (
+    <AutoComplete
+      options={[
+        { label: "Apple", value: "apple" },
+        { label: "Banana", value: "banana" },
+        { label: "Cherry", value: "cherry" },
+      ]}
+      placeholder="搜索..."
+      className="w-48"
+    />
+  )
+}
+```
+
+### 异步搜索
+
+设置 `filterOption={false}` 关闭本地过滤，通过 `onSearch` 发起远程请求。
+
+```tsx
+import { AutoComplete } from "@/components/ui/auto-complete"
+import { useState } from "react"
+
+export default function Demo() {
+  const [options, setOptions] = useState<{ label: string; value: string }[]>([])
+
+  const handleSearch = async (value: string) => {
+    if (!value) { setOptions([]); return }
+    const res = await fetch(`/api/search?q=${value}`)
+    const data = await res.json()
+    setOptions(data.map((item: string) => ({ label: item, value: item })))
+  }
+
+  return (
+    <AutoComplete
+      options={options}
+      onSearch={handleSearch}
+      filterOption={false}
+      placeholder="搜索关键词..."
+      className="w-64"
+    />
+  )
+}
 ```
 
 <h2 id="api">API</h2>
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| options | 候选项 | `SelectOption[]` |
-| value | 受控值 | `string` |
-| onValueChange | 值回调 | `(value: string) => void` |
+
+### AutoComplete
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 输入时建议的可选项列表，支持平铺和分组格式 | `SelectOptionItem[]` | - |
+| placeholder | 未输入值时的占位文本 | `React.ReactNode` | - |
+| size | 输入框尺寸 | `"small"` \| `"middle"` \| `"large"` | `"middle"` |
+| variant | 视觉变体 | `"outlined"` \| `"filled"` \| `"borderless"` \| `"underlined"` | `"outlined"` |
+| status | 校验状态 | `"error"` \| `"warning"` | - |
+| disabled | 是否禁用输入框 | `boolean` | - |
+| allowClear | 值非空时是否显示清除按钮 | `boolean` | - |
+| prefix | 输入框前渲染的内容 | `React.ReactNode` | - |
+| suffixIcon | 自定义后缀图标，传入 `null` 隐藏 | `React.ReactNode` \| `null` | - |
+| notFoundContent | 无匹配选项时展示的内容 | `React.ReactNode` | `"No results found."` |
+| optionRender | 每个选项的自定义渲染 | `(option: SelectOption, info: { index: number }) => React.ReactNode` | - |
+| popupRender | 包装弹出列表节点，可追加底部按钮等 | `(originNode: React.ReactNode) => React.ReactNode` | - |
+| labelRender | 选中值展示的自定义渲染，仅在值匹配选项时生效 | `(option: SelectOption) => React.ReactNode` | - |
+| placement | 弹出层相对触发器的位置 | `"bottomLeft"` \| `"bottomRight"` \| `"topLeft"` \| `"topRight"` | `"bottomLeft"` |
+| filterOption | 过滤器函数或布尔值控制本地过滤；设为 `false` 用于异步搜索 | `boolean` \| `((input: string, option: SelectOption) => boolean)` | `true` |
+| filterSort | 已过滤选项的自定义排序 | `(a: SelectOption, b: SelectOption, input: string) => number` | - |
+| onSearch | 输入值变化时的回调（用户键入），适合异步搜索 | `(value: string) => void` | - |
+| onSelect | 下拉列表中选择选项时的回调 | `(value: string, option: SelectOption) => void` | - |
+| onClear | 值被清除时的回调 | `() => void` | - |
+| open | 受控的打开状态 | `boolean` | - |
+| defaultOpen | 默认打开状态（非受控） | `boolean` | - |
+| onOpenChange | 弹出层打开/关闭时的回调 | `(open: boolean) => void` | - |
+| value | 受控值（自由文本输入，不限于选项） | `string` | - |
+| defaultValue | 默认值（非受控） | `string` | - |
+| onValueChange | 值变化时的回调，每次按键及选择选项时触发 | `(value: string \| undefined) => void` | - |
+| onChange | onValueChange 的别名，兼容 AntD 命名 | `(value: string \| undefined) => void` | - |
+| className | 根触发器元素的 CSS 类名 | `string` | - |
+| contentClassName | 弹出内容区域的 CSS 类名 | `string` | - |
+| listClassName | 选项列表的 CSS 类名 | `string` | - |
+| name | 底层表单 input 的 name 属性 | `string` | - |
+| id | input 元素的 id 属性 | `string` | - |
+| required | 表单上下文中是否为必填 | `boolean` | - |
+| aria-label | input 的无障碍标签 | `string` | - |
+
+### 派生类型
+
+- `AutoCompleteOption`（别名 `SelectOption`）— 单个选项类型
+- `AutoCompleteOptionGroup`（别名 `SelectOptionGroup`）— 选项分组类型
+- `AutoCompleteOptionItem`（别名 `SelectOptionItem`）— 选项项类型
+- `AutoCompleteSize`（别名 `SelectSize`）— 尺寸类型
+- `AutoCompleteStatus`（别名 `SelectStatus`）— 状态类型
+- `AutoCompleteVariant`（别名 `SelectVariant`）— 变体类型
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现异步搜索？
+
+设置 `filterOption={false}` 关闭本地过滤，通过 `onSearch` 回调发起远程请求并动态更新 `options`：
+
+```tsx
+<AutoComplete
+  options={remoteOptions}
+  onSearch={(value) => fetchSuggestions(value)}
+  filterOption={false}
+/>
+```
+
+### onChange 和 onValueChange 有什么区别？
+
+两者等价，`onChange` 是 `onValueChange` 的别名，兼容 Ant Design 命名风格。传入任意一个即可，两者同时传入时 `onChange` 优先。
+
+### 如何自定义选项渲染？
+
+使用 `optionRender` 自定义每个选项的展示内容，或使用 `labelRender` 自定义选中后在触发器中的展示：
+
+```tsx
+<AutoComplete
+  optionRender={(option, { index }) => (
+    <div className="flex items-center gap-2">
+      <Avatar size="small" />
+      <span>{option.label}</span>
+    </div>
+  )}
+/>
+```
+
+### AutoComplete 和 Select（combobox 模式）的关系？
+
+`AutoComplete` 本质是对 `<Select mode="combobox" showSearch />` 的封装，类型兼容。如果不需要自由输入（即值必须从选项中选择），直接使用 Select 即可。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/auto-complete` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/auto-complete` 导入，不要从 `antd` 导入 AutoComplete。
+2. 使用 `options` 提供候选项，`onSearch` 处理异步搜索。
+3. 使用 `filterOption={false}` 关闭本地过滤用于异步搜索场景。
+4. 需要自定义选项或选中值展示时，使用 `optionRender`、`labelRender`。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="auto-complete" />

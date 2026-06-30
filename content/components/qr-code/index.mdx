@@ -1,7 +1,25 @@
-QRCode 二维码生成组件，基于 `qrcode` 库将文本编码为 SVG 二维码。支持自定义前景色、背景色和容错级别。
+QRCode 二维码生成组件，基于 `qrcode` 库将文本编码为 SVG 二维码。支持自定义前景色、背景色和容错级别，自动适配项目 CSS 主题变量。
 
 <h2 id="when-to-use">何时使用</h2>
-需要将 URL、文本等信息编码为二维码供用户扫码时使用。
+
+当需要将 URL、文本、配置等信息编码为二维码供用户扫码时使用。
+
+常见场景：
+
+- 分享链接、下载地址的二维码生成。
+- 用户身份标识、会员卡号等信息的视觉编码。
+- 支付页面、登录页面的扫码入口。
+- 设备配网信息、WiFi 凭证的二维码展示。
+
+不推荐：
+
+- 编码超长文本（> 4296 字符），高容错级别下容量更小。
+- 需要实时更新且编码数据变化频繁的场景（每次变更都会重新生成 SVG）。
+- 引入 `antd` 的 QRCode 或 `@ant-design/icons` 作为替代。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="qr-code" path="qr-code/basic" />
 
@@ -18,24 +36,69 @@ export default function Demo() {
 }
 ```
 
+### 自定义颜色与容错级别
+
+```tsx
+import { QRCode } from "@/components/ui/qr-code"
+
+export default function Demo() {
+  return (
+    <div className="flex items-center gap-4">
+      <QRCode
+        data="https://example.com"
+        foreground="#6366f1"
+        background="#eef2ff"
+        robustness="H"
+      />
+    </div>
+  )
+}
+```
+
 <h2 id="api">API</h2>
+
+### QRCode
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | data | 要编码为二维码的文本内容（必填） | `string` | - |
-| foreground | 前景色 | `string` | CSS `--foreground` |
-| background | 背景色 | `string` | CSS `--background` |
-| robustness | 容错级别 | `L` \| `M` \| `Q` \| `H` | `M` |
+| foreground | 前景色，支持 CSS 颜色字符串或 oklch 变量 | `string` | CSS `--foreground` |
+| background | 背景色，支持 CSS 颜色字符串或 oklch 变量 | `string` | CSS `--background` |
+| robustness | 容错级别。L 约 7% 容错，M 约 15%，Q 约 25%，H 约 30% | `"L"` \| `"M"` \| `"Q"` \| `"H"` | `"M"` |
+| className | 根容器 CSS 类名 | `string` | - |
 
-<h2 id="semantic-dom">Semantic DOM</h2>
+继承 `HTMLAttributes<HTMLDivElement>`。外层容器带 `data-slot="qrcode"` 语义标记，内层使用 `dangerouslySetInnerHTML` 渲染 SVG。颜色自动通过 `culori` 将 oklch 变量转换为 hex，确保二维码在不同主题下颜色正确。
 
-| data-slot | 说明 |
-| --- | --- |
-| `qrcode` | 二维码外层容器 |
+<h2 id="faq">常见问题</h2>
+
+### 如何调整二维码尺寸？
+
+通过 `className` 设置宽高，内部 SVG 会自适应填充 (`size-full`)，边框和背景由外层容器控制：
+
+```tsx
+<QRCode data="https://example.com" className="size-32" />
+<QRCode data="https://example.com" className="size-48" />
+```
+
+### 编码中文内容乱码怎么办？
+
+`data` 直接传入原始字符串即可，`qrcode` 库已处理 UTF-8 编码。不需要手动 `encodeURIComponent`。
+
+### 如何配合暗色模式使用？
+
+不传 `foreground` 和 `background` 时，组件自动读取 CSS 变量 `--foreground` 和 `--background`，这些变量在项目暗色模式下会自动切换，二维码颜色随之适配。
+
+### 如何在二维码中间添加 Logo？
+
+本组件不内置 Logo 叠加功能。如有需要，可在业务侧通过绝对定位在二维码上方覆盖图标元素。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/qr-code` 导入。
-2. 使用 `data` 传入要编码的内容，不是 `value`。
+
+1. 从 `@/components/ui/qr-code` 导入，不要从 `antd` 或 `qrcode` 直接导入。
+2. 使用 `data` 传入要编码的文本，不是 `value` 或 `content`。
+3. 颜色通过 `foreground`/`background` 设置，优先使用 CSS 变量名称（如 `"--foreground"`），组件自动处理 oklch 转换。
+4. 容错级别使用 `robustness`，不是 `errorCorrectionLevel`。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="qr-code" />

@@ -1,25 +1,219 @@
-Notification 全局展示通知提醒，在屏幕右上角弹出，支持多种类型。
+Notification 通知提醒。全局通知提醒 API，在屏幕角落展示提示信息。基于 sonner 实现，提供与 Ant Design notification 类似的命令式调用 API，无需组件声明即可使用。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要向用户推送系统级通知消息时使用。通知从屏幕角落弹出，不打断用户当前操作。
+
+常见场景：
+
+- 操作成功后的反馈提示（如"保存成功"）。
+- 系统级警告或错误通知。
+- 需要自动消失的临时消息。
+- 跨路由的全局消息推送。
+
+不推荐：
+
+- 需要用户明确交互确认的提示——使用 Dialog 或 Popconfirm。
+- 与当前页面上下文强相关的内联提示——使用 Alert。
+- 大量频繁推送消息——会导致通知堆积影响体验。
+- 在 Toaster 组件未挂载时调用——通知将无法渲染。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="notification" path="notification/basic" />
 
 ```tsx
-import { notification } from "@/components/ui/notification-api"
+import { notification } from "@/components/ui/notification"
 import { Button } from "@/components/ui/button"
+
 export default function Demo() {
-  return <Button size="small" variant="outlined" onClick={() => notification.success({ message: "操作成功", description: "内容已保存" })}>发送通知</Button>
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.success({
+            title: "操作成功",
+            description: "数据已保存",
+          })
+        }
+      >
+        成功通知
+      </Button>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.info({
+            title: "提示",
+            description: "这是一条信息",
+          })
+        }
+      >
+        信息通知
+      </Button>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.warning({
+            title: "警告",
+            description: "请注意检查",
+          })
+        }
+      >
+        警告通知
+      </Button>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.error({
+            title: "错误",
+            description: "操作失败，请重试",
+          })
+        }
+      >
+        错误通知
+      </Button>
+    </div>
+  )
+}
+```
+
+### 自定义位置与时长
+
+```tsx
+import { notification } from "@/components/ui/notification"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.success({
+            title: "右上角",
+            description: "默认位置 topRight",
+          })
+        }
+      >
+        右上角（默认）
+      </Button>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.info({
+            title: "左上角",
+            description: "位置 topLeft",
+            placement: "topLeft",
+          })
+        }
+      >
+        左上角
+      </Button>
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() =>
+          notification.warning({
+            title: "不自动关闭",
+            description: "点击关闭按钮才会消失",
+            duration: 0,
+          })
+        }
+      >
+        不自动关闭
+      </Button>
+    </div>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
-`notification.success(config)`、`notification.error(config)`、`notification.info(config)`、`notification.warning(config)`。config: `{ message, description?, duration? }`。
+
+### notification
+
+命令式 API 对象，无需组件声明。前提是页面中已挂载 `<Toaster />`（来自 `@/components/ui/toaster`）。
+
+| 方法 | 说明 | 签名 |
+| --- | --- | --- |
+| `notification.success(args)` | 成功通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.info(args)` | 信息通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.warning(args)` | 警告通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.error(args)` | 错误通知 | `(args: NotificationArgs) => NotificationClose` |
+| `notification.open(args)` | 通用通知（不指定 type） | `(args: NotificationArgs) => NotificationClose` |
+| `notification.destroy(key?)` | 关闭指定或全部通知 | `(key?: string \| number) => void` |
+
+各方法返回 `NotificationClose` 函数，调用后可手动关闭该通知。
+
+### NotificationArgs
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 通知标题（必填） | `React.ReactNode` | - |
+| description | 通知内容描述 | `React.ReactNode` | - |
+| type | 通知类型 | `"success" \| "info" \| "warning" \| "error"` | `"info"` |
+| key | 唯一标识，用于 update/destroy | `string \| number` | - |
+| duration | 自动关闭时间（秒），0 表示不关闭 | `number` | `4.5` |
+| placement | 屏幕位置 | `"top" \| "topLeft" \| "topRight" \| "bottom" \| "bottomLeft" \| "bottomRight"` | `"topRight"` |
+| closable | 是否显示关闭按钮 | `boolean` | `true` |
+| closeIcon | 自定义关闭图标 | `React.ReactNode` | `✕` |
+| icon | 自定义通知图标 | `React.ReactNode` | 根据 type 自动选择 |
+| onClose | 通知关闭回调 | `() => void` | - |
+| onClick | 通知点击回调 | `() => void` | - |
+| className | 附加样式类名 | `string` | - |
+| style | 附加内联样式 | `React.CSSProperties` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么调用 notification.success() 后看不到通知？
+
+确保页面根组件中已挂载 `<Toaster />`，它是 sonner 的容器组件。通常放在 `App.tsx` 或 `layout.tsx` 中：
+
+```tsx
+import { Toaster } from "@/components/ui/toaster"
+
+export default function Layout({ children }) {
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  )
+}
+```
+
+### 如何手动关闭通知？
+
+调用时保存返回的关闭函数，需要时执行：
+
+```tsx
+const close = notification.success({ title: "处理中..." })
+// 稍后关闭
+close()
+// 或通过 key 关闭
+notification.success({ title: "处理中...", key: "upload" })
+notification.destroy("upload")
+```
+
+### 如何设置通知不自动关闭？
+
+设置 `duration: 0`，通知将一直显示直到用户点击关闭按钮或手动调用 `destroy`。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/notification-api` 导入（注意导入路径）。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/notification` 导入 `notification` 对象。
+2. 使用 `notification.success/info/warning/error` 方法，`title` 为必填。
+3. 确保页面中已挂载 `<Toaster />`（来自 `@/components/ui/toaster`）。
+4. 需要不自动关闭的通知设置 `duration: 0`。
+5. 不要引入 Ant Design 相关依赖，不要使用 `useNotification` hooks。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="notification" />

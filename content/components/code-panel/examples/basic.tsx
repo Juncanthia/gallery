@@ -10,7 +10,7 @@ export default function CodePanelBasicExample() {
   return (
     <Code code={sampleCode} className="w-full max-w-sm">
       <CodeHeader copyButton>example.ts</CodeHeader>
-      <CodeBlock language="tsx" />
+      <CodeBlock />
     </Code>
   )
 }

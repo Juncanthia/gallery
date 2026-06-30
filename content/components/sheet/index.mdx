@@ -1,4 +1,23 @@
-Sheet 从屏幕边缘滑出的面板，基于 Radix Dialog 实现，常用于移动端的菜单或详情面板。
+Sheet 面板。从屏幕边缘滑出的浮层面板，基于 Radix Dialog 实现，支持四个方向的滑出、标题描述、自定义底部和遮罩控制。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要从屏幕边缘滑出一个临时面板来承载额外操作或信息时使用。Sheet 适合移动端菜单、表单抽屉、详情面板等场景。
+
+常见场景：
+- 移动端底部菜单或选项列表
+- 侧边滑出的筛选/排序面板
+- 详情页的补充信息面板
+- 表单填写不打断主流程的辅助面板
+
+不推荐：
+- 作为永久性的侧边导航栏 —— 应使用 Sidebar 组件
+- 嵌套多个 Sheet —— 会导致 z-index 和焦点管理混乱
+- 在 Sheet 内部使用 Dialog/Modal —— 冲突的焦点陷阱
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="sheet" path="sheet/basic" />
 
@@ -21,18 +40,186 @@ export default function Demo() {
 }
 ```
 
+### 高级组合
+
+使用 `title`、`description`、`footer`、`placement` 等便捷 props 快速构建面板，或使用 `closable={false}` 隐藏关闭按钮实现自定义布局。
+
+```tsx
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+
+export default function Demo() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild><Button variant="outlined">编辑资料</Button></SheetTrigger>
+      <SheetContent side="right" size="large">
+        <SheetHeader>
+          <SheetTitle>编辑个人资料</SheetTitle>
+          <SheetDescription>修改您的个人信息，完成后点击保存。</SheetDescription>
+        </SheetHeader>
+        <div className="grid gap-4 px-4">
+          <div className="grid gap-2">
+            <Label htmlFor="name">姓名</Label>
+            <Input id="name" defaultValue="张三" />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="email">邮箱</Label>
+            <Input id="email" defaultValue="zhangsan@example.com" />
+          </div>
+        </div>
+        <SheetFooter>
+          <SheetClose asChild><Button variant="outlined">取消</Button></SheetClose>
+          <Button>保存</Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  )
+}
+```
+
+### 快捷模式
+
+Sheet 原生支持通过便捷 props 直接传入 `title`、`description`、`footer`、`extra` 等，无需手动组合子组件。
+
+```tsx
+import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+
+export default function Demo() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild><Button variant="outlined">快捷面板</Button></SheetTrigger>
+      <SheetContent
+        title="通知设置"
+        description="管理您的消息通知偏好。"
+        footer={<Button className="w-full">保存设置</Button>}
+        placement="right"
+      >
+        <p className="text-sm text-muted-foreground px-4">通知内容区域</p>
+      </SheetContent>
+    </Sheet>
+  )
+}
+```
+
 <h2 id="api">API</h2>
+
+### Sheet
+
+顶层容器，包装 Radix Sheet primitive。支持两种使用模式：纯组合模式（传递 children 为 SheetTrigger + SheetContent 等子组件）和快捷模式（通过 title/description/footer 等便捷 props）。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| side | 滑出方向 | `top` \| `bottom` \| `left` \| `right` | `right` |
+| trigger | 触发器节点（快捷模式） | `React.ReactNode` | - |
+| title | 面板标题（快捷模式） | `React.ReactNode` | - |
+| description | 面板描述（快捷模式） | `React.ReactNode` | - |
+| footer | 底部内容（快捷模式） | `React.ReactNode` | - |
+| extra | 标题行右侧额外内容（快捷模式） | `React.ReactNode` | - |
+| placement | 滑出方向，`side` 的别名 | `'top'` \| `'bottom'` \| `'left'` \| `'right'` | - |
+| side | 滑出方向 | `'top'` \| `'bottom'` \| `'left'` \| `'right'` | `'right'` |
+| size | 面板尺寸，`'default'` 为 350px，`'large'` 为 736px，也可传入自定义值 | `'default'` \| `'large'` \| `number` \| `string` | - |
+| closable | 是否显示关闭按钮 | `boolean` | - |
+| closeIcon | 自定义关闭图标 | `React.ReactNode` | `<XIcon>` |
+| mask | 是否显示遮罩 | `boolean` | `true`（Content 层默认） |
+| maskClosable | 点击遮罩是否关闭 | `boolean` | `true`（Content 层默认） |
+| showCloseButton | 是否显示关闭按钮（Content 层） | `boolean` | `true` |
+| contentProps | 传递给 SheetContent 的额外属性 | `Omit<SheetContentProps, 'children' \| 'side' \| 'showCloseButton'>` | - |
+| open | 受控打开状态 | `boolean` | - |
+| onOpenChange | 打开状态变化回调 | `(open: boolean) => void` | - |
+
+### SheetTrigger
+
+触发器，继承 Radix SheetTrigger 的全部属性。使用 `asChild` 模式将触发行为注入子元素。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 将触发行为注入子元素 | `boolean` | - |
+
+### SheetContent
+
+面板内容容器。内部自动添加 Portal 和 Overlay。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 滑出方向 | `'top'` \| `'bottom'` \| `'left'` \| `'right'` | `'right'` |
+| size | 面板尺寸 | `'default'` \| `'large'` \| `number` \| `string` | - |
+| closable | 是否显示关闭按钮 | `boolean` | `showCloseButton` 的值 |
+| closeIcon | 自定义关闭图标 | `React.ReactNode` | `<XIcon>` |
+| mask | 是否显示遮罩 | `boolean` | `true` |
+| maskClosable | 点击遮罩是否关闭 | `boolean` | `true` |
+| showCloseButton | 是否显示关闭按钮 | `boolean` | `true` |
+
+### SheetClose
+
+关闭按钮，基于 Radix SheetClose primitive。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 将关闭行为注入子元素 | `boolean` | - |
+
+### SheetHeader
+
+面板头部容器，默认样式 `flex flex-col gap-1.5 p-4`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SheetFooter
+
+面板底部容器，默认 `mt-auto flex flex-col gap-2 p-4`，自动贴在底部。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SheetTitle
+
+面板标题，默认 `font-semibold`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+### SheetDescription
+
+面板描述文本，默认 `text-sm text-muted-foreground`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 快捷模式和组合模式如何选择？
+
+快捷模式适合内容简单的面板，直接通过 `title`、`description`、`footer` props 传入即可，无需手动组合子组件。组合模式适合需要完全控制布局和交互的场景，手动使用 SheetTrigger、SheetContent、SheetHeader 等子组件。
+
+### 如何禁用遮罩点击关闭？
+
+设置 `maskClosable={false}` 即可。该属性在 SheetContent 上设置：
+
+```tsx
+<Sheet>
+  <SheetContent maskClosable={false}>
+    ...
+  </SheetContent>
+</Sheet>
+```
+
+### 如何无关闭按钮？
+
+设置 `closable={false}` 或 `showCloseButton={false}` 即可隐藏关闭按钮。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/sheet` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/sheet` 导入，不要从 `antd` 导入。
+2. 快捷模式通过 Sheet props（title/description/footer/placement/size）直接传入，不需要手动嵌套 SheetHeader/SheetTitle 等子组件。
+3. 关闭按钮通过 `closable` 或 `showCloseButton` 控制，不要手动添加 SheetClose。
+4. 嵌套使用时注意 scope 属性区分触发关联。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="sheet" />

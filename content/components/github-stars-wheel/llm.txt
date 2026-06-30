@@ -1,0 +1,184 @@
+---
+category: Blocks
+title: GitHubStarsWheel
+subtitle: GitHub 星标
+description: GitHub 星标数字滚轮动画组件，自动获取仓库星标数并展示滚动数字效果。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 6
+source:
+  component: src/components/blocks/github-stars-wheel/index.tsx
+  docs: content/components/github-stars-wheel/index.mdx
+  examples:
+    - content/components/github-stars-wheel/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# GitHubStarsWheel GitHub 星标
+
+GitHubStarsWheel 是一个展示 GitHub 仓库星标数字的滚动动画组件。它自动通过 GitHub API 获取指定仓库的星标数，并以数字滚轮（ScrollingNumber）的形式展示。星标数按 `step` 取整后显示，滚动动画停止时星形图标填充金色，并可触发粒子特效。适合在 Landing Page、项目展示页中作为社交证明（Social Proof）元素。
+
+## 何时使用 {#when-to-use}
+
+适用于展示 GitHub 仓库星标数的场景：
+
+- 开源项目首页展示星标数。
+- 产品 Landing Page 的社会证明模块。
+- 开发者作品集展示。
+
+常见场景：
+
+- 自动获取 GitHub 仓库星标数并生成滚动数字动画。
+- 按百位/千位取整展示（`step` 控制）。
+- 无网络或 API 失败时静默降级（初始显示 0，不展示组件）。
+
+不推荐：
+
+- 无 GitHub 仓库关联的纯数字展示——使用 ScrollingNumber 原语即可。
+- 需要实时更新的星标数监控——组件仅在挂载时获取一次数据。
+- 静态数值展示——直接用文本，不需要滚动动画。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { GitHubStarsWheel } from "@/components/ui/github-stars-wheel"
+
+export default function Demo() {
+  return (
+    <GitHubStarsWheel
+      username="shadcn-ui"
+      repo="ui"
+    />
+  )
+}
+```
+
+### 指定 step 和方向
+
+```tsx
+import { GitHubStarsWheel } from "@/components/ui/github-stars-wheel"
+
+export default function Demo() {
+  return (
+    <GitHubStarsWheel
+      username="vercel"
+      repo="next.js"
+      direction="ttb"
+      step={1000}
+      delay={500}
+    />
+  )
+}
+```
+
+### 受控数值
+
+```tsx
+import { GitHubStarsWheel } from "@/components/ui/github-stars-wheel"
+
+export default function Demo() {
+  return (
+    <GitHubStarsWheel
+      value={72500}
+      step={100}
+      direction="btt"
+    />
+  )
+}
+```
+
+## API {#api}
+
+### GitHubStarsWheel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| username | GitHub 用户名 | `string` | - |
+| repo | GitHub 仓库名 | `string` | - |
+| value | 受控数值，传入后跳过 API 获取 | `number` | - |
+| direction | 数字滚动方向 | `"btt" \| "ttb"` | `"btt"` |
+| delay | API 请求延迟（ms） | `number` | `0` |
+| step | 数字取整步长（如 100 表示取整到百位） | `number` | `100` |
+| itemsSize | 单个数字项高度（px） | `number` | `35` |
+| sideItemsCount | 可见的上下侧项数 | `number` | `2` |
+| className | 附加 className | `string` | - |
+
+继承 `Omit<ScrollingNumberContainerPrimitiveProps, "direction" | "number" | "step">`，同时继承 `React.ComponentProps<'div'>`。
+
+组件行为：
+
+1. 若同时传入 `value` 和 `username`/`repo`，优先使用 `value`，不发起 API 请求。
+2. `username` 和 `repo` 任一为空且 `value` 未传入时，不发起 API 请求（初始 stars 为 0）。
+3. API 请求在 `delay` 毫秒后发起，使用 `fetch` 调用 `https://api.github.com/repos/{username}/{repo}`。
+4. 星标数按 `step` 取整：`Math.round(stars / step) * step`。
+5. 数字滚动完毕后，星形图标从灰色填充至金色完整（`clipPath` inset 动画），并触发粒子特效。
+6. 加载中不渲染任何内容（`isLoading` 为 true 时返回 null）。
+
+## 样式模型 {#styling-model}
+
+全部使用 Tailwind CSS。
+
+- 容器：`w-28`（默认宽度，可通过 `className` 覆盖）。
+- 上下渐变遮罩：`bg-gradient-to-t` / `bg-gradient-to-b`，`from-transparent to-background`，高度 `itemsSize * sideItemsCount`。
+- 高亮行：`bg-accent/40 border rounded-md`，居中定位，作为当前数字的视觉指示器。
+- 星形图标：`fill-neutral-300 stroke-neutral-300`（灰色底）、`fill-yellow-500 stroke-yellow-500`（金色覆盖层，通过 `clipPath: inset` 实现从底部到顶部的填充进度）。
+- 粒子效果：`size-1 rounded-full bg-yellow-500`。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/github-stars-wheel/index.tsx`：全部实现。
+
+关键依赖：
+
+- `@/primitives/texts/scrolling-number`：数字滚轮原语（ScrollingNumberContainer、ScrollingNumber、ScrollingNumberItems、ScrollingNumberHighlight）。
+- `@/primitives/effects/particles`：粒子特效（Particles、ParticlesEffect）。
+- `lucide-react`：StarIcon。
+- `@/lib/utils`：`cn` 工具函数。
+
+关键行为：
+
+1. `fillPercentage` 计算当前滚动进度占目标值的百分比（`percentageBetween(currentStars, 0, roundedStars)`），驱动星标金色填充比例。
+2. `isCompleted` 基于 `currentStars === roundedStars` 判断滚动是否完成。
+3. 滚动完成时 `Particles` 的 `animate` 变为 true 触发粒子特效，同时星形图标完全填满。
+4. 星标填充使用 `clipPath: inset(${100 - fillPercentage}% 0 0 0)` 实现从下到上的填充动画。
+5. 当 `value` 指定且同时设置了 `username`/`repo` 时，不发起 API 请求。
+6. 数字使用 `Intl.NumberFormat('en-US')` 格式化。
+
+## 可访问性 {#accessibility}
+
+- 星形图标标记 `aria-hidden="true"`，属于纯装饰元素。
+- 数字内容由 `Intl.NumberFormat` 格式化，屏幕阅读器可正常朗读。
+- 数字滚动为视觉呈现，不提供 ARIA live region 实时播报。
+- 组件本身不具备交互性，纯展示用途。
+- 渐变遮罩和粒子效果不影响文档流和可访问性树。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Ant Design 不提供等价的 GitHub 星标展示组件。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| Statistic 组件 | 非等价 | AntD Statistic 是通用数值展示，GitHubStarsWheel 是特定场景的动画展示 |
+
+## LLM 使用规则 {#llm-rules}
+
+1. 从 `@/components/ui/github-stars-wheel` 导入 `GitHubStarsWheel`（命名导出）。
+2. 如需自动获取真实星标数，必须同时传入 `username` 和 `repo`；否则组件将显示 `0`。
+3. 如需固定星标数不发起 API 请求，仅传入 `value`，不要同时传入 `username`/`repo`。
+4. `step` 默认值为 `100`，星标数会四舍五入到百位；如需精确值，将 `step` 设为 `1`。
+5. `direction` 仅在需要反向滚动时显式传入 `"ttb"`，绝大多数场景使用默认的 `"btt"`（从下向上）即可。
+6. 组件加载期间返回 null，父容器可提前设置占位高度避免布局跳动。
+7. 不要将本组件用于展示非 GitHub 来源的数据——星形图标和 GitHub API 调用是硬编码的。

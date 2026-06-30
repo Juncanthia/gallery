@@ -72,7 +72,26 @@ export default function Demo() {
 
 以下类型来自本地源码，是生成代码时的主要依据：
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+### Toaster
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| theme | 主题模式 | `"light"` \| `"dark"` \| `"system"` | `"system"` |
+| position | 通知浮现位置 | `Position` | `"bottom-right"` |
+| richColors | 是否使用富色样式 | `boolean` | `false` |
+| expand | 是否展开所有通知 | `boolean` | `false` |
+| duration | 通知默认持续时间（毫秒） | `number` | `4000` |
+| gap | 通知间距（像素） | `number` | `8` |
+| visibleToasts | 同时可见的最大通知数 | `number` | `3` |
+| closeButton | 是否显示关闭按钮 | `boolean` | `false` |
+| invert | 是否反转视觉效果 | `boolean` | `false` |
+| hotkey | 聚焦快捷键 | `string[]` | `["altKey", "KeyT"]` |
+| icons | 自定义图标集 | `ToastIcons` | - |
+| className | 自定义样式类名 | `string` | - |
+| style | 内联样式 | `CSSProperties` | - |
+| offset | 相对视口的偏移量 | `Offset` | - |
+| dir | 文本方向 | `"rtl"` \| `"ltr"` \| `"auto"` | `"ltr"` |
+| containerAriaLabel | 容器 ARIA 标签 | `string` | - |
 
 ## Semantic DOM {#semantic-dom}
 

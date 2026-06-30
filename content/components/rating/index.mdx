@@ -1,21 +1,186 @@
-RatingButton 复合组件。
+Rating 评分复合组件，用于收集或展示用户对内容的星级评价。由 `Rating`（容器）和 `RatingButton`（单个星标按钮）组合而成，通过 React Context 共享状态，支持受控/非受控双模式、键盘导航和焦点管理。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对内容进行星级评分的交互场景时使用。
+
+常见场景：
+
+- 商品、文章、服务等的用户评分入口。
+- 用户评价表单中的星级选择。
+- 只读展示已有的评分结果。
+- 需要自定义评分图标（如心形、大拇指等）的场景。
+
+与 `Rate` 组件的区别：`Rating` 是复合组件，评分数量由子元素数量决定，图标通过 `icon` prop 传入 ReactElement；`Rate` 是单一组件，通过 `count` prop 配置数量，通过 `character` prop 配置图标。
+
+不推荐：
+
+- 绕过 `Rating` 容器直接使用 `RatingButton`（会因缺少 Context 抛出异常）。
+- 在 `RatingButton` 上自行管理选中状态——该状态由 Context 统一提供。
+- 需要半星评分或清除功能——应使用 `Rate` 组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="rating" path="rating/basic" />
 
 ```tsx
-import { RatingButton } from "@/components/ui/rating"
+import { Rating, RatingButton } from "@/components/ui/rating"
 
 export default function Demo() {
-  return <RatingButton className="w-full max-w-sm" />
+  return (
+    <Rating defaultValue={3} className="w-full max-w-sm">
+      {Array.from({ length: 5 }, (_, i) => (
+        <RatingButton key={i} />
+      ))}
+    </Rating>
+  )
+}
+```
+
+### 自定义图标
+
+```tsx
+import { Rating, RatingButton } from "@/components/ui/rating"
+import { Heart } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Rating defaultValue={3}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <RatingButton key={i} icon={<Heart />} />
+      ))}
+    </Rating>
+  )
+}
+```
+
+### 受控模式
+
+```tsx
+import { Rating, RatingButton } from "@/components/ui/rating"
+import { useState } from "react"
+
+export default function Demo() {
+  const [value, setValue] = useState(2)
+
+  return (
+    <Rating value={value} onValueChange={setValue}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <RatingButton key={i} />
+      ))}
+    </Rating>
+  )
+}
+```
+
+### 只读展示
+
+```tsx
+import { Rating, RatingButton } from "@/components/ui/rating"
+
+export default function Demo() {
+  return (
+    <Rating value={4} readOnly>
+      {Array.from({ length: 5 }, (_, i) => (
+        <RatingButton key={i} />
+      ))}
+    </Rating>
+  )
+}
+```
+
+### 自定义数量
+
+```tsx
+import { Rating, RatingButton } from "@/components/ui/rating"
+
+export default function Demo() {
+  return (
+    <Rating defaultValue={7}>
+      {Array.from({ length: 10 }, (_, i) => (
+        <RatingButton key={i} />
+      ))}
+    </Rating>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/rating/index.tsx` 中的 TypeScript 类型为准。
+### Rating
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| defaultValue | 非受控模式下的默认评分值 | `number` | `0` |
+| value | 受控模式下的评分值 | `number` | - |
+| onChange | 值变化回调，传入原始事件和新值 | `(event: MouseEvent \| KeyboardEvent, value: number) => void` | - |
+| onValueChange | 值变化回调，仅传入新值 | `(value: number) => void` | - |
+| readOnly | 只读模式，禁止交互 | `boolean` | `false` |
+| className | 根容器 CSS 类名 | `string` | - |
+| children | 评分按钮元素，通常为 `RatingButton` 数组 | `ReactNode` | - |
+
+评分范围由 children 中 `RatingButton` 的数量决定。容器 `role="radiogroup"`，`aria-label="Rating"`。通过 `Children.map` + `cloneElement` 自动为每个 `RatingButton` 注入 `index`。
+
+### RatingButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| index | 星标序号（0-based），由 Rating 容器自动注入 | `number` | 自动注入 |
+| size | 图标像素尺寸 | `number` | `20` |
+| className | 按钮 CSS 类名 | `string` | - |
+| icon | 自定义图标元素，激活时自动添加 `fill-current` | `ReactElement<LucideProps>` | `<StarIcon />` |
+
+继承 `LucideProps`，可透传 `strokeWidth`、`color` 等图标属性。按钮设置 `tabIndex` 焦点管理：仅有当前值的按钮 `tabIndex={0}`，其余为 `-1`。`readOnly` 模式下按钮 `disabled`。
+
+<h2 id="faq">常见问题</h2>
+
+### Rating 和 Rate 有什么区别？
+
+- **Rate**：单一组件，通过 `count` 配置数量，支持 `allowHalf`（半星）和 `allowClear`（清除）。适合简单的五星评分场景。
+- **Rating**：复合组件（Rating + RatingButton），数量由子元素决定，支持自定义图标（ReactElement）。适合需要高度定制图标或评分数量不固定的场景。
+- Rating 不支持半星和清除功能。
+
+### 如何自定义评分图标？
+
+通过 `RatingButton` 的 `icon` prop 传入任意 Lucide 图标或自定义 SVG：
+
+```tsx
+<RatingButton icon={<Heart />} />
+```
+
+激活时图标会自动添加 `fill-current` class 实现填充效果。
+
+### 如何让评分组件只读？
+
+设置 `Rating` 的 `readOnly` 属性，按钮会自动 `disabled` 并移除 `cursor-pointer`，键盘导航也会被禁用：
+
+```tsx
+<Rating value={4} readOnly>
+  {Array.from({ length: 5 }, (_, i) => (
+    <RatingButton key={i} />
+  ))}
+</Rating>
+```
+
+### 如何在评分值变化时获取事件对象？
+
+使用 `onChange` 而非 `onValueChange`，前者会传入原始 `MouseEvent` 或 `KeyboardEvent`：
+
+```tsx
+<Rating onChange={(event, value) => console.log(event.type, value)}>
+  ...
+</Rating>
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rating` 导入。
+
+1. 从 `@/components/ui/rating` 导入 `Rating` 和 `RatingButton`，不要从 `antd` 导入。
+2. 评分数量由 `Rating` 的子元素（`RatingButton`）数量决定，不是通过 `count` prop 配置。
+3. 图标自定义通过 `RatingButton` 的 `icon` prop 传入 ReactElement（如 `<Heart />`），不是字符串。
+4. 受控模式使用 `value` + `onValueChange`，非受控使用 `defaultValue`。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="rating" />

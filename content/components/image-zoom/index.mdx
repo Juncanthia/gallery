@@ -1,4 +1,24 @@
-ImageZoom 复合组件。
+图片缩放 基于 react-medium-image-zoom 的图片缩放组件，支持点击放大、模态查看和键盘导航，提供完整的缩放交互体验。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要让用户点击图片查看高清大图时使用。
+
+常见场景：
+- 商品详情图的点击放大查看。
+- 文档截图或技术方案的细节查看。
+- 缩略图到高清原图的过渡切换。
+- 需要支持键盘和触屏缩放交互的场景。
+- 需要受控模式（通过 state 控制缩放状态）的场景。
+
+不推荐：
+- 简单的 hover 放大效果——使用 CSS transform 即可。
+- 需要手势捏合缩放（pinch-to-zoom）的移动端全屏体验——考虑专用图片画廊。
+- 仅需要简单预览——使用 Image 组件的 `preview` 属性。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="image-zoom" path="image-zoom/basic" />
 
@@ -6,16 +26,103 @@ ImageZoom 复合组件。
 import { ImageZoom } from "@/components/ui/image-zoom"
 
 export default function Demo() {
-  return <ImageZoom className="w-full max-w-sm" />
+  return (
+    <ImageZoom>
+      <img
+        alt="示例图片"
+        src="https://picsum.photos/800/600"
+        width={400}
+        height={300}
+      />
+    </ImageZoom>
+  )
+}
+```
+
+### 受控模式
+
+```tsx
+import { ImageZoom } from "@/components/ui/image-zoom"
+
+export default function Demo() {
+  const [zoomed, setZoomed] = useState(false)
+
+  return (
+    <ImageZoom isZoomed={zoomed} onZoomChange={setZoomed}>
+      <img alt="受控缩放" src="/image.png" width={300} />
+    </ImageZoom>
+  )
+}
+```
+
+### 自定义遮罩样式
+
+```tsx
+import { ImageZoom } from "@/components/ui/image-zoom"
+
+export default function Demo() {
+  return (
+    <ImageZoom backdropClassName="bg-red-500/50">
+      <img alt="自定义遮罩" src="/product.jpg" width={400} height={300} />
+    </ImageZoom>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/image-zoom/index.tsx` 中的 TypeScript 类型为准。
+### ImageZoom
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| isZoomed | 受控模式：是否处于缩放状态 | `boolean` | - |
+| onZoomChange | 受控模式：缩放状态变更回调 | `(zoomed: boolean) => void` | - |
+| className | 外层容器 CSS 类名 | `string` | - |
+| backdropClassName | 模态遮罩层（dialog）的 CSS 类名 | `string` | - |
+| children | 被缩放的图片内容（必填） | `ReactNode` | 必填 |
+
+同时接受 `react-medium-image-zoom` 的 `UncontrolledProps` 全部属性（如 `ZoomContent`、`zoomMargin`、`wrapElement` 等），可通过展开传入。
+
+### 导出类型
+
+- `ImageZoomProps` — ImageZoom 组件的 props 类型。
+
+<h2 id="faq">常见问题</h2>
+
+### 受控模式和非受控模式如何选择？
+
+不传 `isZoomed` 和 `onZoomChange` 即为非受控模式，组件内部自行管理缩放状态。传入两者即为受控模式，由外部 state 控制缩放开关。
+
+```tsx
+// 非受控
+<ImageZoom><img src="/photo.jpg" /></ImageZoom>
+
+// 受控
+<ImageZoom isZoomed={open} onZoomChange={setOpen}><img src="/photo.jpg" /></ImageZoom>
+```
+
+### 如何自定义缩放模态层的背景样式？
+
+通过 `backdropClassName` 传入自定义类名，会合并到 `<dialog>` 元素的 `classDialog` 上。默认使用 `bg-background/80 backdrop-blur-md` 的模糊半透明效果。
+
+```tsx
+<ImageZoom backdropClassName="bg-black/90">
+  <img src="/photo.jpg" />
+</ImageZoom>
+```
+
+### 支持哪些图片格式？
+
+ImageZoom 不限制图片格式。任何可放入 `<img>` 的元素均可作为 children。常见的包括 `<img>`、`<picture>`、SVG 元素等。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/image-zoom` 导入。
+
+1. 从 `@/components/ui/image-zoom` 导入 `ImageZoom`。
+2. `ImageZoom` 通过 children 传入被缩放的图片元素。
+3. 需要受控模式时，同时传入 `isZoomed` 和 `onZoomChange`。
+4. 自定义遮罩样式使用 `backdropClassName`，自定义容器样式使用 `className`。
+5. 不要引入 Ant Design 的 Image 组件或相关依赖。
+6. 该组件为项目本地复合组件（Blocks），无 Ant Design 直接对应。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="image-zoom" />

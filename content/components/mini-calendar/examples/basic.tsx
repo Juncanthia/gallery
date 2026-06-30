@@ -1,5 +1,20 @@
-import { MiniCalendar } from "@/components/ui/mini-calendar"
+import {
+  MiniCalendar,
+  MiniCalendarNavigation,
+  MiniCalendarDays,
+  MiniCalendarDay,
+} from "@/components/ui/mini-calendar"
 
 export default function MiniCalendarBasicExample() {
-  return <MiniCalendar className="w-full max-w-sm" />
+  return (
+    <MiniCalendar>
+      <MiniCalendarNavigation direction="prev" />
+      <MiniCalendarDays>
+        {(date) => (
+          <MiniCalendarDay key={date.toISOString()} date={date} />
+        )}
+      </MiniCalendarDays>
+      <MiniCalendarNavigation direction="next" />
+    </MiniCalendar>
+  )
 }

@@ -76,11 +76,63 @@ export default function Demo() {
 - `useMessageScrollerScrollable`
 - `useMessageScrollerVisibility`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### MessageScrollerProvider
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+包装 `@shadcn/react/message-scroller` 的 Provider，提供滚动上下文。支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Provider>` 的所有属性。
+
+### MessageScroller
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Root>` 的所有属性。
+
+### MessageScrollerViewport
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Viewport>` 的所有属性。
+
+### MessageScrollerContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Content>` 的所有属性。
+
+### MessageScrollerItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| scrollAnchor | 是否作为滚动锚点 | `boolean` | `false` |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Item>` 的所有属性。
+
+### MessageScrollerButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| direction | 滚动方向 | `"start" \| "end"` | `"end"` |
+| variant | 按钮样式变体，透传至 Button | `"filled" \| ...` | `"filled"` |
+| size | 按钮尺寸，透传至 Button | `"small" \| ...` | `"small"` |
+| render | 自定义渲染元素 | `ReactNode` | `<Button variant={variant} size={size} shape="square" />` |
+| children | 按钮内容（默认为箭头图标 + sr-only 文本） | `ReactNode` | 箭头图标 |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Button>` 的其他属性。
+
+### Hooks
+
+- `useMessageScroller` — 返回 MessageScroller 上下文
+- `useMessageScrollerScrollable` — 返回是否可滚动及滚动方向
+- `useMessageScrollerVisibility` — 返回按钮显示/隐藏状态
 
 ## Semantic DOM {#semantic-dom}
 

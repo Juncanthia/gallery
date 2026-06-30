@@ -1,0 +1,189 @@
+---
+category: Blocks
+title: Dropzone
+subtitle: 拖拽上传
+description: 文件拖拽与点击上传区域，基于 react-dropzone，支持文件类型/大小/数量限制。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 3
+source:
+  component: src/components/blocks/dropzone/index.tsx
+  docs: content/components/dropzone/index.mdx
+  examples:
+    - content/components/dropzone/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Dropzone 拖拽上传
+
+Dropzone 是基于 `react-dropzone` 的文件上传入口组件。外观渲染为按钮样式，内部承载拖拽/点击交互区域。支持限制文件类型、大小、数量以及自定义已选文件和空状态的展示内容。选用 Dropzone 时，调用侧自行处理文件上传逻辑，组件只负责文件选择交互。
+
+## 何时使用 {#when-to-use}
+
+适用于需要用户选择或拖入文件的场景：
+
+- 文件上传（图片、文档、视频等）。
+- 拖拽替换已选文件。
+- 带格式/大小约束的文件选择。
+
+常见场景：
+
+- 单文件上传（默认 `maxFiles=1`），例如头像上传。
+- 多文件批量上传。
+- 文件替换：已选文件展示当前文件名，拖入新文件替换。
+- 受约束的文件选择：只接受特定 MIME 类型和大小范围。
+
+不推荐：
+
+- 需要内置上传进度、队列管理——Dropzone 只做文件选择，上传逻辑由调用侧负责。
+- 需要复杂预览（缩略图、裁剪）——应在 `onDrop` 回调中自行实现。
+
+## 代码演示 {#examples}
+
+### 基础文件上传
+
+```tsx
+import { Dropzone, DropzoneEmptyState } from "@/components/ui/dropzone"
+
+export default function Demo() {
+  return (
+    <Dropzone
+      accept={{ "image/*": [] }}
+      maxSize={5 * 1024 * 1024}
+      onDrop={(files) => console.log(files)}
+    >
+      <DropzoneEmptyState />
+    </Dropzone>
+  )
+}
+```
+
+### 已选文件 + 替换
+
+```tsx
+import { useState } from "react"
+import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/dropzone"
+
+export default function Demo() {
+  const [files, setFiles] = useState<File[]>([])
+
+  return (
+    <Dropzone
+      src={files}
+      maxFiles={3}
+      onDrop={(accepted) => setFiles(accepted)}
+    >
+      <DropzoneContent />
+      <DropzoneEmptyState />
+    </Dropzone>
+  )
+}
+```
+
+## API {#api}
+
+### Dropzone
+
+顶层组件，集成 `useDropzone`，提供拖拽/点击交互。`src` 变化时自动重建 Context 以反映新文件状态。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | 当前已选文件数组，非空时 EmptyState 不显示 | `File[]` | - |
+| accept | 接受的 MIME 类型 | `DropzoneOptions["accept"]` | - |
+| maxFiles | 最大文件数量 | `number` | `1` |
+| maxSize | 单个文件最大字节数 | `number` | - |
+| minSize | 单个文件最小字节数 | `number` | - |
+| onDrop | 文件拖放/选择回调 | `(acceptedFiles: File[], fileRejections: FileRejection[], event: DropEvent) => void` | - |
+| onError | 文件拒绝或错误回调 | `(error: Error) => void` | - |
+| disabled | 禁用拖拽区域 | `boolean` | - |
+| className | 附加 className | `string` | - |
+| children | 内容（通常为 DropzoneContent + DropzoneEmptyState） | `ReactNode` | - |
+
+其余属性透传至 `useDropzone`。
+
+### DropzoneContent
+
+已选文件状态的默认展示。当 `src` 非空且无自定义 children 时展示文件名和替换提示。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义已选文件展示内容 | `ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+### DropzoneEmptyState
+
+空状态展示。当 `src` 为空且无自定义 children 时展示上传引导文案以及 accept/size 约束说明。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义空状态内容 | `ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+## 样式模型 {#styling-model}
+
+全部使用 Tailwind CSS，基于 `Button variant="outlined"` 渲染。
+
+- 拖拽区域：`relative h-auto w-full flex-col overflow-hidden p-8`，`variant="outlined"`。
+- 拖拽悬停态：`isDragActive` 时添加 `outline-none ring-1 ring-ring`。
+- 上传图标：`size-8 rounded-md bg-muted text-muted-foreground`。
+- 文件名：`font-medium text-sm`，超过 3 个文件时使用 `Intl.ListFormat` 截断。
+- 提示文本：`text-muted-foreground text-xs`。
+- disabled 状态使用 Button 的原生 disabled 样式。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/dropzone/index.tsx`：全部实现。
+
+关键依赖：
+
+- `react-dropzone`：文件拖拽/选择的核心 hook。
+- `lucide-react`：Upload 图标。
+- `@/components/ui/button`：渲染拖拽区域的基底组件。
+
+关键行为：
+
+1. 文件拒绝（类型/大小不符）时，先调用 `onError`，不触发 `onDrop`。
+2. `src` 变化时 Dropzone 重新挂载 Context（通过 `key={JSON.stringify(src)}`），确保子组件感知新文件状态。
+3. 输入元素（`<input>`）隐藏在 Button 内部，通过 `getInputProps` 注入。
+4. `renderBytes` 将字节数转换为人类可读格式。
+5. `DropzoneContent` 最多展示 3 个文件名，超出显示 "and N more"。
+6. `DropzoneEmptyState` 在存在 accept/minSize/maxSize 时自动生成约束说明文本。
+
+## 可访问性 {#accessibility}
+
+- 底层使用 `<button>` 元素可被 Tab 聚焦。
+- 内部的 `<input type="file">` 由 react-dropzone 管理辅助技术可访问性。
+- disabled 时 `<input>` 同步禁用。
+- 拖拽激活态通过视觉 ring 反馈，不提供 ARIA 实时区域通知。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Ant Design 的 `Upload` 组件是完整的文件上传方案（包含请求发送、进度、列表管理、预览等）。Dropzone 只负责文件选择入口，上传逻辑完全由调用侧控制。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| action / 自动上传 | 不做 | 上传策略由业务侧决定，组件只做选择 |
+| UploadList 文件列表 | 不做 | 调用侧按需渲染 |
+| beforeUpload 钩子 | 不做 | 用 onDrop 回调替代 |
+| 预览（PreviewFile） | 不做 | 调用侧自行实现 |
+| 拖拽排序（itemRender） | 不做 | 超出组件范围 |
+
+## LLM 使用规则 {#llm-rules}
+
+1. 从 `@/components/ui/dropzone` 导入 `Dropzone`、`DropzoneContent`、`DropzoneEmptyState`。
+2. 文件选择后 Dropzone 只返回 `File[]` 数组，上传逻辑需调用侧在 `onDrop` 中自行实现。
+3. `DropzoneContent` 和 `DropzoneEmptyState` 放在 Dropzone 内部作为 children，它们会自动根据 `src` 状态切换显示。
+4. 受控模式：传入 `src`（已选文件），`src` 变化会触发 Dropzone 重新挂载。
+5. 限制文件类型使用 `accept`、大小使用 `maxSize`/`minSize`、数量使用 `maxFiles`。
+6. 错误处理优先使用 `onError`，组件会在文件拒绝时自动调用，无需在 `onDrop` 中二次判断。

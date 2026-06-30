@@ -73,7 +73,21 @@ export default function Demo() {
 
 以下类型来自本地源码，是生成代码时的主要依据：
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+### Tree
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 树节点内容 | `ReactNode` | - |
+| defaultExpandedIds | 默认展开的节点 ID 列表 | `string[]` | `[]` |
+| showLines | 是否显示层级连接线 | `boolean` | `true` |
+| showIcons | 是否显示节点图标 | `boolean` | `true` |
+| selectable | 是否允许节点选择 | `boolean` | `true` |
+| multiSelect | 是否支持多选（Ctrl/Meta + 点击） | `boolean` | `false` |
+| selectedIds | 选中节点 ID 列表（受控） | `string[]` | - |
+| onSelectionChange | 选择变化回调 | `(selectedIds: string[]) => void` | - |
+| indent | 每级缩进距离（像素） | `number` | `20` |
+| animateExpand | 是否启用展开/收起动画 | `boolean` | `true` |
+| className | 自定义样式类名 | `string` | - |
 
 ## Semantic DOM {#semantic-dom}
 

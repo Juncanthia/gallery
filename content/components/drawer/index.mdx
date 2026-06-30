@@ -1,24 +1,157 @@
-Drawer 从屏幕边缘滑出的浮层面板，常用于移动端的导航菜单或表单面板。
+抽屉 Drawer。从屏幕边缘滑出的浮层面板，基于 Vaul 实现。支持上下左右四个弹出方向、三种预设尺寸和自定义宽高，适合移动端操作面板或侧边补充信息展示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在屏幕边缘滑出面板来承载额外内容或操作时使用。
+
+常见场景：
+
+- 移动端的导航菜单。
+- 表单填写面板（筛选条件、新增/编辑表单）。
+- 详情信息的侧边补充展示。
+- 设置面板或配置抽屉。
+
+不推荐：
+
+- 居中模态的确认/表单场景，使用 Dialog 更合适。
+- 内容需要与页面保持视觉连续性时，考虑内联展开而非 Drawer。
+- 嵌套 Drawer（抽屉中再弹抽屉），应合并为单一面板或分步流程。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="drawer" path="drawer/basic" />
 
 ```tsx
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 
 export default function Demo() {
   const [open, setOpen] = useState(false)
+
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild><Button>打开抽屉</Button></DrawerTrigger>
+      <DrawerTrigger asChild>
+        <Button>打开抽屉</Button>
+      </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>抽屉标题</DrawerTitle>
           <DrawerDescription>抽屉的描述信息</DrawerDescription>
         </DrawerHeader>
-        <div className="p-4 pb-8">
-          <p className="text-sm text-muted-foreground">抽屉主体内容。</p>
+        <div className="px-4 pb-8">
+          <p className="text-sm text-muted-foreground">抽屉主体内容区域。</p>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  )
+}
+```
+
+### 不同弹出方向
+
+```tsx
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+
+export default function Demo() {
+  const [openTop, setOpenTop] = useState(false)
+  const [openLeft, setOpenLeft] = useState(false)
+  const [openRight, setOpenRight] = useState(false)
+
+  return (
+    <div className="flex gap-2">
+      <Drawer open={openTop} onOpenChange={setOpenTop} placement="top">
+        <DrawerTrigger asChild>
+          <Button variant="outlined">上</Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>顶部抽屉</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-8">
+            <p className="text-sm text-muted-foreground">从顶部滑出。</p>
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+      <Drawer open={openLeft} onOpenChange={setOpenLeft} placement="left">
+        <DrawerTrigger asChild>
+          <Button variant="outlined">左</Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>左侧抽屉</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-8">
+            <p className="text-sm text-muted-foreground">从左侧滑出。</p>
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+      <Drawer open={openRight} onOpenChange={setOpenRight} placement="right">
+        <DrawerTrigger asChild>
+          <Button variant="outlined">右</Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>右侧抽屉</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-8">
+            <p className="text-sm text-muted-foreground">从右侧滑出。</p>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </div>
+  )
+}
+```
+
+### 自定义尺寸
+
+```tsx
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+
+export default function Demo() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Drawer open={open} onOpenChange={setOpen} size="large">
+      <DrawerTrigger asChild>
+        <Button>大型抽屉</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>大型抽屉 (736px)</DrawerTitle>
+        </DrawerHeader>
+        <div className="px-4 pb-8">
+          <p className="text-sm text-muted-foreground">
+            size 支持 "default" (378px), "large" (736px), 或自定义数值/字符串。
+          </p>
         </div>
       </DrawerContent>
     </Drawer>
@@ -27,33 +160,96 @@ export default function Demo() {
 ```
 
 <h2 id="api">API</h2>
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| open | 受控显隐 | `boolean` |
-| onOpenChange | 显隐回调 | `(open: boolean) => void` |
 
-子组件：`DrawerTrigger`、`DrawerContent`、`DrawerHeader`、`DrawerTitle`、`DrawerDescription`、`DrawerFooter`。
+### Drawer
+
+顶层容器组件。支持便捷 API 模式和子组件模式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| open | 受控显隐状态 | `boolean` | - |
+| defaultOpen | 非受控默认显隐状态 | `boolean` | - |
+| onOpenChange | 显隐状态变化回调 | `(open: boolean) => void` | - |
+| trigger | 触发器元素（便捷 API） | `React.ReactNode` | - |
+| title | 标题（便捷 API） | `React.ReactNode` | - |
+| description | 描述文本（便捷 API） | `React.ReactNode` | - |
+| footer | 底部内容，传入 `null` 隐藏（便捷 API） | `React.ReactNode` | - |
+| extra | 标题右侧额外内容（便捷 API） | `React.ReactNode` | - |
+| placement | 弹出方向 | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"` |
+| size | 抽屉尺寸 | `"default" \| "large" \| number \| string` | - |
+| closable | 是否显示关闭按钮 | `boolean` | `true` |
+| closeIcon | 自定义关闭图标 | `React.ReactNode` | `<X />` |
+| closeText | 关闭按钮文本，传入则显示底部关闭按钮（便捷 API） | `React.ReactNode` | - |
+| mask | 是否显示遮罩层 | `boolean` | - |
+| maskClosable | 点击遮罩是否关闭 | `boolean` | - |
+| closeButtonProps | 关闭按钮额外属性 | `ButtonProps` | - |
+| contentProps | 传给 DrawerContent 的额外属性 | `DrawerContentProps` | - |
+
+### DrawerTrigger
+
+触发打开抽屉的元素。继承 Vaul `DrawerPrimitive.Trigger`。
+
+### DrawerContent
+
+抽屉主体面板，通过 Portal 渲染。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| direction | 弹出方向 | `DrawerPlacement` | `"bottom"` |
+| mask | 是否显示遮罩 | `boolean` | `true` |
+| size | 抽屉尺寸 | `DrawerSize` | - |
+| className | 附加 className | `string` | - |
+
+### DrawerHeader / DrawerTitle / DrawerDescription
+
+- **DrawerHeader**：头部容器，底部方向默认 `text-center`，`md:text-left`。
+- **DrawerTitle**：标题，`font-heading font-medium text-foreground`。
+- **DrawerDescription**：描述文本，`text-sm text-muted-foreground`。
+
+### DrawerFooter / DrawerClose / DrawerOverlay / DrawerPortal
+
+- **DrawerFooter**：底部操作区，`mt-auto flex flex-col gap-2 p-4`。
+- **DrawerClose**：关闭按钮。
+- **DrawerOverlay**：背景遮罩，带 `backdrop-blur-xs` 模糊效果。
+- **DrawerPortal**：Portal 容器。
+
+### DrawerPlacement
+
+`"top" | "bottom" | "left" | "right"`
+
+### DrawerSize
+
+`"default"` (378px) | `"large"` (736px) | `number` (自动补 px) | `string` (任意 CSS 值)
+
+<h2 id="faq">常见问题</h2>
+
+### Drawer 和 Dialog 有什么区别？
+
+- **Drawer**：从屏幕边缘滑出，基于 Vaul，适合移动端操作面板和侧边内容展示。
+- **Dialog**：屏幕居中弹出，基于 Radix Dialog，适合需要用户聚焦的模态操作。
+
+移动端优先选择 Drawer，桌面端确认/表单类操作优先选择 Dialog。
+
+### 如何设置抽屉的宽度/高度？
+
+使用 `size` 属性。对于 `left`/`right` 方向，`size` 控制宽度；对于 `top`/`bottom` 方向，`size` 控制高度。预设值 "default" 为 378px，"large" 为 736px，也支持传入数字（自动补 px）或任意 CSS 字符串值。
+
+### 如何禁用点击遮罩关闭？
+
+设置 `maskClosable={false}`。此时点击遮罩层不会关闭抽屉。
+
+### Direction 和 Placement 有什么区别？
+
+`placement` 是便捷 API 的 prop，内部转换为 Vaul 的 `direction`。在 `DrawerContent` 中直接使用 `direction`。二者等效，推荐使用 `placement` 更语义化。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/drawer` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `drawer` | - |
-| `drawer-close` | - |
-| `drawer-content` | - |
-| `drawer-description` | - |
-| `drawer-footer` | - |
-| `drawer-header` | - |
-| `drawer-overlay` | - |
-| `drawer-portal` | - |
-| `drawer-title` | - |
-| `drawer-trigger` | - |
+1. 从 `@/components/ui/drawer` 导入所需的子组件。
+2. 使用受控模式管理 `open` 状态，确保可在操作完成后关闭。
+3. `DrawerTrigger` 使用 `asChild` 包裹 Button。
+4. 移动端场景优先使用 Drawer，桌面端表单/确认场景优先使用 Dialog。
+5. 通过 `placement` 控制弹出方向，通过 `size` 控制面板尺寸。
+6. 不要引入 Ant Design 的 `Drawer` 或 `antd` 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="drawer" />

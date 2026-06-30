@@ -1,0 +1,382 @@
+---
+category: Blocks
+title: Editor
+subtitle: 富文本编辑器
+description: 基于 Tiptap 的富文本编辑器复合组件，内置斜杠命令、气泡菜单、浮动菜单、表格编辑、字数统计等完整编辑体验。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 5
+source:
+  component: src/components/blocks/editor/index.tsx
+  docs: content/components/editor/index.mdx
+  examples:
+    - content/components/editor/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  tiptap: true
+  lowlight: true
+  fusejs: true
+  tippy: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# Editor 富文本编辑器
+
+Editor 是一套基于 Tiptap（ProseMirror）的富文本编辑器复合组件系统。它在 `@tiptap/react` 的 `EditorProvider` 之上封装了完整的编辑体验：斜杠命令菜单、文本格式气泡菜单、浮动菜单、链接选择器、表格上下文菜单（行列增删、合并拆分）、字符计数等。自带 StarterKit、代码高亮、上下标、任务列表、Typography 扩展。
+
+并非 Ant Design 任何组件的兼容层，是本地设计系统内建的复合组件，调用侧无需手动拼装 Tiptap 扩展和样式。
+
+## 何时使用 {#when-to-use}
+
+需要为应用提供所见即所得的富文本编辑能力时使用。
+
+常见场景：
+
+- 内容管理系统（CMS）的文章/页面编辑器。
+- 评论、笔记、文档编辑。
+- 需要表格编辑、代码块、任务列表的协作工具。
+- 支持 Markdown 快捷输入的编辑器。
+- 需要字符计数限制的长文本输入。
+
+推荐使用方式：
+
+- 使用 EditorProvider 作为顶层容器，它预配置了 StarterKit、表格、代码高亮、slash 命令等扩展。
+- 通过 placeholder 和 limit 控制输入提示和字数上限。
+- 在 EditorProvider 内部组合 EditorBubbleMenu（选中浮层）和 EditorFloatingMenu（空白行浮层）提供格式化工具栏。
+- 使用 EditorSelector 和 EditorLinkSelector 构建节点切换和链接编辑 UI。
+- 使用 EditorTableMenu 系列组件为表格提供上下文操作入口。
+
+不推荐：
+
+- 绕过 EditorProvider 直接使用底层 @tiptap/react，除非需要完全自定义扩展配置。
+- 简单文本输入场景使用此组件——用 Textarea 或 Input 更轻量。
+- 纯代码编辑——使用 CodeMirror 或 Monaco 更合适。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+EditorProvider 提供开箱即用的编辑器，内置斜杠命令面板（输入 `/` 触发）。
+
+```tsx
+import { EditorProvider } from "@/components/ui/editor"
+
+export default function Demo() {
+  return <EditorProvider className="w-full max-w-sm" />
+}
+```
+
+### 完整工具栏
+
+组合 EditorBubbleMenu、EditorSelector、EditorLinkSelector 及各类格式/节点按钮构建完整格式化工具栏。
+
+```tsx
+import {
+  EditorBubbleMenu,
+  EditorFormatBold,
+  EditorFormatItalic,
+  EditorFormatStrike,
+  EditorFormatCode,
+  EditorLinkSelector,
+  EditorNodeHeading1,
+  EditorNodeHeading2,
+  EditorNodeHeading3,
+  EditorNodeBulletList,
+  EditorNodeOrderedList,
+  EditorNodeQuote,
+  EditorNodeCode,
+  EditorProvider,
+  EditorSelector
+} from "@/components/ui/editor"
+
+export default function Demo() {
+  return (
+    <EditorProvider className="w-full max-w-sm">
+      <EditorBubbleMenu>
+        <EditorSelector title="Text">
+          <EditorNodeText />
+          <EditorNodeHeading1 />
+          <EditorNodeHeading2 />
+          <EditorNodeHeading3 />
+          <EditorNodeBulletList />
+          <EditorNodeOrderedList />
+          <EditorNodeQuote />
+          <EditorNodeCode />
+        </EditorSelector>
+        <EditorFormatBold hideName />
+        <EditorFormatItalic hideName />
+        <EditorFormatStrike hideName />
+        <EditorFormatCode hideName />
+        <EditorLinkSelector />
+      </EditorBubbleMenu>
+    </EditorProvider>
+  )
+}
+```
+
+### 表格编辑
+
+使用 EditorTableMenu 系列组件为表格提供列级、行级和全局上下文工具栏。
+
+```tsx
+import {
+  EditorProvider,
+  EditorTableColumnMenu,
+  EditorTableColumnBefore,
+  EditorTableColumnAfter,
+  EditorTableColumnDelete,
+  EditorTableRowMenu,
+  EditorTableRowBefore,
+  EditorTableRowAfter,
+  EditorTableRowDelete,
+  EditorTableGlobalMenu,
+  EditorTableHeaderColumnToggle,
+  EditorTableHeaderRowToggle,
+  EditorTableMergeCells,
+  EditorTableSplitCell,
+  EditorTableDelete,
+  EditorTableFix
+} from "@/components/ui/editor"
+
+export default function Demo() {
+  return (
+    <EditorProvider>
+      <EditorTableColumnMenu>
+        <EditorTableColumnBefore />
+        <EditorTableColumnAfter />
+        <EditorTableColumnDelete />
+      </EditorTableColumnMenu>
+      <EditorTableRowMenu>
+        <EditorTableRowBefore />
+        <EditorTableRowAfter />
+        <EditorTableRowDelete />
+      </EditorTableRowMenu>
+      <EditorTableGlobalMenu>
+        <EditorTableHeaderColumnToggle />
+        <EditorTableHeaderRowToggle />
+        <EditorTableMergeCells />
+        <EditorTableSplitCell />
+        <EditorTableDelete />
+        <EditorTableFix />
+      </EditorTableGlobalMenu>
+    </EditorProvider>
+  )
+}
+```
+
+## API {#api}
+
+### EditorProvider
+
+顶层编辑器提供者，封装 `TiptapEditorProvider`，注册默认扩展集。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| limit | 字符计数上限，传给 CharacterCount 扩展 | `number` | - |
+| placeholder | 空编辑器占位文本，传给 Placeholder 扩展 | `string` | - |
+| extensions | 额外 Tiptap 扩展，合并到默认扩展之后 | `Extension[]` | - |
+
+继承 `TiptapEditorProviderProps`（含 `content`、`onUpdate`、`onSelectionUpdate` 等）。默认已注册：StarterKit（无默认 codeBlock）、Typography、Placeholder、CharacterCount、CodeBlockLowlight（全语言高亮）、Superscript、Subscript、Slash（斜杠命令）、Table（含 Row/Cell/Header 样式）、TaskList/TaskItem、TextStyleKit。
+
+### EditorFloatingMenu
+
+浮动菜单，在空行开头显示。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+继承 `FloatingMenuProps`（不含 editor），editor 从 `useCurrentEditor` 自动获取。
+
+### EditorBubbleMenu
+
+选中文本时弹出的气泡格式菜单。子元素之间自动插入 Separator 分隔线。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| children | 菜单按钮列表，数组时自动插入 Separator | `ReactNode` / `ReactNode[]` | - |
+
+继承 `BubbleMenuProps`（不含 editor）。
+
+### EditorSelector
+
+通用节点类型下拉选择器，基于 Popover 实现。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 触发按钮文字 | `string` | - |
+| open | 受控开启状态 | `boolean` | - |
+| onOpenChange | 开启状态变化回调 | `(open: boolean) => void` | - |
+| className | 附加 className | `string` | - |
+| children | 下拉选项，通常为 EditorNode* 组件 | `React.ReactNode` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### EditorLinkSelector
+
+链接插入/编辑/删除弹窗。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| open | 受控弹窗开启状态 | `boolean` | - |
+| onOpenChange | 弹窗状态变化回调 | `(open: boolean) => void` | - |
+
+### 节点类型按钮
+
+共享 `{ hideName?: boolean }` Props，`hideName` 为 `false` 时同时显示图标和文本。
+
+| 组件 | 功能 |
+| --- | --- |
+| EditorNodeText | 切换为普通文本段落 |
+| EditorNodeHeading1 | 切换为一级标题 |
+| EditorNodeHeading2 | 切换为二级标题 |
+| EditorNodeHeading3 | 切换为三级标题 |
+| EditorNodeBulletList | 切换为无序列表 |
+| EditorNodeOrderedList | 切换为有序列表 |
+| EditorNodeTaskList | 切换为任务列表 |
+| EditorNodeQuote | 切换为引用块 |
+| EditorNodeCode | 切换为代码块 |
+| EditorNodeTable | 插入 3x3 表格（含表头行） |
+
+### 内联格式按钮
+
+共享 `{ hideName?: boolean }` Props。EditorClearFormatting 的 `hideName` 默认为 `true`。
+
+| 组件 | 功能 |
+| --- | --- |
+| EditorFormatBold | 切换加粗 |
+| EditorFormatItalic | 切换斜体 |
+| EditorFormatStrike | 切换删除线 |
+| EditorFormatCode | 切换行内代码 |
+| EditorFormatSubscript | 切换下标 |
+| EditorFormatSuperscript | 切换上标 |
+| EditorFormatUnderline | 切换下划线 |
+| EditorClearFormatting | 清除所有格式 |
+
+### 表格上下文菜单容器
+
+仅在表格激活时渲染的容器组件，通过 selectionUpdate 事件动态定位。
+
+| 组件 | Props | 定位方式 |
+| --- | --- | --- |
+| EditorTableMenu | `children: ReactNode` | 仅当 `editor.isActive("table")` 时渲染 |
+| EditorTableGlobalMenu | `children: ReactNode` | 表格底部居中浮层 |
+| EditorTableColumnMenu | `children: ReactNode` | 列顶部居中，DropdownMenu 触发 |
+| EditorTableRowMenu | `children: ReactNode` | 行左侧居中，DropdownMenu 触发 |
+
+### 表格操作按钮
+
+无需自定义 Props，直接使用的功能性按钮组件。
+
+| 组件 | 功能 |
+| --- | --- |
+| EditorTableColumnBefore | 左侧插入列 |
+| EditorTableColumnAfter | 右侧插入列 |
+| EditorTableColumnDelete | 删除当前列 |
+| EditorTableRowBefore | 上方插入行 |
+| EditorTableRowAfter | 下方插入行 |
+| EditorTableRowDelete | 删除当前行 |
+| EditorTableHeaderColumnToggle | 切换标题列 |
+| EditorTableHeaderRowToggle | 切换标题行 |
+| EditorTableMergeCells | 合并选中单元格 |
+| EditorTableSplitCell | 拆分选中单元格 |
+| EditorTableDelete | 删除整个表格 |
+| EditorTableFix | 修复表格结构 |
+
+### EditorCharacterCount
+
+字符/单词计数，通过 `.Characters` 和 `.Words` 命名空间子组件访问。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 前缀内容（如 "字数："） | `ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+### 导出类型
+
+组件同时 re-export：`Editor`、`JSONContent`（来自 @tiptap/react）、`SuggestionItem`。
+
+## 样式模型 {#styling-model}
+
+全部使用 Tailwind CSS，通过 Tiptap 扩展的 `HTMLAttributes` 注入 class，用 `cn` 合并。
+
+- 编辑器容器：`[&_.ProseMirror-focused]:outline-none`。
+- 气泡菜单：`flex rounded-xl border bg-background p-0.5 shadow`，首尾子元素有独立圆角。
+- 浮动菜单：`flex items-center bg-secondary`。
+- 代码块高亮：GitHub 风格配色，通过 `[&_.hljs-*]` 选择器定义。文本色 `#d73a49`（红）、类/函数 `#6f42c1`（紫）、属性/数字 `#005cc5`（蓝）、字符串 `#032f62`（深蓝）、内置 `#e36209`（橙）、注释 `#6a737d`（灰）、选择器 `#22863a`（绿）。
+- 表格：`table-fixed border-collapse`，单元格 `min-w-[1em] border p-1`，表头 `bg-secondary font-semibold`。
+- 占位符：`before:text-muted-foreground before:content-[attr(data-placeholder)] before:float-left before:h-0 before:pointer-events-none`。
+- 字符计数：`absolute right-4 bottom-4 rounded-md border bg-background p-2 text-muted-foreground text-sm shadow`。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/editor/index.tsx`：全部编辑器组件定义。
+
+关键依赖：
+
+- `@tiptap/react`、`@tiptap/core`、`@tiptap/pm`：编辑器核心与 React 绑定。
+- `@tiptap/starter-kit`：基础扩展集（heading、bold、italic、list、blockquote、code、hr 等）。
+- `@tiptap/extension-code-block-lowlight`：代码块语法高亮扩展。
+- `lowlight` + `all` 全语言包：语法高亮词法分析，初始化时加载所有 highlight.js 语言。
+- `@tiptap/suggestion`：斜杠命令建议引擎。
+- `fuse.js`：斜杠命令模糊搜索。
+- `tippy.js`：斜杠命令弹出定位。
+- `lucide-react`：图标库。
+- `@/components/ui/button`、`@/components/ui/command`、`@/components/ui/dropdown-menu`、`@/components/ui/popover`、`@/components/ui/separator`、`@/components/ui/tooltip`：底层 UI 组件。
+- `@/lib/utils`：cn 工具函数。
+
+关键行为：
+
+1. Slash 自定义节点注册为 ProseMirror inline atom 节点，输入 `/` 触发建议菜单，通过 Fuse.js 模糊匹配。
+2. 代码块使用 `createLowlight(all)` 加载所有 highlight.js 语言，初始化开销较大；如需精简可通过自定义扩展按需注册。
+3. 自定义扩展的 class 通过 `HTMLAttributes` merge 到 Tiptap 默认渲染之上。
+4. EditorBubbleMenu 的 children 为数组时自动在元素间插入 Separator 分隔线。
+5. Table 菜单（Column/Row/Global）通过监听 `selectionUpdate` 事件跟踪表格/行/列位置，以绝对定位浮层呈现。
+6. 编辑器的 Dropcursor 使用 CSS 变量 `var(--border)` 自定义颜色。
+7. EditorCharacterCount 依赖 CharacterCount 扩展的 storage，导出 `.Characters` 和 `.Words` 两个命名空间子组件。
+8. EditorProvider 自动包裹 TooltipProvider，其内部的 Tooltip 子组件可直接使用。
+
+## 可访问性 {#accessibility}
+
+- 编辑器使用 ProseMirror 的 contentEditable，天然支持键盘导航编辑。
+- 斜杠命令面板通过 `handleCommandNavigation` 转发 ArrowUp/ArrowDown/Enter/Escape 事件，支持无障碍键盘操作。
+- 链接输入框有 `aria-label="Link URL"`。
+- 气泡菜单按钮可聚焦和点击，通过 Button 组件保留其可访问性属性。
+- 表格操作按钮通过 Tooltip 提供文本说明。
+- 字数统计为纯展示信息，无交互语义。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Ant Design 不提供内置富文本编辑器组件，Editor 是本地全新构建的复合组件。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| 无对应组件 | 基于 Tiptap 全新构建 | AntD 无内置编辑器，社区方案通常直接集成 Tiptap/ProseMirror |
+| 无 slash command 规范 | 自定义 Slash 节点 + Fuse.js 搜索 | 提供类 Notion 的 `/` 命令体验 |
+| 表格编辑 | 自建表格式上下文菜单系统 | 通过 selectionUpdate 事件定位，提供列/行/全局三级菜单 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Editor 代码时，应遵守：
+
+1. 从 `@/components/ui/editor` 按需导入 EditorProvider 及所需子组件。
+2. EditorProvider 作为顶层容器，所有菜单子组件放在其内部。
+3. 文本格式按钮（Bold/Italic/Strike 等）和节点切换按钮（Heading/List 等）放在 EditorBubbleMenu 内，EditorBubbleMenu 会自动在子元素间插入 Separator。
+4. 表格操作按钮（行列增删、合并拆分）放在对应的 Table Menu 容器内（GlobalMenu / ColumnMenu / RowMenu）。
+5. 需要字符限制时设置 `limit`，配合 `EditorCharacterCount.Characters` 或 `.Words` 展示计数。
+6. 编辑器默认注册 StarterKit + 代码高亮 + 斜杠菜单 + 表格 + 任务列表，如需额外扩展通过 `extensions` 属性传入。
+7. 不要使用 `@/components/ui/editor` 未导出的内部组件（如 `BubbleMenuButton`、`Slash`），它们不是公开 API。
+8. 不要引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+9. 斜杠命令在默认加载所有 lowlight 语言，若仅需少量语言可通过自定义 CodeBlockLowlight 配置按需注册。
+10. EditorProvider 可使用 `content` 属性设置初始内容，使用 `onUpdate` 监听内容变更。

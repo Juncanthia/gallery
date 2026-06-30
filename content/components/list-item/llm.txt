@@ -77,11 +77,91 @@ export default function Demo() {
 - `ItemSeparator`
 - `ItemTitle`
 
-## API 摘要 {#api}
+## API {#api}
 
-以下类型来自本地源码，是生成代码时的主要依据：
+### ItemGroup
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### ItemSeparator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<typeof Separator>` 的所有属性。默认 `orientation="horizontal"`。
+
+### Item
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 列表项样式变体 | `"default" \| "outline" \| "muted"` | `"default"` |
+| size | 列表项尺寸 | `"default" \| "sm" \| "xs"` | `"default"` |
+| asChild | 是否渲染为子元素 | `boolean` | `false` |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。当 `asChild=true` 时使用 Radix Slot 渲染。
+
+### ItemMedia
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 媒体区域样式变体 | `"default" \| "icon" \| "image"` | `"default"` |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### ItemContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### ItemTitle
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### ItemDescription
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"p">` 的所有原生属性。
+
+### ItemActions
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### ItemHeader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### ItemFooter
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
 
 ## Semantic DOM {#semantic-dom}
 

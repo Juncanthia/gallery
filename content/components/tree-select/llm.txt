@@ -74,7 +74,24 @@ export default function Demo() {
 
 以下类型来自本地源码，是生成代码时的主要依据：
 
-源码未单独声明 Props 类型；该组件主要透传原生元素或底层 primitive 的 props。
+### TreeSelect
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 树形选项数据 | `TreeSelectOption[]` | - |
+| value | 当前选中值（受控） | `string` \| `string[]` | - |
+| defaultValue | 默认选中值 | `string` \| `string[]` | `[]` |
+| onChange | 值变化回调 | `(value: string \| string[]) => void` | - |
+| multiple | 是否支持多选 | `boolean` | `false` |
+| treeCheckable | 是否在节点前显示复选框 | `boolean` | `false` |
+| placeholder | 未选择时的占位文本 | `string` | `"Select..."` |
+| showSearch | 是否显示搜索输入框 | `boolean` | `false` |
+| filterTreeNode | 自定义搜索过滤函数 | `(inputValue: string, node: TreeSelectOption) => boolean` | - |
+| allowClear | 是否允许一键清空 | `boolean` | `true` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| className | 自定义容器样式类名 | `string` | - |
+| triggerClassName | 自定义触发器样式类名 | `string` | - |
+| treeDefaultExpandAll | 是否默认展开全部节点 | `boolean` | `false` |
 
 ## Semantic DOM {#semantic-dom}
 

@@ -1,26 +1,99 @@
-TimePicker 时间选择器，用于选择时分秒。
+时间选择框 TimePicker。用于选择时分秒的时间录入控件，支持 12/24 小时制、多种时间格式以及步长控制。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要用户输入或选择特定时间时使用。
+
+常见场景：
+- 表单中的时间字段录入，如预约时间、提醒时间
+- 需要精确到秒的时间选择场景
+- 与日期选择器组合使用，构成完整的日期时间录入
+
+不推荐：
+- 仅需日期选择——使用 DatePicker
+- 需要时间段范围选择——使用两个 TimePicker 组合
+- 需要展示时间线或时间流信息——使用 Timeline 组件
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="time-picker" path="time-picker/basic" />
 
 ```tsx
 import { TimePicker } from "@/components/ui/time-picker"
-export default function Demo() { return <TimePicker placeholder="选择时间" /> }
+
+export default function Demo() {
+  return <TimePicker placeholder="选择时间" />
+}
+```
+
+### 12 小时制
+
+```tsx
+import { TimePicker } from "@/components/ui/time-picker"
+
+export default function Demo() {
+  return <TimePicker use12Hours format="HH:mm" placeholder="选择时间" />
+}
+```
+
+### 自定义步长
+
+```tsx
+import { TimePicker } from "@/components/ui/time-picker"
+
+export default function Demo() {
+  return (
+    <TimePicker
+      hourStep={2}
+      minuteStep={15}
+      placeholder="选择时间"
+      format="HH:mm"
+    />
+  )
+}
 ```
 
 <h2 id="api">API</h2>
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| value | 受控时间值 | `string \| Date` |
-| onChange | 变化回调 | `(time) => void` |
-| format | 显示格式 | `string` |
+
+### TimePicker
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 当前时间值（受控），格式为 `HH:mm:ss` | `string` | - |
+| defaultValue | 默认时间值（非受控） | `string` | `"00:00:00"` |
+| onChange | 时间变化回调 | `(value: string) => void` | - |
+| format | 时间显示格式 | `"HH:mm:ss"` \| `"HH:mm"` \| `"mm:ss"` | `"HH:mm:ss"` |
+| use12Hours | 是否使用 12 小时制 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| placeholder | 未选择时的占位文本 | `string` | `"Select time"` |
+| hourStep | 小时列步长 | `number` | `1` |
+| minuteStep | 分钟列步长 | `number` | `1` |
+| secondStep | 秒列步长 | `number` | `1` |
+| className | 自定义容器样式类名 | `string` | - |
+| triggerClassName | 自定义触发器样式类名 | `string` | - |
+
+组件使用 `useControllableState` 实现受控/非受控双模式。触发按钮内嵌 Clock 图标，点击后弹出 Popover 面板，通过三列滚动选择器（时/分/秒）选取时间。面板顶部实时显示当前选中的时间值。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何只选择小时和分钟，不要秒？
+设置 `format="HH:mm"`，秒列将不会显示，时间值为 `HH:mm` 格式。
+
+### 12 小时制下的小时范围是什么？
+启用 `use12Hours` 后，小时列的范围为 1-12，步长基于 12 小时计算（即 `Math.ceil(12/hourStep)`）。
+
+### 如何获取选中时间的 Date 对象？
+组件 `onChange` 回调返回 `string`（如 `"14:30:00"`），如需 `Date` 对象，请在回调中自行解析。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/time-picker` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件使用原生元素语义，未声明额外的 `data-slot` 属性。通过标签名和 ARIA 属性定位。
+1. 从 `@/components/ui/time-picker` 导入，不要从 `antd` 导入。
+2. 受控模式使用 `value` + `onChange`；非受控模式使用 `defaultValue`。
+3. `format` 决定显示和值的格式，支持 `"HH:mm:ss"`、`"HH:mm"`、`"mm:ss"` 三种。
+4. 需要步长控制时使用 `hourStep`、`minuteStep`、`secondStep`，值为正整数。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="time-picker" />

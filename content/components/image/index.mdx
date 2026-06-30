@@ -1,4 +1,23 @@
-Image 增强的图片组件，支持占位、加载状态和错误回退。
+图片 增强的图片组件，支持加载占位、错误回退和内联预览。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中展示图片并需要处理加载中、加载失败等状态时使用。
+
+常见场景：
+- 用户头像、商品图片等需要加载占位的展示。
+- 需要点击预览大图的内联图片展示。
+- 需要统一错误回退样式的图片列表。
+- 需要自定义加载中占位符（如骨架屏）的图片。
+
+不推荐：
+- 简单的 `<img>` 标签即可满足的场景——使用原生标签更轻量。
+- 需要手势缩放或画廊式浏览——使用 ImageZoom 复合组件。
+- 需要裁剪功能——使用 ImageCrop 复合组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="image" path="image/basic" />
 
@@ -15,25 +34,115 @@ export default function Demo() {
 }
 ```
 
+### 带预览与回退
+
+```tsx
+import { Image } from "@/components/ui/image"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-4">
+      <Image
+        src="https://picsum.photos/400/300"
+        alt="可预览"
+        width={200}
+        height={150}
+        preview
+      />
+      <Image
+        src="https://invalid.url/broken.png"
+        alt="加载失败"
+        width={200}
+        height={150}
+        fallback={<div className="flex size-full items-center justify-center bg-muted text-sm">自定义回退</div>}
+      />
+    </div>
+  )
+}
+```
+
+### 自定义占位
+
+```tsx
+import { Image } from "@/components/ui/image"
+
+export default function Demo() {
+  return (
+    <Image
+      src="https://picsum.photos/800/600"
+      alt="带骨架屏占位"
+      width={300}
+      height={200}
+      placeholder={<div className="size-full animate-pulse bg-muted" />}
+    />
+  )
+}
+```
+
 <h2 id="api">API</h2>
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| src | 图片地址 | `string` |
-| alt | 替代文本 | `string` |
-| width / height | 尺寸 | `number` |
-| fallback | 加载失败回退 | `ReactNode` |
+
+### Image
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | 图片源地址 | `string` | 必填 |
+| alt | 图片替代文本 | `string` | `""` |
+| width | 图片宽度 | `number \| string` | - |
+| height | 图片高度 | `number \| string` | - |
+| preview | 是否点击预览大图 | `boolean` | `true` |
+| fallback | 加载失败时显示的回退元素 | `React.ReactNode` | 默认"Failed to load" |
+| placeholder | 加载中显示的占位元素 | `React.ReactNode` | - |
+| className | 外层容器 CSS 类名 | `string` | - |
+| imgClassName | img 元素 CSS 类名 | `string` | - |
+| style | 外层容器内联样式 | `React.CSSProperties` | - |
+
+继承 `Omit<React.ImgHTMLAttributes<HTMLImageElement>, "placeholder">` 的全部原生属性。
+
+当 `preview=true` 且图片加载成功时，点击图片会弹出全屏预览层（固定定位、黑色半透明背景、带关闭按钮）。按 ESC 点击遮罩均可关闭。
+
+### 导出类型
+
+- `ImageProps` — Image 组件的 props 类型。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何禁止点击预览？
+
+设置 `preview={false}` 即可禁用点击预览。此时图片为纯展示模式，不会响应点击。
+
+```tsx
+<Image src="/photo.jpg" preview={false} width={200} />
+```
+
+### 如何自定义加载失败的回退内容？
+
+通过 `fallback` 属性传入任意 React 元素。不传时默认显示居中的"Failed to load"文本。
+
+```tsx
+<Image
+  src="/maybe-broken.png"
+  fallback={<UserIcon className="size-8 text-muted-foreground" />}
+/>
+```
+
+### 加载中的占位符如何自定义？
+
+通过 `placeholder` 属性传入占位元素。图片加载完成后占位符自动消失。
+
+```tsx
+<Image
+  src="/large-image.jpg"
+  placeholder={<Skeleton className="size-full" />}
+/>
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/image` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `image` | - |
+1. 从 `@/components/ui/image` 导入 `Image`。
+2. `src` 为必填属性，始终为图片提供有意义的 `alt` 文本。
+3. 需要自定义加载态或错误态时，使用 `placeholder` 和 `fallback` props，不要在外层包裹条件渲染。
+4. 需要禁用预览时设置 `preview={false}`。
+5. 不要引入 Ant Design 的 `Image` 或相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="image" />

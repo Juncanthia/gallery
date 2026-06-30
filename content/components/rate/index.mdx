@@ -1,23 +1,28 @@
-Rate 用于评分操作，支持半星、清除、自定义字符和 Tooltip 提示。
+Rate 评分组件，用于收集用户对事物的星级评价。支持半星、清除、自定义字符和 Tooltip 提示，基于纯 React 实现，不依赖第三方 UI 库。
 
 <h2 id="when-to-use">何时使用</h2>
 
-当需要收集用户对某事物的评分时使用，例如：
+当需要收集用户对某事物的评分时使用。
+
+常见场景：
 
 - 商品或服务的星级评价。
 - 内容质量评分。
 - 满意度调查。
+- 评分筛选（电商平台）。
+
+Rate 支持整数和半星评分，默认 5 颗星。悬停时以浅色预览，点击后确认。`allowClear` 允许再次点击已选项清除评分。支持受控（`value` + `onChange`）和非受控（`defaultValue`）两种模式。
+
+不推荐：
+
+- 需要复杂评分类别（多维评分）——自行组合多个 Rate 实例。
+- 仅展示评分不交互——考虑使用 `rating` 复合组件的 `readOnly` 模式。
 
 <h2 id="examples">代码演示</h2>
 
 ### 基础用法
 
-默认 5 颗星，`allowHalf` 支持半星选择。
-
-<ComponentShowcase
-  id="rate"
-  path="rate/basic"
-/>
+<ComponentShowcase id="rate" path="rate/basic" />
 
 ```tsx
 import { useState } from "react"
@@ -36,6 +41,42 @@ export default function Demo() {
 }
 ```
 
+### 自定义图标
+
+```tsx
+import { Rate } from "@/components/ui/rate"
+import { Heart } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Rate defaultValue={3} character={<Heart />} />
+      <Rate
+        defaultValue={3}
+        character={({ filled }) =>
+          filled ? <Heart className="fill-red-500 text-red-500" /> : <Heart />
+        }
+      />
+    </div>
+  )
+}
+```
+
+### 带 Tooltip
+
+```tsx
+import { Rate } from "@/components/ui/rate"
+
+export default function Demo() {
+  return (
+    <Rate
+      defaultValue={3}
+      tooltips={["很差", "较差", "一般", "较好", "很好"]}
+    />
+  )
+}
+```
+
 <h2 id="api">API</h2>
 
 ### Rate
@@ -43,32 +84,67 @@ export default function Demo() {
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | value | 受控值 | `number` | - |
-| defaultValue | 默认值 | `number` | `0` |
+| defaultValue | 默认值（非受控） | `number` | `0` |
 | onChange | 值变化回调 | `(value: number) => void` | - |
 | count | 星星数量 | `number` | `5` |
-| allowHalf | 支持半星 | `boolean` | `false` |
-| allowClear | 再次点击清除 | `boolean` | `false` |
-| disabled | 只读模式 | `boolean` | `false` |
-| character | 自定义字符 | `ReactNode \| (props) => ReactNode` | 星形图标 |
-| tooltips | 每颗星的提示文本 | `string[]` | - |
+| allowHalf | 是否支持半星选择 | `boolean` | - |
+| allowClear | 再次点击当前值是否清除为 0 | `boolean` | - |
+| disabled | 是否禁用交互 | `boolean` | - |
+| character | 自定义字符/图标 | `React.ReactNode` \| `(props: { index: number; filled: boolean; half: boolean }) => React.ReactNode` | Star 图标 |
+| tooltips | 每颗星的提示文本，数组长度应与 count 一致 | `string[]` | - |
+| className | 根容器 CSS 类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+
+组件根元素 `data-slot="rate"`，`role="radiogroup"`，`aria-label="Rating"`。每颗星渲染为 `<button>`。半星通过 `getBoundingClientRect` 判断点击位置在左/右半区。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何支持半星评分？
+
+设置 `allowHalf`，用户点击星的左半部分为半星，右半部分为整星：
+
+```tsx
+<Rate allowHalf defaultValue={3.5} />
+```
+
+### 如何自定义评分图标？
+
+使用 `character` prop，可以是静态 ReactNode 或渲染函数：
+
+```tsx
+// 静态图标
+<Rate character={<Heart />} />
+
+// 回调函数（按填充状态切换）
+<Rate character={({ filled }) => filled ? <Heart fill="red" /> : <Heart />} />
+```
+
+### 如何为每颗星添加 tooltip？
+
+使用 `tooltips` 数组，长度需与 `count` 一致，对应每颗星的 `title` 属性：
+
+```tsx
+<Rate
+  count={5}
+  tooltips={["很差", "差", "一般", "好", "很好"]}
+/>
+```
+
+### 如何清空评分？
+
+启用 `allowClear` 后，再次点击当前已选中星即可清空为 0：
+
+```tsx
+<Rate allowClear defaultValue={3} />
+```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-AI 生成 Rate 代码时：
-
-1. 从 `@/components/ui/rate` 导入。
-2. 半星评分使用 `allowHalf`。
-3. 不要引入 Ant Design 的 `Rate`。
-
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `rate` | - |
+1. 从 `@/components/ui/rate` 导入，不要从 `antd` 导入。
+2. `onChange` 回调参数为 `number`（不是事件对象），不要期待 `Event` 参数。
+3. 半星评分使用 `allowHalf`，不是 `allowHalf` + 额外配置。
+4. 自定义图标使用 `character` prop，函数形式可接收 `{ index, filled, half }` 参数。
+5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
-
 <SourceViewer componentId="rate" />

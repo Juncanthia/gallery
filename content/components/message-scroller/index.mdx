@@ -1,30 +1,188 @@
-MessageScroller 消息滚动容器，自动滚到底部并在新消息时保持可见。
+消息滚动容器 MessageScroller。基于 @shadcn/react/message-scroller 的消息列表滚动组件，自动跟踪滚动位置，新消息到达时滚动到底部，并提供跳转到顶部/底部的浮动按钮。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在聊天或消息流界面中管理滚动行为时使用，确保新消息可见且提供便捷的导航。
+
+常见场景：
+- 聊天应用中自动滚动到最新消息
+- AI 对话界面，流式输出时自动跟随
+- 消息列表的"回到底部"按钮
+- 通知列表的滚动容器
+
+不推荐：
+- 普通内容页面的滚动——使用原生 overflow 即可
+- 不需要新消息自动跟踪的静态列表
+- 作为通用滚动容器替代 ScrollArea
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
 
 <ComponentShowcase id="message-scroller" path="message-scroller/basic" />
 
 ```tsx
-import { MessageScroller } from "@/components/ui/message-scroller"
-export default function Demo() { return <MessageScroller className="h-40 w-64 rounded border p-2"><div className="text-sm text-muted-foreground">消息列表</div></MessageScroller> }
+import {
+  MessageScroller,
+  MessageScrollerViewport,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerButton,
+} from "@/components/ui/message-scroller"
+
+export default function Demo() {
+  return (
+    <MessageScroller className="h-64 w-80 rounded-md border">
+      <MessageScrollerViewport>
+        <MessageScrollerContent>
+          <MessageScrollerItem>
+            <div className="bg-muted rounded-lg p-3 text-sm">消息 1</div>
+          </MessageScrollerItem>
+          <MessageScrollerItem>
+            <div className="bg-muted rounded-lg p-3 text-sm">消息 2</div>
+          </MessageScrollerItem>
+          <MessageScrollerItem>
+            <div className="bg-muted rounded-lg p-3 text-sm">消息 3</div>
+          </MessageScrollerItem>
+        </MessageScrollerContent>
+      </MessageScrollerViewport>
+      <MessageScrollerButton />
+    </MessageScroller>
+  )
+}
+```
+
+### 带 Provider 和双向按钮
+
+```tsx
+import {
+  MessageScrollerProvider,
+  MessageScroller,
+  MessageScrollerViewport,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerButton,
+} from "@/components/ui/message-scroller"
+
+export default function Demo() {
+  return (
+    <MessageScrollerProvider>
+      <MessageScroller className="h-64 w-80 rounded-md border">
+        <MessageScrollerViewport>
+          <MessageScrollerContent>
+            <MessageScrollerItem>
+              <div className="bg-muted rounded-lg p-3 text-sm">历史消息...</div>
+            </MessageScrollerItem>
+            <MessageScrollerItem scrollAnchor>
+              <div className="bg-primary text-primary-foreground rounded-lg p-3 text-sm">
+                最新消息
+              </div>
+            </MessageScrollerItem>
+          </MessageScrollerContent>
+        </MessageScrollerViewport>
+        <MessageScrollerButton direction="start" />
+        <MessageScrollerButton direction="end" />
+      </MessageScroller>
+    </MessageScrollerProvider>
+  )
+}
 ```
 
 <h2 id="api">API</h2>
-滚动容器组件，内部放置消息列表。支持 `className` 控制样式。
+
+### MessageScrollerProvider
+
+可选的 Provider，为整个消息滚动区域提供共享上下文。包裹在最外层。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+
+支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Provider>` 的所有属性。
+
+### MessageScroller
+
+滚动容器根组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Root>` 的所有属性。
+
+### MessageScrollerViewport
+
+可滚动的视口区域。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Viewport>` 的所有属性。
+
+### MessageScrollerContent
+
+消息内容容器，flex 纵向排列。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Content>` 的所有属性。
+
+### MessageScrollerItem
+
+单条消息项，支持滚动锚点。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| scrollAnchor | 是否作为滚动锚点（新消息标记） | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+
+支持 `React.ComponentProps<typeof MessageScrollerPrimitive.Item>` 的所有属性。
+
+### MessageScrollerButton
+
+浮动滚动按钮，默认在底部显示"滚到底部"。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| direction | 滚动方向 | `"start"` \| `"end"` | `"end"` |
+| variant | 按钮样式变体，透传至 Button | `Button` 的 `variant` | `"filled"` |
+| size | 按钮尺寸，透传至 Button | `Button` 的 `size` | `"small"` |
+| render | 自定义渲染元素 | `ReactNode` | `<Button variant={variant} size={size} shape="square" />` |
+| children | 按钮内容（默认为箭头图标 + sr-only 文本） | `ReactNode` | 箭头图标 |
+| className | 附加样式类名 | `string` | - |
+
+### Hooks
+
+| Hook | 说明 |
+| --- | --- |
+| `useMessageScroller` | 返回 MessageScroller 上下文 |
+| `useMessageScrollerScrollable` | 返回是否可滚动及滚动方向信息 |
+| `useMessageScrollerVisibility` | 返回按钮显示/隐藏状态 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何让新消息自动滚动到底部？
+
+将最新消息的 `MessageScrollerItem` 设置 `scrollAnchor` 属性，组件会自动将其作为滚动目标。
+
+### MessageScroller 和 ScrollArea 有什么区别？
+
+MessageScroller 专为聊天消息流设计，内置自动滚动跟踪、浮动导航按钮和滚动锚点机制；ScrollArea 是通用滚动容器，适合常规内容滚动。
+
+### 如何自定义浮动按钮的外观？
+
+通过 `MessageScrollerButton` 的 `render` 属性传入自定义元素，或通过 `children` 自定义按钮内容。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/message-scroller` 导入。
 
-
-<h2 id="semantic-dom">Semantic DOM</h2>
-
-组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
-
-| data-slot | 说明 |
-| --- | --- |
-| `message-scroller` | - |
-| `message-scroller-button` | - |
-| `message-scroller-content` | - |
-| `message-scroller-item` | - |
-| `message-scroller-viewport` | - |
+1. 从 `@/components/ui/message-scroller` 导入所需组件和 hooks。
+2. 结构为 `MessageScroller` > `MessageScrollerViewport` > `MessageScrollerContent` > `MessageScrollerItem`。
+3. 使用 `MessageScrollerProvider` 包裹以启用共享上下文。
+4. `MessageScrollerButton` 的 `direction` 控制滚动方向。
+5. 用 `scrollAnchor` 标记需要自动滚动到的消息项。
+6. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="message-scroller" />

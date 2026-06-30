@@ -1,21 +1,129 @@
-AvatarStack 复合组件。
+AvatarStack 头像堆叠，将多个 Avatar 以 CSS mask 圆形裁切的方式紧凑堆叠排列，hover 时支持展开动画。纯 CSS 实现，无额外 JS 计算。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将多个头像紧凑堆叠展示时使用。
+
+常见场景：
+- 文档协作者头像列表，2-6 个头像为最佳显示范围。
+- 群组成员快速预览。
+- 评论或参与者的头像聚合展示。
+- 看板卡片上的任务负责人集合。
+- 文件/文档的共享用户列表。
+
+不推荐：
+- 头像数量超过 10 个仍使用堆叠——此时应考虑"前 N 个 + 更多"的模式。
+- 将非 Avatar 组件传入 children——AvatarStack 内部假设子元素含 `data-slot="avatar"`。
+- 需要悬停提示框或可交互头像组时，使用 AvatarTooltipGroup 代替。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入多个 Avatar 实现头像堆叠。
 
 <ComponentShowcase id="avatar-stack" path="avatar-stack/basic" />
 
 ```tsx
 import { AvatarStack } from "@/components/ui/avatar-stack"
+import { Avatar } from "@/components/ui/avatar"
 
 export default function Demo() {
-  return <AvatarStack className="w-full max-w-sm" />
+  return (
+    <AvatarStack>
+      <Avatar name="张三" />
+      <Avatar name="李四" />
+      <Avatar name="王五" />
+      <Avatar name="赵六" />
+    </AvatarStack>
+  )
+}
+```
+
+### 悬停展开
+
+设置 `animate` 为 `true`，hover 时头像间距展开。
+
+```tsx
+import { AvatarStack } from "@/components/ui/avatar-stack"
+import { Avatar } from "@/components/ui/avatar"
+
+export default function Demo() {
+  return (
+    <AvatarStack animate>
+      <Avatar name="张三" />
+      <Avatar name="李四" />
+      <Avatar name="王五" />
+    </AvatarStack>
+  )
+}
+```
+
+### 自定义尺寸
+
+通过 `size` 控制每个头像的尺寸，默认为 40px。
+
+```tsx
+import { AvatarStack } from "@/components/ui/avatar-stack"
+import { Avatar } from "@/components/ui/avatar"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <AvatarStack size={32} animate>
+        <Avatar name="张三" />
+        <Avatar name="李四" />
+        <Avatar name="王五" />
+      </AvatarStack>
+      <AvatarStack size={48}>
+        <Avatar name="张三" />
+        <Avatar name="李四" />
+        <Avatar name="王五" />
+      </AvatarStack>
+    </div>
+  )
 }
 ```
 
 <h2 id="api">API</h2>
 
-API 以 `src/components/blocks/avatar-stack/index.tsx` 中的 TypeScript 类型为准。
+### AvatarStack
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 子元素，应为多个 Avatar 组件 | `ReactNode` | 必填 |
+| animate | 是否启用 hover 展开动画 | `boolean` | `false` |
+| size | 每个头像的尺寸（宽高），同时影响 mask 裁切半径 | `number` | `40` |
+| className | 附加样式类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### AvatarStack 和 AvatarGroup 有什么区别？
+
+`AvatarGroup`（来自 `@/components/ui/avatar`）提供 `max` 溢出计数和堆叠展示，适合需要显示"前 N + 更多"的场景。`AvatarStack` 使用 CSS mask-image 实现圆形裁切重叠效果，支持 hover 展开动画，但不提供内置的溢出计数。两者可配合使用。
+
+### hover 展开动画如何启用？
+
+设置 `animate={true}` 即可。内部通过 Tailwind 的 `hover:space-x-0` 和 `[&>*]:transition-all` 实现纯 CSS 动画，无需 JavaScript 动画库。
+
+### size 参数的作用范围？
+
+`size` 同时控制：每个头像包裹层的宽高、mask 渐变半径（公式 `circle ${size/2}px`）、mask 偏移量（公式 `-${size/4 + size/10}px`），确保裁切区域精确匹配头像边界。
+
+### 头像重叠的效果是如何实现的？
+
+每个子头像被包裹在 `div` 中，第二个及之后的头像包裹层通过 `maskImage: radial-gradient(...)` 动态生成圆形裁切，在相邻头像重叠侧产生透明渐变，形成自然的圆形交叠效果。容器使用 `-space-x-1` 产生负间距重叠。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/avatar-stack` 导入。
+
+1. 从 `@/components/ui/avatar-stack` 导入 `AvatarStack`。
+2. children 必须是 Avatar 组件（从 `@/components/ui/avatar` 导入），不要传入其他类型的元素。
+3. `size` 与 Avatar 自身的 size 属性保持一致以呈现正确效果。
+4. 头像数量建议 2-6 个；超过 10 个时应考虑截断显示。
+5. 如需 hover 时展开间距，使用 `animate` 属性；不要手动写入 hover 相关的 className。
+6. 不要删除或绕开 CSS mask-image 裁切逻辑——这是 AvatarStack 的核心视觉特征。
+7. 不要在 AvatarStack 上添加 onClick 等交互行为——这是静态展示组件。如需可交互的头像组请使用 AvatarTooltipGroup。
+8. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="avatar-stack" />

@@ -1,3 +1,8 @@
 "use client"
 
-export * from "@/components/blocks/tour"
+export { Tour } from "@/components/blocks/tour"
+
+export type {
+  TourStepConfig,
+  TourProps,
+} from "@/components/blocks/tour"
