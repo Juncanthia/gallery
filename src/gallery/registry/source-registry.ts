@@ -112,6 +112,7 @@ import textPressureTsx from "../../../src/components/react-bits/text-pressure.ts
 import textTypeTsx from "../../../src/components/react-bits/text-type.tsx?raw"
 import trueFocusTsx from "../../../src/components/react-bits/true-focus.tsx?raw"
 import variableProximityTsx from "../../../src/components/react-bits/variable-proximity.tsx?raw"
+import sabramanSliderTsx from "../../../src/components/sabraman/components/legacy-slider.tsx?raw"
 
 export type ComponentSourceFile = {
   name: string
@@ -191,6 +192,7 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "sidebar": [{ name: "sidebar.tsx", source: sidebarTsx }],
   "skeleton": [{ name: "skeleton.tsx", source: skeletonTsx }],
   "slider": [{ name: "slider.tsx", source: sliderTsx }],
+  "sabraman-slider": [{ name: "legacy-slider.tsx", source: sabramanSliderTsx }],
   "space": [{ name: "space.tsx", source: spaceTsx }],
   "spin": [{ name: "spin.tsx", source: spinTsx }],
   "statistic": [{ name: "statistic.tsx", source: statisticTsx }],

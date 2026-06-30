@@ -1,0 +1,140 @@
+K 线图用于展示金融时间序列的 OHLC（开盘/最高/最低/收盘）数据，是股票、期货、加密货币行情分析的核心图表。每根 K 线通过实体（开盘至收盘）和影线（最高至最低）直观表达单一时间单位的交易范围与涨跌方向。组件基于 @visx，支持缩放、平移、刷选联动等交互。
+
+## 何时使用
+
+K 线图专门用于展示金融时间序列的开高低收四维数据，帮助交易者和分析师快速识别价格形态、支撑阻力位和市场趋势。相对于普通折线图，K 线图同时传达波动范围和方向信息。
+
+常见场景：
+
+- 股票、期货、外汇行情展示：日 K、周 K、月 K 等不同周期的价格走势
+- 加密货币交易平台的行情图表
+- 金融数据看板和量化策略回测可视化
+- 配合成交量、EMA/MA 辅助指标进行技术分析
+
+不适用场景：
+
+- 仅需展示单一价格或指标趋势：改用 LineChart 或 AreaChart
+- 非金融 OHLC 结构的通用时间序列：使用 ComposedChart 或 BarChart
+- 无需交互的静态展示场景：K 线图的价值在于 hover/缩放/刷选等交互操作
+
+## 代码演示
+
+### 基础用法
+
+<ComponentShowcase id="bklit/candlestick-chart" path="bklit/candlestick-chart/basic" />
+
+```tsx
+import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"
+import { Candlestick } from "@/components/bklit/charts"
+const data = [
+  { date: new Date(2024, 0, 1), open: 100, high: 120, low: 90, close: 110 },
+  // ...
+]
+
+export default function Demo() {
+  return (
+    <CandlestickChart data={data}>
+      <Candlestick />
+    </CandlestickChart>
+  )
+}
+```
+
+## API
+
+### CandlestickChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | OHLC 数据 | `OHLCDataPoint[]` | — |
+| xDataKey | 时间轴 data key | `string` | `"date"` |
+| margin | 图表边距 | `Partial<Margin>` | `{ top: 40, right: 40, bottom: 40, left: 40 }` |
+| animationDuration | 入场动画时长（毫秒） | `number` | `1100` |
+| enterTransition | 入场动画的 motion Transition 配置 | `Transition` | spring 弹入 |
+| revealSignature | 签名变更时重放入场动画 | `string` | — |
+| aspectRatio | 容器宽高比 | `string` | `"2 / 1"` |
+| className | 容器附加样式类名 | `string` | — |
+| style | 容器内联样式 | `React.CSSProperties` | — |
+| candleGap | K 线间隙（0–1，占槽宽比例）。candleWidth 设置后忽略 | `number` | `0.2` |
+| candleWidth | 固定 K 线实体宽度（像素）。设置后覆盖 candleGap | `number` | — |
+| xDomain | 固定 X 轴时间域（配合 ChartBrush 保持主图与缩略图刻度一致） | `[Date, Date]` | 数据推导 |
+| xDomainSlotCount | xDomain 模式下的槽位数（通常传入完整 data.length） | `number` | — |
+| children | 子组件（Candlestick, Grid, XAxis, YAxis, ChartTooltip 等） | `ReactNode` | — |
+
+### Candlestick Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| animate | 是否启用入场动画 | `boolean` | `true` |
+| positiveFill | 阳线（收盘 >= 开盘）填充色 | `string` | `"url(#candlestick-positive)"` |
+| negativeFill | 阴线（收盘 < 开盘）填充色 | `string` | `"url(#candlestick-negative)"` |
+| bodyPatternPositive | 阳线实体图案 URL | `string` | — |
+| bodyPatternNegative | 阴线实体图案 URL | `string` | — |
+| insideStrokeWidth | 实体内部描边宽度（向内绘制，不扩展形状） | `number` | `0` |
+| fadedOpacity | 非悬停 K 线的不透明度 | `number` | `0.3` |
+| showHoverFade | hover 时是否淡化非悬停 K 线 | `boolean` | `true` |
+
+### OHLCDataPoint
+
+| 字段 | 说明 | 类型 |
+|------|------|------|
+| date | 时间戳 | `Date` |
+| open | 开盘价 | `number` |
+| high | 最高价 | `number` |
+| low | 最低价 | `number` |
+| close | 收盘价 | `number` |
+
+## 常见问题
+
+### 如何自定义 K 线颜色？
+
+通过 `Candlestick` 的 `positiveFill` 和 `negativeFill` 属性设置，支持 CSS 变量和渐变 URL。
+
+```tsx
+<CandlestickChart data={data}>
+  <Candlestick positiveFill="var(--success)" negativeFill="var(--danger)" />
+</CandlestickChart>
+```
+
+### 如何禁用入场动画？
+
+设置 `Candlestick` 的 `animate={false}`。
+
+```tsx
+<CandlestickChart data={data}>
+  <Candlestick animate={false} />
+</CandlestickChart>
+```
+
+### 如何配合 ChartBrush 实现刷选联动？
+
+在主图和缩略图传入相同的 `xDomain` 和 `xDomainSlotCount`，通过 `ChartBrush` 的 `onSelectionChange` 同步 `xDomain`。
+
+```tsx
+const [xDomain, setXDomain] = useState<[Date, Date] | undefined>()
+// 主图
+<CandlestickChart data={data} xDomain={xDomain} xDomainSlotCount={data.length}>
+  <Candlestick />
+</CandlestickChart>
+// 缩略图
+<CandlestickChart data={data} aspectRatio="6 / 1" xDomain={xDomain} xDomainSlotCount={data.length}>
+  <ChartBrush onSelectionChange={(sel) => sel && setXDomain(sel.xDomain)} />
+</CandlestickChart>
+```
+
+## LLM 使用规则
+
+- 导入: `import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"`
+- 导入: `import { Candlestick } from "@/components/bklit/charts"`
+- 来自 BKLit Charts 库（基于 @visx）
+- 需要提供 `data` 属性
+- `data` 中每条记录必须包含 `date`、`open`、`high`、`low`、`close` 五个必填字段
+- `CandlestickChart` 必须包含 `<Candlestick />` 子组件才会渲染 K 线
+- 阳线默认使用 `--chart-1` CSS 变量（绿色）；阴线默认使用 `--chart-5` CSS 变量（红色）
+- 可通过 Grid、XAxis、YAxis、ChartTooltip 等子组件扩展标题、坐标轴和悬停提示
+- K 线图依赖 `@visx/responsive`、`@visx/scale`、`d3-array` 和 `motion`（motion/react）
+
+## 源码
+
+- [CandlestickChart](/source/bklit/charts/candlestick-chart)
+- [Candlestick](/source/bklit/charts/candlestick)

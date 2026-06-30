@@ -1,0 +1,103 @@
+[图表网格 / ChartGrid]
+导入: import { Grid } from "@/components/ui/bklit-chart-grid"
+包来源: @/components/bklit/charts (grid.tsx)
+组件类型: 图表元素 / BKLit Charts
+依赖: @visx/grid, motion/react
+
+## 何时使用
+在图表中添加横向或纵向网格线，帮助读者快速追踪数值。作为图表的参考背景，提升数据可读性。适用于柱状图、折线图和面积图等笛卡尔坐标系图表。
+
+## Props 速查
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| horizontal | 显示横向网格线 | `boolean` | `true` |
+| vertical | 显示纵向网格线 | `boolean` | `false` |
+| numTicksRows | 横向网格线数量 | `number` | `5` |
+| numTicksColumns | 纵向网格线数量 | `number` | `10` |
+| rowTickValues | 横向网格线显式刻度值（覆盖 numTicksRows） | `number[]` | - |
+| stroke | 网格线颜色 | `string` | `var(--chart-grid)` |
+| loadingStroke | 加载态 chrome 阶段颜色，回退至 stroke | `string` | - |
+| strokeOpacity | 网格线透明度 | `number` | `1` |
+| strokeWidth | 网格线宽度 | `number` | `1` |
+| strokeDasharray | 虚线样式 | `string` | `"4,4"` |
+| highlightRowValues | 高亮的行刻度值（如零基线） | `number[]` | - |
+| highlightRowStroke | 高亮行颜色 | `string` | `var(--chart-foreground-muted)` |
+| highlightRowStrokeOpacity | 高亮行透明度 | `number` | `1` |
+| highlightRowStrokeWidth | 高亮行宽度 | `number` | `1` |
+| highlightRowStrokeDasharray | 高亮行虚线样式 | `string` | `"0"` |
+| fadeHorizontal | 横向渐变边缘（左右淡出） | `boolean` | `true` |
+| fadeVertical | 纵向渐变边缘（上下淡出） | `boolean` | `false` |
+| hideHorizontalEdgeLines | 隐藏首尾横向网格线 | `boolean` | `false` |
+| hideVerticalEdgeLines | 隐藏首尾纵向网格线 | `boolean` | `false` |
+| yAxisId | Y 轴 ID，默认主 Y 轴 | `string \| number` | `"left"` |
+| shimmer | 启用加载态闪烁动画 | `boolean` | `false` |
+| shimmerStroke | 闪烁带颜色 | `string` | `color-mix(in oklch, var(--foreground) 68%, transparent)` |
+| shimmerLength | 闪烁带宽度（px） | `number` | `140` |
+| shimmerSpeed | 闪烁速度倍率 | `number` | `1` |
+| shimmerSync | 与 line loading pulse 同步计时 | `boolean` | `false` |
+
+## 示例代码
+
+### 基础：横向网格线
+```tsx
+import { BarChart } from "@/components/ui/bklit-bar-chart"
+import { Bar } from "@/components/bklit/charts"
+import { Grid } from "@/components/ui/bklit-chart-grid"
+
+export default function Demo() {
+  return (
+    <BarChart data={data} xDataKey="name">
+      <Grid horizontal stroke="var(--chart-grid)" />
+      <Bar dataKey="value" fill="var(--chart-line-primary)" />
+    </BarChart>
+  )
+}
+```
+
+### 纵向网格 + 渐变边缘
+```tsx
+import { Grid } from "@/components/ui/bklit-chart-grid"
+
+export default function Demo() {
+  return (
+    <BarChart data={data} xDataKey="name">
+      <Grid vertical fadeVertical numTicksColumns={8} />
+      <Bar dataKey="value" />
+    </BarChart>
+  )
+}
+```
+
+### 高亮零基线 + 加载闪烁
+```tsx
+import { Grid } from "@/components/ui/bklit-chart-grid"
+
+export default function Demo() {
+  return (
+    <BarChart data={data} xDataKey="name" status="loading">
+      <Grid
+        horizontal
+        shimmer
+        shimmerLength={200}
+        highlightRowValues={[0]}
+        highlightRowStroke="var(--chart-foreground-muted)"
+        highlightRowStrokeWidth={2}
+      />
+      <Bar dataKey="value" />
+    </BarChart>
+  )
+}
+```
+
+## 约束与最佳实践
+
+- Grid 必须作为 BarChart / LineChart / AreaChart / ComposedChart 的子组件使用，内部依赖 ChartContext 获取 scale 信息。
+- 使用 `horizontal` / `vertical` 控制方向，旧版 `showRows` / `showColumns` 已废弃，不要使用。
+- 横向网格线默认带渐变边缘（`fadeHorizontal=true`），该效果通过 SVG mask 实现，会增加少量 DOM 节点。
+- 高亮基线使用 `highlightRowValues` 传入刻度值数组，不要手动绘制 `<line>` 元素替代。
+- 加载态闪烁需同时设置 chart `status="loading"` 和 `shimmer={true}`，闪烁仅在 `isLoadingChromePhase` 阶段激活。
+- Grid 不适用于饼图、环形图、雷达图（已有独立 RadarGrid）、仪表盘等非笛卡尔坐标系图表。
+- 网格线颜色优先通过 CSS 变量 `--chart-grid` 统一控制，单个实例用 `stroke` 属性覆盖。
+- `rowTickValues` 优先级高于 `numTicksRows`，传入后 numTicksRows 被忽略。
+- `hideHorizontalEdgeLines` / `hideVerticalEdgeLines` 会移除首尾网格线，适合与轴线紧贴的布局。

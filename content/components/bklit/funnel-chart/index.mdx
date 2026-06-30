@@ -1,0 +1,65 @@
+FunnelChart 漏斗图用于展示分阶段转化数据，直观呈现用户从初始阶段到最终目标各步骤的流失与留存情况。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示和分析用户行为转化漏斗时使用。漏斗图通过各阶段的宽度或面积变化，直观传递转化率与流失率信息，帮助团队快速定位转化瓶颈并制定优化策略。
+
+适用场景：
+
+- 用户增长分析：展示访问-注册-激活-付费-留存等关键路径的逐级转化。
+- 销售漏斗监控：追踪线索-商机-报价-签约-回款等销售阶段的推进效率。
+- 电商转化分析：呈现曝光-点击-加购-下单-支付等购物链路各环节流失。
+- 运营活动评估：衡量下载-注册-首次使用-七日留存等功能漏斗的转化效果。
+
+不推荐的使用方式：
+
+- 数据阶段过少（不足 3 个），此时漏斗的视觉差异不足以传达有效信息，建议使用进度条或数值卡片。
+- 各阶段数据非严格递减关系，漏斗图会传递错误的流失信号，应改用柱状图或条形图。
+- 需要精确数值对比的场景，漏斗图侧重趋势表达，精确读数建议配合数据表格。
+- 极窄移动端布局中水平漏斗阅读体验受限，可考虑切换为垂直方向 `orientation="vertical"`。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="bklit/funnel-chart" path="bklit/funnel-chart/basic" />
+
+```tsx
+import { FunnelChart } from "@/components/ui/bklit-funnel-chart"
+
+const data = [
+  { label: "访问", value: 5000 },
+  { label: "注册", value: 3000 },
+  // ...
+]
+
+export default function Demo() {
+  return <FunnelChart data={data} />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FunnelChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 漏斗阶段数据 | `FunnelStage[]` | — |
+| size | 固定尺寸 (px) | `number` | — |
+| gradients | 渐变色配置 | `FunnelGradientStop[]` | — |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义颜色？
+
+通过子组件的 `fill` 或 `stroke` 属性设置，支持 CSS 变量和渐变 URL。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+- 导入: `import { FunnelChart } from "@/components/ui/bklit-funnel-chart"`
+- 来自 BKLit Charts 库（基于 @visx）
+- 需要提供 `data` 属性
+
+<h2 id="source">源码</h2>
+
+- [FunnelChart](/source/bklit/charts/funnel-chart)

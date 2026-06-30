@@ -1,0 +1,20 @@
+[编辑器展示 / PlateEditorsShowcase]
+导入: import { PlateEditorsShowcase } from "@/components/ui/plate-editors-showcase"
+包来源: @/components/plate
+依赖: platejs, @platejs/basic-nodes
+
+## 何时使用
+富文本编辑器展示组件，集成多种 PlateJS 编辑器风格。
+
+## 示例
+```tsx
+import { PlateEditorsShowcase } from "@/components/ui/plate-editors-showcase"
+
+export default function Demo() {
+  return <PlateEditorsShowcase />
+}
+```
+
+## 约束
+- 基于 PlateJS，确保 platejs 和 @platejs/basic-nodes 已安装
+- 为展示组件，实际项目中直接使用 Plate 编辑器配置

@@ -1,0 +1,72 @@
+"use client";
+
+import { useState } from "react";
+import {
+  m,
+  LazyMotion,
+  domAnimation,
+  SVGMotionProps,
+  Easing,
+} from "motion/react";
+
+interface ChevronRightIconProps extends SVGMotionProps<SVGSVGElement> {
+  size?: number;
+  duration?: number;
+  strokeWidth?: number;
+  isHovered?: boolean;
+  repeatDelay?: number;
+  ease?: Easing;
+}
+
+const ChevronRightIcon = (props: ChevronRightIconProps) => {
+  const {
+    size = 28, // Icon size in pixels
+    duration = 1.5, // Animation duration in seconds
+    strokeWidth = 2, // SVG stroke width
+    isHovered = false, // When true, animate only on hover
+    repeatDelay = 1, // Delay between animation loops (seconds)
+    ease = "easeInOut", // Animation easing function
+    className,
+    ...restProps
+  } = props;
+
+  const [isHoveredInternal, setIsHoveredInternal] = useState(false);
+
+  const shouldAnimate = isHovered ? isHoveredInternal : true;
+
+  const pathAnimationProps = {
+    animate: shouldAnimate ? { x: [0, 4, 0] } : { x: 0 },
+    transition: {
+      duration: duration,
+      ease: ease,
+      repeat: isHovered ? 0 : Infinity,
+      repeatDelay: repeatDelay,
+    },
+  };
+
+  return (
+    <LazyMotion features={domAnimation}>
+      <m.svg
+        {...restProps}
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        overflow="visible"
+        onMouseEnter={() => isHovered && setIsHoveredInternal(true)}
+        onMouseLeave={() => isHovered && setIsHoveredInternal(false)}
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <m.path d="M9 6l6 6l-6 6" {...pathAnimationProps} />
+      </m.svg>
+    </LazyMotion>
+  );
+};
+
+export default ChevronRightIcon;

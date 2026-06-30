@@ -1,0 +1,212 @@
+---
+category: Components
+title: BarButton
+subtitle: 工具栏按钮
+description: LegacyBarButton 是经典工具栏风格按钮，通过渐变背景和内阴影呈现立体感。
+group:
+  title: 组件
+  order: 0
+source:
+  component: src/components/sabraman/components/legacy-bar-button.tsx
+  reexport: src/components/ui/sabraman-bar-button.tsx
+  docs: content/components/sabraman/bar-button/index.mdx
+  examples:
+    - content/components/sabraman/bar-button/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  lucide: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# BarButton 工具栏按钮
+
+LegacyBarButton 是 Sabraman 组件库中的工具栏风格按钮，模拟经典工具栏外观。它通过渐变背景和内阴影呈现立体感，仅支持固定高度工具栏风格。
+
+本组件不是通用 Button 的替代。它具有固化的工具栏设计语言，高度不可调，样式不可扩展。对于通用按钮需求，使用 `@/components/ui/button`。
+
+## 导入
+
+```tsx
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+```
+
+## 何时使用 {#when-to-use}
+
+标记一个操作命令，响应用户点击行为。LegacyBarButton 适用于工具栏场景：
+
+- 工具栏主操作：新建、搜索、保存。
+- 次操作：下载、导出、刷新。
+- 危险操作：删除、移除。
+- 导航返回：面包屑上级跳转。
+- 纯图标操作：搜索、下载、更多。
+
+通过 `variant` 表达操作语义：
+
+- `default`：蓝灰色调，用于普通操作。
+- `accent`：蓝色调，用于强调操作。
+- `destructive`：红色调，用于危险操作。
+
+通过 `layout` 控制布局模式：
+
+- `text`：纯文字按钮。
+- `icon`：纯图标按钮。
+- `text-icon`：带图标的文字按钮，可组合 `icon` 和 `trailingIcon`。
+- `backward`：返回式按钮，左侧带箭头形状。
+
+## API {#api}
+
+### LegacyBarButton
+
+```tsx
+export interface LegacyBarButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon?: React.ReactNode
+  label?: string
+  layout?: LegacyBarButtonLayout
+  trailingIcon?: React.ReactNode
+  variant?: LegacyBarButtonVariant
+}
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 颜色变体，控制渐变色调 | `"default"` \| `"accent"` \| `"destructive"` | `"default"` |
+| layout | 布局模式；未指定时自动推断 | `"text"` \| `"icon"` \| `"text-icon"` \| `"backward"` | 自动推断 |
+| icon | 前置图标 | `React.ReactNode` | - |
+| label | 按钮文字 | `string` | - |
+| trailingIcon | 后缀图标 | `React.ReactNode` | - |
+| disabled | 禁用交互 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+
+### 类型定义
+
+```tsx
+type LegacyBarButtonVariant = "default" | "accent" | "destructive"
+type LegacyBarButtonLayout = "text" | "icon" | "text-icon" | "backward"
+```
+
+### Layout 自动推断规则
+
+| 条件 | 推断的 layout |
+| --- | --- |
+| 仅 `label` | `"text"` |
+| 有 `icon` 或 `trailingIcon`，无 `label` | `"icon"` |
+| 有 `icon`/`trailingIcon` 且 有 `label` | `"text-icon"` |
+| 显式指定 `layout` | 使用指定值 |
+
+### Variant 渐变色值
+
+| variant | 渐变色值 |
+| --- | --- |
+| default | `[#A2B2C9, #798EAC, #506D94, #405F8A]` |
+| accent | `[#93B5F6, #6790E1, #3C71DA, #2562D9]` |
+| destructive | `[#DB8B92, #C3626A, #B2303B, #B01A27]` |
+
+## 约束 {#constraints}
+
+1. 按钮高度固定 29px，不可调整。
+2. 不能在外部设置 `height`、`min-height`、`border-radius` 或渐变背景，组件内部已固化。
+3. 对于通用按钮需求，使用 `@/components/ui/button` 而不是 LegacyBarButton。
+4. `backward` 布局必须在 `layout` 属性中显式指定。
+5. 纯图标按钮（不传 `label`）应添加 `aria-label`。
+6. 文字节点使用 `label` 属性而非 `children`。
+7. 图标使用 `ReactNode`，推荐使用 lucide-react 图标。
+8. 不要在外部覆盖组件内部的 SVG 渐变或阴影样式。
+9. 组件本身不支持 `loading` 状态；如需加载态，自行管理 `disabled` + 图标替换。
+10. 不要将 LegacyBarButton 用作表单提交按钮；使用 Button 的 `htmlType="submit"`。
+
+## 代码示例 {#examples}
+
+### 基础用法
+
+```tsx
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton label="默认" />
+      <LegacyBarButton label="主色" variant="accent" />
+      <LegacyBarButton label="危险" variant="destructive" />
+    </div>
+  )
+}
+```
+
+### 图标按钮
+
+```tsx
+import { Search, Download, ChevronRight } from "lucide-react"
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton icon={<Search />} aria-label="搜索" />
+      <LegacyBarButton icon={<Search />} label="搜索" />
+      <LegacyBarButton
+        icon={<Download />}
+        label="下载"
+        trailingIcon={<ChevronRight />}
+        variant="accent"
+      />
+    </div>
+  )
+}
+```
+
+### 返回按钮
+
+```tsx
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton label="返回" layout="backward" />
+      <LegacyBarButton label="上一级" layout="backward" variant="accent" />
+    </div>
+  )
+}
+```
+
+### 禁用状态
+
+```tsx
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton disabled label="默认禁用" />
+      <LegacyBarButton disabled label="主色禁用" variant="accent" />
+      <LegacyBarButton disabled label="危险禁用" variant="destructive" />
+    </div>
+  )
+}
+```
+
+### 点击事件
+
+```tsx
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  const handleClick = () => {
+    console.log("clicked")
+  }
+
+  return (
+    <LegacyBarButton label="点击" variant="accent" onClick={handleClick} />
+  )
+}
+```
+
+## 设计参考
+
+- 核心实现：`src/components/sabraman/components/legacy-bar-button.tsx`
+- 重导出入口：`src/components/ui/sabraman-bar-button.tsx`
+- 文档：`content/components/sabraman/bar-button/index.mdx`
+- 示例：`content/components/sabraman/bar-button/examples/basic.tsx`

@@ -1,0 +1,320 @@
+@utility roundbit {
+  border-radius: var(--radius);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-* {
+  border-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-s-* {
+  border-start-start-radius: --value(--radius-*, [length], [percentage]);
+  border-end-start-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-e-* {
+  border-start-end-radius: --value(--radius-*, [length], [percentage]);
+  border-end-end-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-t-* {
+  border-top-left-radius: --value(--radius-*, [length], [percentage]);
+  border-top-right-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-r-* {
+  border-top-right-radius: --value(--radius-*, [length], [percentage]);
+  border-bottom-right-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-b-* {
+  border-bottom-right-radius: --value(--radius-*, [length], [percentage]);
+  border-bottom-left-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-l-* {
+  border-top-left-radius: --value(--radius-*, [length], [percentage]);
+  border-bottom-left-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-ss-* {
+  border-start-start-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-se-* {
+  border-start-end-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-ee-* {
+  border-end-end-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-es-* {
+  border-end-start-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-tl-* {
+  border-top-left-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-tr-* {
+  border-top-right-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-br-* {
+  border-bottom-right-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-bl-* {
+  border-bottom-left-radius: --value(--radius-*, [length], [percentage]);
+  clip-path: var(--roundbit-clip-path);
+}
+
+@utility roundbit-step-1 {
+  --roundbit-step: 1px;
+}
+
+@utility roundbit-step-2 {
+  --roundbit-step: 2px;
+}
+
+@utility roundbit-step-4 {
+  --roundbit-step: 4px;
+}
+
+@utility roundbit-border {
+  --roundbit-border-source: 1;
+  --roundbit-border-top-width: 1px;
+  --roundbit-border-right-width: 1px;
+  --roundbit-border-bottom-width: 1px;
+  --roundbit-border-left-width: 1px;
+  border-width: 1px;
+}
+
+@utility roundbit-border-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-top-width: --value([length]);
+  --roundbit-border-top-width: calc(--value(integer) * 1px);
+  --roundbit-border-right-width: --value([length]);
+  --roundbit-border-right-width: calc(--value(integer) * 1px);
+  --roundbit-border-bottom-width: --value([length]);
+  --roundbit-border-bottom-width: calc(--value(integer) * 1px);
+  --roundbit-border-left-width: --value([length]);
+  --roundbit-border-left-width: calc(--value(integer) * 1px);
+  --roundbit-border-top-color: --value(--color-*, [color]);
+  --roundbit-border-right-color: --value(--color-*, [color]);
+  --roundbit-border-bottom-color: --value(--color-*, [color]);
+  --roundbit-border-left-color: --value(--color-*, [color]);
+  border-width: --value([length]);
+  border-width: calc(--value(integer) * 1px);
+  border-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-x-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-right-width: --value([length]);
+  --roundbit-border-right-width: calc(--value(integer) * 1px);
+  --roundbit-border-left-width: --value([length]);
+  --roundbit-border-left-width: calc(--value(integer) * 1px);
+  --roundbit-border-right-color: --value(--color-*, [color]);
+  --roundbit-border-left-color: --value(--color-*, [color]);
+  border-inline-width: --value([length]);
+  border-inline-width: calc(--value(integer) * 1px);
+  border-inline-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-y-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-top-width: --value([length]);
+  --roundbit-border-top-width: calc(--value(integer) * 1px);
+  --roundbit-border-bottom-width: --value([length]);
+  --roundbit-border-bottom-width: calc(--value(integer) * 1px);
+  --roundbit-border-top-color: --value(--color-*, [color]);
+  --roundbit-border-bottom-color: --value(--color-*, [color]);
+  border-block-width: --value([length]);
+  border-block-width: calc(--value(integer) * 1px);
+  border-block-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-s-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-start-width: --value([length]);
+  --roundbit-border-start-width: calc(--value(integer) * 1px);
+  --roundbit-border-start-color: --value(--color-*, [color]);
+  border-inline-start-width: --value([length]);
+  border-inline-start-width: calc(--value(integer) * 1px);
+  border-inline-start-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-e-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-end-width: --value([length]);
+  --roundbit-border-end-width: calc(--value(integer) * 1px);
+  --roundbit-border-end-color: --value(--color-*, [color]);
+  border-inline-end-width: --value([length]);
+  border-inline-end-width: calc(--value(integer) * 1px);
+  border-inline-end-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-t-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-top-width: --value([length]);
+  --roundbit-border-top-width: calc(--value(integer) * 1px);
+  --roundbit-border-top-color: --value(--color-*, [color]);
+  border-top-width: --value([length]);
+  border-top-width: calc(--value(integer) * 1px);
+  border-top-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-r-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-right-width: --value([length]);
+  --roundbit-border-right-width: calc(--value(integer) * 1px);
+  --roundbit-border-right-color: --value(--color-*, [color]);
+  border-right-width: --value([length]);
+  border-right-width: calc(--value(integer) * 1px);
+  border-right-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-b-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-bottom-width: --value([length]);
+  --roundbit-border-bottom-width: calc(--value(integer) * 1px);
+  --roundbit-border-bottom-color: --value(--color-*, [color]);
+  border-bottom-width: --value([length]);
+  border-bottom-width: calc(--value(integer) * 1px);
+  border-bottom-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-l-* {
+  --roundbit-border-source: 1;
+  --roundbit-border-left-width: --value([length]);
+  --roundbit-border-left-width: calc(--value(integer) * 1px);
+  --roundbit-border-left-color: --value(--color-*, [color]);
+  border-left-width: --value([length]);
+  border-left-width: calc(--value(integer) * 1px);
+  border-left-color: --value(--color-*, [color]);
+}
+
+@utility roundbit-border-solid {
+  --roundbit-border-source: 1;
+  --roundbit-border-style: solid;
+  border-style: solid;
+}
+
+@utility roundbit-border-dashed {
+  --roundbit-border-source: 1;
+  --roundbit-border-style: dashed;
+  border-style: dashed;
+}
+
+@utility roundbit-border-dotted {
+  --roundbit-border-source: 1;
+  --roundbit-border-style: dotted;
+  border-style: dotted;
+}
+
+@utility roundbit-border-double {
+  --roundbit-border-source: 1;
+  --roundbit-border-style: double;
+  border-style: double;
+}
+
+@utility roundbit-border-none {
+  --roundbit-border-source: 1;
+  --roundbit-border-style: none;
+  border-style: none;
+}
+
+@utility roundbit-border-hidden {
+  --roundbit-border-source: 1;
+  --roundbit-border-style: hidden;
+  border-style: hidden;
+}
+
+@layer components {
+  .roundbit-frame {
+    box-sizing: border-box;
+    clip-path: var(--roundbit-clip-path);
+    display: inline-grid;
+    isolation: isolate;
+    position: relative;
+  }
+
+  [data-roundbit-snapped="true"] {
+    translate: var(--roundbit-snap-x, 0px) var(--roundbit-snap-y, 0px);
+  }
+
+  .roundbit-frame::before {
+    background: var(--roundbit-outline-fill, transparent);
+    clip-path: var(--roundbit-outline-clip-path, var(--roundbit-clip-path));
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+  }
+
+  .roundbit-frame::after {
+    background-image: var(--roundbit-border-image, none);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .roundbit-frame[data-roundbit-proxy-shadow="true"] {
+    box-shadow: none !important;
+    filter: var(--roundbit-shadow-filter);
+  }
+
+  .roundbit-frame[data-roundbit-proxy-outline="true"] {
+    background: transparent !important;
+    outline: none !important;
+  }
+
+  .roundbit-frame[data-roundbit-proxy-border="true"] {
+    border-width: 0 !important;
+  }
+
+  .roundbit-frame[data-roundbit-proxy-outline="false"]::before {
+    background: transparent;
+  }
+
+  .roundbit-frame[data-roundbit-proxy-border="false"]::after {
+    background-image: none;
+  }
+
+  .roundbit-content {
+    background: transparent;
+    background-clip: padding-box;
+    box-sizing: border-box;
+    border-bottom: var(--roundbit-content-bottom-inset, 0px) solid transparent;
+    border-left: var(--roundbit-content-left-inset, 0px) solid transparent;
+    border-right: var(--roundbit-content-right-inset, 0px) solid transparent;
+    border-top: var(--roundbit-content-top-inset, 0px) solid transparent;
+    clip-path: var(--roundbit-inner-clip-path, var(--roundbit-clip-path));
+    display: block;
+    min-width: 0;
+    position: relative;
+    z-index: 2;
+  }
+}

@@ -1,0 +1,148 @@
+[散点图 / ScatterChart]
+导入: import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
+Scatter 子组件: import { Scatter } from "@/components/bklit/charts"
+包来源: @/components/bklit/charts (基于 @visx)
+组件类型: 图表 / BKLit Charts
+
+## 何时使用
+展示两个数值变量之间的相关关系与分布特征。基于笛卡尔坐标系，以点标记数据位置，支持 hover 高亮、淡化联动、Y 轴渐变着色、动画入场以及拖拽刷选区域等交互能力。适用于相关性分析、用户分群、异常检测、实验对比、时序散点等需要观察数据分布的探索性分析场景。
+
+## Props 速查
+
+### ScatterChart Props
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 散点数据数组 | `Record<string, unknown>[]` | 必填 |
+| xDataKey | X 轴字段名（用于时间轴取值） | `string` | `"date"` |
+| aspectRatio | 容器宽高比 | `string` | `"2 / 1"` |
+| animationDuration | 入场动画时长 (ms) | `number` | `1100` |
+| animationEasing | 缓动函数 | `string` | `"cubic-bezier(0.85,0,0.15,1)"` |
+| margin | 图表内边距 | `Partial<Margin>` | `{top:40,right:40,bottom:40,left:40}` |
+| className | 容器附加样式 | `string` | — |
+| children | Scatter、Grid、ChartTooltip、XAxis 等 | `ReactNode` | 必填 |
+| onPhaseChange | 动画阶段变化回调 | `(phase: ChartPhase) => void` | — |
+
+### Scatter Props
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| dataKey | Y 轴数据字段名 | `string` | 必填 |
+| fill | 点填充颜色（支持 CSS 变量） | `string` | 调色板循环色 |
+| stroke | 点描边颜色 | `string` | — |
+| strokeWidth | 描边宽度 | `number` | `2` |
+| radius | 点半径大小 | `number` | `5` |
+| ringGap | 高亮环与点的间距 | `number` | `2` |
+| outlineWidth | 选中轮廓宽度 | `number` | `0` |
+| outlineColor | 选中轮廓颜色 | `string` | — |
+| animate | 是否启用入场动画 | `boolean` | `true` |
+| fadeOnHover | hover 时非活跃点是否淡化 | `boolean` | `true` |
+| inactiveOpacity | 非活跃点透明度 | `number` | `0.5` |
+| inactiveBlur | 非活跃点模糊量 (px) | `number` | `2` |
+| enterBlur | 入场动画模糊量 (px) | `number` | `2` |
+| showActiveHighlight | 是否显示活跃点高亮放大 | `boolean` | `true` |
+| yAxisId | Y 轴分组 id（多 Y 轴场景） | `string \| number` | — |
+| yGradient | 按 Y 值渐变着色 | `boolean \| {from?:string;to?:string}` | — |
+
+## 示例代码
+
+### 基础散点图
+```tsx
+import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
+import { Scatter } from "@/components/bklit/charts"
+
+const data = [
+  { x: 10, y: 20 },
+  { x: 30, y: 50 },
+  { x: 50, y: 30 },
+  { x: 70, y: 80 },
+  { x: 90, y: 45 },
+]
+
+export default function Demo() {
+  return (
+    <ScatterChart data={data} xDataKey="x">
+      <Scatter dataKey="y" fill="var(--chart-1)" />
+    </ScatterChart>
+  )
+}
+```
+
+### 多系列散点 + Y 轴渐变
+```tsx
+import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
+import { Scatter } from "@/components/bklit/charts"
+import { Grid } from "@/components/bklit/charts"
+
+const data = [
+  { date: "2024-01-01", revenue: 120, cost: 80 },
+  { date: "2024-01-02", revenue: 200, cost: 140 },
+  { date: "2024-01-03", revenue: 150, cost: 100 },
+  { date: "2024-01-04", revenue: 300, cost: 180 },
+  { date: "2024-01-05", revenue: 180, cost: 110 },
+]
+
+export default function Demo() {
+  return (
+    <ScatterChart data={data}>
+      <Grid />
+      <Scatter dataKey="revenue" fill="var(--chart-1)" radius={6} />
+      <Scatter dataKey="cost" yGradient />
+    </ScatterChart>
+  )
+}
+```
+
+### 完整配置（含 tooltip 和坐标轴）
+```tsx
+import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
+import { Scatter, Grid, ChartTooltip, XAxis } from "@/components/bklit/charts"
+
+const data = [
+  { date: new Date("2024-01-01"), value: 42 },
+  { date: new Date("2024-01-02"), value: 68 },
+  { date: new Date("2024-01-03"), value: 55 },
+  { date: new Date("2024-01-04"), value: 91 },
+  { date: new Date("2024-01-05"), value: 37 },
+]
+
+export default function Demo() {
+  return (
+    <ScatterChart
+      animationDuration={800}
+      aspectRatio="16 / 9"
+      data={data}
+      margin={{ top: 20, right: 20, bottom: 30, left: 40 }}
+    >
+      <Grid />
+      <XAxis />
+      <Scatter
+        dataKey="value"
+        fill="var(--chart-2)"
+        radius={7}
+        showActiveHighlight
+        strokeWidth={1.5}
+      />
+      <ChartTooltip />
+    </ScatterChart>
+  )
+}
+```
+
+## 约束与最佳实践
+
+### 约束
+- 需要 @visx/* 系列依赖（@visx/scale、@visx/shape、@visx/event 等），项目已内置
+- data 中 X 轴字段默认取 key `"date"`；若数据使用其他 key（如 `x`），必须显式传入 `xDataKey`
+- X 轴值会被强制转为 Date 类型，非 Date 值调用 `new Date(value)`
+- 至少需要一个 `Scatter` 子组件，否则图表无可见内容
+- 容器使用 `aspectRatio` 保证渲染比例，默认 `"2 / 1"`；可通过 className 覆盖宽高
+
+### 最佳实践
+- 数据点数量：建议 10-500 个点，过少难以形成分布洞察，过多导致遮盖和性能下降
+- 颜色：优先使用 CSS 变量 `var(--chart-1)` 至 `var(--chart-5)`，与整体主题保持一致
+- 多系列：不超过 3 个 Scatter 子组件，否则重叠严重；不同系列应使用不同 fill 颜色区分
+- 交互：保持 `fadeOnHover` 和 `showActiveHighlight` 开启（默认），为密集散点提供可读性
+- 配合 Grid 和 ChartTooltip 提供数值参考和悬停详情
+- 时间轴数据建议使用 Date 对象而非字符串，避免自动解析歧义
+- Y 轴渐变着色 (yGradient) 适合单系列场景，让点的垂直位置携带颜色语义
+- aspectRatio 根据数据范围调整：时序数据推荐 `"2 / 1"`，方形分布推荐 `"1 / 1"`
+- 离群点较多时，考虑扩大的 aspectRatio 或增大 margin 以避免标签被裁剪

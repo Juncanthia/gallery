@@ -1,0 +1,140 @@
+macOS Aqua 风格的分段控件，用于在多个互斥选项之间切换。受控组件，通过 `value` 和 `onValueChange` 管理选中状态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在有限的一组互斥选项之间进行切换时使用，例如视图模式切换、时间范围选择、筛选条件等。
+
+常见场景：
+
+- 视图切换：列表 / 网格 / 详情
+- 时间粒度：日 / 周 / 月
+- 筛选维度：全部 / 未读 / 已读
+- 编辑器模式：设计 / 代码 / 预览
+
+LegacySegmentedControl 呈现经典 macOS Aqua 控件风格：圆角容器、渐变色段、内阴影边框，适合需要复古 macOS 视觉风格的工具型界面。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase
+  id="sabraman/segmented-control"
+  path="sabraman/segmented-control/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { LegacySegmentedControl } from "@/components/ui/sabraman-segmented-control"
+
+export default function Demo() {
+  const [value, setValue] = useState("option1")
+
+  return (
+    <div className="flex items-center justify-center p-8">
+      <LegacySegmentedControl
+        items={[
+          { label: "选项一", value: "option1" },
+          { label: "选项二", value: "option2" },
+          { label: "选项三", value: "option3" },
+        ]}
+        value={value}
+        onValueChange={setValue}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LegacySegmentedControl
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 分段选项列表 | `readonly LegacySegmentedControlItem<T>[]` | - |
+| value | 当前选中的值（受控） | `T extends string` | - |
+| onValueChange | 选中值变化回调 | `(value: T) => void` | - |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+
+组件同时接受除 `onChange` 外的所有 `React.HTMLAttributes&lt;HTMLDivElement&gt;` 属性。
+
+### LegacySegmentedControlItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 显示文本 | `string` | - |
+| value | 选项值 | `T extends string` | - |
+| width | 固定宽度（px），不传则自适应 | `number` | - |
+
+### Semantic DOM
+
+组件通过 ARIA 属性暴露结构语义：
+
+- 容器：`role="tablist"`
+- 每个选项按钮：`role="tab"`，选中态 `aria-selected="true"`
+- 分隔线：`aria-hidden="true"`
+
+<h2 id="faq">常见问题</h2>
+
+### 受控模式如何使用？
+
+LegacySegmentedControl 是纯受控组件，必须同时提供 `value` 和 `onValueChange`：
+
+```tsx
+const [mode, setMode] = useState("list")
+
+<LegacySegmentedControl
+  items={[
+    { label: "列表", value: "list" },
+    { label: "网格", value: "grid" },
+  ]}
+  value={mode}
+  onValueChange={setMode}
+/>
+```
+
+### 如何设置固定宽度？
+
+通过 `items` 中每项的 `width` 属性设置：
+
+```tsx
+<LegacySegmentedControl
+  items={[
+    { label: "短", value: "a", width: 60 },
+    { label: "中等宽度", value: "b", width: 120 },
+  ]}
+  value={value}
+  onValueChange={setValue}
+/>
+```
+
+### 如何自定义样式？
+
+通过 `className` 和 `style` 附加样式：
+
+```tsx
+<LegacySegmentedControl
+  className="scale-90"
+  items={items}
+  value={value}
+  onValueChange={setValue}
+/>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LegacySegmentedControl 代码时：
+
+1. 从 `@/components/ui/sabraman-segmented-control` 导入
+2. 必须同时提供 `value` 和 `onValueChange`（受控组件）
+3. `items` 中每项必须包含 `label` 和 `value`，`width` 可选
+4. 使用 TypeScript 泛型时，可通过 `<LegacySegmentedControl<"a" | "b">` 约束 value 类型
+5. 不要引入 Ant Design 的 Segmented 组件
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/sabraman/components/legacy-segmented-control.tsx` — 渲染逻辑与样式
+- `src/components/ui/sabraman-segmented-control.tsx` — 对外导出封装

@@ -1,0 +1,137 @@
+SankeyChart 用于展示数据在不同节点之间的流向和转移关系，是 BKLit Charts 图表库中的桑基图组件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要直观展示流量、能量、资金或用户行为在多个阶段/分类之间的转移关系时，使用桑基图。桑基图通过节点和连接线（links）的宽度编码数值大小，使数据流向一目了然。
+
+常见场景：
+
+- 用户行为流：展示用户从进入、浏览、加购、下单到支付的完整转化漏斗。
+- 流量分配：展示网站或应用的流量在各级页面/功能之间的分发路径。
+- 资金流转：展示财务数据在不同科目、部门或账户之间的转移情况。
+- 能量/资源流：展示能源、物料或资源在生产流程各环节的消耗与转化。
+
+不适用场景：
+
+- 数据节点过多（超过 20 个节点）时，桑基图会变得拥挤难以阅读，建议改用矩阵图或弦图。
+- 数据只有单一层次结构时，树图或旭日图更合适。
+- 节点间流向过于稀疏时，桑基图会出现大量空白区域，建议先用筛选过滤无效关系。
+- 需要精确数值对比时，桑基图的宽度视觉编码不如柱状图或表格直观。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+通过 `SankeyChart` 包裹 `SankeyNode`、`SankeyLink` 和 `SankeyTooltip` 来渲染完整的桑基图。
+
+<ComponentShowcase id="bklit/sankey-chart" path="bklit/sankey-chart/basic" />
+
+```tsx
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/ui/bklit-sankey-chart"
+
+const data = {
+  nodes: [{ name: "A" }, { name: "B" }, { name: "C" }],
+  links: [{ source: 0, target: 2, value: 80 }],
+}
+
+export default function Demo() {
+  return (
+    <SankeyChart data={data}>
+      <SankeyLink />
+      <SankeyNode />
+      <SankeyTooltip />
+    </SankeyChart>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### SankeyChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 桑基图数据，包含 nodes 和 links | `SankeyData` | — |
+| children | 子组件（SankeyLink、SankeyNode、SankeyTooltip） | `ReactNode` | — |
+| margin | 图表边距 | `Partial<Margin>` | `{ top: 40, right: 180, bottom: 40, left: 180 }` |
+| animationDuration | 进入动画时长 (ms) | `number` | `1100` |
+| enterTransition | motion 进入过渡动画配置 | `Transition` | — |
+| revealSignature | 动画重播标识，变化时触发重新进入动画 | `string` | — |
+| aspectRatio | 宽高比（"宽 / 高"） | `string` | `"2 / 1"` |
+| nodeWidth | 节点宽度 (px) | `number` | `16` |
+| nodePadding | 节点间距 (px) | `number` | `24` |
+| className | 容器附加样式类名 | `string` | — |
+| hoveredNodeIndex | 受控的悬停节点索引 | `number \| null` | — |
+| onNodeHoverChange | 节点悬停变化回调 | `(index: number \| null) => void` | — |
+
+### SankeyNode Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| fill | 节点填充颜色 | `string` | —（使用主题色循环） |
+| lineCap | 节点圆角半径 | `number` | `4` |
+| fadedOpacity | 其他节点/链接悬停时，非关联节点的透明度 | `number` | `0.4` |
+| showLabels | 是否显示节点标签 | `boolean` | `true` |
+| showValueLabels | 是否在节点名称下方显示数值标签 | `boolean` | `true` |
+| getNodeColor | 自定义节点颜色函数 | `(node, index) => string` | — |
+
+### SankeyLink Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| stroke | 链接描边颜色（覆盖渐变） | `string` | — |
+| strokeOpacity | 链接描边透明度 | `number` | `0.5` |
+| fadedOpacity | 其他元素悬停时，非关联链接的透明度 | `number` | `0.1` |
+| useGradient | 是否使用从源节点到目标节点的颜色渐变 | `boolean` | `true` |
+| getNodeColor | 自定义节点颜色函数（用于渐变） | `(node, index) => string` | — |
+| getLinkColor | 自定义链接颜色函数（覆盖渐变） | `(link, index) => string` | — |
+| patterns | 图案定义（使用 @visx/pattern 组件） | `ReactNode` | — |
+| getLinkPattern | 返回链接图案 ID 的函数 | `(link, index) => string \| null \| undefined` | — |
+
+### SankeyTooltip Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| nodeContent | 自定义节点悬浮提示内容 | `(props) => ReactNode` | — |
+| linkContent | 自定义链接悬浮提示内容 | `(props) => ReactNode` | — |
+| formatValue | 数值格式化函数 | `(value: number) => string` | `intFmt` |
+| className | 附加样式类名 | `string` | — |
+
+### SankeyData 类型
+
+```ts
+interface SankeyData {
+  nodes: SankeyNodeDatum[]   // { name: string; category?: "source" | "landing" | "outcome" }
+  links: SankeyLinkDatum[]   // { source: number; target: number; value: number }
+}
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义样式？
+
+通过 CSS 变量（如 `--chart-1` 至 `--chart-5` 控制节点颜色，`--chart-line-primary` 控制链接颜色）或通过 `SankeyNode` 的 `getNodeColor`、`SankeyLink` 的 `getLinkColor` 进行编程式样式设置。
+
+### 如何调整节点和链接的间距？
+
+通过 `SankeyChart` 的 `nodeWidth` 和 `nodePadding` 属性调整节点的宽度和间距。链接的宽度由数据中的 `value` 决定。
+
+### 如何关闭标签显示？
+
+在 `SankeyNode` 上设置 `showLabels={false}` 和 `showValueLabels={false}` 即可隐藏节点名称和数值标签。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 SankeyChart 代码时：
+
+1. 从 `@/components/ui/bklit-sankey-chart` 导入 `SankeyChart`、`SankeyNode`、`SankeyLink`、`SankeyTooltip`
+2. `children` 为必填项，需包含 `SankeyLink`、`SankeyNode`、`SankeyTooltip` 三个子组件
+3. 数据格式为 `{ nodes: Array<{ name: string }>, links: Array<{ source: number, target: number, value: number }> }`
+4. `links` 中的 `source` 和 `target` 为 `nodes` 数组的索引（从 0 开始）
+5. 通过 `aspectRatio` 控制图表宽高比，默认 `"2 / 1"`
+6. 需要 `@visx/sankey`、`@visx/responsive`、`@visx/event`、`motion` 等依赖
+7. 不要引入 Ant Design 相关依赖
+
+<h2 id="source">源码</h2>
+
+- [SankeyChart](/source/bklit/charts/sankey-chart)

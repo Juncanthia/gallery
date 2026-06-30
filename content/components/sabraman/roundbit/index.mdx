@@ -1,0 +1,101 @@
+RoundbitFrame 为容器内容提供像素风格的圆角裁切效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为卡牌、面板、弹窗等容器添加具有像素艺术风格的圆角框架时使用。
+
+常见场景：
+
+- 卡牌和面板组件的外层装饰。
+- 弹出层、对话框的视觉包装。
+- 复古像素风格 UI 的容器元素。
+- 需要区别于传统 CSS `border-radius` 的视觉表达。
+
+RoundbitFrame 的内部效果由 `initRoundbit` 驱动，通过 Canvas 绘制像素级圆角裁切路径，与传统的 CSS border-radius 产生不同的视觉风格。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+RoundbitFrame 包裹任意内容，自动应用圆角裁切效果。
+
+<ComponentShowcase
+  id="sabraman/roundbit"
+  path="sabraman/roundbit/basic"
+/>
+
+```tsx
+import { RoundbitFrame } from "@/components/ui/sabraman-roundbit"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <RoundbitFrame className="w-64">
+        <div className="flex h-32 items-center justify-center bg-primary/10 text-sm text-primary">
+          圆角框架示例
+        </div>
+      </RoundbitFrame>
+      <RoundbitFrame className="w-64">
+        <div className="flex flex-col gap-2 p-4 text-sm">
+          <h3 className="font-semibold">标题</h3>
+          <p className="text-muted-foreground">这是一段放在 RoundbitFrame 内的描述文字。</p>
+        </div>
+      </RoundbitFrame>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### RoundbitFrame
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 框架内的内容 | `React.ReactNode` | - |
+| className | 外层框架容器类名 | `string` | - |
+| contentClassName | 内层内容容器类名 | `string` | - |
+| contentProps | 内层内容容器的 HTML 属性 | `React.HTMLAttributes&lt;HTMLDivElement&gt;` | - |
+
+同时支持所有标准 `div` HTML 属性（`React.HTMLAttributes&lt;HTMLDivElement&gt;`）。
+
+<h2 id="faq">常见问题</h2>
+
+### RoundbitFrame 与 CSS border-radius 有何区别？
+
+RoundbitFrame 使用 Canvas 绘制像素风格的圆角裁切路径，呈现出一种像素艺术的视觉效果，而非传统的平滑圆角。它适合复古像素风格或需要视觉差异化的场景。
+
+### 如何自定义圆角大小？
+
+圆角效果由 `initRoundbit` 内部实现管理，当前版本不暴露圆角半径配置。如需自定义，可直接使用底层 `buildRoundbitPaths` 和 `initRoundbit` 函数。
+
+### 何时不应使用 RoundbitFrame？
+
+- 需要平滑圆角时，应使用 CSS `border-radius`。
+- 需要高性能大量渲染时，Canvas 路径计算有一定开销。
+- 设计系统需要统一 border-radius token 时，Canvas 圆角与 CSS token 体系不兼容。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 RoundbitFrame 代码时：
+
+1. 从 `@/components/ui/sabraman-roundbit` 导入
+2. 将需要圆角裁切的内容作为 `children` 传入
+3. 使用 `className` 控制外层容器样式（宽高、布局等）
+4. 使用 `contentClassName` 控制内层内容样式
+5. 不要同时在外层应用 CSS `border-radius`，避免与 Canvas 裁切冲突
+6. 不要在 `RoundbitFrame` 内嵌套另一个 `RoundbitFrame`
+
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `className` 暴露稳定的语义类名：
+
+| class | 说明 |
+| --- | --- |
+| `roundbit-frame` | 外层框架容器 |
+| `roundbit-content` | 内层内容容器 |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="sabraman/roundbit" />

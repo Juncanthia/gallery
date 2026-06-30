@@ -1,0 +1,159 @@
+---
+category: Components
+title: Switch
+subtitle: 开关
+description: 复古 iOS 风格开关组件，用于在两种互斥状态之间切换。
+group:
+  title: Sabraman
+  order: 2
+source:
+  component: src/components/sabraman/components/legacy-switch.tsx
+  export: src/components/ui/sabraman-switch.tsx
+  docs: content/components/sabraman/switch/index.mdx
+  examples:
+    - content/components/sabraman/switch/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  radixSwitch: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# Switch 开关
+
+LegacySwitch 是复古 iOS 风格的开关组件，基于 Radix UI Switch 构建。继承 Radix Switch 完整的可访问性支持（WAI-ARIA Switch 模式）和受控 / 非受控模式，同时提供 `offLabel`、`onLabel` 自定义开关文字。
+
+本组件不是 Ant Design Switch 的兼容层。API 直接使用 Radix UI Switch 的 `checked` / `onCheckedChange` 模型，不提供 AntD 的 `checkedChildren`、`unCheckedChildren`、`loading` 等属性。
+
+## 何时使用
+
+需要表示开关状态 / 两种状态之间的切换时使用。
+
+常见场景：
+
+- 表示某个功能的启用 / 禁用，例如通知开关、Wi-Fi 开关。
+- 表单中表示布尔值的输入。
+- 列表或表格中的行内状态切换。
+- 需要使用复古 iOS 风格开关的界面。
+
+## 代码演示
+
+### 基础用法
+
+受控模式、非受控模式、自定义标签、禁用四种基础用法。
+
+```tsx
+import { useState } from "react"
+import { LegacySwitch } from "@/components/ui/sabraman-switch"
+
+export default function Demo() {
+  const [checked, setChecked] = useState(false)
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-3">
+        <LegacySwitch checked={checked} onCheckedChange={setChecked} id="controlled" />
+        <label htmlFor="controlled" className="text-sm select-none">
+          {checked ? "已开启" : "已关闭"}
+        </label>
+      </div>
+      <div className="flex items-center gap-3">
+        <LegacySwitch defaultChecked id="uncontrolled" />
+        <label htmlFor="uncontrolled" className="text-sm select-none">
+          默认开启
+        </label>
+      </div>
+      <div className="flex items-center gap-3">
+        <LegacySwitch offLabel="关" onLabel="开" id="cn-label" />
+        <label htmlFor="cn-label" className="text-sm select-none">
+          自定义标签
+        </label>
+      </div>
+      <div className="flex items-center gap-3">
+        <LegacySwitch disabled id="disabled" />
+        <label htmlFor="disabled" className="text-sm text-muted-foreground select-none">
+          禁用状态
+        </label>
+      </div>
+    </div>
+  )
+}
+```
+
+## API
+
+### LegacySwitch
+
+继承 Radix UI Switch.Root 的全部属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| offLabel | 关闭状态的标签文字 | `string` | `OFF` |
+| onLabel | 开启状态的标签文字 | `string` | `ON` |
+| checked | 受控选中状态 | `boolean` | - |
+| defaultChecked | 默认选中状态（非受控） | `boolean` | - |
+| onCheckedChange | 状态变更回调 | `(checked: boolean) => void` | - |
+| disabled | 禁用 | `boolean` | - |
+| required | 表单必填 | `boolean` | - |
+| name | 表单字段名 | `string` | - |
+| value | 表单值 | `string` | - |
+| className | 附加 class | `string` | - |
+
+扩展属性通过 `LegacySwitchProps` 类型导出：
+
+```ts
+export interface LegacySwitchProps
+  extends React.ComponentPropsWithoutRef<typeof Switch.Root> {
+  offLabel?: string;
+  onLabel?: string;
+}
+```
+
+## 与 Ant Design Switch 的差异
+
+| 差异点 | 说明 |
+| --- | --- |
+| 无 `checkedChildren` / `unCheckedChildren` | 使用 `onLabel` / `offLabel` |
+| 无 `loading` | 不支持加载态 |
+| 无 `size` | 固定尺寸，复古 iOS 风格 |
+| 无 `checked` → `onChange` 模型 | 使用 Radix 的 `checked` / `onCheckedChange` |
+| 无 ConfigProvider / Design Token | 使用 Tailwind 内联样式 |
+
+## FAQ
+
+### 如何获取开关状态？
+
+受控模式使用 `checked` + `onCheckedChange`。非受控模式使用 `defaultChecked`。
+
+### 如何自定义开关文字？
+
+使用 `offLabel` 和 `onLabel` props，默认为 `OFF` / `ON`。
+
+### 如何禁用开关？
+
+设置 `disabled={true}`。
+
+## LLM 使用规则
+
+AI 生成 LegacySwitch 代码时：
+
+1. 从 `@/components/ui/sabraman-switch` 导入
+2. 使用 `checked` + `onCheckedChange` 实现受控
+3. 使用 `defaultChecked` 实现非受控
+4. 使用 `offLabel` / `onLabel` 自定义文字，不是 `checkedChildren`
+5. 配合 `<label>` 标签使用提升可访问性
+6. 不要引入 Radix UI Switch 原始组件
+7. 不要引入 Ant Design Switch 或其 API 惯例
+
+## Semantic DOM
+
+| data-slot | 说明 |
+| --- | --- |
+| `legacy-switch` | 开关根元素 |
+| `legacy-switch-thumb` | 滑块元素 |
+
+## 实现参考
+
+- `src/components/sabraman/components/legacy-switch.tsx` — 渲染逻辑、样式
+- `src/components/ui/sabraman-switch.tsx` — 统一导出

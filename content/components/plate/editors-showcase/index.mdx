@@ -1,0 +1,38 @@
+Plate 富文本编辑器展示组件，基于 PlateJS 构建。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中嵌入完整的富文本编辑体验时使用。PlateEditorsShowcase 集成了多种编辑器风格，适合文档编辑、内容创作等场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="plate/editors-showcase" path="plate/editors-showcase/basic" />
+
+```tsx
+import { PlateEditorsShowcase } from "@/components/ui/plate-editors-showcase"
+
+export default function Demo() {
+  return <PlateEditorsShowcase />
+}
+```
+
+<h2 id="api">API</h2>
+
+PlateEditorsShowcase 为展示组件，无需额外 Props。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义编辑器样式？
+
+PlateEditorsShowcase 是展示组件，修改源码中的 Plate 配置即可自定义。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+- 导入: `import { PlateEditorsShowcase } from "@/components/ui/plate-editors-showcase"`
+- 基于 PlateJS（platejs），依赖 @platejs/basic-nodes
+
+<h2 id="source">源码</h2>
+
+- [PlateEditorsShowcase](/source/plate/components/plate-editors-showcase)

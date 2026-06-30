@@ -1,0 +1,154 @@
+[图表提示框 / ChartTooltip]
+导入: import { ChartTooltip } from "@/components/ui/bklit-chart-tooltip"
+包来源: @/components/bklit/charts
+组件类型: 图表 / BKLit Charts
+
+## 何时使用
+图表提示框（ChartTooltip）是 BKLit Charts 图表的交互增强组件，当用户悬停或触摸图表数据区域时，以浮层形式展示当前数据点的详细信息。它自动从 ChartContext 获取工具提示数据，与 LineChart、BarChart、AreaChart 等笛卡尔坐标系图表深度集成，无需手动传递数据。
+
+ChartTooltip 提供开箱即用的默认渲染（数据点彩色圆点 + 标签 + 数值），同时通过 `content`、`rows`、`children` 等属性支持完整的内容自定义。它还内置了交叉十字线、数据点圆点、日期标签等视觉辅助元素，并支持基于 spring 物理引擎的平滑动画跟随。组件通过 React Portal 渲染，不受图表容器 overflow 限制，始终正确浮于页面顶层。
+
+常见场景：
+- 折线图悬停展示多系列数值对比
+- 柱状图悬停展示分类及其对应数值
+- 面积图查看特定时间点的各层数据
+- 自定义 tooltip 内容（如百分比、环比涨幅、迷你趋势图等）
+- 需要显示交叉十字线和数据点的高亮图
+
+不适用场景：
+- 饼图、环形图等非笛卡尔坐标系图表，应使用图表自带的 tooltip 方案
+- 需在图外任意位置触发的提示，应使用独立的 Tooltip 组件
+- 静态数据展示场景，无需使用交互式 tooltip
+
+## Props 速查
+
+### ChartTooltip Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| showDatePill | 是否在底部显示日期标签 | `boolean` | `true` |
+| showCrosshair | 是否显示垂直交叉十字线 | `boolean` | `true` |
+| showDots | 是否在数据线上显示圆点 | `boolean` | `true` |
+| indicatorColor | 交叉线颜色；函数时可接收当前悬停数据点 | `string \| ((point: Record<string, unknown>) => string)` | `var(--chart-crosshair)` |
+| indicatorDasharray | 交叉线 SVG 虚线样式，不传为实线 | `string` | - |
+| indicatorFadeEdges | 交叉线边缘渐隐方向 | `both` \| `top` \| `bottom` \| `none` | `both` |
+| indicatorFadeLength | 交叉线渐隐区域长度（% 高度） | `number` | `10` |
+| content | 自定义 tooltip 完整内容，渲染后替代默认布局 | `(props: { point: Record<string, unknown>; index: number }) => React.ReactNode` | - |
+| rows | 自定义行数据数组，覆盖默认生成的 rows | `(point: Record<string, unknown>) => TooltipRow[]` | - |
+| dotColor | 数据点圆点颜色；字符串统一设置，函数按线和数据点分别设置 | `string \| ((point: Record<string, unknown>, line: LineConfig) => string)` | 跟随线条颜色或 rows 颜色 |
+| children | tooltip 面板底部附加内容（如标记、图例等） | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+| springConfig | 交叉线 / 圆点 / 日期动画的 spring 配置（覆盖 ChartConfigProvider 全局设置） | `SpringConfig` | - |
+| matchCrosshair | 浮层面板跟随交叉线 spring 动画 | `boolean` | `false` |
+| damping | 浮层面板 spring 阻尼（`matchCrosshair` 为 false 时生效），0 为瞬间定位 | `number` | `20` |
+| boxSpringConfig | 浮层面板 spring 动画配置（覆盖 ChartConfigProvider 全局设置） | `SpringConfig` | - |
+| panelStyle | 浮层面板内联样式（背景、模糊等） | `React.CSSProperties` | - |
+| backgroundColor | 浮层面板背景色（CSS 变量或色值） | `string` | `var(--chart-tooltip-background)` |
+
+### TooltipRow
+
+| 属性 | 说明 | 类型 |
+|------|------|------|
+| color | 行颜色标识（圆点颜色） | `string` |
+| label | 行标签文本 | `string` |
+| value | 行数值（number 自动千分位格式化） | `string \| number` |
+
+## 示例代码
+
+### 基础用法
+
+将 ChartTooltip 作为 LineChart 的子组件，自动展示 tooltip：
+
+```tsx
+import { LineChart, Line, ChartTooltip } from "@/components/bklit/charts"
+
+const data = [
+  { date: new Date(2024, 0, 1), value: 100 },
+  { date: new Date(2024, 0, 2), value: 200 },
+  { date: new Date(2024, 0, 3), value: 150 },
+  { date: new Date(2024, 0, 4), value: 300 },
+  { date: new Date(2024, 0, 5), value: 250 },
+]
+
+export default function Demo() {
+  return (
+    <LineChart data={data}>
+      <ChartTooltip />
+      <Line dataKey="value" stroke="var(--chart-line-primary)" />
+    </LineChart>
+  )
+}
+```
+
+### 自定义内容
+
+使用 `content` 完全接管 tooltip 渲染：
+
+```tsx
+import { LineChart, Line, ChartTooltip } from "@/components/bklit/charts"
+
+export default function Demo() {
+  return (
+    <LineChart data={chartData}>
+      <ChartTooltip
+        content={({ point, index }) => (
+          <div className="p-3">
+            <div className="font-medium">第 {index + 1} 天</div>
+            <div>数值：{point.value as number}</div>
+          </div>
+        )}
+      />
+      <Line dataKey="value" stroke="var(--chart-line-primary)" />
+    </LineChart>
+  )
+}
+```
+
+### 自定义行数据
+
+使用 `rows` 自定义行数据，适用于多系列图表：
+
+```tsx
+import { LineChart, Line, ChartTooltip } from "@/components/bklit/charts"
+
+export default function Demo() {
+  return (
+    <LineChart data={chartData}>
+      <ChartTooltip
+        rows={(point) => [
+          {
+            color: "var(--chart-line-primary)",
+            label: "收入",
+            value: point.income,
+          },
+          {
+            color: "var(--chart-line-secondary)",
+            label: "支出",
+            value: point.expense,
+          },
+        ]}
+      />
+      <Line dataKey="income" stroke="var(--chart-line-primary)" />
+      <Line dataKey="expense" stroke="var(--chart-line-secondary)" />
+    </LineChart>
+  )
+}
+```
+
+## 约束
+
+- 需要 `@visx/*` 系列依赖和 `motion/react` 动画库
+- 必须在 Chart 组件（LineChart / BarChart / AreaChart 等）内部使用，依赖 ChartContext 获取数据
+- 饼图、环形图、桑基图、热力图等非笛卡尔坐标系图表请勿使用 ChartTooltip，应使用各自的 tooltip 实现
+- 图表数据需要包含 `date` 类型的 x 轴字段（用于日期格式化显示）
+- ChartTooltip 通过 `ReactDOM.createPortal` 渲染，需确保图表容器 ref 可用（客户端挂载后渲染）
+- `content` 和 `rows` 互斥，同时设置时 `content` 优先（`rows` 不生效）
+- 数据点超过 60 个时，动画自动回退为离散模式，不使用 spring 动画，以保证流畅性
+
+## 最佳实践
+
+- 优先使用默认 tooltip，仅在需要定制时才使用 `content` 或 `rows`
+- 多系列图表通过 `lines`（即 Chart 中的 `<Line>` 等子组件）自动生成行数据，无需手动配置
+- 背景色使用 CSS 变量 `var(--chart-tooltip-background)` 以保持主题一致性
+- 需要关闭动画时设置 `damping={0}`，不要设置极其小的阻尼值
+- 交叉线渐隐 (`indicatorFadeEdges`) 在横向柱状图等场景中可能不适用，按需关闭

@@ -1,0 +1,110 @@
+仪表盘用于展示单一度量值在目标范围内的完成进度或当前等级，通过圆弧凹槽的填充比例直观传达数值占比。BKLit Charts 的 Gauge 组件基于 @visx 实现，支持凹槽圆弧角度、渐变填充、圆角、动画等高级定制。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在一个圆形或半圆形仪表中呈现某个指标相对于最大值的完成情况时使用。Gauge 适合以视觉化的方式传达百分比、比率或进度信息，通常用于仪表盘概览页面、监控面板或数据概览卡片中，帮助用户快速感知关键指标的当前状态和达成水平。
+
+常见场景：
+
+- 目标完成率展示：如销售目标达成度、项目进度百分比、任务完成率。
+- 容量/占用率监控：如存储空间使用率、带宽占用率、库存水位。
+- 评分与等级展示：如信用评分、性能评级、健康指数。
+- 仪表盘概览：在数据看板中作为概览卡片的核心视觉元素，配合数值标签突出关键指标。
+- 实时指标：配合 `motion/react` 动画，展示动态变化的指标（如当前在线用户数相对于最大容量）。
+
+不推荐的使用场景：
+
+- 需要精确对比多个数据点的场景，应使用柱状图、条形图或表格。
+- 数据范围动态变化且无法确定最大值的场景，仪表盘需要明确的 `value` 和最大值参照。
+- 需要展示趋势变化的场景（如时间序列数据），应使用折线图或面积图。
+- 需要用户交互调整数值的场景，Gauge 是只读展示组件，不提供拖拽编辑功能。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="bklit/gauge" path="bklit/gauge/basic" />
+
+```tsx
+import { Gauge } from "@/components/ui/bklit-gauge"
+
+export default function Demo() {
+  return <Gauge value={65} centerValue={65} />
+}
+```
+
+<h2 id="api">API</h2>
+
+### Gauge Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| value | 填充值，范围 0-100，控制活跃凹槽数量 | `number` | — |
+| centerValue | 中心展示的数值，传递给 NumberFlow 动画 | `number` | — |
+| totalNotches | 凹槽总数 | `number` | `40` |
+| spacing | 凹槽间距百分比，范围 0-100 | `number` | `25` |
+| notchCornerRadius | 凹槽角圆角半径（px），0 为锐角 | `number` | `0` |
+| uniformWidth | `true` 为矩形凹槽；`false` 为向圆心收窄 | `boolean` | `false` |
+| startAngle | 圆弧起始角度（度） | `number` | `135` |
+| endAngle | 圆弧结束角度（度） | `number` | `405` |
+| useGradient | 启用渐变色填充活跃凹槽 | `boolean` | `false` |
+| activeGradient | 活跃凹槽渐变起止色（useGradient 为 true 时生效） | `readonly [string, string]` | `["#bef264", "#10b981"]` |
+| inactiveGradient | 非活跃凹槽渐变起止色，默认同 activeGradient | `readonly [string, string]` | — |
+| inactiveFill | 非活跃凹槽填充色，支持 CSS 颜色或 `url(#id)` | `string` | — |
+| activeFill | 活跃凹槽填充色，设置后覆盖纯色/渐变填充 | `string` | — |
+| inactiveFillOpacity | 非活跃凹槽 fill-opacity，范围 0-1 | `number` | `0.8` |
+| activeFillOpacity | 活跃凹槽 fill-opacity，范围 0-1 | `number` | `1` |
+| defaultLabel | 中心默认标签文字 | `string` | `"Total"` |
+| prefix | 中心数值前缀 | `string` | — |
+| suffix | 中心数值后缀 | `string` | — |
+| formatOptions | NumberFlow 格式化选项 | `ChartStatFlowFormat` | — |
+| width | 显式像素宽度，省略时自适应父容器 | `number` | — |
+| height | 显式像素高度，省略时自适应父容器 | `number` | — |
+| minWidth | 自适应模式下最小宽度（px） | `number` | `300` |
+| notchLengthPercent | 凹槽径向深度百分比，范围 5-100 | `number` | `100` |
+| enterTransition | Framer Motion 进入动画 Transition 配置 | `Transition` | spring 动画 |
+| enterStaggerScale | 凹槽交错延迟缩放，1 为基准 | `number` | `1` |
+| children | 定义 Pattern / Gradient 等 `<defs>` 元素，约定同 PieChart | `ReactNode` | — |
+| className | 附加样式类名 | `string` | — |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义颜色？
+
+通过 `activeFill` 或 `inactiveFill` 属性设置，支持 CSS 颜色值、CSS 变量（如 `var(--chart-1)`）和渐变 URL（如 `url(#my-gradient)`）。
+
+如需使用渐变色自动插值，设置 `useGradient={true}` 并通过 `activeGradient` 和 `inactiveGradient` 指定起止色对。
+
+### 如何调整圆弧角度？
+
+通过 `startAngle` 和 `endAngle` 控制圆弧范围。默认为 `startAngle={135}` `endAngle={405}`（270 度圆弧，底部开口）。设为 `startAngle={180}` `endAngle={360}` 可获得 180 度半圆仪表盘。
+
+### 如何自定义中心文字？
+
+通过 `defaultLabel`、`prefix`、`suffix` 和 `formatOptions` 控制中心展示内容。`centerValue` 传递实际数值，前缀后缀自动拼接显示。
+
+### 如何控制组件尺寸？
+
+两种方式：
+- 显式尺寸：同时传入 `width` 和 `height`。
+- 自适应：省略两者，组件填充父容器宽度（最小 `minWidth` 默认 300px），通过 `ParentSize` 自动计算，建议父容器设置 `aspect-ratio` 或固定尺寸。
+
+### 如何关闭动画？
+
+传入 `enterTransition={{ duration: 0 }}` 配合 `enterStaggerScale={0}` 可禁用所有入场动画。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Gauge 代码时：
+
+1. 从 `@/components/ui/bklit-gauge` 导入
+2. 必须提供 `value`（0-100）和 `centerValue` 两个必填属性
+3. 如需控制尺寸，建议使用自适应模式（省略 width/height），在父容器设置约束
+4. 自定义颜色优先使用 `activeFill`/`inactiveFill`；渐变场景使用 `useGradient` + `activeGradient`
+5. 需要提供 `defaultLabel`、`prefix`、`suffix` 来定制中心标签
+6. 可通过 `children` 传入 `<defs>` 元素定义复杂的 SVG Pattern/Gradient
+7. 不要引入 Ant Design 相关依赖
+
+<h2 id="source">源码</h2>
+
+- [Gauge](/source/bklit/charts/gauge)

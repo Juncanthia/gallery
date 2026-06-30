@@ -1,0 +1,285 @@
+LegacyBarButton 是 Sabraman 组件库中的工具栏风格按钮，模拟经典工具栏外观。它通过渐变背景和内阴影呈现立体感，仅支持固定高度工具栏风格。
+
+<h2 id="when-to-use">何时使用</h2>
+
+标记一个操作命令，响应用户点击行为，触发相应的业务逻辑。
+
+常见场景：
+
+- 工具栏主操作：新建、搜索、保存。
+- 次操作：下载、导出、刷新。
+- 危险操作：删除、移除。
+- 导航返回：面包屑上级跳转。
+- 纯图标操作：搜索、下载、更多。
+
+LegacyBarButton 通过 `variant` 表达视觉语义：
+
+- `default`：蓝灰色调，用于普通操作。
+- `accent`：蓝色调，用于强调操作。
+- `destructive`：红色调，用于危险操作。
+
+通过 `layout` 控制布局模式：
+
+- `text`：纯文字按钮。
+- `icon`：纯图标按钮。
+- `text-icon`：带图标的文字按钮，可组合 `icon` 和 `trailingIcon`。
+- `backward`：返回式按钮，左侧带箭头形状。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认按钮使用 `variant="default"`，仅需传入 `label`。
+
+<ComponentShowcase
+  id="sabraman/bar-button"
+  path="sabraman/bar-button/basic"
+/>
+
+```tsx
+import { Search, Download, ChevronRight } from "lucide-react"
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        {/*
+         * 文字按钮
+         */}
+        <LegacyBarButton label="默认" />
+        <LegacyBarButton label="主色" variant="accent" />
+        <LegacyBarButton label="危险" variant="destructive" />
+
+        {/*
+         * 图标按钮（不传 label，layout 自动为 icon）
+         */}
+        <LegacyBarButton icon={<Search />} />
+        <LegacyBarButton icon={<Download />} variant="accent" />
+
+        {/*
+         * 带文字的图标按钮
+         */}
+        <LegacyBarButton icon={<Search />} label="搜索" />
+        <LegacyBarButton icon={<Download />} label="下载" trailingIcon={<ChevronRight />} variant="accent" />
+
+        {/*
+         * 返回式按钮
+         */}
+        <LegacyBarButton label="返回" layout="backward" />
+        <LegacyBarButton label="上一级" layout="backward" variant="accent" />
+
+        {/*
+         * 禁用状态
+         */}
+        <LegacyBarButton disabled label="禁用" />
+        <LegacyBarButton disabled icon={<Search />} variant="accent" />
+      </div>
+    </div>
+  )
+}
+```
+
+### 颜色变体
+
+支持 `default`、`accent`、`destructive` 三种变体，每种变体通过四色渐变呈现工具栏立体质感。
+
+<ComponentShowcase
+  id="sabraman/bar-button"
+  path="sabraman/bar-button/basic"
+/>
+
+```tsx
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton label="默认" />
+      <LegacyBarButton label="主色" variant="accent" />
+      <LegacyBarButton label="危险" variant="destructive" />
+    </div>
+  )
+}
+```
+
+### 布局模式
+
+`layout` 控制按钮内部排列方式。若不显式指定，组件会根据 `icon`、`label`、`trailingIcon` 的存在自动推断：
+
+- 仅 `label`：`text`
+- 仅 `icon` 或 `trailingIcon`：`icon`
+- `icon`/`trailingIcon` + `label`：`text-icon`
+
+`backward` 布局渲染为带左侧箭头的返回式按钮，必须显式指定。
+
+<ComponentShowcase
+  id="sabraman/bar-button"
+  path="sabraman/bar-button/basic"
+/>
+
+```tsx
+import { ChevronRight, Download, Search } from "lucide-react"
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton label="纯文字（text）" />
+      <LegacyBarButton icon={<Search />} />
+      <LegacyBarButton icon={<Search />} label="图标+文字" />
+      <LegacyBarButton icon={<Download />} label="下载" trailingIcon={<ChevronRight />} />
+      <LegacyBarButton label="返回（backward）" layout="backward" />
+    </div>
+  )
+}
+```
+
+### 图标按钮
+
+`icon` 设置前置图标，`trailingIcon` 设置后缀图标。图标按钮高度固定 29px，SVG 图标自动缩放为合适尺寸。纯图标按钮不传 `label` 即可。
+
+<ComponentShowcase
+  id="sabraman/bar-button"
+  path="sabraman/bar-button/basic"
+/>
+
+```tsx
+import { Search, Download, ExternalLink } from "lucide-react"
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton icon={<Search />} />
+      <LegacyBarButton icon={<Download />} variant="accent" />
+      <LegacyBarButton icon={<Search />} label="搜索" />
+      <LegacyBarButton icon={<Download />} label="下载" trailingIcon={<ExternalLink />} variant="accent" />
+    </div>
+  )
+}
+```
+
+### 不可用状态
+
+`disabled` 禁用按钮交互，按钮变为半透明并禁用光标。
+
+<ComponentShowcase
+  id="sabraman/bar-button"
+  path="sabraman/bar-button/basic"
+/>
+
+```tsx
+import { Search, Download } from "lucide-react"
+import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <LegacyBarButton disabled label="默认禁用" />
+      <LegacyBarButton disabled label="主色禁用" variant="accent" />
+      <LegacyBarButton disabled label="危险禁用" variant="destructive" />
+      <LegacyBarButton disabled icon={<Search />} variant="accent" />
+      <LegacyBarButton disabled icon={<Download />} label="下载" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LegacyBarButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 颜色变体，控制渐变色调 | `default` \| `accent` \| `destructive` | `default` |
+| layout | 布局模式；未指定时自动推断 | `text` \| `icon` \| `text-icon` \| `backward` | 自动推断 |
+| icon | 前置图标 | `React.ReactNode` | - |
+| label | 按钮文字 | `string` | - |
+| trailingIcon | 后缀图标 | `React.ReactNode` | - |
+| disabled | 禁用交互 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+| onClick | 点击回调 | `(event) => void` | - |
+| type | 原生 button type | `button` \| `submit` \| `reset` | `button` |
+
+按钮高度固定为 29px，宽度由内容和布局模式决定。`backward` 布局最少 56px，其他布局按内容自适应。组件支持所有原生 `ButtonHTMLAttributes`，如 `aria-label`、`title`、`onFocus` 等。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何选择布局模式？
+
+通常无需显式指定 `layout`，组件会根据 `icon`、`label`、`trailingIcon` 的有无自动推断。仅 `backward` 布局需显式设置。
+
+```tsx
+<LegacyBarButton label="返回上级" layout="backward" />
+```
+
+### 如何做纯图标按钮？
+
+传入 `icon` 且不传 `label` 即可，组件自动推断 `layout="icon"`。
+
+```tsx
+<LegacyBarButton icon={<Search />} aria-label="搜索" />
+```
+
+### 如何做带前后图标的按钮？
+
+同时传入 `icon`、`label` 和 `trailingIcon`。
+
+```tsx
+<LegacyBarButton icon={<Download />} label="下载" trailingIcon={<ChevronRight />} />
+```
+
+### 如何表达主操作？
+
+使用 `variant="accent"`。
+
+```tsx
+<LegacyBarButton label="保存" variant="accent" />
+```
+
+### 如何表达危险操作？
+
+使用 `variant="destructive"`。
+
+```tsx
+<LegacyBarButton label="删除" variant="destructive" />
+```
+
+### 如何禁用按钮？
+
+设置 `disabled` 属性。
+
+```tsx
+<LegacyBarButton disabled label="禁用" />
+```
+
+### 按钮高度是否可调？
+
+按钮高度固定为 29px，不可调整。这是工具栏风格的设计约束。如需可变高度按钮，使用 Button 组件。
+
+### 与 Button 组件的区别是什么？
+
+LegacyBarButton 定位为经典工具栏按钮，固定 29px 高度，使用渐变和内阴影呈现立体感。Button 组件提供完整的尺寸、形状、变体系统，适用于通用 UI 场景。两个组件可以并存，按场景选择。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LegacyBarButton 代码时：
+
+1. 从 `@/components/ui/sabraman-bar-button` 导入
+2. 使用 `variant` 表达操作语义，不要自定义颜色
+3. `label` 用于按钮文字，`icon` 和 `trailingIcon` 用于图标
+4. `layout` 通常无需显式指定；仅 `backward` 需要
+5. 纯图标按钮必须包含 `aria-label`
+6. 不要尝试调整按钮高度或内边距，组件已固化
+7. 不要引入 Ant Design 相关依赖
+8. 禁用时使用 `disabled`，组件自动应用半透明和 cursor 样式
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过固定的 DOM 结构渲染。`backward` 布局使用 SVG `<path>` 渲染箭头形状，其它布局使用 `border-radius` 和渐变背景。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="sabraman/bar-button" />

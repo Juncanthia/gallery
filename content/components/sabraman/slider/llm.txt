@@ -1,0 +1,147 @@
+---
+category: Components
+title: LegacySlider
+subtitle: 滑块
+description: Windows 经典风格滑块组件，基于 Radix Slider 封装，提供简化的单值 API。
+demo:
+  cols: 1
+group:
+  title: Sabraman
+  order: 1
+source:
+  component: src/components/sabraman/components/legacy-slider.tsx
+  docs: content/components/sabraman/slider/index.mdx
+  examples:
+    - content/components/sabraman/slider/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  radix: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# LegacySlider 滑块
+
+LegacySlider 是一个 Windows 经典风格的滑块组件。它基于 Radix Slider（`@radix-ui/react-slider`）封装，使用 Track、Range、Thumb 构建，并应用了 Windows Vista/7 经典主题的渐变和阴影样式。
+
+本组件将 Radix Slider 的数组值 API 简化为单值 API：`value` 和 `defaultValue` 为 `number` 类型，`onValueChange` 和 `onValueCommit` 回调参数也为 `number`。
+
+## 何时使用 {#when-to-use}
+
+- 音量、亮度等连续数值的调整。
+- 数值范围的快速选择。
+- 需要还原 Windows 经典视觉风格的场景。
+- 作为表单控件，替代数字输入框。
+
+## Import
+
+```tsx
+import { LegacySlider } from "@/components/ui/sabraman-slider"
+// 类型
+import type { LegacySliderProps } from "@/components/ui/sabraman-slider"
+```
+
+## Props
+
+### LegacySlider
+
+| 属性 | 说明 | 类型 | 默认值 | 必须 |
+| --- | --- | --- | --- | --- |
+| value | 当前值（受控） | `number` | - | 否 |
+| defaultValue | 初始值（非受控） | `number` | `min` | 否 |
+| min | 最小值 | `number` | `0` | 否 |
+| max | 最大值 | `number` | `100` | 否 |
+| onValueChange | 值变化回调，参数为单值 | `(value: number) => void` | - | 否 |
+| onValueCommit | 松开时回调，参数为单值 | `(value: number) => void` | - | 否 |
+| className | 附加 class | `string` | - | 否 |
+
+其余 `SliderPrimitive.Root` 原生属性（如 `step`、`disabled`、`orientation`、`dir`、`name` 等）可直接透传。
+
+### 类型导出
+
+```ts
+export interface LegacySliderProps
+  extends Omit<
+    React.ComponentProps<typeof SliderPrimitive.Root>,
+    "defaultValue" | "onValueChange" | "onValueCommit" | "value"
+  > {
+  defaultValue?: number
+  onValueChange?: (value: number) => void
+  onValueCommit?: (value: number) => void
+  value?: number
+}
+```
+
+## 代码示例
+
+### 基础（非受控）
+
+```tsx
+import { LegacySlider } from "@/components/ui/sabraman-slider"
+
+export default function Demo() {
+  return <LegacySlider defaultValue={50} />
+}
+```
+
+### 受控
+
+```tsx
+import { useState } from "react"
+import { LegacySlider } from "@/components/ui/sabraman-slider"
+
+export default function Demo() {
+  const [value, setValue] = useState(60)
+  return (
+    <div className="flex items-center gap-3">
+      <span>{value}</span>
+      <LegacySlider value={value} onValueChange={setValue} />
+    </div>
+  )
+}
+```
+
+### 自定义范围
+
+```tsx
+import { LegacySlider } from "@/components/ui/sabraman-slider"
+
+export default function Demo() {
+  return <LegacySlider defaultValue={30} max={50} min={10} />
+}
+```
+
+### 使用步长
+
+```tsx
+import { LegacySlider } from "@/components/ui/sabraman-slider"
+
+export default function Demo() {
+  return <LegacySlider defaultValue={50} step={25} />
+}
+```
+
+### 值提交回调
+
+```tsx
+import { LegacySlider } from "@/components/ui/sabraman-slider"
+
+export default function Demo() {
+  return (
+    <LegacySlider
+      defaultValue={40}
+      onValueCommit={(v) => console.log("committed:", v)}
+    />
+  )
+}
+```
+
+## 约束与限制
+
+1. 仅支持单值滑块，不支持范围选择（双滑块）。
+2. `value` 和 `defaultValue` 必须为 `number`，不可传入 `number[]`。
+3. `onValueChange` 和 `onValueCommit` 回调参数为 `number`，非数组。
+4. 导入路径为 `@/components/ui/sabraman-slider`，不可从 `@radix-ui/react-slider` 直接导入。
+5. 视觉样式为 Windows 经典风格，自定义样式通过 `className` 透传。
+6. 组件使用 `min` 作为 `defaultValue` 的兜底值，当 `defaultValue` 为 `undefined` 时回退到 `min`。

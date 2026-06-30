@@ -1,0 +1,154 @@
+[实时折线图 / LiveLineChart]
+导入: import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
+包来源: @/components/bklit/charts
+组件类型: 图表 / BKLit Charts
+
+## 何时使用
+展示实时流式更新的时序数据。适用于监控面板、金融行情、IoT 数据、性能压测等需要低延迟数据刷新的场景。内置 requestAnimationFrame 动画循环、动量检测、平滑插值和动态颜色变化。
+
+## Props 速查
+
+### LiveLineChart
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 时序数据点数组 | `LiveLinePoint[]` | 必填 |
+| value | 最新值（动画平滑插值目标） | `number` | 必填 |
+| dataKey | data 中 value 字段的 key | `string` | `"value"` |
+| window | 可视时间窗口（秒） | `number` | `30` |
+| numXTicks | X 轴刻度数量 | `number` | `5` |
+| nowOffsetUnits | 右侧偏移（刻度单位，0=边缘） | `number` | `0` |
+| exaggerate | 紧凑 Y 轴范围 | `boolean` | `false` |
+| lerpSpeed | 插值速度（0-1） | `number` | `0.08` |
+| margin | 图表边距 | `Partial<Margin>` | `{top:24,right:16,bottom:32,left:16}` |
+| paused | 冻结滚动 | `boolean` | `false` |
+| children | 子组件（LiveLine, LiveXAxis, LiveYAxis, Grid 等） | `ReactNode` | 必填 |
+| className | 容器附加类名 | `string` | — |
+| style | 容器附加样式 | `CSSProperties` | — |
+
+类型 `LiveLinePoint`：`{ time: number; value: number }`，其中 `time` 为 Unix 秒时间戳。
+
+### LiveLine
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| dataKey | 数据中 Y 轴值字段 key | `string` | 必填 |
+| stroke | 线条颜色 | `string` | `var(--chart-line-primary)` |
+| strokeWidth | 线条宽度 | `number` | `2` |
+| curve | 曲线类型 | d3 curve factory | `curveMonotoneX` |
+| fill | 显示渐变色填充区域 | `boolean` | `true` |
+| pulse | 显示脉冲圆点动画 | `boolean` | `true` |
+| dotSize | 圆点半径 | `number` | `4` |
+| badge | 显示数值标签面板 | `boolean` | `true` |
+| formatValue | 标签数值格式化函数 | `(v: number) => string` | `v.toFixed(2)` |
+| momentumColors | 动量颜色映射（覆盖 stroke） | `{ up, down, flat }` | — |
+
+### LiveXAxis
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| numTicks | 时间标签数量 | `number` | `5` |
+| formatTime | 时间格式化函数 | `(t: number) => string` | `HH:MM:SS` |
+
+### LiveYAxis
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| minGap | 标签最小间距（像素） | `number` | `36` |
+| position | 位置 | `"left"` \| `"right"` | `"left"` |
+| formatValue | 数值格式化函数 | `(v: number) => string` | `v.toFixed(2)` |
+| allowDecimals | 允许刻度小数 | `boolean` | `true` |
+
+## 示例代码
+
+### 基础用法
+
+```tsx
+import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
+import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/bklit/charts"
+
+function BasicDemo() {
+  const data = Array.from({ length: 50 }, (_, i) => ({
+    time: (Date.now() - (50 - i) * 1000) / 1000,
+    value: 100 + Math.sin(i * 0.3) * 30 + Math.random() * 10,
+  }))
+
+  return (
+    <LiveLineChart data={data} value={data[data.length - 1]?.value ?? 100}>
+      <LiveLine dataKey="value" stroke="var(--chart-line-primary)" />
+      <LiveXAxis />
+      <LiveYAxis />
+    </LiveLineChart>
+  )
+}
+```
+
+### 动量颜色
+
+```tsx
+import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
+import { LiveLine } from "@/components/bklit/charts"
+
+function MomentumDemo() {
+  const data = Array.from({ length: 50 }, (_, i) => ({
+    time: (Date.now() - (50 - i) * 1000) / 1000,
+    value: 100 + Math.sin(i * 0.3) * 30 + Math.random() * 10,
+  }))
+
+  return (
+    <LiveLineChart data={data} value={data[data.length - 1]?.value ?? 100}>
+      <LiveLine
+        dataKey="value"
+        momentumColors={{
+          up: "var(--chart-2)",
+          down: "var(--chart-5)",
+          flat: "var(--chart-line-primary)",
+        }}
+      />
+    </LiveLineChart>
+  )
+}
+```
+
+### 自定义窗口和格式化
+
+```tsx
+import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
+import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/bklit/charts"
+
+function CustomWindowDemo() {
+  const data = Array.from({ length: 100 }, (_, i) => ({
+    time: (Date.now() - (100 - i) * 500) / 1000,
+    value: 50 + Math.sin(i * 0.2) * 20 + Math.random() * 5,
+  }))
+
+  return (
+    <LiveLineChart data={data} value={data[data.length - 1]?.value ?? 50} window={60}>
+      <LiveLine
+        badge
+        dataKey="value"
+        formatValue={(v) => `${v.toFixed(1)}ms`}
+        stroke="var(--chart-3)"
+      />
+      <LiveXAxis numTicks={7} />
+      <LiveYAxis formatValue={(v) => `${v.toFixed(1)}ms`} />
+    </LiveLineChart>
+  )
+}
+```
+
+## 约束
+- 依赖 `@visx/*` 系列包（`@visx/event`, `@visx/responsive`, `@visx/scale`, `@visx/shape`, `@visx/curve`）和 `d3-array`、`motion`（原 framer-motion）。
+- `data` 元素必须为 `{ time: number, value: number }` 格式，`time` 为 **Unix 秒**时间戳，非毫秒或 Date 对象。
+- `value` prop 为必填项，表示实时流数据中的当前最新值，组件将向此值平滑插值。
+- LiveXAxis 和 LiveYAxis 通过 React Portal 渲染到容器外部，需要确保容器 DOM 元素可用。
+- 容器默认高度为 300px，可通过 `style={{ height }}` 自定义。
+- 动画帧使用 startTransition 调度，避免阻塞用户交互。
+
+## 最佳实践
+- 高频数据更新时适当降低 `lerpSpeed`（如 0.05），使动画更平滑。
+- 使用 `momentumColors` 通过 CSS 变量引用主题色，保持全局一致性。
+- `exaggerate` 设为 `true` 可突出小幅波动，适合监控场景。
+- `paused` 控制动画暂停，适合用户聚焦查看时临时冻结图表。
+- 始终搭配 `LiveXAxis` 和 `LiveYAxis` 提供刻度参考。
+- 数据溢出窗口时仅保留可视范围内的点，避免全量重绘。

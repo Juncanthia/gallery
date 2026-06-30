@@ -1,0 +1,36 @@
+"use client"
+
+import React from "react"
+
+import * as Select from "@hyper/limeplay/ui/select"
+import * as PlaybackRate from "@hyper/limeplay/ui/playback-rate"
+
+export function PlaybackRateDemo() {
+  return (
+    <PlaybackRate.SelectRoot>
+      <Select.SelectTrigger
+        className={`
+          border-none bg-transparent whitespace-nowrap shadow-none
+          hover:bg-foreground/10
+          dark:bg-transparent dark:shadow-none
+        `}
+        size="sm"
+      >
+        <Select.SelectValue />
+      </Select.SelectTrigger>
+      <Select.SelectContent
+        align="start"
+        className={`dark min-w-28 border border-border bg-background/70 backdrop-blur-md backdrop-saturate-[1.15]`}
+        side="top"
+        {...({
+          alignItemWithTrigger: false,
+          position: "popper",
+        } as React.ComponentProps<typeof Select.SelectContent>)}
+      >
+        <PlaybackRate.SelectGroup className={`tracking-wider`}>
+          <Select.SelectLabel>Playback Rate</Select.SelectLabel>
+        </PlaybackRate.SelectGroup>
+      </Select.SelectContent>
+    </PlaybackRate.SelectRoot>
+  )
+}

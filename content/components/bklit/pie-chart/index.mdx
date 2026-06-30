@@ -1,0 +1,196 @@
+PieChart 饼图用于展示各部分占整体的比例关系，支持环形图、动态悬停效果和入场动画。
+
+<h2 id="when-to-use">何时使用</h2>
+
+饼图适用于展示数据的部分与整体之间的比例关系。当需要直观地比较各分类的占比差异，且分类数量较少（通常不超过 7 个）时，饼图是最佳选择。通过设置 `innerRadius`，饼图可以转换为环形图（Donut Chart），环形中心区域可搭配 `PieCenter` 展示总计信息或悬停交互状态。PieChart 内置入场动画和悬停反馈，适合仪表盘、报告和分析看板等场景。
+
+常见场景：
+
+- 市场份额、预算分配、用户来源等占比数据展示
+- 环形图展示进度或完成率，中心显示汇总数值和标签
+- 悬停交互查看各分类的具体数值和标签
+- 与图例配合使用，增强数据分类的可读性
+- 多级数据（内环+外环）通过双层饼图或环形图嵌套表达
+
+不推荐：
+
+- 分类数量过多（超过 7 个），饼图可读性急剧下降，建议使用 BarChart 柱状图
+- 需要精确比较数值大小时，人类对角度的敏感度低于长度，建议使用 BarChart
+- 数据中包含负值或零值时，饼图无法正确表达比例关系
+- 需要展示时间趋势或多维度对比时，建议使用 LineChart 或 ComposedChart
+- 分类占比差异过小（如都在 20% 左右波动），饼图难以区分差异，建议使用表格
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+基础饼图，通过 `data` 属性传入数据，每个扇区通过 `PieSlice` 子组件渲染。必须为每个 `PieSlice` 指定 `index` 以匹配数据项。
+
+<ComponentShowcase id="bklit/pie-chart" path="bklit/pie-chart/basic" />
+
+```tsx
+import { PieChart } from "@/components/ui/bklit-pie-chart"
+import { PieSlice } from "@/components/bklit/charts"
+
+const data = [
+  { label: "A", value: 40, color: "var(--chart-line-primary)" },
+  { label: "B", value: 30, color: "var(--chart-line-secondary)" },
+  { label: "C", value: 20, color: "#22c55e" },
+  { label: "D", value: 10, color: "#eab308" },
+]
+
+export default function Demo() {
+  return (
+    <PieChart data={data}>
+      {data.map((item, i) => (
+        <PieSlice key={item.label} index={i} />
+      ))}
+    </PieChart>
+  )
+}
+```
+
+### 环形图（Donut Chart）
+
+设置 `innerRadius` 将饼图转换为环形图，搭配 `PieCenter` 在中心显示汇总信息。
+
+<ComponentShowcase id="bklit/pie-chart" path="bklit/pie-chart/donut" />
+
+```tsx
+import { PieChart } from "@/components/ui/bklit-pie-chart"
+import { PieCenter, PieSlice } from "@/components/bklit/charts"
+
+const data = [
+  { label: "产品 A", value: 400, color: "var(--chart-1)" },
+  { label: "产品 B", value: 300, color: "var(--chart-2)" },
+  { label: "产品 C", value: 200, color: "var(--chart-3)" },
+  { label: "产品 D", value: 100, color: "var(--chart-4)" },
+]
+
+export default function Demo() {
+  return (
+    <PieChart data={data} innerRadius={80}>
+      {data.map((item, i) => (
+        <PieSlice key={item.label} index={i} />
+      ))}
+      <PieCenter />
+    </PieChart>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### PieChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 饼图数据 | `PieData[]` | — |
+| size | 固定尺寸 (px)；未设置时自适应父容器宽高 | `number` | — |
+| innerRadius | 内半径 (px)；大于 0 时转为环形图 | `number` | `0` |
+| padAngle | 扇区间角度间距 (弧度) | `number` | `0` |
+| cornerRadius | 扇区圆角半径 | `number` | `0` |
+| startAngle | 起始角度 (弧度) | `number` | `-PI/2` |
+| endAngle | 结束角度 (弧度) | `number` | `3*PI/2` |
+| hoverOffset | 悬停偏移距离 (px) | `number` | `10` |
+| hoveredIndex | 受控悬停扇区索引 | `number \| null` | — |
+| onHoverChange | 悬停状态变化回调 | `(index: number \| null) => void` | — |
+| enterTransition | 入场动画 Framer Motion Transition 配置 | `Transition` | — |
+| enterStaggerScale | 扇区间入场交错延迟缩放系数 | `number` | `1` |
+| geometryScrubbing | 高频几何更新模式（如 Studio 滑块拖拽）；跳过 motion 动画 | `boolean` | `false` |
+| className | 容器附加样式类名 | `string` | — |
+| children | 子组件 (PieSlice, PieCenter, 渐变/图案定义等) | `ReactNode` | — |
+
+### PieSlice Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| index | 扇区在 data 数组中的索引；必填 | `number` | — |
+| color | 扇区颜色；覆盖 data 中的 color | `string` | — |
+| fill | 填充覆盖；支持渐变 URL (`url(#id)`) 或图案 URL | `string` | — |
+| animate | 是否启用入场动画 | `boolean` | `true` |
+| showGlow | 悬停时是否显示发光效果 | `boolean` | `true` |
+| hoverEffect | 悬停效果类型：`"translate"` 扇区沿径向偏移、`"grow"` 扇区外半径扩展、`"none"` 无动画 | `"translate" \| "grow" \| "none"` | `"translate"` |
+| hoverOffset | 悬停偏移距离 (px)；未设置时继承 PieChart 的 hoverOffset | `number` | — |
+| className | 附加样式类名 | `string` | — |
+
+### PieCenter Props
+
+PieCenter 仅在 `innerRadius > 0`（环形图模式）时渲染。默认显示汇总数值和标签，悬停扇区时切换为对应扇区的数值和标签。
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| defaultLabel | 未悬停时显示的标签 | `string` | `"Total"` |
+| formatOptions | NumberFlow 数值格式化选项 | `ChartStatFlowFormat` | — |
+| prefix | 数值前缀（如 `"$"`） | `string` | — |
+| suffix | 数值后缀（如 `"%"`） | `string` | — |
+| valueClassName | 数值文本样式类名 | `string` | — |
+| labelClassName | 标签文本样式类名 | `string` | — |
+| className | 附加样式类名 | `string` | — |
+| children | 自定义渲染函数，接收 `{ value, label, isHovered, data }` 返回 ReactNode | `(props) => ReactNode` | — |
+
+### PieData
+
+| 属性 | 说明 | 类型 | 必填 |
+|------|------|------|------|
+| label | 扇区标签 | `string` | 是 |
+| value | 扇区数值，决定扇区大小 | `number` | 是 |
+| color | 扇区颜色；未设置时从默认调色板自动选取 | `string` | 否 |
+| fill | 填充 URL；支持渐变/图案引用，如 `"url(#patternId)"` | `string` | 否 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何创建环形图（Donut Chart）？
+
+设置 PieChart 的 `innerRadius` 属性，例如 `innerRadius={80}`。搭配 `PieCenter` 可在环形中心展示汇总信息：
+
+```tsx
+<PieChart data={data} innerRadius={80}>
+  {data.map((item, i) => <PieSlice key={item.label} index={i} />)}
+  <PieCenter />
+</PieChart>
+```
+
+### 如何自定义扇区颜色？
+
+通过 data 数组中每项的 `color` 属性设置，支持 CSS 变量、hex 颜色等。也可通过 `PieSlice` 的 `color` 或 `fill` 属性逐扇区覆盖。未设置颜色时自动从默认调色板 (`--chart-1` 到 `--chart-5`) 循环取值。
+
+### 如何给扇区使用渐变或图案填充？
+
+在 PieChart 内部定义 SVG `<defs>`（如 `<LinearGradient>`），然后通过 data 的 `fill` 属性引用：
+
+```tsx
+<PieChart data={data}>
+  <LinearGradient id="grad1" from="#ff7e5f" to="#feb47b" />
+  {data.map((item, i) => (
+    <PieSlice key={item.label} index={i} fill="url(#grad1)" />
+  ))}
+</PieChart>
+```
+
+### 如何控制悬停效果？
+
+通过 `PieSlice` 的 `hoverEffect` 属性控制：`"translate"`（默认，扇区径向弹出）、`"grow"`（扇区外扩）、`"none"`（关闭悬停动画）。通过 PieChart 的 `hoverOffset` 或 PieSlice 的 `hoverOffset` 调整偏移距离。
+
+### 如何实现半圆饼图？
+
+通过 PieChart 的 `startAngle` 和 `endAngle` 控制角度范围。例如下半圆：`startAngle={0} endAngle={Math.PI}`；右半圆：`startAngle={-Math.PI/2} endAngle={Math.PI/2}`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+- 导入 PieChart: `import { PieChart } from "@/components/ui/bklit-pie-chart"`
+- 导入子组件: `import { PieSlice, PieCenter } from "@/components/bklit/charts"`
+- 数据格式: `{ label: string, value: number, color?: string, fill?: string }[]`
+- 必须为每个 `PieSlice` 提供 `index` 属性，映射到 data 数组索引
+- 环形图需设置 PieChart 的 `innerRadius`，并可选添加 `PieCenter`
+- 悬停效果通过 PieSlice 的 `hoverEffect` 控制，支持 `"translate"`、`"grow"`、`"none"`
+- 渐变/图案填充通过 data 的 `fill: "url(#id)"` 或 PieSlice 的 `fill` 属性设置
+- 容器默认 `aspect-square` 自适应；固定尺寸使用 `size` 属性
+- 来自 BKLit Charts 库，基于 @visx 和 d3-shape
+- 不要引入 Recharts 或 Ant Design Charts 依赖
+
+<h2 id="source">源码</h2>
+
+- [PieChart](/source/bklit/charts/pie-chart)
+- [PieSlice](/source/bklit/charts/pie-slice)
+- [PieCenter](/source/bklit/charts/pie-center)

@@ -1,0 +1,179 @@
+[等值区域图 / ChoroplethChart]
+导入: import { ChoroplethChart } from "@/components/ui/bklit-choropleth-chart"
+子组件导入: import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/bklit/charts"
+包来源: @/components/bklit/charts/choropleth
+组件类型: 图表 / BKLit Charts
+
+## 何时使用
+在地理区域上展示统计数据，通过颜色深浅反映数值的地理分布差异。适用于人口统计、经济数据、选举结果、业务地理分析等场景。基于 @visx/geo 的 Mercator 投影渲染，支持缩放、平移和悬停高亮。
+
+## Props 速查
+
+### ChoroplethChart
+| 参数 | 说明 | 类型 | 默认值 | 必填 |
+|------|------|------|--------|------|
+| data | GeoJSON FeatureCollection 数据 | `FeatureCollection<Geometry, ChoroplethFeatureProperties>` | — | 是 |
+| children | 子组件 | `ReactNode` | — | 是 |
+| margin | 图表边距 | `Partial<{ top: number; right: number; bottom: number; left: number }>` | `0` | 否 |
+| aspectRatio | 宽高比 | `string` | `"16 / 9"` | 否 |
+| animationDuration | 入场动画时长 (ms) | `number` | `800` | 否 |
+| enterTransition | Motion 入场过渡动画 | `Transition` | — | 否 |
+| revealSignature | 签名变更触发重新入场 | `string` | — | 否 |
+| scale | 投影缩放比例 | `number` | 自动计算 | 否 |
+| center | 投影中心 [lng, lat] | `[number, number]` | `[0, 20]` | 否 |
+| translate | 投影平移 [x, y] | `[number, number]` | 自动居中 | 否 |
+| zoomEnabled | 启用缩放平移 | `boolean` | `false` | 否 |
+| zoomMin | 最小缩放 | `number` | `0.5` | 否 |
+| zoomMax | 最大缩放 | `number` | `4` | 否 |
+| initialZoom | 初始缩放变换 | `TransformMatrix` | `{scaleX:1,scaleY:1,translateX:0,translateY:0,skewX:0,skewY:0}` | 否 |
+| className | 容器类名 | `string` | — | 否 |
+
+### ChoroplethFeature
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| fill | 统一填充色 | `string` | — |
+| stroke | 描边颜色 | `string` | `var(--background)` |
+| strokeWidth | 描边宽度 | `number` | `0.5` |
+| fadedOpacity | 悬停时非高亮透明度 | `number` | `0.4` |
+| getFeatureColor | 按 feature 返回颜色 | `(f, i) => string` | 循环 var(--chart-1~5) |
+| patterns | SVG pattern 定义 | `ReactNode` | — |
+| getFeaturePattern | 按 feature 返回 pattern ID | `(f, i) => string \| null` | — |
+
+### ChoroplethGraticule
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| stroke | 经纬线颜色 | `string` | `rgba(255,255,255,0.1)` |
+| strokeWidth | 经纬线宽度 | `number` | `0.5` |
+| step | 经纬线间隔 [经度, 纬度] | `[number, number]` | — |
+
+### ChoroplethTooltip
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| content | 自定义 Tooltip 渲染 | `({ feature, index }) => ReactNode` | — |
+| formatValue | 数值格式化 | `(v: number) => string` | `intFmt` |
+| getFeatureName | 区域名称 | `(f, i) => string` | `feature.properties.name` |
+| getFeatureValue | 区域数值 | `(f, i) => number \| undefined` | — |
+| valueLabel | 数值行标签 | `string` | `"Value"` |
+| className | 附加类名 | `string` | — |
+| panelStyle | 面板内联样式 | `CSSProperties` | — |
+| backgroundColor | 面板背景色 | `string` | `var(--chart-tooltip-background)` |
+
+## 示例代码
+
+### 基础用法（带颜色映射和 Tooltip）
+
+```tsx
+import { ChoroplethChart } from "@/components/ui/bklit-choropleth-chart"
+import { ChoroplethFeatureComponent, ChoroplethTooltip } from "@/components/bklit/charts"
+import type { FeatureCollection, Geometry } from "geojson"
+
+const geoData: FeatureCollection<Geometry, { name: string; value: number }> = {
+  type: "FeatureCollection",
+  features: [
+    { type: "Feature", properties: { name: "亚洲", value: 4500 }, geometry: { type: "Polygon", coordinates: [[[60,5],[150,5],[150,55],[60,55],[60,5]]] } },
+    { type: "Feature", properties: { name: "北美", value: 2800 }, geometry: { type: "Polygon", coordinates: [[[-130,15],[-60,15],[-60,75],[-130,75],[-130,15]]] } },
+  ],
+}
+
+export default function Demo() {
+  return (
+    <ChoroplethChart data={geoData} zoomEnabled>
+      <ChoroplethFeatureComponent
+        getFeatureColor={(f) => {
+          const v = f.properties?.value ?? 0
+          return v > 3000 ? "var(--chart-1)" : "var(--chart-3)"
+        }}
+      />
+      <ChoroplethTooltip
+        getFeatureValue={(f) => f.properties?.value as number}
+        formatValue={(v) => `${v}M`}
+        valueLabel="GDP"
+      />
+    </ChoroplethChart>
+  )
+}
+```
+
+### 带经纬线和缩放的完整示例
+
+```tsx
+import { ChoroplethChart } from "@/components/ui/bklit-choropleth-chart"
+import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/bklit/charts"
+
+export default function Demo() {
+  return (
+    <ChoroplethChart
+      data={geoData}
+      zoomEnabled
+      zoomMin={0.5}
+      zoomMax={4}
+      aspectRatio="16 / 9"
+      center={[15, 15]}
+    >
+      <ChoroplethFeatureComponent
+        getFeatureColor={(f) => {
+          const v = f.properties?.value ?? 0
+          if (v > 3000) return "#2563eb"
+          if (v > 1500) return "#60a5fa"
+          return "#93c5fd"
+        }}
+        stroke="var(--background)"
+      />
+      <ChoroplethGraticule
+        stroke="rgba(255,255,255,0.15)"
+        step={[10, 10]}
+      />
+      <ChoroplethTooltip
+        getFeatureValue={(f) => f.properties?.value as number}
+        formatValue={(v) => `${v}M`}
+        valueLabel="总量"
+      />
+    </ChoroplethChart>
+  )
+}
+```
+
+### 使用 d3-scale 连续色阶
+
+```tsx
+import { scaleSequential } from "d3-scale"
+import { interpolateBlues } from "d3-scale-chromatic"
+
+const values = geoData.features.map((f) => f.properties?.value ?? 0)
+const colorScale = scaleSequential(interpolateBlues).domain([Math.min(...values), Math.max(...values)])
+
+export default function Demo() {
+  return (
+    <ChoroplethChart data={geoData}>
+      <ChoroplethFeatureComponent
+        getFeatureColor={(f) => colorScale(f.properties?.value ?? 0)}
+      />
+      <ChoroplethTooltip
+        getFeatureValue={(f) => f.properties?.value as number}
+      />
+    </ChoroplethChart>
+  )
+}
+```
+
+## 约束
+
+- 数据必须是 GeoJSON FeatureCollection 格式，每个 feature 的 geometry 为 Polygon 或 MultiPolygon
+- 坐标需为 WGS84 `[longitude, latitude]` 格式，由 Mercator 投影转换为屏幕坐标
+- `children` 中必须包含至少一个 SVG 子组件（ChoroplethFeatureComponent 或 ChoroplethGraticule）才能有可见输出
+- HTML 元素（div、span 等）会被分离到覆盖层（overlay），而非 SVG 内部
+- 依赖 @visx/geo、@visx/responsive、@visx/zoom、geojson、d3-geo、motion
+- 容器通过 CSS `aspect-ratio` 控制比例，建议使用 `16 / 9` 或 `4 / 3`
+- 缩放功能通过 @visx/zoom 实现，启用后支持鼠标滚轮和拖拽
+- 悬停高亮通过 `fadedOpacity` 控制非高亮区域的透明度
+- 颜色默认循环使用 `var(--chart-1)` 到 `var(--chart-5)` CSS 变量
+
+## 最佳实践
+
+- 颜色映射应使用 5-7 级分类色阶，避免过多分级导致辨识困难
+- 数据值应进行标准化处理（如人均值、密度），避免区域面积差异造成误导
+- 对于全球数据，`center` 设为 `[0, 20]` 可完整展示各大洲
+- 对于特定区域数据，调整 `center` 和 `scale` 聚焦目标区域
+- 始终提供 Tooltip 显示精确数值，补偿颜色难以精确比较的不足
+- 使用 `getFeatureColor` 而非 `fill` 来实现数据驱动的颜色映射
+- TopoJSON 数据需先用 topojson-client 的 `feature()` 转换为 GeoJSON FeatureCollection

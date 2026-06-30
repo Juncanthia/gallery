@@ -1,0 +1,211 @@
+EvilBrush 是 EvilCharts 图表库中的缩放刷选控件。它在图表下方渲染一组缩略图，提供可拖拽的左右手柄和中间平移区域，用于在主图表中联动缩放可见数据区间。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当图表数据量较大、需要用户自由缩放和拖拽数据区间时使用 EvilBrush。
+
+常见场景：
+
+- 时序数据浏览：90 天数据中快速定位到近两周。
+- 联动图表：一个刷选控件控制多个图表同时缩放。
+- 数据探索：拖拽左右手柄调整起止范围，拖拽中间区域平移窗口。
+- 配合 `useEvilBrush` hook 驱动主图表的 `visibleData` 切片。
+
+EvilBrush 核心概念：
+
+- 缩略图变体：`line`、`area`、`bar` 三种视觉形态，自适应数据。
+- 操作方式：左右手柄独立拖拽调整起止位置，中间区域拖拽平移。
+- `useEvilBrush` hook：管理刷选状态，返回 `visibleData`（切片数据）和 `brushProps`（透传 EvilBrush 的受控属性）。
+- 双模式：支持受控（`startIndex` / `endIndex`）和非受控（`defaultStartIndex` / `defaultEndIndex`）两种用法。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础刷选
+
+通过 `useEvilBrush` hook 将 EvilBrush 与 EvilAreaChart 联动。刷选区间变化时主图表自动切片。
+
+<ComponentShowcase
+  id="evilcharts/brush"
+  path="evilcharts/brush/basic"
+/>
+
+```tsx
+import { EvilBrush } from "@/components/ui/evilcharts-brush"
+import { useEvilBrush } from "@/components/evilcharts/components/brush"
+import { EvilAreaChart } from "@/components/ui/evilcharts-area-chart"
+import { Area, XAxis, Grid, Tooltip } from "@/components/evilcharts/components/area-chart"
+import { type ChartConfig } from "@/components/evilcharts/components/chart"
+
+const chartConfig = {
+  sales: {
+    label: "销售额",
+    colors: { light: ["#2563eb"], dark: ["#3b82f6"] },
+  },
+  orders: {
+    label: "订单数",
+    colors: { light: ["#d946ef"], dark: ["#e879f9"] },
+  },
+} satisfies ChartConfig
+
+const data = Array.from({ length: 90 }, (_, i) => ({
+  day: `${i + 1}日`,
+  sales: Math.round(300 + Math.sin(i / 7) * 150 + Math.sin(i / 20) * 80),
+  orders: Math.round(80 + Math.cos(i / 9) * 40 + Math.cos(i / 25) * 20),
+}))
+
+export default function Demo() {
+  const { visibleData, brushProps } = useEvilBrush({ data })
+
+  return (
+    &lt;div className="flex flex-col gap-2 h-full w-full p-4"&gt;
+      &lt;EvilAreaChart
+        data={visibleData}
+        config={chartConfig}
+        className="flex-1 w-full"
+        xDataKey="day"
+      &gt;
+        &lt;Grid /&gt;
+        &lt;XAxis dataKey="day" /&gt;
+        &lt;Tooltip /&gt;
+        &lt;Area dataKey="sales" variant="default" /&gt;
+        &lt;Area dataKey="orders" variant="default" /&gt;
+      &lt;/EvilAreaChart&gt;
+
+      &lt;EvilBrush
+        data={data}
+        chartConfig={chartConfig}
+        dataKeys={["sales", "orders"]}
+        xDataKey="day"
+        variant="area"
+        height={56}
+        {...brushProps}
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### EvilBrush
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 完整数据集，缩略图中始终渲染全部数据 | `Record&lt;string, unknown&gt;[]` | 必填 |
+| chartConfig | 系列颜色和标签配置 | `ChartConfig` | 必填 |
+| dataKeys | 渲染的数据键名，默认从 `chartConfig` 提取 | `string[]` | `Object.keys(chartConfig)` |
+| xDataKey | x 轴数据键名，用于手柄标签 | `string` | - |
+| variant | 缩略图视觉变体 | `line` \| `area` \| `bar` | `area` |
+| height | 刷选控件像素高度 | `number` | `56` |
+| className | 附加样式类名 | `string` | - |
+| stacked | 缩略图中是否堆叠面积/柱条 | `boolean` | `false` |
+| strokeVariant | 缩略图描边样式 | `solid` \| `dashed` \| `animated-dashed` | `solid` |
+| connectNulls | 连接 null 数据点 | `boolean` | `false` |
+| barRadius | bar 变体下柱条圆角半径 | `number` | `3` |
+| startIndex | 受控模式起始索引 | `number` | - |
+| endIndex | 受控模式结束索引 | `number` | - |
+| defaultStartIndex | 非受控模式初始起始索引 | `number` | `0` |
+| defaultEndIndex | 非受控模式初始结束索引 | `number` | `data.length - 1` |
+| onChange | 可见区间变化回调 | `(range: EvilBrushRange) => void` | - |
+| formatLabel | 格式化手柄标签 | `(value: unknown, index: number) => string` | - |
+| curveType | line / area 变体下曲线类型 | `CurveType` | `monotone` |
+| minSpan | 最小选中数据点数 | `number` | `2` |
+| showLabels | 是否在手柄上显示标签 | `boolean` | `true` |
+| skipStyle | 不渲染 ChartStyle（当外层已提供 CSS 变量时） | `boolean` | `false` |
+
+### useEvilBrush
+
+管理刷选状态并返回切片后的可见数据。
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 完整数据集 | `TData[]` | 必填 |
+| defaultStartIndex | 初始起始索引 | `number` | `0` |
+| defaultEndIndex | 初始结束索引 | `number` | `data.length - 1` |
+
+返回值：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| range | 当前刷选区间 | `{ startIndex: number; endIndex: number }` |
+| visibleData | 切片后的可见数据 | `TData[]` |
+| brushProps | 透传给 EvilBrush 的受控属性集 | `{ startIndex; endIndex; onChange }` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何将 EvilBrush 与图表联动？
+
+使用 `useEvilBrush` hook，它返回 `visibleData`（传给图表）和 `brushProps`（传给 EvilBrush）：
+
+```tsx
+const { visibleData, brushProps } = useEvilBrush({ data })
+
+&lt;EvilAreaChart data={visibleData} config={chartConfig} ...&gt;...&lt;/EvilAreaChart&gt;
+&lt;EvilBrush data={data} chartConfig={chartConfig} {...brushProps} /&gt;
+```
+
+### 如何使用受控模式？
+
+直接传入 `startIndex` 和 `endIndex`，自行管理状态：
+
+```tsx
+const [range, setRange] = useState({ startIndex: 0, endIndex: 29 })
+
+&lt;EvilBrush
+  data={data}
+  chartConfig={chartConfig}
+  startIndex={range.startIndex}
+  endIndex={range.endIndex}
+  onChange={setRange}
+/&gt;
+```
+
+### 如何控制最小选中范围？
+
+使用 `minSpan` 属性，限制左右手柄之间至少保持的数据点数：
+
+```tsx
+&lt;EvilBrush data={data} chartConfig={chartConfig} minSpan={7} /&gt;
+```
+
+### 如何自定义手柄标签？
+
+使用 `formatLabel` 格式化 x 轴值的显示：
+
+```tsx
+&lt;EvilBrush
+  data={data}
+  chartConfig={chartConfig}
+  xDataKey="date"
+  formatLabel={(v) => new Date(v as string).toLocaleDateString()}
+/&gt;
+```
+
+### 如何切换缩略图样式？
+
+使用 `variant` 切换 `line`、`area`、`bar`：
+
+```tsx
+&lt;EvilBrush data={data} chartConfig={chartConfig} variant="bar" /&gt;
+```
+
+### EvilBrush 与 EvilBarChart / EvilLineChart 内置的 `showBrush` 有何区别？
+
+`showBrush` 是 EvilBarChart 和 EvilLineChart 的内置属性，自动渲染刷选控件且无需 `useEvilBrush`。而 EvilBrush 是独立的通用刷选控件，适用于任何图表或自定义场景，需要 `useEvilBrush` 管理数据切片。使用内置 `showBrush` 更简便，使用 EvilBrush 更灵活。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 EvilBrush 代码时：
+
+1. 从 `@/components/ui/evilcharts-brush` 导入 `EvilBrush`；从 `@/components/evilcharts/components/brush` 导入 `useEvilBrush`。
+2. `chartConfig` 必须满足 `ChartConfig` 类型，键名与 data 中的字段和 `dataKeys` 对应。
+3. 必须提供 `data`（完整数据集）和 `chartConfig`。推荐提供 `xDataKey` 以显示手柄标签。
+4. 联动主图表时使用 `useEvilBrush` hook，不要手动计算 `visibleData`。
+5. `useEvilBrush` 返回的 `brushProps` 通过展开运算符透传至 EvilBrush。
+6. 不需要刷选功能时不要引入 EvilBrush，优先考虑 EvilBarChart / EvilLineChart 内置的 `showBrush`。
+7. 不要从 recharts 直接导入 Brush 或 ReferenceArea，使用 EvilBrush 替代。
+8. 不要引入 Ant Design Charts、BizCharts、ECharts 或其他图表库。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="evilcharts/brush" />

@@ -1,0 +1,349 @@
+EvilRadarChart 用于展示多维数据在多个轴上的分布，以雷达图形状直观对比不同序列的覆盖范围。
+
+<h2 id="when-to-use">何时使用</h2>
+
+雷达图（Radar Chart）适合展示多变量数据在数个维度上的表现，便于对比不同系列的优劣势分布。
+
+常见场景：
+
+- 多维能力评估：技能雷达、能力模型对比。
+- 竞品对比：多个产品的多维指标对比。
+- 性能分析：系统各维度性能评分。
+- 多维度评测：多候选方案的综合评分。
+
+EvilRadarChart 采用组合式 API，通过 &lt;EvilRadarChart&gt; 作为容器，内部自由组合 &lt;Radar&gt;、&lt;PolarGrid&gt;、&lt;PolarAngleAxis&gt;、&lt;PolarRadiusAxis&gt;、&lt;Tooltip&gt;、&lt;Legend&gt; 等子组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础雷达图
+
+默认雷达图使用 `variant="filled"` 填充样式，配置两个系列进行多维对比。
+
+<ComponentShowcase
+  id="evilcharts/radar-chart"
+  path="evilcharts/radar-chart/basic"
+/>
+
+```tsx
+import {
+  EvilRadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  Tooltip,
+  Legend,
+  Dot,
+  ActiveDot,
+} from "@/components/ui/evilcharts/radar-chart"
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
+  },
+  mobile: {
+    label: "Mobile",
+    colors: { light: ["#10b981"], dark: ["#34d399"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    &lt;EvilRadarChart data={data} config={chartConfig} className="h-full w-full p-4"&gt;
+      &lt;PolarGrid /&gt;
+      &lt;PolarAngleAxis dataKey="skill" /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Radar dataKey="desktop" variant="filled" isClickable&gt;
+        &lt;Dot variant="colored-border" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Radar&gt;
+      &lt;Radar dataKey="mobile" variant="filled" isClickable&gt;
+        &lt;Dot variant="colored-border" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Radar&gt;
+    &lt;/EvilRadarChart&gt;
+  )
+}
+```
+
+### 线性变体
+
+`variant="lines"` 仅绘制轮廓线和中点标记，不填充区域，适合数据点较少的场景。
+
+<ComponentShowcase
+  id="evilcharts/radar-chart"
+  path="evilcharts/radar-chart/lines"
+/>
+
+```tsx
+&lt;Radar dataKey="desktop" variant="lines"&gt;
+  &lt;Dot variant="colored-border" /&gt;
+  &lt;ActiveDot variant="default" /&gt;
+&lt;/Radar&gt;
+&lt;Radar dataKey="mobile" variant="lines"&gt;
+  &lt;Dot variant="colored-border" /&gt;
+  &lt;ActiveDot variant="default" /&gt;
+&lt;/Radar&gt;
+```
+
+### 发光效果
+
+`isGlowing` 为雷达图系列添加柔和的发光效果，突出展示特定系列。
+
+<ComponentShowcase
+  id="evilcharts/radar-chart"
+  path="evilcharts/radar-chart/glowing"
+/>
+
+```tsx
+&lt;Radar dataKey="desktop" variant="filled" isGlowing&gt;
+  &lt;Dot variant="colored-border" /&gt;
+  &lt;ActiveDot variant="default" /&gt;
+&lt;/Radar&gt;
+&lt;Radar dataKey="mobile" variant="filled"&gt;
+  &lt;Dot variant="colored-border" /&gt;
+  &lt;ActiveDot variant="default" /&gt;
+&lt;/Radar&gt;
+```
+
+### 渐变颜色
+
+在 `config` 中为每个系列配置多个颜色值，自动生成渐变色效果。
+
+<ComponentShowcase
+  id="evilcharts/radar-chart"
+  path="evilcharts/radar-chart/gradient-colors"
+/>
+
+```tsx
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: {
+      light: ["#6366f1", "#a855f7", "#ec4899"],
+      dark: ["#818cf8", "#c084fc", "#f472b6"],
+    },
+  },
+  mobile: {
+    label: "Mobile",
+    colors: {
+      light: ["#14b8a6", "#06b6d4", "#3b82f6"],
+      dark: ["#2dd4bf", "#22d3ee", "#60a5fa"],
+    },
+  },
+} satisfies ChartConfig
+```
+
+### 圆形网格
+
+`PolarGrid` 的 `gridType="circle"` 将默认的多边形网格切换为圆形网格。
+
+<ComponentShowcase
+  id="evilcharts/radar-chart"
+  path="evilcharts/radar-chart/circle-grid"
+/>
+
+```tsx
+&lt;PolarGrid gridType="circle" /&gt;
+```
+
+### 加载状态
+
+`isLoading` 启用加载骨架动画。加载期间将 `data` 设为空数组，图表自动渲染动画骨架。
+
+<ComponentShowcase
+  id="evilcharts/radar-chart"
+  path="evilcharts/radar-chart/loading-state"
+/>
+
+```tsx
+&lt;EvilRadarChart
+  data={isLoading ? [] : data}
+  config={chartConfig}
+  isLoading={isLoading}
+  className="h-full w-full p-4"
+&gt;
+  &lt;PolarGrid /&gt;
+  &lt;PolarAngleAxis dataKey="skill" /&gt;
+  &lt;Legend /&gt;
+  &lt;Tooltip /&gt;
+  &lt;Radar dataKey="desktop" variant="filled" /&gt;
+  &lt;Radar dataKey="mobile" variant="filled" /&gt;
+&lt;/EvilRadarChart&gt;
+```
+
+<h2 id="api">API</h2>
+
+### EvilRadarChart
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| config | 系列颜色和标签配置 | `ChartConfig` | - |
+| data | 图表数据行 | `TData[]` | - |
+| children | 组合的子组件 | `ReactNode` | - |
+| className | 容器附加样式类名 | `string` | - |
+| chartProps | 透传 Recharts RadarChart 属性 | `ComponentProps&lt;typeof RechartsRadarChart&gt;` | - |
+| backgroundVariant | 图表背景图案 | `"dots"` \| `"grid"` \| `"cross-hatch"` \| `"diagonal-lines"` \| `"plus"` \| `"falling-triangles"` \| `"4-pointed-star"` \| `"tiny-checkers"` \| `"overlapping-circles"` \| `"wiggle-lines"` \| `"bubbles"` | - |
+| defaultSelectedDataKey | 初始选中系列 | `string` \| `null` | `null` |
+| onSelectionChange | 选中系列变更回调 | `(selectedDataKey: string \| null) =&gt; void` | - |
+| isLoading | 显示加载骨架 | `boolean` | `false` |
+| loadingPoints | 加载骨架的数据点数 | `number` | `6` |
+
+### Radar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataKey | 系列键，需在 data 和 config 中存在 | `string` | - |
+| variant | 填充样式 | `"filled"` \| `"lines"` | `"filled"` |
+| fillOpacity | 填充区域透明度（variant="filled" 时生效） | `number` | `0.3` |
+| isGlowing | 添加柔光效果 | `boolean` | `false` |
+| isClickable | 允许点击选中/取消选中该系列 | `boolean` | `false` |
+| children | 可组合 &lt;Dot&gt; 和 &lt;ActiveDot&gt; | `ReactNode` | - |
+| radarProps | 透传 Recharts Radar 属性 | `Omit&lt;ComponentProps&lt;typeof RechartsRadar&gt;, "dataKey"&gt;` | - |
+
+### Dot / ActiveDot
+
+`Dot` 和 `ActiveDot` 是配置槽位，不渲染自身，由父级 &lt;Radar&gt; 读取其属性后渲染。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 数据点标记样式 | `"default"` \| `"border"` \| `"colored-border"` | - |
+
+### PolarGrid
+
+透传所有 Recharts PolarGrid 属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| gridType | 网格类型 | `"polygon"` \| `"circle"` | `"polygon"` |
+| stroke | 网格线颜色 | `string` | `"currentColor"` |
+| strokeOpacity | 网格线透明度 | `number` | `0.2` |
+| strokeDasharray | 网格线虚线样式 | `string` | `"3 4"` |
+
+### PolarAngleAxis
+
+透传所有 Recharts PolarAngleAxis 属性。加载期间自动隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataKey | 角轴数据字段 | `string` | - |
+| tick | 刻度文本样式 | `object` | `{ fill: "currentColor", fontSize: 12 }` |
+| tickLine | 显示刻度线 | `boolean` | `false` |
+
+### PolarRadiusAxis
+
+透传所有 Recharts PolarRadiusAxis 属性。加载期间自动隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| tick | 刻度文本样式 | `object` | `{ fill: "currentColor", fontSize: 10 }` |
+| tickLine | 显示刻度线 | `boolean` | `false` |
+| axisLine | 显示轴基线 | `boolean` | `false` |
+
+### Tooltip
+
+加载期间自动隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 提示框视觉样式 | `"default"` \| `"frosted-glass"` | - |
+| roundness | 提示框圆角 | `"sm"` \| `"md"` \| `"lg"` \| `"xl"` | - |
+| defaultIndex | 无 hover 时默认展示的数据索引 | `number` | - |
+
+### Legend
+
+加载期间自动隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 图例指示器样式 | `"square"` \| `"circle"` \| `"circle-outline"` \| `"rounded-square"` \| `"rounded-square-outline"` \| `"vertical-bar"` \| `"horizontal-bar"` | - |
+| align | 水平对齐 | `"left"` \| `"center"` \| `"right"` | `"center"` |
+| verticalAlign | 垂直对齐 | `"top"` \| `"middle"` \| `"bottom"` | `"bottom"` |
+| isClickable | 允许点击图例项切换选中 | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何配置系列颜色？
+
+在 `config` 中为每个 dataKey 定义 `colors` 对象，至少包含一个主题键（`light` / `dark`）：
+
+```tsx
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
+  },
+}
+```
+
+使用多色数组可生成渐变色：
+
+```tsx
+colors: { light: ["#6366f1", "#a855f7", "#ec4899"], dark: ["#818cf8", "#c084fc", "#f472b6"] }
+```
+
+### 如何实现点击选中系列？
+
+为 &lt;Radar&gt; 添加 `isClickable`，配合 &lt;Legend isClickable&gt; 可同时通过图例切换选中：
+
+```tsx
+&lt;Radar dataKey="desktop" isClickable&gt;...&lt;/Radar&gt;
+&lt;Legend isClickable /&gt;
+```
+
+点击已选中的系列会清除选择（恢复全部可见）。`onSelectionChange` 回调可监听选中变化。
+
+### 如何处理加载状态？
+
+设置 `isLoading={true}` 并将 `data` 设为空数组：
+
+```tsx
+&lt;EvilRadarChart data={isLoading ? [] : data} config={chartConfig} isLoading={isLoading}&gt;
+  ...
+&lt;/EvilRadarChart&gt;
+```
+
+加载骨架自动随机动画，可通过 `loadingPoints` 控制骨架数据点数。
+
+### 如何自定义图表背景？
+
+使用 `backgroundVariant` 属性添加背景图案：
+
+```tsx
+&lt;EvilRadarChart ... backgroundVariant="dots"&gt;
+```
+
+支持 11 种背景图案：`dots`、`grid`、`cross-hatch`、`diagonal-lines`、`plus`、`falling-triangles`、`4-pointed-star`、`tiny-checkers`、`overlapping-circles`、`wiggle-lines`、`bubbles`。
+
+### 如何透传 Recharts 原生属性？
+
+每个子组件都提供了透传 escape hatch：
+- &lt;EvilRadarChart&gt; 的 `chartProps` 透传给 Recharts RadarChart
+- &lt;Radar&gt; 的 `radarProps` 透传给 Recharts Radar
+- &lt;PolarGrid&gt;、&lt;PolarAngleAxis&gt;、&lt;PolarRadiusAxis&gt; 直接接受所有 Recharts 对应组件的属性
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 EvilRadarChart 代码时：
+
+1. 从 `@/components/ui/evilcharts/radar-chart` 导入所有子组件
+2. `config` 必须包含每个 dataKey 的 `label` 和 `colors`（至少一个主题键 `light`/`dark`）
+3. 使用组合式 API：&lt;EvilRadarChart&gt; 作为容器，内部自由组合子组件
+4. 每个 &lt;Radar&gt; 必须指定 `dataKey`，该 key 必须同时存在于 `data` 和 `config` 中
+5. 数据点标记使用 &lt;Dot&gt; 和 &lt;ActiveDot&gt; 组合在 &lt;Radar&gt; 内部
+6. 所有子组件必须位于 &lt;EvilRadarChart&gt; 内部，否则会抛出错误
+7. 加载时传递空数据数组 + `isLoading={true}`
+8. 不应直接导入 Recharts 的 RadarChart、PolarGrid 等组件，使用 EvilCharts 封装
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `chart` | - |
+
+<h2 id="source">源码</h2>
+
+&lt;SourceViewer componentId="evilcharts/radar-chart" /&gt;

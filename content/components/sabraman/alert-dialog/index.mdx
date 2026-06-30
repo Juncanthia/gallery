@@ -1,0 +1,237 @@
+LegacyAlertDialog 是一个复古 macOS 10.15 风格的警告对话框组件，基于 Dialog 构建，呈现半透明毛玻璃面板、渐变按钮和经典系统字体排版。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当系统需要向用户展示关键确认操作、错误提示或警示信息时使用。适用于需要用户明确反馈的阻断式交互场景。
+
+常见场景：
+
+- 删除确认：用户点击删除后弹出确认框。
+- 操作风险提示：不可逆操作前的二次确认。
+- 错误/警告通告：系统级错误或状态异常提醒。
+- 退出确认：关闭未保存内容的确认拦截。
+
+LegacyAlertDialog 采用复合组件模式，通过多个命名导出组合使用：
+
+- `LegacyAlertDialog` — 根触发器容器，控制弹窗的开闭状态。
+- `LegacyAlertDialogTrigger` — 触发弹窗的元素。
+- `LegacyAlertDialogContent` — 弹窗内容容器，内嵌 LegacyAlertDialogPanel 提供玻璃面板样式。
+- `LegacyAlertDialogPanel` — 独立的面板容器，带有玻璃质感和关闭按钮（适合手动控制 Dialog 时使用）。
+- `LegacyAlertDialogHeader` — 标题区域。
+- `LegacyAlertDialogTitle` — 弹窗标题。
+- `LegacyAlertDialogDescription` — 弹窗描述文本。
+- `LegacyAlertDialogFooter` — 底部按钮区域。
+- `LegacyAlertDialogButton` — 复古风格按钮，支持 `default` / `primary` 两种变体。
+- `LegacyAlertDialogClose` — 关闭弹窗的按钮包装器。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+典型的确认对话框，包含标题、描述和两个操作按钮。`showCloseButton` 在面板右上角显示关闭图标。
+
+<ComponentShowcase
+  id="sabraman/alert-dialog"
+  path="sabraman/alert-dialog/basic"
+/>
+
+```tsx
+import {
+  LegacyAlertDialog,
+  LegacyAlertDialogButton,
+  LegacyAlertDialogClose,
+  LegacyAlertDialogContent,
+  LegacyAlertDialogDescription,
+  LegacyAlertDialogFooter,
+  LegacyAlertDialogHeader,
+  LegacyAlertDialogTitle,
+  LegacyAlertDialogTrigger,
+} from "@/components/ui/sabraman-alert-dialog"
+
+export default function Demo() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <LegacyAlertDialog>
+        <LegacyAlertDialogTrigger asChild>
+          <LegacyAlertDialogButton>删除文件</LegacyAlertDialogButton>
+        </LegacyAlertDialogTrigger>
+        <LegacyAlertDialogContent showCloseButton>
+          <LegacyAlertDialogHeader>
+            <LegacyAlertDialogTitle>确认删除</LegacyAlertDialogTitle>
+            <LegacyAlertDialogDescription>
+              此操作无法撤销。确定要永久删除此文件吗？
+            </LegacyAlertDialogDescription>
+          </LegacyAlertDialogHeader>
+          <LegacyAlertDialogFooter>
+            <LegacyAlertDialogClose asChild>
+              <LegacyAlertDialogButton>取消</LegacyAlertDialogButton>
+            </LegacyAlertDialogClose>
+            <LegacyAlertDialogButton variant="primary">
+              删除
+            </LegacyAlertDialogButton>
+          </LegacyAlertDialogFooter>
+        </LegacyAlertDialogContent>
+      </LegacyAlertDialog>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LegacyAlertDialog
+
+根组件，包裹触发器和弹窗内容，控制弹窗的打开和关闭状态。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| open | 受控模式下的打开状态 | `boolean` | - |
+| defaultOpen | 非受控模式下的默认打开状态 | `boolean` | - |
+| onOpenChange | 打开状态变化回调 | `(open: boolean) =&gt; void` | - |
+| modal | 是否显示遮罩层 | `boolean` | `true` |
+
+继承所有 React.ComponentProps&lt;typeof Dialog&gt;。
+
+### LegacyAlertDialogTrigger
+
+触发器元素，点击后打开弹窗。需配合 `asChild` 使用。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 将触发器行为合并到子元素 | `boolean` | `false` |
+
+继承所有 React.ComponentProps&lt;typeof DialogTrigger&gt;。
+
+### LegacyAlertDialogContent
+
+弹窗内容容器，自动包裹 LegacyAlertDialogPanel 以提供玻璃面板样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showCloseButton | 右上角是否显示关闭按钮 | `boolean` | `false` |
+
+继承所有 React.ComponentProps&lt;typeof DialogContent&gt;。
+
+### LegacyAlertDialogPanel
+
+独立的面板容器，可直接与手动控制的 Dialog 搭配使用。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showCloseButton | 右上角是否显示关闭按钮 | `boolean` | `false` |
+
+继承所有 React.HTMLAttributes&lt;HTMLDivElement&gt;。
+
+### LegacyAlertDialogHeader
+
+标题区域容器。
+
+继承所有 React.ComponentProps&lt;"div"&gt;。
+
+### LegacyAlertDialogTitle
+
+弹窗标题文本。
+
+继承所有 React.ComponentProps&lt;typeof DialogTitle&gt;。
+
+### LegacyAlertDialogDescription
+
+弹窗描述文本。
+
+继承所有 React.ComponentProps&lt;typeof DialogDescription&gt;。
+
+### LegacyAlertDialogFooter
+
+底部按钮区域容器，默认 flex-row 布局。
+
+继承所有 React.ComponentProps&lt;"div"&gt;。
+
+### LegacyAlertDialogButton
+
+弹窗内使用的操作按钮，具有渐变背景和经典系统字体。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 按钮视觉变体 | `default` \| `primary` | `default` |
+
+继承所有 React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;。
+
+### LegacyAlertDialogClose
+
+关闭按钮包装器，点击子元素后关闭弹窗。需配合 `asChild` 使用。
+
+继承所有 React.ComponentProps&lt;typeof DialogClose&gt;。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何控制弹窗的打开和关闭？
+
+使用 `open` + `onOpenChange` 进行受控：
+
+```tsx
+const [open, setOpen] = useState(false)
+
+<LegacyAlertDialog open={open} onOpenChange={setOpen}>
+  <LegacyAlertDialogContent>
+    {/* ... */}
+  </LegacyAlertDialogContent>
+</LegacyAlertDialog>
+```
+
+非受控模式下使用 `defaultOpen`：
+
+```tsx
+<LegacyAlertDialog defaultOpen>
+  <LegacyAlertDialogContent>
+    {/* ... */}
+  </LegacyAlertDialogContent>
+</LegacyAlertDialog>
+```
+
+### 如何自定义触发按钮？
+
+使用 `LegacyAlertDialogTrigger` 配合 `asChild`：
+
+```tsx
+<LegacyAlertDialogTrigger asChild>
+  <LegacyAlertDialogButton variant="primary">打开对话框</LegacyAlertDialogButton>
+</LegacyAlertDialogTrigger>
+```
+
+### 关闭按钮在哪里？
+
+`LegacyAlertDialogContent` 和 `LegacyAlertDialogPanel` 均支持 `showCloseButton` 属性。设为 `true` 后右上角将显示关闭图标按钮。
+
+### 如何自定义面板样式？
+
+`LegacyAlertDialogContent` 和 `LegacyAlertDialogPanel` 均支持 `className` 和 `style`，可叠加自定义样式：
+
+```tsx
+<LegacyAlertDialogContent className="max-w-xs">
+  {/* ... */}
+</LegacyAlertDialogContent>
+```
+
+### 按钮有哪几种变体？
+
+`LegacyAlertDialogButton` 支持两种 `variant`：
+
+- `default` — 标准按钮，浅渐变背景。
+- `primary` — 主要操作按钮，更亮的渐变背景。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LegacyAlertDialog 代码时：
+
+1. 从 `@/components/ui/sabraman-alert-dialog` 导入所有命名导出。
+2. 使用复合组件模式：`LegacyAlertDialog` + `LegacyAlertDialogTrigger` + `LegacyAlertDialogContent`。
+3. `LegacyAlertDialogTrigger` 和 `LegacyAlertDialogClose` 必须配合 `asChild` 使用。
+4. 按钮使用 `LegacyAlertDialogButton` 而非通用 Button。
+5. 主要操作按钮使用 `variant="primary"`。
+6. 根据场景决定是否启用 `showCloseButton`。
+7. 内容按 Header (Title + Description) + Footer (按钮组) 结构组织。
+8. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="sabraman/alert-dialog" />

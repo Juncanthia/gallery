@@ -1,0 +1,97 @@
+---
+component: LegacyAlertDialog
+import: "@/components/ui/sabraman-alert-dialog"
+exports: LegacyAlertDialog, LegacyAlertDialogTrigger, LegacyAlertDialogContent, LegacyAlertDialogPanel, LegacyAlertDialogHeader, LegacyAlertDialogTitle, LegacyAlertDialogDescription, LegacyAlertDialogFooter, LegacyAlertDialogButton, LegacyAlertDialogClose
+base: Dialog (from @hyper/sabraman/components/ui/dialog)
+style: macOS 10.15 legacy glass-panel alert
+---
+
+## Props
+
+### LegacyAlertDialog
+- open?: boolean — controlled open state
+- defaultOpen?: boolean — uncontrolled default open state
+- onOpenChange?: (open: boolean) => void — open state change callback
+- modal?: boolean = true — show overlay
+- extends React.ComponentProps<typeof Dialog>
+
+### LegacyAlertDialogTrigger
+- asChild?: boolean
+- extends React.ComponentProps<typeof DialogTrigger>
+
+### LegacyAlertDialogContent
+- showCloseButton?: boolean = false — show X close button at top-right
+- extends React.ComponentProps<typeof DialogContent>
+
+### LegacyAlertDialogPanel
+- showCloseButton?: boolean = false — show X close button at top-right
+- extends React.HTMLAttributes<HTMLDivElement>
+
+### LegacyAlertDialogHeader
+- extends React.ComponentProps<"div">
+
+### LegacyAlertDialogTitle
+- extends React.ComponentProps<typeof DialogTitle>
+
+### LegacyAlertDialogDescription
+- extends React.ComponentProps<typeof DialogDescription>
+
+### LegacyAlertDialogFooter
+- extends React.ComponentProps<"div">
+
+### LegacyAlertDialogButton
+- variant?: "default" | "primary" = "default"
+- extends React.ButtonHTMLAttributes<HTMLButtonElement>
+
+### LegacyAlertDialogClose
+- extends React.ComponentProps<typeof DialogClose>
+
+## Code Example
+
+```tsx
+import {
+  LegacyAlertDialog,
+  LegacyAlertDialogButton,
+  LegacyAlertDialogClose,
+  LegacyAlertDialogContent,
+  LegacyAlertDialogDescription,
+  LegacyAlertDialogFooter,
+  LegacyAlertDialogHeader,
+  LegacyAlertDialogTitle,
+  LegacyAlertDialogTrigger,
+} from "@/components/ui/sabraman-alert-dialog"
+
+function DeleteConfirm() {
+  return (
+    <LegacyAlertDialog>
+      <LegacyAlertDialogTrigger asChild>
+        <LegacyAlertDialogButton variant="primary">删除</LegacyAlertDialogButton>
+      </LegacyAlertDialogTrigger>
+      <LegacyAlertDialogContent showCloseButton>
+        <LegacyAlertDialogHeader>
+          <LegacyAlertDialogTitle>确认删除</LegacyAlertDialogTitle>
+          <LegacyAlertDialogDescription>
+            此操作无法撤销。确定要继续吗？
+          </LegacyAlertDialogDescription>
+        </LegacyAlertDialogHeader>
+        <LegacyAlertDialogFooter>
+          <LegacyAlertDialogClose asChild>
+            <LegacyAlertDialogButton>取消</LegacyAlertDialogButton>
+          </LegacyAlertDialogClose>
+          <LegacyAlertDialogButton variant="primary">删除</LegacyAlertDialogButton>
+        </LegacyAlertDialogFooter>
+      </LegacyAlertDialogContent>
+    </LegacyAlertDialog>
+  )
+}
+```
+
+## Constraints
+- ALWAYS use the composite pattern: LegacyAlertDialog wraps LegacyAlertDialogTrigger + LegacyAlertDialogContent.
+- LegacyAlertDialogTrigger and LegacyAlertDialogClose MUST have `asChild` set to true.
+- Use LegacyAlertDialogButton for all buttons inside the dialog; do NOT use the generic Button component.
+- Primary action buttons use `variant="primary"`.
+- Content structure: Header (Title + Description) → Footer (buttons).
+- The dialog is styled like macOS 10.15 alert panels (glass effect, Helvetica Neue font, gradient buttons).
+- NEVER import from antd or use Ant Design patterns.
+- Import path: `@/components/ui/sabraman-alert-dialog`

@@ -47,6 +47,62 @@ type ComponentSeed = {
   api?: boolean
 }
 
+function uselayoutsItem(id: string, en: string, label: string): GalleryNavItem {
+  return {
+    id,
+    label,
+    en,
+    to: `/components/uselayouts/${id}`,
+    summary: `${label}，UseLayouts 布局组件。`,
+    keywords: [id, en, en.toLowerCase(), label],
+    antd: false,
+    migration: 0,
+    api: true,
+  }
+}
+
+function sabramanItem(id: string, en: string, label: string): GalleryNavItem {
+  return {
+    id,
+    label,
+    en,
+    to: `/components/sabraman/${id}`,
+    summary: `${label}，Sabraman 组件。`,
+    keywords: [id, en, en.toLowerCase(), label],
+    antd: false,
+    migration: 0,
+    api: true,
+  }
+}
+
+function evilItem(id: string, en: string, label: string): GalleryNavItem {
+  return {
+    id,
+    label,
+    en,
+    to: `/components/evilcharts/${id}`,
+    summary: `${label}，EvilCharts 图表组件。`,
+    keywords: [id, en, en.toLowerCase(), label],
+    antd: false,
+    migration: 0,
+    api: true,
+  }
+}
+
+function bklitItem(id: string, en: string, label: string): GalleryNavItem {
+  return {
+    id,
+    label,
+    en,
+    to: `/components/bklit/${id}`,
+    summary: `${label}，BKLit 图表组件。`,
+    keywords: [id, en, en.toLowerCase(), label],
+    antd: false,
+    migration: 0,
+    api: true,
+  }
+}
+
 function rbItem(id: string, en: string, label: string): GalleryNavItem {
   return {
     id,
@@ -753,6 +809,144 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
     rbItem("variable-proximity", "VariableProximity", "可变邻近"),
   ],
 },
+  {
+    group: "图表",
+    groupEn: "Charts",
+    libraryId: "bklit-ui",
+    items: [
+      bklitItem("area-chart", "AreaChart", "面积图"),
+      bklitItem("bar-chart", "BarChart", "柱状图"),
+      bklitItem("candlestick-chart", "CandlestickChart", "K线图"),
+      bklitItem("composed-chart", "ComposedChart", "组合图"),
+      bklitItem("funnel-chart", "FunnelChart", "漏斗图"),
+      bklitItem("gauge", "Gauge", "仪表盘"),
+      bklitItem("line-chart", "LineChart", "折线图"),
+      bklitItem("live-line-chart", "LiveLineChart", "实时折线图"),
+      bklitItem("pie-chart", "PieChart", "饼图"),
+      bklitItem("radar-chart", "RadarChart", "雷达图"),
+      bklitItem("ring-chart", "RingChart", "环形图"),
+      bklitItem("scatter-chart", "ScatterChart", "散点图"),
+    ],
+  },
+  {
+    group: "高级图表",
+    groupEn: "Advanced Charts",
+    libraryId: "bklit-ui",
+    items: [
+      bklitItem("choropleth-chart", "ChoroplethChart", "等值区域图"),
+      bklitItem("heatmap-chart", "HeatmapChart", "热力图"),
+      bklitItem("sankey-chart", "SankeyChart", "桑基图"),
+    ],
+  },
+  {
+    group: "图表工具",
+    groupEn: "Chart Tools",
+    libraryId: "bklit-ui",
+    items: [
+      bklitItem("chart-tooltip", "ChartTooltip", "图表提示框"),
+      bklitItem("legend", "Legend", "图例"),
+      bklitItem("chart-grid", "ChartGrid", "图表网格"),
+      bklitItem("chart-brush", "ChartBrush", "图表刷选"),
+    ],
+  },
+  {
+    group: "动画",
+    groupEn: "Animation",
+    libraryId: "bklit-ui",
+    items: [
+      bklitItem("fan-circles", "FanCircles", "扇形扩散"),
+    ],
+  },
+  {
+    group: "图表",
+    groupEn: "Charts",
+    libraryId: "evilcharts",
+    items: [
+      evilItem("bar-chart", "EvilBarChart", "柱状图"),
+      evilItem("line-chart", "EvilLineChart", "折线图"),
+      evilItem("area-chart", "EvilAreaChart", "面积图"),
+      evilItem("pie-chart", "EvilPieChart", "饼图"),
+      evilItem("composed-chart", "EvilComposedChart", "组合图"),
+      evilItem("radar-chart", "EvilRadarChart", "雷达图"),
+      evilItem("radial-chart", "EvilRadialChart", "径向图"),
+      evilItem("sankey-chart", "EvilSankeyChart", "桑基图"),
+    ],
+  },
+  {
+    group: "图表工具",
+    groupEn: "Chart Tools",
+    libraryId: "evilcharts",
+    items: [
+      evilItem("chart", "ChartContainer", "图表容器"),
+      evilItem("brush", "EvilBrush", "刷选工具"),
+    ],
+  },
+  {
+    group: "组件",
+    groupEn: "Components",
+    libraryId: "sabraman",
+    items: [
+      sabramanItem("roundbit", "RoundbitFrame", "圆角框架"),
+      sabramanItem("bar-button", "LegacyBarButton", "工具栏按钮"),
+      sabramanItem("segmented-control", "LegacySegmentedControl", "分段控件"),
+      sabramanItem("switch", "LegacySwitch", "开关"),
+      sabramanItem("slider", "LegacySlider", "滑块"),
+      sabramanItem("clock", "LegacyClock", "时钟"),
+      sabramanItem("notification", "LegacyNotification", "通知"),
+      sabramanItem("alert-dialog", "LegacyAlertDialog", "警告对话框"),
+      sabramanItem("code-block", "LegacyCodeBlockCommand", "代码块命令"),
+    ],
+  },
+  {
+    group: "编辑器",
+    groupEn: "Editor",
+    libraryId: "plate",
+    items: [
+      {
+        id: "editors-showcase",
+        label: "编辑器展示",
+        en: "PlateEditorsShowcase",
+        to: "/components/plate/editors-showcase",
+        summary: "Plate 富文本编辑器展示组件。",
+        keywords: ["plate", "editor", "showcase"],
+        antd: false,
+        migration: 0,
+        api: true,
+      },
+    ],
+  },
+  {
+    group: "布局",
+    groupEn: "Layout",
+    libraryId: "uselayouts",
+    items: [
+      uselayoutsItem("3d-book", "3dBook", "3D 书"),
+      uselayoutsItem("animated-collection", "AnimatedCollection", "动画集合"),
+      uselayoutsItem("bento-card", "BentoCard", "便当卡片"),
+      uselayoutsItem("bottom-menu", "BottomMenu", "底部菜单"),
+      uselayoutsItem("bucket", "Bucket", "存储桶"),
+      uselayoutsItem("day-picker", "DayPicker", "日期选择"),
+      uselayoutsItem("delete-button", "DeleteButton", "删除按钮"),
+      uselayoutsItem("discover-button", "DiscoverButton", "发现按钮"),
+      uselayoutsItem("discrete-tabs", "DiscreteTabs", "离散标签"),
+      uselayoutsItem("dynamic-toolbar", "DynamicToolbar", "动态工具栏"),
+      uselayoutsItem("empty-testimonial", "EmptyTestimonial", "空推荐"),
+      uselayoutsItem("expandable-gallery", "ExpandableGallery", "可扩展画廊"),
+      uselayoutsItem("feature-carousel", "FeatureCarousel", "特性轮播"),
+      uselayoutsItem("fluid-expanding-grid", "FluidExpandingGrid", "流体网格"),
+      uselayoutsItem("folder-interaction", "FolderInteraction", "文件夹交互"),
+      uselayoutsItem("inline-edit", "InlineEdit", "内联编辑"),
+      uselayoutsItem("magnified-bento", "MagnifiedBento", "放大便当"),
+      uselayoutsItem("morphing-input", "MorphingInput", "变形输入"),
+      uselayoutsItem("multi-step-form", "MultiStepForm", "多步表单"),
+      uselayoutsItem("pricing-card", "PricingCard", "定价卡片"),
+      uselayoutsItem("shake-testimonial-card", "ShakeTestimonialCard", "抖动推荐卡"),
+      uselayoutsItem("smooth-dropdown", "SmoothDropdown", "平滑下拉"),
+      uselayoutsItem("stacked-list", "StackedList", "堆叠列表"),
+      uselayoutsItem("status-button", "StatusButton", "状态按钮"),
+      uselayoutsItem("vertical-tabs", "VerticalTabs", "垂直标签"),
+    ],
+  },
 
 ]
 

@@ -1,0 +1,264 @@
+---
+category: Charts
+title: EvilComposedChart
+subtitle: 组合图表
+description: 在同一图表中组合柱状图和折线图，展示多个度量维度。
+demo:
+  cols: 1
+group:
+  title: EvilCharts
+  order: 3
+source:
+  component: src/components/evilcharts/components/evilcharts/charts/composed-chart.tsx
+  reexport: src/components/evilcharts/components/composed-chart.ts
+  docs: content/components/evilcharts/composed-chart/index.mdx
+  examples:
+    - content/components/evilcharts/composed-chart/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  recharts: true
+  motion: true
+  cva: false
+  radixSlot: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# EvilComposedChart 组合图表
+
+在同一图表中组合柱状图和折线图，展示多个度量维度。通过声明式组合 `<Bar />`、`<Line />`、`<XAxis />`、`<Tooltip />` 等子组件，自由构建所需的图表结构。支持交互选择、缩放刷选、多种填充变体和 motion.dev 入场动画。
+
+## 导入路径
+
+```tsx
+// 主组件
+import { EvilComposedChart } from "@/components/ui/evilcharts-composed-chart"
+
+// 子组件（Bar, Line, XAxis, Grid, Tooltip, Legend, Dot, ActiveDot）
+import {
+  Bar,
+  Line,
+  XAxis,
+  YAxis,
+  Grid,
+  Tooltip,
+  Legend,
+  ActiveDot,
+  Dot,
+} from "@/components/evilcharts/components/composed-chart"
+
+// 类型
+import { type ChartConfig } from "@/components/evilcharts/components/chart"
+```
+
+## 基础示例
+
+```tsx
+import {
+  EvilComposedChart,
+  Bar,
+  Line,
+  XAxis,
+  Grid,
+  Tooltip,
+  Legend,
+  ActiveDot,
+  Dot,
+} from "@hyper/evilcharts/components/composed-chart"
+import { type ChartConfig } from "@hyper/evilcharts/components/chart"
+
+const data = [
+  { month: "1月", revenue: 4200, profit: 1800 },
+  { month: "2月", revenue: 5800, profit: 2400 },
+  { month: "3月", revenue: 4100, profit: 1600 },
+  { month: "4月", revenue: 6200, profit: 2800 },
+  { month: "5月", revenue: 5400, profit: 2200 },
+  { month: "6月", revenue: 7800, profit: 3400 },
+  { month: "7月", revenue: 6100, profit: 2600 },
+  { month: "8月", revenue: 8200, profit: 3800 },
+  { month: "9月", revenue: 5900, profit: 2500 },
+  { month: "10月", revenue: 6800, profit: 3000 },
+  { month: "11月", revenue: 7200, profit: 3200 },
+  { month: "12月", revenue: 9100, profit: 4200 },
+]
+
+const chartConfig = {
+  revenue: {
+    label: "营收",
+    colors: { light: ["#3b82f6"], dark: ["#6A5ACD"] },
+  },
+  profit: {
+    label: "利润",
+    colors: { light: ["#10b981"], dark: ["#34d399"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    <EvilComposedChart
+      className="h-full w-full p-4"
+      xDataKey="month"
+      data={data}
+      config={chartConfig}
+      showBrush
+      brushFormatLabel={(value) => String(value).substring(0, 3)}
+    >
+      <Grid />
+      <XAxis dataKey="month" tickFormatter={(value) => String(value).substring(0, 3)} />
+      <Legend isClickable />
+      <Tooltip />
+      <Bar dataKey="revenue" isClickable />
+      <Line dataKey="profit" isClickable>
+        <ActiveDot variant="colored-border" />
+        <Dot variant="default" />
+      </Line>
+    </EvilComposedChart>
+  )
+}
+```
+
+## Bar 变体示例
+
+```tsx
+// Bar variant: "default" | "hatched" | "duotone" | "duotone-reverse" | "gradient" | "stripped"
+<EvilComposedChart data={data} config={chartConfig}>
+  <Grid />
+  <XAxis dataKey="month" />
+  <Legend isClickable />
+  <Tooltip />
+  <Bar dataKey="revenue" variant="duotone" isClickable />
+  <Line dataKey="profit" isClickable />
+</EvilComposedChart>
+```
+
+## Line 描边与发光示例
+
+```tsx
+// strokeVariant: "solid" | "dashed" | "animated-dashed"
+// glow: 柔光 Neon 发光效果
+<EvilComposedChart data={data} config={chartConfig}>
+  <Grid />
+  <XAxis dataKey="month" />
+  <Legend isClickable />
+  <Tooltip />
+  <Bar dataKey="revenue" variant="gradient" isClickable />
+  <Line dataKey="profit" strokeVariant="dashed" glow isClickable>
+    <ActiveDot variant="colored-border" />
+  </Line>
+</EvilComposedChart>
+```
+
+## Props 文档
+
+### EvilComposedChart（根容器）
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| config | `Record<string, ChartConfig[string]>` | 必填 | 系列颜色与标签，需含 `light`/`dark` 双色 |
+| data | `TData[]` | 必填 | 数据行 |
+| xDataKey | `string` | - | X 轴键，刷选依赖 |
+| children | `ReactNode` | 必填 | 子组件：Bar, Line, XAxis, Grid, Tooltip, Legend |
+| className | `string` | - | 容器样式 |
+| curveType | `CurveType` | `"linear"` | 折线默认插值曲线 |
+| animationType | `"none" \| "left-to-right" \| "right-to-left" \| "center-out" \| "edges-in"` | `"left-to-right"` | 入场动画方向 |
+| barGap | `number` | - | 柱间距 |
+| barCategoryGap | `number` | - | 类别组间距 |
+| defaultSelectedDataKey | `string \| null` | `null` | 初始选中系列 |
+| onSelectionChange | `(key: string \| null) => void` | - | 选中变化回调 |
+| isLoading | `boolean` | `false` | 加载骨架屏 |
+| loadingBars | `number` | `12` | 骨架屏柱数 |
+| showBrush | `boolean` | `false` | 启用刷选缩放 |
+| brushHeight | `number` | - | 刷选高度 |
+| brushFormatLabel | `(value: unknown, index: number) => string` | - | 刷选标签格式化 |
+| onBrushChange | `(range: EvilBrushRange) => void` | - | 刷选变化回调 |
+| chartProps | `ComponentProps<typeof RechartsComposedChart>` | - | Recharts 逃生口 |
+
+### Bar
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| dataKey | `string` | 必填 | 系列键 |
+| variant | `"default" \| "hatched" \| "duotone" \| "duotone-reverse" \| "gradient" \| "stripped"` | `"default"` | 填充风格 |
+| radius | `number` | `4` | 圆角半径 |
+| glow | `boolean` | `false` | 发光效果 |
+| animationType | `ComposedAnimationType` | - | 入场动画，继承图表默认 |
+| isClickable | `boolean` | `false` | 点击选中系列 |
+| enableHoverHighlight | `boolean` | `false` | 悬停弱化其他列 |
+| barProps | `ComponentProps<typeof RechartsBar>` | - | Recharts 逃生口 |
+
+### Line
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| dataKey | `string` | 必填 | 系列键 |
+| strokeVariant | `"solid" \| "dashed" \| "animated-dashed"` | `"solid"` | 描边样式 |
+| curveType | `CurveType` | - | 插值曲线，继承图表默认 |
+| animationType | `ComposedAnimationType` | - | 入场动画，继承图表默认 |
+| connectNulls | `boolean` | `false` | 连接 null 缺失值 |
+| glow | `boolean` | `false` | 发光效果 |
+| isClickable | `boolean` | `false` | 点击选中系列 |
+| children | `ReactNode` | - | 组合 `<Dot />`、`<ActiveDot />` |
+| lineProps | `ComponentProps<typeof RechartsLine>` | - | Recharts 逃生口 |
+
+### Dot / ActiveDot（Line 子组件）
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| variant | `DotVariant` | - | 点标记外观（如 `"default"`、`"colored-border"`） |
+
+### XAxis
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| dataKey | `string` | - | 数据键 |
+| tickLine | `boolean` | `false` | 刻度线 |
+| axisLine | `boolean` | `false` | 轴线 |
+| tickMargin | `number` | `8` | 刻度间距 |
+| minTickGap | `number` | `8` | 最小间隙 |
+
+### YAxis
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| tickLine | `boolean` | `false` | 刻度线 |
+| axisLine | `boolean` | `false` | 轴线 |
+| tickMargin | `number` | `8` | 刻度间距 |
+| minTickGap | `number` | `8` | 最小间隙 |
+| width | `number \| string` | `"auto"` | 轴宽度 |
+
+### Grid
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| vertical | `boolean` | `false` | 垂直网格线 |
+| strokeDasharray | `string` | `"3 3"` | 虚线样式 |
+
+### Tooltip
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| variant | `TooltipVariant` | - | 视觉变体 |
+| roundness | `TooltipRoundness` | - | 圆角 |
+| defaultIndex | `number` | - | 默认显示索引 |
+| cursor | `boolean` | `true` | 垂直光标线 |
+
+### Legend
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| variant | `ChartLegendVariant` | - | 指示器变体 |
+| align | `"left" \| "center" \| "right"` | `"right"` | 水平对齐 |
+| verticalAlign | `"top" \| "middle" \| "bottom"` | `"top"` | 垂直对齐 |
+| isClickable | `boolean` | `false` | 点击切换系列选中 |
+
+## 约束
+
+1. 所有子组件（Bar、Line、XAxis、Grid、Tooltip、Legend）必须在 `<EvilComposedChart>` 内部使用，否则抛出运行时错误。
+2. `config` 必须使用 `satisfies ChartConfig` 提供 `light` 和 `dark` 双色配置。每个 key 必须同时存在于 data 行对象中。
+3. `<Dot />` 和 `<ActiveDot />` 只能作为 `<Line />` 的子组件使用，用于声明点标记外观。
+4. 不要直接导入 Recharts 的 Bar、Line、XAxis 等原始组件，使用 EvilCharts 封装版本。
+5. 系统开启"减弱动态效果"时动画自动关闭；也可通过 `animationType="none"` 手动关闭。
+6. 加载状态（`isLoading`）期间，所有子组件隐藏，由 Root 渲染骨架屏 Bar。
+7. `showBrush` 依赖 `xDataKey`，缺省时刷选区域不显示。
+8. `<Bar />` 的 `variant` 每种填充风格相互独立，同一图表多个 Bar 可各自选择不同变体。

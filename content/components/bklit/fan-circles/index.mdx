@@ -1,0 +1,55 @@
+FanCircles 是一个悬停触发的圆形扇形展开动画组件，来自 BKLit Charts 库。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当用户悬停目标区域时，多个彩色圆形元素从中心点以扇形方式向外扩散展开，离开时收拢回中心。组件基于 Motion（原 Framer Motion）的 Spring 物理弹簧动画实现，提供自然流畅的视觉反馈。适用于需要动态视觉吸引力来增强 UI 表现力的交互场景。
+
+常见场景：
+
+- 装饰性动画点缀：在 Hero 区域、CTA 按钮旁或卡片头部添加动态视觉元素，提升页面活力。
+- 交互状态反馈：用扇出动画表示 hover/active 状态，替代单调的颜色或阴影变化。
+- 加载或吸引注意：作为微交互，在页面加载完成后或需要引导用户注意时呈现。
+- 品牌色彩展示：通过 HSL 色相环自动均匀分配颜色，直观展示多彩品牌调性。
+
+非适用场景：
+
+- 不适合作为数据可视化图表使用——组件为纯装饰性动画，不接收外部数据源。
+- 不适合高密度信息区域——动画运动会干扰用户的阅读和操作效率。
+- 不适合移动端核心交互——hover 事件在触摸屏上不可用，移动端体验降级。
+- 不适合无障碍关键路径——动画圆形元素不承载任何语义信息，仅作视觉装饰。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="bklit/fan-circles" path="bklit/fan-circles/basic" />
+
+```tsx
+import { FanCircles } from "@/components/ui/bklit-fan-circles"
+
+export default function Demo() {
+  return <FanCircles />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FanCircles
+
+无需 Props 即可使用。悬停时 5 个彩色圆形会从中心扇形展开，离开时收起。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义样式？
+通过 CSS 变量（如 `var(--chart-line-primary)`）或组件属性进行样式设置。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+- 导入: `import { FanCircles } from "@/components/ui/bklit-fan-circles"`
+- 来自 BKLit Charts 库（基于 @visx）
+- 无 Props，直接使用
+- 悬停交互，Spring 动画
+
+<h2 id="source">源码</h2>
+
+- [FanCircles](/source/bklit/charts/fan-circles)
