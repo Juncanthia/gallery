@@ -3,8 +3,8 @@
 import { ArrowRight, Menu, X } from "lucide-react"
 import Link from "next/link"
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
-import { Button } from "@hyper/gooseui/components/ui/button"
+import { cn } from "@/components/gooseui/lib/utils"
+import { Button } from "@/components/gooseui/components/ui/button"
 
 const navItems = [
   { label: "Products", href: "#products" },

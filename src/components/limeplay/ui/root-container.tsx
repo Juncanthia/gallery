@@ -4,10 +4,10 @@ import { composeRefs } from "@radix-ui/react-compose-refs"
 import { Slot } from "@radix-ui/react-slot"
 import React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { usePlaybackStore } from "@hyper/limeplay/hooks/use-playback"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
+import { cn } from "@/components/limeplay/lib/utils"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
 
 export interface RootContainerProps extends React.ComponentPropsWithoutRef<"div"> {
   asChild?: boolean

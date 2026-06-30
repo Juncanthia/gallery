@@ -1,7 +1,7 @@
-import * as ListboxPrimitive from "@hyper/dice-ui/listbox";
+import * as ListboxPrimitive from "@/components/dice/listbox";
 import { Check } from "lucide-react";
 import type * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 const Listbox = (({
   className,

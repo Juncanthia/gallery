@@ -3,7 +3,7 @@
 import throttle from "lodash.throttle"
 import { useEffect, useState } from "react"
 
-import { off, on } from "@hyper/limeplay/lib/utils"
+import { off, on } from "@/components/limeplay/lib/utils"
 
 const defaultEvents = [
   "mousemove",

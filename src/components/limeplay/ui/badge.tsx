@@ -2,7 +2,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 const badgeVariants = cva(
   `

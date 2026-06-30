@@ -9,7 +9,7 @@ import {
   SparklesIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useIsMobile } from "@hyper/uselayouts/hooks/use-mobile";
+import { useIsMobile } from "@/components/uselayouts/hooks/use-mobile";
 const INITIAL_CHIPS = [
   {
     id: 1,

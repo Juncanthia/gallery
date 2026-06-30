@@ -1,5 +1,5 @@
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { useMediaApi } from "@hyper/limeplay/ui/media-provider"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { useMediaApi } from "@/components/limeplay/ui/media-provider"
 
 export function useSeek() {
   const store = useMediaApi()

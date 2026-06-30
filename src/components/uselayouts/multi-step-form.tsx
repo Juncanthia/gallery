@@ -12,7 +12,7 @@ import {
   FieldLabel,
   FieldDescription,
   FieldError,
-} from "@hyper/uselayouts/_shared/ui/field";
+} from "@/components/uselayouts/_shared/ui/field";
 import {
   Card,
   CardHeader,
@@ -20,25 +20,25 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@hyper/uselayouts/_shared/ui/card";
-import { Button } from "@hyper/uselayouts/_shared/ui/button";
-import { Input } from "@hyper/uselayouts/_shared/ui/input";
-import { Textarea } from "@hyper/uselayouts/_shared/ui/textarea";
+} from "@/components/uselayouts/_shared/ui/card";
+import { Button } from "@/components/uselayouts/_shared/ui/button";
+import { Input } from "@/components/uselayouts/_shared/ui/input";
+import { Textarea } from "@/components/uselayouts/_shared/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@hyper/uselayouts/_shared/ui/select";
-import { Badge } from "@hyper/uselayouts/_shared/ui/badge";
-import { Calendar } from "@hyper/uselayouts/_shared/ui/calendar";
+} from "@/components/uselayouts/_shared/ui/select";
+import { Badge } from "@/components/uselayouts/_shared/ui/badge";
+import { Calendar } from "@/components/uselayouts/_shared/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/uselayouts/_shared/ui/popover";
-import { cn } from "@hyper/uselayouts/lib/utils";
+} from "@/components/uselayouts/_shared/ui/popover";
+import { cn } from "@/components/uselayouts/lib/utils";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import useMeasure from "react-use-measure";
 

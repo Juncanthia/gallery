@@ -5,8 +5,8 @@
  * copied to another project by updating these imports to match the target
  * project's paths.
  */
-export { cn } from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
 
-export { Button } from "@hyper/shadcn";
-export { Card } from "@hyper/shadcn";
+export { Button } from "@/components/ui/button";
+export { Card } from "@/components/ui/card";
 export { ChevronLeft, ChevronRight } from "lucide-react";

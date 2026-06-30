@@ -7,14 +7,14 @@ import type {
   GetAssetId,
   PlayerSource,
   UseAssetOptions,
-} from "@hyper/limeplay/hooks/use-asset"
+} from "@/components/limeplay/hooks/use-asset"
 
 import {
   AssetSourceOrigin,
   AssetSourceType,
   useAsset,
-} from "@hyper/limeplay/hooks/use-asset"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
+} from "@/components/limeplay/hooks/use-asset"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
 
 export interface UsePlaybackSourceOptions<TAsset extends Asset> {
   autoLoad?: boolean

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, type Transition } from "motion/react"
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 interface SlidingNumberProps {
   value: number

@@ -3,8 +3,8 @@ import {
   CaretCircleDoubleRightIcon,
 } from "@phosphor-icons/react/dist/ssr"
 
-import { Button } from "@hyper/limeplay/ui/button"
-import { SeekControl } from "@hyper/limeplay/ui/seek-controls"
+import { Button } from "@/components/limeplay/ui/button"
+import { SeekControl } from "@/components/limeplay/ui/seek-controls"
 
 export function SeekControlDemo() {
   return (

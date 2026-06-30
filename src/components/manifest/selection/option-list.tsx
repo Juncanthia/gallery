@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
-import { cn } from '@hyper/manifest-ui/lib/utils'
+import { Button } from '@/components/manifest/components/ui/button'
+import { cn } from '@/components/manifest/lib/utils'
 import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 

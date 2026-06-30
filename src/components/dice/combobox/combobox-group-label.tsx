@@ -1,4 +1,4 @@
-import { Primitive } from "@hyper/dice-ui/_shared";
+import { Primitive } from "@/components/dice/_shared";
 import * as React from "react";
 import { useComboboxGroupContext } from "./combobox-group";
 

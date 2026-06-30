@@ -1,6 +1,6 @@
 import type * as React from "react";
 
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (

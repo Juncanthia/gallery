@@ -6,11 +6,11 @@ import {
 } from "radix-ui";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { useAsRef } from "@hyper/dice-ui/hooks/use-as-ref";
-import { useIsomorphicLayoutEffect } from "@hyper/dice-ui/hooks/use-isomorphic-layout-effect";
-import { Button } from "@hyper/dice-ui/ui/button";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { cn } from "@/components/dice/lib/utils";
+import { useAsRef } from "@/components/dice/hooks/use-as-ref";
+import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
+import { Button } from "@/components/dice/ui/button";
 
 const ROOT_NAME = "ActionBar";
 const GROUP_NAME = "ActionBarGroup";

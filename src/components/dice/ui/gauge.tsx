@@ -2,7 +2,7 @@
 
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 const GAUGE_NAME = "Gauge";
 const INDICATOR_NAME = "GaugeIndicator";

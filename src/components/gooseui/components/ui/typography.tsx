@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const typographyVariants = cva("", {
   variants: {

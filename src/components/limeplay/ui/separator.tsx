@@ -2,7 +2,7 @@
 
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 function Separator({
   className,

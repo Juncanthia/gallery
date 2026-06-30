@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
+import { Button } from '@/components/manifest/components/ui/button'
 import { CreditCard, Lock } from 'lucide-react'
 import { useState } from 'react'
 

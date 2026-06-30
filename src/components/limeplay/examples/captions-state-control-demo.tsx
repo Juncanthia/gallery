@@ -3,17 +3,17 @@
 import { ClosedCaptioningIcon } from "@phosphor-icons/react"
 import { useEffect } from "react"
 
-import { Button } from "@hyper/limeplay/ui/button"
-import { useCaptionsStore } from "@hyper/limeplay/hooks/use-captions"
+import { Button } from "@/components/limeplay/ui/button"
+import { useCaptionsStore } from "@/components/limeplay/hooks/use-captions"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
+} from "@/components/limeplay/hooks/use-playback"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
 import {
   CaptionsContainer,
   CaptionsControl,
-} from "@hyper/limeplay/ui/captions"
+} from "@/components/limeplay/ui/captions"
 
 export function CaptionsHybridDemo() {
   return <CaptionsContainer className="mb-16" />

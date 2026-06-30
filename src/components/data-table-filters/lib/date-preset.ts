@@ -1,4 +1,4 @@
-import { DatePreset } from "@hyper/data-table-filters/components/data-table/types";
+import { DatePreset } from "@/components/data-table-filters/components/data-table/types";
 import { addDays, addHours, endOfDay, startOfDay } from "date-fns";
 
 export const presets = [

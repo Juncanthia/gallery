@@ -8,8 +8,8 @@ import {
   Tooltip,
   Dot,
   ActiveDot,
-} from "@hyper/evilcharts/components/line-chart";
-import { type ChartConfig } from "@hyper/evilcharts/components/chart";
+} from "@/components/evilcharts/components/line-chart";
+import { type ChartConfig } from "@/components/evilcharts/components/chart";
 
 const data = [
   { month: "January", desktop: 342, mobile: 184 },

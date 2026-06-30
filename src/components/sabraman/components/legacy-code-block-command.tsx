@@ -2,10 +2,10 @@
 
 import { CheckIcon, CircleXIcon, CopyIcon } from "lucide-react";
 import * as React from "react";
-import { useSafeLegacyUiLocale } from "@hyper/sabraman/components/legacy-locale-context";
-import { cn } from "@hyper/sabraman/lib/utils";
-import { LegacyBarButton } from "@hyper/sabraman/components/legacy-bar-button";
-import { LegacySegmentedControl } from "@hyper/sabraman/components/legacy-segmented-control";
+import { useSafeLegacyUiLocale } from "@/components/sabraman/components/legacy-locale-context";
+import { cn } from "@/components/sabraman/lib/utils";
+import { LegacyBarButton } from "@/components/sabraman/components/legacy-bar-button";
+import { LegacySegmentedControl } from "@/components/sabraman/components/legacy-segmented-control";
 
 const PACKAGE_MANAGERS = ["bun", "npm", "pnpm", "yarn"] as const;
 const STORAGE_KEY = "sabraman-legacy-code-block-command-package-manager";

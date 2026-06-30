@@ -9,24 +9,24 @@ import type {
   MediaEventSlice,
   MediaFeature,
   MediaStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
-import { useInterval } from "@hyper/limeplay/hooks/use-interval"
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
+import { useInterval } from "@/components/limeplay/hooks/use-interval"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
+} from "@/components/limeplay/hooks/use-playback"
 import {
   type PlayerStore,
   usePlayerStore,
-} from "@hyper/limeplay/hooks/use-player"
-import { noop, off, on, toFixedNumber } from "@hyper/limeplay/lib/utils"
+} from "@/components/limeplay/hooks/use-player"
+import { noop, off, on, toFixedNumber } from "@/components/limeplay/lib/utils"
 import {
   useMediaEvents,
   useMediaFeatureApi,
   useMediaFeatureStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 export const TIMELINE_FEATURE_KEY = "timeline"
 

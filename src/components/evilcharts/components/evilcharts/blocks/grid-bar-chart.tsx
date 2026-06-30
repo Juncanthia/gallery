@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChartConfig, ChartContainer } from "@hyper/evilcharts/components/chart";
+import { type ChartConfig, ChartContainer } from "@/components/evilcharts/components/chart";
 import { Bar, BarChart, XAxis } from "recharts";
 const SQUARE_SIZE = 10;
 const GAP = 2;

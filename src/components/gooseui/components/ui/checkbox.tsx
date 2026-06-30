@@ -2,7 +2,7 @@
 
 import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const checkboxVariants = cva(
   "group inline-flex items-center gap-2 cursor-pointer select-none",

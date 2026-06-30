@@ -3,10 +3,10 @@
 import type {
   AudioPlayerAsset,
   PlaybackUrls,
-} from "@hyper/limeplay/blocks/audio-player/components/audio-source"
-import type { UseAssetReturn } from "@hyper/limeplay/hooks/use-asset"
+} from "@/components/limeplay/blocks/audio-player/components/audio-source"
+import type { UseAssetReturn } from "@/components/limeplay/hooks/use-asset"
 
-import { useAsset } from "@hyper/limeplay/hooks/use-asset"
+import { useAsset } from "@/components/limeplay/hooks/use-asset"
 
 export type { PlaybackUrls }
 

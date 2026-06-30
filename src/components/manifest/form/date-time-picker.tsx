@@ -1,14 +1,14 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Button } from '@hyper/manifest-ui/components/ui/button'
+import { Button } from '@/components/manifest/components/ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@hyper/manifest-ui/components/ui/popover'
+} from '@/components/manifest/components/ui/popover'
 import { ArrowLeft, ChevronLeft, ChevronRight, Globe, Search } from 'lucide-react'
-import { cn } from '@hyper/manifest-ui/lib/utils'
+import { cn } from '@/components/manifest/lib/utils'
 import { demoDateTimePickerData } from './demo/form'
 
 /** Timezone configuration using IANA timezone identifiers for correct DST handling */

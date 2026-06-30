@@ -11,7 +11,7 @@ import {
   useId,
   useItemCollection,
   VisuallyHiddenInput,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 import type { TagsInputInput } from "./tags-input-input";
 

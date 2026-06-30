@@ -3,8 +3,8 @@
 import * as React from "react"
 import { FileUploadIcon } from "@hugeicons/core-free-icons"
 
-import { PDFViewer } from "@hyper/extend-ui/components/ui/pdf-viewer"
-import { FileUpload } from "@hyper/extend-ui/components/ui/file-upload"
+import { PDFViewer } from "@/components/extend/components/ui/pdf-viewer"
+import { FileUpload } from "@/components/extend/components/ui/file-upload"
 
 const PDF_ACCEPT = "application/pdf,.pdf"
 const PDF_UPLOAD_DROPZONE_SELECTOR = "[data-pdf-upload-dropzone]"

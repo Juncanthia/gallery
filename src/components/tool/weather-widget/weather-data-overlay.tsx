@@ -14,7 +14,7 @@ import {
   Wind,
   type LucideIcon,
 } from "lucide-react";
-import { cn } from "@hyper/shadcn";
+import { cn } from "@/lib/utils";
 import type {
   ForecastDay,
   TemperatureUnit,

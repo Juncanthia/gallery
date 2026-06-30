@@ -16,7 +16,7 @@ import {
   BrushIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { cn } from "@hyper/uselayouts/lib/utils";
+import { cn } from "@/components/uselayouts/lib/utils";
 import React, { useState } from "react";
 
 interface CollectionItem {

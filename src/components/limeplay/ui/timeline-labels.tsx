@@ -1,9 +1,9 @@
 import React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
-import { useTimelineStore } from "@hyper/limeplay/hooks/use-timeline"
-import { durationDateTime, formatTimestamp } from "@hyper/limeplay/lib/time"
+import { cn } from "@/components/limeplay/lib/utils"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
+import { useTimelineStore } from "@/components/limeplay/hooks/use-timeline"
+import { durationDateTime, formatTimestamp } from "@/components/limeplay/lib/time"
 
 const HOURS_IN_SECONDS = 60 * 60
 

@@ -4,7 +4,7 @@ import {
   DATA_ITEM_ATTR,
   Primitive,
   useId,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 import { type InputValue, useTagsInput } from "./tags-input-root";
 

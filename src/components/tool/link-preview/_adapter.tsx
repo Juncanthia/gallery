@@ -3,4 +3,4 @@
  */
 "use client";
 
-export { cn } from "@hyper/shadcn";
+export { cn } from "@/lib/utils";

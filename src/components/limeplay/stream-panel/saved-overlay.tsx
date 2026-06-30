@@ -5,8 +5,8 @@ import { PlusIcon, XIcon } from "lucide-react"
 import {
   type SavedStream,
   useStreamPanelStore,
-} from "@hyper/limeplay/stream-panel/use-stream-panel"
-import { cn } from "@hyper/limeplay/lib/utils"
+} from "@/components/limeplay/stream-panel/use-stream-panel"
+import { cn } from "@/components/limeplay/lib/utils"
 
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"

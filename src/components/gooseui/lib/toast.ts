@@ -1,6 +1,6 @@
 import { createElement } from "react"
 import { toast } from "sonner"
-import { CustomToast } from "@hyper/gooseui/components/ui/custom-toast"
+import { CustomToast } from "@/components/gooseui/components/ui/custom-toast"
 
 interface ToastOptions {
   description?: string

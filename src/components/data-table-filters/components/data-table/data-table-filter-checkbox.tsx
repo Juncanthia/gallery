@@ -1,16 +1,16 @@
 "use client";
 
-import { useDataTable } from "@hyper/data-table-filters/components/data-table/data-table-provider";
-import { Checkbox } from "@hyper/shadcn/components/ui/checkbox";
+import { useDataTable } from "@/components/data-table-filters/components/data-table/data-table-provider";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@hyper/shadcn/components/ui/input-group";
-import { Label } from "@hyper/shadcn/components/ui/label";
-import { Skeleton } from "@hyper/shadcn/components/ui/skeleton";
-import { formatCompactNumber } from "@hyper/data-table-filters/lib/format";
-import { cn } from "@hyper/data-table-filters/lib/utils";
+} from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatCompactNumber } from "@/components/data-table-filters/lib/format";
+import { cn } from "@/components/data-table-filters/lib/utils";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import type { DataTableCheckboxFilterField } from "./types";

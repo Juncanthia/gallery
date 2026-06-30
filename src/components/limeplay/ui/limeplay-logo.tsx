@@ -1,4 +1,4 @@
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 export function LimeplayLogo(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...etc } = props

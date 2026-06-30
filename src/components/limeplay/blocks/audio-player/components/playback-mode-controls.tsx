@@ -3,21 +3,21 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useMemo } from "react"
 
-import type { RepeatMode } from "@hyper/limeplay/hooks/use-playlist"
+import type { RepeatMode } from "@/components/limeplay/hooks/use-playlist"
 
-import { cn } from "@hyper/limeplay/lib/utils"
-import { Button } from "@hyper/limeplay/blocks/audio-player/components/button"
+import { cn } from "@/components/limeplay/lib/utils"
+import { Button } from "@/components/limeplay/blocks/audio-player/components/button"
 import {
   RepeatAllIcon,
   RepeatIcon,
   RepeatOneIcon,
   ShuffleOffIcon,
   ShuffleOneIcon,
-} from "@hyper/limeplay/blocks/audio-player/components/icons"
+} from "@/components/limeplay/blocks/audio-player/components/icons"
 import {
   usePlaylist,
   usePlaylistStore,
-} from "@hyper/limeplay/hooks/use-playlist"
+} from "@/components/limeplay/hooks/use-playlist"
 
 type RepeatControlVariant = "asset" | "playlist"
 

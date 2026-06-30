@@ -13,16 +13,15 @@
  *   Label        → shadcn/ui Label
  */
 
-export { cn } from "@hyper/shadcn";
-export { Button } from "@hyper/shadcn";
-export { Switch } from "@hyper/shadcn";
-export { ToggleGroup, ToggleGroupItem } from "@hyper/shadcn";
-export {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@hyper/shadcn";
-export { Separator } from "@hyper/shadcn";
-export { Label } from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
+export { Button } from "@/components/ui/button";
+export { Switch } from "@/components/ui/switch";
+export { ToggleGroup } from "@/components/ui/toggle-group"
+export { ToggleGroupItem } from "@/components/ui/toggle-group";
+export { Select } from "@/components/ui/select"
+export { SelectContent } from "@/components/ui/select"
+export { SelectItem } from "@/components/ui/select"
+export { SelectTrigger } from "@/components/ui/select"
+export { SelectValue } from "@/components/ui/select"
+export { Separator } from "@/components/ui/separator";
+export { Label } from "@/components/ui/label";

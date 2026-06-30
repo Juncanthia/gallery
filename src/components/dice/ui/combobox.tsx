@@ -1,8 +1,8 @@
-import * as ComboboxPrimitive from "@hyper/dice-ui/combobox";
+import * as ComboboxPrimitive from "@/components/dice/combobox";
 import { Check, ChevronDown, X } from "lucide-react";
 import type * as React from "react";
 
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 const Combobox = (({
   className,

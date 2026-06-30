@@ -7,30 +7,30 @@ import { useCallback, useEffect } from "react"
 import type {
   PlaybackEvents,
   PlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
+} from "@/components/limeplay/hooks/use-playback"
 import type {
   PlayerEvents,
   PlayerStore,
-} from "@hyper/limeplay/hooks/use-player"
+} from "@/components/limeplay/hooks/use-player"
 import type {
   PlaylistChangeEvent,
   PlaylistEvents,
   PlaylistStore,
-} from "@hyper/limeplay/hooks/use-playlist"
+} from "@/components/limeplay/hooks/use-playlist"
 import type {
   ImmerStoreApi,
   MediaEventSlice,
   MediaFeature,
   MediaStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
-import { isLoadInterrupted } from "@hyper/limeplay/hooks/use-player"
-import { usePlaylist } from "@hyper/limeplay/hooks/use-playlist"
+import { isLoadInterrupted } from "@/components/limeplay/hooks/use-player"
+import { usePlaylist } from "@/components/limeplay/hooks/use-playlist"
 import {
   useMediaEvents,
   useMediaFeatureApi,
   useMediaFeatureStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 /** Metadata and playback configuration for one playable media item. */
 export interface Asset {

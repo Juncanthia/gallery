@@ -8,9 +8,9 @@ import {
   INITIAL_SPLITS,
   type DocumentSplit,
   type DocumentSplitPageId,
-} from "@hyper/extend-ui/components/ui/document-splits"
-import { PDFViewer, type PDFViewerHandle } from "@hyper/extend-ui/components/ui/pdf-viewer"
-import { PdfBlockResizableShell } from "@hyper/extend-ui/components/pdf-block-resizable-shell"
+} from "@/components/extend/components/ui/document-splits"
+import { PDFViewer, type PDFViewerHandle } from "@/components/extend/components/ui/pdf-viewer"
+import { PdfBlockResizableShell } from "@/components/extend/components/pdf-block-resizable-shell"
 
 export function DocumentSplitsBlock({
   file,

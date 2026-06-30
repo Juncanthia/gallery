@@ -13,32 +13,24 @@
  *   Table        → shadcn/ui Table
  */
 
-export { cn } from "@hyper/shadcn";
-export { Button } from "@hyper/shadcn";
-export {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@hyper/shadcn";
-export {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@hyper/shadcn";
-export {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@hyper/shadcn";
-export { Badge } from "@hyper/shadcn";
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
+export { Button } from "@/components/ui/button";
+export { DropdownMenu } from "@/components/ui/dropdown-menu"
+export { DropdownMenuContent } from "@/components/ui/dropdown-menu"
+export { DropdownMenuItem } from "@/components/ui/dropdown-menu"
+export { DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+export { Accordion } from "@/components/ui/accordion"
+export { AccordionContent } from "@/components/ui/accordion"
+export { AccordionItem } from "@/components/ui/accordion"
+export { AccordionTrigger } from "@/components/ui/accordion"
+export { Tooltip } from "@/components/ui/tooltip"
+export { TooltipContent } from "@/components/ui/tooltip"
+export { TooltipProvider } from "@/components/ui/tooltip-provider"
+export { TooltipTrigger } from "@/components/ui/tooltip"
+export { Badge } from "@/components/ui/badge";
+export { Table } from "@/components/ui/table"
+export { TableHeader } from "@/components/ui/table"
+export { TableBody } from "@/components/ui/table"
+export { TableHead } from "@/components/ui/table"
+export { TableRow } from "@/components/ui/table"
+export { TableCell } from "@/components/ui/table"

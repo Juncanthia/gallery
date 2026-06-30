@@ -8,7 +8,7 @@ import { ChevronDown, ChevronUp } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root
 

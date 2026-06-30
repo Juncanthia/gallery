@@ -2,13 +2,13 @@
 
 import { useState } from "react"
 
-import { Button } from "@hyper/limeplay/ui/button"
-import * as TimelineControlPrimitive from "@hyper/limeplay/ui/timeline-control"
+import { Button } from "@/components/limeplay/ui/button"
+import * as TimelineControlPrimitive from "@/components/limeplay/ui/timeline-control"
 import {
   Duration,
   Elapsed,
   Remaining,
-} from "@hyper/limeplay/ui/timeline-labels"
+} from "@/components/limeplay/ui/timeline-labels"
 
 export function TimelineControlDemo() {
   const [showRemaining, setShowRemaining] = useState(false)

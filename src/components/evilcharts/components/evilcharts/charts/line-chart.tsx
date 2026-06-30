@@ -6,7 +6,7 @@ import {
   getColorsCount,
   getLoadingData,
   LoadingIndicator,
-} from "@hyper/evilcharts/components/chart";
+} from "@/components/evilcharts/components/chart";
 import {
   CartesianGrid,
   Curve,
@@ -21,10 +21,10 @@ import {
   ChartTooltipContent,
   type TooltipRoundness,
   type TooltipVariant,
-} from "@hyper/evilcharts/components/tooltip";
-import { EvilBrush, useEvilBrush, type EvilBrushRange } from "@hyper/evilcharts/components/evil-brush";
-import { ChartLegend, ChartLegendContent, type ChartLegendVariant } from "@hyper/evilcharts/components/legend";
-import { ChartDot, type DotVariant } from "@hyper/evilcharts/components/dot";
+} from "@/components/evilcharts/components/tooltip";
+import { EvilBrush, useEvilBrush, type EvilBrushRange } from "@/components/evilcharts/components/evil-brush";
+import { ChartLegend, ChartLegendContent, type ChartLegendVariant } from "@/components/evilcharts/components/legend";
+import { ChartDot, type DotVariant } from "@/components/evilcharts/components/dot";
 import {
   Children,
   createContext,

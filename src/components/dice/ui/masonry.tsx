@@ -2,8 +2,8 @@
 
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { useIsomorphicLayoutEffect } from "@hyper/dice-ui/hooks/use-isomorphic-layout-effect";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
 
 const NODE_COLOR = {
   RED: 0,

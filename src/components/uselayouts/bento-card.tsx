@@ -20,7 +20,7 @@ import {
   LeftToRightListDashIcon,
   UserIcon,
 } from "@hugeicons/core-free-icons";
-import { cn } from "@hyper/uselayouts/lib/utils";
+import { cn } from "@/components/uselayouts/lib/utils";
 
 interface TabConfig {
   id: string;

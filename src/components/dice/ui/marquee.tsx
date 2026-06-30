@@ -6,8 +6,8 @@ import {
   Slot as SlotPrimitive,
 } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { cn } from "@/components/dice/lib/utils";
 
 const ROOT_NAME = "Marquee";
 const CONTENT_NAME = "MarqueeContent";

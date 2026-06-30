@@ -2,8 +2,8 @@
 
 import { Star } from "lucide-react"
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
-import { SlidingNumber } from "@hyper/gooseui/components/ui/sliding-number"
+import { cn } from "@/components/gooseui/lib/utils"
+import { SlidingNumber } from "@/components/gooseui/components/ui/sliding-number"
 
 interface GitHubStarsProps {
   /**

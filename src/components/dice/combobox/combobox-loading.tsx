@@ -1,4 +1,4 @@
-import { Primitive, useProgress } from "@hyper/dice-ui/_shared";
+import { Primitive, useProgress } from "@/components/dice/_shared";
 import * as React from "react";
 import { useComboboxContext } from "./combobox-root";
 

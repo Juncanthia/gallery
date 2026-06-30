@@ -11,8 +11,8 @@ import {
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@hyper/limeplay/ui/item"
-import { cn } from "@hyper/limeplay/lib/utils"
+} from "@/components/limeplay/ui/item"
+import { cn } from "@/components/limeplay/lib/utils"
 
 const MEDIA_ERROR_MAP: Partial<
   Record<number, { code: string; title: string }>

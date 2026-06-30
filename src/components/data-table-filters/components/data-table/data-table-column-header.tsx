@@ -1,5 +1,5 @@
-import { Button } from "@hyper/shadcn/components/ui/button";
-import { cn } from "@hyper/data-table-filters/lib/utils";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/components/data-table-filters/lib/utils";
 import type { Column } from "@tanstack/react-table";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import type React from "react";

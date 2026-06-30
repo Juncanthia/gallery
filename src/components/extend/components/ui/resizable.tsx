@@ -6,7 +6,7 @@ import { DragDropVerticalIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as ResizablePrimitive from "react-resizable-panels"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 function ResizablePanelGroup({
   className,

@@ -2,8 +2,8 @@
 
 import { SkipForwardIcon } from "@phosphor-icons/react"
 
-import { Button } from "@hyper/limeplay/blocks/video-player/components/button"
-import { usePlaylistStore } from "@hyper/limeplay/hooks/use-playlist"
+import { Button } from "@/components/limeplay/blocks/video-player/components/button"
+import { usePlaylistStore } from "@/components/limeplay/hooks/use-playlist"
 
 export function PlaylistNextControl() {
   const next = usePlaylistStore((state) => state.next)

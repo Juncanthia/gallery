@@ -9,7 +9,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 export function Breadcrumb({
   ...props

@@ -6,7 +6,7 @@ import {
   Terminal,
   Zap,
 } from "lucide-react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const demoFeatures = [
   {

@@ -3,7 +3,7 @@
 import { Slider as SliderPrimitive } from "radix-ui";
 import * as React from "react";
 
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 function Slider({
   className,

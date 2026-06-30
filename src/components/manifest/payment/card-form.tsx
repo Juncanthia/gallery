@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@hyper/manifest-ui/components/ui/button'
+import { Button } from '@/components/manifest/components/ui/button'
 import {
   Card,
   CardContent,
@@ -9,9 +9,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle
-} from '@hyper/manifest-ui/components/ui/card'
-import { Input } from '@hyper/manifest-ui/components/ui/input'
-import { Label } from '@hyper/manifest-ui/components/ui/label'
+} from '@/components/manifest/components/ui/card'
+import { Input } from '@/components/manifest/components/ui/input'
+import { Label } from '@/components/manifest/components/ui/label'
 import { CreditCard, Lock } from 'lucide-react'
 
 /**

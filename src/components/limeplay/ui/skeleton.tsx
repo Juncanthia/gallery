@@ -1,4 +1,4 @@
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (

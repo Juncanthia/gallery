@@ -6,7 +6,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
-import { cn } from "@hyper/uselayouts/lib/utils";
+import { cn } from "@/components/uselayouts/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

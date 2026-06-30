@@ -7,9 +7,9 @@ import { ChevronRightIcon, Film, Satellite, Video } from "lucide-react"
 import type {
   StreamPanelContentKind,
   StreamPanelPlayerType,
-} from "@hyper/limeplay/stream-panel/use-stream-panel"
+} from "@/components/limeplay/stream-panel/use-stream-panel"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 import { Separator } from "../ui/separator"
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"

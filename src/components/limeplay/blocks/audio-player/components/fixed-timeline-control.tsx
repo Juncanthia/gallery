@@ -1,12 +1,12 @@
 "use client"
 
-import { cn } from "@hyper/limeplay/lib/utils"
-import * as TimelineSlider from "@hyper/limeplay/ui/timeline-control"
+import { cn } from "@/components/limeplay/lib/utils"
+import * as TimelineSlider from "@/components/limeplay/ui/timeline-control"
 import {
   Duration,
   Elapsed,
   HoverTime,
-} from "@hyper/limeplay/ui/timeline-labels"
+} from "@/components/limeplay/ui/timeline-labels"
 
 export function TimeLabels() {
   return (

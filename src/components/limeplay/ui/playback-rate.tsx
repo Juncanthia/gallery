@@ -6,8 +6,8 @@ import {
   SelectGroup as SelectGroupPrimitive,
   SelectItem,
   Select as SelectPrimitive,
-} from "@hyper/limeplay/ui/select"
-import { usePlaybackRateStore } from "@hyper/limeplay/hooks/use-playback-rate"
+} from "@/components/limeplay/ui/select"
+import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"
 
 export function SelectRoot(
   props: React.ComponentProps<typeof SelectPrimitive>

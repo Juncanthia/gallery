@@ -4,8 +4,8 @@ import { Send } from "lucide-react"
 import Link from "next/link"
 import * as React from "react"
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa"
-import { Button } from "@hyper/gooseui/components/ui/button"
-import { Input } from "@hyper/gooseui/components/ui/input"
+import { Button } from "@/components/gooseui/components/ui/button"
+import { Input } from "@/components/gooseui/components/ui/input"
 
 // Computed at build time, avoids hydration mismatch
 const CURRENT_YEAR = 2026

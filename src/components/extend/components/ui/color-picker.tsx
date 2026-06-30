@@ -4,26 +4,26 @@ import * as React from "react"
 import { CheckIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Button } from "@hyper/extend-ui/components/ui/button"
-import { Input } from "@hyper/extend-ui/components/ui/input"
+import { cn } from "@/components/extend/lib/utils"
+import { Button } from "@/components/extend/components/ui/button"
+import { Input } from "@/components/extend/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/extend-ui/components/ui/popover"
+} from "@/components/extend/components/ui/popover"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@hyper/extend-ui/components/ui/select"
+} from "@/components/extend/components/ui/select"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@hyper/extend-ui/components/ui/tooltip"
+} from "@/components/extend/components/ui/tooltip"
 
 const COLOR_PICKER_PRESETS = [
   "#111827",

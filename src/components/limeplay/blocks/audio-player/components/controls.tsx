@@ -1,20 +1,20 @@
 "use client"
 
-import { ActionControls } from "@hyper/limeplay/blocks/audio-player/components/action-controls"
-import { TimeLabels } from "@hyper/limeplay/blocks/audio-player/components/fixed-timeline-control"
-import { PlaybackControls } from "@hyper/limeplay/blocks/audio-player/components/playback-controls"
+import { ActionControls } from "@/components/limeplay/blocks/audio-player/components/action-controls"
+import { TimeLabels } from "@/components/limeplay/blocks/audio-player/components/fixed-timeline-control"
+import { PlaybackControls } from "@/components/limeplay/blocks/audio-player/components/playback-controls"
 import {
   RepeatControl,
   ShuffleControl,
-} from "@hyper/limeplay/blocks/audio-player/components/playback-mode-controls"
-import { Playlist } from "@hyper/limeplay/blocks/audio-player/components/playlist"
-import { TrackInfo } from "@hyper/limeplay/blocks/audio-player/components/track-info"
-import { VolumeControl } from "@hyper/limeplay/blocks/audio-player/components/volume-group-control"
+} from "@/components/limeplay/blocks/audio-player/components/playback-mode-controls"
+import { Playlist } from "@/components/limeplay/blocks/audio-player/components/playlist"
+import { TrackInfo } from "@/components/limeplay/blocks/audio-player/components/track-info"
+import { VolumeControl } from "@/components/limeplay/blocks/audio-player/components/volume-group-control"
 import {
   AssetSourceType,
   useAssetStore,
-} from "@hyper/limeplay/hooks/use-asset"
-import { usePlaylistStore } from "@hyper/limeplay/hooks/use-playlist"
+} from "@/components/limeplay/hooks/use-asset"
+import { usePlaylistStore } from "@/components/limeplay/hooks/use-playlist"
 
 export function PlayerControls() {
   const sourceType = useAssetStore((state) => state.sourceType)

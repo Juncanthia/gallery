@@ -9,8 +9,8 @@ import {
   Legend,
   Dot,
   ActiveDot,
-} from "@hyper/evilcharts/components/radar-chart";
-import { type ChartConfig } from "@hyper/evilcharts/components/chart";
+} from "@/components/evilcharts/components/radar-chart";
+import { type ChartConfig } from "@/components/evilcharts/components/chart";
 
 const data = [
   { skill: "JavaScript", desktop: 186, mobile: 80 },

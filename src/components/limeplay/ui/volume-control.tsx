@@ -3,13 +3,13 @@
 import { Slider as SliderPrimitive } from "@base-ui/react/slider"
 import React, { useImperativeHandle, useRef, useState } from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
-import { useTrackEvents } from "@hyper/limeplay/hooks/use-track-events"
-import { useVolumeStore } from "@hyper/limeplay/hooks/use-volume"
+} from "@/components/limeplay/hooks/use-playback"
+import { useTrackEvents } from "@/components/limeplay/hooks/use-track-events"
+import { useVolumeStore } from "@/components/limeplay/hooks/use-volume"
 
 const VOLUME_RESET_BASE = 0.05
 

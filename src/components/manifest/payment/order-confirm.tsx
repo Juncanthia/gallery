@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
+import { Button } from '@/components/manifest/components/ui/button'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
 import { demoOrderConfirm } from './demo/payment'
 

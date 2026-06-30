@@ -1,15 +1,15 @@
 "use client";
 
-import { Slider } from "@hyper/data-table-filters/components/custom/slider";
-import { useDataTable } from "@hyper/data-table-filters/components/data-table/data-table-provider";
+import { Slider } from "@/components/data-table-filters/components/custom/slider";
+import { useDataTable } from "@/components/data-table-filters/components/data-table/data-table-provider";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@hyper/shadcn/components/ui/input-group";
-import { Label } from "@hyper/shadcn/components/ui/label";
-import { useDebounce } from "@hyper/data-table-filters/hooks/use-debounce";
-import { isArrayOfNumbers } from "@hyper/data-table-filters/lib/is-array";
+} from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
+import { useDebounce } from "@/components/data-table-filters/hooks/use-debounce";
+import { isArrayOfNumbers } from "@/components/data-table-filters/lib/is-array";
 import { useEffect, useState } from "react";
 import type { DataTableSliderFilterField } from "./types";
 

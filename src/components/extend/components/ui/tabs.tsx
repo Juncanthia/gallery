@@ -3,7 +3,7 @@
 import type React from "react"
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 export type TabsVariant = "default" | "underline"
 

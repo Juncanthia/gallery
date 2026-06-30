@@ -4,7 +4,7 @@ import type React from "react"
 import { isValidElement } from "react"
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 export const PopoverCreateHandle: typeof PopoverPrimitive.createHandle =
   PopoverPrimitive.createHandle

@@ -8,7 +8,7 @@
  *   Leaflet → map primitives from react-leaflet
  */
 
-export { cn } from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
 export {
   CircleMarker,
   MapContainer,

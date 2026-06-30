@@ -2,12 +2,12 @@
 
 import { ExternalLinkIcon, RotateCwIcon } from "lucide-react"
 
-import { Button } from "@hyper/limeplay/ui/button"
+import { Button } from "@/components/limeplay/ui/button"
 import {
   ErrorScreen,
   getErrorDetails,
   type ShakaErrorLike,
-} from "@hyper/limeplay/ui/error-screen"
+} from "@/components/limeplay/ui/error-screen"
 
 const demoError: ShakaErrorLike = {
   category: 1,

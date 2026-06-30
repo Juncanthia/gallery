@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes"
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 interface DigitalClockProps {
   className?: string

@@ -1,10 +1,10 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
-import { Input } from '@hyper/manifest-ui/components/ui/input'
-import { Label } from '@hyper/manifest-ui/components/ui/label'
-import { Separator } from '@hyper/manifest-ui/components/ui/separator'
-import { cn } from '@hyper/manifest-ui/lib/utils'
+import { Button } from '@/components/manifest/components/ui/button'
+import { Input } from '@/components/manifest/components/ui/input'
+import { Label } from '@/components/manifest/components/ui/label'
+import { Separator } from '@/components/manifest/components/ui/separator'
+import { cn } from '@/components/manifest/lib/utils'
 import {
   Bell,
   Check,

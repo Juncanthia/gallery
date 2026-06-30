@@ -9,7 +9,7 @@ import {
   Truck,
   type LucideIcon,
 } from "lucide-react"
-import { cn } from "@hyper/manifest-ui/lib/utils"
+import { cn } from "@/components/manifest/lib/utils"
 import { demoStatusBadge } from './demo/status'
 
 /**

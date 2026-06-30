@@ -3,7 +3,7 @@ import {
   createContext,
   Primitive,
   useId,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 import { useComboboxBadgeListContext } from "./combobox-badge-list";
 import { useComboboxContext } from "./combobox-root";

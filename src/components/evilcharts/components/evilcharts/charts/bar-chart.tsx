@@ -6,16 +6,16 @@ import {
   getColorsCount,
   getLoadingData,
   LoadingIndicator,
-} from "@hyper/evilcharts/components/chart";
-import { EvilBrush, useEvilBrush, type EvilBrushRange } from "@hyper/evilcharts/components/evil-brush";
+} from "@/components/evilcharts/components/chart";
+import { EvilBrush, useEvilBrush, type EvilBrushRange } from "@/components/evilcharts/components/evil-brush";
 import {
   ChartTooltip,
   ChartTooltipContent,
   type TooltipRoundness,
   type TooltipVariant,
-} from "@hyper/evilcharts/components/tooltip";
-import { ChartLegend, ChartLegendContent, type ChartLegendVariant } from "@hyper/evilcharts/components/legend";
-import { ChartBackground, type BackgroundVariant } from "@hyper/evilcharts/components/background";
+} from "@/components/evilcharts/components/tooltip";
+import { ChartLegend, ChartLegendContent, type ChartLegendVariant } from "@/components/evilcharts/components/legend";
+import { ChartBackground, type BackgroundVariant } from "@/components/evilcharts/components/background";
 import {
   createContext,
   use,

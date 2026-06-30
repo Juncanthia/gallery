@@ -4,10 +4,10 @@ import { ArrowLeft, Check, Monitor, Moon, Paintbrush, Sun } from "lucide-react"
 import { MotionConfig, motion } from "motion/react"
 import { useTheme } from "next-themes"
 import * as React from "react"
-import { BrushCleaning } from "@hyper/gooseui/components/animate-ui/icons/brush-cleaning"
-import { ThemeToggle } from "@hyper/gooseui/components/ui/theme-toggle"
-import { useClickOutside } from "@hyper/gooseui/hooks/use-click-outside"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { BrushCleaning } from "@/components/gooseui/components/animate-ui/icons/brush-cleaning"
+import { ThemeToggle } from "@/components/gooseui/components/ui/theme-toggle"
+import { useClickOutside } from "@/components/gooseui/hooks/use-click-outside"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const colors = [
   { name: "zinc", class: "bg-zinc-500" },

@@ -8,9 +8,9 @@ import { useRender } from "@base-ui/react/use-render"
 import { Cancel01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Button } from "@hyper/extend-ui/components/ui/button"
-import { ScrollArea } from "@hyper/extend-ui/components/ui/scroll-area"
+import { cn } from "@/components/extend/lib/utils"
+import { Button } from "@/components/extend/components/ui/button"
+import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
 
 export const Sheet: typeof SheetPrimitive.Root = SheetPrimitive.Root
 

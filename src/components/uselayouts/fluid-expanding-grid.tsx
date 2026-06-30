@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, LayoutGroup } from "motion/react";
-import { cn } from "@hyper/uselayouts/lib/utils";
+import { cn } from "@/components/uselayouts/lib/utils";
 
 interface GalleryItem {
   id: string;

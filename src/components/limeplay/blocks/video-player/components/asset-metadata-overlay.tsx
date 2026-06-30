@@ -1,9 +1,9 @@
 "use client"
 
-import type { VideoPlayerAsset } from "@hyper/limeplay/blocks/video-player/components/media-player"
+import type { VideoPlayerAsset } from "@/components/limeplay/blocks/video-player/components/media-player"
 
-import { useAsset } from "@hyper/limeplay/hooks/use-asset"
-import { ControlsTopContainer } from "@hyper/limeplay/ui/player-layout"
+import { useAsset } from "@/components/limeplay/hooks/use-asset"
+import { ControlsTopContainer } from "@/components/limeplay/ui/player-layout"
 
 export function AssetMetadataOverlay() {
   const { currentItem } = useAsset<VideoPlayerAsset>()

@@ -11,7 +11,7 @@ import {
   Shield,
   Zap,
 } from "lucide-react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 interface Service {
   title: string

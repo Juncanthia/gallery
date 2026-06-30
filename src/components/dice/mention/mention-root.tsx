@@ -13,7 +13,7 @@ import {
   useId,
   useListHighlighting,
   VisuallyHiddenInput,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import type { VirtualElement } from "@floating-ui/react";
 import * as React from "react";
 import type { ContentElement } from "./mention-content";

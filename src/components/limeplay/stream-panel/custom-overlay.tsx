@@ -3,11 +3,11 @@
 import { AnimatePresence, m } from "motion/react"
 import React, { useState } from "react"
 
-import { useStreamPanelStore } from "@hyper/limeplay/stream-panel/use-stream-panel"
-import { Button } from "@hyper/limeplay/ui/button"
-import { Input } from "@hyper/limeplay/ui/input"
-import { Textarea } from "@hyper/limeplay/ui/textarea"
-import { cn } from "@hyper/limeplay/lib/utils"
+import { useStreamPanelStore } from "@/components/limeplay/stream-panel/use-stream-panel"
+import { Button } from "@/components/limeplay/ui/button"
+import { Input } from "@/components/limeplay/ui/input"
+import { Textarea } from "@/components/limeplay/ui/textarea"
+import { cn } from "@/components/limeplay/lib/utils"
 
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 

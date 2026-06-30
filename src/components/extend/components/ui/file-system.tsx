@@ -29,8 +29,8 @@ import {
 import { FileTree as PierreFileTree, useFileTree } from "@pierre/trees/react"
 import { createPortal } from "react-dom"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Button } from "@hyper/extend-ui/components/ui/button"
+import { cn } from "@/components/extend/lib/utils"
+import { Button } from "@/components/extend/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -38,7 +38,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@hyper/extend-ui/components/ui/command"
+} from "@/components/extend/components/ui/command"
 import {
   Dialog,
   DialogClose,
@@ -47,7 +47,7 @@ import {
   DialogHeader,
   DialogPanel,
   DialogTitle,
-} from "@hyper/extend-ui/components/ui/dialog"
+} from "@/components/extend/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,37 +56,37 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@hyper/extend-ui/components/ui/dropdown-menu"
-import { FileThumbnail } from "@hyper/extend-ui/components/ui/file-thumbnail"
-import { Input } from "@hyper/extend-ui/components/ui/input"
+} from "@/components/extend/components/ui/dropdown-menu"
+import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
+import { Input } from "@/components/extend/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/extend-ui/components/ui/popover"
-import { ScrollArea, ScrollAreaPrimitive } from "@hyper/extend-ui/components/ui/scroll-area"
+} from "@/components/extend/components/ui/popover"
+import { ScrollArea, ScrollAreaPrimitive } from "@/components/extend/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@hyper/extend-ui/components/ui/select"
-import { Spinner } from "@hyper/extend-ui/components/ui/spinner"
-import { Tabs, TabsList, TabsTrigger } from "@hyper/extend-ui/components/ui/tabs"
+} from "@/components/extend/components/ui/select"
+import { Spinner } from "@/components/extend/components/ui/spinner"
+import { Tabs, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
 
 const LazyPDFViewer = React.lazy(() =>
-  import("@hyper/extend-ui/components/ui/pdf-viewer").then((mod) => ({
+  import("@/components/extend/components/ui/pdf-viewer").then((mod) => ({
     default: mod.PDFViewer,
   }))
 )
 const LazyDocxViewerPreview = React.lazy(() =>
-  import("@hyper/extend-ui/components/ui/docx-viewer").then((mod) => ({
+  import("@/components/extend/components/ui/docx-viewer").then((mod) => ({
     default: mod.DocxViewerPreview,
   }))
 )
 const LazyXlsxViewerPreview = React.lazy(() =>
-  import("@hyper/extend-ui/components/ui/xlsx-viewer").then((mod) => ({
+  import("@/components/extend/components/ui/xlsx-viewer").then((mod) => ({
     default: mod.XlsxViewerPreview,
   }))
 )

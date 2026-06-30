@@ -5,7 +5,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@hyper/shadcn";
+} from "@/lib/utils";
 
 export function DataTableCellTimestamp({
   date,

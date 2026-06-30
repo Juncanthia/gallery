@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from '@hyper/manifest-ui/components/ui/button';
-import { Card } from '@hyper/manifest-ui/components/ui/card';
-import { cn } from '@hyper/manifest-ui/lib/utils';
+import { Button } from '@/components/manifest/components/ui/button';
+import { Card } from '@/components/manifest/components/ui/card';
+import { cn } from '@/components/manifest/lib/utils';
 import { FileImage, FileSpreadsheet, FileText, Upload, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

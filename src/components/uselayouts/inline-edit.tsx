@@ -4,8 +4,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
 import { Edit01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Input } from "@hyper/uselayouts/_shared/ui/input";
-import { cn } from "@hyper/uselayouts/lib/cn";
+import { Input } from "@/components/uselayouts/_shared/ui/input";
+import { cn } from "@/components/uselayouts/lib/cn";
 
 function SaveInput() {
   const [isEditing, setIsEditing] = useState(false);

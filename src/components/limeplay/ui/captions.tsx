@@ -4,13 +4,13 @@ import { composeRefs } from "@radix-ui/react-compose-refs"
 import { Slot } from "@radix-ui/react-slot"
 import React, { useEffect } from "react"
 
-import { Button } from "@hyper/limeplay/ui/button"
-import { cn } from "@hyper/limeplay/lib/utils"
+import { Button } from "@/components/limeplay/ui/button"
+import { cn } from "@/components/limeplay/lib/utils"
 import {
   useCaptions,
   useCaptionsStore,
-} from "@hyper/limeplay/hooks/use-captions"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
+} from "@/components/limeplay/hooks/use-captions"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
 
 export interface CaptionsControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**

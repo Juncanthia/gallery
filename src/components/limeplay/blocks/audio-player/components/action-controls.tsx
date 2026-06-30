@@ -4,14 +4,14 @@ import { DotsThreeVerticalIcon } from "@phosphor-icons/react"
 import { AnimatePresence, motion } from "motion/react"
 import * as React from "react"
 
-import { ToggleGroup, ToggleGroupItem } from "@hyper/limeplay/ui/toggle-group"
-import { Button } from "@hyper/limeplay/blocks/audio-player/components/button"
+import { ToggleGroup, ToggleGroupItem } from "@/components/limeplay/ui/toggle-group"
+import { Button } from "@/components/limeplay/blocks/audio-player/components/button"
 import {
   DislikeIcon,
   DislikeSelectedIcon,
   LikeIcon,
   LikeSelectedIcon,
-} from "@hyper/limeplay/blocks/audio-player/components/icons"
+} from "@/components/limeplay/blocks/audio-player/components/icons"
 
 export function ActionControls() {
   const [value, setValue] = React.useState<string>("")

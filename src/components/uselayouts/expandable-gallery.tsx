@@ -2,12 +2,12 @@
 
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import React, { useState, useId, useRef } from "react";
-import { useOutsideClick } from "@hyper/uselayouts/hooks/use-outside-click";
+import { useOutsideClick } from "@/components/uselayouts/hooks/use-outside-click";
 import Image from "next/image";
-import { Button } from "@hyper/uselayouts/_shared/ui/button";
+import { Button } from "@/components/uselayouts/_shared/ui/button";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { cn } from "@hyper/uselayouts/lib/utils";
+import { cn } from "@/components/uselayouts/lib/utils";
 
 // Change Here
 const PHOTOS = [

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "@hyper/sabraman/lib/utils";
+import { cn } from "@/components/sabraman/lib/utils";
 
 const CLOCK_FRAME_SIZE = 76;
 const FALLBACK_CLOCK_TIME = {

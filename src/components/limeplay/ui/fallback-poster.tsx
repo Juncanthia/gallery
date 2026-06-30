@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef } from "react"
 
 import * as React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 export const FallbackPoster = React.forwardRef<
   HTMLDivElement,

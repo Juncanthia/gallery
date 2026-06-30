@@ -3,7 +3,7 @@
 import { Progress as ProgressPrimitive } from "radix-ui";
 import type * as React from "react";
 
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 function Progress({
   className,

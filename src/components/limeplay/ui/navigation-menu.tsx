@@ -3,7 +3,7 @@
 import * as Primitive from "@radix-ui/react-navigation-menu"
 import * as React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 const NavigationMenu = Primitive.Root
 

@@ -7,7 +7,7 @@ import {
   type IconProps,
   IconWrapper,
   useAnimateIconContext,
-} from "@hyper/gooseui/components/animate-ui/icons/icon"
+} from "@/components/gooseui/components/animate-ui/icons/icon"
 
 type BinaryProps = IconProps<keyof typeof animations>
 

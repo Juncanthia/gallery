@@ -1,6 +1,6 @@
 "use client"
 
-import { FileSystem, type FileSystemProps } from "@hyper/extend-ui/components/ui/file-system"
+import { FileSystem, type FileSystemProps } from "@/components/extend/components/ui/file-system"
 
 export type FileSystemBlockProps = FileSystemProps
 

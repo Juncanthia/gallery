@@ -73,43 +73,43 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { flushSync } from "react-dom"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Button } from "@hyper/extend-ui/components/ui/button"
+import { cn } from "@/components/extend/lib/utils"
+import { Button } from "@/components/extend/components/ui/button"
 import {
   DocumentViewerSidebarSkeleton,
   DocumentViewerThumbnailSidebar,
   useElementWidth,
   useInlineThumbnailSidebar,
-} from "@hyper/extend-ui/components/ui/document-viewer-sidebar"
+} from "@/components/extend/components/ui/document-viewer-sidebar"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@hyper/extend-ui/components/ui/dropdown-menu"
-import { Input } from "@hyper/extend-ui/components/ui/input"
+} from "@/components/extend/components/ui/dropdown-menu"
+import { Input } from "@/components/extend/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/extend-ui/components/ui/popover"
-import { ScrollArea } from "@hyper/extend-ui/components/ui/scroll-area"
+} from "@/components/extend/components/ui/popover"
+import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@hyper/extend-ui/components/ui/select"
-import { Separator } from "@hyper/extend-ui/components/ui/separator"
-import { Spinner } from "@hyper/extend-ui/components/ui/spinner"
+} from "@/components/extend/components/ui/select"
+import { Separator } from "@/components/extend/components/ui/separator"
+import { Spinner } from "@/components/extend/components/ui/spinner"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/extend-ui/components/ui/tooltip"
-import { loadSharedPdfEngine } from "@hyper/extend-ui/components/pdf-thumbnail-utils"
+} from "@/components/extend/components/ui/tooltip"
+import { loadSharedPdfEngine } from "@/components/extend/components/pdf-thumbnail-utils"
 
 export type PDFViewerPageOverlayProps = {
   pageNumber: number

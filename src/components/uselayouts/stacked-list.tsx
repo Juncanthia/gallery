@@ -1,10 +1,10 @@
 "use client";
 
-import { cn } from "@hyper/uselayouts/lib/utils";
+import { cn } from "@/components/uselayouts/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useMemo } from "react";
-import { Input } from "@hyper/uselayouts/_shared/ui/input";
-import { Button } from "@hyper/uselayouts/_shared/ui/button";
+import { Input } from "@/components/uselayouts/_shared/ui/input";
+import { Button } from "@/components/uselayouts/_shared/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ProfileIcon,

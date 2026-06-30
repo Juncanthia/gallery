@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { cn } from "@hyper/manifest-ui/lib/utils"
+import { cn } from "@/components/manifest/lib/utils"
 
 /*
  * Card Component - ChatGPT UI Guidelines Compliant

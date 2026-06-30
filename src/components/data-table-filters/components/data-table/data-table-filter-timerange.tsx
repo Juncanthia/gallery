@@ -1,8 +1,8 @@
 "use client";
 
-import { DatePickerWithRange } from "@hyper/data-table-filters/components/custom/date-picker-with-range";
-import { useDataTable } from "@hyper/data-table-filters/components/data-table/data-table-provider";
-import { isArrayOfDates } from "@hyper/data-table-filters/lib/is-array";
+import { DatePickerWithRange } from "@/components/data-table-filters/components/custom/date-picker-with-range";
+import { useDataTable } from "@/components/data-table-filters/components/data-table/data-table-provider";
+import { isArrayOfDates } from "@/components/data-table-filters/lib/is-array";
 import { useMemo } from "react";
 import type { DateRange } from "react-day-picker";
 import type { DataTableTimerangeFilterField } from "./types";

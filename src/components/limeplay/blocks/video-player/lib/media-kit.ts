@@ -1,16 +1,16 @@
 "use client"
 
-import { assetFeature } from "@hyper/limeplay/hooks/use-asset"
-import { captionsFeature } from "@hyper/limeplay/hooks/use-captions"
-import { mediaFeature } from "@hyper/limeplay/hooks/use-media"
-import { pictureInPictureFeature } from "@hyper/limeplay/hooks/use-picture-in-picture"
-import { playbackFeature } from "@hyper/limeplay/hooks/use-playback"
-import { playbackRateFeature } from "@hyper/limeplay/hooks/use-playback-rate"
-import { playerFeature } from "@hyper/limeplay/hooks/use-player"
-import { playlistFeature } from "@hyper/limeplay/hooks/use-playlist"
-import { timelineFeature } from "@hyper/limeplay/hooks/use-timeline"
-import { volumeFeature } from "@hyper/limeplay/hooks/use-volume"
-import { createMediaKit } from "@hyper/limeplay/ui/media-provider"
+import { assetFeature } from "@/components/limeplay/hooks/use-asset"
+import { captionsFeature } from "@/components/limeplay/hooks/use-captions"
+import { mediaFeature } from "@/components/limeplay/hooks/use-media"
+import { pictureInPictureFeature } from "@/components/limeplay/hooks/use-picture-in-picture"
+import { playbackFeature } from "@/components/limeplay/hooks/use-playback"
+import { playbackRateFeature } from "@/components/limeplay/hooks/use-playback-rate"
+import { playerFeature } from "@/components/limeplay/hooks/use-player"
+import { playlistFeature } from "@/components/limeplay/hooks/use-playlist"
+import { timelineFeature } from "@/components/limeplay/hooks/use-timeline"
+import { volumeFeature } from "@/components/limeplay/hooks/use-volume"
+import { createMediaKit } from "@/components/limeplay/ui/media-provider"
 
 export const media = createMediaKit({
   features: [

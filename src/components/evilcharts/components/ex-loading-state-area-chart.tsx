@@ -9,8 +9,8 @@ import {
   Tooltip,
   Legend,
   ActiveDot,
-} from "@hyper/evilcharts/components/area-chart";
-import { type ChartConfig } from "@hyper/evilcharts/components/chart";
+} from "@/components/evilcharts/components/area-chart";
+import { type ChartConfig } from "@/components/evilcharts/components/chart";
 
 const chartConfig = {
   desktop: {

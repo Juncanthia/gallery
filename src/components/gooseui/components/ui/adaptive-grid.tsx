@@ -1,7 +1,7 @@
 "use client"
 
 import type * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 interface AdaptiveCardProps {
   children: React.ReactNode

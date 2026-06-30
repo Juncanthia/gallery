@@ -16,19 +16,19 @@ import { useEffect } from "react"
 import type {
   MediaFeature,
   MediaStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { usePlaybackStore } from "@hyper/limeplay/hooks/use-playback"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
 import {
   type PlayerStore,
   usePlayerStore,
-} from "@hyper/limeplay/hooks/use-player"
-import { getDeviceLanguage, off, on } from "@hyper/limeplay/lib/utils"
+} from "@/components/limeplay/hooks/use-player"
+import { getDeviceLanguage, off, on } from "@/components/limeplay/lib/utils"
 import {
   useMediaFeatureApi,
   useMediaFeatureStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 export const CAPTIONS_FEATURE_KEY = "captions"
 

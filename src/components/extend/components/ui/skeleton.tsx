@@ -1,6 +1,6 @@
 import type React from "react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 export function Skeleton({
   className,

@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useRef, useEffect, useMemo } from "react"
-import { Button } from "@hyper/manifest-ui/components/ui/button"
+import { Button } from "@/components/manifest/components/ui/button"
 import { Minus, Plus } from "lucide-react"
-import { cn } from "@hyper/manifest-ui/lib/utils"
+import { cn } from "@/components/manifest/lib/utils"
 import { demoAmountPresets } from "./demo/payment"
 
 /**

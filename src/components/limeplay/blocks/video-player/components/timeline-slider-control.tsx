@@ -2,17 +2,17 @@
 
 import { useState } from "react"
 
-import { Button } from "@hyper/limeplay/blocks/video-player/components/button"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
-import { useTimelineStore } from "@hyper/limeplay/hooks/use-timeline"
-import * as TimelineSlider from "@hyper/limeplay/ui/timeline-control"
+import { Button } from "@/components/limeplay/blocks/video-player/components/button"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
+import { useTimelineStore } from "@/components/limeplay/hooks/use-timeline"
+import * as TimelineSlider from "@/components/limeplay/ui/timeline-control"
 import {
   Duration,
   Elapsed,
   HoverTime,
   LiveLatency,
   Remaining,
-} from "@hyper/limeplay/ui/timeline-labels"
+} from "@/components/limeplay/ui/timeline-labels"
 
 export function TimelineSliderControl() {
   const [showRemaining, setShowRemaining] = useState(false)

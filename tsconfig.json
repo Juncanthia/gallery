@@ -6,22 +6,7 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@hyper/shadcn": ["./src/index.ts"],
-      "@hyper/shadcn/*": ["./src/*"],
-      "@hyper/dice-ui/*": ["./src/components/dice/*"],
-      "@hyper/data-table-filters/*": ["./src/components/data-table-filters/*"],
-      "@hyper/evilcharts/*": ["./src/components/evilcharts/*"],
-      "@hyper/gooseui/*": ["./src/components/gooseui/*"],
-      "@hyper/limeplay/*": ["./src/components/limeplay/*"],
-      "@hyper/manifest-ui/*": ["./src/components/manifest/*"],
-      "@hyper/extend-ui/*": ["./src/components/extend/*"],
-      "@hyper/chamaac-ui/*": ["./src/components/chamaac/*"],
-      "@hyper/sabraman/*": ["./src/components/sabraman/*"],
-      "@hyper/uselayouts/*": ["./src/components/uselayouts/*"],
-      "@hyper/patterns/*": ["./src/components/patterns/*"],
-      "@hyper/plate/*": ["./src/components/plate/*"],
-      "@hyper/tool-ui/*": ["./src/components/tool/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

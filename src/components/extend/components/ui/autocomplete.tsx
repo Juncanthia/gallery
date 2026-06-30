@@ -5,9 +5,9 @@ import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomple
 import { ArrowUpDownIcon, Cancel01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Input } from "@hyper/extend-ui/components/ui/input"
-import { ScrollArea } from "@hyper/extend-ui/components/ui/scroll-area"
+import { cn } from "@/components/extend/lib/utils"
+import { Input } from "@/components/extend/components/ui/input"
+import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
 
 export const Autocomplete: typeof AutocompletePrimitive.Root =
   AutocompletePrimitive.Root

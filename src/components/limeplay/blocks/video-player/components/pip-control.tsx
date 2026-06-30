@@ -2,9 +2,9 @@
 
 import { PictureInPictureIcon } from "@phosphor-icons/react"
 
-import { Button } from "@hyper/limeplay/blocks/video-player/components/button"
-import { usePictureInPictureStore } from "@hyper/limeplay/hooks/use-picture-in-picture"
-import { PictureInPictureControl as PictureInPictureControlPrimitive } from "@hyper/limeplay/ui/picture-in-picture-control"
+import { Button } from "@/components/limeplay/blocks/video-player/components/button"
+import { usePictureInPictureStore } from "@/components/limeplay/hooks/use-picture-in-picture"
+import { PictureInPictureControl as PictureInPictureControlPrimitive } from "@/components/limeplay/ui/picture-in-picture-control"
 
 export function PictureInPictureControl() {
   const isPictureInPictureActive = usePictureInPictureStore(

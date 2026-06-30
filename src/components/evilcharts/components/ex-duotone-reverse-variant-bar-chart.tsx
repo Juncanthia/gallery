@@ -1,7 +1,7 @@
 "use client";
 
-import { EvilBarChart, Bar, XAxis, Grid, Tooltip, Legend } from "@hyper/evilcharts/components/bar-chart";
-import { type ChartConfig } from "@hyper/evilcharts/components/chart";
+import { EvilBarChart, Bar, XAxis, Grid, Tooltip, Legend } from "@/components/evilcharts/components/bar-chart";
+import { type ChartConfig } from "@/components/evilcharts/components/chart";
 
 const data = [
   { month: "January", desktop: 342, mobile: 184 },

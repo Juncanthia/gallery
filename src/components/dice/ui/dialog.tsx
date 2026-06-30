@@ -3,8 +3,8 @@
 import { XIcon } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import type * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { Button } from "@hyper/dice-ui/ui/button";
+import { cn } from "@/components/dice/lib/utils";
+import { Button } from "@/components/dice/ui/button";
 
 function Dialog({
   ...props

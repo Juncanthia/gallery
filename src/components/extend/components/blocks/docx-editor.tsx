@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { DocxEditorPreview } from "@hyper/extend-ui/components/ui/docx-editor"
+import { DocxEditorPreview } from "@/components/extend/components/ui/docx-editor"
 
 export function DocxEditorBlock({ file }: { file?: string }) {
   const [isDark, setIsDark] = React.useState(false)

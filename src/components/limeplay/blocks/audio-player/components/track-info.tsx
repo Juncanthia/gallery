@@ -3,9 +3,9 @@
 import {
   type AudioPlayerAsset,
   getAudioAssetMetadata,
-} from "@hyper/limeplay/blocks/audio-player/components/audio-source"
-import { useAsset } from "@hyper/limeplay/hooks/use-asset"
-import { LimeplayLogo } from "@hyper/limeplay/ui/limeplay-logo"
+} from "@/components/limeplay/blocks/audio-player/components/audio-source"
+import { useAsset } from "@/components/limeplay/hooks/use-asset"
+import { LimeplayLogo } from "@/components/limeplay/ui/limeplay-logo"
 
 export function TrackInfo() {
   const { currentItem } = useAsset<AudioPlayerAsset>()

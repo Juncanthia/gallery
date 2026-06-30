@@ -1,4 +1,4 @@
-import { Primitive, useId } from "@hyper/dice-ui/_shared";
+import { Primitive, useId } from "@/components/dice/_shared";
 import * as React from "react";
 import { useCheckboxGroup } from "./checkbox-group-root";
 

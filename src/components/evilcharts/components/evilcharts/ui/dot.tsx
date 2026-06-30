@@ -1,4 +1,4 @@
-import { cn } from "@hyper/evilcharts/lib/utils";
+import { cn } from "@/components/evilcharts/lib/utils";
 import * as React from "react";
 
 export type DotVariant = "default" | "border" | "colored-border";

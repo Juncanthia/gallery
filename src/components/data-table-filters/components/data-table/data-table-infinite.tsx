@@ -10,25 +10,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@hyper/data-table-filters/components/custom/table";
-import { DataTableFilterControls } from "@hyper/data-table-filters/components/data-table/data-table-filter-controls";
-import { DataTableProvider } from "@hyper/data-table-filters/components/data-table/data-table-provider";
-import { DataTableResetButton } from "@hyper/data-table-filters/components/data-table/data-table-reset-button";
-import { DataTableToolbar } from "@hyper/data-table-filters/components/data-table/data-table-toolbar"; // TODO: check where to put this
-import type { DataTableFilterField } from "@hyper/data-table-filters/components/data-table/types";
-import { Button } from "@hyper/shadcn/components/ui/button";
-import { useHotKey } from "@hyper/data-table-filters/hooks/use-hot-key";
-import { useLocalStorage } from "@hyper/data-table-filters/hooks/use-local-storage";
+} from "@/components/data-table-filters/components/custom/table";
+import { DataTableFilterControls } from "@/components/data-table-filters/components/data-table/data-table-filter-controls";
+import { DataTableProvider } from "@/components/data-table-filters/components/data-table/data-table-provider";
+import { DataTableResetButton } from "@/components/data-table-filters/components/data-table/data-table-reset-button";
+import { DataTableToolbar } from "@/components/data-table-filters/components/data-table/data-table-toolbar"; // TODO: check where to put this
+import type { DataTableFilterField } from "@/components/data-table-filters/components/data-table/types";
+import { Button } from "@/components/ui/button";
+import { useHotKey } from "@/components/data-table-filters/hooks/use-hot-key";
+import { useLocalStorage } from "@/components/data-table-filters/hooks/use-local-storage";
 import {
   getColumnOrderKey,
   getColumnVisibilityKey,
-} from "@hyper/data-table-filters/lib/constants/local-storage";
-import { getFacetedUniqueValuesFlattened } from "@hyper/data-table-filters/lib/data-table/faceted";
-import { formatCompactNumber } from "@hyper/data-table-filters/lib/format";
-import { useFilterActions } from "@hyper/data-table-filters/lib/store/hooks/useFilterActions";
-import { useFilterState } from "@hyper/data-table-filters/lib/store/hooks/useFilterState";
-import { arrSome, inDateRange } from "@hyper/data-table-filters/lib/table/filterfns";
-import { cn } from "@hyper/data-table-filters/lib/utils";
+} from "@/components/data-table-filters/lib/constants/local-storage";
+import { getFacetedUniqueValuesFlattened } from "@/components/data-table-filters/lib/data-table/faceted";
+import { formatCompactNumber } from "@/components/data-table-filters/lib/format";
+import { useFilterActions } from "@/components/data-table-filters/lib/store/hooks/useFilterActions";
+import { useFilterState } from "@/components/data-table-filters/lib/store/hooks/useFilterState";
+import { arrSome, inDateRange } from "@/components/data-table-filters/lib/table/filterfns";
+import { cn } from "@/components/data-table-filters/lib/utils";
 import {
   type FetchNextPageOptions,
   type FetchPreviousPageOptions,

@@ -66,44 +66,44 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Button } from "@hyper/extend-ui/components/ui/button"
-import { ColorPicker } from "@hyper/extend-ui/components/ui/color-picker"
+import { cn } from "@/components/extend/lib/utils"
+import { Button } from "@/components/extend/components/ui/button"
+import { ColorPicker } from "@/components/extend/components/ui/color-picker"
 import {
   DocumentViewerThumbnailSidebar,
   useElementWidth,
   useInlineThumbnailSidebar,
-} from "@hyper/extend-ui/components/ui/document-viewer-sidebar"
+} from "@/components/extend/components/ui/document-viewer-sidebar"
 import {
   renderDocxCommentCard,
   renderDocxTrackedChangeCard,
-} from "@hyper/extend-ui/components/ui/docx-annotation-card"
+} from "@/components/extend/components/ui/docx-annotation-card"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@hyper/extend-ui/components/ui/dropdown-menu"
-import { FileThumbnail } from "@hyper/extend-ui/components/ui/file-thumbnail"
-import { Input } from "@hyper/extend-ui/components/ui/input"
-import { ScrollArea } from "@hyper/extend-ui/components/ui/scroll-area"
+} from "@/components/extend/components/ui/dropdown-menu"
+import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
+import { Input } from "@/components/extend/components/ui/input"
+import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@hyper/extend-ui/components/ui/select"
-import { Separator } from "@hyper/extend-ui/components/ui/separator"
-import { Spinner } from "@hyper/extend-ui/components/ui/spinner"
-import { ToggleGroup, ToggleGroupItem } from "@hyper/extend-ui/components/ui/toggle"
+} from "@/components/extend/components/ui/select"
+import { Separator } from "@/components/extend/components/ui/separator"
+import { Spinner } from "@/components/extend/components/ui/spinner"
+import { ToggleGroup, ToggleGroupItem } from "@/components/extend/components/ui/toggle"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/extend-ui/components/ui/tooltip"
+} from "@/components/extend/components/ui/tooltip"
 
 const DOCX_MIME_TYPE =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"

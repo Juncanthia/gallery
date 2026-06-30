@@ -3,5 +3,5 @@
  */
 "use client";
 
-export { cn } from "@hyper/shadcn";
-export { Button } from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
+export { Button } from "@/components/ui/button";

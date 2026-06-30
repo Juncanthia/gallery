@@ -8,7 +8,7 @@ import { createStore, type StoreApi } from "zustand/vanilla"
 import {
   type MediaProviderProps,
   type MediaStore,
-} from "@hyper/limeplay/hooks/use-media"
+} from "@/components/limeplay/hooks/use-media"
 
 export type { MediaProviderProps, MediaStore }
 

@@ -1,4 +1,4 @@
-import { hexToRgb } from "@hyper/data-table-filters/lib/colors";
+import { hexToRgb } from "@/components/data-table-filters/lib/colors";
 
 const BG_OPACITY = 0.2;
 const FOREGROUND_OPACITY = 0.5;

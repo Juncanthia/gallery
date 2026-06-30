@@ -4,8 +4,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger
-} from '@hyper/manifest-ui/components/ui/dropdown-menu'
-import { cn } from '@hyper/manifest-ui/lib/utils'
+} from '@/components/manifest/components/ui/dropdown-menu'
+import { cn } from '@/components/manifest/lib/utils'
 import { demoTextMessages, demoImageMessages, demoReactionMessage, demoVoiceMessage } from './demo/messaging'
 import { Check, CheckCheck, Smile } from 'lucide-react'
 import { useRef, useState } from 'react'

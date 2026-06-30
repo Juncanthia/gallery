@@ -6,7 +6,7 @@ import {
   Primitive,
   useId,
   useIsomorphicLayoutEffect,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 import { type ItemData, useMentionContext } from "./mention-root";
 

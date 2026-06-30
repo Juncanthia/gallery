@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@hyper/manifest-ui/lib/utils'
+import { cn } from '@/components/manifest/lib/utils'
 import { MapPin } from 'lucide-react'
 import { lazy } from 'react'
 import type { ComponentType } from 'react'

@@ -3,7 +3,7 @@
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 import * as React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 function Popover({ ...props }: PopoverPrimitive.Root.Props) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />

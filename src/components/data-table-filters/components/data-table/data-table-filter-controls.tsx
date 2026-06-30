@@ -1,12 +1,12 @@
 "use client";
 
-import { useDataTable } from "@hyper/data-table-filters/components/data-table/data-table-provider";
+import { useDataTable } from "@/components/data-table-filters/components/data-table/data-table-provider";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@hyper/shadcn/components/ui/accordion";
+} from "@/components/ui/accordion";
 import * as React from "react";
 import { DataTableFilterCheckbox } from "./data-table-filter-checkbox";
 import { DataTableFilterInput } from "./data-table-filter-input";

@@ -3,9 +3,9 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { useMemo } from "react"
 
-import { Label } from "@hyper/limeplay/ui/label"
-import { Separator } from "@hyper/limeplay/ui/separator"
-import { cn } from "@hyper/limeplay/lib/utils"
+import { Label } from "@/components/limeplay/ui/label"
+import { Separator } from "@/components/limeplay/ui/separator"
+import { cn } from "@/components/limeplay/lib/utils"
 
 function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

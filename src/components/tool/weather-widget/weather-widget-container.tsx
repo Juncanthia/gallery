@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { cn } from "@hyper/shadcn";
+import { cn } from "@/lib/utils";
 import {
   EffectCompositorRuntime,
   getNearestCheckpoint,

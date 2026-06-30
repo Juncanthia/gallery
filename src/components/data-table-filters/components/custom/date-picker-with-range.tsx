@@ -1,16 +1,16 @@
 "use client";
 
-import type { DatePreset } from "@hyper/data-table-filters/components/data-table/types";
-import { Button } from "@hyper/shadcn/components/ui/button";
-import { Calendar } from "@hyper/shadcn/components/ui/calendar";
-import { Input } from "@hyper/shadcn/components/ui/input";
-import { Kbd } from "@hyper/shadcn/components/ui/kbd";
-import { Label } from "@hyper/shadcn/components/ui/label";
+import type { DatePreset } from "@/components/data-table-filters/components/data-table/types";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Kbd } from "@/components/ui/kbd";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/shadcn/components/ui/popover";
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -19,11 +19,11 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@hyper/shadcn/components/ui/select";
-import { Separator } from "@hyper/shadcn/components/ui/separator";
-import { useDebounce } from "@hyper/data-table-filters/hooks/use-debounce";
-import { presets as defaultPresets } from "@hyper/data-table-filters/lib/date-preset";
-import { cn } from "@hyper/data-table-filters/lib/utils";
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { useDebounce } from "@/components/data-table-filters/hooks/use-debounce";
+import { presets as defaultPresets } from "@/components/data-table-filters/lib/date-preset";
+import { cn } from "@/components/data-table-filters/lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import * as React from "react";

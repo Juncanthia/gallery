@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/shadcn";
+} from "@/lib/utils";
 import { cn } from "../../lib/utils";
 import React, { useEffect, useRef, useState } from "react";
 

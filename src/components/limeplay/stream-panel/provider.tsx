@@ -9,9 +9,9 @@ import React, {
   useState,
 } from "react"
 
-import type { StreamPanelPlaylistPreset } from "@hyper/limeplay/stream-panel/content-catalog"
-import type { StreamPanelPlayerType } from "@hyper/limeplay/stream-panel/use-stream-panel"
-import type { StreamPreset } from "@hyper/limeplay/lib/stream-presets"
+import type { StreamPanelPlaylistPreset } from "@/components/limeplay/stream-panel/content-catalog"
+import type { StreamPanelPlayerType } from "@/components/limeplay/stream-panel/use-stream-panel"
+import type { StreamPreset } from "@/components/limeplay/lib/stream-presets"
 
 export interface StreamPanelController {
   onLoadStream?: (src: string, config?: string) => void

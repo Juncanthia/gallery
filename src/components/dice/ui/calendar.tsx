@@ -11,8 +11,8 @@ import {
   DayPicker,
   getDefaultClassNames,
 } from "react-day-picker";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { Button, buttonVariants } from "@hyper/dice-ui/ui/button";
+import { cn } from "@/components/dice/lib/utils";
+import { Button, buttonVariants } from "@/components/dice/ui/button";
 
 function Calendar({
   className,

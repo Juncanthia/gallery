@@ -1,4 +1,4 @@
-import { Primitive, useComposedRefs } from "@hyper/dice-ui/_shared";
+import { Primitive, useComposedRefs } from "@/components/dice/_shared";
 import * as React from "react";
 import { useComboboxItemContext } from "./combobox-item";
 

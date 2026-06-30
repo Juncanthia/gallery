@@ -1,8 +1,8 @@
 "use client";
 
-import { EvilSankeyChart, Node, NodeLabel, Link, Tooltip } from "@hyper/evilcharts/components/sankey-chart";
+import { EvilSankeyChart, Node, NodeLabel, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart";
 import type { SankeyData } from "recharts";
-import { type ChartConfig } from "@hyper/evilcharts/components/chart";
+import { type ChartConfig } from "@/components/evilcharts/components/chart";
 
 // Marketing funnel - user acquisition to conversions
 const data: SankeyData = {

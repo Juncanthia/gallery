@@ -3,12 +3,12 @@
 import { Check, ChevronDown } from "lucide-react";
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { VisuallyHiddenInput } from "@hyper/dice-ui/components/visually-hidden-input";
-import { useAsRef } from "@hyper/dice-ui/hooks/use-as-ref";
-import { useIsomorphicLayoutEffect } from "@hyper/dice-ui/hooks/use-isomorphic-layout-effect";
-import { useLazyRef } from "@hyper/dice-ui/hooks/use-lazy-ref";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { cn } from "@/components/dice/lib/utils";
+import { VisuallyHiddenInput } from "@/components/dice/components/visually-hidden-input";
+import { useAsRef } from "@/components/dice/hooks/use-as-ref";
+import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
+import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
 import {
   Command,
   CommandEmpty,
@@ -16,13 +16,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@hyper/dice-ui/ui/command";
-import { Input } from "@hyper/dice-ui/ui/input";
+} from "@/components/dice/ui/command";
+import { Input } from "@/components/dice/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/dice-ui/ui/popover";
+} from "@/components/dice/ui/popover";
 
 const ROOT_NAME = "PhoneInput";
 const COUNTRY_SELECT_NAME = "PhoneInputCountrySelect";

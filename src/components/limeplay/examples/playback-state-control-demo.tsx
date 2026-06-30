@@ -5,9 +5,9 @@ import {
   RepeatIcon,
 } from "@phosphor-icons/react"
 
-import { Button } from "@hyper/limeplay/ui/button"
-import { usePlaybackStore } from "@hyper/limeplay/hooks/use-playback"
-import { PlaybackControl } from "@hyper/limeplay/ui/playback-control"
+import { Button } from "@/components/limeplay/ui/button"
+import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
+import { PlaybackControl } from "@/components/limeplay/ui/playback-control"
 
 export function PlaybackStateControlDemo() {
   const status = usePlaybackStore((state) => state.status)

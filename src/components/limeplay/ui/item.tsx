@@ -3,8 +3,8 @@ import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
 
-import { Separator } from "@hyper/limeplay/ui/separator"
-import { cn } from "@hyper/limeplay/lib/utils"
+import { Separator } from "@/components/limeplay/ui/separator"
+import { cn } from "@/components/limeplay/lib/utils"
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

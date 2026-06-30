@@ -1,7 +1,7 @@
 "use client";
 
 import * as RechartsPrimitive from "recharts";
-import { cn } from "@hyper/evilcharts/lib/utils";
+import { cn } from "@/components/evilcharts/lib/utils";
 import * as React from "react";
 
 // Format: { THEME_NAME: CSS_SELECTOR }

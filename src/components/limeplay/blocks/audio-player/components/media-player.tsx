@@ -12,15 +12,15 @@ import type {
   AudioPlayerAsset,
   AudioSourceProviderProps,
   PlaybackUrls,
-} from "@hyper/limeplay/blocks/audio-player/components/audio-source"
+} from "@/components/limeplay/blocks/audio-player/components/audio-source"
 
-import { cn } from "@hyper/limeplay/lib/utils"
-import { AudioSourceProvider } from "@hyper/limeplay/blocks/audio-player/components/audio-source"
-import { PlayerControls } from "@hyper/limeplay/blocks/audio-player/components/controls"
-import { TimelineControl } from "@hyper/limeplay/blocks/audio-player/components/fixed-timeline-control"
-import { MediaProvider } from "@hyper/limeplay/blocks/audio-player/lib/media-kit"
-import { Media } from "@hyper/limeplay/ui/media"
-import { RootContainer } from "@hyper/limeplay/ui/root-container"
+import { cn } from "@/components/limeplay/lib/utils"
+import { AudioSourceProvider } from "@/components/limeplay/blocks/audio-player/components/audio-source"
+import { PlayerControls } from "@/components/limeplay/blocks/audio-player/components/controls"
+import { TimelineControl } from "@/components/limeplay/blocks/audio-player/components/fixed-timeline-control"
+import { MediaProvider } from "@/components/limeplay/blocks/audio-player/lib/media-kit"
+import { Media } from "@/components/limeplay/ui/media"
+import { RootContainer } from "@/components/limeplay/ui/root-container"
 
 import styles from "../audio-player.module.css"
 

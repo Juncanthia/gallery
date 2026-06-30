@@ -1,4 +1,4 @@
-import { composeEventHandlers, Presence, Primitive } from "@hyper/dice-ui/_shared";
+import { composeEventHandlers, Presence, Primitive } from "@/components/dice/_shared";
 import * as React from "react";
 import { useTagsInput } from "./tags-input-root";
 

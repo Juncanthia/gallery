@@ -1,7 +1,7 @@
 "use client"
 
 /* eslint-disable @next/next/no-img-element */
-import { usePokemonImage } from "@hyper/gooseui/components/blocks/complex-component/hooks/use-pokemon"
+import { usePokemonImage } from "@/components/gooseui/components/blocks/complex-component/hooks/use-pokemon"
 
 export function PokemonImage({
   name,

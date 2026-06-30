@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { useIsomorphicLayoutEffect } from "@hyper/gooseui/hooks/use-isomorphic-layout-effect"
+import { useIsomorphicLayoutEffect } from "@/components/gooseui/hooks/use-isomorphic-layout-effect"
 
 function useAsRef<T>(props: T) {
   const ref = React.useRef<T>(props)

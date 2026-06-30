@@ -31,35 +31,35 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import Papa from "papaparse"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Button } from "@hyper/extend-ui/components/ui/button"
+import { cn } from "@/components/extend/lib/utils"
+import { Button } from "@/components/extend/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@hyper/extend-ui/components/ui/dropdown-menu"
-import { Input } from "@hyper/extend-ui/components/ui/input"
+} from "@/components/extend/components/ui/dropdown-menu"
+import { Input } from "@/components/extend/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/extend-ui/components/ui/popover"
+} from "@/components/extend/components/ui/popover"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@hyper/extend-ui/components/ui/select"
-import { Separator } from "@hyper/extend-ui/components/ui/separator"
-import { Spinner } from "@hyper/extend-ui/components/ui/spinner"
+} from "@/components/extend/components/ui/select"
+import { Separator } from "@/components/extend/components/ui/separator"
+import { Spinner } from "@/components/extend/components/ui/spinner"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/extend-ui/components/ui/tooltip"
+} from "@/components/extend/components/ui/tooltip"
 
 const ZOOM_OPTIONS = [0.75, 1, 1.25, 1.5, 2] as const
 const CSV_SEARCH_BATCH_ROW_COUNT = 500

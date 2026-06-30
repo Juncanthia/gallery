@@ -15,9 +15,9 @@ import {
   type ReviewField,
   type ReviewLocation,
   type ReviewMetadataEntry,
-} from "@hyper/extend-ui/components/ui/bounding-box-citations"
-import { PDFViewer, type PDFViewerHandle } from "@hyper/extend-ui/components/ui/pdf-viewer"
-import { PdfBlockResizableShell } from "@hyper/extend-ui/components/pdf-block-resizable-shell"
+} from "@/components/extend/components/ui/bounding-box-citations"
+import { PDFViewer, type PDFViewerHandle } from "@/components/extend/components/ui/pdf-viewer"
+import { PdfBlockResizableShell } from "@/components/extend/components/pdf-block-resizable-shell"
 
 const DEFAULT_ZOOM = 1
 

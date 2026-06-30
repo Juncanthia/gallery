@@ -1,8 +1,8 @@
 "use client"
 
 import type * as React from "react"
-import { useGlobalStyles } from "@hyper/gooseui/hooks/use-global-styles"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { useGlobalStyles } from "@/components/gooseui/hooks/use-global-styles"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const PARALLAX_CARDS_STYLES = `
 @keyframes parallax-card {

@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@hyper/manifest-ui/lib/utils'
+import { cn } from '@/components/manifest/lib/utils'
 import { demoQuickReplies } from './demo/selection'
 
 /**

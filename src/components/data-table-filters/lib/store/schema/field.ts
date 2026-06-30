@@ -2,7 +2,7 @@ import {
   ARRAY_DELIMITER,
   SLIDER_DELIMITER,
   SORT_DELIMITER,
-} from "@hyper/data-table-filters/lib/delimiters";
+} from "@/components/data-table-filters/lib/delimiters";
 import type { FieldBuilder, FieldConfig } from "./types";
 
 // Helper to create a field builder from config

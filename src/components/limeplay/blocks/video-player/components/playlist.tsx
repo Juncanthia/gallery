@@ -3,7 +3,7 @@
 import { CardsThreeIcon, PlayIcon } from "@phosphor-icons/react"
 import { useEffect, useMemo } from "react"
 
-import type { VideoPlayerAsset } from "@hyper/limeplay/blocks/video-player/components/media-player"
+import type { VideoPlayerAsset } from "@/components/limeplay/blocks/video-player/components/media-player"
 
 import {
   DropdownMenu,
@@ -13,11 +13,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@hyper/limeplay/ui/dropdown-menu"
-import { Button } from "@hyper/limeplay/blocks/video-player/components/button"
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
-import { usePlaylistStore } from "@hyper/limeplay/hooks/use-playlist"
+} from "@/components/limeplay/ui/dropdown-menu"
+import { Button } from "@/components/limeplay/blocks/video-player/components/button"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
+import { usePlaylistStore } from "@/components/limeplay/hooks/use-playlist"
 
 export function Playlist() {
   const currentItem = usePlaylistStore(

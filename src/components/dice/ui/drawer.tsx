@@ -3,7 +3,7 @@
 import type * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 function Drawer({
   ...props

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 const INLINE_THUMBNAIL_SIDEBAR_MIN_WIDTH = 768
 

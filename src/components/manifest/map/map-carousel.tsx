@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
-import { Checkbox } from '@hyper/manifest-ui/components/ui/checkbox'
-import { cn } from '@hyper/manifest-ui/lib/utils'
+import { Button } from '@/components/manifest/components/ui/button'
+import { Checkbox } from '@/components/manifest/components/ui/checkbox'
+import { cn } from '@/components/manifest/lib/utils'
 import { ChevronDown, MapPin, Maximize2, SlidersHorizontal, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { demoMapLocations, demoMapCenter, demoMapZoom } from './demo/map'

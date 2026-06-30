@@ -5,25 +5,25 @@ import { PanelLeftIcon } from "lucide-react"
 import { Slot } from "radix-ui"
 import * as React from "react"
 
-import { Button } from "@hyper/limeplay/ui/button"
-import { Input } from "@hyper/limeplay/ui/input"
-import { Separator } from "@hyper/limeplay/ui/separator"
+import { Button } from "@/components/limeplay/ui/button"
+import { Input } from "@/components/limeplay/ui/input"
+import { Separator } from "@/components/limeplay/ui/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@hyper/limeplay/ui/sheet"
-import { Skeleton } from "@hyper/limeplay/ui/skeleton"
+} from "@/components/limeplay/ui/sheet"
+import { Skeleton } from "@/components/limeplay/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/limeplay/ui/tooltip"
-import { useIsMobile } from "@hyper/limeplay/hooks/use-mobile"
-import { cn } from "@hyper/limeplay/lib/utils"
+} from "@/components/limeplay/ui/tooltip"
+import { useIsMobile } from "@/components/limeplay/hooks/use-mobile"
+import { cn } from "@/components/limeplay/lib/utils"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

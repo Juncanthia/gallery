@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@hyper/manifest-ui/lib/utils";
+import { cn } from "@/components/manifest/lib/utils";
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createNoise3D } from "simplex-noise";
 

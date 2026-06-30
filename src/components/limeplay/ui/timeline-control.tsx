@@ -3,14 +3,14 @@
 import { Slider as SliderPrimitive } from "@base-ui/react/slider"
 import React, { useImperativeHandle, useRef } from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
-import { useTimelineStore } from "@hyper/limeplay/hooks/use-timeline"
-import { useTrackEvents } from "@hyper/limeplay/hooks/use-track-events"
+} from "@/components/limeplay/hooks/use-playback"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
+import { useTimelineStore } from "@/components/limeplay/hooks/use-timeline"
+import { useTrackEvents } from "@/components/limeplay/hooks/use-track-events"
 
 export type TimelineRootPropsDocs = Pick<
   React.ComponentProps<typeof SliderPrimitive.Root>,

@@ -6,8 +6,8 @@ import type {
   DocxTrackedChangeCardRenderProps,
 } from "@extend-ai/react-docx"
 
-import { Badge } from "@hyper/extend-ui/components/ui/badge"
-import { Card } from "@hyper/extend-ui/components/ui/card"
+import { Badge } from "@/components/extend/components/ui/badge"
+import { Card } from "@/components/extend/components/ui/card"
 
 function trackedChangeBadgeVariant(
   kind: DocxTrackedChangeCardRenderProps["change"]["kind"]

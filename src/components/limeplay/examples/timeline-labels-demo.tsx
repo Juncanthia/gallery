@@ -1,10 +1,10 @@
-import * as TimelineControlPrimitive from "@hyper/limeplay/ui/timeline-control"
+import * as TimelineControlPrimitive from "@/components/limeplay/ui/timeline-control"
 import {
   Duration,
   Elapsed,
   HoverTime,
   Remaining,
-} from "@hyper/limeplay/ui/timeline-labels"
+} from "@/components/limeplay/ui/timeline-labels"
 
 export function TimelineLabelsDemo() {
   return (

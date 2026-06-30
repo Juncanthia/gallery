@@ -3,8 +3,8 @@
 import { useComposedRefs } from "@radix-ui/react-compose-refs"
 import * as React from "react"
 
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { usePlaybackStore } from "@hyper/limeplay/hooks/use-playback"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
 
 export type MediaProps =
   | (React.AudioHTMLAttributes<HTMLAudioElement> & { as: "audio" })

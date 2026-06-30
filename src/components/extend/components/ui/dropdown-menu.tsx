@@ -5,7 +5,7 @@ import { Menu as DropdownMenuPrimitive } from "@base-ui/react/menu"
 import { ArrowRight01Icon, Tick02Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 function childContent(
   asChild: boolean | undefined,

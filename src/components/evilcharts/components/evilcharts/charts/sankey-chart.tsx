@@ -5,14 +5,14 @@ import {
   ChartContainer,
   getColorsCount,
   LoadingIndicator,
-} from "@hyper/evilcharts/components/chart";
+} from "@/components/evilcharts/components/chart";
 import {
   ChartTooltip,
   ChartTooltipContent,
   type TooltipRoundness,
   type TooltipVariant,
-} from "@hyper/evilcharts/components/tooltip";
-import { ChartBackground, type BackgroundVariant } from "@hyper/evilcharts/components/background";
+} from "@/components/evilcharts/components/tooltip";
+import { ChartBackground, type BackgroundVariant } from "@/components/evilcharts/components/background";
 import {
   Children,
   createContext,

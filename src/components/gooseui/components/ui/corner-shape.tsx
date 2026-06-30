@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 /**
  * Generate superellipse path with normalized coordinates (0-1)

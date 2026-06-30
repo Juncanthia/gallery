@@ -1,5 +1,5 @@
-import { FallbackPoster } from "@hyper/limeplay/ui/fallback-poster"
-import { LimeplayLogo } from "@hyper/limeplay/ui/limeplay-logo"
+import { FallbackPoster } from "@/components/limeplay/ui/fallback-poster"
+import { LimeplayLogo } from "@/components/limeplay/ui/limeplay-logo"
 
 export function FallbackPosterDemo() {
   return (

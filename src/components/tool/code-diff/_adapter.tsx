@@ -9,6 +9,7 @@
  *   Collapsible -> shadcn/ui Collapsible
  */
 
-export { cn } from "@hyper/shadcn";
-export { Button } from "@hyper/shadcn";
-export { Collapsible, CollapsibleTrigger } from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
+export { Button } from "@/components/ui/button";
+export { Collapsible } from "@/components/ui/collapsible"
+export { CollapsibleTrigger } from "@/components/ui/collapsible";

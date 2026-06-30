@@ -1,4 +1,4 @@
-import { composeEventHandlers, Primitive } from "@hyper/dice-ui/_shared";
+import { composeEventHandlers, Primitive } from "@/components/dice/_shared";
 import * as React from "react";
 import { useComboboxContext } from "./combobox-root";
 

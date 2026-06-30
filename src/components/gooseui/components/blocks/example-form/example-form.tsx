@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { z } from "zod"
-import { Button } from "@hyper/gooseui/components/ui/button"
+import { Button } from "@/components/gooseui/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,10 +10,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@hyper/gooseui/components/ui/card"
-import { Input } from "@hyper/gooseui/components/ui/input"
-import { Label } from "@hyper/gooseui/components/ui/label"
-import { Textarea } from "@hyper/gooseui/components/ui/textarea"
+} from "@/components/gooseui/components/ui/card"
+import { Input } from "@/components/gooseui/components/ui/input"
+import { Label } from "@/components/gooseui/components/ui/label"
+import { Textarea } from "@/components/gooseui/components/ui/textarea"
 
 const exampleFormSchema = z.object({
   name: z.string().min(1),

@@ -2,8 +2,8 @@
 
 import { XIcon } from "lucide-react";
 import * as React from "react";
-import { useSafeLegacyUiLocale } from "@hyper/sabraman/components/legacy-locale-context";
-import { cn } from "@hyper/sabraman/lib/utils";
+import { useSafeLegacyUiLocale } from "@/components/sabraman/components/legacy-locale-context";
+import { cn } from "@/components/sabraman/lib/utils";
 import {
 	Dialog,
 	DialogClose,
@@ -13,7 +13,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@hyper/sabraman/components/ui/dialog";
+} from "@/components/sabraman/components/ui/dialog";
 
 const LEGACY_ALERT_BUTTON_BACKGROUNDS = {
 	default:

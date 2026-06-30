@@ -13,9 +13,9 @@ import * as React from "react"
 import {
   Slot,
   type WithAsChild,
-} from "@hyper/gooseui/components/animate-ui/primitives/animate/slot"
-import { useIsInView } from "@hyper/gooseui/hooks/use-is-in-view"
-import { cn } from "@hyper/gooseui/lib/utils"
+} from "@/components/gooseui/components/animate-ui/primitives/animate/slot"
+import { useIsInView } from "@/components/gooseui/hooks/use-is-in-view"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const staticAnimations = {
   path: {

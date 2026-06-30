@@ -7,23 +7,23 @@ import type {
   Asset,
   PlayerSource,
   UseAssetOptions,
-} from "@hyper/limeplay/hooks/use-asset"
+} from "@/components/limeplay/hooks/use-asset"
 
-import { cn } from "@hyper/limeplay/lib/utils"
-import { AssetMetadataOverlay } from "@hyper/limeplay/blocks/video-player/components/asset-metadata-overlay"
-import { BottomControls } from "@hyper/limeplay/blocks/video-player/components/bottom-controls"
-import { Button } from "@hyper/limeplay/blocks/video-player/components/button"
-import { MediaProvider } from "@hyper/limeplay/blocks/video-player/lib/media-kit"
-import { useAsset } from "@hyper/limeplay/hooks/use-asset"
-import { usePlaybackStore } from "@hyper/limeplay/hooks/use-playback"
-import { PlaybackSourceController } from "@hyper/limeplay/hooks/use-playback-source"
-import { CaptionsContainer } from "@hyper/limeplay/ui/captions"
-import { ErrorScreen } from "@hyper/limeplay/ui/error-screen"
-import { FallbackPoster } from "@hyper/limeplay/ui/fallback-poster"
-import { LimeplayLogo } from "@hyper/limeplay/ui/limeplay-logo"
-import { Media } from "@hyper/limeplay/ui/media"
-import * as Layout from "@hyper/limeplay/ui/player-layout"
-import { RootContainer } from "@hyper/limeplay/ui/root-container"
+import { cn } from "@/components/limeplay/lib/utils"
+import { AssetMetadataOverlay } from "@/components/limeplay/blocks/video-player/components/asset-metadata-overlay"
+import { BottomControls } from "@/components/limeplay/blocks/video-player/components/bottom-controls"
+import { Button } from "@/components/limeplay/blocks/video-player/components/button"
+import { MediaProvider } from "@/components/limeplay/blocks/video-player/lib/media-kit"
+import { useAsset } from "@/components/limeplay/hooks/use-asset"
+import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
+import { PlaybackSourceController } from "@/components/limeplay/hooks/use-playback-source"
+import { CaptionsContainer } from "@/components/limeplay/ui/captions"
+import { ErrorScreen } from "@/components/limeplay/ui/error-screen"
+import { FallbackPoster } from "@/components/limeplay/ui/fallback-poster"
+import { LimeplayLogo } from "@/components/limeplay/ui/limeplay-logo"
+import { Media } from "@/components/limeplay/ui/media"
+import * as Layout from "@/components/limeplay/ui/player-layout"
+import { RootContainer } from "@/components/limeplay/ui/root-container"
 
 export interface VideoPlayerAsset extends Asset {
   description?: string

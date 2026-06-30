@@ -7,8 +7,8 @@ import {
   PolarAngleAxis,
   Tooltip,
   Legend,
-} from "@hyper/evilcharts/components/radar-chart";
-import { type ChartConfig } from "@hyper/evilcharts/components/chart";
+} from "@/components/evilcharts/components/radar-chart";
+import { type ChartConfig } from "@/components/evilcharts/components/chart";
 
 const chartConfig = {
   desktop: {

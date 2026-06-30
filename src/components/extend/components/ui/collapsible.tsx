@@ -4,7 +4,7 @@ import type React from "react"
 import { isValidElement } from "react"
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 
 export function Collapsible({
   ...props

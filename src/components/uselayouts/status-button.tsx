@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@hyper/uselayouts/_shared/ui/button";
-import { cn } from "@hyper/uselayouts/lib/utils";
+import { Button } from "@/components/uselayouts/_shared/ui/button";
+import { cn } from "@/components/uselayouts/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";

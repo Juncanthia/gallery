@@ -3,19 +3,19 @@
 import React, { useRef } from "react"
 import shaka from "shaka-player"
 
-import type { PlaybackStore } from "@hyper/limeplay/hooks/use-playback"
+import type { PlaybackStore } from "@/components/limeplay/hooks/use-playback"
 import type {
   MediaEventSlice,
   MediaFeature,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { noop, off, on } from "@hyper/limeplay/lib/utils"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { noop, off, on } from "@/components/limeplay/lib/utils"
 import {
   useMediaEvents,
   useMediaFeatureApi,
   useMediaFeatureStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 declare global {
   interface HTMLMediaElement {

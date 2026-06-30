@@ -1,5 +1,5 @@
-import { cn } from "@hyper/limeplay/lib/utils"
-import * as VolumeSlider from "@hyper/limeplay/ui/volume-control"
+import { cn } from "@/components/limeplay/lib/utils"
+import * as VolumeSlider from "@/components/limeplay/ui/volume-control"
 
 export function VolumeSliderControl() {
   return (

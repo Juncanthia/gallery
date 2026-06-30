@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@hyper/manifest-ui/components/ui/button"
+import { Button } from "@/components/manifest/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@hyper/manifest-ui/components/ui/card"
+} from "@/components/manifest/components/ui/card"
 import { CreditCard, Plus, Check } from "lucide-react"
 
 /**

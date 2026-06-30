@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
+import { Button } from '@/components/manifest/components/ui/button'
 
 // Import types from shared types file to avoid circular dependencies
 import type { Post } from './types'

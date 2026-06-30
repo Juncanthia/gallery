@@ -31,9 +31,9 @@ import {
   type SortableContextProps,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Button } from "@hyper/shadcn/components/ui/button";
-import { composeRefs } from "@hyper/data-table-filters/lib/compose-refs";
-import { cn } from "@hyper/data-table-filters/lib/utils";
+import { Button } from "@/components/ui/button";
+import { composeRefs } from "@/components/data-table-filters/lib/compose-refs";
+import { cn } from "@/components/data-table-filters/lib/utils";
 import { Slot, type SlotProps } from "@radix-ui/react-slot";
 import * as React from "react";
 import { createPortal } from "react-dom";

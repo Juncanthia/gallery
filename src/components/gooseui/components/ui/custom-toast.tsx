@@ -10,8 +10,8 @@ import {
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { Button } from "@hyper/gooseui/components/ui/button"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { Button } from "@/components/gooseui/components/ui/button"
+import { cn } from "@/components/gooseui/lib/utils"
 
 type ToastType = "success" | "error" | "warning" | "info"
 

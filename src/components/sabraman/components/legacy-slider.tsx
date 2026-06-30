@@ -3,7 +3,7 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import type * as React from "react";
 
-import { cn } from "@hyper/sabraman/lib/utils";
+import { cn } from "@/components/sabraman/lib/utils";
 
 export interface LegacySliderProps
 	extends Omit<

@@ -10,14 +10,14 @@ import { useShallow } from "zustand/react/shallow"
 import type {
   MediaEventSlice,
   MediaFeature,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
 import {
   useMediaEvents,
   useMediaFeatureApi,
   useMediaFeatureStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 export interface PlaylistChangeEvent<T = Record<string, unknown>> {
   currentIndex: number

@@ -1,14 +1,14 @@
 "use client"
 
-import { Badge } from "@hyper/manifest-ui/components/ui/badge"
+import { Badge } from "@/components/manifest/components/ui/badge"
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@hyper/manifest-ui/components/ui/card"
-import { Separator } from "@hyper/manifest-ui/components/ui/separator"
+} from "@/components/manifest/components/ui/card"
+import { Separator } from "@/components/manifest/components/ui/separator"
 import { Package, Percent, Truck } from "lucide-react"
 
 // Import types from shared types file to avoid circular dependencies

@@ -18,7 +18,7 @@ import {
   VisuallyHiddenInput,
   type WithDisplayName,
   type WithForwardedRef,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 import type { AnchorElement } from "./combobox-anchor";
 import type { ContentElement } from "./combobox-content";

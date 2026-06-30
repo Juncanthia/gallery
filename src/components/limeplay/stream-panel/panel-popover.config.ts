@@ -1,9 +1,9 @@
-import type { StreamPanelPlaylistPreset } from "@hyper/limeplay/stream-panel/content-catalog"
+import type { StreamPanelPlaylistPreset } from "@/components/limeplay/stream-panel/content-catalog"
 import type {
   StreamPanelContentKind,
   StreamPanelPlayerType,
-} from "@hyper/limeplay/stream-panel/use-stream-panel"
-import type { StreamPreset } from "@hyper/limeplay/lib/stream-presets"
+} from "@/components/limeplay/stream-panel/use-stream-panel"
+import type { StreamPreset } from "@/components/limeplay/lib/stream-presets"
 
 export const STREAM_PANEL_OVERLAY = {
   CONTENT: "content",

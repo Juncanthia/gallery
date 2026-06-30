@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@hyper/manifest-ui/components/ui/dropdown-menu"
+} from "@/components/manifest/components/ui/dropdown-menu"
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════

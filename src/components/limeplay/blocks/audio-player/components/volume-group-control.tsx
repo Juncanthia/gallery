@@ -2,15 +2,15 @@
 
 import { AnimatePresence, motion } from "motion/react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
-import { Button } from "@hyper/limeplay/blocks/audio-player/components/button"
+import { cn } from "@/components/limeplay/lib/utils"
+import { Button } from "@/components/limeplay/blocks/audio-player/components/button"
 import {
   VolumeFullIcon,
   VolumeMutedIcon,
-} from "@hyper/limeplay/blocks/audio-player/components/icons"
-import { useVolumeStore } from "@hyper/limeplay/hooks/use-volume"
-import { MuteControl } from "@hyper/limeplay/ui/mute-control"
-import * as VolumeSlider from "@hyper/limeplay/ui/volume-control"
+} from "@/components/limeplay/blocks/audio-player/components/icons"
+import { useVolumeStore } from "@/components/limeplay/hooks/use-volume"
+import { MuteControl } from "@/components/limeplay/ui/mute-control"
+import * as VolumeSlider from "@/components/limeplay/ui/volume-control"
 
 export function VolumeControl() {
   const muted = useVolumeStore((state) => state.muted)

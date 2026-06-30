@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { useIsomorphicLayoutEffect } from "@hyper/sabraman/lib/hooks/use-isomorphic-layout-effect";
-import { initRoundbit } from "@hyper/sabraman/lib/roundbit";
-import { cn } from "@hyper/sabraman/lib/utils";
+import { useIsomorphicLayoutEffect } from "@/components/sabraman/lib/hooks/use-isomorphic-layout-effect";
+import { initRoundbit } from "@/components/sabraman/lib/roundbit";
+import { cn } from "@/components/sabraman/lib/utils";
 
 export interface RoundbitFrameProps
 	extends React.HTMLAttributes<HTMLDivElement> {

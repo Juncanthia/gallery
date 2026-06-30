@@ -39,11 +39,11 @@ import {
 } from "radix-ui";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { useLazyRef } from "@hyper/dice-ui/hooks/use-lazy-ref";
-import { Badge } from "@hyper/dice-ui/ui/badge";
-import { Button } from "@hyper/dice-ui/ui/button";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { cn } from "@/components/dice/lib/utils";
+import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
+import { Badge } from "@/components/dice/ui/badge";
+import { Button } from "@/components/dice/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,12 +53,12 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@hyper/dice-ui/ui/dropdown-menu";
+} from "@/components/dice/ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@hyper/dice-ui/ui/tooltip";
+} from "@/components/dice/ui/tooltip";
 
 const ROOT_NAME = "MediaPlayer";
 const SEEK_NAME = "MediaPlayerSeek";

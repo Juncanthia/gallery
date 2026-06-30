@@ -1,17 +1,17 @@
 "use client";
 
-import { useDataTable } from "@hyper/data-table-filters/components/data-table/data-table-provider";
-import { Button } from "@hyper/shadcn/components/ui/button";
-import { Kbd } from "@hyper/shadcn/components/ui/kbd";
+import { useDataTable } from "@/components/data-table-filters/components/data-table/data-table-provider";
+import { Button } from "@/components/ui/button";
+import { Kbd } from "@/components/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/shadcn/components/ui/tooltip";
-import { useHotKey } from "@hyper/data-table-filters/hooks/use-hot-key";
-import { formatCompactNumber } from "@hyper/data-table-filters/lib/format";
-import { useControls } from "@hyper/data-table-filters/components/controls";
+} from "@/components/ui/tooltip";
+import { useHotKey } from "@/components/data-table-filters/hooks/use-hot-key";
+import { formatCompactNumber } from "@/components/data-table-filters/lib/format";
+import { useControls } from "@/components/data-table-filters/components/controls";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { DataTableFilterControlsDrawer } from "./data-table-filter-controls-drawer";
 import { DataTableResetButton } from "./data-table-reset-button";

@@ -5,10 +5,10 @@ import { X } from "lucide-react";
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { useAsRef } from "@hyper/dice-ui/hooks/use-as-ref";
-import { useLazyRef } from "@hyper/dice-ui/hooks/use-lazy-ref";
-import { Button } from "@hyper/dice-ui/ui/button";
+import { cn } from "@/components/dice/lib/utils";
+import { useAsRef } from "@/components/dice/hooks/use-as-ref";
+import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
+import { Button } from "@/components/dice/ui/button";
 
 const BANNER_ANIMATION_DURATION = 400;
 const DEFAULT_BANNER_PRIORITY = 0;

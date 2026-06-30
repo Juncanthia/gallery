@@ -1,7 +1,7 @@
-import * as TagsInputPrimitive from "@hyper/dice-ui/tags-input";
+import * as TagsInputPrimitive from "@/components/dice/tags-input";
 import { X } from "lucide-react";
 import type * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 function TagsInput({
   className,

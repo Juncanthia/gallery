@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const brands = [
   { name: "Vercel", logo: "▲" },

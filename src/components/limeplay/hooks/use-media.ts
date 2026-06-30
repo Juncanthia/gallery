@@ -1,8 +1,8 @@
 "use client"
 
-import type { MediaFeature } from "@hyper/limeplay/ui/media-provider"
+import type { MediaFeature } from "@/components/limeplay/ui/media-provider"
 
-import { useMediaFeatureStore } from "@hyper/limeplay/ui/media-provider"
+import { useMediaFeatureStore } from "@/components/limeplay/ui/media-provider"
 
 export const MEDIA_FEATURE_KEY = "media"
 

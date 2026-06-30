@@ -6,7 +6,7 @@ import {
   useControllableState,
   useDirection,
   useId,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 
 const ROOT_NAME = "CheckboxGroupRoot";

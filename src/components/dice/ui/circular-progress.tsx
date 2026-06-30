@@ -2,7 +2,7 @@
 
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 const CIRCULAR_PROGRESS_NAME = "CircularProgress";
 const INDICATOR_NAME = "CircularProgressIndicator";

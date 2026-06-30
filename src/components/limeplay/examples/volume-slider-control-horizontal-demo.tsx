@@ -1,5 +1,5 @@
-import { VolumeStateControlDemo } from "@hyper/limeplay/examples/volume-state-control-demo"
-import * as VolumeSlider from "@hyper/limeplay/ui/volume-control"
+import { VolumeStateControlDemo } from "@/components/limeplay/examples/volume-state-control-demo"
+import * as VolumeSlider from "@/components/limeplay/ui/volume-control"
 
 export function VolumeSliderControlHorizontalDemo() {
   return (

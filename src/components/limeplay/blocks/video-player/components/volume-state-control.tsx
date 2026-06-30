@@ -6,9 +6,9 @@ import {
   SpeakerXIcon,
 } from "@phosphor-icons/react"
 
-import { Button } from "@hyper/limeplay/blocks/video-player/components/button"
-import { useVolumeStore } from "@hyper/limeplay/hooks/use-volume"
-import { MuteControl } from "@hyper/limeplay/ui/mute-control"
+import { Button } from "@/components/limeplay/blocks/video-player/components/button"
+import { useVolumeStore } from "@/components/limeplay/hooks/use-volume"
+import { MuteControl } from "@/components/limeplay/ui/mute-control"
 
 export function VolumeStateControl() {
   const muted = useVolumeStore((state) => state.muted)

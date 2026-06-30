@@ -1,7 +1,7 @@
-import * as CheckboxGroupPrimitive from "@hyper/dice-ui/checkbox-group";
+import * as CheckboxGroupPrimitive from "@/components/dice/checkbox-group";
 import { Check } from "lucide-react";
 import type * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 function CheckboxGroup({
   className,

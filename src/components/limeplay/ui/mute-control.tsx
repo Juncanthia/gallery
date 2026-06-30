@@ -3,12 +3,12 @@
 import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
 
-import { Button } from "@hyper/limeplay/ui/button"
+import { Button } from "@/components/limeplay/ui/button"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
-import { useVolumeStore } from "@hyper/limeplay/hooks/use-volume"
+} from "@/components/limeplay/hooks/use-playback"
+import { useVolumeStore } from "@/components/limeplay/hooks/use-volume"
 
 export interface MuteControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean

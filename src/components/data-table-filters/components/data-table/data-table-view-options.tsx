@@ -4,9 +4,9 @@ import {
   Sortable,
   SortableDragHandle,
   SortableItem,
-} from "@hyper/data-table-filters/components/custom/sortable";
-import { useDataTable } from "@hyper/data-table-filters/components/data-table/data-table-provider";
-import { Button } from "@hyper/shadcn/components/ui/button";
+} from "@/components/data-table-filters/components/custom/sortable";
+import { useDataTable } from "@/components/data-table-filters/components/data-table/data-table-provider";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -14,13 +14,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@hyper/shadcn/components/ui/command";
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@hyper/shadcn/components/ui/popover";
-import { cn } from "@hyper/data-table-filters/lib/utils";
+} from "@/components/ui/popover";
+import { cn } from "@/components/data-table-filters/lib/utils";
 import { Check, GripVertical, Settings2 } from "lucide-react";
 import { useMemo, useState } from "react";
 

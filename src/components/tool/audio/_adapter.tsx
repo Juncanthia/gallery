@@ -3,6 +3,6 @@
  */
 "use client";
 
-export { cn } from "@hyper/shadcn";
-export { Button } from "@hyper/shadcn";
-export { Slider } from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
+export { Button } from "@/components/ui/button";
+export { Slider } from "@/components/ui/slider";

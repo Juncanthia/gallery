@@ -6,8 +6,8 @@ import {
   Slot as SlotPrimitive,
 } from "radix-ui";
 import * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { Input } from "@hyper/dice-ui/ui/input";
+import { cn } from "@/components/dice/lib/utils";
+import { Input } from "@/components/dice/ui/input";
 
 const ROOT_NAME = "SegmentedInput";
 const ITEM_NAME = "SegmentedInputItem";

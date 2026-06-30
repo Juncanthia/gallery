@@ -1,20 +1,20 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
-import { Input } from '@hyper/manifest-ui/components/ui/input'
+import { Button } from '@/components/manifest/components/ui/button'
+import { Input } from '@/components/manifest/components/ui/input'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@hyper/manifest-ui/components/ui/popover'
+} from '@/components/manifest/components/ui/popover'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@hyper/manifest-ui/components/ui/select'
-import { cn } from '@hyper/manifest-ui/lib/utils'
+} from '@/components/manifest/components/ui/select'
+import { cn } from '@/components/manifest/lib/utils'
 import { demoTableColumns, demoTableRows } from './demo/list'
 import {
   ArrowDownAZ,

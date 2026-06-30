@@ -3,8 +3,8 @@
 import * as React from "react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { motion } from "motion/react";
-import { type ChartConfig, ChartContainer } from "@hyper/evilcharts/components/chart";
-import { ChartTooltip, ChartTooltipContent } from "@hyper/evilcharts/components/tooltip";
+import { type ChartConfig, ChartContainer } from "@/components/evilcharts/components/chart";
+import { ChartTooltip, ChartTooltipContent } from "@/components/evilcharts/components/tooltip";
 
 const chartData = [
   { month: "January", revenue: 28 },

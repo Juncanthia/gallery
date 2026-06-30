@@ -1,6 +1,6 @@
 "use client"
 
-import { CurvedText } from "@hyper/gooseui/components/ui/curved-text"
+import { CurvedText } from "@/components/gooseui/components/ui/curved-text"
 
 /**
  * Curved Text Marquee Block

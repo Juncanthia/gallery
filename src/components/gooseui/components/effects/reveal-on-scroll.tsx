@@ -1,8 +1,8 @@
 "use client"
 
 import type * as React from "react"
-import { useGlobalStyles } from "@hyper/gooseui/hooks/use-global-styles"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { useGlobalStyles } from "@/components/gooseui/hooks/use-global-styles"
+import { cn } from "@/components/gooseui/lib/utils"
 
 const REVEAL_ON_SCROLL_STYLES = `
 @keyframes reveal-up {

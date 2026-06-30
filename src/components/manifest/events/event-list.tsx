@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from '@hyper/manifest-ui/components/ui/button'
-import { Checkbox } from '@hyper/manifest-ui/components/ui/checkbox'
-import { cn } from '@hyper/manifest-ui/lib/utils'
+import { Button } from '@/components/manifest/components/ui/button'
+import { Checkbox } from '@/components/manifest/components/ui/checkbox'
+import { cn } from '@/components/manifest/lib/utils'
 import { ChevronDown, ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react'
 import { Suspense, useCallback, useRef, useState } from 'react'
 import type { Event } from './types'

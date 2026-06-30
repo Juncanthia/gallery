@@ -3,16 +3,16 @@
 import { BookmarkPlus, ChevronRight, FolderKanban, type LucideProps } from "lucide-react"
 import React, { useMemo, useState } from "react"
 
-import type { StreamPanelContentKind } from "@hyper/limeplay/stream-panel/use-stream-panel"
+import type { StreamPanelContentKind } from "@/components/limeplay/stream-panel/use-stream-panel"
 
-import { getPlaylistPresetsForType } from "@hyper/limeplay/stream-panel/content-catalog"
-import { useStreamPanelStore } from "@hyper/limeplay/stream-panel/use-stream-panel"
-import { Field, FieldLabel } from "@hyper/limeplay/ui/field"
-import { Popover, PopoverContent } from "@hyper/limeplay/ui/popover"
-import { Separator } from "@hyper/limeplay/ui/separator"
-import { ToggleGroup, ToggleGroupItem } from "@hyper/limeplay/ui/toggle-group"
-import { getPresetsForType, type StreamPreset } from "@hyper/limeplay/lib/stream-presets"
-import { cn } from "@hyper/limeplay/lib/utils"
+import { getPlaylistPresetsForType } from "@/components/limeplay/stream-panel/content-catalog"
+import { useStreamPanelStore } from "@/components/limeplay/stream-panel/use-stream-panel"
+import { Field, FieldLabel } from "@/components/limeplay/ui/field"
+import { Popover, PopoverContent } from "@/components/limeplay/ui/popover"
+import { Separator } from "@/components/limeplay/ui/separator"
+import { ToggleGroup, ToggleGroupItem } from "@/components/limeplay/ui/toggle-group"
+import { getPresetsForType, type StreamPreset } from "@/components/limeplay/lib/stream-presets"
+import { cn } from "@/components/limeplay/lib/utils"
 
 import type { OverlayShellPlacement } from "./overlay-shell"
 

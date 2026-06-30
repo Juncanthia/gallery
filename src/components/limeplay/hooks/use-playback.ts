@@ -3,15 +3,15 @@ import React from "react"
 import type {
   MediaEventSlice,
   MediaFeature,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { noop, off, on } from "@hyper/limeplay/lib/utils"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { noop, off, on } from "@/components/limeplay/lib/utils"
 import {
   useMediaEvents,
   useMediaFeatureApi,
   useMediaFeatureStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 export type MediaStatus =
   | "buffering"

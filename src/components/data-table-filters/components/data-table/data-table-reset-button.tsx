@@ -1,15 +1,15 @@
 "use client";
 
-import { useDataTable } from "@hyper/data-table-filters/components/data-table/data-table-provider";
-import { Button } from "@hyper/shadcn/components/ui/button";
-import { Kbd } from "@hyper/shadcn/components/ui/kbd";
+import { useDataTable } from "@/components/data-table-filters/components/data-table/data-table-provider";
+import { Button } from "@/components/ui/button";
+import { Kbd } from "@/components/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/shadcn/components/ui/tooltip";
-import { useHotKey } from "@hyper/data-table-filters/hooks/use-hot-key";
+} from "@/components/ui/tooltip";
+import { useHotKey } from "@/components/data-table-filters/hooks/use-hot-key";
 import { X } from "lucide-react";
 
 export function DataTableResetButton() {

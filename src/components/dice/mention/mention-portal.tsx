@@ -1,4 +1,4 @@
-import { Portal as PortalPrimitive, type PortalProps } from "@hyper/dice-ui/_shared";
+import { Portal as PortalPrimitive, type PortalProps } from "@/components/dice/_shared";
 import * as React from "react";
 
 const PORTAL_NAME = "MentionPortal";

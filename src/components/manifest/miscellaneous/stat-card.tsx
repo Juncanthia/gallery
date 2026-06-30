@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp, TrendingDown, Minus } from "lucide-react"
-import { cn } from "@hyper/manifest-ui/lib/utils"
+import { cn } from "@/components/manifest/lib/utils"
 import { demoStats } from './demo/miscellaneous'
 
 /**

@@ -1,6 +1,6 @@
 import { cache } from "react"
-import { PokemonCard } from "@hyper/gooseui/components/blocks/complex-component/components/pokemon-card"
-import { getPokemonList } from "@hyper/gooseui/components/blocks/complex-component/lib/pokemon"
+import { PokemonCard } from "@/components/gooseui/components/blocks/complex-component/components/pokemon-card"
+import { getPokemonList } from "@/components/gooseui/components/blocks/complex-component/lib/pokemon"
 
 const getCachedPokemonList = cache(getPokemonList)
 

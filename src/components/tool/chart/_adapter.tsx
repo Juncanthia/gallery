@@ -9,19 +9,15 @@
  *   Card  → shadcn/ui Card
  */
 
-export { cn } from "@hyper/shadcn";
-export {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
-  type ChartConfig,
-} from "@hyper/shadcn";
-export {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
+export { ChartContainer } from "@/components/ui/chart"
+export { ChartTooltip } from "@/components/ui/chart"
+export { ChartTooltipContent } from "@/components/ui/chart"
+export { ChartLegend } from "@/components/ui/chart"
+export { ChartLegendContent } from "@/components/ui/chart"
+export { type ChartConfig } from "@/components/ui/type -chart-config"
+export { Card } from "@/components/ui/card"
+export { CardHeader } from "@/components/ui/card"
+export { CardTitle } from "@/components/ui/card"
+export { CardDescription } from "@/components/ui/card"
+export { CardContent } from "@/components/ui/card"

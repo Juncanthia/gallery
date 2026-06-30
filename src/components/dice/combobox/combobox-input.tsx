@@ -4,7 +4,7 @@ import {
   type HighlightingDirection,
   Primitive,
   useComposedRefs,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 import { ITEM_SELECT_EVENT } from "./combobox-item";
 import { useComboboxContext } from "./combobox-root";

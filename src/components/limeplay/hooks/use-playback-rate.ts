@@ -6,20 +6,20 @@ import type {
   MediaEventSlice,
   MediaFeature,
   MediaStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { usePlaybackStore } from "@hyper/limeplay/hooks/use-playback"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
 import {
   type PlayerStore,
   usePlayerStore,
-} from "@hyper/limeplay/hooks/use-player"
-import { off, on } from "@hyper/limeplay/lib/utils"
+} from "@/components/limeplay/hooks/use-player"
+import { off, on } from "@/components/limeplay/lib/utils"
 import {
   useMediaEvents,
   useMediaFeatureApi,
   useMediaFeatureStore,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 export const PLAYBACK_RATE_FEATURE_KEY = "playbackRate"
 

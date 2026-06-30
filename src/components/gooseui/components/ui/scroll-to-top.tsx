@@ -2,7 +2,7 @@
 
 import { ArrowUp, ChevronUp } from "lucide-react"
 import * as React from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 interface ScrollToTopProps {
   /** Scroll threshold in pixels before showing button */

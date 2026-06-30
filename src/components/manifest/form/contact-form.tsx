@@ -1,10 +1,10 @@
 'use client';
 
-import { Button } from '@hyper/manifest-ui/components/ui/button';
-import { Input } from '@hyper/manifest-ui/components/ui/input';
-import { Label } from '@hyper/manifest-ui/components/ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '@hyper/manifest-ui/components/ui/popover';
-import { cn } from '@hyper/manifest-ui/lib/utils';
+import { Button } from '@/components/manifest/components/ui/button';
+import { Input } from '@/components/manifest/components/ui/input';
+import { Label } from '@/components/manifest/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/manifest/components/ui/popover';
+import { cn } from '@/components/manifest/lib/utils';
 import { ChevronDown, Paperclip, Search, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { countries } from './countries';

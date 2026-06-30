@@ -60,9 +60,9 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { Button } from "@hyper/extend-ui/components/ui/button"
-import { ColorPicker, ColorPickerPanel } from "@hyper/extend-ui/components/ui/color-picker"
+import { cn } from "@/components/extend/lib/utils"
+import { Button } from "@/components/extend/components/ui/button"
+import { ColorPicker, ColorPickerPanel } from "@/components/extend/components/ui/color-picker"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,30 +73,30 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@hyper/extend-ui/components/ui/dropdown-menu"
-import { Group, GroupSeparator, GroupText } from "@hyper/extend-ui/components/ui/group"
-import { Input } from "@hyper/extend-ui/components/ui/input"
+} from "@/components/extend/components/ui/dropdown-menu"
+import { Group, GroupSeparator, GroupText } from "@/components/extend/components/ui/group"
+import { Input } from "@/components/extend/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@hyper/extend-ui/components/ui/select"
-import { Separator } from "@hyper/extend-ui/components/ui/separator"
-import { Spinner } from "@hyper/extend-ui/components/ui/spinner"
-import { ToggleGroup, ToggleGroupItem } from "@hyper/extend-ui/components/ui/toggle"
+} from "@/components/extend/components/ui/select"
+import { Separator } from "@/components/extend/components/ui/separator"
+import { Spinner } from "@/components/extend/components/ui/spinner"
+import { ToggleGroup, ToggleGroupItem } from "@/components/extend/components/ui/toggle"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/extend-ui/components/ui/tooltip"
+} from "@/components/extend/components/ui/tooltip"
 import {
   renderXlsxScroller,
   WorkbookSheetTabs,
   WorkbookTableHeaderMenu,
-} from "@hyper/extend-ui/components/ui/xlsx-viewer"
+} from "@/components/extend/components/ui/xlsx-viewer"
 
 const XLSX_LOADING_INDICATOR_DELAY_MS = 300
 const XLSX_EDITOR_READ_ONLY_THRESHOLD_BYTES = 5 * 1024 * 1024

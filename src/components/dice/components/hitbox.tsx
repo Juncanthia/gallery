@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { Slot as SlotPrimitive } from "radix-ui";
 import type * as React from "react";
 
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 
 type Size = "default" | "sm" | "lg";
 type DynamicSize = Size | (string & {});

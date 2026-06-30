@@ -4,7 +4,7 @@ import { ChevronLeft } from "lucide-react"
 import { domAnimation, LazyMotion, m } from "motion/react"
 import * as React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 import { Button } from "../ui/button"
 

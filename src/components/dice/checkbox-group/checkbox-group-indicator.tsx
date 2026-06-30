@@ -1,4 +1,4 @@
-import { Presence, Primitive } from "@hyper/dice-ui/_shared";
+import { Presence, Primitive } from "@/components/dice/_shared";
 import * as React from "react";
 import { getDataState, useCheckboxGroupItem } from "./checkbox-group-item";
 

@@ -1,6 +1,6 @@
-import { getPayloadConfigFromPayload, getColorsCount, useChart } from "@hyper/evilcharts/components/chart";
+import { getPayloadConfigFromPayload, getColorsCount, useChart } from "@/components/evilcharts/components/chart";
 import * as RechartsPrimitive from "recharts";
-import { cn } from "@hyper/evilcharts/lib/utils";
+import { cn } from "@/components/evilcharts/lib/utils";
 import * as React from "react";
 
 type ChartLegendVariant =

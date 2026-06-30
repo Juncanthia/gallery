@@ -12,8 +12,8 @@ import {
   useFormContext,
   useFormState,
 } from "react-hook-form";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { Label } from "@hyper/dice-ui/ui/label";
+import { cn } from "@/components/dice/lib/utils";
+import { Label } from "@/components/dice/ui/label";
 
 const Form = FormProvider;
 

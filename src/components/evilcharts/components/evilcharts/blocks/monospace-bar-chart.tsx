@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChartConfig, ChartContainer } from "@hyper/evilcharts/components/chart";
+import { type ChartConfig, ChartContainer } from "@/components/evilcharts/components/chart";
 import { Bar, BarChart, Rectangle, XAxis } from "recharts";
 import { motion, AnimatePresence } from "motion/react";
 

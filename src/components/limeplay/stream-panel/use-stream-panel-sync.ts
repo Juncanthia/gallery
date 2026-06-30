@@ -6,8 +6,8 @@ import type {
   Asset,
   AssetEvents,
   UseAssetOptions,
-} from "@hyper/limeplay/hooks/use-asset"
-import type { PlaybackStore } from "@hyper/limeplay/hooks/use-playback"
+} from "@/components/limeplay/hooks/use-asset"
+import type { PlaybackStore } from "@/components/limeplay/hooks/use-playback"
 
 import {
   addBlenderCaptions,
@@ -18,31 +18,31 @@ import {
   fetchPlaylistPresetAssets,
   isBlenderOpenFilmAsset,
   type StreamPanelPlaylistPreset,
-} from "@hyper/limeplay/stream-panel/content-catalog"
+} from "@/components/limeplay/stream-panel/content-catalog"
 import {
   type StreamPanelContentKind,
   type StreamPanelPlayerType,
   type StreamPanelSelection,
   useStreamPanelStore,
   useStreamPanelStoreHydrated,
-} from "@hyper/limeplay/stream-panel/use-stream-panel"
-import { getPresetsForType, type StreamPreset } from "@hyper/limeplay/lib/stream-presets"
+} from "@/components/limeplay/stream-panel/use-stream-panel"
+import { getPresetsForType, type StreamPreset } from "@/components/limeplay/lib/stream-presets"
 import {
   AssetRecoveryAction,
   useAsset,
-} from "@hyper/limeplay/hooks/use-asset"
-import { useMediaStore } from "@hyper/limeplay/hooks/use-media"
-import { PLAYBACK_FEATURE_KEY } from "@hyper/limeplay/hooks/use-playback"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
+} from "@/components/limeplay/hooks/use-asset"
+import { useMediaStore } from "@/components/limeplay/hooks/use-media"
+import { PLAYBACK_FEATURE_KEY } from "@/components/limeplay/hooks/use-playback"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
 import {
   PLAYLIST_FEATURE_KEY,
   type PlaylistStore,
-} from "@hyper/limeplay/hooks/use-playlist"
-import { useVolumeStore } from "@hyper/limeplay/hooks/use-volume"
+} from "@/components/limeplay/hooks/use-playlist"
+import { useVolumeStore } from "@/components/limeplay/hooks/use-volume"
 import {
   useMediaEvents,
   useMediaFeatureApi,
-} from "@hyper/limeplay/ui/media-provider"
+} from "@/components/limeplay/ui/media-provider"
 
 const DEFAULT_VIDEO_PRESET_ID = "mux-big-buck-bunny"
 const APPLE_MUSIC_LOAD_MORE_THRESHOLD = 5

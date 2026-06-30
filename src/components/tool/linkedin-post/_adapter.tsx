@@ -9,11 +9,9 @@
  *   Tooltip → shadcn/ui Tooltip
  */
 
-export { cn } from "@hyper/shadcn";
-export { Button } from "@hyper/shadcn";
-export {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@hyper/shadcn";
+export { cn } from "@/lib/utils";
+export { Button } from "@/components/ui/button";
+export { Tooltip } from "@/components/ui/tooltip"
+export { TooltipContent } from "@/components/ui/tooltip"
+export { TooltipProvider } from "@/components/ui/tooltip-provider"
+export { TooltipTrigger } from "@/components/ui/tooltip"

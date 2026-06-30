@@ -4,17 +4,17 @@ import { CircleNotchIcon } from "@phosphor-icons/react"
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 
-import { Button } from "@hyper/limeplay/blocks/audio-player/components/button"
+import { Button } from "@/components/limeplay/blocks/audio-player/components/button"
 import {
   NextIcon,
   PauseIcon,
   PlayIcon,
   PreviousIcon,
-} from "@hyper/limeplay/blocks/audio-player/components/icons"
-import { usePlaybackStore } from "@hyper/limeplay/hooks/use-playback"
-import { RECOMMENDED_PLAYER_BUFFERING_THROTTLE_MS } from "@hyper/limeplay/hooks/use-player"
-import { usePlaylist } from "@hyper/limeplay/hooks/use-playlist"
-import { PlaybackControl } from "@hyper/limeplay/ui/playback-control"
+} from "@/components/limeplay/blocks/audio-player/components/icons"
+import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
+import { RECOMMENDED_PLAYER_BUFFERING_THROTTLE_MS } from "@/components/limeplay/hooks/use-player"
+import { usePlaylist } from "@/components/limeplay/hooks/use-playlist"
+import { PlaybackControl } from "@/components/limeplay/ui/playback-control"
 
 export function PlaybackControls({
   showNavigation = true,

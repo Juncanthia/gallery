@@ -5,14 +5,14 @@ import { Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Command as CommandPrimitive } from "cmdk"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
+import { cn } from "@/components/extend/lib/utils"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@hyper/extend-ui/components/ui/dialog"
+} from "@/components/extend/components/ui/dialog"
 
 function Command({
   className,

@@ -2,9 +2,9 @@
 
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { useLazyRef } from "@hyper/dice-ui/hooks/use-lazy-ref";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { cn } from "@/components/dice/lib/utils";
+import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
 
 const ROOT_NAME = "QRCode";
 const CANVAS_NAME = "QRCodeCanvas";

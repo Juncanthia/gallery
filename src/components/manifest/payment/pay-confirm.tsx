@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@hyper/manifest-ui/components/ui/button"
+import { Button } from "@/components/manifest/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,8 +8,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@hyper/manifest-ui/components/ui/card"
-import { Separator } from "@hyper/manifest-ui/components/ui/separator"
+} from "@/components/manifest/components/ui/card"
+import { Separator } from "@/components/manifest/components/ui/separator"
 import { Check, CreditCard, ShieldCheck } from "lucide-react"
 
 /**

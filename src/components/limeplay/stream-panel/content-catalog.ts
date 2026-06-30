@@ -2,8 +2,8 @@ import type shaka from "shaka-player"
 
 import { z } from "zod"
 
-import type { StreamPanelPlayerType } from "@hyper/limeplay/stream-panel/use-stream-panel"
-import type { Asset } from "@hyper/limeplay/hooks/use-asset"
+import type { StreamPanelPlayerType } from "@/components/limeplay/stream-panel/use-stream-panel"
+import type { Asset } from "@/components/limeplay/hooks/use-asset"
 
 export interface AppleMusicArtwork {
   bgColor?: string

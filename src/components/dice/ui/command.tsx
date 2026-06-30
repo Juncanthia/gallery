@@ -3,18 +3,18 @@
 import { Command as CommandPrimitive } from "cmdk";
 import { CheckIcon, SearchIcon } from "lucide-react";
 import type * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@hyper/dice-ui/ui/dialog";
+} from "@/components/dice/ui/dialog";
 import {
   InputGroup,
   InputGroupAddon,
-} from "@hyper/dice-ui/ui/input-group";
+} from "@/components/dice/ui/input-group";
 
 function Command({
   className,

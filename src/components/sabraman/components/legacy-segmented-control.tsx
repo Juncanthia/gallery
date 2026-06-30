@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "@hyper/sabraman/lib/utils";
+import { cn } from "@/components/sabraman/lib/utils";
 
 const SEGMENT_ACTIVE_BACKGROUND =
 	"linear-gradient(180deg, rgb(162, 178, 201) 0%, rgb(121, 142, 172) 33%, rgb(80, 109, 148) 67%, rgb(64, 95, 138) 100%)";

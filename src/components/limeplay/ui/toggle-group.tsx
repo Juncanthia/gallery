@@ -5,8 +5,8 @@ import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group
 import { type VariantProps } from "class-variance-authority"
 import * as React from "react"
 
-import { toggleVariants } from "@hyper/limeplay/ui/toggle"
-import { cn } from "@hyper/limeplay/lib/utils"
+import { toggleVariants } from "@/components/limeplay/ui/toggle"
+import { cn } from "@/components/limeplay/lib/utils"
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {

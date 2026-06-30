@@ -8,11 +8,11 @@ import {
 } from "lucide-react";
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { useAsRef } from "@hyper/dice-ui/hooks/use-as-ref";
-import { useIsomorphicLayoutEffect } from "@hyper/dice-ui/hooks/use-isomorphic-layout-effect";
-import { useLazyRef } from "@hyper/dice-ui/hooks/use-lazy-ref";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { cn } from "@/components/dice/lib/utils";
+import { useAsRef } from "@/components/dice/hooks/use-as-ref";
+import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
+import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
 
 const ROOT_NAME = "CompareSlider";
 const BEFORE_NAME = "CompareSliderBefore";

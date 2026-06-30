@@ -3,15 +3,15 @@
 import { PlusIcon, XIcon } from "lucide-react";
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@hyper/dice-ui/lib/compose-refs";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { VisuallyHiddenInput } from "@hyper/dice-ui/components/visually-hidden-input";
-import { useAsRef } from "@hyper/dice-ui/hooks/use-as-ref";
-import { useIsomorphicLayoutEffect } from "@hyper/dice-ui/hooks/use-isomorphic-layout-effect";
-import { useLazyRef } from "@hyper/dice-ui/hooks/use-lazy-ref";
-import { Button } from "@hyper/dice-ui/ui/button";
-import { Input } from "@hyper/dice-ui/ui/input";
-import { Textarea } from "@hyper/dice-ui/ui/textarea";
+import { useComposedRefs } from "@/components/dice/lib/compose-refs";
+import { cn } from "@/components/dice/lib/utils";
+import { VisuallyHiddenInput } from "@/components/dice/components/visually-hidden-input";
+import { useAsRef } from "@/components/dice/hooks/use-as-ref";
+import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
+import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
+import { Button } from "@/components/dice/ui/button";
+import { Input } from "@/components/dice/ui/input";
+import { Textarea } from "@/components/dice/ui/textarea";
 
 const ROOT_NAME = "KeyValue";
 const LIST_NAME = "KeyValueList";

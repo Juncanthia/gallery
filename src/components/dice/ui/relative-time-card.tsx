@@ -3,12 +3,12 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
+import { cn } from "@/components/dice/lib/utils";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@hyper/dice-ui/ui/hover-card";
+} from "@/components/dice/ui/hover-card";
 
 function pluralize(n: number, word: string) {
   return `${n} ${word}${n === 1 ? "" : "s"}`;

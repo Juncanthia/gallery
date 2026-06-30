@@ -8,16 +8,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@hyper/limeplay/ui/dropdown-menu"
-import { cn } from "@hyper/limeplay/lib/utils"
+} from "@/components/limeplay/ui/dropdown-menu"
+import { cn } from "@/components/limeplay/lib/utils"
 import {
   type AudioPlayerAsset,
   getAudioAssetMetadata,
-} from "@hyper/limeplay/blocks/audio-player/components/audio-source"
-import { Button } from "@hyper/limeplay/blocks/audio-player/components/button"
-import { usePlayerStore } from "@hyper/limeplay/hooks/use-player"
-import { usePlaylistStore } from "@hyper/limeplay/hooks/use-playlist"
-import { LimeplayLogo } from "@hyper/limeplay/ui/limeplay-logo"
+} from "@/components/limeplay/blocks/audio-player/components/audio-source"
+import { Button } from "@/components/limeplay/blocks/audio-player/components/button"
+import { usePlayerStore } from "@/components/limeplay/hooks/use-player"
+import { usePlaylistStore } from "@/components/limeplay/hooks/use-playlist"
+import { LimeplayLogo } from "@/components/limeplay/ui/limeplay-logo"
 
 const PLAYLIST_SIDE_OFFSET = 24
 

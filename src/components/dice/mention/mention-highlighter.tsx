@@ -1,4 +1,4 @@
-import { useCallbackRef, useComposedRefs } from "@hyper/dice-ui/_shared";
+import { useCallbackRef, useComposedRefs } from "@/components/dice/_shared";
 import * as React from "react";
 import { useMentionContext } from "./mention-root";
 

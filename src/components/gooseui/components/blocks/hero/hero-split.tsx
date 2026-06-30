@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowRight, Check } from "lucide-react"
-import { Button } from "@hyper/gooseui/components/ui/button"
+import { Button } from "@/components/gooseui/components/ui/button"
 
 const features = [
   "Lightning fast performance",

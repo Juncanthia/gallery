@@ -4,10 +4,10 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import { CheckIcon } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
-import type { StreamFeature, StreamPreset } from "@hyper/limeplay/lib/stream-presets"
+import type { StreamFeature, StreamPreset } from "@/components/limeplay/lib/stream-presets"
 
-import { getStreamSupport, initStreamSupport } from "@hyper/limeplay/lib/stream-support"
-import { cn } from "@hyper/limeplay/lib/utils"
+import { getStreamSupport, initStreamSupport } from "@/components/limeplay/lib/stream-support"
+import { cn } from "@/components/limeplay/lib/utils"
 
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 

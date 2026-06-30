@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { useAsRef } from "@hyper/dice-ui/hooks/use-as-ref";
-import { useIsomorphicLayoutEffect } from "@hyper/dice-ui/hooks/use-isomorphic-layout-effect";
-import { useLazyRef } from "@hyper/dice-ui/hooks/use-lazy-ref";
-import { useIsMobile } from "@hyper/dice-ui/hooks/use-mobile";
+import { cn } from "@/components/dice/lib/utils";
+import { useAsRef } from "@/components/dice/hooks/use-as-ref";
+import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
+import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
+import { useIsMobile } from "@/components/dice/hooks/use-mobile";
 import {
   Dialog,
   DialogClose,
@@ -17,7 +17,7 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "@hyper/dice-ui/ui/dialog";
+} from "@/components/dice/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -29,7 +29,7 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
-} from "@hyper/dice-ui/ui/drawer";
+} from "@/components/dice/ui/drawer";
 
 const ROOT_NAME = "ResponsiveDialog";
 

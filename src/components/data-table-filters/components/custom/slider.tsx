@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@hyper/data-table-filters/lib/utils";
+import { cn } from "@/components/data-table-filters/lib/utils";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 

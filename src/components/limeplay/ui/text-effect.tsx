@@ -10,7 +10,7 @@ import type {
 import { AnimatePresence, motion } from "motion/react"
 import React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 export type PerType = "char" | "line" | "word"
 

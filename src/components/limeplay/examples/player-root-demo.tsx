@@ -14,24 +14,24 @@ import {
   StreamPanel,
   StreamPanelProvider,
   useStreamPanel,
-} from "@hyper/limeplay/stream-panel"
-import { useStreamPanelSync } from "@hyper/limeplay/stream-panel/use-stream-panel-sync"
-import { Button } from "@hyper/limeplay/ui/button"
-import { PopoverTrigger } from "@hyper/limeplay/ui/popover"
-import { Tabs, TabsContent, TabsList } from "@hyper/limeplay/ui/tabs"
-import { cn } from "@hyper/limeplay/lib/utils"
-import { useAsset } from "@hyper/limeplay/hooks/use-asset"
-import { CustomDemoControls } from "@hyper/limeplay/internal/custom-demo-controls"
-import { MediaProvider, useMediaStore } from "@hyper/limeplay/internal/media"
+} from "@/components/limeplay/stream-panel"
+import { useStreamPanelSync } from "@/components/limeplay/stream-panel/use-stream-panel-sync"
+import { Button } from "@/components/limeplay/ui/button"
+import { PopoverTrigger } from "@/components/limeplay/ui/popover"
+import { Tabs, TabsContent, TabsList } from "@/components/limeplay/ui/tabs"
+import { cn } from "@/components/limeplay/lib/utils"
+import { useAsset } from "@/components/limeplay/hooks/use-asset"
+import { CustomDemoControls } from "@/components/limeplay/internal/custom-demo-controls"
+import { MediaProvider, useMediaStore } from "@/components/limeplay/internal/media"
 import {
   ErrorScreen,
   getErrorDetails,
-} from "@hyper/limeplay/ui/error-screen"
-import { FallbackPoster } from "@hyper/limeplay/ui/fallback-poster"
-import { LimeplayLogo } from "@hyper/limeplay/ui/limeplay-logo"
-import { Media } from "@hyper/limeplay/ui/media"
-import * as Layout from "@hyper/limeplay/ui/player-layout"
-import { RootContainer } from "@hyper/limeplay/ui/root-container"
+} from "@/components/limeplay/ui/error-screen"
+import { FallbackPoster } from "@/components/limeplay/ui/fallback-poster"
+import { LimeplayLogo } from "@/components/limeplay/ui/limeplay-logo"
+import { Media } from "@/components/limeplay/ui/media"
+import * as Layout from "@/components/limeplay/ui/player-layout"
+import { RootContainer } from "@/components/limeplay/ui/root-container"
 
 interface PlayerDemoLayoutProps extends React.PropsWithChildren {
   blockChildren?: React.ReactNode

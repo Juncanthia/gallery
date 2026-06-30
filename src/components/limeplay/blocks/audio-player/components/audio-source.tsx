@@ -6,10 +6,10 @@ import type {
   Asset,
   PlayerSource,
   UseAssetOptions,
-} from "@hyper/limeplay/hooks/use-asset"
+} from "@/components/limeplay/hooks/use-asset"
 
-import { AssetRecoveryAction } from "@hyper/limeplay/hooks/use-asset"
-import { PlaybackSourceController } from "@hyper/limeplay/hooks/use-playback-source"
+import { AssetRecoveryAction } from "@/components/limeplay/hooks/use-asset"
+import { PlaybackSourceController } from "@/components/limeplay/hooks/use-playback-source"
 
 export interface AudioAssetDisplayMetadata {
   poster?: string

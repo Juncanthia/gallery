@@ -1,4 +1,4 @@
-import { Button } from "@hyper/shadcn/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -8,16 +8,16 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@hyper/shadcn/components/ui/drawer";
-import { Kbd } from "@hyper/shadcn/components/ui/kbd";
+} from "@/components/ui/drawer";
+import { Kbd } from "@/components/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@hyper/shadcn/components/ui/tooltip";
-import { useHotKey } from "@hyper/data-table-filters/hooks/use-hot-key";
-import { useMediaQuery } from "@hyper/data-table-filters/hooks/use-media-query";
+} from "@/components/ui/tooltip";
+import { useHotKey } from "@/components/data-table-filters/hooks/use-hot-key";
+import { useMediaQuery } from "@/components/data-table-filters/hooks/use-media-query";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { FilterIcon } from "lucide-react";
 import React from "react";

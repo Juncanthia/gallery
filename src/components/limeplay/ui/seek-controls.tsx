@@ -3,12 +3,12 @@
 import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
 
-import { Button } from "@hyper/limeplay/ui/button"
+import { Button } from "@/components/limeplay/ui/button"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
-import { useSeek } from "@hyper/limeplay/hooks/use-seek"
+} from "@/components/limeplay/hooks/use-playback"
+import { useSeek } from "@/components/limeplay/hooks/use-seek"
 
 export interface SeekControlProps extends React.ComponentProps<typeof Button> {
   asChild?: boolean

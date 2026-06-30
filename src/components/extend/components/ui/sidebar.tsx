@@ -7,25 +7,25 @@ import { SidebarLeftIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@hyper/extend-ui/lib/utils"
-import { useMediaQuery } from "@hyper/extend-ui/hooks/use-media-query"
-import { Button } from "@hyper/extend-ui/components/ui/button"
-import { Input } from "@hyper/extend-ui/components/ui/input"
-import { ScrollArea } from "@hyper/extend-ui/components/ui/scroll-area"
-import { Separator } from "@hyper/extend-ui/components/ui/separator"
+import { cn } from "@/components/extend/lib/utils"
+import { useMediaQuery } from "@/components/extend/hooks/use-media-query"
+import { Button } from "@/components/extend/components/ui/button"
+import { Input } from "@/components/extend/components/ui/input"
+import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+import { Separator } from "@/components/extend/components/ui/separator"
 import {
   Sheet,
   SheetDescription,
   SheetHeader,
   SheetPopup,
   SheetTitle,
-} from "@hyper/extend-ui/components/ui/sheet"
-import { Skeleton } from "@hyper/extend-ui/components/ui/skeleton"
+} from "@/components/extend/components/ui/sheet"
+import { Skeleton } from "@/components/extend/components/ui/skeleton"
 import {
   Tooltip,
   TooltipPopup,
   TooltipTrigger,
-} from "@hyper/extend-ui/components/ui/tooltip"
+} from "@/components/extend/components/ui/tooltip"
 
 const SIDEBAR_COOKIE_NAME: string = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 7

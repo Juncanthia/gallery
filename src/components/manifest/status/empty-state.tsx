@@ -8,7 +8,7 @@ import {
   EmptyContent,
   EmptyMedia,
 } from '@/components/ui/empty-state'
-import { Button } from '@hyper/manifest-ui/components/ui/button'
+import { Button } from '@/components/manifest/components/ui/button'
 import { Inbox, Plus } from 'lucide-react'
 
 /**

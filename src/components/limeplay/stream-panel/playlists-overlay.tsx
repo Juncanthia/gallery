@@ -3,10 +3,10 @@
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import { CheckIcon } from "lucide-react"
 
-import type { StreamPanelPlaylistPreset } from "@hyper/limeplay/stream-panel/content-catalog"
-import type { StreamPanelSelection } from "@hyper/limeplay/stream-panel/use-stream-panel"
+import type { StreamPanelPlaylistPreset } from "@/components/limeplay/stream-panel/content-catalog"
+import type { StreamPanelSelection } from "@/components/limeplay/stream-panel/use-stream-panel"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 

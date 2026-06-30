@@ -1,5 +1,5 @@
-import { VolumeSliderControl } from "@hyper/limeplay/blocks/video-player/components/volume-slider-control"
-import { VolumeStateControl } from "@hyper/limeplay/blocks/video-player/components/volume-state-control"
+import { VolumeSliderControl } from "@/components/limeplay/blocks/video-player/components/volume-slider-control"
+import { VolumeStateControl } from "@/components/limeplay/blocks/video-player/components/volume-state-control"
 
 export function VolumeGroupControl() {
   return (

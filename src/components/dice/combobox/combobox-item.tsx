@@ -8,7 +8,7 @@ import {
   useId,
   useIsomorphicLayoutEffect,
   useLabel,
-} from "@hyper/dice-ui/_shared";
+} from "@/components/dice/_shared";
 import * as React from "react";
 import { useComboboxGroupContext } from "./combobox-group";
 import type { ItemTextElement } from "./combobox-item-text";

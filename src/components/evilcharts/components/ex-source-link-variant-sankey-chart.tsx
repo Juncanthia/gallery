@@ -1,8 +1,8 @@
 "use client";
 
-import { EvilSankeyChart, Node, Link, Tooltip } from "@hyper/evilcharts/components/sankey-chart";
+import { EvilSankeyChart, Node, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart";
 import type { SankeyData } from "recharts";
-import { type ChartConfig } from "@hyper/evilcharts/components/chart";
+import { type ChartConfig } from "@/components/evilcharts/components/chart";
 
 // Data pipeline - sources through processing to destinations
 const data: SankeyData = {

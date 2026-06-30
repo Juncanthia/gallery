@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useId, useState } from "react"
-import { cn } from "@hyper/gooseui/lib/utils"
+import { cn } from "@/components/gooseui/lib/utils"
 
 interface CurvedTextProps {
   /** Text to display along the curve */

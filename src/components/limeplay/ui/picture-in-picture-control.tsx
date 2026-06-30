@@ -3,12 +3,12 @@
 import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
 
-import { Button } from "@hyper/limeplay/ui/button"
-import { usePictureInPictureStore } from "@hyper/limeplay/hooks/use-picture-in-picture"
+import { Button } from "@/components/limeplay/ui/button"
+import { usePictureInPictureStore } from "@/components/limeplay/hooks/use-picture-in-picture"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@hyper/limeplay/hooks/use-playback"
+} from "@/components/limeplay/hooks/use-playback"
 
 export interface PictureInPictureControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**

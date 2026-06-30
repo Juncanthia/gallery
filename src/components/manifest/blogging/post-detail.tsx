@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@hyper/manifest-ui/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@hyper/manifest-ui/components/ui/tooltip';
+import { Button } from '@/components/manifest/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/manifest/components/ui/tooltip';
 import { Calendar, Clock, ExternalLink, Maximize2 } from 'lucide-react';
 import { useMemo } from 'react';
 import type { Post } from './types';

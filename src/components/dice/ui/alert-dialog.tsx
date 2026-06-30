@@ -2,8 +2,8 @@
 
 import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 import type * as React from "react";
-import { cn } from "@hyper/dice-ui/lib/utils";
-import { buttonVariants } from "@hyper/dice-ui/ui/button";
+import { cn } from "@/components/dice/lib/utils";
+import { buttonVariants } from "@/components/dice/ui/button";
 
 function AlertDialog({
   ...props

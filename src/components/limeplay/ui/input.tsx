@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { cn } from "@hyper/limeplay/lib/utils"
+import { cn } from "@/components/limeplay/lib/utils"
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (

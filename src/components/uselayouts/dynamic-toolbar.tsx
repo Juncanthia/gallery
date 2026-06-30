@@ -14,7 +14,7 @@ import {
   ArrowLeft01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import useMeasure from "@hyper/uselayouts/hooks/use-measure";
+import useMeasure from "@/components/uselayouts/hooks/use-measure";
 
 const ICON_SIZE = 24;
 
