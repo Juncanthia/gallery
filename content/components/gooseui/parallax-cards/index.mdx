@@ -1,0 +1,120 @@
+ParallaxCards 提供基于 CSS scroll-driven animations 的视差卡片容器。卡片在进入视口时自动执行淡入和位移动画，通过 intensity 控制视差强度，无需 JavaScript 动画库。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为卡片列表添加滚动入场视差效果时使用，适用于落地页、产品特性展示、博客列表等场景。
+
+常见场景：
+
+- 产品特性卡片列表的滚动入场动画。
+- 落地页亮点展示的逐条呈现。
+- 博客或文章列表的渐进式加载感。
+- 时间线或步骤引导卡的视觉强化。
+
+不推荐：
+
+- 对性能要求极高的首屏内容，scroll-driven animations 在部分低端设备上可能掉帧。
+- 需要精确控制动画时序的场景，scroll-driven 基于滚动位置而非时间轴。
+- 不支持 `animation-timeline: view()` 的浏览器环境（如旧版 Safari）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase
+  id="gooseui/parallax-cards"
+  path="gooseui/parallax-cards/basic"
+/>
+
+```tsx
+import { ParallaxCard, ParallaxCards } from "@/components/ui/gooseui-parallax-cards"
+
+export default function Demo() {
+  return (
+    &lt;ParallaxCards&gt;
+      &lt;ParallaxCard intensity={0.3}&gt;
+        &lt;h3&gt;低强度视差&lt;/h3&gt;
+        &lt;p&gt;轻微的上浮和缩放效果。&lt;/p&gt;
+      &lt;/ParallaxCard&gt;
+      &lt;ParallaxCard intensity={0.7}&gt;
+        &lt;h3&gt;高强度视差&lt;/h3&gt;
+        &lt;p&gt;更明显的动画幅度。&lt;/p&gt;
+      &lt;/ParallaxCard&gt;
+    &lt;/ParallaxCards&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ParallaxCard
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片内容 | `React.ReactNode` | - |
+| intensity | 视差强度，0 到 1 之间 | `number` | `0.5` |
+| className | 附加 CSS 类名 | `string` | - |
+
+### ParallaxCards
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片列表内容 | `React.ReactNode` | - |
+| className | 附加 CSS 类名 | `string` | - |
+
+ParallaxCard 使用 CSS scroll-driven animations 的 `view()` timeline 实现视差效果。`intensity` 值映射为 `translateY`（`intensity × 100` px）和 `scale`（`1 - intensity × 0.1`）。动画范围为 `entry 0% cover 50%`，即卡片从视口底部进入直到覆盖视口 50% 的过程中完成动画。
+
+ParallaxCards 作为容器组件，通过 `useGlobalStyles` 注入 `@keyframes parallax-card` 全局样式，并提供一个 `space-y-8` 的垂直间距布局。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何调整视差强度？
+
+通过 `ParallaxCard` 的 `intensity` 属性控制，范围为 0 到 1。0 表示无效果（卡片直接显示），1 表示最大位移（100px translateY + 0.9 scale）。
+
+```tsx
+&lt;ParallaxCard intensity={0}&gt;无效果&lt;/ParallaxCard&gt;
+&lt;ParallaxCard intensity={0.3}&gt;轻微效果&lt;/ParallaxCard&gt;
+&lt;ParallaxCard intensity={0.8}&gt;强烈效果&lt;/ParallaxCard&gt;
+```
+
+### 为什么必须用 ParallaxCards 包裹？
+
+`ParallaxCards` 负责注入 CSS `@keyframes parallax-card` 全局样式。直接使用 `ParallaxCard` 而不包裹在 `ParallaxCards` 中，动画的 keyframes 定义不存在，卡片不会有视差效果。
+
+### 支持哪些浏览器？
+
+依赖 CSS `animation-timeline: view()` 属性。Chrome 115+、Edge 115+、Firefox（需开启 `layout.css.scroll-driven-animations.enabled` flag）支持。Safari 18.2+ 开始支持。在不支持的浏览器中，卡片直接以最终状态显示，不会报错。
+
+### 如何修改卡片间距？
+
+通过 `ParallaxCards` 的 `className` 属性传入 Tailwind 间距类，覆盖默认的 `space-y-8`。
+
+```tsx
+&lt;ParallaxCards className="space-y-4"&gt;
+  ...
+&lt;/ParallaxCards&gt;
+```
+
+### 如何自定义单个卡片的样式？
+
+通过 `ParallaxCard` 的 `className` 属性传入自定义样式，会与默认的基础样式合并。
+
+```tsx
+&lt;ParallaxCard className="bg-blue-50 border-blue-200"&gt;
+  ...
+&lt;/ParallaxCard&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/gooseui-parallax-cards` 导入 `ParallaxCard` 和 `ParallaxCards`。
+2. 必须用 `ParallaxCards` 包裹所有 `ParallaxCard`，否则 keyframes 不会注入。
+3. `intensity` 传入 0 到 1 之间的数字，非字符串。
+4. 不要在调用侧添加动画相关的 className，效果由 `intensity` 控制。
+5. 不要引入 Ant Design 相关依赖。
+6. 注意浏览器兼容性，`animation-timeline: view()` 是较新的 CSS 特性。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/parallax-cards" />

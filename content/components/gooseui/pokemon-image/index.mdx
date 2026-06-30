@@ -1,0 +1,78 @@
+PokemonImage 通过宝可梦编号渲染对应的精灵图片。数据来自 PokeAPI 官方精灵图资源，传入 `name` 和 `number` 即可展示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中展示宝可梦精灵图时使用，适用于游戏化界面、收藏展示、图鉴浏览等场景。
+
+常见场景：
+
+- 宝可梦图鉴或收藏展示页面。
+- 游戏化 UI 中的角色展示。
+- 数据可视化中的图标点缀。
+
+不推荐：
+
+- 需要离线可用或自托管精灵资源的场景（当前依赖 PokeAPI CDN）。
+- 对图片加载性能要求极高的场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+PokemonImage 接收 `name`（宝可梦名称）和 `number`（全国图鉴编号）属性，渲染对应的精灵图片。
+
+<ComponentShowcase
+  id="gooseui/pokemon-image"
+  path="gooseui/pokemon-image/basic"
+/>
+
+```tsx
+import { PokemonImage } from "@/components/ui/gooseui-pokemon-image"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-6">
+      <PokemonImage name="Bulbasaur" number={1} />
+      <PokemonImage name="Charmander" number={4} />
+      <PokemonImage name="Squirtle" number={7} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### PokemonImage
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| name | 宝可梦名称，用作 img alt 属性 | `string` | - |
+| number | 宝可梦全国图鉴编号 | `number` | - |
+
+PokemonImage 通过内部 `usePokemonImage` hook 将 `number` 转换为 PokeAPI 精灵图 URL（`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{number}.png`）。当 URL 不可用时返回 `null` 不渲染任何内容。组件使用原生 `<img>` 标签渲染，`alt` 属性设置为 `name` 的值。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何使用不同世代的精灵图？
+
+PokemonImage 当前固定使用 PokeAPI 的标准精灵图资源。如需使用其他世代或形态的精灵图，请参考 PokeAPI 文档自行扩展。
+
+### 图片加载失败怎么办？
+
+当 `usePokemonImage` 返回的 URL 不可用时，组件返回 `null`，不会显示破损图片。如需自定义占位图或加载状态，可在调用侧包装处理。
+
+### 支持哪些宝可梦？
+
+支持 PokeAPI 官方精灵图资源中收录的所有宝可梦，按全国图鉴编号（number）访问。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/gooseui-pokemon-image` 导入 `PokemonImage`。
+2. 必须传入 `name` 和 `number` 两个属性。
+3. `number` 为数字类型，传入宝可梦的全国图鉴编号。
+4. `name` 为字符串类型，用作图片的 `alt` 文本，确保可访问性。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui-pokemon-image" />

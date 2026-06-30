@@ -1,0 +1,31 @@
+---
+component: CornerShape
+slug: gooseui/corner-shape
+
+import: import { Squircle } from "@/components/ui/gooseui-corner-shape"
+
+usage: |
+  <Squircle n={5} radius="20%" className="w-24 h-24 bg-blue-500">
+    {children}
+  </Squircle>
+
+props:
+  n?: number  -- 超椭圆指数。2=椭圆，5=squircle（默认），更大越接近方形
+  radius?: string  -- 圆角比例 CSS 值，默认 "20%"
+  className?: string  -- 附加样式类名
+  children?: React.ReactNode  -- 子元素内容
+
+constraints:
+  - Chrome 139+ 使用原生 CSS corner-shape: squircle；其他浏览器自动降级为 SVG clip-path。
+  - 兼容性由组件内部处理，调用侧无需关注降级逻辑。
+  - Squircle 接受标准 HTML div 属性（data-*、事件等）。
+  - 不要使用 border-radius + overflow: hidden 模拟 squircle，应直接使用本组件。
+  - 不要手动编写 SVG clip-path 实现超椭圆，应使用 useSuperellipsePath hook。
+  - 图片裁剪优先使用 SquircleImage；复杂内容使用 Squircle。
+  - 不要引入第三方圆角或裁剪库（如 @floating-ui）。
+  - SquircleImage 和 SquircleComparison 是可选的附加组件。
+
+source: src/components/gooseui/components/ui/corner-shape.tsx
+example: content/components/gooseui/corner-shape/examples/basic.tsx
+docs: content/components/gooseui/corner-shape/index.mdx
+---

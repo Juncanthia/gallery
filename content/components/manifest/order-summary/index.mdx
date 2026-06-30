@@ -1,0 +1,198 @@
+OrderSummary 订单摘要。用于展示订单的明细列表、费用分解和总计金额，支持商品图片、数量、折扣码实时展示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要向用户展示订单的完整费用分解时使用。适用于：
+
+- 购物车结算页面，展示待支付订单的商品清单和费用明细。
+- 支付确认页，在用户完成支付前最后确认订单金额。
+- 订单详情页，展示历史订单的费用构成。
+- 发票预览，提供商品级别的费用明细。
+
+OrderSummary 以结构化方式展示订单信息：
+
+- 商品行项目，包含缩略图、名称、数量和行小计。
+- 小计、运费、税费的分项展示。
+- 折扣金额与折扣码的标签展示。
+- 最终合计金额的高亮显示。
+- 多币种格式化支持（通过 `Intl.NumberFormat`）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础订单摘要
+
+包含多件商品、运费、税费、折扣和总计的完整订单摘要。
+
+<ComponentShowcase
+  id="manifest/order-summary"
+  path="manifest/order-summary/basic"
+/>
+
+```tsx
+import { OrderSummary } from "@/components/ui/manifest-order-summary"
+
+const sampleData = {
+  items: [
+    {
+      id: "1",
+      name: "Wireless Headphones",
+      quantity: 1,
+      price: 149.99,
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=120&h=120&fit=crop",
+    },
+    {
+      id: "2",
+      name: "USB-C Cable",
+      quantity: 2,
+      price: 19.99,
+    },
+    {
+      id: "3",
+      name: "Phone Case",
+      quantity: 1,
+      price: 29.99,
+      image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=120&h=120&fit=crop",
+    },
+  ],
+  subtotal: 219.96,
+  shipping: 5.99,
+  tax: 17.60,
+  discount: 20,
+  discountCode: "SAVE20",
+  total: 223.55,
+}
+
+export default function Demo() {
+  return (
+    <OrderSummary
+      data={sampleData}
+      appearance={{ currency: "USD" }}
+    />
+  )
+}
+```
+
+### 免运费订单
+
+设置 `shipping` 为 `0` 时显示 "Free"。
+
+```tsx
+import { OrderSummary } from "@/components/ui/manifest-order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary
+      data={{
+        items: [
+          { id: "1", name: "Digital Download", quantity: 1, price: 49.99 },
+        ],
+        subtotal: 49.99,
+        shipping: 0,
+        tax: 4.00,
+        total: 53.99,
+      }}
+      appearance={{ currency: "USD" }}
+    />
+  )
+}
+```
+
+### 无折扣订单
+
+不传 `discount` 和 `discountCode` 时折扣行不渲染。
+
+```tsx
+import { OrderSummary } from "@/components/ui/manifest-order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary
+      data={{
+        items: [
+          { id: "1", name: "Coffee Beans", quantity: 3, price: 15.99 },
+          { id: "2", name: "Mug", quantity: 2, price: 12.50 },
+        ],
+        subtotal: 72.97,
+        shipping: 5.99,
+        tax: 6.32,
+        total: 85.28,
+      }}
+      appearance={{ currency: "USD" }}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### OrderSummary
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 订单数据对象，包含商品、费用和总计 | `object` | - |
+| data.items | 订单中的商品列表 | `OrderItem[]` | - |
+| data.subtotal | 小计金额（不含运费、税和折扣） | `number` | - |
+| data.shipping | 运费。设为 `0` 时显示 "Free" | `number` | - |
+| data.tax | 税费金额 | `number` | - |
+| data.discount | 折扣金额。仅当大于 `0` 时显示 | `number` | - |
+| data.discountCode | 折扣码，以 Badge 形式展示在折扣行 | `string` | - |
+| data.total | 最终合计金额，高亮显示 | `number` | - |
+| appearance | 外观配置 | `object` | - |
+| appearance.currency | 货币代码，用于 `Intl.NumberFormat` 格式化 | `string` | `"USD"` |
+
+### OrderItem
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 商品唯一标识 | `string` | 是 |
+| name | 商品名称 | `string` | 否 |
+| quantity | 购买数量 | `number` | 否 |
+| price | 商品单价 | `number` | 否 |
+| image | 商品图片 URL | `string` | 否 |
+
+当 `price` 和 `quantity` 均传入时显示行小计（`price * quantity`）。当 `image` 传入时渲染商品缩略图，否则显示默认占位图标。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何切换货币？
+
+通过 `appearance.currency` 设置 ISO 4217 货币代码：
+
+```tsx
+<OrderSummary
+  data={orderData}
+  appearance={{ currency: "EUR" }}
+/>
+```
+
+组件内部使用 `Intl.NumberFormat` 进行格式化，自动根据货币代码渲染对应的符号和格式。
+
+### 如何隐藏没有图片的商品占位？
+
+当前 OrderSummary 在商品无 `image` 时默认显示 Package 图标占位。如需完全隐藏，请在调用侧过滤或修改源码。
+
+### 如何只显示商品列表而不显示费用分解？
+
+OrderSummary 的费用分解行（subtotal、shipping、tax、discount）仅在对应字段不为 `undefined` 时渲染。如需隐藏某一行，不传该字段即可。如需隐藏全部费用分解行，请不传 `subtotal`、`shipping`、`tax` 和 `discount`。
+
+### OrderSummary 和 PaymentConfirmed 的区别？
+
+- **OrderSummary**：展示订单的费用明细分解，用于结算和确认前的费用核对。
+- **PaymentConfirmed**：展示支付成功后的结果页，包含产品信息、物流信息和支付金额。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 OrderSummary 代码时：
+
+1. 从 `@/components/ui/manifest-order-summary` 导入 OrderSummary
+2. 通过 `data` prop 传入订单数据对象
+3. 商品项必须包含 `id`，建议同时传入 `name`、`quantity`、`price`
+4. `data.total` 应等于 `subtotal + shipping + tax - discount`，确保数值一致性
+5. 通过 `appearance.currency` 指定货币，默认 `"USD"`
+6. 运费为 `0` 时自动显示 "Free"，无需额外处理
+7. 折扣仅当 `discount &gt; 0` 时显示，传入 `discountCode` 可展示折扣码 Badge
+8. 组件内部使用 `Intl.NumberFormat`，无需额外引入货币格式化库
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="manifest/order-summary" />

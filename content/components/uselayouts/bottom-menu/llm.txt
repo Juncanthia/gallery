@@ -1,0 +1,148 @@
+---
+category: Components
+title: BottomMenu
+subtitle: 底部菜单
+description: BottomMenu 底部菜单，一个带动画的 iOS 风格底部导航栏，点击图标展开对应的子菜单面板。
+demo:
+  cols: 2
+group:
+  title: UseLayouts
+  order: 1
+source:
+  component: src/components/uselayouts/bottom-menu.tsx
+  entry: src/components/ui/uselayouts-bottom-menu.tsx
+  docs: content/components/uselayouts/bottom-menu/index.mdx
+  examples:
+    - content/components/uselayouts/bottom-menu/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# BottomMenu 底部菜单
+
+BottomMenu 是 UseLayouts 系列布局组件，提供一个带动画的 iOS 风格底部导航栏。
+
+本组件是自定义设计实现，不基于 Ant Design。使用 motion/react 驱动面板切换动画，hugeicons 提供图标。
+
+## 何时使用 {#when-to-use}
+
+适合需要底部固定导航栏 + 可展开子菜单面板的界面。每个导航入口点击后弹出对应的操作面板，再次点击或点击外部区域收起。
+
+常见场景：
+
+- 移动端底部主导航。
+- 快捷操作入口面板。
+- 主题切换面板。
+- 个人中心快捷菜单。
+
+不推荐：
+
+- 用于全局导航。
+- 导航项超过 6 个。
+- 在已有底部安全区的页面重复叠加。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { BottomMenu } from "@/components/ui/uselayouts-bottom-menu"
+
+export default function Demo() {
+  return <BottomMenu />
+}
+```
+
+## 核心导出 {#exports}
+
+- `BottomMenu`
+
+## API 摘要 {#api}
+
+BottomMenu 为零 props 组件，内部管理所有状态和导航配置。
+
+内部状态：
+
+- `view: "default" | "home" | "search" | "notifications" | "profile" | "theme"` — 当前展开的面板。
+- `theme: "light" | "dark" | "system"` — 当前主题选择。
+
+导航项通过内部常量定义，修改时直接编辑源码：
+
+- `MAIN_NAV` — 底部图标栏入口。
+- `HOME_ITEMS` — 首页面板操作项。
+- `SEARCH_OPTIONS` — 搜索面板入口。
+- `NOTIFICATION_TYPES` — 通知分类。
+- `PROFILE_LINKS` — 个人中心入口。
+- `THEME_OPTIONS` — 主题选项。
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- 组件未声明 `data-slot`，使用组件 DOM 结构和 Tailwind class 定位。
+- 底部栏背景：`bg-background/95 backdrop-blur-xl border border-border rounded-[18px]`。
+- 子面板容器：`bg-background/95 backdrop-blur-xl border border-border rounded-[18px]`。
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 直接控制，不使用 CVA。
+- 动画由 motion/react 的 `AnimatePresence` 和 `motion.div` 驱动。
+- 面板高度/宽度测量使用 `react-use-measure`。
+- 外部点击检测使用原生 `mousedown` 事件监听。
+- 主题颜色使用 `bg-background`、`text-foreground`、`text-muted-foreground`、`bg-accent`、`border-border` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/bottom-menu.tsx`
+- `src/components/ui/uselayouts-bottom-menu.tsx`
+
+直接依赖：
+
+- `motion/react` — 面板切换动画。
+- `react-use-measure` — 面板尺寸测量。
+- `@hugeicons/core-free-icons` — 图标库。
+- `@hugeicons/react` — React 图标组件。
+- `@hyper/uselayouts/lib/utils` — cn 工具函数。
+
+实现注意：
+
+1. 组件为零 props 设计，所有配置通过修改源码常量完成。
+2. 点击外部区域通过 `mousedown` 事件监听实现，依赖 `containerRef`。
+3. 子面板使用"预渲染 + 测量"方式实现动态尺寸：隐藏元素在 `left: -9999px` 处渲染，通过 `useMeasure` 获取实际尺寸。
+4. 面板内容切换使用 `AnimatePresence mode="popLayout"` 实现弹性过渡。
+
+## 可访问性 {#accessibility}
+
+- 底部图标按钮为原生 `<button>` 元素，具备键盘焦点和点击语义。
+- 当前未提供 `aria-label` 或 `aria-expanded` 等 ARIA 属性，建议扩展时补充。
+- 主题切换无持久化逻辑，刷新后恢复默认值。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 自定义设计，AntD 无对应组件 |
+| 视觉系统 | Tailwind CSS + motion/react 动画 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 css-in-js |
+| 图标系统 | 使用 hugeicons，不使用 @ant-design/icons |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 BottomMenu 代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-bottom-menu` 导入 BottomMenu。
+2. BottomMenu 为零 props 组件，直接渲染即可。
+3. 如需定制导航项，修改 `src/components/uselayouts/bottom-menu.tsx` 中的常量。
+4. 图标使用 `@hugeicons/core-free-icons`，不要使用 `@ant-design/icons`。
+5. 不要引入 `antd`、`antd-style` 或 rc-component。

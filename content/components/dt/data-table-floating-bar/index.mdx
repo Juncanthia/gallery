@@ -1,0 +1,276 @@
+DataTableFloatingBar 是 DataTable 的浮动操作栏，当用户选中表格行后从底部浮出，展示选中行数量、取消选中按钮和自定义操作。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对表格选中行批量操作时使用。用户勾选行后，组件从底部浮出显示选中数量和操作按钮，提供清晰的操作反馈和便捷的键盘快捷键。
+
+常见场景：
+
+- 对选中行执行批量删除、归档、标记等操作。
+- 表格数据量大，需要一种非侵入式的批量操作入口。
+- 配合 DataTable 行选择功能，提供选中后的操作闭环。
+
+不推荐：
+
+- 没有行选择功能的表格，组件不会渲染（`selectedRowCount === 0` 时返回 `null`）。
+- 脱离 DataTableProvider 上下文使用，组件依赖 `useDataTable()` 获取 `table` 和 `rowSelection`。
+- 操作按钮不需要访问选中行数据时使用，此时应使用固定位置的工具栏按钮。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件必须在 `DataTableProvider` 内部使用，并需要表格开启 `rowSelection` 状态。`children` 为 render prop 函数，接收 `{ rows, table }`，返回自定义操作按钮。
+
+选中表格行后，底部浮出操作栏。按下 `Shift+X` 可取消全选。
+
+<ComponentShowcase
+  id="dt/data-table-floating-bar"
+  path="dt/data-table-floating-bar/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { DataTableProvider } from "@/components/ui/dt-data-table-provider"
+import { DataTableFloatingBar } from "@/components/ui/dt-data-table-floating-bar"
+import { Button } from "@hyper/shadcn/components/ui/button"
+import {
+  useReactTable,
+  getCoreRowModel,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type RowSelectionState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/ui/dt-data-table-provider"
+import { Trash2, Archive, Tags } from "lucide-react"
+
+type Task = {
+  id: string
+  title: string
+  status: string
+  priority: string
+  assignee: string
+}
+
+const data: Task[] = [
+  { id: "1", title: "Fix login bug", status: "open", priority: "high", assignee: "Alice" },
+  { id: "2", title: "Add dark mode", status: "in-progress", priority: "medium", assignee: "Bob" },
+  { id: "3", title: "Update docs", status: "open", priority: "low", assignee: "Charlie" },
+  { id: "4", title: "Refactor auth", status: "done", priority: "high", assignee: "Alice" },
+  { id: "5", title: "Design new logo", status: "open", priority: "medium", assignee: "Diana" },
+  { id: "6", title: "Write tests", status: "in-progress", priority: "high", assignee: "Bob" },
+  { id: "7", title: "Deploy staging", status: "open", priority: "low", assignee: "Eve" },
+  { id: "8", title: "Review PRs", status: "done", priority: "medium", assignee: "Charlie" },
+]
+
+const columns: ColumnDef&lt;Task&gt;[] = [
+  { accessorKey: "title", header: "Title" },
+  { accessorKey: "status", header: "Status" },
+  { accessorKey: "priority", header: "Priority" },
+  { accessorKey: "assignee", header: "Assignee" },
+]
+
+const filterFields: DataTableFilterField&lt;Task&gt;[] = []
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState&lt;ColumnFiltersState&gt;([])
+  const [rowSelection, setRowSelection] = useState&lt;RowSelectionState&gt;({})
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters, rowSelection },
+    onColumnFiltersChange: setColumnFilters,
+    onRowSelectionChange: setRowSelection,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (row) =&gt; row.id,
+  })
+
+  return (
+    &lt;DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+    &gt;
+      &lt;div className="w-full space-y-4"&gt;
+        &lt;div className="overflow-hidden rounded-md border"&gt;
+          &lt;table className="w-full text-sm"&gt;
+            &lt;thead&gt;
+              &lt;tr className="bg-muted/50"&gt;
+                &lt;th className="w-10 px-3 py-2"&gt;
+                  &lt;input
+                    type="checkbox"
+                    checked={table.getIsAllPageRowsSelected()}
+                    onChange={table.getToggleAllPageRowsSelectedHandler()}
+                    className="size-3.5 rounded border-border"
+                  /&gt;
+                &lt;/th&gt;
+                {table.getVisibleLeafColumns().map((column) =&gt; (
+                  &lt;th key={column.id} className="px-3 py-2 text-left font-medium"&gt;
+                    {column.columnDef.header as string}
+                  &lt;/th&gt;
+                ))}
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+              {table.getRowModel().rows.map((row) =&gt; (
+                &lt;tr key={row.id} className="border-t"&gt;
+                  &lt;td className="px-3 py-2"&gt;
+                    &lt;input
+                      type="checkbox"
+                      checked={row.getIsSelected()}
+                      onChange={row.getToggleSelectedHandler()}
+                      className="size-3.5 rounded border-border"
+                    /&gt;
+                  &lt;/td&gt;
+                  {row.getVisibleCells().map((cell) =&gt; (
+                    &lt;td key={cell.id} className="px-3 py-2"&gt;
+                      {cell.getValue() as string}
+                    &lt;/td&gt;
+                  ))}
+                &lt;/tr&gt;
+              ))}
+            &lt;/tbody&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+
+        &lt;DataTableFloatingBar&lt;Task&gt;&gt;
+          {({ rows, table }) =&gt; (
+            &lt;&gt;
+              &lt;Button
+                variant="ghost"
+                size="sm"
+                onClick={() =&gt; {
+                  alert(`Archiving ${rows.length} task(s)`)
+                  table.resetRowSelection()
+                }}
+              &gt;
+                &lt;Archive className="mr-1.5 size-3.5" /&gt;
+                Archive
+              &lt;/Button&gt;
+              &lt;Button
+                variant="ghost"
+                size="sm"
+                onClick={() =&gt; {
+                  alert(`Tagging ${rows.length} task(s)`)
+                  table.resetRowSelection()
+                }}
+              &gt;
+                &lt;Tags className="mr-1.5 size-3.5" /&gt;
+                Tag
+              &lt;/Button&gt;
+              &lt;Button
+                variant="ghost"
+                size="sm"
+                onClick={() =&gt; {
+                  alert(`Deleting ${rows.length} task(s)`)
+                  table.resetRowSelection()
+                }}
+              &gt;
+                &lt;Trash2 className="mr-1.5 size-3.5" /&gt;
+                Delete
+              &lt;/Button&gt;
+            &lt;/&gt;
+          )}
+        &lt;/DataTableFloatingBar&gt;
+      &lt;/div&gt;
+    &lt;/DataTableProvider&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DataTableFloatingBar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | render prop，接收 `{ rows, table }`，返回 ReactNode | `(props: { rows: Row&lt;TData&gt;[]; table: TTable&lt;TData&gt; }) =&gt; React.ReactNode` | -（必填） |
+
+### 上下文依赖
+
+组件通过 `useDataTable()` 从 DataTableProvider 获取以下状态：
+
+| 上下文属性 | 说明 | 来源 |
+| --- | --- | --- |
+| table | TanStack Table 实例，用于 `getFilteredSelectedRowModel()` 和 `resetRowSelection()` | DataTableProvider |
+| rowSelection | 行选择状态对象，用于计算选中行数和控制组件显隐 | DataTableProvider |
+
+### render prop 参数
+
+| 参数 | 说明 | 类型 |
+| --- | --- | --- |
+| rows | 当前筛选后的选中行数组 | `Row&lt;TData&gt;[]` |
+| table | TanStack Table 实例，可调用 `resetRowSelection()` 等 API | `TTable&lt;TData&gt;` |
+
+### 键盘快捷键
+
+| 快捷键 | 说明 |
+| --- | --- |
+| Shift + X | 取消所有选中行 |
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么选中行后浮动栏不显示？
+
+检查以下条件：
+
+1. 表格必须配置 `rowSelection` 状态和 `onRowSelectionChange` 回调。
+2. 组件必须在 `DataTableProvider` 内部使用。
+3. `selectedRowCount` 必须大于 0，组件内部通过 `Object.keys(rowSelection).length` 计算。
+
+```tsx
+const [rowSelection, setRowSelection] = useState&lt;RowSelectionState&gt;({})
+
+const table = useReactTable({
+  // ...
+  state: { rowSelection },
+  onRowSelectionChange: setRowSelection,
+})
+```
+
+### 如何添加自定义操作按钮？
+
+通过 `children` render prop 返回自定义按钮。`rows` 包含所有选中行数据，`table` 提供 `resetRowSelection()` 等方法。
+
+```tsx
+&lt;DataTableFloatingBar&lt;TData&gt;&gt;
+  {({ rows, table }) =&gt; (
+    &lt;&gt;
+      &lt;Button onClick={() =&gt; handleBulkAction(rows)}&gt;
+        批量操作 ({rows.length})
+      &lt;/Button&gt;
+    &lt;/&gt;
+  )}
+&lt;/DataTableFloatingBar&gt;
+```
+
+### 如何自定义浮动栏样式？
+
+浮动栏使用 Tailwind CSS 类名控制样式，外层容器为 `fixed inset-x-0 bottom-4 z-50 mx-auto w-fit`。如需修改，可直接通过 className 覆盖或包装额外样式。当前组件不支持 className prop，需要修改源码。
+
+### 浮动栏的位置可以改变吗？
+
+固定定位在视口底部居中（`bottom-4`），`z-50` 层级。如需调整位置，修改 `src/components/data-table-filters/components/data-table/data-table-floating-bar.tsx` 第 40 行的定位类名。
+
+### 取消全选的快捷键能修改吗？
+
+快捷键在源码中硬编码为 `useHotKey(() => table.resetRowSelection(), "x", { shift: true })`。如需修改，调整 `lib/hot-key.ts` 或替换为自定义快捷键逻辑。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DataTableFloatingBar 代码时：
+
+1. 从 `@/components/ui/dt-data-table-floating-bar` 导入。
+2. 组件必须在 `DataTableProvider` 内部使用，否则 `useDataTable()` 会抛出错误。
+3. `children` 为 render prop 函数，不要传入 ReactNode 实例。
+4. 表格需要启用 `rowSelection` 状态（`RowSelectionState`），否则浮动栏不会显示。
+5. 使用 `table.resetRowSelection()` 在操作完成后清空选择状态。
+6. `rows` 来自 `table.getFilteredSelectedRowModel().rows`，会随表格筛选联动。
+7. 选中行数从 `rowSelection` 对象计算，不依赖 table 的 selected rows 长度以防状态不一致。
+8. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="data-table-floating-bar" />

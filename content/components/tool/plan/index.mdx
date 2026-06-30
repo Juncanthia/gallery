@@ -1,0 +1,212 @@
+Plan 计划组件。以卡片形式展示 AI 生成的执行计划，包含标题、描述、进度条和待办事项列表。每个待办项支持 pending / in_progress / completed / cancelled 四种状态，带展开描述、新品进场动画和完成庆祝动画。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在 AI 对话中展示多步骤执行计划或任务拆解时使用。
+
+常见场景：
+- AI Agent 生成多步骤执行计划后，以结构化卡片呈现给用户。
+- 编码任务拆解为子任务列表，追踪每个子任务的完成状态。
+- 项目规划阶段展示待办清单，用户可直观了解整体进度。
+
+不推荐：
+- 待办项数量极少（少于 2 个）时使用，进度条和折叠逻辑无实际意义。
+- 需要用户交互编辑状态的清单 —— Plan 为只读展示组件，不支持拖拽排序或状态切换。
+- 需要甘特图、时间线等复杂排期视图的场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 id、title、todos 等属性，展示完整的计划卡片含进度、待办状态图标和展开描述。
+
+<ComponentShowcase id="tool/plan" path="tool/plan/basic" />
+
+```tsx
+import { Plan } from "@/components/ui/tool-plan"
+
+export default function Demo() {
+  return (
+    <Plan
+      id="demo-plan"
+      title="构建用户认证系统"
+      todos={[
+        { id: "1", label: "设计数据库模型", status: "completed" },
+        { id: "2", label: "实现注册接口", status: "in_progress" },
+        { id: "3", label: "实现登录接口", status: "pending" },
+      ]}
+    />
+  )
+}
+```
+
+### 待办项带描述
+
+每个 todo 可设置 `description` 属性，渲染为可折叠的描述区域。点击待办项展开/收起。
+
+```tsx
+import { Plan } from "@/components/ui/tool-plan"
+
+export default function Demo() {
+  return (
+    <Plan
+      id="demo-description"
+      title="数据库优化方案"
+      description="提升查询性能，降低慢查询比例"
+      todos={[
+        {
+          id: "1",
+          label: "添加缺失索引",
+          status: "completed",
+          description: "分析 EXPLAIN 输出，为 orders.user_id、products.category_id 添加联合索引",
+        },
+        {
+          id: "2",
+          label: "优化 N+1 查询",
+          status: "in_progress",
+          description: "使用 eager loading 替代循环查询，减少数据库往返次数",
+        },
+        {
+          id: "3",
+          label: "启用查询缓存",
+          status: "pending",
+          description: "在 Redis 中缓存热点查询结果，设置合理的 TTL",
+        },
+      ]}
+    />
+  )
+}
+```
+
+### 多种待办状态
+
+每个 todo 支持四种状态：`pending`（空心圆）、`in_progress`（旋转加载图标）、`completed`（绿色对勾）、`cancelled`（红色叉号）。
+
+```tsx
+import { Plan } from "@/components/ui/tool-plan"
+
+export default function Demo() {
+  return (
+    <Plan
+      id="demo-status"
+      title="发布上线流程"
+      todos={[
+        { id: "1", label: "代码审查通过", status: "completed" },
+        { id: "2", label: "CI 流水线通过", status: "completed" },
+        { id: "3", label: "预发环境验证", status: "in_progress" },
+        { id: "4", label: "数据库迁移", status: "cancelled", description: "本次无 schema 变更，跳过" },
+        { id: "5", label: "灰度发布 10% 流量", status: "pending" },
+        { id: "6", label: "监控告警确认", status: "pending" },
+      ]}
+    />
+  )
+}
+```
+
+### 控制可见待办数量
+
+使用 `maxVisibleTodos` 限制初始可见的待办项数量，超出部分折叠到"X more"手风琴区域。
+
+```tsx
+import { Plan } from "@/components/ui/tool-plan"
+
+export default function Demo() {
+  return (
+    <Plan
+      id="demo-max-visible"
+      title="前端重构计划"
+      maxVisibleTodos={3}
+      todos={[
+        { id: "1", label: "迁移到 React 19", status: "completed" },
+        { id: "2", label: "替换状态管理方案", status: "completed" },
+        { id: "3", label: "组件懒加载拆分", status: "in_progress" },
+        { id: "4", label: "升级 Tailwind v4", status: "pending" },
+        { id: "5", label: "移除废弃 API 调用", status: "pending" },
+        { id: "6", label: "E2E 测试覆盖", status: "pending" },
+      ]}
+    />
+  )
+}
+```
+
+### Compact 紧凑模式
+
+使用 `Plan.Compact` 替代 `Plan`，隐藏外层的 Card 包裹和标题区域，仅保留待办列表和进度条，适合嵌入到更大的布局中。
+
+```tsx
+import { Plan } from "@/components/ui/tool-plan"
+
+export default function Demo() {
+  return (
+    <Plan.Compact
+      id="demo-compact"
+      title="Quick tasks"
+      todos={[
+        { id: "1", label: "安装依赖", status: "completed" },
+        { id: "2", label: "配置环境变量", status: "completed" },
+        { id: "3", label: "启动开发服务器", status: "in_progress" },
+      ]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Plan
+
+计划卡片组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识 | `string` | -（必填） |
+| title | 计划标题 | `string` | -（必填） |
+| description | 计划描述，显示于标题下方 | `string` | - |
+| todos | 待办事项数组（至少 1 项，id 不可重复） | `PlanTodo[]` | -（必填） |
+| maxVisibleTodos | 初始可见待办项数量，超出折叠 | `number` | `4` |
+| className | 自定义样式类名 | `string` | - |
+
+### Plan.Compact
+
+紧凑模式，与 Plan 共用所有 Props。区别在于隐藏外层 Card 包裹和标题区域，适合嵌入其他布局。
+
+### PlanTodo
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 待办项唯一标识（不可重复） | `string` | -（必填） |
+| label | 待办项标题 | `string` | -（必填） |
+| status | 待办项状态 | `"pending"` \| `"in_progress"` \| `"completed"` \| `"cancelled"` | -（必填） |
+| description | 待办项详情，设置后可点击展开 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 何时使用 Plan vs Plan.Compact？
+
+`Plan` 为完整卡片形态，含标题、描述、进度条和外层 Card 样式，适合独立展示。`Plan.Compact` 隐藏外层包裹和标题，仅保留列表和进度条，适合嵌入到已有的 Card 或 Dialog 内部。
+
+### 进度条百分比如何计算？
+
+进度百分比 = `completedCount / totalCount * 100`，仅 `status === "completed"` 的待办项计入已完成数量。`cancelled` 不计入完成数。
+
+### 待办项列表支持动画吗？
+
+支持。新增待办项（首次出现的 id）会播放 fade-in + slide-in 进场动画，带 50ms 的 stagger 延迟。全部完成时进度条会触发庆祝脉冲动画。
+
+### 如何触发 AI 流式更新待办状态？
+
+Plan 组件是纯展示组件，接收 props 渲染。AI Agent 应在流式响应中逐步更新 `todos` 数组（如将某个 todo 的 status 从 `pending` 改为 `in_progress` 再到 `completed`），React 会重新渲染并触发对应动画。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/tool-plan` 导入 `Plan`。
+2. `id`、`title`、`todos` 为必填属性，`todos` 至少包含 1 个元素，且所有 `id` 唯一。
+3. 每个 todo 必须设置 `status`：`"pending"` / `"in_progress"` / `"completed"` / `"cancelled"`。
+4. 待办项超过 4 个时，建议设置 `maxVisibleTodos` 控制初始展示数量，避免列表过长。
+5. 需要嵌入其他布局时使用 `Plan.Compact`，不建议通过 className 隐藏 Card 外壳。
+6. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+7. 不要引入 Ant Design 相关依赖。
+8. `todo.description` 为可选属性，仅在待办项需要展开详情时设置。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tool/plan" />

@@ -1,0 +1,58 @@
+---
+category: Components
+title: ScrollProgress
+subtitle: 滚动进度条
+description: 页面滚动进度条组件，使用 CSS scroll-driven animation 显示页面滚动进度。
+source:
+  component: src/components/gooseui/components/ui/scroll-progress.tsx
+  docs: content/components/gooseui/scroll-progress/index.mdx
+  examples:
+    - content/components/gooseui/scroll-progress/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---
+
+# ScrollProgress 滚动进度条
+
+ScrollProgress 使用 CSS `animation-timeline: scroll(root)` 实现零 JavaScript 开销的页面滚动进度条显示。
+
+## 使用示例
+
+```tsx
+import { ScrollProgress } from "@/components/ui/gooseui-scroll-progress"
+
+// 默认顶部 3px 进度条
+export default function Demo() {
+  return <ScrollProgress />
+}
+
+// 自定义颜色和高度
+function CustomDemo() {
+  return <ScrollProgress color="#ec4899" height={4} />
+}
+
+// 底部显示
+function BottomDemo() {
+  return <ScrollProgress position="bottom" />
+}
+```
+
+## API 速览
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| color | `string` | `bg-primary` | 进度条颜色（CSS 颜色值） |
+| height | `number` | `3` | 进度条高度（px） |
+| position | `top` \| `bottom` | `top` | 显示位置 |
+| className | `string` | - | 附加样式类名 |
+
+## 约束
+
+1. 从 `@/components/ui/gooseui-scroll-progress` 导入，不要从 gooseui 内部路径导入。
+2. 纯 CSS 实现（`animation-timeline: scroll(root)`），无 JavaScript 计算开销。不要用 `scroll` 事件 + `useState` 方案替代。
+3. 不要引入 `nprogress` 或任何第三方进度条库。
+4. `color` 接收 CSS 颜色值（HEX、RGB、HSL 等），不接收 Tailwind 颜色类名。
+5. 组件使用 `fixed` 定位 + `z-index: 100`，确保不被其他内容遮挡。
+6. 组件跟踪页面根滚动（`scroll(root)`），容器内进度跟踪需使用 `ScrollContainer`。
+7. `className` 可用于渐变背景等自定义样式，但不要通过 className 覆盖 `position`、`height`、`color` 的核心逻辑。

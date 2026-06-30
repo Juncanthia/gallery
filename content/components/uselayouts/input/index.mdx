@@ -1,0 +1,131 @@
+Input 输入框，用于接收用户的文本输入。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要用户输入文本内容时使用。支持所有原生 input 属性，通过默认的 Tailwind 样式与项目视觉系统保持一致。
+
+常见场景：
+
+- 表单中的文本输入、密码输入、数字输入。
+- 搜索框、筛选条件输入。
+- 登录、注册等表单页面。
+
+不推荐：
+
+- 多行文本输入，应使用 Textarea 组件。
+- 需要选择器、级联选择等复合交互，应使用 Select、Cascader 等专用组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+Input 支持所有原生 HTML input 属性，包括 `type`、`placeholder`、`disabled` 等。
+
+<ComponentShowcase
+  id="uselayouts/input"
+  path="uselayouts/input/basic"
+/>
+
+```tsx
+import Input from "@/components/ui/uselayouts-input"
+
+export default function Demo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      <Input placeholder="请输入内容" />
+      <Input type="password" placeholder="请输入密码" />
+      <Input disabled placeholder="禁用状态" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Input
+
+Input 基于 `React.forwardRef` 封装，继承所有原生 `React.InputHTMLAttributes&lt;HTMLInputElement&gt;` 属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 输入框类型 | `text` \| `password` \| `email` \| `number` \| `tel` \| `url` \| `search` \| ... | `text` |
+| placeholder | 占位提示文字 | `string` | - |
+| disabled | 禁用状态 | `boolean` | `false` |
+| value | 受控值 | `string` \| `number` \| `string[]` | - |
+| defaultValue | 非受控默认值 | `string` \| `number` \| `string[]` | - |
+| onChange | 值变化回调 | `React.ChangeEventHandler&lt;HTMLInputElement&gt;` | - |
+| onFocus | 聚焦回调 | `React.FocusEventHandler&lt;HTMLInputElement&gt;` | - |
+| onBlur | 失焦回调 | `React.FocusEventHandler&lt;HTMLInputElement&gt;` | - |
+| readOnly | 只读状态 | `boolean` | `false` |
+| required | 必填标记 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+| ref | 元素引用 | `React.Ref&lt;HTMLInputElement&gt;` | - |
+
+所有其他原生 input 属性（`min`、`max`、`maxLength`、`pattern`、`autoComplete`、`autoFocus`、`name`、`id` 等）均可直接透传。
+
+默认样式：
+
+- `h-10`（40px 高度）、`w-full`（撑满容器宽度）。
+- `rounded-md border border-input bg-background`（圆角、边框、背景色）。
+- `px-3 py-2 text-sm`（内边距、字体大小）。
+- `focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`（聚焦环）。
+- `disabled:cursor-not-allowed disabled:opacity-50`（禁用态）。
+- `file:border-0 file:bg-transparent file:text-sm file:font-medium`（file 类型输入框的文件选择按钮样式）。
+- `placeholder:text-muted-foreground`（占位文字颜色）。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义宽度？
+
+通过 `className` 覆写默认的 `w-full`：
+
+```tsx
+&lt;Input className="w-48" placeholder="固定宽度" /&gt;
+```
+
+### 如何获取输入框引用？
+
+使用 `ref`：
+
+```tsx
+const inputRef = useRef&lt;HTMLInputElement&gt;(null)
+
+&lt;Input ref={inputRef} placeholder="通过 ref 操作" /&gt;
+```
+
+### 如何做受控输入？
+
+传入 `value` 和 `onChange`：
+
+```tsx
+const [value, setValue] = useState("")
+
+&lt;Input
+  value={value}
+  onChange={(e) => setValue(e.target.value)}
+  placeholder="受控输入"
+/&gt;
+```
+
+### 如何与表单库配合？
+
+Input 透传 `ref` 且支持所有原生属性，可与 React Hook Form、Formik 等表单库配合使用：
+
+```tsx
+// React Hook Form
+const { register } = useForm()
+
+&lt;Input {...register("username")} placeholder="用户名" /&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/uselayouts-input` 导入 `Input`（default export）。
+2. 受控模式使用 `value` + `onChange`，非受控使用 `defaultValue`。
+3. 需要输入框引用时使用 `ref`，不要在外部通过 DOM 查询获取。
+4. 禁用态使用 `disabled` 属性。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/input" />

@@ -1,0 +1,114 @@
+Progress 用于展示操作的当前进度。
+
+<h2 id="when-to-use">何时使用</h2>
+
+在操作需要较长时间才能完成时，向用户展示当前进度和状态。
+
+常见场景：
+
+- 文件上传、下载进度展示。
+- 表单多步骤完成的进度指示。
+- 数据加载、处理进度。
+- 任务完成度百分比展示。
+
+Progress 通过 `value` 属性控制进度百分比（0-100）。不传入 `value` 或传入 `null` 时，进度条进入不确定（indeterminate）模式，适用于无法预估完成时间的场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础进度条
+
+`value` 取值范围为 0-100，控制进度条填充比例。
+
+<ComponentShowcase
+  id="dice/progress"
+  path="dice/progress/basic"
+/>
+
+```tsx
+import { Progress } from "@/components/ui/dice-progress"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex w-full max-w-sm flex-col gap-4"&gt;
+      &lt;Progress value={0} /&gt;
+      &lt;Progress value={30} /&gt;
+      &lt;Progress value={60} /&gt;
+      &lt;Progress value={100} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Progress
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 当前进度百分比，取值 0-100；不传入时为不确定模式 | `number` | - |
+| className | 附加样式类名 | `string` | - |
+
+Progress 继承 Radix UI Progress.Root 的所有属性，包括 `max`、`getValueLabel`、`asChild` 等。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现不确定进度条？
+
+不传入 `value` 属性，进度条自动进入不确定模式，显示循环动画。
+
+```tsx
+&lt;Progress /&gt;
+```
+
+### 如何自定义进度条颜色？
+
+通过 `className` 覆盖背景色即可：
+
+```tsx
+&lt;Progress value={60} className="bg-destructive/20 [&amp;[data-slot=progress-indicator]]:bg-destructive" /&gt;
+```
+
+### 如何修改进度条高度？
+
+通过 `className` 覆盖高度：
+
+```tsx
+&lt;Progress value={60} className="h-4" /&gt;
+```
+
+### 如何展示百分比文本？
+
+Progress 组件本身不包含文本显示。需要百分比文本时，在外部自行渲染：
+
+```tsx
+const [value, setValue] = useState(60);
+
+return (
+  &lt;div className="flex items-center gap-3"&gt;
+    &lt;Progress value={value} className="flex-1" /&gt;
+    &lt;span className="text-sm text-muted-foreground"&gt;{value}%&lt;/span&gt;
+  &lt;/div&gt;
+);
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Progress 代码时：
+
+1. 从 `@/components/ui/dice-progress` 导入 Progress。
+2. 使用 `value` 控制进度，取值范围 0-100。
+3. 不确定模式不传 `value`。
+4. 自定义样式使用 `className`，优先 Tailwind 语义色变量。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构：
+
+| data-slot | 说明 |
+| --- | --- |
+| `progress` | 进度条根元素 |
+| `progress-indicator` | 进度指示器 |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="dice/progress" />

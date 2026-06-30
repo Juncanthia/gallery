@@ -1,0 +1,53 @@
+---
+category: Components
+title: DiscreteTabs
+subtitle: 离散标签
+description: 带有 layoutId 动画和 Shimmer 反馈的标签切换组件。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 1
+source:
+  component: src/components/uselayouts/discrete-tabs.tsx
+  docs: content/components/uselayouts/discrete-tabs/index.mdx
+  examples:
+    - content/components/uselayouts/discrete-tabs/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: true
+  radixSlot: false
+  motion: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# DiscreteTabs 离散标签
+
+DiscreteTabs 是一个带有 layoutId 共享元素动画的标签切换组件。点击标签时，激活态胶囊通过 spring 缓动在不同标签间平滑过渡，并伴有 800ms Shimmer 闪亮反馈。
+
+本组件是 UseLayouts 系列的演示组件，自包含、无外部 props，专注展示 motion/react 的 layoutId 共享元素动画在标签切换场景中的应用。
+
+## 导入
+
+```tsx
+import { DiscreteTabs } from "@/components/ui/uselayouts-discrete-tabs"
+```
+
+## 基本用法
+
+```tsx
+<DiscreteTabs />
+```
+
+组件内置三个标签（Inbox / Planner / Alerts），默认激活 Inbox。
+
+## 约束
+
+1. 自包含组件，不含 props，直接渲染即可。
+2. 标签内容（图标、文字、数量）硬编码在源码 `TABS` 数组中，需修改源码来增删改标签。
+3. 依赖 `motion/react` 的 `layoutId` 和 `AnimatePresence`，不可移除或替换该依赖。
+4. 使用 `@hyper/uselayouts/lib/utils` 的 `cn` 工具合并 class，不要在外部覆盖内部样式逻辑。
+5. Shimmer 反馈为内置交互，持续 800ms，不可由 props 控制。
+6. 图标为内联 SVG 组件（Inbox、Calendar、Alert），具有 `React.ComponentType<React.SVGProps<SVGSVGElement> & { size?: number }>` 签名。

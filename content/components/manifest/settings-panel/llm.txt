@@ -1,0 +1,364 @@
+---
+category: Components
+title: SettingsPanel
+subtitle: 设置面板
+description: 完整的设置面板组件，提供侧边栏导航和分区表单，涵盖 Profile、Account、Notifications、Appearance 四个设置区域，包含 Danger Zone 删除账号功能。
+demo:
+  cols: 1
+group:
+  title: 页面模板
+  order: 11
+source:
+  component: src/components/manifest/form/settings-panel.tsx
+  wrapper: src/components/ui/manifest-settings-panel.tsx
+  docs: content/components/manifest/settings-panel/index.mdx
+  examples:
+    - content/components/manifest/settings-panel/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  lucide: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# SettingsPanel 设置面板
+
+SettingsPanel 是一个完整的设置面板组件，适用于 SaaS 产品的用户设置页面或管理后台的个人偏好配置。它通过侧边栏导航、分区表单和危险区域将多个设置区域组织为一个统一的设置页面。
+
+## 何时使用 {#when-to-use}
+
+当需要为用户提供集中式的设置管理页面时使用。SettingsPanel 将侧边栏导航、分区表单、保存操作和危险区域组合为一个完整的设置面板。
+
+适用于：
+
+- SaaS 产品的用户设置页面。
+- 管理后台的个人偏好配置。
+- 账户安全设置（密码修改）。
+- 通知偏好管理。
+- 外观主题和语言切换。
+
+推荐使用方式：
+
+- 通过 `actions.onSave` 处理设置保存，接收完整的 `SettingsData` 对象。
+- 通过 `control.isLoading` 控制保存按钮加载状态。
+- 通过 `data.sections` 自定义侧边栏导航分区。
+- 通过 `data.profileDefaults`、`data.notificationDefaults`、`data.appearanceDefaults` 预填充默认值。
+- 通过 `appearance.defaultSection` 设置默认展开的分区。
+- 通过 `actions.onDeleteAccount` 处理删除账号操作。
+
+不推荐：
+
+- 仅需单一表单（如仅修改密码）—— 使用独立的 ForgotPassword 或自定义表单。
+- 需要复杂的权限控制——SettingsPanel 不内置角色权限，需在调用侧控制。
+- 仅用于展示静态设置信息（非交互） —— SettingsPanel 为交互式表单组件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认展示标题、副标题、侧边栏导航和 Profile 设置区域。
+
+```tsx
+import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-4xl">
+      <SettingsPanel
+        data={{ title: "Settings" }}
+        actions={{
+          onSave: (settings) => console.log("Saved:", settings),
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 处理设置保存
+
+通过 `actions.onSave` 回调接收完整的 `SettingsData` 对象：
+
+```tsx
+import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+
+export default function Demo() {
+  return (
+    <SettingsPanel
+      actions={{
+        onSave: (settings) => {
+          console.log("Profile:", settings.profile)
+          console.log("Notifications:", settings.notifications)
+          saveSettingsAPI(settings)
+        },
+      }}
+    />
+  )
+}
+```
+
+### 受控模式与加载状态
+
+通过 `control.isLoading` 控制保存按钮加载状态：
+
+```tsx
+import { useState } from "react"
+import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+
+export default function Demo() {
+  const [loading, setLoading] = useState(false)
+
+  return (
+    <SettingsPanel
+      control={{ isLoading: loading }}
+      actions={{
+        onSave: async (settings) => {
+          setLoading(true)
+          try {
+            await saveSettingsAPI(settings)
+          } finally {
+            setLoading(false)
+          }
+        },
+      }}
+    />
+  )
+}
+```
+
+### 自定义侧边栏导航
+
+通过 `data.sections` 传入自定义分区，分区 id 用于 content 区域切换：
+
+```tsx
+import { User, Bell, Key } from "lucide-react"
+import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+
+const sections = [
+  { id: "profile", label: "个人信息", icon: User },
+  { id: "notifications", label: "通知设置", icon: Bell },
+  { id: "security", label: "安全设置", icon: Key },
+]
+
+export default function Demo() {
+  return <SettingsPanel data={{ sections }} />
+}
+```
+
+### 预填充默认值
+
+通过 `data.profileDefaults` 预填充 Profile 区域：
+
+```tsx
+import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+
+export default function Demo() {
+  return (
+    <SettingsPanel
+      data={{
+        profileDefaults: {
+          displayName: "Zhang San",
+          email: "zhangsan@example.com",
+          bio: "Full-stack developer",
+        },
+        notificationDefaults: {
+          marketingEmails: true,
+        },
+        appearanceDefaults: {
+          theme: "dark",
+          language: "zh",
+        },
+      }}
+    />
+  )
+}
+```
+
+### 隐藏 Danger Zone
+
+```tsx
+import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+
+export default function Demo() {
+  return <SettingsPanel appearance={{ showDangerZone: false }} />
+}
+```
+
+### 处理删除账号
+
+```tsx
+import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+
+export default function Demo() {
+  return (
+    <SettingsPanel
+      actions={{
+        onDeleteAccount: () => {
+          if (confirm("确定要删除账号吗？")) {
+            deleteAccountAPI()
+          }
+        },
+      }}
+    />
+  )
+}
+```
+
+## API {#api}
+
+### SettingsPanel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 面板数据配置 | `object` | — |
+| data.title | 面板标题 | `string` | `"Settings"` |
+| data.subtitle | 标题下方描述文字 | `string` | `"Manage your account settings and preferences."` |
+| data.sections | 侧边栏导航分区 | `SettingsSection[]` | 4 个默认分区 |
+| data.profileDefaults | Profile 预填充值 | `Partial<ProfileSettings>` | — |
+| data.notificationDefaults | Notifications 预填充值 | `Partial<NotificationSettings>` | — |
+| data.appearanceDefaults | Appearance 预填充值 | `Partial<AppearanceSettings>` | — |
+| data.languages | 语言选项 | `{ value: string; label: string }[]` | EN/ZH/JA |
+| data.saveLabel | 保存按钮文字 | `string` | `"Save Changes"` |
+| data.deleteAccountLabel | 删除按钮文字 | `string` | `"Delete Account"` |
+| data.dangerZoneDescription | 危险区域描述 | `string` | — |
+| actions.onSave | 保存回调 | `(settings: SettingsData) => void` | — |
+| actions.onDeleteAccount | 删除回调 | `() => void` | — |
+| appearance.showTitle | 显示标题 | `boolean` | `true` |
+| appearance.showDangerZone | 显示危险区域 | `boolean` | `true` |
+| appearance.defaultSection | 默认分区 id | `string` | `"profile"` |
+| control.isLoading | 保存按钮加载中 | `boolean` | `false` |
+
+### SettingsSection
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| id | 分区唯一标识（对应 content 切换 key） | `string` |
+| label | 侧边栏显示文字 | `string` |
+| icon | Lucide 图标组件 | `React.ComponentType` |
+
+### SettingsData
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| profile | Profile 设置 | `ProfileSettings` |
+| account | Account 设置 | `AccountSettings` |
+| notifications | Notifications 设置 | `NotificationSettings` |
+| appearance | Appearance 设置 | `AppearanceSettings` |
+
+### ProfileSettings
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| displayName | 显示名称 | `string` |
+| email | 邮箱地址 | `string` |
+| bio | 个人简介 | `string` |
+
+### AccountSettings
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| currentPassword | 当前密码 | `string` |
+| newPassword | 新密码 | `string` |
+| confirmPassword | 确认密码 | `string` |
+
+### NotificationSettings
+
+| 字段 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| emailNotifications | 邮件通知 | `boolean` | `true` |
+| pushNotifications | 推送通知 | `boolean` | `true` |
+| marketingEmails | 营销邮件 | `boolean` | `false` |
+| weeklyDigest | 每周摘要 | `boolean` | `true` |
+
+### AppearanceSettings
+
+| 字段 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| theme | 主题 | `"light" \| "dark" \| "system"` | `"system"` |
+| language | 语言 | `string` | `"en"` |
+| compactMode | 紧凑模式 | `boolean` | `false` |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/manifest/form/settings-panel.tsx`：设置面板组件实现，包含侧边栏导航、四个设置分区表单和 Danger Zone。
+- `src/components/ui/manifest-settings-panel.tsx`：薄包装，从 manifest 包重新导出。
+
+关键行为：
+
+1. 组件内部使用 `useState` 管理所有设置分区的表单状态。
+2. 侧边栏点击切换 active section，右侧内容区域随之切换。
+3. 保存按钮点击时，将所有分区状态合并为 `SettingsData` 并通过 `actions.onSave` 回调传出。
+4. 保存成功后显示 3 秒的绿色成功提示。
+5. `control.isLoading` 为 `true` 时自动禁用保存按钮并显示加载状态。
+6. Notifications 分区使用 toggle switch 开关控件，点击切换 boolean 值。
+7. Appearance 分区使用 ThemeOption 按钮组选择主题，使用原生 select 选择语言。
+8. Danger Zone 使用红色边框和文字突出警告，点击删除按钮触发 `actions.onDeleteAccount`。
+9. 通知和外观设置的默认值可通过 `data.notificationDefaults` 和 `data.appearanceDefaults` 覆盖。
+
+## FAQ {#faq}
+
+### 如何获取用户保存的设置数据？
+
+通过 `actions.onSave` 回调接收完整的 `SettingsData` 对象。组件内部负责管理所有分区状态，调用侧只需关心收到数据后的处理逻辑。
+
+### 如何设置保存按钮的加载状态？
+
+通过 `control.isLoading` 控制。典型用法是配合异步 `onSave`：
+
+```tsx
+const [loading, setLoading] = useState(false)
+
+<SettingsPanel
+  control={{ isLoading: loading }}
+  actions={{
+    onSave: async (settings) => {
+      setLoading(true)
+      await saveSettingsAPI(settings)
+      setLoading(false)
+    }
+  }}
+/>
+```
+
+### 如何自定义侧边栏导航分区？
+
+通过 `data.sections` 传入自定义分区列表。每个分区需要提供 `id`（用于内容区域匹配）、`label`（显示文字）和 `icon`（Lucide 图标组件）。
+
+### 如何设置默认展开分区？
+
+通过 `appearance.defaultSection` 设置分区 id：
+
+```tsx
+<SettingsPanel appearance={{ defaultSection: "notifications" }} />
+```
+
+### 如何处理删除账号操作？
+
+通过 `actions.onDeleteAccount` 回调处理。组件内部只负责触发回调，实际删除逻辑（如确认对话框、API 请求）由调用侧实现。
+
+### 如何隐藏 Danger Zone？
+
+```tsx
+<SettingsPanel appearance={{ showDangerZone: false }} />
+```
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 SettingsPanel 代码时，应遵守：
+
+1. 从 `@/components/ui/manifest-settings-panel` 导入 `SettingsPanel`。
+2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
+3. 设置保存通过 `actions.onSave` 处理，接收完整的 `SettingsData` 对象。
+4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用按钮并显示加载状态。
+5. 预填充数据通过 `data.profileDefaults`、`data.notificationDefaults`、`data.appearanceDefaults` 传入。
+6. 侧边栏分区通过 `data.sections` 自定义，传入 `{ id, label, icon }` 数组。
+7. 默认展开分区通过 `appearance.defaultSection` 设置。
+8. Danger Zone 通过 `appearance.showDangerZone` 控制显隐。
+9. 不要引入 Ant Design 相关依赖。
+10. 组件为页面模板级别的复合组件，不要复刻或重新实现其内部逻辑。

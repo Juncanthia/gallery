@@ -1,0 +1,210 @@
+---
+category: Components
+title: Sonner
+subtitle: 吐司通知
+description: 基于 sonner 库实现的轻量级 Toast 通知系统，通过指令式 API 展示操作反馈。
+demo:
+  cols: 1
+group:
+  title: 工具
+  order: 4
+source:
+  component: src/components/dice/ui/sonner.tsx
+  docs: content/components/dice/sonner/index.mdx
+  examples:
+    - content/components/dice/sonner/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  sonner: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Sonner 吐司通知
+
+Sonner 是基于 sonner 库实现的轻量级 Toast 通知组件。提供 Toaster 容器组件和 `toast` 指令式 API，在页面中展示非阻断式的操作反馈通知。
+
+## 何时使用 {#when-to-use}
+
+当需要向用户反馈操作结果、状态变更等非阻断式信息时使用。Toast 通知从屏幕边缘弹出，短暂停留后自动消失。
+
+常见场景：
+
+- 操作成功/失败反馈：保存成功、删除完成、提交失败。
+- 系统状态提示：网络断开、服务重启、版本更新。
+- 表单提交结果的即时反馈。
+- 异步操作的状态通知（配合 `toast.promise`）。
+
+不推荐：
+
+- 需要用户确认的阻断式提示 — 使用 AlertDialog 或 Popconfirm。
+- 长期展示的静态信息 — 使用 Alert 或 Banner。
+- 需要交互操作的复杂通知 — 使用 Notification。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+在应用根组件中放置 `Toaster` 容器，通过 `toast()` 系列函数创建通知。
+
+```tsx
+import { toast } from "sonner"
+import { Toaster } from "@/components/ui/dice-sonner"
+
+export default function Demo() {
+  return (
+    <div>
+      <Toaster />
+      <button onClick={() => toast("操作完成")}>
+        发送通知
+      </button>
+    </div>
+  )
+}
+```
+
+### 变体通知
+
+```tsx
+import { toast } from "sonner"
+
+toast("默认通知")
+toast.success("操作成功")
+toast.error("操作失败")
+toast.info("提示信息")
+toast.warning("警告信息")
+```
+
+### 带描述的 toast
+
+```tsx
+toast("保存成功", {
+  description: "数据已同步到服务器",
+})
+```
+
+### 异步操作
+
+```tsx
+const promise = fetch("/api/submit", { method: "POST" })
+
+toast.promise(promise, {
+  loading: "提交中...",
+  success: "提交成功",
+  error: "提交失败",
+})
+```
+
+### 手动控制加载状态
+
+```tsx
+function handleSave() {
+  const id = toast.loading("保存中...")
+  try {
+    await saveData()
+    toast.success("保存成功", { id })
+  } catch {
+    toast.error("保存失败", { id })
+  }
+}
+```
+
+### 带操作按钮的 toast
+
+```tsx
+toast("新版本可用", {
+  action: {
+    label: "更新",
+    onClick: () => window.location.reload(),
+  },
+})
+```
+
+### 自定义内容
+
+```tsx
+toast(
+  <div className="font-bold">自定义标题</div>,
+  {
+    description: (
+      <span className="text-muted-foreground">详细描述信息</span>
+    ),
+  }
+)
+```
+
+## API {#api}
+
+### Toaster
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| theme | 主题 | `"light"` \| `"dark"` \| `"system"` | 跟随系统 |
+| position | 通知弹出位置 | `"top-left"` \| `"top-right"` \| `"bottom-left"` \| `"bottom-right"` \| `"top-center"` \| `"bottom-center"` | `"bottom-right"` |
+| richColors | 启用富色彩模式 | `boolean` | `false` |
+| closeButton | 显示关闭按钮 | `boolean` | `false` |
+| duration | 自动消失时长（毫秒） | `number` | `4000` |
+| visibleToasts | 同时可见的通知数量 | `number` | `3` |
+| expand | 是否展开显示多条通知 | `boolean` | `false` |
+| offset | 视口边缘偏移量 | `string` \| `number` | - |
+| gap | 通知之间的间距 | `number` | - |
+| invert | 反转富色彩效果 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+| toastOptions | 全局默认 toast 选项 | `ToastOptions` | - |
+
+### toast()
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| message | 通知标题 | `React.ReactNode` | - |
+| description | 通知内描述文本 | `React.ReactNode` | - |
+| duration | 自动消失时长（毫秒） | `number` | `4000` |
+| action | 操作按钮 | `{ label: string; onClick: () => void }` | - |
+| cancel | 取消按钮 | `{ label: string; onClick: () => void }` | - |
+| onDismiss | 通知消失时的回调 | `(toast) => void` | - |
+| onAutoClose | 通知自动关闭时的回调 | `(toast) => void` | - |
+| important | 是否标记为重要 | `boolean` | `false` |
+| id | 自定义 toast id | `string` \| `number` | - |
+| dismissible | 是否可手动关闭 | `boolean` | `true` |
+| icon | 自定义图饰 | `React.ReactNode` | - |
+| classNames | toast 各部分的类名 | `ToastClassnames` | - |
+| styles | toast 各部分的内联样式 | `ToastStyles` | - |
+
+## 与 Ant Design 的差异 {#antd-differences}
+
+| 差异点 | 说明 |
+| --- | --- |
+| 无 notification 组件 | 使用 sonner 的 toast.promise 和有操作的 toast 替代 |
+| 不依赖 ConfigProvider | 通过 Tailwind 主题变量和 CSS 自定义属性管理样式 |
+| 无 `message.config` | 通过 Toaster 的 props 全局配置 |
+| Hooks API | 使用指令式 `toast()` 函数替代 hooks/static 方法 |
+
+## 主题变量 {#design-token}
+
+本地封装自动设置以下 CSS 自定义属性：
+
+| 属性 | 说明 |
+| --- | --- |
+| `--normal-bg` | `var(--popover)` — 通知背景色 |
+| `--normal-text` | `var(--popover-foreground)` — 通知文字色 |
+| `--normal-border` | `var(--border)` — 通知边框色 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Sonner 代码时，应遵守：
+
+1. 从 `@/components/ui/dice-sonner` 导入 `Toaster`。
+2. 从 `sonner` 导入 `toast` 及其变体方法。
+3. `Toaster` 放在根布局组件中，只渲染一次；不要在每次使用时重复放置。
+4. 使用 `toast()` 创建默认通知。
+5. 使用 `toast.success()` / `toast.error()` / `toast.info()` / `toast.warning()` 创建语义化通知。
+6. 异步操作使用 `toast.promise()`，传入 `loading` / `success` / `error` 三个状态描述。
+7. 手动控制异步状态时，使用 `toast.loading()` 获取 id，完成后通过 `{ id }` 更新。
+8. 自定义内容时，使用 JSX 作为 message/description。
+9. 关闭通知使用 `toast.dismiss(id)`。
+10. 不要引入 Ant Design 的 `message`、`notification` 或 rc-component。
+11. Toaster 主题自动跟随系统，无需手动传递 `theme` prop。

@@ -1,0 +1,197 @@
+---
+category: Components
+title: FileUpload
+subtitle: FileUpload
+description: FileUpload 是 Extend UI 文件上传组件。
+demo:
+  cols: 2
+group:
+  title: Extend
+  order: 1
+source:
+  component: src/components/extend/components/ui/file-upload.tsx
+  wrapper: src/components/ui/extend-file-upload.tsx
+  docs: content/components/extend/file-upload/index.mdx
+  examples:
+    - content/components/extend/file-upload/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+  hugeicons: true
+  borderBeam: true
+---
+
+# FileUpload FileUpload
+
+FileUpload 是 Extend UI 文件上传组件，支持点击上传和拖拽上传，内置类型图标展示、边框光束动效和文件列表。
+
+本组件是项目内的本地组件，API 和行为以源码为准，不对应 Ant Design Upload 的完整公共组件契约。
+
+## 何时使用 {#when-to-use}
+
+适合需要文件上传能力的界面中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
+
+常见场景：
+
+- 需要复用统一的拖拽/点击上传交互、视觉反馈和文件列表展示。
+- 需要和本项目 Tailwind 主题变量、暗色模式保持一致。
+- 需要内置文件类型图标（Image/PDF/Sheet）和拖拽光束动效。
+- 需要让 AI 或业务代码稳定地从 `@/components/ui/extend-file-upload` 引用组件。
+
+不推荐：
+
+- 为了照搬 Ant Design Upload API 而新增兼容别名。
+- 在调用侧绕过组件 API，直接依赖内部 DOM 结构完成业务逻辑。
+- 用于超大文件（>100MB）直传，应使用分片上传方案。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-upload 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { FileUpload } from "@/components/ui/extend-file-upload"
+
+export default function Demo() {
+  return (
+    <FileUpload
+      className="w-full max-w-md"
+      onFilesChange={(files) => {
+        console.log("Files:", files)
+      }}
+    />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。完整用法请参考 `content/components/extend/file-upload/index.mdx` 中的演示。
+
+## 核心导出 {#exports}
+
+- `FileUpload`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+type FileUploadItem = {
+  id: string
+  name: string
+  type: string
+  size: number
+  url: string
+}
+```
+
+```ts
+type AcceptedFileType = {
+  label: string
+  icon: React.ComponentProps<typeof HugeiconsIcon>["icon"]
+}
+```
+
+```ts
+type FileUploadProps = {
+  accept?: string
+  acceptedFileTypes?: AcceptedFileType[]
+  borderBeamTheme?: "light" | "dark"
+  browseLabel?: string
+  className?: string
+  description?: string
+  draggingLabel?: string
+  multiple?: boolean
+  showBorderBeam?: boolean
+  showFileList?: boolean
+  title?: string
+  onFilesAccepted?: (files: File[]) => void
+  onFilesChange?: (files: FileUploadItem[]) => void
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+
+额外状态属性：
+
+- 无额外 `data-*` 状态属性。
+
+生成测试、样式定位或自动化脚本时，优先使用 ARIA 语义和角色属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+- 上传区域：`role="button" tabIndex={0}`，支持 Enter/Space 键盘触发。
+- 隐藏文件输入：`type="file"`，通过 ref 控制。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 拖拽态通过 `isDragging` 状态切换 `border-foreground/40 bg-accent/35` 样式。
+- 边框光束效果由 `border-beam` 外部组件提供，可配置 `theme`、`colorVariant`、`duration`、`strength`。
+- 文件类型图标使用 `@hugeicons/core-free-icons` 图标集。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/extend/components/ui/file-upload.tsx` — 主组件实现
+- `src/components/ui/extend-file-upload.tsx` — 路径重导出封装
+
+直接依赖摘要：
+
+- `@hugeicons/core-free-icons` — 文件类型图标
+- `@hugeicons/react` — 图标组件
+- `border-beam` — 拖拽边框光束动效
+- `@hyper/extend-ui/components/ui/card` — 图标容器
+- `@hyper/extend-ui/components/ui/file-thumbnail` — 文件缩略图
+- `@hyper/extend-ui/lib/utils` — cn 工具函数
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 样式应优先通过组件 props 表达。
+3. 拖拽检测使用 `dragDepthRef` 计数器防止子元素事件导致的闪烁。
+4. 切换文件时自动释放之前的 blob URL 防止内存泄漏。
+5. `onFilesAccept` 回调中的 blob URL 仅在浏览器会话内有效，持久化前需转换。
+6. 如果需要新增能力，应先修改该组件源码，再更新本 llm 文档。
+7. 不要把第三方文档中的全量 API 视为本地已支持能力。
+
+## 可访问性 {#accessibility}
+
+- 上传区域为 `role="button"` 且 `tabIndex={0}`，支持键盘 Enter/Space 触发文件选择对话框。
+- 拖拽功能通过 onDragEnter/onDragLeave/onDragOver/onDrop 事件处理。
+- 文件类型不匹配时显示拒绝提示文本。
+- 不支持的文件类型会被静默过滤，同时设置 `rejectionMessage` 内部状态。
+
+## 与 Ant Design Upload 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/extend/components/ui/file-upload.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 借鉴 AntD 使用心智，但不承诺 API 兼容 |
+| 拖拽光束 | 使用 `border-beam` 第三方组件，非 AntD 内置效果 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 FileUpload 代码时，应遵守：
+
+1. 从 `@/components/ui/extend-file-upload` 导入 `FileUpload`，不要从 `antd` 导入。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
+4. 使用 `accept` 限制文件类型，使用 `multiple` 控制单/多文件。
+5. 通过 `onFilesChange` 获取完整文件信息，`onFilesAccepted` 获取原生 File 对象。
+6. 注意 blob URL 的时效性：组件卸载时自动释放，跨会话/持久化前需转换。
+7. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+8. 如果不确定某个 AntD Upload API 是否存在，先检查 `src/components/extend/components/ui/file-upload.tsx`，不要凭 AntD 记忆生成。

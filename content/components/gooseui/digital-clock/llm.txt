@@ -1,0 +1,153 @@
+---
+category: Components
+title: DigitalClock
+subtitle: 数码管时钟
+description: 7 段数码管风格的实时数字时钟，支持 12/24 小时制、秒数显示、颜色和缩放自定义。
+demo:
+  cols: 1
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/ui/gooseui-digital-clock.tsx
+  examples:
+    - content/components/gooseui/digital-clock/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DigitalClock 数码管时钟
+
+7 段数码管风格的实时数字时钟，冒号自动闪烁，支持暗色/亮色模式自适应。
+
+本组件借鉴 GooseUI 的数码管显示心智，但不是第三方的兼容层。实现以本地源码为准，不引入外部运行时依赖或 CSS-in-JS。
+
+## 何时使用 {#when-to-use}
+
+适合在需要以复古数码管风格展示实时时间时使用。优先通过组件自身 props 表达显示配置，避免在业务侧重复拼接 className。
+
+常见场景：
+
+- 仪表盘或监控面板中的实时时钟。
+- 赛博朋克、复古科技风格页面的时间展示。
+- 锁屏界面或全屏时钟应用。
+
+不推荐：
+
+- 需要展示日期而非时间的场景。
+- 需要用户选择或输入时间的场景。
+- 高精度计时需求，组件以秒为最小单位。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { DigitalClock } from "@/components/ui/gooseui-digital-clock"
+
+export default function Demo() {
+  return (
+    &lt;DigitalClock showSeconds /&gt;
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。更多配置项参见下方 API 摘要。
+
+## 核心导出 {#exports}
+
+- `DigitalClock`
+- `DigitalClockProps`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface DigitalClockProps {
+  /** 附加 CSS 类名 */
+  className?: string;
+  /** 是否显示秒数 */
+  showSeconds?: boolean;
+  /** 是否使用 24 小时制 */
+  use24Hour?: boolean;
+  /** 数码管点亮时的颜色（CSS 颜色值） */
+  color?: string;
+  /** 时钟整体缩放比例 */
+  scale?: number;
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+DigitalClock 渲染一个 flex 容器，内含 Digit（数字）和 Colon（冒号分隔符）子组件。
+
+结构：
+- 外层 `div.flex.items-center.justify-center.gap-1`。
+- 每个 Digit 由一个 `div.relative` 渲染，通过 5 层 CSS `linear-gradient` 构建 7 段数码管图案。
+- Colon 为两个 10x10px 的圆点 div，每 500ms 切换 `backgroundColor` 实现闪烁。
+- 未挂载时渲染占位时钟（所有数字为 0），防止 hydration mismatch。
+
+## 样式模型 {#styling-model}
+
+- 数字渲染通过 CSS `backgroundImage`（`linear-gradient`）+ `backgroundPosition` + `backgroundSize` 实现 7 段数码管图案。
+- 颜色通过内联 `style` 动态设置（`backgroundColor`、渐变颜色值）。
+- 所有尺寸通过 `scale` 参数统一缩放。
+- 布局使用 Tailwind CSS class（`flex`、`items-center`、`justify-center`、`gap-1`）。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/ui/gooseui-digital-clock.tsx`（re-export）
+- `src/components/gooseui/components/ui/digital-clock.tsx`（实现）
+
+直接依赖摘要：
+
+- React（`useState`、`useEffect`）
+- next-themes（`useTheme`）
+- `@hyper/gooseui/lib/utils`（`cn`）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 通过 `mounted` 状态防止 hydration mismatch，挂载前渲染占位内容。
+3. 冒号闪烁通过 `setInterval` 每 500ms 切换 `colonVisible` 状态实现。
+4. 暗色/亮色模式通过 `next-themes` 的 `useTheme()` 自动检测，未点亮段颜色自适应。
+5. 所有尺寸值通过 `scale` 参数统一缩放，包括数字宽高、间距、冒号大小。
+
+## 可访问性 {#accessibility}
+
+- DigitalClock 为纯展示组件，不包含交互元素。
+- 时间信息通过视觉呈现，无 ARIA label 或语义化时间元素。如需增强可访问性，建议在容器上添加 `aria-label` 或 `role="timer"`。
+- 组件内部不包含对 `prefers-reduced-motion` 的特殊处理，闪烁效果速率固定。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/gooseui/components/ui/digital-clock.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 CSS linear-gradient + 内联 style + Tailwind CSS |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 非 AntD 组件，无兼容需求 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DigitalClock 代码时，应遵守：
+
+1. 从 `@/components/ui/gooseui-digital-clock` 导入 `DigitalClock`。
+2. `color` 传入 CSS 颜色字符串（如 `"#82FA58"`），非 Tailwind class。
+3. `scale` 传入数字，控制整体大小缩放比例。
+4. `use24Hour` 和 `showSeconds` 为布尔值，无需传入字符串。
+5. DigitalClock 仅展示当前系统时间，不接收时间输入。
+6. 不要为需要用户交互的时间选择场景使用 DigitalClock。
+7. 不要引入 Ant Design 相关依赖。

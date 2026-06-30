@@ -1,0 +1,257 @@
+---
+category: Components
+title: DataTableViewOptions
+subtitle: 视图选项
+description: DataTable 工具栏内的视图选项按钮，用于切换列的可见性和拖拽调整列顺序。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 7
+source:
+  component: src/components/data-table-filters/components/data-table/data-table-view-options.tsx
+  wrapper: src/components/ui/dt-data-table-view-options.tsx
+  examples:
+    - content/components/dt/data-table-view-options/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTableViewOptions 视图选项
+
+DataTableViewOptions 是 DataTable 工具栏内的视图选项按钮。点击设置图标打开弹出面板，面板内列出所有可隐藏的列，支持勾选切换可见性。当 `enableColumnOrdering` 启用时，还支持拖拽调整列顺序。
+
+本组件依赖 `DataTableProvider` 提供的 `useDataTable()` 上下文，必须在该 Provider 内部使用。组件本身无 Props，所有配置通过上下文获取。
+
+## 何时使用 {#when-to-use}
+
+当 DataTable 列数较多，需要让用户按需显示/隐藏列或调整列顺序时使用。
+
+常见场景：
+
+- 数据表格列数超过 5 列，用户需要隐藏部分列以聚焦关键信息。
+- 不同用户关注不同字段，需要个性化列可见性配置。
+- 支持拖拽调整列顺序，使表格布局匹配用户心智模型。
+
+不推荐：
+
+- 列数很少（3 列以内）时使用，按钮占用空间且价值有限。
+- 脱离 DataTableProvider 上下文使用。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+在 `DataTableProvider` 内部渲染 `&lt;DataTableViewOptions /&gt;`。传入 `enableColumnOrdering` 启用排序手柄。
+
+```tsx
+import { useMemo, useState } from "react"
+import { DataTableProvider } from "@/components/ui/dt-data-table-provider"
+import { DataTableViewOptions } from "@/components/ui/dt-data-table-view-options"
+import {
+  useReactTable,
+  getCoreRowModel,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/ui/dt-data-table-provider"
+
+type Person = {
+  id: string
+  name: string
+  email: string
+  status: string
+  role: string
+  department: string
+}
+
+const data: Person[] = [
+  { id: "1", name: "Alice", email: "alice@example.com", status: "active", role: "admin", department: "Engineering" },
+  { id: "2", name: "Bob", email: "bob@example.com", status: "inactive", role: "user", department: "Design" },
+  { id: "3", name: "Charlie", email: "charlie@example.com", status: "active", role: "editor", department: "Product" },
+]
+
+const columns: ColumnDef&lt;Person&gt;[] = [
+  { accessorKey: "name", header: "Name", meta: { label: "姓名" } },
+  { accessorKey: "email", header: "Email", meta: { label: "邮箱" }, enableHiding: true },
+  { accessorKey: "status", header: "Status", meta: { label: "状态" }, enableHiding: true },
+  { accessorKey: "role", header: "Role", meta: { label: "角色" }, enableHiding: true },
+  { accessorKey: "department", header: "Department", meta: { label: "部门" }, enableHiding: true },
+]
+
+const filterFields: DataTableFilterField&lt;Person&gt;[] = []
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState&lt;ColumnFiltersState&gt;([])
+  const [columnVisibility, setColumnVisibility] = useState({})
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters, columnVisibility },
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  return (
+    &lt;DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+      enableColumnOrdering
+    &gt;
+      &lt;div className="w-full space-y-4"&gt;
+        &lt;div className="flex items-center justify-between"&gt;
+          &lt;span className="text-sm text-muted-foreground"&gt;
+            当前可见列：{visibleHeaders.length}/{columns.length} —{" "}
+            {visibleHeaders.join("、") || "无"}
+          &lt;/span&gt;
+          &lt;DataTableViewOptions /&gt;
+        &lt;/div&gt;
+        &lt;div className="overflow-hidden rounded-md border"&gt;
+          &lt;table className="w-full text-sm"&gt;
+            &lt;thead&gt;
+              &lt;tr className="bg-muted/50"&gt;
+                {table.getVisibleLeafColumns().map((column) =&gt; (
+                  &lt;th key={column.id} className="px-3 py-2 text-left font-medium"&gt;
+                    {column.columnDef.header as string}
+                  &lt;/th&gt;
+                ))}
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+              {table.getRowModel().rows.map((row) =&gt; (
+                &lt;tr key={row.id} className="border-t"&gt;
+                  {row.getVisibleCells().map((cell) =&gt; (
+                    &lt;td key={cell.id} className="px-3 py-2"&gt;
+                      {cell.getValue() as string}
+                    &lt;/td&gt;
+                  ))}
+                &lt;/tr&gt;
+              ))}
+            &lt;/tbody&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/DataTableProvider&gt;
+  )
+}
+```
+
+## 核心导出 {#exports}
+
+- `DataTableViewOptions`
+
+## API 摘要 {#api}
+
+组件无 Props。所有状态通过 `useDataTable()` 上下文获取：
+
+```ts
+// 上下文类型
+interface DataTableStateContextType {
+  columnFilters: ColumnFiltersState
+  sorting: SortingState
+  rowSelection: RowSelectionState
+  columnOrder: string[]
+  columnVisibility: VisibilityState
+  pagination: PaginationState
+  enableColumnOrdering: boolean
+}
+```
+
+组件内部使用的上下文属性：
+
+- `table` — TanStack Table 实例，用于 `getAllColumns()`、`getState()`、`setColumnOrder()` 等
+- `enableColumnOrdering` — 是否显示拖拽手柄（默认 `false`）
+
+列定义中需要关注：
+
+- `column.accessorFn` — 必须有（`undefined` 的列不会出现在面板中）
+- `column.getCanHide()` — 列是否允许隐藏
+- `column.columnDef.meta?.label` — 面板中显示的列名称
+
+## Semantic DOM {#semantic-dom}
+
+- 触发按钮：`<Button variant="outline" size="icon" role="combobox">`，内含 `Settings2` 图标
+- 弹出面板：`<PopoverContent>` 内含 `<Command>`
+- 搜索框：`<CommandInput>`，placeholder 为 "Search options..."
+- 空状态：`<CommandEmpty>`，文本 "No option found."
+- 列列表：`<Sortable>` 包裹的 `<SortableItem>` 列表
+- 列项：`<CommandItem>`，内含复选框（`<Check>` 图标）和列名
+- 拖动把手：`<SortableDragHandle>`（仅 `enableColumnOrdering` 时显示），内含 `GripVertical` 图标
+- 无 `data-*` 状态属性。
+
+## 样式模型 {#styling-model}
+
+- 触发按钮：`Button variant="outline" size="icon"`，附加 `shadow-none`
+- 弹出面板：`w-[200px] p-0`
+- 复选框：选中时 `bg-primary text-primary-foreground`，未选中时 `opacity-50 [&_svg]:invisible`
+- 拖拽覆盖层：`bg-muted/60 h-8 w-full rounded-md`
+- 拖拽手柄：`variant="ghost" size="icon"`，`text-muted-foreground`
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/data-table-filters/components/data-table/data-table-view-options.tsx`
+- `src/components/ui/dt-data-table-view-options.tsx`（包装导出）
+
+直接依赖：
+
+- `@/components/data-table-filters/components/data-table/data-table-provider`（useDataTable）
+- `@/components/data-table-filters/components/custom/sortable`（Sortable、SortableDragHandle、SortableItem）
+- `@/components/ui/button`
+- `@/components/ui/command`
+- `@/components/ui/popover`
+- `lucide-react`（Settings2、Check、GripVertical）
+
+根本实现：
+
+- `@tanstack/react-table`（table.getAllColumns、table.getState、table.setColumnOrder、column.toggleVisibility、column.getIsVisible、column.getCanHide）
+
+实现注意：
+
+1. 组件必须在 `DataTableProvider` 内部使用，否则 `useDataTable()` 抛出错误。
+2. 仅显示 `typeof column.accessorFn !== "undefined"` 且 `column.getCanHide()` 为 `true` 的列。
+3. 列按 `columnOrder` 排序显示。
+4. `toggleVisibility(!column.getIsVisible())` 切换列可见性。
+5. 拖拽期间 `disabled={drag}` 禁用列项的点击切换。
+6. 搜索输入仅过滤 Command 列表，不影响列的实际显示。
+
+## 可访问性 {#accessibility}
+
+- 按钮使用 `role="combobox"` 和 `aria-expanded={open}`。
+- 图标按钮包含 `<span className="sr-only">View</span>` 提供可访问文本。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/data-table-filters/components/data-table/data-table-view-options.tsx` 的源码为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 配合 DataTable 体系使用，不承诺 AntD API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTableViewOptions 代码时，应遵守：
+
+1. 从 `@/components/ui/dt-data-table-view-options` 导入。
+2. 组件必须在 `DataTableProvider` 内部使用。
+3. 组件无 Props，所有配置通过上下文传递。
+4. 默认不启用列拖拽排序；需要时在 Provider 上传入 `enableColumnOrdering`。
+5. 列名通过 `meta.label` 配置；不配置时面板显示 `column.id`。
+6. 不可隐藏的列（`enableHiding: false`）不会出现在面板中。
+7. 不要引入 Ant Design 相关依赖。
+8. 如果不确定某个 API 是否存在，先检查源码，不要凭记忆生成。

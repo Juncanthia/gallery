@@ -1,0 +1,96 @@
+文件夹交互是一个点击展开动画组件，点击文件夹区域触发三层页面分层弹出动画，模拟真实文件夹的开合效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以文件夹形式展示内容分层，通过点击切换展开和闭合状态时使用。组件提供三层页面同时展开的弹性过渡效果。
+
+常见场景：
+
+- 文件管理类界面，用文件夹开合动画增强操作反馈。
+- 内容分层展示，通过展开动画逐步揭示信息层级。
+- 创意着陆页，以交互式文件夹动画吸引用户注意。
+
+不推荐：
+
+- 需要展示实际可操作文件列表的场景（本组件页面层内为装饰性占位线条）。
+- 需要自定义每一层页面内容的场景，应直接修改组件源码中的 Page 子组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件无需任何 props，点击文件夹区域即可切换展开和闭合。
+
+<ComponentShowcase
+  id="uselayouts/folder-interaction"
+  path="uselayouts/folder-interaction/basic"
+/>
+
+```tsx
+import { FolderInteraction } from "@/components/ui/uselayouts-folder-interaction"
+
+export default function Demo() {
+  return <FolderInteraction />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FolderInteraction
+
+该组件为自包含交互组件，无需传递任何 props。所有交互行为（点击切换、弹性动画）均由组件内部的 `useState` 和 motion/react 管理。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 无需传递任何 props | - | - |
+
+视觉结构：
+
+- 文件夹封套（SVG）：底部折叠结构，使用 linearGradient 和 clipPath 实现毛玻璃效果。
+- 三层页面（motion.div）：每层预设不同的初始位置、展开位置和过渡参数，展开时向外扩散。
+- 前盖（motion.div）：通过 rotateX 旋转控制翻开角度，展开时旋转 -40deg。
+- 页面内容（Page 子组件）：8 行占位线条，渐变色模拟文档内容。
+
+动画配置：
+
+- 第一层（左侧）：stiffness=160、damping=22、bounce=0.15
+- 第二层（中间）：stiffness=190、damping=24、bounce=0.12
+- 第三层（右侧）：stiffness=170、damping=21、bounce=0.17
+- 前盖翻页：spring、duration=0.5、bounce=0.2
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义页面内容？
+
+当前组件为视觉演示型组件，页面层内为装饰性占位线条。如需添加实际内容：
+
+1. 修改 `src/components/uselayouts/folder-interaction.tsx` 中的 `Page` 子组件。
+2. 替换占位线条为你需要的文本、图片或其他 React 元素。
+3. 如需更多页面层，修改 `pages` 数组，添加新的初始位置和展开位置配置。
+
+### 如何调整动画速度？
+
+修改各层 `transition` 配置中的 `stiffness`、`damping` 或 `duration` 参数：
+
+- `stiffness` 越大动画越快越生硬。
+- `damping` 越大动画越平滑但越慢。
+- `bounce` 控制弹性回弹幅度。
+
+### 如何调整文件夹尺寸？
+
+修改 `.wrapper` 容器的 `w-80` 和 `h-52` 类名，同时调整 `.folder` 的 `w-[87.5%]` 和 SVG 的 `viewBox` 以匹配新尺寸。
+
+### 组件支持哪些交互？
+
+当前仅支持点击切换展开/闭合。如需拖拽交互，可在 `src/components/uselayouts/folder-interaction.tsx` 中添加相应的 pointer 事件处理。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/uselayouts-folder-interaction` 导入 `FolderInteraction`（named export）。
+2. 组件无需任何 props，直接渲染即可获得完整的文件夹交互效果。
+3. 如需自定义动画参数或页面内容，直接修改 `src/components/uselayouts/folder-interaction.tsx`。
+4. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/folder-interaction" />

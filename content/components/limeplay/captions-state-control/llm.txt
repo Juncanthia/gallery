@@ -1,0 +1,87 @@
+---
+category: Components
+title: CaptionsStateControl
+subtitle: 字幕状态控制
+description: 预组装的字幕切换按钮，点击切换字幕可见性，根据可见状态自动更新图标样式。
+demo:
+  cols: 2
+group:
+  title: Limeplay
+  order: 6
+source:
+  component: src/components/limeplay/blocks/video-player/components/captions-state-control.tsx
+  wrapper: src/components/ui/limeplay-captions-state-control.tsx
+  examples:
+    - content/components/limeplay/captions-state-control/examples/basic.tsx
+  blocks:
+    - src/components/limeplay/blocks/video-player/components/captions-state-control.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# CaptionsStateControl 字幕状态控制
+
+预组装字幕切换按钮，点击切换字幕可见性，根据状态自动更新图标。
+
+## 导入路径
+
+```tsx
+import { CaptionsStateControl } from "@/components/ui/limeplay-captions-state-control"
+```
+
+## 核心导出
+
+- `CaptionsStateControl`
+
+## API 摘要
+
+`CaptionsStateControl` 是预组装组件，无对外暴露的 props。内部使用 `CaptionsControl`（asChild）包裹 `Button`，配合 `ClosedCaptioningIcon` 展示状态。
+
+如需自定义，使用底层 `CaptionsControl`：
+
+```ts
+interface CaptionsControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean           // 使用 Radix Slot 合并到子元素，默认 false
+  render?: React.ReactElement // 渲染自定义子元素
+  shortcut?: string           // 键盘快捷键提示，例 "C"
+}
+```
+
+## 最小示例
+
+```tsx
+import { CaptionsContainer } from "@/components/ui/limeplay-captions"
+import { CaptionsStateControl } from "@/components/ui/limeplay-captions-state-control"
+
+export default function Demo() {
+  return (
+    <div className="flex w-full flex-col items-center gap-4">
+      <CaptionsStateControl />
+      <CaptionsContainer className="w-full" />
+    </div>
+  )
+}
+```
+
+## 关键行为
+
+1. 点击时调用 `useCaptions().toggleVisibility()` 切换字幕显隐。
+2. 根据 `useCaptionsStore` 的 `visible` 状态切换图标 weight（fill / regular）。
+3. 当无可用字幕轨道（`tracks.length === 0`）时按钮自动 `disabled`。
+4. 自动生成 `aria-label="Captions"`。
+5. 内部使用 `CaptionsControl` 的 `asChild` 模式包裹 `Button`。
+
+## 约束
+
+- 必须在 `MediaProvider` 上下文中使用。
+- 字幕文本需要配合 `CaptionsContainer` 渲染。
+- 不要引入 `antd` 或 `@ant-design/icons`。
+- 如需自定义样式，使用底层 `CaptionsControl` 配合 `asChild`。

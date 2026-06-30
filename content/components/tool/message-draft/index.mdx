@@ -1,0 +1,223 @@
+MessageDraft 用于展示 AI 生成的消息草稿，支持邮件和 Slack 两种渠道，在发送前提供审查、撤销和取消等交互。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当 AI 生成消息内容并需要用户确认后再发送时使用。MessageDraft 提供结构化的消息预览和操作入口。
+
+常见场景：
+
+- AI 助手根据上下文起草邮件回复。
+- AI 助手为 Slack 频道编写消息。
+- 需要用户在发送前审查、修改或撤销消息。
+- 发送操作需要倒计时撤销期。
+
+MessageDraft 支持两种渠道模式：
+
+- `channel="email"`：展示标准邮件格式，包含收件人、抄送、密送、主题和正文。
+- `channel="slack"`：展示 Slack 消息格式，包含频道名称、成员数指示和正文。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础邮件草稿
+
+展示 AI 生成的邮件草稿，用户可审查后发送或取消。
+
+<ComponentShowcase
+  id="tool/message-draft"
+  path="tool/message-draft/basic"
+/>
+
+```tsx
+import { MessageDraft } from "@/components/ui/tool-message-draft"
+
+export default function Demo() {
+  return (
+    &lt;MessageDraft
+      id="email-draft-1"
+      channel="email"
+      subject="Q3 Product Roadmap Review"
+      from="alice@company.com"
+      to={["bob@company.com", "carol@company.com"]}
+      cc={["team-leads@company.com"]}
+      body={`Hi team,
+
+I've put together the draft for our Q3 product roadmap.`}
+      onSend={() => console.log("Sent")}
+      onCancel={() => console.log("Cancelled")}
+    /&gt;
+  )
+}
+```
+
+### Slack 消息草稿
+
+展示 AI 生成的 Slack 频道消息。
+
+```tsx
+import { MessageDraft } from "@/components/ui/tool-message-draft"
+
+export default function Demo() {
+  return (
+    &lt;MessageDraft
+      id="slack-draft-1"
+      channel="slack"
+      target={{ type: "channel", name: "general", memberCount: 42 }}
+      body="The latest deployment is now live in production. All tests passed."
+      onSend={() => console.log("Sent")}
+      onCancel={() => console.log("Cancelled")}
+    /&gt;
+  )
+}
+```
+
+### Slack DM 草稿
+
+展示发给个人的 Slack 私信草稿。
+
+```tsx
+import { MessageDraft } from "@/components/ui/tool-message-draft"
+
+export default function Demo() {
+  return (
+    &lt;MessageDraft
+      id="slack-dm-1"
+      channel="slack"
+      target={{ type: "dm", name: "jane" }}
+      body="Can you review the PR when you have a moment?"
+      onSend={() => console.log("Sent")}
+      onCancel={() => console.log("Cancelled")}
+    /&gt;
+  )
+}
+```
+
+### 带撤销期的草稿
+
+通过 `undoGracePeriod` 自定义发送倒计时，用户可在倒计时内撤销发送。
+
+```tsx
+import { MessageDraft } from "@/components/ui/tool-message-draft"
+
+export default function Demo() {
+  return (
+    &lt;MessageDraft
+      id="email-draft-2"
+      channel="email"
+      subject="Weekly Status Update"
+      from="manager@company.com"
+      to={["team@company.com"]}
+      body="Here's a summary of this week's progress."
+      undoGracePeriod={10000}
+      onSend={() => console.log("Sent")}
+      onUndo={() => console.log("Undo triggered")}
+      onCancel={() => console.log("Cancelled")}
+    /&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### MessageDraft
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识，用于 data 属性和 ARIA 标注 | `string` | 必填 |
+| channel | 消息渠道类型 | `email` &vert; `slack` | 必填 |
+| body | 消息正文内容 | `string` | 必填 |
+| outcome | 外部控制的发送结果，传入后组件同步状态 | `sent` &vert; `cancelled` | - |
+| className | 附加样式类名 | `string` | - |
+| undoGracePeriod | 发送倒计时毫秒数，到期后自动调用 onSend | `number` | `5000` |
+| onSend | 发送回调，倒计时到期或外部 outcome 变更时调用 | `() => void &vert; Promise<void>` | - |
+| onUndo | 撤销发送回调 | `() => void` | - |
+| onCancel | 取消草稿回调 | `() => void` | - |
+
+### email 模式专属属性
+
+当 `channel="email"` 时额外需要以下属性：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| subject | 邮件主题 | `string` | 必填 |
+| from | 发件人 | `string` | - |
+| to | 收件人列表 | `string[]` | 必填（至少 1 项） |
+| cc | 抄送列表 | `string[]` | - |
+| bcc | 密送列表 | `string[]` | - |
+
+### slack 模式专属属性
+
+当 `channel="slack"` 时额外需要以下属性：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| target | 消息目标，渠道或私信 | `SlackTarget` | 必填 |
+
+### SlackTarget
+
+`target` 为联合类型，通过 `type` 字段区分：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 目标类型 | `channel` &vert; `dm` | 必填 |
+| name | 频道名或用户名 | `string` | 必填 |
+| memberCount | 频道成员数（仅 channel 模式） | `number` | - |
+
+## Semantic DOM
+
+MessageDraft 通过 `data-*` 属性暴露稳定的语义结构：
+
+| data-slot | 说明 |
+| --- | --- |
+| `message-draft` | 根容器 |
+
+附加属性：
+
+| data 属性 | 说明 |
+| --- | --- |
+| `data-tool-ui-id` | 组件 id |
+| `data-state` | 当前状态：`review` &vert; `sending` &vert; `sent` &vert; `cancelled` |
+
+## FAQ
+
+### 如何区分邮件和 Slack 模式？
+
+通过 `channel` 属性指定：
+
+```tsx
+// 邮件模式
+&lt;MessageDraft channel="email" subject="..." to={["..." ]} ... /&gt;
+
+// Slack 模式
+&lt;MessageDraft channel="slack" target={{ type: "channel", name: "general" }} ... /&gt;
+```
+
+### 如何控制发送倒计时？
+
+通过 `undoGracePeriod` 属性，单位为毫秒，默认 5000（5 秒）。用户可在倒计时内点击 Undo 按钮撤销发送。
+
+```tsx
+&lt;MessageDraft undoGracePeriod={10000} ... /&gt;
+```
+
+### 如何从外部控制发送状态？
+
+通过 `outcome` 属性传入 `"sent"` 或 `"cancelled"`，组件会自动同步内部状态到对应阶段。
+
+```tsx
+&lt;MessageDraft outcome="sent" ... /&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 MessageDraft 代码时：
+
+1. 从 `@/components/ui/tool-message-draft` 导入
+2. `channel` 和 `id` 为必填属性
+3. email 模式必须提供 `subject` 和 `to`（至少一项）
+4. slack 模式必须提供 `target`，包含 `type` 和 `name`
+5. `onSend`、`onUndo`、`onCancel` 回调为可选，用于集成外部逻辑
+6. 撤销倒计时默认 5 秒，可通过 `undoGracePeriod` 调整
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="tool/message-draft" />

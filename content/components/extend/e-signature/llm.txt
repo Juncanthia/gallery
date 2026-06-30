@@ -1,0 +1,102 @@
+---
+category: Components
+title: ESignatureBlock
+subtitle: 电子签名
+description: 为 PDF 文档提供电子签名能力，支持在指定区域绘制签名并导出已签名的 PDF 文件。
+demo:
+  cols: 2
+group:
+  title: 文档
+  order: 1
+source:
+  component: src/components/ui/extend-e-signature.tsx
+  implementation: src/components/extend/components/blocks/e-signature.tsx
+  docs: content/components/extend/e-signature/index.mdx
+  examples:
+    - content/components/extend/e-signature/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  signature_pad: true
+  pdf_lib: true
+---
+
+# ESignatureBlock 电子签名
+
+ESignatureBlock 为 PDF 文档提供电子签名能力。它基于 signature_pad 提供画布绘制签名，基于 pdf-lib 将签名嵌入 PDF 并支持导出。组件以 PDF 预览 + 侧边栏的布局呈现，用户可在指定签名区域绘制签名，签名后可将已签名的 PDF 文件下载到本地。
+
+## 何时使用 {#when-to-use}
+
+当需要在 PDF 文档中嵌入电子签名时使用。
+
+常见场景：
+
+- 合同签署：用户在 PDF 合同指定位置签名确认。
+- 审批流程：审批人在文档中签署意见。
+- 表单签收：接收方在表单上签名表示已收到。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+传入 PDF 文件 URL，组件渲染 PDF 预览界面并提供签名功能。
+
+```tsx
+import { ESignatureBlock } from "@/components/ui/extend-e-signature"
+
+export default function Demo() {
+  return <ESignatureBlock file="/samples/attention.pdf" />
+}
+```
+
+## API {#api}
+
+### ESignatureBlock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| file | PDF 文件 URL 地址 | `string` | - |
+
+## 实现参考 {#implementation-notes}
+
+核心文件：
+
+- `src/components/ui/extend-e-signature.tsx`：公共导出入口。
+- `src/components/extend/components/blocks/e-signature.tsx`：完整的签名块实现，包含 PDF 预览、签名面板、签名导出。
+
+关键行为：
+
+1. 组件使用 `PdfBlockResizableShell` 提供左右分栏的可调布局。
+2. 左侧嵌入 `PDFViewer`，在指定页面的指定区域渲染签名覆盖层。
+3. 右侧显示签名字段面板，提供签名、编辑、清除操作。
+4. 签名对话框基于 `signature_pad` 库，支持手写绘制。
+5. 导出功能基于 `pdf-lib`，将签名 PNG 嵌入 PDF 并触发下载。
+6. 签名数据以 Base64 PNG Data URL 形式存储。
+
+## FAQ {#faq}
+
+### 如何传入 PDF 文件？
+
+通过 `file` 属性传入 PDF 文件的 URL 地址：
+
+```tsx
+<ESignatureBlock file="/path/to/document.pdf" />
+```
+
+### 签名数据如何持久化？
+
+签名以 `imageDataUrl`（PNG Base64）格式存储在 `SignatureField` 中。可将该数据序列化后保存到后端，下次加载时作为 `INITIAL_FIELD` 传入恢复状态。
+
+### 如何自定义签名区域位置？
+
+签名区域由 `INITIAL_FIELD` 的 `bbox` 控制（坐标 x、y、宽 width、高 height）。修改 `INITIAL_FIELD` 常量即可调整默认签名区域的位置和尺寸。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 ESignatureBlock 代码时，应遵守：
+
+1. 从 `@/components/ui/extend-e-signature` 导入 ESIgnatureBlock。
+2. 传入 `file` 属性指定 PDF 文件 URL。
+3. 该组件依赖浏览器 Canvas API，仅在 Client Component 中使用。
+4. 签名数据以 Base64 Data URL 形式存储，可直接序列化到后端。
+5. 不要自行实现签名绘制或 PDF 导出逻辑，使用组件内置能力。

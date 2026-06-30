@@ -1,0 +1,79 @@
+---
+component: MorphingDialog
+slug: gooseui/morphing-dialog
+
+import: |
+  import { MorphingDialog, MorphingDialogTrigger, MorphingDialogContainer, MorphingDialogContent, MorphingDialogClose, MorphingDialogImage, MorphingDialogTitle, MorphingDialogSubtitle, MorphingDialogDescription } from "@/components/ui/gooseui-morphing-dialog"
+
+usage: |
+  <MorphingDialog>
+    <MorphingDialogTrigger>
+      <div>点击触发</div>
+    </MorphingDialogTrigger>
+    <MorphingDialogContainer>
+      <MorphingDialogContent>
+        <MorphingDialogClose />
+        <MorphingDialogImage src="https://example.com/image.jpg" alt="描述" />
+        <MorphingDialogTitle>标题</MorphingDialogTitle>
+        <MorphingDialogSubtitle>副标题</MorphingDialogSubtitle>
+        <MorphingDialogDescription>详细描述内容</MorphingDialogDescription>
+      </MorphingDialogContent>
+    </MorphingDialogContainer>
+  </MorphingDialog>
+
+exports:
+  MorphingDialog: 根容器，管理对话框开关状态和变形动画
+  MorphingDialogTrigger: 触发元素容器
+  MorphingDialogContainer: 原生 <dialog> 包装器
+  MorphingDialogContent: 对话框内容区域
+  MorphingDialogClose: 关闭按钮
+  MorphingDialogImage: 图片展示
+  MorphingDialogTitle: 标题
+  MorphingDialogSubtitle: 副标题
+  MorphingDialogDescription: 描述文本区域
+
+props:
+  MorphingDialog:
+    children: React.ReactNode  -- 子组件内容
+  MorphingDialogTrigger:
+    children: React.ReactNode  -- 触发元素
+    className?: string  -- 附加样式
+    style?: React.CSSProperties  -- 内联样式
+  MorphingDialogContainer:
+    children: React.ReactNode  -- 对话框内容
+  MorphingDialogContent:
+    children: React.ReactNode  -- 内容
+    className?: string  -- 附加样式
+    style?: React.CSSProperties  -- 内联样式
+  MorphingDialogClose:
+    children?: React.ReactNode  -- 自定义关闭按钮内容，默认 <X /> 图标
+    className?: string  -- 附加样式
+  MorphingDialogImage:
+    src: string  -- 图片地址（必填）
+    alt: string  -- 图片描述（必填）
+    className?: string  -- 附加样式
+    style?: React.CSSProperties  -- 内联样式
+  MorphingDialogTitle:
+    children: React.ReactNode  -- 标题内容
+    className?: string  -- 附加样式
+  MorphingDialogSubtitle:
+    children: React.ReactNode  -- 副标题内容
+    className?: string  -- 附加样式
+  MorphingDialogDescription:
+    children: React.ReactNode  -- 描述内容
+    className?: string  -- 附加样式
+
+constraints:
+  - 基于浏览器原生 View Transitions API + <dialog> 元素实现变形动画。
+  - View Transitions API 仅 Chromium 111+ 支持；非 Chromium 环境自动降级为无动画即时切换。
+  - 尊重 prefers-reduced-motion: reduce，匹配时关闭所有动画。
+  - 使用 useId() 生成唯一 viewTransitionName，多个实例互不冲突。
+  - 必须按 MorphingDialog > MorphingDialogTrigger + MorphingDialogContainer > MorphingDialogContent 层级结构使用。
+  - MorphingDialogClose 应放在 MorphingDialogContent 内部。
+  - 不要引入 @radix-ui/react-dialog、@framer-motion 或其他第三方对话框/动画库。
+  - 不要修改组件内部的 viewTransitionName 生成逻辑。
+
+source: src/components/gooseui/components/ui/morphing-dialog.tsx
+example: content/components/gooseui/morphing-dialog/examples/basic.tsx
+docs: content/components/gooseui/morphing-dialog/index.mdx
+---

@@ -1,0 +1,119 @@
+ShimmerButton 是一组带动画效果的按钮组件，按钮根据传入文字渲染对应语言。通过 CSS background-position 动画实现文字闪光扫描效果，支持暗色模式自适应。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要强化按钮的点击引导时使用。ShimmerButton 提供灵动渐变效果，适合用作：
+
+- 品牌官网或落地页的 CTA 按钮。
+- 营销邮件或推广页面的转化按钮。
+- 产品功能入口的引导按钮。
+
+默认提供白色背景 + 灰色系扫光（暗色模式自动切换），hover 时按钮轻微放大，点击有按压缩放反馈。
+
+不推荐在纯文本操作区（如表单提交、工具栏按钮）中大量使用，扫光动画在密集按钮区域易产生视觉干扰。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认文字为 "Book a Free Call"，可通过 `text` 自定义。
+
+<ComponentShowcase id="chamaac/shimmer-button" path="chamaac/shimmer-button/basic" />
+
+```tsx
+import { ShimmerButton } from "@/components/ui/chamaac-shimmer-button"
+
+export default function Demo() {
+  return <ShimmerButton text="Book a Free Call" />
+}
+```
+
+### 自定义文字与动画时长
+
+通过 `text` 设置按钮文字，`duration` 控制扫光动画周期（秒）。
+
+```tsx
+import { ShimmerButton } from "@/components/ui/chamaac-shimmer-button"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-wrap gap-4"&gt;
+      &lt;ShimmerButton text="Get Started" /&gt;
+      &lt;ShimmerButton text="了解更多" duration={0.8} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 绑定点击事件
+
+传入 `onClick` 处理点击。
+
+```tsx
+import { ShimmerButton } from "@/components/ui/chamaac-shimmer-button"
+
+export default function Demo() {
+  return (
+    &lt;ShimmerButton
+      text="Click Me"
+      onClick={() => alert("clicked")}
+    /&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ShimmerButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 按钮显示文字 | `string` | `"Book a Free Call"` |
+| className | 附加样式类名，合并到按钮根元素 | `string` | - |
+| duration | 扫光动画周期（秒） | `number` | `1.2` |
+| onClick | 点击回调 | `() => void` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何改变按钮背景色？
+
+通过 `className` 覆盖默认背景。默认背景为 `bg-white dark:bg-neutral-950`，传入自定义类即可覆盖。
+
+```tsx
+<ShimmerButton
+  text="Custom Style"
+  className="bg-blue-500 dark:bg-blue-700 border-blue-400"
+/>
+```
+
+### 扫光颜色如何修改？
+
+扫光使用 `bg-clip-text text-transparent` 和 `background-position` 动画实现。如需自定义扫光颜色，通过 `className` 传入自定义的 `background-image` 渐变即可。
+
+### 暗色模式支持是如何工作的？
+
+组件使用 Tailwind 的 `dark:` 前缀切换文字渐变颜色：
+- 亮色模式：灰色系扫光 `#737373` -> `#171717` -> `#737373`
+- 暗色模式：浅灰色系扫光 `#a1a1aa` -> `#ffffff` -> `#a1a1aa`
+
+确保应用已配置 Tailwind 暗色模式（`class` 策略）即可自动适配。
+
+### 如何停止动画？
+
+组件扫光动画为 `repeat: Infinity`，如需停止需通过条件渲染控制组件挂载/卸载。组件不提供 `autoPlay` 或 `paused` 属性。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ShimmerButton 代码时：
+
+1. 从 `@/components/ui/chamaac-shimmer-button` 导入 `ShimmerButton`。
+2. `ShimmerButton` 是一个默认导出，使用 `import { ShimmerButton }` 命名导入（barrel 文件使用 named re-export）。
+3. `text` 默认为 `"Book a Free Call"`，传入自定义文字时覆盖。
+4. `duration` 单位为秒，控制 `background-position` 动画速度。
+5. `className` 合并到按钮根元素的 `cn()` 中，可用于覆盖背景色、边框、内边距。
+6. 组件依赖 `motion/react`（通过 `LazyMotion` + `domAnimation`），确保项目中已安装 `motion`。
+7. 不需要 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="chamaac/shimmer-button" />

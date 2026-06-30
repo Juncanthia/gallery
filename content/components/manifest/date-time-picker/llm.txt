@@ -1,0 +1,187 @@
+---
+category: Blocks
+title: DateTimePicker
+subtitle: 日期时间选择器
+description: Calendly 风格的日期和时间选择组件，提供日历视图、可用时间段列表和时区选择功能，支持桌面端和移动端布局。
+demo:
+  cols: 1
+group:
+  title: 表单
+  order: 15
+source:
+  component: src/components/manifest/form/date-time-picker.tsx
+  docs: content/components/manifest/date-time-picker/index.mdx
+  examples:
+    - content/components/manifest/date-time-picker/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+  mediaChrome: false
+---
+
+# DateTimePicker 日期时间选择器
+
+Calendly 风格的日期和时间选择组件，专为预约、预定和日程安排场景设计。包含日历导航、日期点选、时间段列表和可搜索时区选择器，支持桌面端左右分栏和移动端两视图布局。
+
+## 何时使用
+
+当需要用户选择特定日期和时间（预约、预定、日程安排）时使用。
+
+常见场景：
+
+- 会议预约、咨询预约等日程安排页面。
+- 服务预订中的时间选择步骤（如医疗、美容、咨询等）。
+- 需要结合时区选择的跨国预约场景。
+
+不推荐：
+
+- 仅需选择日期（不需要时间）—— 使用 `Calendar` 或 `DatePicker`。
+- 仅需选择时间（不需要日期）—— 使用 `TimePicker`。
+- 需要日期区间或多日连续选择 —— DateTimePicker 一次只能选择一个日期和一个时间点。
+
+## 代码演示
+
+### 基础用法
+
+```tsx
+import { DateTimePicker } from "@/components/ui/manifest-date-time-picker"
+
+export default function Demo() {
+  return (
+    <DateTimePicker
+      data={{
+        title: "Select a Date & Time",
+        availableDates: [
+          new Date(2026, 6, 1),
+          new Date(2026, 6, 7),
+          new Date(2026, 6, 14),
+        ],
+        availableTimeSlots: [
+          "9:00am",
+          "10:00am",
+          "2:30pm",
+          "4:00pm",
+        ],
+        timezone: "Eastern Time - US & Canada",
+      }}
+      appearance={{ showTitle: true, showTimezone: true }}
+    />
+  )
+}
+```
+
+### 受控模式
+
+```tsx
+import { useState } from "react"
+import { DateTimePicker } from "@/components/ui/manifest-date-time-picker"
+
+export default function Demo() {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
+
+  return (
+    <DateTimePicker
+      data={{
+        title: "Book an Appointment",
+        availableDates: [new Date(2026, 6, 1), new Date(2026, 6, 8)],
+        availableTimeSlots: ["9:00am", "11:00am", "2:00pm"],
+      }}
+      control={{ selectedDate, selectedTime }}
+      actions={{ onNext: (date, time) => console.log(date, time) }}
+    />
+  )
+}
+```
+
+## API
+
+### DateTimePicker
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 日期和时间数据配置 | `DateTimePickerData` | - |
+| data.title | 选择器顶部标题文字 | `string` | - |
+| data.availableDates | 可选择的有效日期数组 | `Date[]` | - |
+| data.availableTimeSlots | 可选择的时间段字符串数组 | `string[]` | - |
+| data.timezone | 默认时区名称 | `string` | `"Eastern Time - US & Canada"` |
+| appearance | 外观配置 | `DateTimePickerAppearance` | `{}` |
+| appearance.showTitle | 是否显示标题 | `boolean` | `true` |
+| appearance.showTimezone | 是否显示时区选择器 | `boolean` | `true` |
+| appearance.weekStartsOn | 每周起始日 | `"sunday"` \| `"monday"` \| `"saturday"` | `"sunday"` |
+| actions | 行为回调 | `DateTimePickerActions` | `{}` |
+| actions.onNext | 确认选中后的回调 | `(date: Date, time: string) => void` | - |
+| control | 受控模式 | `DateTimePickerControl` | - |
+| control.selectedDate | 受控选中日期 | `Date \| null` | - |
+| control.selectedTime | 受控选中时间 | `string \| null` | - |
+
+## 样式模型
+
+- 主题对接：组件使用 Tailwind CSS 的语义化 token（`bg-card`、`text-foreground`、`text-primary` 等），自动适配亮色/暗色模式。
+- 日历单元格：可选日期显示 `bg-primary/10` 浅色背景，选中日期显示 `bg-primary` 实色填充，今日用圆点指示。
+- 时间段槽位：未选中为 `border-primary` 边框样式，选中后切换为 `bg-muted-foreground text-background` 实色填充，Next 按钮从右侧滑入。
+- 响应式：桌面端左右分栏布局（日历 + 时间段），移动端两视图切换（日历视图 → 时间选择视图）。
+- 时区搜索框使用 `border rounded-md` 标准样式，下拉列表项 hover 时高亮 `bg-muted`。
+
+## 依赖与实现说明
+
+核心文件：
+
+- `src/components/manifest/form/date-time-picker.tsx`
+
+技术依赖：
+
+- `react` — 组件框架（useState、useEffect、useRef）
+- `tailwindcss` — 样式系统
+- `lucide-react` — 图标库（ArrowLeft、ChevronLeft、ChevronRight、Globe、Search）
+- `@hyper/manifest-ui` — 内部 UI 库（Button、Popover、cn 工具）
+- `Intl.DateTimeFormat` — 浏览器原生 API，用于时区时间格式化
+
+实现要点：
+
+1. 组件同时支持受控和不受控模式。非受控模式下通过内部 `useState` 管理 `selectedDate` 和 `selectedTime` 状态；受控模式下通过 `control` prop 注入外部状态。
+2. 日历网格计算基于 `Date` 对象，通过 `new Date(year, month, 1)` 计算当月第一天和总天数，支持自定义每周起始日。
+3. `availableDates` 通过 `isSameDay` 比较确定哪些日期可点击，不可用日期自动显示灰色且禁用点击。
+4. 时区选择器使用内部定义的 20 个 IANA 时区标识符，通过 `Intl.DateTimeFormat` 的 `timeZone` 选项获取各时区的当前时间，确保正确处理夏令时（DST）。
+5. 移动端使用 `md:` 断点切换布局模式，日历和时间选择拆分为两个独立视图，选中日期后自动切换到时间视图。
+6. 组件为 Blocks 级复合组件，封装了完整的预约选择交互流程，不依赖外部状态管理库。
+7. 无 props 时使用 `demoDateTimePickerData` 作为默认数据（动态生成当前及下月的工作日）。
+
+## 可访问性
+
+- 月份导航按钮设置 `aria-label="Previous month"` 和 `aria-label="Next month"`。
+- 时区选择触发按钮设置 `aria-label="Select timezone"`。
+- 日历单元格中不可用的日期设置了 `disabled` 属性。
+- 时区搜索输入框在 Popover 打开时自动聚焦（`useEffect` + `ref.focus()`）。
+- 桌面端时间槽位面板通过 `transition-all duration-300` 实现动画过渡，动画仅作用于视觉层，不影响交互。
+
+## 与 Ant Design 的取舍
+
+该组件为项目本地复合组件，基于 React 原生状态管理和 Tailwind CSS 构建，无 Ant Design 直接对应。Ant Design 的 `DatePicker` 提供日期选择，但不提供时间段选择 + 时区选择的预约式体验。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 技术基础 | React + Tailwind CSS + 浏览器原生 Intl API |
+| API 定义 | 以 `src/components/manifest/form/date-time-picker.tsx` 中导出的类型为准 |
+| 样式体系 | Tailwind CSS semantic tokens |
+| 时区处理 | IANA 时区标识符 + Intl.DateTimeFormat（浏览器原生） |
+| 与 AntD 关系 | 不兼容 AntD（AntD 无等效组件），不引入 `antd` 运行时依赖 |
+
+## LLM 使用规则
+
+1. 从 `@/components/ui/manifest-date-time-picker` 导入 `DateTimePicker`，不要从 `antd` 导入。
+2. `data.availableDates` 必须是 `Date[]`，组件内部使用 `isSameDay` 比较日期，确保传入有效的 Date 对象。
+3. `data.availableTimeSlots` 是字符串数组（如 `["9:00am", "2:30pm"]`），组件不自动生成时间段，需外部传入。
+4. 日期不可选时组件自动置灰，无需外部处理禁用逻辑。
+5. 移动端自动采用两视图布局（日历→时间），无需额外响应式处理。
+6. 时区选择使用 IANA 时区标识符，通过 `Intl.DateTimeFormat` 获取当前时间，确保正确处理夏令时。
+7. 本组件为 Blocks 级复合组件，无 Ant Design 对应物，不要尝试从 `antd` 导入。
+8. 受控模式需同时提供 `control.selectedDate` 和 `control.selectedTime`。
+9. `weekStartsOn` 影响日历网格的列排序（`sunday` → 日一二三四五六，`monday` → 一二三四五六日，`saturday` → 六日一二三四五）。

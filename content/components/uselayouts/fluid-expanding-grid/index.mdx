@@ -1,0 +1,101 @@
+FluidExpandingGrid 是一个流体扩展网格组件，点击任意项目平滑扩展占满整行，相邻项目自动重新排列，由 spring 物理动画驱动。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要一个带有流畅展开/收起动画的图片画廊时使用，尤其适合：
+
+- 产品展示页面的精选图片画廊。
+- 作品集或个人主页的视觉展示区域。
+- 需要交互动效替代传统网格排列的场景。
+- 2x2 网格布局，点击任一项目使其占据整行以突出展示。
+
+FluidExpandingGrid 的核心交互逻辑：
+
+- 初始状态为 2x2 网格，首行 2 个项目，次行最多 2 个项目。
+- 点击任一项目，该项目展开占据整行（grid-column: 1 / span 2），同行邻居移至另一行。
+- 当目标行仅剩 1 个项目时，点击无效，防止某行为空。
+- 使用 motion/react 的 LayoutGroup + layoutId 驱动项目位置和大小的 spring 动画过渡。
+- 每个项目包含背景图片、渐变叠加层、标题和副标题文字。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+FluidExpandingGrid 使用内置默认图片数据集，无需传入任何 props 即可渲染。
+
+<ComponentShowcase
+  id="uselayouts/fluid-expanding-grid"
+  path="uselayouts/fluid-expanding-grid/basic"
+/>
+
+```tsx
+import { FluidExpandingGrid } from "@/components/ui/uselayouts-fluid-expanding-grid"
+
+export default function Demo() {
+  return <FluidExpandingGrid />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FluidExpandingGrid
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 画廊数据项数组，每项包含 id、title、subtitle、image、color | `GalleryItem[]` | 内置 3 个默认项 |
+| className | 附加样式类名 | `string` | - |
+| id | LayoutGroup 标识符，多实例并存时需不同值 | `string` | `"fluid-gallery"` |
+
+### GalleryItem
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| id | 项目唯一标识 | `string` |
+| title | 项目标题 | `string` |
+| subtitle | 项目副标题 | `string` |
+| image | 背景图片 URL | `string` |
+| color | 主题色（hex 色值，如 `#84cc16`） | `string` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义画廊数据？
+
+传入 `items` 属性，每项需包含 id、title、subtitle、image、color：
+
+```tsx
+<FluidExpandingGrid
+  items={[
+    { id: "1", title: "标题", subtitle: "副标题", image: "https://...", color: "#84cc16" },
+  ]}
+/>
+```
+
+注意 `items` 数组至少需要 3 个项目（否则网格交互逻辑无法正常工作）。
+
+### 页面内使用多个 FluidExpandingGrid 会导致动画冲突吗？
+
+会。FluidExpandingGrid 依赖 motion/react 的 LayoutGroup，通过 `id` 属性隔离不同实例的 layoutId 命名空间。同时使用多个实例时，为每个实例传入不同的 `id`：
+
+```tsx
+<FluidExpandingGrid id="gallery-1" />
+<FluidExpandingGrid id="gallery-2" />
+```
+
+### 如何修改展开动画参数？
+
+FluidExpandingGrid 使用 spring 动画，参数为 `stiffness: 100, damping: 25`。如需调整，在 `src/components/uselayouts/fluid-expanding-grid.tsx` 中修改 `transition.layout` 配置。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FluidExpandingGrid 相关代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-fluid-expanding-grid` 导入 `FluidExpandingGrid`（named export）。
+2. 默认场景无需传 props，组件使用内建图片数据集。
+3. 自定义数据时传入 `items` 数组，每项必须包含 id、title、subtitle、image、color 五个字段。
+4. 多个实例并存时，为每个实例传入不同的 `id` 以避免 layoutId 冲突。
+5. 组件依赖 motion/react 的 LayoutGroup 和 layoutId 动画，不要移除这些动画逻辑。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/fluid-expanding-grid" />

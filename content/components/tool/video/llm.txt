@@ -1,0 +1,202 @@
+---
+category: Components
+title: Video
+subtitle: 视频
+description: 用于在AI对话中嵌入视频内容和播放控制。
+demo:
+  cols: 1
+group:
+  title: 工具组件
+  order: 6
+source:
+  component: src/components/tool/video/video.tsx
+  examples:
+    - content/components/tool/video/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Video 视频
+
+用于在 AI 对话中嵌入视频内容，支持悬浮播放控制、来源标注和自适应宽高比。
+
+本组件是项目内的本地基础能力，API 和行为以源码为准，不对应 Ant Design 的完整公共组件契约。
+
+## 何时使用 {#when-to-use}
+
+适合在需要内嵌视频 播放展示相关能力的界面中使用。优先通过组件自身 props 表达状态和语义。
+
+## 核心导出 {#exports}
+
+- `Video`
+- `VideoProps`
+- `SerializableVideo`
+- `Source`
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Video } from "@/components/ui/tool-video"
+
+export default function Demo() {
+  return (
+    <Video
+      id="demo-video"
+      assetId="demo-video-asset"
+      src="https://example.com/video.mp4"
+    />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。`id`、`assetId`、`src` 为必填属性，其余可选。
+
+### 完整示例
+
+```tsx
+import { Video } from "@/components/ui/tool-video"
+
+export default function Demo() {
+  return (
+    <Video
+      id="demo-video"
+      assetId="demo-video-asset"
+      src="https://example.com/video.mp4"
+      poster="https://example.com/poster.jpg"
+      title="Video Title"
+      description="A detailed video about the topic."
+      domain="example.com"
+      durationMs={596000}
+      ratio="16:9"
+      fit="cover"
+      createdAt="2026-06-30T12:00:00.000Z"
+      locale="en-US"
+      source={{
+        label: "Source Name",
+        url: "https://example.com/video",
+      }}
+      onNavigate={(href, video) => console.log("Navigate", href, video)}
+      onMediaEvent={(type) => console.log("Event", type)}
+    />
+  )
+}
+```
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface VideoProps extends SerializableVideo {
+  className?: string;
+  autoPlay?: boolean;       // 默认 true
+  defaultMuted?: boolean;   // 默认 true
+  onNavigate?: (href: string, video: SerializableVideo) => void;
+  onMediaEvent?: (type: "play" | "pause" | "mute" | "unmute") => void;
+}
+```
+
+```ts
+interface SerializableVideo {
+  id: string;               // 必填
+  assetId: string;          // 必填
+  src: string;              // URL，必填
+  poster?: string;          // URL
+  title?: string;
+  description?: string;
+  href?: string;            // URL
+  domain?: string;
+  durationMs?: number;      // 毫秒，正整数
+  ratio?: "16:9" | "4:3" | "1:1" | "auto";   // 默认 "16:9"
+  fit?: "cover" | "contain" | "fill" | "scale-down" | "none"; // 默认 "cover"
+  createdAt?: string;       // ISO 8601 datetime
+  locale?: string;          // 默认 "en-US"
+  source?: {
+    label: string;
+    iconUrl?: string;       // URL
+    url?: string;           // URL
+  };
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `data-slot="video"` — 根容器
+- `data-tool-ui-id` — 组件 id
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 组件使用 `group` 和 `@container` 实现悬浮层的显示/隐藏。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground` 等项目级语义变量。
+- 视频容器使用 `bg-black` 作为视频加载前的背景色。
+
+## 约束与注意事项 {#constraints}
+
+1. `src` 必须是完整的 HTTPS URL，指向可直接播放的视频文件（如 .mp4）。
+2. `poster` 必须是完整的 HTTPS URL，指向封面图片。
+3. `durationMs` 单位为毫秒，传入正整数。元数据区域会自动格式化为 `mm:ss` 或 `hh:mm:ss`。
+4. `createdAt` 使用 ISO 8601 datetime 格式，组件会按 `locale` 格式化为本地化日期。
+5. `href` 和 `source.url` 会经过 `sanitizeHref` 和 `resolveSafeNavigationHref` 安全处理。
+6. 组件使用内部 `VideoProvider` Context 管理播放状态，`useVideo` hook 仅在组件内部使用。
+7. 悬浮层（标题和外链按钮）仅在 `title` 或 `href` 存在时渲染。
+8. 元数据区域（描述、来源、域名、时长、日期）仅在至少一项存在时渲染。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/tool/video/video.tsx`
+- `src/components/tool/video/schema.ts`
+- `src/components/tool/video/context.tsx`
+- `src/components/tool/video/video-helpers.ts`
+
+直接依赖摘要：
+
+- `lucide-react`（Play、ExternalLink 图标）
+- `@hyper/shadcn`（cn 工具函数、Button 组件）
+- `zod`（schema 校验）
+
+## 可访问性 {#accessibility}
+
+- 原生 `<video>` 元素提供键盘可访问的播放控制（controls 属性）。
+- 按钮携带 `aria-hidden="true"` 的图标装饰不暴露给辅助技术。
+- 悬浮层在 `group-focus-within:opacity-100` 时可见，支持键盘聚焦。
+- 无标题时使用 `<span className="sr-only">Video controls</span>` 作为屏幕阅读器文本。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/tool/video/video.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 播放器引擎 | 基于原生 `<video>` 元素，不依赖第三方播放器 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 借鉴 AntD 使用心智，但不承诺 API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Video 代码时，应遵守：
+
+1. 从 `@/components/ui/tool-video` 导入，不要从 `antd` 导入。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
+4. `id`、`assetId`、`src` 为必填属性，缺少会导致 schema 校验失败。
+5. `src`、`poster`、`href`、`source.url`、`source.iconUrl` 必须为完整的 HTTPS URL。
+6. `durationMs` 单位为毫秒，`createdAt` 为 ISO 8601 datetime 格式。
+7. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+8. 不要绕过 Video 组件直接使用原生 `<video>` 标签。
+9. 如果不确定某个 props 是否存在，先检查 `src/components/tool/video/video.tsx`，不要凭记忆生成。

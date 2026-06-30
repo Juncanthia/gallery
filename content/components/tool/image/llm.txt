@@ -1,0 +1,213 @@
+---
+category: Components
+title: Image
+subtitle: 图片
+description: 用于在AI对话中嵌入图片内容，支持自适应宽高比、来源标注和外链跳转。
+demo:
+  cols: 1
+group:
+  title: 工具组件
+  order: 5
+source:
+  component: src/components/tool/image/image.tsx
+  examples:
+    - content/components/tool/image/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Image 图片
+
+用于在 AI 对话中嵌入图片内容，支持自适应宽高比、填充模式、来源标注和外链跳转。
+
+本组件是项目内的本地基础能力，API 和行为以源码为准，不对应 Ant Design 的完整公共组件契约。
+
+## 何时使用 {#when-to-use}
+
+适合在需要内嵌图片展示的场景中使用。优先通过组件自身 props 表达状态和语义。
+
+常见场景：
+
+- AI 对话或搜索结果中展示图片内容。
+- 需要复用统一设计语言、状态样式和可访问性约定。
+- 图片带来源标注、外链跳转等交互需求。
+
+不推荐：
+
+- 在调用侧绕过组件 API，直接依赖内部 DOM 结构完成业务逻辑。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+## 核心导出 {#exports}
+
+- `Image`
+- `ImageProps`
+- `SerializableImage`
+- `Source`
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Image } from "@/components/ui/tool-image"
+
+export default function Demo() {
+  return (
+    <Image
+      id="demo-image"
+      assetId="demo-image-asset"
+      src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
+      alt="Mountain landscape"
+    />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。`id`、`assetId`、`src`、`alt` 为必填属性，其余可选。
+
+### 完整示例
+
+```tsx
+import { Image } from "@/components/ui/tool-image"
+
+export default function Demo() {
+  return (
+    <Image
+      id="demo-image"
+      assetId="demo-image-asset"
+      src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
+      alt="Mountain landscape with a lake and pine trees under a clear blue sky"
+      title="Mountain Landscape"
+      description="A scenic view of mountains reflected in a calm lake."
+      href="https://example.com/gallery/mountain"
+      domain="unsplash.com"
+      ratio="16:9"
+      fit="cover"
+      fileSizeBytes={245760}
+      createdAt="2026-06-30T12:00:00.000Z"
+      locale="en-US"
+      source={{
+        label: "Unsplash",
+        iconUrl: "https://unsplash.com/favicon.ico",
+        url: "https://unsplash.com/photos/mountain-landscape",
+      }}
+      onNavigate={(href, image) => console.log("Navigate", href, image)}
+    />
+  )
+}
+```
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface ImageProps extends SerializableImage {
+  className?: string;
+  onNavigate?: (href: string, image: SerializableImage) => void;
+}
+```
+
+```ts
+interface SerializableImage {
+  id: string;                  // 必填
+  assetId: string;             // 必填
+  src: string;                 // URL，必填
+  alt: string;                 // 必填，min 1 char
+  title?: string;
+  description?: string;
+  href?: string;               // URL
+  domain?: string;
+  ratio?: "auto" | "1:1" | "4:3" | "16:9" | "9:16";   // 默认 "auto"
+  fit?: "cover" | "contain";   // 默认 "cover"
+  fileSizeBytes?: number;      // 正整数
+  createdAt?: string;          // ISO 8601 datetime
+  locale?: string;             // 默认 "en-US"
+  source?: {
+    label: string;
+    iconUrl?: string;          // URL
+    url?: string;              // URL
+  };
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `data-slot="image"` — 根容器
+- `data-tool-ui-id` — 组件 id
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 组件使用 `group` 和 `@container` 实现响应式布局。
+- 主题颜色优先使用 `bg-card`、`text-foreground`、`border-border`、`text-muted-foreground`、`bg-muted` 等项目级语义变量。
+- 图片容器在 ratio 为 auto 时使用 `min-h-[160px]` 作为最小高度。
+- 元数据区域（标题和来源）仅在 `title` 或 `source` 存在时渲染。
+
+## 约束与注意事项 {#constraints}
+
+1. `src` 必须是完整的 HTTPS URL，指向可直接访问的图片文件。
+2. `alt` 必须提供有意义的替代文本，不能为空字符串（schema 要求 min 1）。
+3. `fileSizeBytes` 单位为字节，传入正整数。
+4. `createdAt` 使用 ISO 8601 datetime 格式（如 `"2026-06-30T12:00:00.000Z"`）。
+5. `href` 和 `source.url` 会经过 `sanitizeHref` 和 `resolveSafeNavigationHref` 安全处理。
+6. 有 `href` 时图片区域变为可点击链接（`role="link"`），支持键盘 Enter/Space 激活。
+7. 元数据区域仅在 `title` 或 `source`（label 或 iconUrl）存在时渲染。
+8. 来源区域有 `source.url` 时渲染为可点击按钮，否则渲染为纯展示元素。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/tool/image/image.tsx`
+- `src/components/tool/image/schema.ts`
+- `src/components/tool/shared/media/aspect-ratio.ts`
+
+直接依赖摘要：
+
+- `@hyper/shadcn`（cn 工具函数）
+- `zod`（schema 校验）
+- `react`（核心框架）
+
+## 可访问性 {#accessibility}
+
+- `<img>` 元素强制要求 `alt` 属性，schema 校验确保非空字符串。
+- 有 `href` 时图片容器设置 `role="link"` + `tabIndex={0}`，支持键盘 Enter/Space 激活。
+- 图片使用 `loading="lazy"` 和 `decoding="async"` 优化性能。
+- 点击来源区域的按钮携带 `focus-visible:ring-ring` 焦点样式。
+- 纯装饰性来源图标使用 `aria-hidden="true"`。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/tool/image/image.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 借鉴 AntD 使用心智，但不承诺 API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Image 代码时，应遵守：
+
+1. 从 `@/components/ui/tool-image` 导入，不要从 `antd` 导入。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
+4. `id`、`assetId`、`src`、`alt` 为必填属性，缺少会导致 schema 校验失败。
+5. `src`、`href`、`source.url`、`source.iconUrl` 必须为完整的 HTTPS URL。
+6. `alt` 必须提供有意义的描述文本，不能为空。
+7. `ratio` 用于控制宽高比，使用组件 prop 而非外部 className。
+8. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+9. 不要绕过 Image 组件直接使用原生 `<img>` 标签。
+10. 如果不确定某个 props 是否存在，先检查 `src/components/tool/image/image.tsx`，不要凭记忆生成。

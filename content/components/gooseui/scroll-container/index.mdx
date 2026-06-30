@@ -1,0 +1,172 @@
+ScrollContainer 自定义滚动条容器组件，使用现代 CSS scrollbar-color 和 scrollbar-width 属性定制滚动条样式，支持多种变体和交互模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对特定容器内的滚动条进行样式定制时使用，适用于侧边栏、对话框内容区、代码面板、下拉菜单等需要独立滚动区域的场景。
+
+- 侧边栏导航菜单滚动区域。
+- 对话框 / 抽屉内容滚动区。
+- 代码编辑器 / 预览面板。
+- 下拉菜单长列表。
+- 表格内容容器。
+- 卡片内嵌滚动内容。
+
+ScrollContainer 使用现代 CSS `scrollbar-color` 和 `scrollbar-width` 属性（Chrome 121+、Firefox 64+、Safari 26.2+），并以 `::-webkit-scrollbar` 作为旧版浏览器回退方案。组件内部使用 `React.useId` 生成 scoped CSS 类名，样式隔离不污染全局。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认 variant，200px 高度滚动容器，内嵌文本内容展示自定义滚动条效果。
+
+<ComponentShowcase
+  id="gooseui/scroll-container"
+  path="gooseui/scroll-container/basic"
+/>
+
+```tsx
+import { ScrollContainer } from "@/components/ui/gooseui-scroll-container"
+
+export default function Demo() {
+  return (
+    <ScrollContainer height={200} className="rounded border p-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">默认滚动容器</h4>
+        <p className="text-sm text-muted-foreground">
+          内容超出容器高度时出现自定义滚动条...
+        </p>
+      </div>
+    </ScrollContainer>
+  )
+}
+```
+
+### 三种变体
+
+default、minimal、primary 三种滚动条样式变体。
+
+```tsx
+import { ScrollContainer } from "@/components/ui/gooseui-scroll-container"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <ScrollContainer height={150} variant="default" className="rounded border p-4">
+        <p>default — 标准半透明滚动条，hover 加深</p>
+      </ScrollContainer>
+      <ScrollContainer height={150} variant="minimal" className="rounded border p-4">
+        <p>minimal — 更淡的滚动条，透明轨道</p>
+      </ScrollContainer>
+      <ScrollContainer height={150} variant="primary" className="rounded border p-4">
+        <p>primary — 使用主题色的滚动条</p>
+      </ScrollContainer>
+    </div>
+  )
+}
+```
+
+### 悬停显隐
+
+`autoHide` 模式下，滚动条默认透明，鼠标悬停时才显示。
+
+```tsx
+import { ScrollContainer } from "@/components/ui/gooseui-scroll-container"
+
+export default function Demo() {
+  return (
+    <ScrollContainer height={150} autoHide className="rounded border p-4">
+      <p>默认不显示滚动条，hover 时出现</p>
+    </ScrollContainer>
+  )
+}
+```
+
+### 强制显示滚动条
+
+`forceVisible` 使用 `scrollbar-gutter: stable` 预留滚动条空间，避免内容因滚动条出现/消失产生布局偏移。
+
+```tsx
+import { ScrollContainer } from "@/components/ui/gooseui-scroll-container"
+
+export default function Demo() {
+  return (
+    <ScrollContainer height={150} forceVisible className="rounded border p-4">
+      <p>始终预留滚动条空间，避免布局抖动</p>
+    </ScrollContainer>
+  )
+}
+```
+
+### 数值高度
+
+`height` 支持数字类型，自动添加 px 单位。
+
+```tsx
+import { ScrollContainer } from "@/components/ui/gooseui-scroll-container"
+
+export default function Demo() {
+  return (
+    <ScrollContainer height={120} variant="primary" className="rounded border p-4">
+      <p>height={"{120}"} 等价于 height="120px"</p>
+    </ScrollContainer>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ScrollContainer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| height | 容器高度 | `string` \| `number` | `"100%"` |
+| variant | 滚动条样式变体 | `"default"` \| `"minimal"` \| `"primary"` | `"default"` |
+| autoHide | 默认隐藏滚动条，hover 时显示 | `boolean` | `false` |
+| forceVisible | 强制预留滚动条空间（scrollbar-gutter: stable） | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+| children | 子内容 | `React.ReactNode` | - |
+
+组件继承 `React.HTMLAttributes&lt;HTMLDivElement&gt;`，支持所有原生 div 属性（style、onScroll、id 等）。
+
+组件内部使用 `React.useId` 生成唯一的 CSS 作用域类名，通过 `&lt;style&gt;` 标签注入 scoped 样式，避免污染全局滚动条样式。CSS 变量控制滚动条颜色，`variant` 属性切换不同的 CSS 变量值组合。
+
+<h2 id="faq">常见问题</h2>
+
+### 和其他滚动条方案有什么区别？
+
+ScrollContainer 使用现代 CSS `scrollbar-color` + `scrollbar-width`（Chrome 121+、Firefox 64+、Safari 26.2+），同时以 `::-webkit-scrollbar` 作为旧版浏览器回退。相比 `simplebar`、`overlayscrollbars` 等 JS 库，本组件零依赖、零 JS 运行时开销，纯 CSS 实现在合成器线程中运行。
+
+### autoHide 和 forceVisible 可以同时使用吗？
+
+可以，但不推荐。`autoHide` 让滚动条默认透明，`forceVisible` 预留滚动条空间。同时使用会使预留的空间在默认状态下显示为空白轨道，视觉上不够美观。
+
+### 容器内容动态变化时滚动条会更新吗？
+
+会。组件返回标准的 `overflow-auto` div，浏览器会根据内容实际高度自动显示/隐藏滚动条。`forceVisible` 模式下始终预留空间但滚动条滑块仍按内容比例显示。
+
+### 如何在 macOS 上强制显示滚动条？
+
+macOS 默认使用 overlay 滚动条（自动隐藏）。通过 `forceVisible` 属性设置 `scrollbar-gutter: stable` 可以预留空间，但滚动条本身的可见性受系统设置控制。用户可在「系统设置 &gt; 外观」中开启「显示滚动条：始终」。
+
+### 组件样式会影响全局滚动条吗？
+
+不会。组件使用 `React.useId` 生成的唯一类名作为 CSS 作用域（如 `.scabc123`），所有滚动条样式规则都限定在此作用域内，不影响页面级滚动条或其他滚动容器。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ScrollContainer 代码时：
+
+1. 从 `@/components/ui/gooseui-scroll-container` 导入 ScrollContainer。
+2. 默认 `<ScrollContainer height={200}>` 即可获得带自定义滚动条的 200px 高滚动容器。
+3. `height` 支持数字（自动添加 px）和字符串（如 `"100%"`、`"50vh"`）。
+4. `variant` 三选一：`"default"`（标准）、`"minimal"`（极简）、`"primary"`（主题色）。
+5. `autoHide` 实现悬停显隐效果，适用于追求简洁视觉的场景。
+6. `forceVisible` 使用 `scrollbar-gutter: stable` 预留空间，防止布局抖动。
+7. 组件使用现代 CSS `scrollbar-color` / `scrollbar-width`，不要引入 `simplebar`、`overlayscrollbars` 等第三方滚动条库。
+8. 组件内部通过 `React.useId` + scoped `&lt;style&gt;` 标签实现样式隔离，CSS 类名唯一，不会污染全局。
+9. 如需页面级滚动进度条，使用 `ScrollProgress` 组件；容器内滚动进度跟踪使用本组件。
+10. 组件继承所有原生 div 属性，可以直接传递 `onScroll`、`style` 等。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/scroll-container" />

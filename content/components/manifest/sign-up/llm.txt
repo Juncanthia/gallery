@@ -1,0 +1,266 @@
+---
+category: Components
+title: SignUp
+subtitle: 注册
+description: 完整的用户注册组件，支持姓名、邮箱、密码、确认密码和服务条款勾选，提供开箱即用的注册页面体验。
+demo:
+  cols: 1
+group:
+  title: 页面模板
+  order: 7
+source:
+  component: src/components/ui/manifest-sign-up.tsx
+  docs: content/components/manifest/sign-up/index.mdx
+  examples:
+    - content/components/manifest/sign-up/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# SignUp 注册
+
+SignUp 是一个完整的用户注册表单组件，适用于网站或应用的注册页面，支持姓名、邮箱、密码、确认密码和服务条款确认。
+
+本组件是页面模板级别的复合组件，内部组合了 Input、Label、Button、Checkbox 等基础组件，提供开箱即用的注册体验。
+
+## 何时使用 {#when-to-use}
+
+用于新用户创建账户的场景。适合以下场景：
+
+- 网站或应用的注册/注册页面，收集用户基本信息。
+- SaaS 产品的注册入口，支持邮箱密码注册。
+- 需要服务条款确认的注册流程。
+- 作为认证流程（sign-in / sign-up / forgot-password）的一部分。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认展示标题、副标题和完整注册表单字段，包括姓名、邮箱、密码、确认密码和服务条款复选框。
+
+```tsx
+import { SignUp } from "@/components/ui/manifest-sign-up"
+
+export default function SignUpDemo() {
+  return (
+    <div className="w-full max-w-md">
+      <SignUp
+        actions={{
+          onSubmit: (data) => console.log("Signed up:", data)
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 自定义文案
+
+通过 `data` prop 自定义标题、副标题和按钮文字。
+
+```tsx
+import { SignUp } from "@/components/ui/manifest-sign-up"
+
+export default function SignUpCustomDemo() {
+  return (
+    <div className="w-full max-w-md">
+      <SignUp
+        data={{
+          title: "创建账户",
+          subtitle: "填写以下信息完成注册。",
+          submitLabel: "立即注册",
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 按需加载
+
+处理表单提交时的异步加载状态。
+
+```tsx
+import { useState } from "react"
+import { SignUp } from "@/components/ui/manifest-sign-up"
+
+export default function SignUpLoadingDemo() {
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(data: SignUpData) {
+    setLoading(true)
+    await fetch("/api/auth/sign-up", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+    setLoading(false)
+  }
+
+  return (
+    <div className="w-full max-w-md">
+      <SignUp
+        actions={{ onSubmit: handleSubmit }}
+        control={{ isLoading: loading }}
+      />
+    </div>
+  )
+}
+```
+
+## API {#api}
+
+### SignUp
+
+通过 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件行为。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 表单数据配置 | `object` | — |
+| data.title | 表单标题 | `string` | `"Create an account"` |
+| data.subtitle | 标题下方描述文字 | `string` | `"Enter your details to get started."` |
+| data.submitLabel | 提交按钮文字 | `string` | `"Sign Up"` |
+| data.initialValues | 预填充的表单初始值 | `Partial<SignUpData>` | — |
+| actions | 回调配置 | `object` | — |
+| actions.onSubmit | 表单提交回调，接收完整 `SignUpData` | `(data: SignUpData) => void` | — |
+| appearance | 外观配置 | `object` | — |
+| appearance.showTitle | 是否显示标题区域 | `boolean` | `true` |
+| appearance.showSignInLink | 是否显示"已有账户？登录"链接 | `boolean` | `true` |
+| appearance.signInHref | 登录页链接地址 | `string` | `"/sign-in"` |
+| control | 控制配置 | `object` | — |
+| control.isLoading | 提交按钮加载状态；为 `true` 时按钮显示"Creating account..."并禁用 | `boolean` | `false` |
+
+### SignUpData
+
+表单提交时 `onSubmit` 接收的数据结构。
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| name | 用户姓名 | `string` | 是 |
+| email | 电子邮箱地址 | `string` | 是 |
+| password | 登录密码 | `string` | 是 |
+| confirmPassword | 确认密码，须与 password 一致 | `string` | 是 |
+| agreeToTerms | 是否同意服务条款 | `boolean` | 是 |
+
+## Semantic DOM {#semantic-dom}
+
+SignUp 通过 `data-slot` 属性暴露稳定的语义结构：
+
+| data-slot | 说明 |
+| --- | --- |
+| `sign-up` | 表单容器 |
+| `sign-up-name` | 姓名输入框 |
+| `sign-up-email` | 邮箱输入框 |
+| `sign-up-password` | 密码输入框 |
+| `sign-up-confirm-password` | 确认密码输入框 |
+| `sign-up-agree-terms` | 服务条款复选框 |
+| `sign-up-submit` | 提交按钮 |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/ui/manifest-sign-up.tsx`：组件导出入口，re-export。
+- `src/components/manifest/auth/sign-up.tsx`：注册表单组件实现（规划中）。
+
+关键行为：
+
+1. 表单内部管理所有字段状态，调用侧只需关心 `onSubmit` 回调。
+2. `initialValues` 仅用于首次渲染，之后表单状态由组件内部管理。
+3. 密码字段内置强度校验：至少 8 位，包含大小写字母和数字。
+4. 确认密码自动校验与密码的一致性，不一致时显示错误提示。
+5. 服务条款复选框未勾选时提交按钮保持禁用状态。
+6. 提交按钮在 `isLoading` 为 `true` 时禁用并显示"Creating account..."文案。
+7. 表单底部默认显示"已有账户？登录"链接，可通过 `appearance.signInHref` 自定义。
+
+## FAQ {#faq}
+
+### 如何获取注册数据？
+
+通过 `actions.onSubmit` 回调接收完整的 `SignUpData` 对象。组件内部负责表单验证和状态管理，调用侧只需关心收到数据后的处理逻辑。
+
+```tsx
+<SignUp
+  actions={{
+    onSubmit: (data) => {
+      console.log("Name:", data.name)
+      console.log("Email:", data.email)
+    }
+  }}
+/>
+```
+
+### 如何设置提交加载状态？
+
+通过 `control.isLoading` 控制。典型用法是配合异步 `onSubmit`：
+
+```tsx
+const [loading, setLoading] = useState(false)
+
+<SignUp
+  actions={{
+    onSubmit: async (data) => {
+      setLoading(true)
+      await signUpAPI(data)
+      setLoading(false)
+    }
+  }}
+  control={{ isLoading: loading }}
+/>
+```
+
+### 如何预填充表单？
+
+通过 `data.initialValues` 传入初始值。注意这仅影响首次渲染。
+
+```tsx
+<SignUp
+  data={{
+    initialValues: {
+      name: "张 三",
+      email: "zhangsan@example.com",
+    }
+  }}
+/>
+```
+
+### 如何自定义登录链接？
+
+通过 `appearance.signInHref` 设置目标地址：
+
+```tsx
+<SignUp appearance={{ signInHref: "/auth/login" }} />
+```
+
+### 如何隐藏标题或登录链接？
+
+```tsx
+<SignUp
+  appearance={{
+    showTitle: false,
+    showSignInLink: false,
+  }}
+/>
+```
+
+### 密码有哪些校验规则？
+
+密码长度至少 8 位，须包含至少一个大写字母、一个小写字母和一个数字。确认密码须与密码一致。校验未通过时提交按钮保持禁用状态。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 SignUp 代码时，应遵守：
+
+1. 从 `@/components/ui/manifest-sign-up` 导入 `SignUp`。
+2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop，不要直接传入子组件。
+3. 表单提交通过 `actions.onSubmit` 处理，不要手动管理组件内部的表单字段状态。
+4. 加载状态仅通过 `control.isLoading` 控制，按钮内部已处理加载文案和禁用逻辑。
+5. 组件内置密码校验和确认密码一致性检查，无需在调用侧重复实现。
+6. 不要引入 Ant Design、ConfigProvider 或 css-in-js 相关依赖。
+7. 不要复刻或重新实现 SignUp 的内部逻辑；它是一个页面模板组件，应直接使用。
+8. 服务条款链接默认指向 `/terms`，隐私政策链接默认指向 `/privacy`。

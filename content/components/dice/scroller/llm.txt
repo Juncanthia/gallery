@@ -1,0 +1,93 @@
+---
+category: Components
+title: Scroller
+subtitle: 滚动容器
+description: 为内容区域提供滚动支持，显示溢出阴影指示器及可选的导航按钮。
+source:
+  component: src/components/dice/ui/scroller.tsx
+  docs: content/components/dice/scroller/index.mdx
+  examples:
+    - content/components/dice/scroller/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: true
+  radixSlot: true
+---
+
+# Scroller 滚动容器
+
+为内容区域提供滚动支持，内容溢出时自动产生渐变阴影指示器，可选显示上/下或左/右导航按钮。
+
+## 导入
+
+```tsx
+import { Scroller } from "@/components/ui/dice-scroller"
+```
+
+## 属性
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 滚动方向 | `"vertical"` \| `"horizontal"` | `"vertical"` |
+| hideScrollbar | 隐藏原生滚动条 | `boolean` | `false` |
+| withNavigation | 显示导航按钮 | `boolean` | `false` |
+| scrollStep | 导航按钮步长（px） | `number` | `40` |
+| scrollTriggerMode | 按钮触发模式 | `"press"` \| `"hover"` \| `"click"` | `"press"` |
+| size | 阴影渐变的区域大小（px） | `number` | `40` |
+| offset | 阴影触发偏移量（px） | `number` | `0` |
+| asChild | Radix Slot 模式 | `boolean` | `false` |
+| className | 容器样式类 | `string` | - |
+
+## 基础用法
+
+```tsx
+import { Scroller } from "@/components/ui/dice-scroller"
+
+export default function Demo() {
+  return (
+    <Scroller className="h-40 w-48 rounded-md border p-3">
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: 20 }, (_, i) => (
+          <div key={i}>Item {i + 1}</div>
+        ))}
+      </div>
+    </Scroller>
+  )
+}
+```
+
+## 隐藏滚动条
+
+```tsx
+<Scroller className="h-40 w-48 rounded-md border p-3" hideScrollbar>
+  {/* 内容 */}
+</Scroller>
+```
+
+## 带导航按钮
+
+```tsx
+<Scroller className="h-40 w-48 rounded-md border p-3" withNavigation>
+  {/* 内容 */}
+</Scroller>
+```
+
+## 水平滚动
+
+```tsx
+<Scroller className="w-64 rounded-md border p-3" orientation="horizontal">
+  <div className="flex gap-2">
+    {/* 横向内容 */}
+  </div>
+</Scroller>
+```
+
+## 约束
+
+- 通过 `className` 设置容器尺寸，组件本身不预设宽高。
+- `orientation` 为单选，不支持同时双向滚动。
+- 导航按钮仅在 `withNavigation` 为 `true` 时渲染，且仅在对应方向存在溢出内容时可见。
+- 阴影通过 CSS `mask-image` 实现，`size` 控制渐变区域大小。
+- data 属性（`data-top-scroll` 等）由组件自动管理，可用于自定义样式。
+- 不要从 antd 导入任何滚动相关组件。

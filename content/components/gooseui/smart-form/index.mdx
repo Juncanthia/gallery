@@ -1,0 +1,140 @@
+SmartForm 提供基于 CSS `:has()` 选择器的零 JavaScript 表单验证反馈。通过 `SmartFormField` 包裹输入控件，即可自动根据 HTML5 表单验证状态显示错误或成功提示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为表单提供即时的验证视觉反馈，且希望避免 JavaScript 状态管理时使用。
+
+常见场景：
+
+- 登录/注册表单的实时字段校验反馈。
+- 设置页面中需要输入校验的配置项。
+- 任何依赖 HTML5 原生表单验证（required、type、pattern、minLength 等）的输入场景。
+
+SmartForm 通过 CSS `:has()` 伪类检测表单字段状态：
+
+- **有效状态**：输入框边框变绿，显示成功提示文本。
+- **无效状态**：输入框边框变红，显示错误提示文本。
+- **表单级别**：表单中存在无效字段时，提交按钮变半透明并禁用点击。
+
+无需任何 JavaScript 状态变量，所有视觉变化由 CSS 驱动。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 `SmartForm` 和 `SmartFormField` 包裹表单控件，HTML5 原生验证属性（如 `required`、`type="email"`、`minLength`）即可触发验证反馈。
+
+<ComponentShowcase
+  id="gooseui/smart-form"
+  path="gooseui/smart-form/basic"
+/>
+
+```tsx
+import { SmartForm, SmartFormField } from "@/components/ui/gooseui-smart-form"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full max-w-sm"&gt;
+      &lt;SmartForm&gt;
+        &lt;SmartFormField
+          errorMessage="请输入有效的邮箱地址"
+          successMessage="邮箱格式正确"
+        &gt;
+          &lt;Label htmlFor="email"&gt;邮箱&lt;/Label&gt;
+          &lt;Input id="email" type="email" placeholder="请输入邮箱" required /&gt;
+        &lt;/SmartFormField&gt;
+
+        &lt;SmartFormField
+          errorMessage="用户名至少3个字符"
+          successMessage="用户名可用"
+        &gt;
+          &lt;Label htmlFor="username"&gt;用户名&lt;/Label&gt;
+          &lt;Input id="username" type="text" placeholder="请输入用户名" required minLength={3} /&gt;
+        &lt;/SmartFormField&gt;
+
+        &lt;Button type="submit" className="submit-btn"&gt;提交&lt;/Button&gt;
+      &lt;/SmartForm&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### SmartForm
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 表单内容，通常为 SmartFormField 组件 | `React.ReactNode` | - |
+| className | 表单容器自定义样式类名 | `string` | - |
+
+同时支持所有原生 `form` 元素的 HTML 属性（`onSubmit`、`action` 等）。
+
+### SmartFormField
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 字段内容，通常包含 Label 和 Input 组件 | `React.ReactNode` | - |
+| errorMessage | 验证失败时显示的提示文本 | `string` | `"This field is invalid"` |
+| successMessage | 验证通过时显示的提示文本 | `string` | `"Looks good!"` |
+| className | 字段容器自定义样式类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 支持哪些验证规则？
+
+SmartForm 依赖 HTML5 原生表单验证属性，支持所有浏览器内置验证：
+
+- `required`：必填字段。
+- `type="email"`：邮箱格式验证。
+- `type="url"`：URL 格式验证。
+- `type="number"` 配合 `min` / `max`：数值范围。
+- `minLength` / `maxLength`：字符长度限制。
+- `pattern`：正则表达式验证。
+
+### 如何自定义错误提示文本？
+
+通过 `SmartFormField` 的 `errorMessage` 和 `successMessage` 属性：
+
+```tsx
+&lt;SmartFormField
+  errorMessage="密码不能少于8位"
+  successMessage="密码强度符合要求"
+&gt;
+  ...
+&lt;/SmartFormField&gt;
+```
+
+### 提交按钮为什么需要 className="submit-btn"？
+
+`SmartForm` 通过 CSS 选择器 `:has(:invalid)_.submit-btn` 来控制提交按钮状态。确保你的提交按钮包含 `submit-btn` 类名，否则表单级别的禁用样式不会生效。
+
+### 能配合 React Hook Form 或其他表单库使用吗？
+
+可以。SmartForm 仅提供纯 CSS 驱动的前端视觉反馈，不影响任何表单状态管理库的工作。你可以同时使用 React Hook Form 的 `register` 和 SmartForm 的样式反馈。
+
+当使用第三方表单库时，建议通过 `useEffect` 或类似机制将库的验证状态同步到 `input` 元素的原生 `:valid` / `:invalid` 伪类（如使用 `setCustomValidity`），或为输入框添加对应的 CSS 类名。
+
+### 浏览器兼容性如何？
+
+SmartForm 依赖 CSS `:has()` 选择器。该特性在所有现代浏览器中已获得广泛支持（Chrome 105+、Firefox 121+、Safari 15.4+）。对于不支持的旧浏览器，验证提示不会显示，但表单功能不受影响（渐进增强）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 SmartForm 代码时：
+
+1. 从 `@/components/ui/gooseui-smart-form` 导入 `SmartForm` 和 `SmartFormField`。
+2. 使用 `SmartForm` 作为表单容器，`SmartFormField` 包裹每个表单字段。
+3. 为每个输入控件设置 HTML5 验证属性（`required`、`type`、`minLength`、`pattern` 等）。
+4. 为提交按钮添加 `submit-btn` 类名，以启用表单级别的无效状态样式。
+5. 通过 `errorMessage` 和 `successMessage` 属性自定义提示文本。
+6. 不要引入 JavaScript 验证状态变量（`useState` 追踪错误等）；利用 CSS 驱动的反馈。
+7. `SmartFormField` 应包裹 Label 和 Input 组件对，Label 的 `htmlFor` 必须与 Input 的 `id` 匹配。
+8. 不要在不支持 `:has()` 的浏览器环境中依赖 SmartForm 的验证反馈作为唯一的验证方式；始终保留 HTML5 原生验证作为后备。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="smart-form" />

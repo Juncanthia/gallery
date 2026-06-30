@@ -1,0 +1,174 @@
+---
+category: Components
+title: DataTableColumnHeader
+subtitle: 列头排序
+description: 为 @tanstack/react-table 列头提供可点击排序功能，通过 chevron 图标指示排序状态。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 5
+source:
+  component: src/components/data-table-filters/components/data-table/data-table-column-header.tsx
+  wrapper: src/components/ui/dt-data-table-column-header.tsx
+  examples:
+    - content/components/dt/data-table-column-header/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTableColumnHeader 列头排序
+
+DataTableColumnHeader 为 @tanstack/react-table 的列头提供可点击排序功能。通过 `column.toggleSorting()` 在三态（升序、降序、未排序）间切换，用 `ChevronUp` 和 `ChevronDown` 图标高亮当前排序方向。
+
+本组件不依赖 DataTableProvider，仅依赖 @tanstack/react-table 的 `Column` 泛型类型。API 和行为以源码为准。
+
+## 何时使用 {#when-to-use}
+
+当需要在 DataTable 中为可排序列提供点击排序的列头时使用。
+
+常见场景：
+
+- 表格列头需要支持点击排序，在三态（升序/降序/未排序）间切换。
+- 需要直观的排序状态指示器（chevron 箭头高亮当前方向）。
+- 部分列不可排序，仅显示纯文本标题。
+
+不推荐：
+
+- 在 @tanstack/react-table 体系之外使用，组件依赖 `Column` 泛型类型。
+- 用于非表格场景的排序切换。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+DataTableColumnHeader 在 `columnDef.header` 渲染函数中使用，接收 `column` 和 `title` 两个参数。
+
+```tsx
+import { DataTableColumnHeader } from "@/components/ui/dt-data-table-column-header"
+
+const columns: ColumnDef<Person>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
+    ),
+  },
+]
+```
+
+## 核心导出 {#exports}
+
+- `DataTableColumnHeader`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+type DataTableColumnHeaderProps<TData, TValue> = React.ComponentProps<typeof Button> & {
+  column: Column<TData, TValue>;
+  title: string;
+}
+```
+
+- `column`：@tanstack/react-table 的 Column 对象，用于调用 `getCanSort()`、`toggleSorting()`、`getIsSorted()`。
+- `title`：列头显示文本。
+- 继承 `Button.props`，支持 `className` 等属性透传。
+
+## Semantic DOM {#semantic-dom}
+
+可排序列：
+
+```html
+<button class="flex h-7 w-full items-center justify-between gap-2 px-0 py-0 hover:bg-transparent">
+  <span>Name</span>
+  <span class="flex flex-col">
+    <svg class="size-3 text-accent-foreground"><!-- ChevronUp 高亮 --></svg>
+    <svg class="size-3 text-muted-foreground"><!-- ChevronDown 暗色 --></svg>
+  </span>
+</button>
+```
+
+不可排序列：
+
+```html
+<div>ID</div>
+```
+
+- 根元素为 `<Button variant="ghost">`，不可排序列为纯 `<div>`。
+- 两个 chevron SVG 图标纵向堆叠（`flex-col`），负边距压缩间距（`-mb-0.5`、`-mt-0.5`）。
+- 当前排序方向的图标使用 `text-accent-foreground` 高亮，非当前方向使用 `text-muted-foreground` 暗色。
+
+## 样式模型 {#styling-model}
+
+- 使用 `Button variant="ghost"` 作为基础样式。
+- 附加 className：`flex h-7 w-full items-center justify-between gap-2 px-0 py-0 hover:bg-transparent`。
+- chevron 图标使用 `size-3!`（带 important 的 Tailwind 尺寸）。
+- 升序/降序激活时使用 `text-accent-foreground`，未激活时使用 `text-muted-foreground`。
+- 不可排序列为纯 `<div>`，无额外样式。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/data-table-filters/components/data-table/data-table-column-header.tsx`
+- `src/components/ui/dt-data-table-column-header.tsx`（包装导出）
+
+直接依赖：
+
+- `@/components/data-table-filters/lib/utils`（cn）
+- `@/components/ui/button`（Button）
+- `lucide-react`（ChevronDown、ChevronUp）
+
+根本实现：
+
+- `@tanstack/react-table`（Column 类型及排序 API）
+
+实现注意：
+
+1. 组件使用泛型 `<TData, TValue>` 匹配 @tanstack/react-table 的 Column 类型。
+2. `column.getCanSort()` 为 `false` 时，返回纯 `<div className={cn(className)}>{title}</div>`，不渲染 Button。
+3. 排序切换调用 `column.toggleSorting(undefined)`，实现三态循环：`undefined → asc → desc → undefined`。
+4. `column.getIsSorted() === "asc"` 时 ChevronUp 高亮，`=== "desc"` 时 ChevronDown 高亮。
+5. 组件不依赖 DataTableProvider，可独立使用。
+
+## 可访问性 {#accessibility}
+
+- 可排序时渲染 `<Button>`，保留原生 button 的键盘可访问性（Enter/Space 触发）。
+- 不可排序时渲染 `<div>`，无交互行为。
+- 排序状态通过 Tailwind 颜色区分（`text-accent-foreground` vs `text-muted-foreground`），提供视觉反馈。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+DataTableColumnHeader 对应 Ant Design Table 的 `column.sorter` 和列头排序交互。本组件提供手动排序控制，不捆绑 AntD 的排序逻辑。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/data-table-filters/components/data-table/data-table-column-header.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量（text-accent-foreground / text-muted-foreground） |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 排序逻辑 | 由 @tanstack/react-table 管理，组件仅作为 UI 层渲染 |
+| 兼容目标 | 配合 @tanstack/react-table 使用，不承诺 AntD API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTableColumnHeader 代码时，应遵守：
+
+1. 从 `@/components/ui/dt-data-table-column-header` 导入 DataTableColumnHeader。
+2. 在 `columnDef.header` 渲染函数中使用，传入 `column` 和 `title` 参数。
+3. `title` 使用英文列名（如 "Name"、"Age"），显示在列头位置。
+4. 不需要手动管理排序状态，@tanstack/react-table 的 `sorting` state 和 `onSortingChange` 自动处理。
+5. 不可排序的列（如 ID）设置 `enableSorting: false`，组件自动降级为纯文本 `<div>`。
+6. 组件可独立使用，不依赖 DataTableProvider。
+7. 不要引入 Ant Design 相关依赖。
+8. 如果不确定某个 API 是否存在，先检查源码 `src/components/data-table-filters/components/data-table/data-table-column-header.tsx`。

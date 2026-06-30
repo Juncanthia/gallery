@@ -1,0 +1,115 @@
+GlassyBoxes 基于 WebGL Shader 的玻璃质感盒子背景动效，三种颜色渐变混合，带折射光影。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要一个带玻璃质感盒子网格的动态背景时使用。
+
+常见场景：
+
+- 网站 Hero 区域的背景装饰。
+- Dashboard 顶部横幅背景。
+- 登录/注册页面的视觉背景。
+- 产品介绍页的氛围背景。
+
+不推荐：
+
+- 需要精确颜色还原的场景（Shader 颜色受渐变混合影响）。
+- 性能受限的低端设备（WebGL Shader 持续渲染）。
+- 作为可交互 UI 元素使用（本组件为纯背景装饰）。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="chamaac/glassy-boxes" path="chamaac/glassy-boxes/basic" />
+
+```tsx
+import { GlassyBoxes } from "@/components/ui/chamaac-glassy-boxes"
+
+export default function Demo() {
+  return (
+    &lt;div className="h-[400px] w-full overflow-hidden rounded"&gt;
+      &lt;GlassyBoxes /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义颜色
+
+通过 `color1`、`color2`、`color3` 自定义渐变颜色。
+
+```tsx
+import { GlassyBoxes } from "@/components/ui/chamaac-glassy-boxes"
+
+export default function Demo() {
+  return (
+    &lt;div className="h-[400px] w-full overflow-hidden rounded"&gt;
+      &lt;GlassyBoxes
+        color1="#ff6b6b"
+        color2="#4ecdc4"
+        color3="#ffe66d"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### GlassyBoxes
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| color1 | 第一个渐变颜色 | `string` | `#2c73d2` |
+| color2 | 第二个渐变颜色 | `string` | `#00a6a6` |
+| color3 | 第三个渐变颜色 | `string` | `#f1e3a0` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何调整背景尺寸？
+
+通过外层容器的宽高控制：
+
+```tsx
+&lt;div className="h-[500px] w-full"&gt;
+  &lt;GlassyBoxes /&gt;
+&lt;/div&gt;
+```
+
+### 如何自定义颜色？
+
+传入 `color1`、`color2`、`color3` 三个颜色值，支持 hex 格式：
+
+```tsx
+&lt;GlassyBoxes color1="#ff6b6b" color2="#4ecdc4" color3="#ffe66d" /&gt;
+```
+
+### 为什么盒子看起来不是纯色？
+
+盒子内部实现了玻璃折射效果，会基于当前位置的渐变颜色做偏移采样，模拟光线透过玻璃的折射感。这是设计效果，不是 bug。
+
+### 如何作为全屏背景使用？
+
+给外层容器设置全屏尺寸，GlassyBoxes 内部使用 `position: relative; w-full; h-full` 自适应填充：
+
+```tsx
+&lt;div className="absolute inset-0"&gt;
+  &lt;GlassyBoxes /&gt;
+&lt;/div&gt;
+```
+
+### 性能如何？
+
+组件内部使用 Three.js ShaderMaterial 在 GPU 上渲染，每帧更新 `uTime` uniform。在中高配设备上流畅运行，低端设备建议评估帧率。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/chamaac-glassy-boxes` 导入 `GlassyBoxes`（命名导出）。
+2. 包裹在 `div` 容器中，通过容器宽高控制尺寸。
+3. 使用 `color1`、`color2`、`color3` 自定义渐变颜色。
+4. 组件依赖 `@react-three/fiber` 和 `three`，确保项目已安装。
+5. 容器建议设置 `overflow-hidden` 和 `rounded` 以裁剪边缘。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="chamaac-glassy-boxes" />

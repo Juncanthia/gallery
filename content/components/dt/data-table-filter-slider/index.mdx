@@ -1,0 +1,186 @@
+DataTableFilterSlider 是 DataTable 筛选体系内的滑块范围筛选组件，支持通过拖动滑块或输入数值来过滤某一列的数值范围。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当 DataTable 中某列数据为数值类型，需要按范围筛选时使用。
+
+常见场景：
+
+- 按价格区间筛选商品列表。
+- 按评分范围筛选内容。
+- 按数量范围筛选库存。
+- 按年龄范围筛选用户。
+
+滑块筛选器同时支持拖拽滑块和手动输入数值两种操作方式，输入值经过 500ms 防抖后生效。
+
+不推荐：
+
+- 用于非数值列筛选，应使用 DataTableFilterCheckbox、DataTableFilterInput 或 DataTableFilterTimerange。
+- 脱离 DataTableProvider 上下文使用，会抛出错误。
+- 不提供 &lt;code&gt;min&lt;/code&gt;/&lt;code&gt;max&lt;/code&gt; 使用，组件无法确定范围边界。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+在 &lt;code&gt;DataTableProvider&lt;/code&gt; 内部，传入数值列的筛选字段配置。组件会自动从列数据或 props 中获取最小/最大值作为滑块范围。
+
+<ComponentShowcase
+  id="dt/data-table-filter-slider"
+  path="dt/data-table-filter-slider/basic"
+/>
+
+```tsx
+import { useMemo, useState } from "react"
+import { DataTableProvider } from "@/components/ui/dt-data-table-provider"
+import { DataTableFilterSlider } from "@/components/ui/dt-data-table-filter-slider"
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedMinMaxValues,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/ui/dt-data-table-provider"
+
+type Product = {
+  id: string
+  name: string
+  price: number
+}
+
+const data: Product[] = [
+  { id: "1", name: "产品 A", price: 99 },
+  { id: "2", name: "产品 B", price: 199 },
+  { id: "3", name: "产品 C", price: 299 },
+  { id: "4", name: "产品 D", price: 399 },
+  { id: "5", name: "产品 E", price: 499 },
+]
+
+const columns: ColumnDef<Product>[] = [
+  { accessorKey: "name", header: "名称" },
+  { accessorKey: "price", header: "价格" },
+]
+
+const filterFields: DataTableFilterField<Product>[] = [
+  {
+    label: "价格",
+    value: "price",
+    type: "slider",
+    min: 0,
+    max: 600,
+    unit: "¥",
+  },
+]
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+  })
+
+  return (
+    <DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+    >
+      <DataTableFilterSlider<Product>
+        label="价格"
+        value="price"
+        type="slider"
+        min={0}
+        max={600}
+        unit="¥"
+      />
+    </DataTableProvider>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DataTableFilterSlider
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 筛选字段标签 | `string` | - |
+| value | 对应表格列的 accessorKey | `keyof TData` | - |
+| type | 筛选类型，固定为 `"slider"` | `"slider"` | - |
+| min | 滑块范围最小值 | `number` | - |
+| max | 滑块范围最大值 | `number` | - |
+| unit | 单位标签，显示在输入框右侧 | `string` | - |
+| defaultOpen | 筛选面板是否默认展开 | `boolean` | `false` |
+| commandDisabled | 是否禁用命令搜索 | `boolean` | `false` |
+
+筛选值类型为 `[number, number]`，表示选中的数值范围。组件内部会自动将单数值包装为范围。
+当通过 &lt;code&gt;getFacetedMinMaxValues&lt;/code&gt; 或表格列自动解析可获得实际范围时，优先使用实际范围而非 &lt;code&gt;min&lt;/code&gt;/&lt;code&gt;max&lt;/code&gt;。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何设置滑块的范围？
+
+通过 &lt;code&gt;min&lt;/code&gt; 和 &lt;code&gt;max&lt;/code&gt; props 设置。建议同时配置 &lt;code&gt;getFacetedRowModel&lt;/code&gt; 和 &lt;code&gt;getFacetedMinMaxValues&lt;/code&gt; 在表格选项中，组件会优先使用数据中的实际范围。
+
+```tsx
+const table = useReactTable({
+  data,
+  columns,
+  getCoreRowModel: getCoreRowModel(),
+  getFacetedRowModel: getFacetedRowModel(),
+  getFacetedMinMaxValues: getFacetedMinMaxValues(),
+})
+```
+
+### 如何添加单位显示？
+
+通过 &lt;code&gt;unit&lt;/code&gt; prop 设置，会显示在 Min./Max. 输入框右侧。
+
+```tsx
+<DataTableFilterSlider
+  label="价格"
+  value="price"
+  type="slider"
+  min={0}
+  max={1000}
+  unit="¥"
+/>
+```
+
+### 如何获取当前筛选值？
+
+筛选值存储在 &lt;code&gt;columnFilters&lt;/code&gt; 状态中，通过 &lt;code&gt;columnFilters.find(i => i.id === "price")?.value&lt;/code&gt; 获取。值为 `[min, max]` 格式的数值数组。
+
+### 如何在 DataTableFilterControls 中使用？
+
+在 &lt;code&gt;filterFields&lt;/code&gt; 配置中声明 &lt;code&gt;type: "slider"&lt;/code&gt; 的字段，DataTableFilterControls 会自动渲染滑块筛选器。
+
+### 输入值如何防抖？
+
+滑块输入框的数值变更经过 500ms 防抖（&lt;code&gt;useDebounce&lt;/code&gt;）后才更新表格筛选，避免频繁触发筛选计算。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DataTableFilterSlider 代码时：
+
+1. 从 `@/components/ui/dt-data-table-filter-slider` 导入
+2. 组件必须在 `DataTableProvider` 内部使用
+3. 传入 `type: "slider"` 以及 `min`、`max` 属性
+4. `value` 必须对应表格中已定义的数值列 accessorKey
+5. 建议在 `useReactTable` 配置中启用 `getFacetedRowModel` 和 `getFacetedMinMaxValues`
+6. 数值单位通过 `unit` 属性传入，不要自行拼接
+7. 筛选值格式为 `[number, number]`，不要使用其他格式
+8. 不要引入 Ant Design 相关依赖
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="dt/data-table-filter-slider" />

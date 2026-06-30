@@ -1,0 +1,101 @@
+ShakeTestimonial 是一个自动轮播的评价卡片堆叠组件，顶部卡片带有抖动动效后滑出，循环展示多条用户评价。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以动画方式轮播展示用户评价或推荐语时使用，尤其适合：
+
+- Landing Page 的社会证明区域，展示客户评价。
+- 产品介绍页的用户反馈区域。
+- 需要吸引注意力的推荐语展示区。
+- 自动轮播场景，无需用户手动翻页。
+
+ShakeTestimonial 是一个无 props 的自包含组件，渲染一个完整的评价卡片堆叠动画：
+
+- 4 张预定义的评价卡片，每张包含头像、姓名、职位、评价内容。
+- 自动定时轮播（1.5 秒间隔），顶部卡片通过抖动后滑出。
+- motion 驱动的 shakeslide 动画：横向抖动配合缩放和 3D 旋转，最后向下滑出。
+- 底部卡片层叠显示（`index * 15px` 偏移 + `index * 0.05` 缩放），营造景深效果。
+- 点击卡片可手动触发轮播。
+- 响应式布局，适配移动端和桌面端。
+
+不推荐：
+
+- 需要高度自定义评价数据源的场景（数据为内建常量，不支持 props 注入）。
+- 需要手动翻页或暂停轮播的场景（组件未暴露控制接口）。
+- 评价数量超过 5 条的场景（仅显示前 4 张卡片，第 5 张及以上 `opacity: 0`）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+ShakeTestimonial 无需任何 props，直接渲染完整评价轮播。
+
+<ComponentShowcase
+  id="uselayouts/shake-testimonial-card"
+  path="uselayouts/shake-testimonial-card/basic"
+/>
+
+```tsx
+import { ShakeTestimonial } from "@/components/ui/uselayouts-shake-testimonial-card"
+
+export default function Demo() {
+  return &lt;ShakeTestimonial /&gt;
+}
+```
+
+<h2 id="api">API</h2>
+
+ShakeTestimonial 为自包含组件，不接受外部 props。所有内部状态（卡片数据、动画状态、定时器）由组件自行管理。
+
+如需扩展评价数据，在 `src/components/uselayouts/shake-testimonial-card.tsx` 中修改 `testimonials` 常量数组：
+
+- `id`：唯一标识，motion 的 `key` 使用。
+- `name`：评价人姓名。
+- `role`：评价人职位。
+- `avatar`：头像图片路径。
+- `content`：评价内容文本。
+- `color`：卡片背景色（hex）。
+- `textColor`：卡片文字色（hex）。
+
+动画参数修改：
+
+- `handleNext` 中 `setTimeout` 的 `600ms` 控制抖动+滑出总时长。
+- `useEffect` 中 `setInterval` 的 `1500ms` 控制自动轮播间隔。
+- motion `animate` 中的 `times` 数组控制抖动关键帧时序。
+
+<h2 id="faq">常见问题</h2>
+
+### ShakeTestimonial 可以自定义评价数据吗？
+
+当前版本评价数据为内建常量。如需自定义评价内容，在 `src/components/uselayouts/shake-testimonial-card.tsx` 中修改 `testimonials` 数组。
+
+### ShakeTestimonial 支持手动翻页吗？
+
+点击当前顶部卡片可手动触发下一张。组件暂不支持上一页、暂停、跳转到指定卡片等操作。
+
+### 轮播速度和动画可以调整吗？
+
+通过修改 `handleNext` 中 `setTimeout` 的延迟（默认 600ms）调整抖动动画时长，修改 `useEffect` 中 `setInterval` 的间隔（默认 1500ms）调整自动轮播速度。注意两者需协调，确保动画完整播放后再触发下一次轮播。
+
+### ShakeTestimonial 的卡片数量是否固定？
+
+内建 4 张卡片。可增减 `testimonials` 数组元素数量，但仅前 4 张可见（`index &lt; 4` 时 `opacity: 1`，其余 `opacity: 0`）。如需显示更多卡片，修改 motion `animate` 中的 opacity 条件即可。
+
+### 如何修改卡片样式？
+
+卡片使用 Tailwind CSS class 和 inline style。通过修改 `src/components/uselayouts/shake-testimonial-card.tsx` 中的 class（`rounded-[48px]`、`p-8` 等）和 inline style（`backgroundColor`、`borderColor` 等）调整外观。全局调整优先修改 Tailwind 主题变量，而非在调用处堆叠 className。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ShakeTestimonial 相关代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-shake-testimonial-card` 导入 `ShakeTestimonial`（named export）。
+2. 不要给 ShakeTestimonial 传递任何 props，组件自身管理全部状态。
+3. 如需引入 motion/react 依赖，从组件源码处参考正确的导入路径（`import { motion, AnimatePresence } from "motion/react"`）。
+4. ShakeTestimonial 依赖 motion/react 的 AnimatePresence 和 layout 动画，不要移除这些动画逻辑。
+5. 样式使用 Tailwind CSS class 内联定义，不引入 CVA 或其他样式管理方案。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/shake-testimonial-card" />

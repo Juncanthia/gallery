@@ -1,0 +1,230 @@
+---
+category: Components
+title: DataTableFilterSlider
+subtitle: 滑块筛选
+description: DataTable 筛选体系内的数值范围滑块筛选器，支持拖拽滑块和手动输入数值两种交互方式。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 4
+source:
+  component: src/components/data-table-filters/components/data-table/data-table-filter-slider.tsx
+  slider-base: src/components/data-table-filters/components/custom/slider.tsx
+  wrapper: src/components/ui/dt-data-table-filter-slider.tsx
+  examples:
+    - content/components/dt/data-table-filter-slider/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  radixSlider: true
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTableFilterSlider 滑块筛选
+
+DataTableFilterSlider 是 DataTable 筛选体系内的数值范围滑块筛选器。它提供拖拽滑块和手动输入最小/最大值两种交互方式，输入值经过 500ms 防抖后更新表格筛选。
+
+本组件依赖 `DataTableProvider` 提供的 `useDataTable()` 上下文，必须在该 Provider 内部使用。滑块底层基于 Radix UI Slider 实现。
+
+## 何时使用 {#when-to-use}
+
+当 DataTable 中某列数据为数值类型，需要按范围筛选时使用。
+
+常见场景：
+
+- 按价格区间筛选商品列表。
+- 按评分范围筛选内容。
+- 按数量范围筛选库存。
+- 按年龄范围筛选用户。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+在 `DataTableProvider` 内部，传入数值列的筛选字段配置 `type: "slider"` 以及 `min`、`max`。组件自动从列数据中获取实际范围（优先于 props 中的 min/max），支持拖拽滑块或输入数值进行范围筛选。
+
+```tsx
+import { useMemo, useState } from "react"
+import { DataTableProvider } from "@/components/ui/dt-data-table-provider"
+import { DataTableFilterSlider } from "@/components/ui/dt-data-table-filter-slider"
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedMinMaxValues,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/ui/dt-data-table-provider"
+
+type Product = {
+  id: string
+  name: string
+  price: number
+}
+
+const data: Product[] = [
+  { id: "1", name: "产品 A", price: 99 },
+  { id: "2", name: "产品 B", price: 199 },
+  { id: "3", name: "产品 C", price: 299 },
+  { id: "4", name: "产品 D", price: 399 },
+  { id: "5", name: "产品 E", price: 499 },
+]
+
+const columns: ColumnDef<Product>[] = [
+  { accessorKey: "name", header: "名称" },
+  { accessorKey: "price", header: "价格" },
+]
+
+const filterFields: DataTableFilterField<Product>[] = [
+  {
+    label: "价格",
+    value: "price",
+    type: "slider",
+    min: 0,
+    max: 600,
+    unit: "¥",
+  },
+]
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+  })
+
+  return (
+    <DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+    >
+      <DataTableFilterSlider<Product>
+        label="价格"
+        value="price"
+        type="slider"
+        min={0}
+        max={600}
+        unit="¥"
+      />
+    </DataTableProvider>
+  )
+}
+```
+
+## 核心导出 {#exports}
+
+- `DataTableFilterSlider`
+
+## API 摘要 {#api}
+
+```ts
+type DataTableSliderFilterField<TData> = {
+  label: string
+  value: keyof TData
+  defaultOpen?: boolean
+  commandDisabled?: boolean
+  type: "slider"
+  min: number
+  max: number
+  options?: Option[]
+  unit?: string
+}
+```
+
+筛选值类型为 `[number, number]`，存入 `columnFilters`。组件内部通过 `getFilter()` 工具函数统一处理单数值、数组等输入形式。
+
+## Semantic DOM {#semantic-dom}
+
+- 根元素为 `<div className="grid gap-2">`。
+- 上部为 Min./Max. 输入框组件，使用 `InputGroup` + `Label`。
+- 下部为 Radix Slider 滑块组件，`data-slot="slider"`。
+- 滑块 Thumb 渲染两个手柄，对应范围的最小值和最大值。
+- 无额外 `data-*` 状态属性在根元素上。
+
+## 样式模型 {#styling-model}
+
+- 输入框使用 `InputGroup` 组件，`className="mb-2 h-9 rounded-lg font-mono shadow-none"`。
+- Label 使用 `className="text-muted-foreground px-2"`。
+- 滑块 Track 使用 `bg-secondary h-2 rounded-full`。
+- 滑块 Range 使用 `bg-primary`。
+- 滑块 Thumb 使用 `border-primary bg-background h-4 w-4 rounded-full border-2`。
+- 整体布局使用 CSS Grid `gap-2`，输入框和滑块之间使用 `gap-4` flex 布局。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/data-table-filters/components/data-table/data-table-filter-slider.tsx`
+- `src/components/data-table-filters/components/custom/slider.tsx`（Radix Slider 封装）
+- `src/components/ui/dt-data-table-filter-slider.tsx`（包装导出）
+
+直接依赖：
+
+- `@radix-ui/react-slider`（滑块底层实现）
+- `@/components/data-table-filters/components/data-table/data-table-provider`（useDataTable）
+- `@/components/data-table-filters/hooks/use-debounce`（500ms 防抖）
+- `@/components/data-table-filters/lib/is-array`（isArrayOfNumbers）
+- `@/components/ui/input-group`
+- `@/components/ui/label`
+
+根本实现：
+
+- `@tanstack/react-table`（table.getColumn, column.setFilterValue, column.getFacetedMinMaxValues）
+
+实现注意：
+
+1. 组件必须在 `DataTableProvider` 内部使用。
+2. 筛选值优先从 `getFacetedMinMaxValues` 获取实际范围，其次从 `column.getFacetedMinMaxValues()`，最后使用 props 中的 `min`/`max`。
+3. 输入框值变更经过 500ms `useDebounce` 防抖后才调用 `column.setFilterValue()`。
+4. 外部 filters 变更会同步到内部 `input` 状态（仅当值不同时）。
+5. `getFilter()` 工具函数将单数值包装为 `[value, value]` 范围格式。
+6. `Slider` 组件在 `props.value` 为非数组时自动使用 `[props.min, props.max]` 作为初始值。
+
+## 可访问性 {#accessibility}
+
+- Radix Slider 原生支持键盘操作（Arrow Left/Right、Home/End）。
+- 输入框绑定 `<Label htmlFor>` 关联可访问名称。
+- 滑块 Thumb 支持 focus-visible ring 样式。
+- 禁用状态通过 Radix 原生 `disabled` 属性传递。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/data-table-filters/components/data-table/types.ts` 的 TypeScript 类型为准 |
+| 滑块实现 | 基于 Radix UI Slider，非 rc-slider |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 配合 DataTable 筛选体系使用，不承诺 AntD Slider API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTableFilterSlider 代码时，应遵守：
+
+1. 从 `@/components/ui/dt-data-table-filter-slider` 导入。
+2. 组件必须在 `DataTableProvider` 内部使用。
+3. 传入 `type: "slider"` 以及必填的 `min`、`max` 属性。
+4. `value` 必须对应表格中已定义的数值列 accessorKey。
+5. 建议在 `useReactTable` 配置中启用 `getFacetedRowModel` 和 `getFacetedMinMaxValues`，使组件能获取数据的实际范围。
+6. 数值单位通过 `unit` 属性传入，不要在外部拼接。
+7. 筛选值格式为 `[number, number]`，不要使用字符串或其他格式。
+8. 在 `filterFields` 配置中声明后，通常由 `DataTableFilterControls` 自动管理渲染，不需要手动引入本组件。
+9. 不要引入 Ant Design 相关依赖。
+10. 如果不确定某个 API 是否存在，先检查源码，不要凭 AntD 记忆生成。

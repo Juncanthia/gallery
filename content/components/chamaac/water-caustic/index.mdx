@@ -1,0 +1,114 @@
+Water Caustic 水焦散。基于 Three.js 和 GLSL 着色器实现，通过程序化 Voronoi 算法生成动态水面焦散视觉效果。适合用作页面背景或氛围装饰。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为页面或区块添加动态水面光纹、焦散折射等氛围型视觉效果时使用。
+
+常见场景：
+- 全屏背景装饰，如 Hero 区域、品牌展示页。
+- 深色主题页面的动态背景层。
+- 海洋、流体、科技主题的营销页面。
+- 需要柔和动态光效的卡片或区块背景。
+
+不推荐：
+- 性能敏感的低端设备页面，WebGL 着色器开销较高。
+- 需要精确视觉一致性的场景，着色器效果受 GPU 差异影响。
+- 纯信息展示的文本密集型页面，动态背景会分散注意力。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="chamaac/water-caustic" path="chamaac/water-caustic/basic" />
+
+### 基础用法
+
+Water Caustic 默认铺满父容器（`absolute inset-0`），需确保父容器 `relative` 且有明确尺寸。
+
+```tsx
+import { WaterCaustic } from "@/components/ui/chamaac-water-caustic"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-slate-950"&gt;
+      &lt;WaterCaustic /&gt;
+      &lt;div className="absolute inset-0 flex items-center justify-center"&gt;
+        &lt;p className="text-white/70 text-lg font-medium"&gt;Water Caustic&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义颜色
+
+通过 `color` 自定义焦散光纹的颜色，默认为白色 `"#ffffff"`。
+
+```tsx
+import { WaterCaustic } from "@/components/ui/chamaac-water-caustic"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-slate-950"&gt;
+      &lt;WaterCaustic color="#ff6b9d" /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整背景
+
+通过修改父容器 `className` 设置背景色，适应不同深色背景需求。
+
+```tsx
+import { WaterCaustic } from "@/components/ui/chamaac-water-caustic"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#0a1628]"&gt;
+      &lt;WaterCaustic color="#4ecdc4" /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### WaterCaustic
+
+水焦散背景组件。基于 WebGL 着色器实现，铺满父容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| color | 焦散光纹颜色 | `string` | `"#ffffff"` |
+
+<h2 id="faq">常见问题</h2>
+
+### WaterCaustic 为什么没有显示？
+
+确保父容器设置了 `position: relative`（或 `absolute`/`fixed`）且有明确的宽高。WaterCaustic 使用 `absolute inset-0` 铺满父容器，如果父容器没有尺寸或定位上下文，Canvas 不会渲染。
+
+### 如何减少性能开销？
+
+默认 DPR 为 `[1, 2]`，无帧率上限。如需优化，可以：
+- 仅在用户可见时渲染（通过条件渲染或 IntersectionObserver）。
+- 减小父容器尺寸，降低 GPU 填充率。
+- 在低端设备上降级为静态背景色。
+
+### 颜色格式支持什么？
+
+`color` 接受 CSS 颜色字符串（如 hex `"#5ea8ff"`、rgb `"rgb(94,168,255)"`、命名颜色 `"cyan"` 等），内部通过 `new THREE.Color()` 解析。
+
+### 可以和文字、内容叠加吗？
+
+可以。WaterCaustic 自带 `pointer-events-none`，不阻挡前景元素的交互。将内容层放在 WaterCaustic 之后渲染，或使用 `z-index` 控制层级即可实现叠加效果。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/chamaac-water-caustic` 导入 WaterCaustic，不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 确保父容器有 `position: relative` 和明确尺寸。
+3. WaterCaustic 自带 `pointer-events-none`，前景内容需要独立的点击层。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="chamaac/water-caustic" />

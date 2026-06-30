@@ -1,0 +1,29 @@
+---
+component: CSSThemeSwitcher
+slug: gooseui/css-theme-switcher
+
+import: import { CSSThemeSwitcher } from "@/components/ui/gooseui-css-theme-switcher"
+
+usage: |
+  &lt;CSSThemeSwitcher /&gt;
+
+props:
+  className?: string  -- 容器附加 CSS 类名
+
+exports:
+  CSSThemeSwitcher  -- 主题切换组件，渲染 light / dark / system 三态 radio 按钮组
+  CSSThemeSwitcherStyles  -- 通过 useGlobalStyles 注入 light-dark() 示例 CSS
+
+constraints:
+  - 基于 CSS light-dark() 函数和 :has() 选择器实现纯 CSS 主题切换，无需 JavaScript 状态管理。
+  - 不保存用户主题选择，不持久化状态。
+  - light-dark() 需要 Chrome 123+ / Firefox 120+ / Safari 17.5+。
+  - :has() 需要 Chrome 105+ / Safari 15.4+ / Firefox 121+。
+  - 图标（SunIcon、MoonIcon、MonitorIcon）为内部实现，不暴露替换接口。
+  - 不要在调用侧使用 useState、useContext 或 next-themes 替代纯 CSS 方案。
+  - CSSThemeSwitcherStyles 渲染为 null，仅注入样式；在页面根元素或顶层使用一次即可。
+
+source: src/components/gooseui/components/ui/css-theme-switcher.tsx
+example: content/components/gooseui/css-theme-switcher/examples/basic.tsx
+docs: content/components/gooseui/css-theme-switcher/index.mdx
+---

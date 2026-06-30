@@ -1,0 +1,214 @@
+Citation 引用卡片。用于展示网页、文档、API 等引用来源的摘要卡片，支持 default（完整卡片）、inline（内联芯片）、stacked（堆叠图标）三种展示形态。hover 时可通过 Popover 预览更多内容。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在 AI 生成内容或搜索结果中展示引用来源的摘要时使用。
+
+常见场景：
+- AI 对话或搜索结果中展示引用来源卡片，供用户点击跳转。
+- 文档参考列表中以卡片形式展示引用条目，含域名、标题、摘要等。
+- 文章底部引用区块，展示引用的网页、API 文档、代码库等来源。
+
+不推荐：
+- 引用数量过多时直接平铺所有卡片，应使用 CitationList 组件控制展示数量。
+- 引用内容过长或含大量图片时，卡片会截断内容，应控制 snippet 长度。
+- 需要复杂交互（如内嵌播放、表单提交）的引用内容，Citation 仅支持点击跳转。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 id、href、title 等必填属性，展示一个完整的引用卡片。
+
+<ComponentShowcase id="tool/citation" path="tool/citation/basic" />
+
+```tsx
+import { Citation } from "@/components/ui/tool-citation"
+
+export default function Demo() {
+  return (
+    <Citation
+      id="citation-demo"
+      href="https://ui.shadcn.com/docs/components"
+      title="shadcn/ui Documentation"
+      snippet="Beautifully designed components..."
+      domain="ui.shadcn.com"
+      type="webpage"
+    />
+  )
+}
+```
+
+### Inline 内联模式
+
+设置 `variant="inline"` 可渲染为紧凑的内联芯片，hover 时弹出 Popover 展示摘要。
+
+```tsx
+import { Citation } from "@/components/ui/tool-citation"
+
+export default function Demo() {
+  return (
+    <Citation
+      id="inline-citation"
+      variant="inline"
+      href="https://react.dev"
+      title="React Documentation"
+      domain="react.dev"
+      type="webpage"
+    />
+  )
+}
+```
+
+### 带作者和日期
+
+设置 `author` 和 `publishedAt` 在卡片顶部展示作者与发布时间。
+
+```tsx
+import { Citation } from "@/components/ui/tool-citation"
+
+export default function Demo() {
+  return (
+    <Citation
+      id="detailed-citation"
+      href="https://arxiv.org/abs/1706.03762"
+      title="Attention Is All You Need"
+      snippet="The dominant sequence transduction models are based on complex recurrent or convolutional neural networks..."
+      domain="arxiv.org"
+      type="article"
+      author="Vaswani et al."
+      publishedAt="2017-06-12T00:00:00Z"
+      favicon="https://arxiv.org/favicon.ico"
+    />
+  )
+}
+```
+
+### 不同引用类型
+
+`type` 属性控制左侧图标，支持 webpage、document、article、api、code、other 六种类型。
+
+```tsx
+import { Citation } from "@/components/ui/tool-citation"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Citation
+        id="type-webpage"
+        href="https://nextjs.org"
+        title="Next.js Documentation"
+        domain="nextjs.org"
+        type="webpage"
+      />
+      <Citation
+        id="type-document"
+        href="https://example.com/report.pdf"
+        title="Annual Report 2024"
+        domain="example.com"
+        type="document"
+      />
+      <Citation
+        id="type-code"
+        href="https://github.com/shadcn/ui"
+        title="shadcn/ui - GitHub"
+        domain="github.com"
+        type="code"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Citation
+
+引用卡片组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 引用唯一标识 | `string` | - |
+| href | 引用链接（必须为合法 URL） | `string` | - |
+| title | 引用标题 | `string` | - |
+| snippet | 引用摘要文本，超过 3 行截断 | `string` | - |
+| domain | 来源域名，不传则从 href 自动提取 | `string` | - |
+| favicon | 来源网站图标 URL | `string` | - |
+| author | 作者名称 | `string` | - |
+| publishedAt | 发布时间（ISO 8601 格式） | `string` | - |
+| type | 引用类型，控制左侧图标 | `"webpage"` \| `"document"` \| `"article"` \| `"api"` \| `"code"` \| `"other"` | `"webpage"` |
+| locale | 日期格式化语言 | `string` | `"en-US"` |
+| variant | 展示形态 | `"default"` \| `"inline"` \| `"stacked"` | `"default"` |
+| className | 附加样式类名 | `string` | - |
+| onNavigate | 自定义导航回调，不传则用 window.open | `(href: string, citation: SerializableCitation) => void` | - |
+
+### CitationList
+
+引用列表组件，控制引用展示数量和"查看更多"溢出交互。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 列表唯一标识 | `string` | - |
+| citations | 引用数组 | `SerializableCitation[]` | - |
+| variant | 展示形态 | `"default"` \| `"inline"` \| `"stacked"` | `"default"` |
+| maxVisible | 最大可见引用数量，超出部分折叠 | `number` | - |
+| className | 附加样式类名 | `string` | - |
+| onNavigate | 自定义导航回调 | `(href: string, citation: SerializableCitation) => void` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### variant 三种形态分别适用于什么场景？
+
+- `default`：完整卡片形态，适合搜索结果列表、文档引用区块等独立展示场景。
+- `inline`：内联芯片形态，适合正文中穿插的引用标记，hover 弹出详细信息。
+- `stacked`：堆叠图标形态，适合列表头部或摘要区域，将多个引用压缩为图标堆叠 + 计数。
+
+### 如何自定义点击跳转行为？
+
+通过 `onNavigate` 回调接管点击行为，适用于需要路由跳转或埋点追踪的场景：
+
+```tsx
+<Citation
+  id="custom-nav"
+  href="https://example.com"
+  title="Example"
+  onNavigate={(href, citation) => {
+    // 自定义导航逻辑
+    router.push(href)
+    trackClick(citation.id)
+  }}
+/>
+```
+
+### 如何控制引用列表的展示数量？
+
+使用 `CitationList` 组件并设置 `maxVisible` 属性，超出部分自动折叠为"查看更多"按钮：
+
+```tsx
+import { CitationList } from "@/components/ui/tool-citation-list"
+
+<CitationList
+  id="my-list"
+  citations={citations}
+  maxVisible={3}
+  variant="default"
+/>
+```
+
+### favicon 和 type 图标的关系？
+
+- 如果传入了 `favicon` 属性（合法图片 URL），则优先展示网站图标。
+- 如果未传 `favicon`，则根据 `type` 属性展示对应的类型图标（Globe、FileText、Code 等）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/tool-citation` 导入 `Citation`，从 `@/components/ui/tool-citation-list` 导入 `CitationList`。
+2. `id`、`href`、`title` 为必填属性，`href` 必须为合法的绝对 URL。
+3. 使用 `variant` 控制展示形态，不要在外部通过 className 重新实现 variant 逻辑。
+4. 多个引用项应使用 `CitationList` 组件统一管理，不要手动循环渲染 `Citation` 并自行实现折叠逻辑。
+5. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+6. 不要引入 Ant Design 相关依赖。
+7. `snippet` 建议控制在 150 字以内，超出部分组件会自动截断（line-clamp-3）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tool/citation" />

@@ -1,0 +1,110 @@
+StatsCards 带悬停动效的数据统计卡片组，4 张卡片交替展示收入、互动量和曝光等关键指标，悬停时卡片旋转归正并放大。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以视觉化卡片方式展示多个核心数据指标时使用。
+
+常见场景：
+
+- 营销 Dashboard 的核心指标展示。
+- Landing Page 的数据背书区域。
+- 社交媒体 profile 页面的互动数据。
+- 活动报告页面的关键成果摘要。
+
+不推荐：
+
+- 仅需展示单一数据点时（建议使用 Statistic 组件）。
+- 卡片内容需要频繁更新的场景（组件为静态设计）。
+- 移动端竖屏布局（4 张卡片横向排列，在小屏上可能拥挤）。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="chamaac/stats-cards" path="chamaac/stats-cards/basic" />
+
+```tsx
+import { StatsCards } from "@/components/ui/chamaac-stats-cards"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-4"&gt;
+      &lt;StatsCards /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义图片
+
+通过 `images` 属性自定义卡片中的图片。
+
+```tsx
+import { StatsCards } from "@/components/ui/chamaac-stats-cards"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-4"&gt;
+      &lt;StatsCards
+        images={["/images/team/1.png", "/images/team/2.png"]}
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义尺寸
+
+通过 `width` 和 `height` 属性调整卡片尺寸。
+
+```tsx
+import { StatsCards } from "@/components/ui/chamaac-stats-cards"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-4"&gt;
+      &lt;StatsCards width="w-60" height="h-72" /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### StatsCards
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| width | 卡片宽度类名 | `string` | `w-70` |
+| height | 卡片高度类名 | `string` | `h-84` |
+| images | 两张图片的路径数组 | `string[]` | `["/images/models/1.png", "/images/models/2.png"]` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何修改卡片中的数字和文字？
+
+当前版本的卡片内容（收入金额、互动数据、曝光量等）为硬编码展示。如需修改，请直接编辑 `stats-cards.tsx` 源文件中对应 Card 的内容。
+
+### 卡片悬停动效是如何实现的？
+
+使用 `framer-motion` 的 `whileHover` 属性，每张卡片设置了不同的初始旋转角度（`rotate: -3 / 2 / 8 / -4`），悬停时 `rotate` 归零并放大至 `scale: 1.05`，产生扇面展开的视觉效果。
+
+### 如何调整卡片数量？
+
+组件内部固定为 4 张卡片（2 张数据卡 + 2 张图片卡）。如需增减卡片数量，请直接编辑源文件中的 Card 区域。
+
+### 可以替换主题色吗？
+
+组件主题色为 `#FF4400`（橙红），出现在 Card 1 和 Card 3 的文字、分割线和背景中。如需修改，请编辑源文件中的颜色值。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/chamaac-stats-cards` 导入 `StatsCards`（命名导出）。
+2. 包裹在 `div` 容器中，通过 `flex`、`items-center`、`justify-center` 居中展示。
+3. 使用 `images` 属性自定义两张图片的路径。
+4. 使用 `width` 和 `height` 属性调整卡片尺寸（Tailwind 类名格式）。
+5. 组件依赖 `framer-motion` 和 `next/image`，确保项目已安装。
+6. 组件使用 `next/font/google` 的 `Inter` 字体，需在项目中加载该字体或被已有字体覆盖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="chamaac-stats-cards" />

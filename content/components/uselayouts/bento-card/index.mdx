@@ -1,0 +1,68 @@
+BentoCard 是一个仪表盘风格的便当卡片布局组件，内置侧边导航和动画内容切换。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要一个自包含的仪表盘展示面板时使用，尤其适合：
+
+- 团队项目概览、管理面板首页。
+- 多标签页内容切换，每页展示不同维度的数据或操作。
+- 需要交互动效的展示型卡片，提升页面活力。
+- 快速搭建后台管理面板的顶部仪表盘区域。
+
+BentoCard 是一个无 props 的自包含组件，渲染一个完整的便当式仪表盘，包含：
+
+- 侧边栏标签导航：Dashboard、Management、Threads、Resources。
+- 每个标签页对应独立的内容面板，展示不同的数据卡片和交互元素。
+- motion 驱动的标签切换和内容过渡动画。
+- 响应式布局，适配不同屏幕尺寸。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+BentoCard 无需任何 props，直接渲染完整仪表盘。
+
+<ComponentShowcase
+  id="uselayouts/bento-card"
+  path="uselayouts/bento-card/basic"
+/>
+
+```tsx
+import { BentoCard } from "@/components/ui/uselayouts-bento-card"
+
+export default function Demo() {
+  return <BentoCard />
+}
+```
+
+<h2 id="api">API</h2>
+
+BentoCard 为自包含组件，不接受外部 props。所有内部状态（activeTab 等）由组件自行管理。
+
+<h2 id="faq">常见问题</h2>
+
+### BentoCard 可以自定义标签页吗？
+
+当前版本 BentoCard 的标签页和内容面板均为内建实现。如需自定义标签页或面板内容，建议在源码中扩展 `TABS` 配置和对应的 Dashboard 子组件。
+
+### BentoCard 适合移动端吗？
+
+BentoCard 内置响应式布局（`sm:` 断点），在移动端会调整间距和卡片高度。但由于包含多层内容嵌套，推荐在 `>=640px` 宽度下使用以获得最佳体验。
+
+### 如何修改 BentoCard 的样式？
+
+BentoCard 使用 Tailwind CSS 和 motion 实现样式与动画。通过修改 `src/components/uselayouts/bento-card.tsx` 中的 class 和动画参数即可调整外观。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 BentoCard 相关代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-bento-card` 导入 `BentoCard`（named export）。
+2. 不要给 BentoCard 传递任何 props，组件自身管理全部状态。
+3. 如需引入其他依赖（motion、@hugeicons），从组件源码处参考正确的导入路径。
+4. BentoCard 依赖 motion/react 的 LayoutGroup 和 AnimatePresence，不要移除这些动画逻辑。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/bento-card" />

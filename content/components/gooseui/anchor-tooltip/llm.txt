@@ -1,0 +1,28 @@
+---
+component: AnchorTooltip
+slug: gooseui/anchor-tooltip
+
+import: import { AnchorTooltip } from "@/components/ui/gooseui-anchor-tooltip"
+
+usage: |
+  <AnchorTooltip content="提示文本" position="top">
+    <span>悬停查看</span>
+  </AnchorTooltip>
+
+props:
+  children: React.ReactNode  -- 触发 tooltip 的元素
+  content: React.ReactNode  -- tooltip 浮层内容
+  position?: "top" | "bottom" | "left" | "right"  -- 弹出方向，默认 "top"
+  className?: string  -- 锚点元素附加样式
+
+constraints:
+  - 基于 CSS Anchor Positioning + Popover API 实现。
+  - 仅 Chromium 125+ 支持；非 Chromium 环境需降级处理。
+  - 不引入 @floating-ui 或 @radix-ui/react-tooltip 等第三方定位库。
+  - children 和 content 均为必传属性。
+  - 锚点元素的交互样式（如下划线、光标、颜色）由调用侧通过 children 和 className 控制。
+
+source: src/components/gooseui/components/ui/anchor-tooltip.tsx
+example: content/components/gooseui/anchor-tooltip/examples/basic.tsx
+docs: content/components/gooseui/anchor-tooltip/index.mdx
+---

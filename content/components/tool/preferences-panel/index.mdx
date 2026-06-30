@@ -1,0 +1,338 @@
+PreferencesPanel 偏好设置面板组件。以分组形式展示用户偏好配置项，支持 Switch 开关、Toggle 选项组和 Select 下拉选择三种控件类型，内置保存/取消操作按钮和已保存摘要视图。
+
+<h2 id="when-to-use">何时使用</h2>
+
+在 AI 对话界面中展示和收集用户偏好设置时使用。PreferencesPanel 提供结构化的偏好配置表单，包含分组标题、描述文本和多种控件类型。
+
+常见场景：
+
+- AI 助手向用户确认通知偏好、隐私设置等配置项。
+- 对话中动态生成偏好设置面板，让用户调整行为参数。
+- 设置确认页面，展示用户选择的偏好摘要（Receipt 模式）。
+
+不推荐：
+
+- 简单的单字段开关场景，应考虑使用独立的 Switch 组件。
+- 需要复杂表单验证或多步向导的设置流程，PreferencesPanel 为单一表单面板。
+- 作为独立页面的系统设置页面，PreferencesPanel 设计用于对话界面中的内嵌小面板。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+展示分组偏好设置面板，包含 Switch 开关、Toggle 选项组和 Select 下拉选择三种控件类型。默认提供 Cancel 和 Save Changes 操作按钮，只有修改过配置项后 Save 按钮才可用。
+
+<ComponentShowcase
+  id="tool/preferences-panel"
+  path="tool/preferences-panel/basic"
+/>
+
+```tsx
+import { PreferencesPanel } from "@/components/ui/tool-preferences-panel"
+
+export default function Demo() {
+  return (
+    &lt;PreferencesPanel
+      id="preferences-1"
+      title="通知偏好设置"
+      sections={[
+        {
+          heading: "通知渠道",
+          items: [
+            {
+              id: "email-notifications",
+              label: "邮件通知",
+              description: "通过电子邮件接收重要更新和提醒",
+              type: "switch",
+              defaultChecked: true,
+            },
+            {
+              id: "push-notifications",
+              label: "推送通知",
+              description: "通过浏览器推送接收实时通知",
+              type: "switch",
+              defaultChecked: false,
+            },
+          ],
+        },
+        {
+          heading: "外观",
+          items: [
+            {
+              id: "theme",
+              label: "主题",
+              type: "toggle",
+              options: [
+                { value: "light", label: "浅色" },
+                { value: "dark", label: "深色" },
+                { value: "system", label: "跟随系统" },
+              ],
+              defaultValue: "system",
+            },
+            {
+              id: "language",
+              label: "语言",
+              type: "select",
+              selectOptions: [
+                { value: "zh-CN", label: "简体中文" },
+                { value: "en-US", label: "English" },
+                { value: "ja-JP", label: "日本語" },
+                { value: "ko-KR", label: "한국어" },
+                { value: "fr-FR", label: "Français" },
+              ],
+              defaultSelected: "zh-CN",
+            },
+          ],
+        },
+        {
+          heading: "隐私",
+          items: [
+            {
+              id: "analytics",
+              label: "使用数据收集",
+              description: "匿名收集使用数据以改进产品体验",
+              type: "switch",
+              defaultChecked: true,
+            },
+          ],
+        },
+      ]}
+    /&gt;
+  )
+}
+```
+
+### 自定义操作按钮
+
+通过 `actions` 属性自定义操作按钮，并通过 `onAction` 处理按钮点击事件。
+
+```tsx
+import { PreferencesPanel } from "@/components/ui/tool-preferences-panel"
+
+export default function Demo() {
+  return (
+    &lt;PreferencesPanel
+      id="preferences-custom"
+      title="显示偏好"
+      sections={[
+        {
+          items: [
+            {
+              id: "compact-mode",
+              label: "紧凑模式",
+              description: "减少间距以适应更多内容",
+              type: "switch",
+              defaultChecked: false,
+            },
+            {
+              id: "font-size",
+              label: "字体大小",
+              type: "toggle",
+              options: [
+                { value: "small", label: "小" },
+                { value: "medium", label: "中" },
+                { value: "large", label: "大" },
+              ],
+              defaultValue: "medium",
+            },
+          ],
+        },
+      ]}
+      actions={{
+        items: [
+          { id: "reset", label: "恢复默认", variant: "ghost" },
+          { id: "apply", label: "应用", variant: "default" },
+        ],
+      }}
+      onAction={async (actionId, values) => {
+        console.log("Action:", actionId, values)
+      }}
+    /&gt;
+  )
+}
+```
+
+### Receipt 模式
+
+使用 `PreferencesPanel.Receipt` 展示已确认的偏好设置摘要。当 AI 已根据用户选择保存设置后，以只读卡片形式展示最终结果。
+
+```tsx
+import { PreferencesPanel } from "@/components/ui/tool-preferences-panel"
+
+export default function Demo() {
+  return (
+    &lt;PreferencesPanel.Receipt
+      id="preferences-receipt"
+      title="已保存的偏好设置"
+      sections={[
+        {
+          heading: "通知渠道",
+          items: [
+            {
+              id: "email-notifications",
+              label: "邮件通知",
+              type: "switch",
+              defaultChecked: true,
+            },
+            {
+              id: "push-notifications",
+              label: "推送通知",
+              type: "switch",
+              defaultChecked: false,
+            },
+          ],
+        },
+        {
+          heading: "外观",
+          items: [
+            {
+              id: "theme",
+              label: "主题",
+              type: "toggle",
+              options: [
+                { value: "light", label: "浅色" },
+                { value: "dark", label: "深色" },
+                { value: "system", label: "跟随系统" },
+              ],
+            },
+            {
+              id: "language",
+              label: "语言",
+              type: "select",
+              selectOptions: [
+                { value: "zh-CN", label: "简体中文" },
+                { value: "en-US", label: "English" },
+              ],
+            },
+          ],
+        },
+      ]}
+      choice={{
+        "email-notifications": true,
+        "push-notifications": false,
+        theme: "dark",
+        language: "zh-CN",
+      }}
+    /&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### PreferencesPanel
+
+偏好设置面板组件，展示分组配置项并提供操作按钮。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识，用于 data 属性标注 | `string` | 必填 |
+| title | 面板标题，显示在顶部 | `string` | - |
+| sections | 配置项分组数组 | `PreferenceSection[]` | 必填 |
+| value | 受控模式下的当前值 | `PreferencesValue` | - |
+| onChange | 值变化回调 | `(value: PreferencesValue) => void` | - |
+| actions | 操作按钮配置（items 数组或包含 confirmTimeout 和 align 的对象） | `ActionsProp` | Cancel + Save Changes |
+| onAction | 操作按钮点击回调，参数为 actionId 和当前值 | `(actionId: string, value: PreferencesValue) => void` | - |
+| onBeforeAction | 操作执行前的回调，可用于校验 | `(actionId: string, value: PreferencesValue) => void` | - |
+| className | 附加样式类名 | `string` | - |
+
+### PreferencesPanel.Receipt
+
+偏好设置摘要组件，只读展示已确认的偏好配置。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识 | `string` | 必填 |
+| title | 摘要标题 | `string` | - |
+| sections | 配置项分组定义 | `PreferenceSection[]` | 必填 |
+| choice | 用户最终选择的偏好值映射 | `Record&lt;string, string \| boolean&gt;` | 必填 |
+| error | 错误信息映射（itemId -> 错误描述） | `Record&lt;string, string&gt;` | - |
+| className | 附加样式类名 | `string` | - |
+
+### PreferenceSection
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| heading | 分组标题，以 fieldset legend 形式渲染 | `string` | - |
+| items | 该分组内的配置项列表 | `PreferenceItem[]` | 必填 |
+
+### PreferenceItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 配置项唯一标识 | `string` | 必填 |
+| label | 配置项标签文本 | `string` | 必填 |
+| description | 配置项补充说明文字 | `string` | - |
+| type | 控件类型：`"switch"` / `"toggle"` / `"select"` | `"switch"` \| `"toggle"` \| `"select"` | 必填 |
+| defaultChecked | type="switch" 时的默认选中状态 | `boolean` | `false` |
+| options | type="toggle" 时的选项列表（至少 2 个） | `Array&lt;{ value: string; label: string }&gt;` | - |
+| defaultValue | type="toggle" 时的默认值 | `string` | - |
+| selectOptions | type="select" 时的下拉选项列表（至少 5 个） | `Array&lt;{ value: string; label: string }&gt;` | - |
+| defaultSelected | type="select" 时的默认选中值 | `string` | - |
+
+### PreferencesValue
+
+偏好值映射对象。
+
+```ts
+type PreferencesValue = {
+  [itemId: string]: string | boolean
+}
+```
+
+### Semantic DOM
+
+| data-slot | 说明 |
+| --- | --- |
+| `preferences-panel` | 根容器 |
+
+附加属性：
+
+| data 属性 | 说明 |
+| --- | --- |
+| `data-tool-ui-id` | 组件 id |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何控制 Save 按钮的可用状态？
+
+Save 按钮在配置项值较初始值无变化时自动禁用，无需手动控制。初始值由各配置项的 `defaultChecked`、`defaultValue` 或 `defaultSelected` 定义。
+
+### 如何实现受控模式？
+
+传入 `value` 和 `onChange` 属性即可进入受控模式，父组件完全控制面板内的配置值。
+
+### 如何自定义操作按钮？
+
+通过 `actions` 属性传入自定义操作配置。默认提供 Cancel 和 Save Changes 两个按钮。Cancel 按钮点击后将所有配置项恢复为初始值。可以传入 `align` 控制按钮对齐方式（"left" / "right"），以及 `confirmTimeout` 启用二次确认机制。
+
+### Receipt 模式和普通模式有何区别？
+
+Receipt 模式为只读摘要视图，不包含交互控件，以文本形式展示各配置项的最终值。适用于 AI 已根据用户选择完成保存后的结果确认。普通模式为交互式表单，包含控件和操作按钮。
+
+### 如何校验配置值？
+
+通过 `onBeforeAction` 回调在操作执行前进行校验。回调接收 actionId 和当前值，可在其中进行验证逻辑。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 PreferencesPanel 代码时：
+
+1. 从 `@/components/ui/tool-preferences-panel` 导入 `PreferencesPanel` 或 `PreferencesPanel.Receipt`
+2. `id` 和 `sections` 为必填属性
+3. sections 中每个分组的 items 至少包含一个配置项
+4. 配置项的 id 必须唯一，类型为英文小写短横线命名
+5. Switch 类型配置项只需 id、label、type 即可工作；optional description 提供补充说明
+6. Toggle 类型配置项至少需提供 2 个选项；Select 类型至少需 5 个选项
+7. 分组使用 heading 属性添加标题分隔；分组不具标题时直接展示配置项列表
+8. Receipt 模式下 choice 必填，其 key 必须与 sections 中所有配置项的 id 一致
+9. 不要在 sections 外单独渲染操作按钮，组件已内置操作区域
+10. 避免在对话界面中放入过多配置项（建议不超过 8 个），防止面板过高
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/tool/preferences-panel/preferences-panel.tsx` — PreferencesPanel 组件主逻辑，包含 Root、Receipt 和内部子组件
+- `src/components/tool/preferences-panel/schema.ts` — Zod Schema 定义与 TypeScript 类型
+- `src/components/ui/tool-preferences-panel.tsx` — 对外导出入口

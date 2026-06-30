@@ -1,0 +1,113 @@
+---
+category: Components
+title: 空白推荐
+subtitle: Empty Testimonial
+description: 带有文件夹翻开动画的空状态推荐组件，在无数据时引导用户添加第一条推荐。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 7
+source:
+  component: src/components/uselayouts/empty-testimonial.tsx
+  examples:
+    - content/components/uselayouts/empty-testimonial/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Empty Testimonial 空白推荐
+
+带有文件夹翻开动画的空状态推荐组件，在无数据时引导用户添加第一条推荐内容。
+
+本组件是 UseLayouts 集合中的空状态组件，提供生动的文件夹翻开交互和推荐引导入口。
+
+## 何时使用 {#when-to-use}
+
+适合在推荐墙、评价列表、UGC 内容区暂无数据时作为空状态占位。组件自包含所有动画和交互逻辑，无需外部配置。
+
+常见场景：
+
+- 推荐墙/评价页面无数据时的空状态展示和引导。
+- 用户反馈列表为空时的添加入口。
+- 评论、留言等内容的初始空态。
+
+不推荐：
+
+- 已有数据的列表场景（非空状态）。
+- 作为通用 Empty 组件替代（本组件有特定的 testimonial 语境和 animation）。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import EmptyTestimonial from "@/components/ui/uselayouts-empty-testimonial"
+
+export default function Demo() {
+  return <EmptyTestimonial />
+}
+```
+
+## 核心导出 {#exports}
+
+- `EmptyTestimonial` (default)
+
+## API 摘要 {#api}
+
+组件为自包含交互组件，无需传递任何 props。
+
+```ts
+type EmptyTestimonialProps = Record<string, never>
+```
+
+内部状态 `isOpen`（文件夹翻开）和 `isHovered`（悬停检测）均由组件内部的 `useState` 管理。
+
+## Semantic DOM {#semantic-dom}
+
+源码中未声明 `data-slot`，使用根元素语义和组件名定位。
+
+## 样式模型 {#styling-model}
+
+- 样式完全通过 Tailwind CSS className 表达。
+- 文件夹翻开动画由 motion/react 驱动，三张页面卡片使用 spring 动画（stiffness 160-190, damping 21-24）。
+- 封面使用 SVG path 绘制，填充色为 `#F2F2F2`，描边色为 `#D1D1D1`。
+- 主题颜色使用 `text-foreground`、`text-muted-foreground`、`bg-primary`、`text-primary`、`bg-background` 等项目级语义变量。
+- 心形图标 hover 脉冲动画由 `motion.span` 的 `scale` 关键帧实现。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/empty-testimonial.tsx`
+
+实现注意：
+
+1. 组件使用 `motion/react` 的 `animate` 和 `transition` 控制所有动画。
+2. 页面卡片配置为数组，每项定义 `initial`、`open` 和 `transition` 参数。
+3. 文件夹封面使用内联 SVG `path` 绘制，点击事件绑定在文件夹容器 `div` 上。
+4. CTA 按钮为外部链接（Twitter intent），通过 `target="_blank"` 和 `rel="noopener noreferrer"` 在新标签页打开。
+5. `Page` 子组件渲染模拟的页面内容骨架（占位线条）。
+
+## 可访问性 {#accessibility}
+
+- 组件依赖点击交互，未提供键盘操作支持。
+- 如用于生产环境，建议为文件夹容器添加 `role="button"`、`tabIndex={0}` 和 `onKeyDown` 处理器。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Empty Testimonial 代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-empty-testimonial` 导入 `EmptyTestimonial`（default export）。
+2. 组件无需 props，直接渲染即可。
+3. 组件内部使用 `motion/react` 和 `@hugeicons/react`，调用侧不要重复引入或尝试传递动画配置。
+4. 在有数据时通过条件渲染切换组件：`{data.length === 0 ? <EmptyTestimonial /> : <List />}`。
+5. 不要引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。

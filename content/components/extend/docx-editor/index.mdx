@@ -1,0 +1,121 @@
+DocxEditor 用于在线编辑和预览 DOCX 文档。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要在前端直接打开、编辑、预览 Word 文档（.docx），无需依赖桌面 Office 软件或服务端渲染。
+
+常见场景：
+
+- 文档管理系统中的在线编辑与预览。
+- 合同、协议等文书的在线审阅与批注。
+- 支持修订追踪（Track Changes）和评论的协作场景。
+- 需要导入、编辑后导出 DOCX 的工作流。
+- 嵌入式文档阅读器，支持暗色模式和缩放。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础编辑器
+
+传入 `src` 指定 DOCX 文件地址，编辑器自动加载文档并提供完整的富文本编辑工具栏。
+
+<ComponentShowcase
+  id="extend/docx-editor"
+  path="extend/docx-editor/basic"
+/>
+
+```tsx
+import React from "react"
+import { DocxEditorPreview } from "@/components/ui/extend-docx-editor"
+
+export default function Demo() {
+  const [isDark, setIsDark] = React.useState(false)
+
+  return (
+    &lt;DocxEditorPreview
+      src="/samples/demo.docx"
+      isDark={isDark}
+      onIsDarkChange={setIsDark}
+    /&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DocxEditorPreview
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | DOCX 文件地址；不传时显示上传入口，用户可手动选择文件 | `string` | - |
+| isDark | 是否启用暗色文档渲染 | `boolean` | `false` |
+| onIsDarkChange | 暗色模式切换回调 | `(isDark: boolean) =&gt; void` | - |
+| fileName | 文档显示名称；不传时从 `src` 路径中提取 | `string` | - |
+| defaultZoomScale | 初始缩放比例 | `number` | `100` |
+| className | 附加样式类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 可以不传 src 吗？
+
+可以。不传 `src` 时，编辑器会显示上传入口，用户可点击上传本地 DOCX 文件进行编辑。
+
+```tsx
+&lt;DocxEditorPreview isDark={isDark} onIsDarkChange={setIsDark} /&gt;
+```
+
+### 如何获取用户编辑后的文档？
+
+编辑器工具栏提供下载按钮（Download DOCX），用户编辑完成后可点击下载。底层基于 `@extend-ai/react-docx` 的 `editor.exportDocx()` 方法。
+
+### 支持哪些文档格式？
+
+仅支持 .docx（Office Open XML）。不支持旧版 .doc 格式。
+
+### 工具栏支持哪些编辑能力？
+
+- 文本格式：字体、字号、加粗、斜体、下划线、删除线、上标、下标
+- 段落样式：正文、各级标题
+- 对齐方式：左对齐、居中、右对齐、两端对齐
+- 列表：无序列表、有序列表
+- 文本颜色、高亮
+- 链接插入与编辑
+- 表格插入
+- 图片插入
+- 边框设置
+- 修订追踪（Track Changes）和评论的显示/隐藏
+- 撤销/重做
+- 暗色文档渲染
+- 只读模式
+
+### 如何嵌入到自定义布局中？
+
+通过 `className` 控制外层容器样式。编辑器默认高度 720px，可通过 `className` 覆盖。
+
+```tsx
+&lt;DocxEditorPreview
+  src="/samples/demo.docx"
+  isDark={isDark}
+  onIsDarkChange={setIsDark}
+  className="h-[600px]"
+/&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DocxEditor 代码时：
+
+1. 从 `@/components/ui/extend-docx-editor` 导入 `DocxEditorPreview`
+2. 必须提供 `isDark` 和 `onIsDarkChange` 属性
+3. `src` 指向可访问的 .docx 文件 URL，或留空让用户上传
+4. 不要尝试直接操作底层 `@extend-ai/react-docx` 的 hooks，使用 `DocxEditorPreview` 封装组件
+5. 编辑器内部已包含完整的工具栏和侧边栏，无需额外包装
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/extend/components/ui/docx-editor.tsx` — DocxEditorPreview 主组件、工具栏、分页逻辑
+- `src/components/extend/components/ui/docx-viewer.tsx` — 仅预览模式（DocxViewerPreview）
+- `src/components/extend/components/ui/docx-annotation-card.tsx` — 修订追踪卡片和评论卡片
+- `src/components/extend/components/blocks/docx-editor.tsx` — DocxEditorBlock 封装
+- `src/components/ui/extend-docx-editor.tsx` — 对外 re-export 入口

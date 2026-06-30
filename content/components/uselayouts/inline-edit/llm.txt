@@ -1,0 +1,163 @@
+---
+category: Components
+title: InlineEdit
+subtitle: 行内编辑
+description: InlineEdit 行内编辑组件，点击图标切换编辑态与只读态，带动画过渡。
+demo:
+  cols: 2
+group:
+  title: UseLayouts
+  order: 1
+source:
+  component: src/components/uselayouts/inline-edit.tsx
+  entry: src/components/ui/uselayouts-inline-edit.tsx
+  docs: content/components/uselayouts/inline-edit/index.mdx
+  examples:
+    - content/components/uselayouts/inline-edit/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# InlineEdit 行内编辑
+
+InlineEdit 是 UseLayouts 系列布局组件，提供一个点击即编辑的行内文本编辑控件。默认为只读展示态，点击编辑图标切入编辑态，点击确认图标保存并退出编辑。
+
+本组件是自定义设计实现，不基于 Ant Design。使用 motion/react 驱动图标切换和焦点环动画，hugeicons 提供编辑和确认图标。
+
+## 何时使用 {#when-to-use}
+
+适合需要轻度修改文本值的场景，例如用户名、标题、标签等。用户无需打开模态框即可快速编辑并保存。
+
+常见场景：
+
+- 用户个人资料页的用户名/昵称编辑。
+- 仪表盘标题快速重命名。
+- 表格行内字段即时修改。
+- 标签名称的快速变更。
+
+InlineEdit 通过编辑态/只读态切换组织交互：
+
+- 只读态：以 muted 文本色展示当前值，右侧显示编辑图标。
+- 编辑态：input 获得焦点并选中全部文本，右侧图标切换为确认图标，容器显示 focus ring。
+- 点击确认图标：退出编辑态，值保持当前输入内容。
+- 切换过程带有 motion 动画，包括图标滑动入场和容器阴影过渡。
+
+不推荐：
+
+- 用于长文本编辑，应使用 Textarea 或模态编辑。
+- 用于需要校验规则的字段编辑，应使用 Form 表单。
+- 用于需要多字段同时编辑的场景，InlineEdit 一次只编辑一个值。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { InlineEdit } from "@/components/ui/uselayouts-inline-edit"
+
+export default function Demo() {
+  return &lt;InlineEdit /&gt;
+}
+```
+
+## 核心导出 {#exports}
+
+- `InlineEdit`
+
+## API 摘要 {#api}
+
+InlineEdit 为零 props 组件，内部管理编辑态和文本值状态。
+
+内部状态：
+
+- `isEditing: boolean` — 是否处于编辑态。
+- `value: string` — 当前文本值，默认为 `"this.urvish"`。
+
+如需定制默认值或编辑行为，请直接修改 `src/components/uselayouts/inline-edit.tsx` 中的 `useState` 初始值。
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- 组件未声明 `data-slot`，使用组件 DOM 结构和 Tailwind class 定位。
+- 外层容器：`motion.div`，圆角 `borderRadius: 60`（胶囊形状）。
+- Input 输入框：`Input` 组件，`readOnly` 由 `isEditing` 控制。
+- 编辑图标按钮：`pen` key 的 `motion.span`，包含 `Edit01Icon`。
+- 确认图标按钮：`check` key 的 `motion.span`，包含 `Tick02Icon`。
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 直接控制，不使用 CVA。
+- 动画由 motion/react 的 `AnimatePresence`、`motion.div`、`motion.span` 驱动。
+- 图标使用 `@hugeicons/core-free-icons` 的 `Edit01Icon` 和 `Tick02Icon`。
+- Input 组件来自 `@hyper/uselayouts/_shared/ui/input`。
+- class 合并使用 `cn` 工具函数。
+
+动画细节：
+
+- 容器 `layout` 动画确保尺寸平滑过渡。
+- 图标按钮使用 `layout="position"` + x 偏移实现左右滑动入场/退场。
+- 编辑态焦点环通过动态 className 切换 `ring-2 ring-ring ring-offset-2`。
+- 图标切换使用 `AnimatePresence initial={false}`，条件渲染实现交换动画。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/inline-edit.tsx`
+- `src/components/ui/uselayouts-inline-edit.tsx`
+
+直接依赖：
+
+- `motion/react` — 图标切换动画、容器 layout 动画。
+- `@hugeicons/core-free-icons` — `Edit01Icon`、`Tick02Icon`。
+- `@hugeicons/react` — `HugeiconsIcon` 组件。
+- `@hyper/uselayouts/_shared/ui/input` — Input 输入框。
+- `@hyper/uselayouts/lib/cn` — cn 工具函数。
+
+实现注意：
+
+1. 组件为零 props 设计，内部管理编辑态和文本值。
+2. 点击编辑图标时，自动调用 `inputRef.current.select()` 选中全部文本。
+3. 编辑态使用 `AnimatePresence` 实现图标交换动画，而非条件渲染单个图标。
+4. 容器使用 `motion.div layout` 实现尺寸自适应动画。
+5. 容器阴影在编辑态/只读态之间切换：只读态有轻微阴影，编辑态有 focus ring。
+6. 组件使用 `useRef` 引用 input 元素以支持 `select()` 操作。
+
+## 可访问性 {#accessibility}
+
+- 编辑图标和确认图标为可点击元素，通过 `onClick` 切换状态。
+- 当前未使用原生 `<button>` 包裹图标，缺少键盘焦点和 ARIA 属性，建议扩展时补充。
+- Input 在只读态设置 `readOnly` 属性，编辑态自动获得焦点。
+- 图标使用 `cursor-pointer` 提示可交互。
+- 建议扩展时添加 `role="button"`、`tabIndex={0}`、`aria-label` 和键盘 Enter/Space 激活支持。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 自定义设计，AntD 无直接对应的行内编辑组件 |
+| 视觉系统 | Tailwind CSS + motion/react 动画 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 css-in-js |
+| 图标系统 | 使用 hugeicons，不使用 @ant-design/icons |
+| 表单集成 | 不依赖 AntD Form，内部自管理状态 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 InlineEdit 代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-inline-edit` 导入 InlineEdit。
+2. InlineEdit 为零 props 组件，直接渲染即可。
+3. 如需定制默认值或编辑行为，修改 `src/components/uselayouts/inline-edit.tsx` 中的状态初始值。
+4. 图标使用 `@hugeicons/core-free-icons`，不要使用 `@ant-design/icons`。
+5. 不要引入 `antd`、`antd-style` 或 rc-component。
+6. 如有新增动画需求，使用 motion/react，不要引入其他动画库。

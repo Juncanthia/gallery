@@ -1,0 +1,31 @@
+---
+component: HeaderAuth
+slug: gooseui/header-auth
+
+import: |
+  import { HeaderAuth } from "@/components/ui/gooseui-header-auth"
+
+usage: |
+  <HeaderAuth />
+
+exports:
+  HeaderAuth: 带认证状态的自适应导航头部，支持登录/未登录双态和移动端汉堡菜单
+  HeaderAuthProps: 组件 Props 类型 { isLoggedIn?: boolean, userName?: string }
+
+props:
+  HeaderAuth:
+    isLoggedIn?: boolean  -- 是否已登录，默认 false；为 true 时显示用户头像和 Sign out 按钮
+    userName?: string  -- 登录用户名，默认 "John"，仅在 isLoggedIn 为 true 时显示
+
+constraints:
+  - 从 @/components/ui/gooseui-header-auth 导入，不要从 gooseui 内部路径导入。
+  - 依赖 next/link 的 Link 组件，须在有 Next.js 路由的环境中渲染。
+  - 导航项（navItems）当前硬编码在组件内部，如需自定义导航项需修改组件源码。
+  - 移动端菜单通过内部 useState(isOpen) 管理展开/收起，无需外部控制。
+  - 不要自行拼装 header DOM 结构，使用组件内置渲染。
+  - 不要引入 Ant Design 相关依赖或 shadcn/ui 的 navigation-menu。
+
+source: src/components/gooseui/components/blocks/headers/header-auth.tsx
+example: content/components/gooseui/header-auth/examples/basic.tsx
+docs: content/components/gooseui/header-auth/index.mdx
+---

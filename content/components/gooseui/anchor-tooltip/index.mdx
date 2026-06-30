@@ -1,0 +1,102 @@
+AnchorTooltip 基于 CSS Anchor Positioning 和 Popover API 实现纯 CSS 驱动的 tooltip 定位组件，hover 展示浮层提示信息。
+
+<h2 id="when-to-use">何时使用</h2>
+
+为一个元素附加悬停展示的提示或补充说明信息。
+
+常见场景：
+
+- 在省略号截断的文本上补充完整内容。
+- 为图标按钮或无文字控件提供功能说明。
+- 在数据展示区域解释术语或指标含义。
+- 在表单字段旁提供输入提示或格式说明。
+
+AnchorTooltip 使用 CSS Anchor Positioning 计算浮层位置，利用 Popover API 管理浮层生命周期。无需 JavaScript 计算位置，无需 `@floating-ui` 等第三方定位库。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+AnchorTooltip 支持上下左右四个方向的 tooltip，默认为 `top`。
+
+<ComponentShowcase
+  id="gooseui/anchor-tooltip"
+  path="gooseui/anchor-tooltip/basic"
+/>
+
+```tsx
+import { AnchorTooltip } from "@/components/ui/gooseui-anchor-tooltip"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4 p-4">
+      <AnchorTooltip content="顶部提示信息" position="top">
+        <span className="underline decoration-dotted underline-offset-4 text-sm font-medium">
+          悬停查看上方
+        </span>
+      </AnchorTooltip>
+      <AnchorTooltip content="底部提示信息" position="bottom">
+        <span className="underline decoration-dotted underline-offset-4 text-sm font-medium">
+          悬停查看下方
+        </span>
+      </AnchorTooltip>
+      <AnchorTooltip content="左侧提示信息" position="left">
+        <span className="underline decoration-dotted underline-offset-4 text-sm font-medium">
+          悬停查看左侧
+        </span>
+      </AnchorTooltip>
+      <AnchorTooltip content="右侧提示信息" position="right">
+        <span className="underline decoration-dotted underline-offset-4 text-sm font-medium">
+          悬停查看右侧
+        </span>
+      </AnchorTooltip>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### AnchorTooltip
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 触发 tooltip 的元素 | `React.ReactNode` | - |
+| content | tooltip 浮层内容 | `React.ReactNode` | - |
+| position | tooltip 弹出方向 | `top` \| `bottom` \| `left` \| `right` | `top` |
+| className | 附加样式类名，作用于锚点元素 | `string` | - |
+
+AnchorTooltip 基于 CSS Anchor Positioning 和 Popover API 实现，不依赖 `@floating-ui` 或 `@radix-ui/react-tooltip`。
+
+<h2 id="faq">常见问题</h2>
+
+### 和 @floating-ui 或 Radix Tooltip 有什么区别？
+
+AnchorTooltip 使用浏览器原生的 CSS Anchor Positioning + Popover API 实现定位和浮层管理，不引入第三方定位库。定位计算在 CSS 层完成，性能更好，代码更精简。缺点是 CSS Anchor Positioning 和 Popover API 在新版浏览器中才被支持（Chrome 125+、Edge 125+）。
+
+### 如何自定义 tooltip 样式？
+
+通过 `content` 传入任意 ReactNode，可自定义内容结构和样式。tooltip 浮层本身有默认样式（`rounded-md border bg-popover px-3 py-1.5`），如需覆盖可使用组件源码中的 `style` 内联样式作为参考，修改对应组件文件的样式。
+
+### 如何在 tooltip 中显示复杂内容？
+
+`content` 接受任意 ReactNode，可传入包含链接、图片、列表等复杂结构。
+
+### 为什么 tooltip 在 Safari / Firefox 中不显示？
+
+CSS Anchor Positioning 和 Popover API 目前主要在 Chromium 内核浏览器中可用。Firefox 和 Safari 的兼容性仍在推进中。建议做好降级方案，例如在不支持的浏览器中默认展示提示文字或使用后备 tooltip 方案。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 AnchorTooltip 代码时：
+
+1. 从 `@/components/ui/gooseui-anchor-tooltip` 导入 AnchorTooltip。
+2. `children` 和 `content` 为必传属性。
+3. 使用 `position` 控制弹出方向，默认为 `top`。
+4. 锚点元素的样式由调用侧通过 `children` 和 `className` 控制。
+5. 不要引入 `@floating-ui`、`@radix-ui/react-tooltip` 或其他 tooltip 库。
+6. 注意 CSS Anchor Positioning 仅在 Chromium 125+ 可用；非 Chromium 环境需做降级处理。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/anchor-tooltip" />

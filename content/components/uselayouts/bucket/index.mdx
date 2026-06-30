@@ -1,0 +1,84 @@
+Bucket 是一个桶形容器组件，内部展示自动轮播的特性标签动画。标签通过 motion 动效从上方落入桶中，每 2 秒自动切换，适用于首页 Hero 区域或产品特性展示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当你需要在页面中展示一个带有动画效果的桶形容器，内部轮播展示产品特性或功能亮点时，可以使用 Bucket。
+
+常见场景：
+
+- 首页 Hero 区域：在首屏展示核心功能亮点。
+- 产品介绍页：聚合展示产品特性标签。
+- Landing Page：作为视觉焦点吸引用户注意力。
+- 功能聚合展示：将多个特性标签用统一的容器承载并轮播。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+Bucket 是一个自包含的展示组件，无需传入任何 props 即可使用。
+
+<ComponentShowcase
+  id="uselayouts/bucket"
+  path="uselayouts/bucket/basic"
+/>
+
+```tsx
+import Bucket from "@/components/ui/uselayouts-bucket"
+
+export default function Demo() {
+  return <Bucket />
+}
+```
+
+<h2 id="api">API</h2>
+
+### Bucket
+
+Bucket 是一个纯展示型组件，不暴露外部 props。内部使用固定的四组特性标签（生产就绪、流畅动效、无障碍、现代设计）进行轮播展示。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 无外部 props | - | - |
+
+如需自定义标签内容和数量，请直接修改 `src/components/uselayouts/bucket.tsx` 中的 `INITIAL_CHIPS` 常量。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何修改轮播的标签内容？
+
+编辑 `src/components/uselayouts/bucket.tsx` 中 `INITIAL_CHIPS` 数组。每个 item 包含：
+- `id`：唯一标识（number）
+- `title`：标签标题（string）
+- `description`：标签描述（string）
+- `icon`：图标（来自 `@hugeicons/core-free-icons`）
+
+### 如何修改轮播间隔？
+
+修改 `src/components/uselayouts/bucket.tsx` 中 `setInterval` 的第二个参数（单位毫秒，默认 2000）。
+
+### 如何关闭动画？
+
+Bucket 使用 `motion/react` 实现动效。如需关闭，可将 `src/components/uselayouts/bucket.tsx` 中的 `motion.div` 替换为普通 `div`，并移除 `AnimatePresence` 包裹。
+
+### 组件在移动端的行为？
+
+Bucket 通过内部 `useIsMobile` hook 检测移动端，并自动调整标签的动画位移距离和缩放比例，保证移动端的展示效果。
+
+### 图标库从哪里来？
+
+Bucket 使用 `@hugeicons/core-free-icons` 和 `@hugeicons/react`。如需更换图标，从 `@hugeicons/core-free-icons` 中导入新的图标组件并更新 `INITIAL_CHIPS` 中的 `icon` 字段。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Bucket 代码时：
+
+1. 从 `@/components/ui/uselayouts-bucket` 导入 Bucket。
+2. Bucket 为自包含组件，直接渲染 `<Bucket />` 即可，无需传入 props。
+3. 不要尝试通过 props 控制标签内容；标签内容定义在组件内部 `INITIAL_CHIPS`。
+4. Bucket 依赖 `motion/react` 和 `@hugeicons/react`，不要移除这些依赖。
+5. Bucket 内置了 `useIsMobile` 响应式逻辑，不要额外包裹移动端判断。
+6. 不要在外部修改 Bucket 的内部样式；所有样式定义在组件文件中。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/bucket" />

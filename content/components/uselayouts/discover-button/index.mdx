@@ -1,0 +1,86 @@
+DiscoverButton 发现按钮。融合搜索与标签切换的交互动效组件，点击搜索图标可展开输入框，标签页随搜索状态平滑切换。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将搜索入口与内容标签筛选紧凑整合，并期望在搜索激活时自动收起标签页以释放空间时使用。
+
+常见场景：
+
+- 内容发现页的搜索与分类切换（如 Popular / Favorites）。
+- 顶部导航栏中搜索与 Tab 的组合入口。
+- 移动端有限空间下的搜索与过滤切换。
+
+交互行为：
+
+- 默认显示标签页（Popular / Favorites），点击标签切换激活态，带 layoutId 动画。
+- 点击搜索图标后，搜索输入框展开，标签页区域收起为关闭按钮。
+- 点击关闭按钮恢复标签页，收起搜索输入框。
+- 所有过渡使用 motion/react 的 spring 动画。
+
+不推荐：
+
+- 标签数量超过 4 个时使用此布局——标签区域空间有限。
+- 需要搜索建议、历史记录等复杂搜索交互时——请使用 AutoComplete 或 Combobox。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+DiscoverButton 无需外部 props，内部自管理搜索展开和标签切换状态。
+
+<ComponentShowcase
+  id="uselayouts/discover-button"
+  path="uselayouts/discover-button/basic"
+/>
+
+```tsx
+import DiscoverButton from "@/components/ui/uselayouts-discover-button"
+
+export default function Demo() {
+  return <DiscoverButton />
+}
+```
+
+<h2 id="api">API</h2>
+
+DiscoverButton 为自包含交互组件，无需外部 props。所有状态（搜索展开、标签切换）均在组件内部管理。
+
+标签配置定义在组件内部的 `TABS` 常量中：
+
+| 标签 ID | 标签文案 | 图标 | 颜色 |
+| --- | --- | --- | --- |
+| popular | Popular | Fire02Icon | text-red-500 |
+| favorites | Favorites | FavouriteIcon | text-gray-900 |
+
+如需自定义标签或扩展功能，直接修改 `src/components/uselayouts/discover-button.tsx` 中的 `TABS` 常量。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义标签？
+
+直接修改组件内的 `TABS` 常量，添加或替换标签项。每个标签需提供 `id`、`label`、`icon`（来自 @hugeicons/core-free-icons）、`color`、`fill` 和 `bg`。
+
+### 能否从外部控制搜索展开状态？
+
+当前 DiscoverButton 为自管理状态组件。如需外部控制，可将 `isSearchExpanded` 和 `setIsSearchExpanded` 提升为 props，或使用受控模式。
+
+### 能否传入外部搜索回调？
+
+当前输入框仅做 UI 展示。如需接入搜索逻辑，在 `<input>` 上添加 `onChange` 或 `onKeyDown` 事件处理。
+
+### 动画可以关闭吗？
+
+动画由 motion/react 驱动。如需调整动画参数，修改组件内 `transition` 配置（damping、stiffness、mass）。完全移除动画需去掉 `motion.div` 替换为普通 `div`，但会丢失交互体验。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/uselayouts-discover-button` 导入 DiscoverButton。
+2. DiscoverButton 无需 props，直接 `<DiscoverButton />` 即可使用。
+3. 图标依赖 @hugeicons/core-free-icons 和 @hugeicons/react，生成代码时不要替换为 lucide-react。
+4. 动画依赖 motion/react，不要移除或绕过。
+5. 标签内容硬编码在组件内部，LLM 不应在调用侧传入 children 或自定义标签。
+6. 不要在 DiscoverButton 外层包裹额外的交互容器，组件自身已包含完整的交互逻辑。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/discover-button" />

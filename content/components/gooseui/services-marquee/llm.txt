@@ -1,0 +1,16 @@
+Import path: @/components/ui/gooseui-services-marquee
+Exports: ServicesMarquee, ServicesGrid
+
+Usage:
+  <ServicesMarquee speed="normal" />
+  <ServicesGrid />
+
+Constraints:
+- speed: "slow" (60s) | "normal" (40s) | "fast" (25s), default "normal"
+- Uses CSS animate-marquee keyframe with --duration custom property
+- Double list rendering for seamless loop
+- Gradient masks on left/right edges (pointer-events-none)
+- 8 hardcoded service cards with Lucide icons and gradient backgrounds
+- ServicesGrid is a static 4-column responsive grid variant (no animation)
+- No Ant Design dependencies
+- Custom styles via className only; do not override marquee keyframes

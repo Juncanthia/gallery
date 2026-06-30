@@ -1,0 +1,273 @@
+---
+category: Tools
+title: CitationList
+subtitle: 引用列表
+description: 用于展示 AI 引用的来源列表，支持三种展示变体。
+demo:
+  cols: 1
+group:
+  title: 工具组件
+source:
+  component: src/components/tool/citation/citation-list.tsx
+  barrel: src/components/ui/tool-citation-list.tsx
+  schema: src/components/tool/citation/schema.ts
+  docs: content/components/tool/citation-list/index.mdx
+  examples:
+    - content/components/tool/citation-list/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  radixPopover: true
+  zod: true
+---
+
+# CitationList 引用列表
+
+CitationList 用于展示 AI 回答所引用的来源列表。它提供三种展示变体（default、inline、stacked），支持六种引用类型的自动图标映射、溢出折叠、悬停预览和自定义导航回调。
+
+## 何时使用 {#when-to-use}
+
+在 AI 对话界面中展示模型回答所引用的来源链接，帮助用户验证信息可靠性。CitationList 向用户呈现透明的信息来源，是构建可信 AI 体验的关键组件。
+
+常见场景：
+
+- AI 回答末尾展示引用的网页、文档、论文等来源。
+- 聊天消息中以内联方式嵌入引用标记。
+- 以紧凑的堆叠头像方式呈现多个来源。
+
+CitationList 通过 `variant` 表达展示形式：
+
+- `default`：纵向列表，每个引用展开完整的标题、摘要、域名等信息。适合独立的来源列表区域。
+- `inline`：横向排列的标签式引用，适合嵌入对话文本中，紧凑不打断阅读流。
+- `stacked`：堆叠图标的紧凑展示，点击弹出完整列表。适合空间极为有限的场景。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认以 `variant="default"` 纵向列表展示所有引用来源。
+
+```tsx
+import { CitationList } from "@/components/ui/tool-citation-list"
+
+const citations = [
+  {
+    id: "c1",
+    href: "https://react.dev/reference/react/useState",
+    title: "useState – React",
+    snippet: "useState is a React Hook that lets you add a state variable...",
+    domain: "react.dev",
+    type: "webpage" as const,
+  },
+  {
+    id: "c2",
+    href: "https://arxiv.org/abs/1706.03762",
+    title: "Attention Is All You Need",
+    snippet: "The dominant sequence transduction models are based on...",
+    domain: "arxiv.org",
+    author: "Vaswani et al.",
+    type: "article" as const,
+  },
+]
+
+export default function Demo() {
+  return (
+    <CitationList id="demo" citations={citations} />
+  )
+}
+```
+
+### 内联变体
+
+设置 `variant="inline"` 以横向标签形式展示引用，适合嵌入对话文本：
+
+```tsx
+import { CitationList } from "@/components/ui/tool-citation-list"
+
+export default function Demo() {
+  return (
+    <div className="text-sm leading-relaxed">
+      根据最新研究<CitationList id="inline" citations={citations} variant="inline" />，
+      React 19 引入了多项性能优化。
+    </div>
+  )
+}
+```
+
+### 堆叠变体
+
+设置 `variant="stacked"` 以紧凑的图标堆叠形式展示，hover 弹出完整列表：
+
+```tsx
+import { CitationList } from "@/components/ui/tool-citation-list"
+
+export default function Demo() {
+  return (
+    <CitationList id="stacked" citations={citations} variant="stacked" />
+  )
+}
+```
+
+### 溢出折叠
+
+使用 `maxVisible` 控制可见引用数量，超出部分折叠到 hover 触发的溢出面板：
+
+```tsx
+import { CitationList } from "@/components/ui/tool-citation-list"
+
+export default function Demo() {
+  return (
+    <CitationList id="limited" citations={manyCitations} maxVisible={3} />
+  )
+}
+```
+
+### 自定义导航
+
+传入 `onNavigate` 拦截默认的链接跳转行为：
+
+```tsx
+import { CitationList } from "@/components/ui/tool-citation-list"
+
+export default function Demo() {
+  return (
+    <CitationList
+      id="custom-nav"
+      citations={citations}
+      onNavigate={(href, citation) => {
+        console.log("navigate", citation.title)
+        window.open(href, "_blank")
+      }}
+    />
+  )
+}
+```
+
+## API {#api}
+
+### CitationList
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 唯一标识符，用于 data-tool-ui-id 属性和 DOM 定位 | `string` | 必填 |
+| citations | 引用数据数组 | `SerializableCitation[]` | 必填 |
+| variant | 展示变体 | `default` \| `inline` \| `stacked` | `default` |
+| maxVisible | 最大可见引用数；超出部分折叠到溢出面板 | `number` | - |
+| className | 附加样式类名，通过 cn 与基础类合并 | `string` | - |
+| onNavigate | 点击引用时的自定义导航回调；不传时使用 openSafeNavigationHref | `(href: string, citation: SerializableCitation) => void` | - |
+
+### SerializableCitation
+
+引用数据结构，由 `SerializableCitationSchema` (Zod) 定义和校验。
+
+| 属性 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 引用唯一标识，使用 ToolUIIdSchema 校验 | `string` | 是 |
+| href | 引用链接地址，必须是合法的 URL | `string` | 是 |
+| title | 引用标题，溢出面板中可截断展示 | `string` | 是 |
+| snippet | 引用摘要，仅在 default 变体中展示 | `string` | 否 |
+| domain | 来源域名，在溢出面板和 default 变体中展示 | `string` | 否 |
+| favicon | 网站图标 URL，存在时替代类型图标展示 | `string` | 否 |
+| author | 作者信息 | `string` | 否 |
+| publishedAt | 发布日期，ISO 8601 格式 | `string` | 否 |
+| type | 引用类型，决定默认图标。六种取值：webpage / document / article / api / code / other | `string` | 否（默认 `webpage`） |
+| locale | 语言区域 | `string` | 否 |
+
+### 引用类型与图标映射
+
+| type | 图标组件 | 图标来源 | 用途 |
+| --- | --- | --- | --- |
+| webpage | Globe | lucide-react | 通用网页 |
+| document | FileText | lucide-react | 文档、手册、规范 |
+| article | Newspaper | lucide-react | 论文、博客文章 |
+| api | Database | lucide-react | API 文档、数据源 |
+| code | Code2 | lucide-react | 代码仓库、代码片段 |
+| other | File | lucide-react | 其他来源（回退） |
+
+## Semantic DOM {#semantic-dom}
+
+CitationList 通过 `data-*` 属性暴露稳定语义结构：
+
+```html
+<div
+  data-tool-ui-id="demo-citations"
+  data-slot="citation-list"
+  class="isolate flex flex-col gap-4"
+>
+  <!-- 每个引用条目由 Citation 子组件渲染 -->
+  <!-- 溢出按钮由 OverflowIndicator 子组件渲染 -->
+</div>
+```
+
+## 样式模型 {#styling-model}
+
+CitationList 使用 Tailwind CSS 内联类名，不依赖 CSS-in-JS 或 ConfigProvider。
+
+- `default` 变体：`isolate flex flex-col gap-4`
+- `inline` 变体：`flex flex-wrap items-center gap-1.5`
+- `stacked` 变体：使用引用图标堆叠 + Popover 交互
+
+所有交互态（hover、focus-visible）均通过 Tailwind 工具类直接实现，不依赖额外的 CSS 变量或主题注入。
+
+## 可访问性 {#accessibility}
+
+- 引用链接使用 `openSafeNavigationHref` 保证安全的导航行为。
+- 溢出面板支持键盘操作：Enter/Space 打开，Escape 关闭。
+- OverflowIndicator 按钮使用原生 `<button>`，支持 focus-visible 环。
+- 图标使用 `aria-hidden="true"` 装饰性隐藏。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/tool/citation/citation-list.tsx`：CitationList 主组件、StackedCitations、OverflowIndicator、OverflowItem
+- `src/components/tool/citation/citation.tsx`：Citation 子组件（单条引用条目）
+- `src/components/tool/citation/schema.ts`：SerializableCitation 的 Zod schema 定义
+- `src/components/ui/tool-citation-list.tsx`：barrel re-export
+
+关键行为：
+
+1. `variant="default"` 时每个 citation 展开为完整的 Citation 卡片。
+2. `variant="inline"` 时渲染为横向标签，溢出项使用 Popover 展示。
+3. `variant="stacked"` 时渲染为堆叠图标按钮，hover 弹出完整列表。
+4. `maxVisible` 生效时，超出项由 OverflowIndicator 管理，hover 出现 Popover 面板。
+5. 导航行为由 `onNavigate` 控制；未提供时使用 `openSafeNavigationHref`。
+6. 每个引用条目根据 `type` 自动选择对应的 Lucide 图标。
+7. `favicon` 存在时优先展示图标，否则使用类型默认图标。
+
+## FAQ {#faq}
+
+### 如何控制可见引用数量？
+
+使用 `maxVisible` 属性。超出数量的引用折叠到溢出面板，hover 或 focus 时弹出展示。
+
+```tsx
+<CitationList id="citations" citations={manyCitations} maxVisible={3} />
+```
+
+### variant 之间如何选择？
+
+- `default`：需要完整展示每个引用的标题、摘要和域名时。
+- `inline`：引用需要嵌入对话文本流，不打断用户阅读时。
+- `stacked`：空间极为有限，仅需一个紧凑的入口时。
+
+### 能否自定义图标？
+
+不提供直接的图标替换属性。系统根据 `type` 字段自动分配图标。如需自定义图标，优先建议正确设置 `type` 以匹配内容类型；极端情况下可通过 `favicon` 覆盖。
+
+### 如何处理链接安全？
+
+组件内部使用 `resolveSafeNavigationHref` 校验链接，并使用 `openSafeNavigationHref` 执行安全跳转。传入 `onNavigate` 后会完全替代默认的安全导航逻辑，调用侧需自行保证安全性。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 CitationList 代码时，应遵守：
+
+1. 从 `@/components/ui/tool-citation-list` 导入 `CitationList`。
+2. `citations` 数组中每项的 `id` 和 `href` 为必填字段，且 `href` 必须是合法 URL。
+3. `type` 字段建议明确指定（webpage / document / article / api / code / other），以便渲染正确的类型图标。
+4. 在对话消息中展示引用时优先选择 `variant="inline"`，独立区域选择 `variant="default"`。
+5. 大量引用（5 条以上）时使用 `maxVisible` 控制折叠阈值，避免页面内容过长。
+6. 需要自定义导航行为（如路由跳转、埋点）时传入 `onNavigate` 回调。
+7. 不要引入 Ant Design、ConfigProvider、css-in-js 或 rc-component 相关依赖。
+8. `citation.id` 应在单个 CitationList 实例内保持唯一。

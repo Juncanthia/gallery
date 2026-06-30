@@ -1,0 +1,124 @@
+ExampleForm 是一个基于 Zod 验证的示例表单组件，提供姓名、邮箱和留言三个字段的完整表单交互流程。组件使用 `exampleFormSchema`（Zod schema）进行客户端表单验证，验证失败时在对应字段下方显示错误提示并将输入框边框标红。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要一个标准化的多字段输入表单时使用，常用于：
+
+- 联系表单、用户反馈表单等需要收集用户信息的页面。
+- 展示完整表单交互流程（输入、验证、提交）的教学和演示场景。
+- 作为其他业务表单的开发和模板参考。
+
+不推荐：
+
+- 需要动态字段或复杂嵌套表单结构的场景，此组件字段固定。
+- 需要集成第三方表单库（如 React Hook Form）的场景，此组件自行管理状态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+ExampleForm 无需任何 props，直接渲染包含姓名、邮箱和留言字段的 Card 表单。提交时通过 Zod schema 进行客户端验证。
+
+<ComponentShowcase
+  id="gooseui/example-form"
+  path="gooseui/example-form/basic"
+/>
+
+```tsx
+import { ExampleForm } from "@/components/ui/gooseui-example-form"
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full max-w-sm"&gt;
+      &lt;ExampleForm /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ExampleForm
+
+ExampleForm 组件不接收任何 props，所有状态（表单数据、验证错误、提交状态）均由组件内部管理。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 组件不接收任何 props | - | - |
+
+### 验证规则（Zod Schema）
+
+| 字段 | 规则 | 说明 |
+| --- | --- | --- |
+| name | `z.string().min(1)` | 必填，不能为空 |
+| email | `z.string().email()` | 必填，需符合邮箱格式 |
+| message | `z.string().min(1)` | 必填，不能为空 |
+
+### HTML 结构
+
+渲染输出为一个 `form` 元素包裹的 `Card` 组件，包含：
+
+- **CardHeader**：标题 "How can we help?" 和描述文本。
+- **CardContent**：三个表单字段（name、email、message），每个字段包含 Label、Input/Textarea 和错误消息区域。
+- **CardFooter**：提交按钮（"Send Message"，pending 时显示 "Sending..."）。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义表单字段？
+
+ExampleForm 的字段是硬编码的。如需修改字段，请复制组件源码并调整 Zod schema 和 JSX 结构。
+
+```tsx
+// 自定义 Zod schema
+const mySchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  message: z.string().min(10), // 修改最小长度
+})
+```
+
+### 如何对接后端 API？
+
+在 `handleSubmit` 函数中，`result.success` 为 `true` 的分支内添加 API 调用逻辑。当前实现仅做客户端验证，未发送请求。
+
+```tsx
+if (result.success) {
+  // 在此添加 API 调用
+  await fetch("/api/contact", {
+    method: "POST",
+    body: JSON.stringify(result.data),
+  })
+  setState({ ...state, success: true })
+}
+```
+
+### 如何重置表单？
+
+可通过 `state.defaultValues` 控制初始值，或在提交成功后重置表单状态。组件内部使用 `defaultValue` 而非受控 `value`，重置需通过 `key` 属性强制重新挂载。
+
+```tsx
+<ExampleForm key={resetKey} />
+```
+
+### 如何调整样式？
+
+ExampleForm 使用 Tailwind CSS class 控制样式。外层容器设置了 `w-full max-w-sm`，Card 使用默认样式。可通过外层 `div` 的 `className` 或修改组件源码调整。
+
+### 验证失败时如何定制错误样式？
+
+错误状态通过 `group/field` 和 `data-invalid` 属性控制。输入框在 `data-invalid=true` 时应用 `border-destructive` 和 `ring-destructive` 样式。Label 应用 `text-destructive`。可通过修改 Tailwind class 自定义。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ExampleForm 代码时：
+
+1. 从 `@/components/ui/gooseui-example-form` 导入 `ExampleForm`。
+2. 组件无需任何 props，直接使用 `&lt;ExampleForm /&gt;` 即可。
+3. 不要为 ExampleForm 传递任何 props，组件不接受任何参数。
+4. 不要修改 Zod schema 验证规则，除非业务需求明确要求。
+5. 不要引入 Ant Design 或 `antd` 相关依赖。
+6. 如需定制字段或样式，复制组件源码后修改，不要直接修改原始组件文件。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/example-form" />

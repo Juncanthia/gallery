@@ -1,3 +1,3 @@
 "use client"
 
-export { default as DiscoverButton } from "@/components/uselayouts/discover-button"
+export { default, default as DiscoverButton } from "@/components/uselayouts/discover-button"

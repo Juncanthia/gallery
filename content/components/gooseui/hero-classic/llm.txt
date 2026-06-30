@@ -1,0 +1,82 @@
+---
+category: Components
+title: HeroClassic
+subtitle: 经典 Hero
+description: 经典 Hero 区域块组件，包含徽章、标题、副标题、双 CTA、社交证明和配图区域。
+demo:
+  cols: 1
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/ui/gooseui-hero-classic.tsx
+  examples:
+    - content/components/gooseui/hero-classic/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# HeroClassic 经典 Hero
+
+经典 Hero 区域块组件，左右双栏布局，左侧为文案+CTA，右侧为配图区域。
+
+本组件是展示型块组件（block component），零配置渲染。自定义需修改源码。
+
+## 何时使用 {#when-to-use}
+
+适合 Landing Page 首屏、产品首页、营销页面的 Hero 区域。零配置直接使用，或基于源码进行定制。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { HeroClassic } from "@/components/ui/gooseui-hero-classic"
+
+export default function Demo() {
+  return <HeroClassic />
+}
+```
+
+> 说明：面向 LLM 的最小导入示例。当前版本无对外 props。
+
+## 核心导出 {#exports}
+
+- `HeroClassic`
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/ui/gooseui-hero-classic.tsx`（re-export）
+- `src/components/gooseui/components/blocks/hero/hero-classic.tsx`（实现）
+
+直接依赖：
+
+- React
+- `lucide-react`（`ArrowRight`、`Play` 图标）
+- `@hyper/gooseui/components/ui/button`（CTA 按钮）
+
+实现注意：
+
+1. 为零配置展示组件，无对外 props。
+2. 移动端浮动卡片隐藏（`hidden md:block`）。
+3. Hero 配图区域为占位设计，需替换为真实图片。
+4. 所有布局使用 Tailwind CSS 响应式断点。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 HeroClassic 代码时，应遵守：
+
+1. 从 `@/components/ui/gooseui-hero-classic` 导入 `HeroClassic`。
+2. 零配置渲染，不传任何 props。
+3. 自定义需修改源文件，不要在业务层用 Tailwind 复刻。
+4. 不引入 Ant Design 相关依赖。

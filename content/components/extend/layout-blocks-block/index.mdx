@@ -1,0 +1,129 @@
+OCR 区块 OcrBlocksBlock。左侧展示内嵌 PDF 查看器并叠加 OCR 识别区块的高亮标注，右侧展示 OCR 区块列表，点击区块自动滚动 PDF 到对应位置。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在一个界面中同时展示 PDF 文档及其 OCR 识别结果，并支持区块与 PDF 页面的双向联动定位时。
+
+常见场景：
+
+- 文档 OCR 处理工具的识别结果展示与校对。
+- 合同、论文等 PDF 文档的版面分析与内容提取。
+- 需要逐区块审查 OCR 识别质量的人工审核工作流。
+
+不推荐：
+
+- 仅需要展示 PDF 而不需要 OCR 区块标注时，使用 `PDFViewer` 组件。
+- 仅需要 OCR 文本内容而无需与 PDF 页面联动时，直接使用数据列表展示。
+- 需要自定义 OCR 处理流程时，应在业务层编排，而非依赖组件内部数据。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase
+  id="extend/layout-blocks-block"
+  path="extend/layout-blocks-block/basic"
+/>
+
+```tsx
+import { OcrBlocksBlock } from "@/components/ui/extend-layout-blocks-block"
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full"&gt;
+      &lt;OcrBlocksBlock /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### OcrBlocksBlock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| file | PDF 文件地址 | `string` | `/samples/attention.pdf` |
+| output | OCR 识别结果数据 | `ParsedOcrOutput` | 内置 Attention Is All You Need 论文示例数据 |
+
+组件内部行为：
+
+- 左侧通过 `PDFViewer` 展示 PDF，并通过 `renderPageOverlay` 在 PDF 页面上叠加 OCR 区块的高亮矩形。
+- 右侧通过 `OcrBlocksPanel` 展示识别到的所有 OCR 区块列表，支持虚拟滚动。
+- 点击右侧列表中的任意区块，左侧 PDF 自动滚动到该区块所在页面并高亮对应区域。
+- 当前激活的区块在 PDF 叠加层中显示为蓝色高亮，其他区块为半透明灰色。
+- 使用 `PdfBlockResizableShell` 提供左右分栏布局，支持拖拽调整面板宽度，自动保存比例到 localStorage（key: `pdf-block-ocr`）。
+
+### OcrBlocksPanel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| blocks | OCR 区块数组 | `OcrBlock[]` | - |
+| activeBlockId | 当前激活的区块 ID | `string` | - |
+| className | 根元素样式类名 | `string` | - |
+| onBlockFocus | 点击区块时的回调 | `(block: OcrBlock) => void` | - |
+
+### OcrBlock 类型
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| id | 区块唯一标识 | `string` |
+| type | 区块类型 | `"heading"` \| `"paragraph"` \| `"list"` \| `"table"` \| `"figure"` \| `"header"` \| `"footer"` \| `"page_number"` |
+| text | 区块文本内容（支持 Markdown） | `string` |
+| page | 所在页码 | `number` |
+| pageWidth | 页面宽度 | `number` |
+| pageHeight | 页面高度 | `number` |
+| confidence | OCR 识别置信度 | `number` |
+| polygon | 区块多边形顶点坐标 | `Point[]` |
+| boundingBox | 区块包围盒 | `BoundingBox` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何传入自定义 PDF 和 OCR 数据？
+
+通过 `file` 和 `output` 属性传入：
+
+```tsx
+&lt;OcrBlocksBlock
+  file="/my-document.pdf"
+  output={myOcrResult}
+/&gt;
+```
+
+`output` 需符合 `ParsedOcrOutput` 类型结构，包含 `chunks` 数组，每个 chunk 包含 `blocks` 数组。
+
+### 如何仅在右侧展示 OCR 区块列表？
+
+如果只需要区块列表而不需要左侧 PDF 联动，可以直接使用 `OcrBlocksPanel`：
+
+```tsx
+import { getOcrBlocks, OcrBlocksPanel } from "@/components/ui/extend-layout-blocks"
+
+&lt;OcrBlocksPanel blocks={getOcrBlocks(myOcrOutput)} /&gt;
+```
+
+### 与 PDFViewer 的关系？
+
+`OcrBlocksBlock` 内部组合了 `PDFViewer` 和 `OcrBlocksPanel`，通过 `PdfBlockResizableShell` 提供分栏布局。如果只需要其中之一的功能，应直接使用 `PDFViewer` 或 `OcrBlocksPanel`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 OcrBlocksBlock 代码时：
+
+1. 从 `@/components/ui/extend-layout-blocks-block` 导入 `OcrBlocksBlock`。
+2. `file` 和 `output` 均有默认值，无 props 时展示内置示例 PDF 和 OCR 数据。
+3. 如需自定义 OCR 数据，请确保数据结构符合 `ParsedOcrOutput` 类型。
+4. 不要手动组合 `PDFViewer` + `OcrBlocksPanel` 来模拟本组件行为，直接使用 `OcrBlocksBlock`。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 和 `data-` 属性暴露稳定的语义结构：
+
+| data 属性 | 说明 |
+| --- | --- |
+| `data-slot="pdf-block-ocr"` | PdfBlockResizableShell 根元素标记 |
+
+<h2 id="source">源码</h2>
+
+&lt;SourceViewer componentId="extend/layout-blocks-block" /&gt;

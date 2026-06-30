@@ -1,0 +1,123 @@
+Waves 波浪背景。基于 Three.js 和 GLSL 着色器实现，通过 3D 单纯形噪声（Simplex Noise）对平面网格进行顶点位移，生成动态波浪流动效果。适合用作页面背景或氛围装饰。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为页面或区块添加动态波浪、海洋流动等氛围型视觉效果时使用。
+
+常见场景：
+- 全屏背景装饰，如 Hero 区域、品牌展示页。
+- 深色主题页面的动态背景层。
+- 科技感、海洋主题页面的氛围组件。
+
+不推荐：
+- 性能敏感的低端设备页面，WebGL 着色器开销较高。
+- 需要精确视觉一致性的场景，着色器效果受 GPU 差异影响。
+- 纯信息展示的文本密集型页面，动态背景会分散注意力。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="chamaac/waves" path="chamaac/waves/basic" />
+
+### 基础用法
+
+Waves 默认铺满父容器（`absolute inset-0`），需确保父容器 `relative` 且有明确尺寸。
+
+```tsx
+import { Waves } from "@/components/ui/chamaac-waves"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-black"&gt;
+      &lt;Waves /&gt;
+      &lt;div className="absolute inset-0 flex items-center justify-center"&gt;
+        &lt;p className="text-white/80 text-lg font-medium"&gt;Waves&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义配色
+
+通过 `waveColor1`、`waveColor2`、`waveColor3` 自定义波浪的三层颜色。
+
+```tsx
+import { Waves } from "@/components/ui/chamaac-waves"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#0a0a2e]"&gt;
+      &lt;Waves
+        backgroundColor="#0a0a2e"
+        waveColor1="#ff6b6b"
+        waveColor2="#ffd93d"
+        waveColor3="#0a0a2e"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整波浪参数
+
+通过 `waveSpeedX`、`waveSpeedY`、`waveAmpX` 控制波浪的流动速度和幅度。
+
+```tsx
+import { Waves } from "@/components/ui/chamaac-waves"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-black"&gt;
+      &lt;Waves
+        waveSpeedX={0.025}
+        waveSpeedY={0.01}
+        waveAmpX={50}
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Waves
+
+波浪背景组件。基于 WebGL 着色器实现，铺满父容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| backgroundColor | Canvas 背景色 | `string` | `"#000000"` |
+| waveColor1 | 波浪中层颜色（谷底到中间） | `string` | `"#071697"` |
+| waveColor2 | 波浪高峰颜色 | `string` | `"#00d4ff"` |
+| waveColor3 | 波浪谷底颜色 | `string` | `"#000000"` |
+| waveSpeedX | X 轴方向流动速度 | `number` | `0.0125` |
+| waveSpeedY | Y 轴方向流动速度 | `number` | `0.005` |
+| waveAmpX | 波浪振幅 | `number` | `32` |
+
+<h2 id="faq">常见问题</h2>
+
+### Waves 为什么没有显示？
+
+确保父容器设置了 `position: relative`（或 `absolute`/`fixed`）且有明确的宽高。Waves 使用 `absolute inset-0` 铺满父容器，如果父容器没有尺寸或定位上下文，Canvas 不会渲染。
+
+### 如何减少性能开销？
+
+- 仅在用户可见时渲染（通过条件渲染或 IntersectionObserver）。
+- 减小父容器尺寸，降低 GPU 填充率。
+- 在低端设备上降级为静态背景色。
+
+### 颜色格式支持什么？
+
+waveColor1、waveColor2、waveColor3、backgroundColor 接受 CSS 颜色字符串（如 hex `"#ff6b6b"`、rgb `"rgb(255,107,107)"`、命名颜色 `"red"` 等），内部通过 `new THREE.Color()` 解析。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/chamaac-waves` 导入 Waves，不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 确保父容器有 `position: relative` 和明确尺寸。
+3. Waves 自带 `pointer-events-none`，前景内容需要独立的点击层。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 等配置。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="chamaac/waves" />

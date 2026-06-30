@@ -1,0 +1,137 @@
+---
+category: Components
+title: FooterNewsletter
+subtitle: 带订阅的页脚
+description: 页脚区块组件，包含邮件订阅表单、导航链接、社交图标和版权信息。
+demo:
+  cols: 2
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/ui/gooseui-footer-newsletter.tsx
+  examples:
+    - content/components/gooseui/footer-newsletter/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# FooterNewsletter 带订阅的页脚
+
+页脚区块组件，包含邮件订阅表单、导航链接、社交媒体图标和底部信息栏。自包含设计，无需外部配置即可渲染完整页脚。
+
+本组件源自 GooseUI 的 blocks/footers 区块模板，实现以本地源码为准。
+
+## 何时使用 {#when-to-use}
+
+需要在页面底部展示品牌信息、导航链接、社交媒体入口，同时提供邮件订阅功能时使用。适用于营销网站、SaaS 落地页、企业官网等场景。
+
+常见场景：
+
+- 营销网站的全局页脚，包含订阅 CTA 和社交链接。
+- SaaS 产品落地页底部，提供导航和法律信息入口。
+- 企业官网的底部信息栏。
+
+不推荐：
+
+- 需要高度定制化页脚布局的场景（建议在源码中直接修改或基于模板重写）。
+- 页脚内容需要服务端动态渲染的场景。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { FooterNewsletter } from "@/components/ui/gooseui-footer-newsletter"
+
+export default function Demo() {
+  return <FooterNewsletter />
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。FooterNewsletter 为自包含组件，无需传入 Props。
+
+## 核心导出 {#exports}
+
+- `FooterNewsletter`
+
+## API 摘要 {#api}
+
+FooterNewsletter 不接受外部 Props。所有内容（导航链接、社交图标、订阅文案）均在组件内部定义。
+
+组件内部状态：
+
+- `email: string` — 邮箱输入值，初始为空。
+- `isSubmitting: boolean` — 提交加载状态，1 秒模拟延迟。
+- `CURRENT_YEAR = 2026` — 编译时常量，用于版权年份。
+
+## Semantic DOM {#semantic-dom}
+
+FooterNewsletter 渲染为 `<footer>` 语义标签，结构为：
+
+- 顶部区域：`grid lg:grid-cols-2` 两栏布局。
+  - 左栏（订阅区）：标题 `<h3>` + 描述 `<p>` + `<form>` 含 `Input` 和 `Button`（Send 图标）。
+  - 右栏（导航+社交）：`<nav>` + 社交图标链接（`rounded-full` 圆形按钮）。
+- 底部栏：`border-t` 分割线 + `<div>` 品牌标识 + `<p>` 版权信息 + 隐私/条款链接。
+
+所有样式使用 Tailwind CSS，依赖 lucide-react（Send 图标）和 react-icons/fa（社交图标）。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/ui/gooseui-footer-newsletter.tsx`（re-export）
+- `src/components/gooseui/components/blocks/footers/footer-newsletter.tsx`（实现）
+
+直接依赖：
+
+- React
+- `lucide-react`（Send 图标）
+- `react-icons/fa`（FaTwitter, FaGithub, FaLinkedin）
+- `next/link`
+- `@hyper/gooseui/components/ui/button`
+- `@hyper/gooseui/components/ui/input`
+
+实现注意：
+
+1. 组件为演示级区块，订阅功能仅模拟提交（1 秒延迟），生产环境需替换为真实 API 调用。
+2. 版权年份使用编译时常量 `CURRENT_YEAR` 避免 SSR 水合不匹配。
+3. 导航链接为占位锚点（`#about`、`#features` 等），实际使用需替换为真实路由。
+4. 社交链接为示例 URL，需替换为实际社交媒体地址。
+
+## 可访问性 {#accessibility}
+
+- 社交图标按钮包含 `sr-only` 文本描述（`<span className="sr-only">{social.label}</span>`）。
+- 导航使用 `<nav>` 语义标签。
+- 表单使用 `<form>` 语义标签，`Input` 包含 `required` 属性。
+- 订阅按钮在加载中显示 "Subscribing..." 文字状态。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/gooseui/components/blocks/footers/footer-newsletter.tsx` 为准 |
+| 页脚方案 | 自包含区块组件，非 AntD Layout.Footer |
+| 布局 | Tailwind CSS Grid，不依赖 AntD Row/Col |
+| 表单 | 原生 HTML form + gooseui Input/Button，非 AntD Form |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 FooterNewsletter 代码时，应遵守：
+
+1. 从 `@/components/ui/gooseui-footer-newsletter` 导入 `FooterNewsletter`。
+2. 直接使用 `<FooterNewsletter />`，无需传入任何 Props。
+3. 不要从 gooseui 内部路径导入。
+4. 定制导航/社交/文案时在组件源码中修改，不要在调用处覆盖内部结构。
+5. 不要引入 Ant Design 或其他 Footer 库的依赖。
+6. 生产环境需替换订阅模拟逻辑为真实 API 调用。

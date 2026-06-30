@@ -1,0 +1,213 @@
+---
+category: Components
+title: IssueReportForm
+subtitle: 问题报告表单
+description: 用于在 IT 支持、帮助台或内部工单系统中提交问题报告。提供分类、影响评估、文件附件和上下文记录的完整表单。
+demo:
+  cols: 1
+group:
+  title: 表单
+  order: 1
+source:
+  component: src/components/manifest/form/issue-report-form.tsx
+  wrapper: src/components/ui/manifest-issue-report-form.tsx
+  demo: src/components/manifest/form/demo/form.ts
+  docs: content/components/manifest/issue-report-form/index.mdx
+  examples:
+    - content/components/manifest/issue-report-form/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  lucide: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# IssueReportForm 问题报告表单
+
+IssueReportForm 是一个结构化的工单提交表单，用于 IT 支持、帮助台或内部工单系统。它内置了报告人信息、团队/位置上下文、分类联动、影响评估、已尝试排查动作记录和文件附件功能。
+
+## 何时使用 {#when-to-use}
+
+当用户需要向技术团队提交问题工单时使用此表单。适用于：
+
+- IT 支持工单系统：报告软件、硬件或网络故障。
+- 帮助台门户：内部员工提交技术支持请求。
+- 服务质量反馈：记录影响、频率和紧急程度。
+- 问题追踪平台：收集关键诊断信息以加速排查。
+
+IssueReportForm 通过结构化数据收集确保每个工单包含足够上下文：
+
+- 报告人信息和联系方式。
+- 团队和位置选择。
+- 分级分类（主分类 -> 子分类联动）。
+- 影响、紧急程度和频率评估。
+- 可折叠区域：已尝试的操作、办公室/工作站、附加评论。
+- 多文件附件支持。
+
+## 代码演示 {#examples}
+
+### 基础问题报告表单
+
+默认提供完整表单，包含所有必要字段。影响评估和附加上下文可通过折叠区域展开。
+
+```tsx
+import { IssueReportForm } from "@/components/ui/manifest-issue-report-form"
+
+const demoData = {
+  title: "Report an Issue",
+  teams: ["Engineering", "Product", "Design"],
+  locations: ["New York", "San Francisco", "London"],
+  categories: {
+    Software: ["Email", "VPN", "Browser"],
+    Hardware: ["Computer", "Monitor", "Printer"],
+  },
+  impacts: [
+    { value: "critical", label: "Critical" },
+    { value: "medium", label: "Medium" },
+  ],
+  urgencies: [
+    { value: "immediate", label: "Immediate" },
+    { value: "this-week", label: "This week" },
+  ],
+  frequencies: [
+    { value: "constant", label: "Constant" },
+    { value: "occasional", label: "Occasional" },
+  ],
+  attemptedActions: [
+    "Restarted the application",
+    "Cleared browser cache",
+  ],
+}
+
+export default function Demo() {
+  return (
+    <div className="max-w-2xl">
+      <IssueReportForm
+        data={demoData}
+        actions={{
+          onSubmit: (formData) => console.log("Issue reported:", formData),
+        }}
+        appearance={{ showTitle: true }}
+      />
+    </div>
+  )
+}
+```
+
+## API {#api}
+
+### IssueReportForm
+
+通过 `data` 配置表单选项，`actions` 处理提交，`appearance` 控制样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 表单配置数据 | `object` | 内置 Demo 数据 |
+| data.title | 表单标题 | `string` | - |
+| data.teams | 可选团队列表 | `string[]` | `[]` |
+| data.locations | 可选地点列表 | `string[]` | `[]` |
+| data.categories | 分类到子分类映射 | `Record<string, string[]>` | `{}` |
+| data.impacts | 影响级别选项 | `{ value: string; label: string }[]` | `[]` |
+| data.urgencies | 紧急程度选项 | `{ value: string; label: string }[]` | `[]` |
+| data.frequencies | 发生频率选项 | `{ value: string; label: string }[]` | `[]` |
+| data.attemptedActions | 预定义排查动作 | `string[]` | `[]` |
+| actions.onSubmit | 提交回调 | `(formData: IssueFormData) => void` | - |
+| appearance.showTitle | 是否显示标题 | `boolean` | `true` |
+| appearance.compactMode | 紧凑布局 | `boolean` | `true` |
+
+### IssueFormData
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| declarantName | 报告人姓名 | `string` |
+| email | 联系邮箱 | `string` |
+| team | 所属团队 | `string` |
+| location | 办公地点 | `string` |
+| office | 办公室/区域 | `string` |
+| workstation | 工作机位编号 | `string` |
+| category | 主分类 | `string` |
+| subcategory | 子分类 | `string` |
+| issueTitle | 问题标题 | `string` |
+| description | 问题描述 | `string` |
+| impact | 影响级别 | `string` |
+| urgency | 紧急程度 | `string` |
+| frequency | 发生频率 | `string` |
+| startDate | 首次出现日期 | `string` |
+| attemptedActions | 已尝试操作 | `string[]` |
+| attachments | 附件文件 | `File[]` |
+| additionalComments | 其他评论 | `string` |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/manifest/form/issue-report-form.tsx`：表单渲染、状态管理、分类联动、文件处理。
+- `src/components/ui/manifest-issue-report-form.tsx`：薄包装，从 manifest 包重新导出。
+- `src/components/manifest/form/demo/form.ts`：Demo 默认数据。
+
+关键行为：
+
+1. 表单为不受控组件，内部使用 `useState` 管理所有字段。
+2. 主分类选择后动态联动子分类下拉选项；切换主分类时子分类重置。
+3. 影响/紧急/频率通过 `Select` 下拉选择，日期通过原生 `<input type="date">`。
+4. 已尝试操作通过标签按钮多选切换，支持预定义列表。
+5. 文件附件通过隐藏 `<input type="file">` 触发，支持多选，附件的添加和删除由组件管理。
+6. 两个折叠区域（影响/紧急 和 附加上下文）可独立展开/收起。
+7. 标题通过 `appearance.showTitle` 控制显示。
+8. `onSubmit` 在点击提交按钮时触发，不包含任何内置的表单验证。
+
+## FAQ {#faq}
+
+### 如何获取表单提交的数据？
+
+通过 `actions.onSubmit` 回调接收完整的 `IssueFormData` 对象：
+
+```tsx
+<IssueReportForm
+  data={formConfig}
+  actions={{
+    onSubmit: (formData) => {
+      createTicket(formData)
+    },
+  }}
+/>
+```
+
+### 如何自定义分类和子分类？
+
+通过 `data.categories` 传入任意分类映射：
+
+```tsx
+const categories = {
+  "软件": ["办公套件", "邮件", "VPN"],
+  "硬件": ["电脑", "显示器", "打印机"],
+}
+
+<IssueReportForm data={{ categories }} />
+```
+
+### 如何隐藏表单标题？
+
+```tsx
+<IssueReportForm appearance={{ showTitle: false }} />
+```
+
+### 如何预填部分字段？
+
+IssueReportForm 当前为不受控组件。如需预填数据，在调用侧自行封装 wrapper 管理初始状态。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 IssueReportForm 代码时，应遵守：
+
+1. 从 `@/components/ui/manifest-issue-report-form` 导入 IssueReportForm。
+2. 通过 `data` prop 传入表单选项配置。
+3. 通过 `actions.onSubmit` 处理表单提交。
+4. 通过 `appearance` 控制标题和布局。
+5. 分类通过 `Record<string, string[]>` 配置，选择主分类后子分类自动联动。
+6. 影响、紧急、频率通过 `{ value: string; label: string }[]` 数组配置。
+7. 已尝试操作通过 `string[]` 配置预定义选项列表。

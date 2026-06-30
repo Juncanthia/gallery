@@ -1,0 +1,134 @@
+ExampleCard 登录卡片，使用原生 CSS 实现样式，包含 Email、Password 输入和 Sign In 按钮。作为 GooseUI 的示例组件，演示了 HTML/CSS 块的导入和使用方式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要展示一个标准的登录表单卡片时使用，常用于：
+
+- 快速搭建登录页面。
+- 作为 CSS 驱动组件的参考示例。
+- 教学演示中展示原生 HTML form 与 CSS 的结合使用。
+
+不推荐：
+
+- 需要完整表单验证逻辑的生产环境（组件不包含客户端/服务端验证）。
+- 需要与后端认证系统集成的场景（组件仅为纯前端展示）。
+
+ExampleCard 是一个自包含组件，样式通过独立的 CSS 文件实现，使用 CSS 自定义属性控制颜色、间距等视觉变量。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+ExampleCard 无需任何 props，直接渲染一个包含 Email、Password 和 Sign In 按钮的登录卡片。
+
+<ComponentShowcase
+  id="gooseui/example-card"
+  path="gooseui/example-card/basic"
+/>
+
+```tsx
+import { ExampleCard } from "@/components/ui/gooseui-example-card"
+
+export default function Demo() {
+  return <ExampleCard />
+}
+```
+
+&gt; 说明：ExampleCard 无 props，以完整的 Login 卡片形态开箱即用。
+
+<h2 id="api">API</h2>
+
+### ExampleCard
+
+ExampleCard 是一个自包含组件，不接收任何 props，渲染完整的登录卡片 DOM 结构。
+
+渲染结构：
+
+```html
+<div class="login-container">
+  <div class="login-card">
+    <h1 class="login-title">Login</h1>
+    <p class="login-subtitle">Please enter your credentials to continue</p>
+    <form class="login-form">
+      <div class="form-group">
+        <label for="field-email">Email</label>
+        <input id="field-email" type="email" placeholder="Enter your email" required />
+      </div>
+      <div class="form-group">
+        <label for="field-password">Password</label>
+        <input id="field-password" type="password" placeholder="Enter your password" required />
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="login-button">Sign In</button>
+      </div>
+      <div class="form-footer">
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+    </form>
+  </div>
+</div>
+```
+
+CSS 自定义属性：
+
+| 变量 | 说明 | 默认值 |
+| --- | --- | --- |
+| --primary-color | 主色调（按钮背景、链接颜色） | #111111 |
+| --primary-hover | 主色调悬停态 | #484747 |
+| --text-color | 主要文本颜色 | #1f2937 |
+| --text-light | 次要文本颜色（placeholder、副标题） | #6b7280 |
+| --border-color | 输入框边框颜色 | #e5e7eb |
+| --background-light | 容器背景色 | #f9fafb |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何修改 Login 卡片的内容？
+
+ExampleCard 渲染的是硬编码的英文内容（"Login"、"Email"、"Password"、"Sign In" 等），不可通过 props 更改。如需自定义文本：
+
+1. 直接修改 `example-card.tsx` 源码中的文本内容。
+2. 基于此组件创建新的变体组件。
+
+### 如何处理表单提交？
+
+ExampleCard 包含一个原生 HTML `<form>` 元素，但其 `onSubmit` 未绑定处理函数。需要处理提交时的逻辑，可以在父组件中监听 form 事件：
+
+```tsx
+<div onSubmit={(e) => { e.preventDefault(); /* 自定义逻辑 */ }}>
+  <ExampleCard />
+</div>
+```
+
+或者修改源码，为 `<form>` 添加 `onSubmit` 处理。
+
+### 如何自定义样式？
+
+样式通过独立的 CSS 文件 `example-card.css` 实现。可通过以下方式定制：
+
+1. 覆盖 CSS 自定义属性（如 `--primary-color`）以更换主题色。
+2. 修改 CSS 文件中的具体规则以调整布局和间距。
+3. 样式文件使用 BEM 风格的 class 命名，可在外部通过更高优先级的选择器覆盖。
+
+### 与 Ant Design 的 Card 组件有什么区别？
+
+ExampleCard 不是 Ant Design Card 的兼容层。它是：
+- GooseUI 自研的示例组件，用于演示 HTML/CSS 块的导入模式。
+- 样式通过独立 CSS 文件实现，不依赖 CSS-in-JS 或 Tailwind。
+- 渲染的是一个完整的 Login 卡片，而非通用的可组合卡片容器。
+
+如果你需要通用的 Card 容器组件，请使用本项目的 `gooseui/card`（Card、CardHeader、CardContent 等子组件组合）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ExampleCard 代码时：
+
+1. 从 `@/components/ui/gooseui-example-card` 导入 `ExampleCard`。
+2. 组件无需任何 props，直接使用 `<ExampleCard />` 即可。
+3. 不要为 ExampleCard 传递任何 props，组件不接受任何参数。
+4. ExampleCard 的样式通过独立 CSS 文件实现，不要用 Tailwind class 覆盖其内部样式。
+5. 不要为登录表单引入 react-hook-form、Formik 或其他表单库。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/example-card" />

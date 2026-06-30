@@ -1,0 +1,86 @@
+BrandsCarousel 是一个基于 CSS animation 的品牌 logo 无限滚动轮播组件。通过双份列表实现无缝循环，支持速度控制和反向滚动。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中展示品牌 logo 或合作伙伴列表，希望以滚动动画形式呈现时使用。适用于落地页、产品首页、合作伙伴展示区等需要 "Trusted by" 区域的场景。
+
+常见场景：
+
+- 首页底部展示合作品牌或客户 logo。
+- SaaS 产品落地页的 &lt;Trusted by&gt; 区域。
+- 赞助商或合作伙伴的 logo 墙。
+
+不推荐：
+
+- 需要用户手动控制滚动的场景（应使用 Carousel 组件）。
+- logo 数量极少无法形成连续滚动视觉效果的场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+BrandsCarousel 内置品牌列表（Vercel、Stripe、GitHub 等），默认 `speed="normal"` 滚动。可通过 `reverse` 切换方向，`speed` 切换速度。
+
+<ComponentShowcase
+  id="gooseui/brands-carousel"
+  path="gooseui/brands-carousel/basic"
+/>
+
+```tsx
+import { BrandsCarousel } from "@/components/ui/gooseui-brands-carousel"
+
+export default function Demo() {
+  return <BrandsCarousel />
+}
+```
+
+<h2 id="api">API</h2>
+
+### BrandsCarousel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+| reverse | 是否反向滚动 | `boolean` | `false` |
+| speed | 滚动速度 | `"slow"` \| `"normal"` \| `"fast"` | `"normal"` |
+
+速度映射：`slow` 对应 `40s`，`normal` 对应 `25s`，`fast` 对应 `15s`，通过 CSS 自定义属性 `--duration` 注入到滚动轨道。
+
+滚动容器左右两侧各有渐变遮罩（`from-background to-transparent`），防止 logo 硬裁切，遮罩设置 `pointer-events-none` 不阻挡鼠标交互。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义品牌列表？
+
+当前品牌列表硬编码在组件内部。如需自定义，通过 `className` 传入样式覆盖或直接修改 `src/components/gooseui/components/blocks/brands/brands-carousel.tsx` 中的 `brands` 数组。
+
+### 如何控制滚动速度？
+
+通过 `speed` 属性，可选 `"slow"`、`"normal"`、`"fast"`，分别对应 40s、25s、15s 的动画时长。如需更精细控制，通过 CSS 覆盖 `--duration` 自定义属性。
+
+```tsx
+<BrandsCarousel speed="slow" />
+```
+
+### 如何实现上下双排反向滚动？
+
+组件提供 `reverse` 属性控制方向。如需双排，组合两个 `BrandsCarousel` 实例，其中一个设置 `reverse`。
+
+```tsx
+<div className="space-y-4">
+  <BrandsCarousel speed="normal" />
+  <BrandsCarousel speed="normal" reverse />
+</div>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/gooseui-brands-carousel` 导入 `BrandsCarousel`。
+2. 使用 `speed` 属性控制滚动速度，可选值 `"slow"` / `"normal"` / `"fast"`。
+3. 使用 `reverse` 属性控制滚动方向，不要自行覆写 `animation-direction`。
+4. 不要自行拼装品牌 logo 布局或 DOM 结构，使用组件内置渲染。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/brands-carousel" />

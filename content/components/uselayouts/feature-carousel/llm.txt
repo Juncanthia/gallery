@@ -1,0 +1,183 @@
+---
+category: Components
+title: FeatureCarousel
+subtitle: 特性轮播
+description: 特性轮播展示组件，左侧可滚动特性标签列表配合右侧图片卡片的交互动画切换。
+demo:
+  cols: 1
+group:
+  title: 布局
+  order: 1
+source:
+  component: src/components/uselayouts/feature-carousel.tsx
+  ui: src/components/ui/uselayouts-feature-carousel.tsx
+  docs: content/components/uselayouts/feature-carousel/index.mdx
+  examples:
+    - content/components/uselayouts/feature-carousel/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+  cva: false
+  radixSlot: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# FeatureCarousel 特性轮播
+
+FeatureCarousel 是一个特性轮播展示组件，左侧为可滚动特性标签列表（芯片式按钮），右侧为对应图片卡片的交互动画切换。它是一个无 props 的自包含组件，内置 10 个产品特性展示项。
+
+本组件来自 UseLayouts 集合，使用 motion/react 驱动卡片切换和标签滚动动画，@hugeicons 提供图标，风格现代且富有视觉冲击力。
+
+## 何时使用 {#when-to-use}
+
+当需要以视觉化方式展示产品特性或服务亮点时使用，尤其适合：
+
+- 产品落地页的核心特性展示区域。
+- SaaS 服务的能力介绍板块。
+- 品牌宣传页面的亮点轮播。
+- 需要自动播放和手动交互结合的场景。
+
+FeatureCarousel 的核心交互：
+
+- **自动轮播**：默认每 3 秒自动切换到下一个特性。
+- **手动选择**：点击左侧任意特性标签，卡片立即切换到对应项。
+- **悬停暂停**：鼠标悬停在标签上时暂停自动轮播，移开后恢复。
+- **卡片动画**：当前卡片居中显示，前后卡片以缩小、平移、旋转的方式呈现纵深感。
+- **图片滤镜**：非激活卡片应用 grayscale + blur 效果，激活卡片恢复全彩清晰。
+
+不推荐：
+
+- 特性数量过少（&lt; 3 项）的场景，轮播效果不明显。
+- 需要展示大量文字描述的场景（每项 description 建议控制在 30 字以内）。
+- 移动端首屏核心区域（组件设计偏向桌面和小屏平板，移动端体验可能不够理想）。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+FeatureCarousel 无需传入任何 props，直接渲染即可获得完整的特性轮播面板。
+
+```tsx
+import { FeatureCarousel } from "@/components/ui/uselayouts-feature-carousel"
+
+export default function Demo() {
+  return <FeatureCarousel />
+}
+```
+
+## API {#api}
+
+FeatureCarousel 为自包含组件，不接受外部 props。所有内部状态（step、isPaused 等）由组件自行管理。
+
+内部关键常量：
+
+| 常量 | 说明 | 默认值 |
+| --- | --- | --- |
+| FEATURES | 特性数据数组，每项含 id、label、icon、image、description | 10 项预设数据 |
+| AUTO_PLAY_INTERVAL | 自动播放间隔（毫秒） | 3000 |
+| ITEM_HEIGHT | 左侧标签项高度（像素） | 65 |
+
+如需扩展，在 `src/components/uselayouts/feature-carousel.tsx` 中修改以上常量和内部函数即可。
+
+## Semantic DOM {#semantic-dom}
+
+FeatureCarousel 未使用 `data-slot` 语义属性暴露结构。组件由 `div`、`button`、`motion.div` 和 `img` 元素组合而成。标签按钮和图片卡片通过 React state（step）和 motion 的 animate 属性实现联动，不依赖语义标记。
+
+## 样式模型 {#styling-model}
+
+FeatureCarousel 的所有样式直接通过 Tailwind CSS class 在组件内部定义，不依赖 CVA 或外部变体文件。
+
+核心样式策略：
+
+- 外层容器：`w-full max-w-7xl mx-auto`，居中有最大宽度约束。
+- 面板容器：`rounded-[2.5rem] lg:rounded-[4rem]`，大圆角设计，flex 布局，最小高度 600px。
+- 左侧标签区：宽度 `lg:w-[40%]`，背景色 `bg-[#62B2FE]`，顶部和底部有渐变遮罩防止内容溢出。
+- 标签按钮：`rounded-full` 胶囊形状，激活态为白底蓝字，非激活态为半透明白字。
+- 标签滚动：motion.div 通过 `y` 属性垂直位移，spring 动画（stiffness: 90, damping: 22）。
+- 右侧卡片区：`flex-1`，背景 `bg-secondary/30`，内部卡片叠放。
+- 卡片动画：motion.div 通过 `x`、`scale`、`opacity`、`rotate` 属性控制，spring 动画（stiffness: 260, damping: 25）。
+- 图片滤镜：非激活卡片 `grayscale blur-[2px] brightness-75`，激活卡片 `grayscale-0 blur-0`。
+- 描述覆盖层：`bg-gradient-to-t from-black/90 via-black/40 to-transparent`，底部渐变遮罩。
+
+## 主题变量 {#design-token}
+
+FeatureCarousel 消费 Tailwind 主题变量和语义色 class。所有颜色通过 Tailwind class 引用，不依赖 css-in-js 或 ConfigProvider。
+
+常用变量来源：
+
+| 语义 | Tailwind / CSS token |
+| --- | --- |
+| 页面背景 | `bg-background` |
+| 前景文本 | `text-foreground` |
+| 次级背景 | `bg-secondary / bg-secondary/30` |
+| 边框 | `border-border` |
+| 卡片边框 | `border-background`（白色描边） |
+| 标签激活背景 | `bg-white` |
+| 标签激活文字 | `text-[#62B2FE]`（硬编码品牌色） |
+
+## 可访问性 {#accessibility}
+
+- 标签按钮使用原生 `<button>` 元素，支持键盘导航和点击。
+- 标签按钮有明确的 hover、激活和非激活视觉状态。
+- `onMouseEnter` / `onMouseLeave` 控制自动播放暂停和恢复。
+- 当前版本未提供 ARIA 标签（如 `aria-label`、`role="listbox"`），如需生产环境使用建议补充相应无障碍标注。
+- 图片使用 `alt` 属性（值为 `feature.label`），提供基本的图像替代文本。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/feature-carousel.tsx`：组件主体，包含 FeatureCarousel 函数、FEATURES 数据、动画逻辑。
+- `src/components/ui/uselayouts-feature-carousel.tsx`：re-export 桥接文件，将 default export 转为命名 export `FeatureCarousel`。
+
+关键行为：
+
+1. FeatureCarousel 不接受外部 props，初始 step 为 0。
+2. `step` 递增驱动轮播，通过 `currentIndex = step % FEATURES.length` 计算当前激活项索引。
+3. `handleChipClick(index)` 计算目标索引与当前索引的差值，一次性递增 step 以实现跳转。
+4. 自动播放通过 `useEffect` + `setInterval` 实现，`isPaused` 控制暂停。
+5. 卡片状态计算（`getCardStatus`）输出 `active`、`prev`、`next`、`hidden` 四种状态。
+6. 动画依赖 motion/react：spring 动画驱动标签垂直位移和卡片三维变换。
+7. 图标使用 @hugeicons/core-free-icons，通过 HugeiconsIcon 组件渲染。
+8. 图片使用 Unsplash 外链，生产环境建议替换为本地或 CDN 资源。
+
+## FAQ {#faq}
+
+### 如何修改轮播的特性内容？
+
+在 `src/components/uselayouts/feature-carousel.tsx` 中修改 `FEATURES` 数组。每项需要提供 `id`（唯一标识）、`label`（显示名称）、`icon`（从 `@hugeicons/core-free-icons` 导入）、`image`（图片 URL）和 `description`（描述文字）。数组长度可任意调整，组件会自动适配。
+
+### 如何调整自动播放速度？
+
+修改 `AUTO_PLAY_INTERVAL` 常量（单位毫秒）。默认 3000（3 秒）。设为较大值可减慢播放，设为较小值可加快。如需禁用自动播放，可将该值设为 `Infinity` 或注释掉 `useEffect` 中的 `setInterval` 逻辑。
+
+### FeatureCarousel 可以展示多少项特性？
+
+`FEATURES` 数组长度无硬限制，但建议 5-10 项。过少（&lt; 3 项）轮播效果不明显，过多（> 15 项）左侧标签区域会变得拥挤，需要调整 `ITEM_HEIGHT` 或面板高度来适配。
+
+### 如何更换左侧面板的主题色？
+
+左侧面板背景色为硬编码的 `bg-[#62B2FE]`，在源码中搜索 `#62B2FE` 统一替换为目标色值即可。同时注意渐变遮罩中也引用了该色值。
+
+### FeatureCarousel 的图片需要什么尺寸？
+
+组件内部图片使用 `object-cover` 填充，无固定尺寸要求。右侧卡片区宽高比为 `aspect-[4/5]`，建议使用 4:5 比例的图片以获得最佳显示效果。生产环境建议使用本地或 CDN 图片替换 Unsplash 外链。
+
+### FeatureCarousel 适合移动端吗？
+
+组件内置响应式布局（`lg:`、`md:` 断点），移动端会自动切换为上下布局（标签列表在上，图片卡片在下）。但由于卡片堆叠动画在窄屏上效果受限，建议在 `>=640px` 宽度下使用以获得最佳体验。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 FeatureCarousel 相关代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-feature-carousel` 导入 `FeatureCarousel`（named export）。
+2. 不要给 FeatureCarousel 传递任何 props，组件自身管理全部状态。
+3. 如需引入其他依赖（motion、@hugeicons），从组件源码处参考正确的导入路径。
+4. FeatureCarousel 依赖 motion/react 的 AnimatePresence 和 spring 动画，不要移除这些动画逻辑。
+5. 图标使用 @hugeicons/core-free-icons，通过 HugeiconsIcon 组件渲染，不要替换为其他图标库。
+6. 样式使用 Tailwind CSS class 内联定义，不引入 CVA 或其他样式管理方案。
+7. 左侧面板主题色为硬编码 `#62B2FE`，修改时需全局替换。
+8. 不要引入 Ant Design 相关依赖（ConfigProvider、antd-style、@ant-design/icons 等）。

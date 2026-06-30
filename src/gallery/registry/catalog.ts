@@ -61,6 +61,48 @@ function uselayoutsItem(id: string, en: string, label: string): GalleryNavItem {
   }
 }
 
+function manifestItem(id: string, en: string, label: string): GalleryNavItem {
+  return { id, label, en, to: "/components/manifest/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+}
+
+function dtfItem(id: string, en: string, label: string): GalleryNavItem {
+  return { id, label, en, to: "/components/dt/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+}
+
+function chamaacItem(id: string, en: string, label: string): GalleryNavItem {
+  return { id, label, en, to: "/components/chamaac/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+}
+
+function limeplayItem(id: string, en: string, label: string): GalleryNavItem {
+  return { id, label, en, to: "/components/limeplay/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+}
+
+function toolItem(id: string, en: string, label: string): GalleryNavItem {
+  return { id, label, en, to: "/components/tool/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+}
+
+function diceItem(id: string, en: string, label: string): GalleryNavItem {
+  return { id, label, en, to: "/components/dice/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+}
+
+function extendItem(id: string, en: string, label: string): GalleryNavItem {
+  return { id, label, en, to: `/components/extend/${id}`, summary: `${label}，Extend 组件。`, keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+}
+
+function gooseuiItem(id: string, en: string, label: string): GalleryNavItem {
+  return {
+    id,
+    label,
+    en,
+    to: `/components/gooseui/${id}`,
+    summary: `${label}，GooseUI 组件。`,
+    keywords: [id, en, en.toLowerCase(), label],
+    antd: false,
+    migration: 0,
+    api: true,
+  }
+}
+
 function sabramanItem(id: string, en: string, label: string): GalleryNavItem {
   return {
     id,
@@ -947,6 +989,229 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
       uselayoutsItem("vertical-tabs", "VerticalTabs", "垂直标签"),
     ],
   },
+  {
+    group: "UI",
+    groupEn: "UI",
+    libraryId: "gooseui",
+    items: [
+      gooseuiItem("anchor-tooltip", "AnchorTooltip", "anchor-tooltip"),
+      gooseuiItem("balanced-text", "BalancedText", "balanced-text"),
+      gooseuiItem("corner-shape", "CornerShape", "corner-shape"),
+      gooseuiItem("custom-toast", "CustomToast", "custom-toast"),
+      gooseuiItem("glitch-text", "GlitchText", "glitch-text"),
+      gooseuiItem("stacking-cards", "StackingCards", "stacking-cards"),
+      gooseuiItem("slider", "Slider", "slider"),
+      gooseuiItem("baseline-status", "BaselineStatus", "baseline-status"),
+      gooseuiItem("morphing-header", "MorphingHeader", "morphing-header"),
+      gooseuiItem("scroll-progress", "ScrollProgress", "scroll-progress"),
+      gooseuiItem("morphing-dialog", "MorphingDialog", "morphing-dialog"),
+      gooseuiItem("animated-timer", "AnimatedTimer", "animated-timer"),
+      gooseuiItem("theme-customizer", "ThemeCustomizer", "theme-customizer"),
+      gooseuiItem("css-theme-switcher", "CssThemeSwitcher", "css-theme-switcher"),
+      gooseuiItem("scroll-to-top", "ScrollToTop", "scroll-to-top"),
+      gooseuiItem("digital-clock", "DigitalClock", "digital-clock"),
+      gooseuiItem("curved-text", "CurvedText", "curved-text"),
+      gooseuiItem("svg-drawable", "SvgDrawable", "svg-drawable"),
+      gooseuiItem("adaptive-grid", "AdaptiveGrid", "adaptive-grid"),
+      gooseuiItem("smart-form", "SmartForm", "smart-form"),
+      gooseuiItem("theme-toggle", "ThemeToggle", "theme-toggle"),
+      gooseuiItem("checkbox", "Checkbox", "checkbox"),
+      gooseuiItem("promo-banner", "PromoBanner", "promo-banner"),
+      gooseuiItem("scroll-container", "ScrollContainer", "scroll-container"),
+    ],
+  },
+  {
+    group: "特效",
+    groupEn: "Effects",
+    libraryId: "gooseui",
+    items: [
+      gooseuiItem("border-beam", "BorderBeam", "border-beam"),
+      gooseuiItem("reveal-on-scroll", "RevealOnScroll", "reveal-on-scroll"),
+      gooseuiItem("parallax-cards", "ParallaxCards", "parallax-cards"),
+    ],
+  },
+  {
+    group: "区块",
+    groupEn: "Blocks",
+    libraryId: "gooseui",
+    items: [
+      gooseuiItem("faq-accordion", "FaqAccordion", "faq-accordion"),
+      gooseuiItem("footer-newsletter", "FooterNewsletter", "footer-newsletter"),
+      gooseuiItem("footer-columns", "FooterColumns", "footer-columns"),
+      gooseuiItem("footer-simple", "FooterSimple", "footer-simple"),
+      gooseuiItem("brands-carousel", "BrandsCarousel", "brands-carousel"),
+      gooseuiItem("features-grid", "FeaturesGrid", "features-grid"),
+      gooseuiItem("hello-world", "HelloWorld", "hello-world"),
+      gooseuiItem("header-simple", "HeaderSimple", "header-simple"),
+      gooseuiItem("header-auth", "HeaderAuth", "header-auth"),
+      gooseuiItem("header-with-cta", "HeaderWithCta", "header-with-cta"),
+      gooseuiItem("curved-text-marquee", "CurvedTextMarquee", "curved-text-marquee"),
+      gooseuiItem("example-card", "ExampleCard", "example-card"),
+      gooseuiItem("hero-classic", "HeroClassic", "hero-classic"),
+      gooseuiItem("hero-split", "HeroSplit", "hero-split"),
+      gooseuiItem("example-form", "ExampleForm", "example-form"),
+      gooseuiItem("services-marquee", "ServicesMarquee", "services-marquee"),
+      gooseuiItem("pokemon-image", "PokemonImage", "pokemon-image"),
+    ],
+  },
+  {
+    group: "文档",
+    groupEn: "Document",
+    libraryId: "extend-ui",
+    items: [
+      extendItem("pdf-viewer", "PDFViewer", "PDF 查看器"),
+      extendItem("csv-viewer", "CsvViewer", "CSV 查看器"),
+      extendItem("excel-editor", "ExcelEditorBlock", "Excel 编辑器"),
+      extendItem("docx-editor", "DocxEditorBlock", "Docx 编辑器"),
+      extendItem("e-signature", "ESignatureBlock", "电子签名"),
+      extendItem("pdf-dropzone", "PdfDropzoneBlock", "PDF 拖放区"),
+      extendItem("file-upload", "FileUpload", "文件上传"),
+      extendItem("file-system-block", "FileSystemBlock", "文件系统"),
+      extendItem("document-splits-block", "DocumentSplitsBlock", "文档分割"),
+      extendItem("bounding-box-citations-block", "HumanReviewBlock", "人工审核"),
+      extendItem("layout-blocks-block", "OcrBlocksBlock", "OCR 区块"),
+      extendItem("schema-builder", "SchemaBuilderPanel", "Schema 构建器"),
+      extendItem("pdf-block-resizable-shell", "PdfBlockResizableShell", "PDF 可调面板"),
+    ],
+  },
+  {
+    group: "页面模板",
+    groupEn: "Templates",
+    libraryId: "manifest-ui",
+    items: [
+      manifestItem("issue-report-form","IssueReportForm","问题报告"),
+      manifestItem("date-time-picker","DateTimePicker","日期时间选择"),
+      manifestItem("contact-form","ContactForm","联系表单"),
+      manifestItem("order-summary","OrderSummary","订单摘要"),
+      manifestItem("payment-confirmed","PaymentConfirmed","支付确认"),
+      manifestItem("notifications","Notifications","通知中心"),
+      manifestItem("sign-in","SignIn","登录"),
+      manifestItem("sign-up","SignUp","注册"),
+      manifestItem("forgot-password","ForgotPassword","忘记密码"),
+      manifestItem("two-factor","TwoFactor","双因素认证"),
+      manifestItem("billing-history","BillingHistory","账单历史"),
+      manifestItem("settings-panel","SettingsPanel","设置面板"),
+      manifestItem("user-profile","UserProfile","用户资料"),
+      manifestItem("dashboard","Dashboard","仪表盘"),
+      manifestItem("empty-state","EmptyState","空状态"),
+      manifestItem("file-uploader","FileUploader","文件上传"),
+    ],
+  },
+  {
+    group: "数据表格",
+    groupEn: "Data Table",
+    libraryId: "data-table-filters",
+    items: [
+      dtfItem("controls","ControlsProvider","筛选控件"),
+      dtfItem("date-picker-with-range","DatePickerWithRange","日期范围"),
+      dtfItem("data-table-filter-controls-drawer","DataTableFilterControlsDrawer","筛选抽屉"),
+      dtfItem("data-table-filter-reset-button","DataTableFilterResetButton","重置筛选"),
+      dtfItem("data-table-filter-checkbox","DataTableFilterCheckbox","复选筛选"),
+      dtfItem("data-table-filter-input","DataTableFilterInput","输入筛选"),
+      dtfItem("data-table-filter-slider","DataTableFilterSlider","滑块筛选"),
+      dtfItem("data-table-column-header","DataTableColumnHeader","列头"),
+      dtfItem("data-table-view-options","DataTableViewOptions","视图选项"),
+      dtfItem("data-table-toolbar","DataTableToolbar","表格工具栏"),
+      dtfItem("data-table-floating-bar","DataTableFloatingBar","浮动工具栏"),
+      dtfItem("data-table-infinite","DataTableInfinite","无限滚动表格"),
+    ],
+  },
+  {
+    group: "视觉效果",
+    groupEn: "Effects",
+    libraryId: "chamaac-ui",
+    items: [
+      chamaacItem("glassy-boxes","GlassyBoxes","玻璃盒子"),
+      chamaacItem("liquid-chrome","LiquidChrome","液态金属"),
+      chamaacItem("deform-tunnel","DeformTunnel","变形隧道"),
+      chamaacItem("nebula","Nebula","星云"),
+      chamaacItem("astral-flow","AstralFlow","星流"),
+      chamaacItem("electric-mist","ElectricMist","电雾"),
+      chamaacItem("emissive-dot-grid","EmissiveDotGrid","发光点阵"),
+      chamaacItem("grid-bloom","GridBloom","网格绽放"),
+      chamaacItem("interactive-grid","InteractiveGrid","交互网格"),
+      chamaacItem("iridescent-windows","IridescentWindows","彩虹窗口"),
+      chamaacItem("light-speed","LightSpeed","光速"),
+      chamaacItem("liquid-morph","LiquidMorph","液态变形"),
+      chamaacItem("marching-waves","MarchingWaves","行进波"),
+      chamaacItem("water-caustic","WaterCaustic","水焦散"),
+      chamaacItem("waves","Waves","波浪"),
+      chamaacItem("dancing-letters","DancingLetters","舞动字母"),
+      chamaacItem("dock","Dock","Dock 导航"),
+      chamaacItem("feature-steps","FeatureSteps","特性步骤"),
+      chamaacItem("focus-button","FocusButton","聚焦按钮"),
+      chamaacItem("gauge","Gauge","仪表"),
+      chamaacItem("shimmer-button","ShimmerButton","闪光按钮"),
+      chamaacItem("stats-cards","StatsCards","统计卡片"),
+      chamaacItem("text-loop","TextLoop","文字循环"),
+      chamaacItem("carousel","Carousel","轮播"),
+    ],
+  },
+  {
+    group: "媒体播放",
+    groupEn: "Media",
+    libraryId: "limeplay",
+    items: [
+      limeplayItem("media-player","MediaPlayer","音频播放器"),
+      limeplayItem("video-player","VideoPlayer","视频播放器"),
+      limeplayItem("playlist","Playlist","播放列表"),
+      limeplayItem("volume-control","VolumeControl","音量控制"),
+      limeplayItem("timeline-control","TimelineControl","时间轴控制"),
+      limeplayItem("playback-control","PlaybackControl","播放控制"),
+      limeplayItem("pip-control","PipControl","画中画"),
+      limeplayItem("playback-rate-control","PlaybackRateControl","播放速率"),
+      limeplayItem("captions-state-control","CaptionsStateControl","字幕"),
+      limeplayItem("audio-source","AudioSourceProvider","音频源"),
+    ],
+  },
+  {
+    group: "工具组件",
+    groupEn: "Tools",
+    libraryId: "tool-ui",
+    items: [
+      toolItem("citation","Citation","引用"),
+      toolItem("citation-list","CitationList","引用列表"),
+      toolItem("message-draft","MessageDraft","消息草稿"),
+      toolItem("question-flow","QuestionFlow","问题流"),
+      toolItem("video","Video","视频"),
+      toolItem("code-diff","CodeDiff","代码对比"),
+      toolItem("terminal","Terminal","终端"),
+      toolItem("plan","Plan","计划"),
+      toolItem("chart","Chart","图表"),
+      toolItem("data-table","DataTable","数据表格"),
+      toolItem("geo-map","GeoMap","地图"),
+      toolItem("image","Image","图片"),
+      toolItem("audio","Audio","音频"),
+      toolItem("weather-widget","WeatherWidget","天气组件"),
+      toolItem("stats-display","StatsDisplay","统计展示"),
+      toolItem("preferences-panel","PreferencesPanel","偏好设置"),
+      toolItem("approval-card","ApprovalCard","审批卡片"),
+      toolItem("order-summary","OrderSummary","订单摘要"),
+    ],
+  },
+  {
+    group: "工具",
+    groupEn: "Utilities",
+    libraryId: "dice-ui",
+    items: [
+      diceItem("slider","Slider","滑块"),
+      diceItem("progress","Progress","进度条"),
+      diceItem("badge-overflow","BadgeOverflow","徽标溢出"),
+      diceItem("sonner","Sonner","吐司通知"),
+      diceItem("switch","Switch","开关"),
+      diceItem("relative-time-card","RelativeTimeCard","相对时间卡片"),
+      diceItem("color-swatch","ColorSwatch","颜色样本"),
+      diceItem("checkbox","Checkbox","复选框"),
+      diceItem("scroller","Scroller","滚动容器"),
+      diceItem("avatar-group","AvatarGroup","头像组"),
+      diceItem("client-only","ClientOnly","客户端渲染"),
+      diceItem("visually-hidden","VisuallyHidden","视觉隐藏"),
+      diceItem("hitbox","Hitbox","点击区域"),
+      diceItem("presence","Presence","在线状态"),
+      diceItem("portal","Portal","传送门"),
+      diceItem("mention-highlighter","MentionHighlighter","提及高亮"),
+    ],
+  },
 
 ]
 
@@ -1120,6 +1385,21 @@ export const GALLERY_DOCS: Record<string, GalleryDocMeta> = {
       { id: "examples", title: "代码演示", depth: 2 },
       { id: "select", title: "基础用法", depth: 3 },
       { id: "groups", title: "分组与尺寸", depth: 3 },
+      { id: "api", title: "API", depth: 2 },
+      { id: "faq", title: "常见问题", depth: 2 },
+      { id: "llm-rules", title: "LLM 使用规则", depth: 2 },
+      { id: "source", title: "源码", depth: 2 },
+    ],
+  },
+  "citation-list": {
+    title: "引用列表",
+    en: "CitationList",
+    description:
+      "用于展示 AI 引用的来源列表，支持三种展示变体（默认、内联、堆叠）。",
+    toc: [
+      { id: "when-to-use", title: "何时使用", depth: 2 },
+      { id: "examples", title: "代码演示", depth: 2 },
+      { id: "citation-list", title: "基础用法", depth: 3 },
       { id: "api", title: "API", depth: 2 },
       { id: "faq", title: "常见问题", depth: 2 },
       { id: "llm-rules", title: "LLM 使用规则", depth: 2 },

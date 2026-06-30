@@ -774,6 +774,16 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "content", type: "string", description: "水印内容" },
     ],
   },
+  "citation-list": {
+    props: [
+      { name: "id", type: "string", description: "唯一标识符，用于 data-tool-ui-id 属性", required: true },
+      { name: "citations", type: "SerializableCitation[]", description: "引用数据数组", required: true },
+      { name: "variant", type: "'default' | 'inline' | 'stacked'", description: "展示变体", defaultValue: "'default'" },
+      { name: "maxVisible", type: "number", description: "最大可见引用数；超出部分折叠" },
+      { name: "className", type: "string", description: "附加样式类名" },
+      { name: "onNavigate", type: "(href: string, citation: SerializableCitation) => void", description: "点击引用的导航回调" },
+    ],
+  },
 }
 
 export function getGalleryApiDoc(id: string): GalleryApiDoc | null {

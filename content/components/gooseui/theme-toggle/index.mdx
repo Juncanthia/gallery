@@ -1,0 +1,123 @@
+ThemeToggle 基于 next-themes 和 framer-motion 实现的亮色/暗色主题切换按钮，点击可在 light 和 dark 模式间切换，带有 SVG 形变动画。
+
+&lt;h2 id="when-to-use"&gt;何时使用&lt;/h2&gt;
+
+当需要为页面或应用提供亮色/暗色模式切换入口时使用。该组件自动读取当前主题状态，通过形变动画在太阳图标（亮色模式）和月亮图标（暗色模式）之间平滑过渡。
+
+常见场景：
+
+- 网站导航栏或页脚中的主题切换按钮。
+- 设置面板或偏好页面中的主题切换控件。
+- 文档站点、博客或个人主页的主题切换入口。
+
+不推荐：
+
+- 需要多种主题色（如 zinc、red、blue 等）切换的场景，请使用 ThemeCustomizer。
+- 需要 system / light / dark 三态切换的场景，请使用 CSSThemeSwitcher。
+
+ThemeToggle 依赖 next-themes 的 `ThemeProvider`，通过 `useTheme` hook 读取并切换主题。首次渲染时显示占位骨架（圆角脉冲方块），客户端挂载后切换到实际图标，避免 hydration 不匹配。
+
+&lt;h2 id="examples"&gt;代码演示&lt;/h2&gt;
+
+### 基础用法
+
+ThemeToggle 默认渲染一个 24x24 的 SVG 图标按钮，点击在亮色/暗色间切换。当前为亮色模式时显示太阳图标（带光芒射线），暗色模式时显示月亮图标。
+
+&lt;ComponentShowcase
+  id="gooseui/theme-toggle"
+  path="gooseui/theme-toggle/basic"
+/&gt;
+
+```tsx
+import { ThemeToggle } from "@/components/ui/gooseui-theme-toggle"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center py-8"&gt;
+      &lt;ThemeToggle /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义尺寸
+
+通过 `size` 属性调整图标尺寸，通过 `className` 添加附加样式。
+
+```tsx
+import { ThemeToggle } from "@/components/ui/gooseui-theme-toggle"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center gap-4 py-8"&gt;
+      &lt;ThemeToggle size={32} /&gt;
+      &lt;ThemeToggle size={40} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+&lt;h2 id="api"&gt;API&lt;/h2&gt;
+
+### ThemeToggle
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 按钮附加 CSS 类名 | `string` | - |
+| size | SVG 图标尺寸（宽高） | `number` | `24` |
+
+ThemeToggle 基于 next-themes 的 `useTheme` hook 实现主题读取与切换，使用 framer-motion 驱动太阳/月亮 SVG 形变动画。首次挂载前显示骨架占位，客户端激活后显示实际图标。
+
+### 依赖
+
+- `next-themes`：提供 `useTheme` hook，需在应用根节点包裹 `ThemeProvider`。
+- `framer-motion`（motion）：驱动 SVG 路径形变动画和光芒射线的交错动画。
+
+&lt;h2 id="faq"&gt;常见问题&lt;/h2&gt;
+
+### ThemeToggle 和 ThemeCustomizer 有什么区别？
+
+ThemeToggle 仅提供 light/dark 两态切换，动画为太阳/月亮形变。ThemeCustomizer 提供 7 种主题色（zinc、red、orange、green、blue、violet、pink）+ light/dark 模式，有 6 种布局变体（Pill、Bar、Sidebar、Dock、Corner、Toolbar）。如果只需要简单的亮暗切换，使用 ThemeToggle；如果需要丰富的主题定制，使用 ThemeCustomizer。
+
+### 应用根节点需要什么配置？
+
+ThemeToggle 依赖 next-themes 的 `ThemeProvider`，需在应用根组件中包裹：
+
+```tsx
+import { ThemeProvider } from "next-themes"
+
+export default function RootLayout({ children }) {
+  return (
+    &lt;ThemeProvider attribute="class" enableSystem={false}&gt;
+      {children}
+    &lt;/ThemeProvider&gt;
+  )
+}
+```
+
+注意 `enableSystem` 设为 `false` 时，切换仅在 light/dark 之间进行，与 ThemeToggle 的二态切换逻辑一致。
+
+### SVG 动画依赖什么库？
+
+ThemeToggle 使用 framer-motion 的 `motion` 组件驱动 SVG 动画：
+- 太阳/月亮主体路径（`d` 属性）形变动画，duration 0.2s。
+- 太阳光芒射线（8 条）使用 `Variants` 的交错动画（staggerChildren 0.03s），在暗色模式时反向消失（staggerDirection -1）。
+
+### 如何自定义动画行为？
+
+如需修改动画参数（duration、staggerChildren 等），可 fork 组件源码并调整 `rayVariant` 和 `raysVariants` 中的 transition 配置。
+
+&lt;h2 id="llm-rules"&gt;LLM 使用规则&lt;/h2&gt;
+
+AI 生成 ThemeToggle 代码时：
+
+1. 从 `@/components/ui/gooseui-theme-toggle` 导入 `ThemeToggle`。
+2. 确保应用根节点已包裹 next-themes 的 `ThemeProvider`。
+3. 使用 `size` 属性调整图标尺寸，使用 `className` 添加附加样式。
+4. 不要在调用侧自行实现主题切换逻辑（useState、localStorage 等）。
+5. 不要从 gooseui 内部路径（`@/components/gooseui/components/ui/theme-toggle`）导入。
+6. 不要引入其他主题切换库（如 `@radix-ui/react-toggle`），使用组件内置逻辑。
+
+&lt;h2 id="source"&gt;源码&lt;/h2&gt;
+
+&lt;SourceViewer componentId="gooseui/theme-toggle" /&gt;

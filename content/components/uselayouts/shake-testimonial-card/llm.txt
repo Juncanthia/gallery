@@ -1,0 +1,134 @@
+---
+category: Components
+title: ShakeTestimonial
+subtitle: 抖动评价卡片
+description: 自动轮播的评价卡片堆叠组件，顶部卡片带有抖动动效后滑出。
+demo:
+  cols: 1
+group:
+  title: 布局
+  order: 21
+source:
+  component: src/components/uselayouts/shake-testimonial-card.tsx
+  ui: src/components/ui/uselayouts-shake-testimonial-card.tsx
+  docs: content/components/uselayouts/shake-testimonial-card/index.mdx
+  examples:
+    - content/components/uselayouts/shake-testimonial-card/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+  cva: false
+  radixSlot: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# ShakeTestimonial 抖动评价卡片
+
+ShakeTestimonial 是一个自动轮播的评价卡片堆叠组件，内置抖动滑出动效。它是一个无 props 的自包含组件，渲染一个完整的评价卡片堆叠动画，4 张评价卡片自动循环。
+
+本组件来自 UseLayouts 集合，使用 motion/react 驱动 shakeslide 交互动效，风格现代且富有活力。
+
+## 何时使用 {#when-to-use}
+
+当需要以动画方式轮播展示用户评价或推荐语时使用，尤其适合：
+
+- Landing Page 的社会证明区域，展示客户评价。
+- 产品介绍页的用户反馈区域。
+- 需要吸引注意力的推荐语展示区。
+- 自动轮播场景，无需用户手动翻页。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+ShakeTestimonial 无需传入任何 props，直接渲染即可获得完整的评价卡片轮播。
+
+```tsx
+import { ShakeTestimonial } from "@/components/ui/uselayouts-shake-testimonial-card"
+
+export default function Demo() {
+  return <ShakeTestimonial />
+}
+```
+
+## API {#api}
+
+ShakeTestimonial 为自包含组件，不接受外部 props。所有内部状态（卡片数据、动画状态、定时器）由组件自行管理。
+
+如需扩展评价数据，在 `src/components/uselayouts/shake-testimonial-card.tsx` 中修改 `testimonials` 常量数组：
+
+- `id`：唯一标识，motion 的 `key` 使用。
+- `name`：评价人姓名。
+- `role`：评价人职位。
+- `avatar`：头像图片路径。
+- `content`：评价内容文本。
+- `color`：卡片背景色（hex）。
+- `textColor`：卡片文字色（hex）。
+
+动画参数修改：
+
+- `handleNext` 中 `setTimeout` 的 `600ms` 控制抖动+滑出总时长。
+- `useEffect` 中 `setInterval` 的 `1500ms` 控制自动轮播间隔。
+- motion `animate` 中的 `times` 数组控制抖动关键帧时序。
+
+## 动画模型 {#animation-model}
+
+ShakeTestimonial 的 shakeslide 动画分为两层：
+
+1. **顶层卡片抖动+滑出**：通过 motion `animate` 的关键帧数组实现横向抖动（`x: [0, -12, 12, -12, 12, 0, 0]`）、缩放闪烁（`scale: [1, 1.05, 1, 1.05, 1, 1, 0.9]`）、3D 旋转（`rotateX: [0, 0, 0, 0, 0, 0, 15]`）和 Z 轴旋转（`rotate: [0, -2, 2, -2, 2, 0, -5]`）。最后向下滑出（`y: -300`）。`times` 数组 `[0, 0.1, 0.2, 0.3, 0.4, 0.5, 1]` 将前 0.5 均匀分布抖动，后 0.5 滑出。
+
+2. **底层卡片层叠**：非顶层卡片通过 `y: index * 15`（向下偏移）、`scale: 1 - index * 0.05`（逐层缩小）、`rotateX: -index * 2`（逐层后倾）营造 3D 景深感。
+
+轮播通过 `setCards` 将数组第一个元素移到末尾（`[...rest, first]`）实现循环。AnimatePresence 的 `mode="popLayout"` 确保移出元素在动画完成后才卸载。
+
+## 响应式 {#responsive}
+
+| 屏幕 | 容器最小高度 | 卡片最大宽度 | 卡片高度 |
+| --- | --- | --- | --- |
+| 小屏 (&lt;640px) | 500px | 370px | 240px |
+| 中屏 (>=768px) | 650px | 370px | 320px |
+| 大屏 (>=1024px) | 650px | 440px | 310px |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/shake-testimonial-card.tsx`：组件主体，包含 testimonials 数据、动画逻辑、渲染。
+- `src/components/ui/uselayouts-shake-testimonial-card.tsx`：re-export 桥接文件，将 default export 转为命名 export `ShakeTestimonial`。
+
+关键行为：
+
+1. ShakeTestimonial 不接受外部 props，评价数据和轮播逻辑均为内建。
+2. 自动轮播通过 `useEffect` + `setInterval` 实现，每 1.5 秒触发一次滑出。
+3. 手动点击通过 `onClick` 回调 `handleNext` 实现。
+4. 动画使用 `isAnimating` 状态锁防止快速点击导致的动画重叠。
+5. 顶层卡片抖动动画时长 600ms，与 `isAnimating` 锁的 timeout 一致。
+6. 卡片使用 `position: absolute` + `zIndex` 堆叠，AnimatePresence 管理进出场。
+7. 卡片头像使用 `<img>` 加载 SVG 文件（`/ui/memoji/*.svg`）。
+
+## FAQ {#faq}
+
+### ShakeTestimonial 可以自定义评价数据吗？
+
+当前版本评价数据为内建常量。如需自定义评价内容，在 `src/components/uselayouts/shake-testimonial-card.tsx` 中修改 `testimonials` 数组。
+
+### ShakeTestimonial 支持手动翻页吗？
+
+点击当前顶部卡片可手动触发下一张。组件暂不支持上一页、暂停、跳转到指定卡片等操作。
+
+### 轮播速度和动画可以调整吗？
+
+通过修改 `handleNext` 中 `setTimeout` 的延迟（默认 600ms）调整抖动动画时长，修改 `useEffect` 中 `setInterval` 的间隔（默认 1500ms）调整自动轮播速度。注意两者需协调，确保动画完整播放后再触发下一次轮播。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 ShakeTestimonial 相关代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-shake-testimonial-card` 导入 `ShakeTestimonial`（named export）。
+2. 不要给 ShakeTestimonial 传递任何 props，组件自身管理全部状态。
+3. 如需引入 motion/react 依赖，从组件源码处参考正确的导入路径（`import { motion, AnimatePresence } from "motion/react"`）。
+4. ShakeTestimonial 依赖 motion/react 的 AnimatePresence 和 layout 动画，不要移除这些动画逻辑。
+5. 样式使用 Tailwind CSS class 内联定义，不引入 CVA 或其他样式管理方案。
+6. 不要引入 Ant Design 相关依赖（ConfigProvider、antd-style、@ant-design/icons 等）。

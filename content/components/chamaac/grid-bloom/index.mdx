@@ -1,0 +1,145 @@
+GridBloom 网格绽放。基于 Three.js 和 GLSL 着色器实现，通过程序化 Simplex Noise 和流体扭曲生成动态网格绽放视觉效果。支持鼠标交互（光晕照明和网格排斥），适合用作页面背景或氛围装饰。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为页面或区块添加动态发光网格、科技感背景等氛围型视觉效果时使用。
+
+常见场景：
+- 全屏背景装饰，如 Hero 区域、品牌展示页。
+- 深色/科技主题页面的动态背景层。
+- 赛博朋克、霓虹风格的视觉展示页面。
+
+不推荐：
+- 性能敏感的低端设备页面，WebGL 着色器开销较高。
+- 需要精确视觉一致性的场景，着色器效果受 GPU 差异影响。
+- 纯信息展示的文本密集型页面，动态背景会分散注意力。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="chamaac/grid-bloom" path="chamaac/grid-bloom/basic" />
+
+### 基础用法
+
+GridBloom 默认铺满父容器（`absolute inset-0`），需确保父容器 `relative` 且有明确尺寸。
+
+```tsx
+import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#0a0a0a]"&gt;
+      &lt;GridBloom /&gt;
+      &lt;div className="absolute inset-0 flex items-center justify-center"&gt;
+        &lt;p className="text-fuchsia-300/80 text-lg font-medium"&gt;GridBloom&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义颜色
+
+通过 `color` 自定义绽放网格的颜色，默认为洋红色 `"#e040fb"`。
+
+```tsx
+import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#0a0a0a]"&gt;
+      &lt;GridBloom color="#00e5ff" /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整动画速度和网格密度
+
+通过 `speed` 控制整体动画速度，`gridScale` 控制网格密度（值越大瓦片越密）。
+
+```tsx
+import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#0a0a0a]"&gt;
+      &lt;GridBloom speed={0.5} gridScale={20.0} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 启用旋转和扭曲
+
+通过 `rotationSpeed` 和 `distortionAmount` 增加动态旋转和有机扭曲效果。
+
+```tsx
+import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#0a0a0a]"&gt;
+      &lt;GridBloom
+        rotationSpeed={0.8}
+        distortionAmount={0.12}
+        color="#76ff03"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### GridBloom
+
+网格绽放背景组件。基于 WebGL 着色器实现，铺满父容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| color | 绽放颜色 | `string` | `"#e040fb"` |
+| speed | 整体动画速度倍数 | `number` | `1.0` |
+| gridScale | 网格密度（越高瓦片越密） | `number` | `12.0` |
+| rotationSpeed | 网格旋转速度 | `number` | `0.0` |
+| fadeFalloff | 边缘渐变衰减程度（越高越柔和） | `number` | `10.0` |
+| distortionAmount | 噪声扭曲量（0 为纯直线） | `number` | `0.05` |
+| flowSpeedX | 水平滚动速度 | `number` | `-0.2` |
+| flowSpeedY | 垂直滚动速度 | `number` | `-0.4` |
+| hoverLightRadius | 鼠标光晕照明半径 | `number` | `0.5` |
+| hoverRepulsionRadius | 鼠标排斥效果半径 | `number` | `1.0` |
+| hoverRepulsionStrength | 鼠标排斥效果强度（0 禁用扭曲） | `number` | `0.6` |
+| enableMouseInteraction | 是否启用鼠标交互（光晕 + 排斥） | `boolean` | `true` |
+
+<h2 id="faq">常见问题</h2>
+
+### GridBloom 为什么没有显示？
+
+确保父容器设置了 `position: relative`（或 `absolute`/`fixed`）且有明确的宽高。GridBloom 使用 `absolute inset-0` 铺满父容器，如果父容器没有尺寸或定位上下文，Canvas 不会渲染。
+
+### 如何减少性能开销？
+
+默认 DPR 为 `[1, 2]`，关闭了抗锯齿。如需进一步优化，可以：
+- 仅在用户可见时渲染（通过条件渲染或 IntersectionObserver）。
+- 减小父容器尺寸，降低 GPU 填充率。
+- 在低端设备上设置 `enableMouseInteraction={false}` 减少指针事件开销。
+- 降低 `gridScale` 减少着色器计算密度。
+
+### 颜色格式支持什么？
+
+`color` 接受 CSS 颜色字符串（如 hex `"#e040fb"`、rgb `"rgb(224,64,251)"`、命名颜色 `"magenta"` 等），内部通过 `new THREE.Color()` 解析。
+
+### 鼠标交互不生效？
+
+确保 `enableMouseInteraction` 为 `true`（默认值）。组件监听 `pointermove` 全局事件，鼠标移动至 Canvas 区域内时触发光晕和排斥效果。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/chamaac-grid-bloom` 导入 GridBloom，不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 确保父容器有 `position: relative` 和明确尺寸。
+3. GridBloom 自带 `pointer-events-none`，前景内容需要独立的点击层。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="chamaac/grid-bloom" />

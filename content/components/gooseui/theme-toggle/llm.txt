@@ -1,0 +1,53 @@
+---
+category: Components
+title: ThemeToggle
+subtitle: 主题切换按钮
+description: 亮色/暗色模式切换按钮，点击在 light 和 dark 间切换，带 SVG 太阳/月亮形变动画。
+source:
+  component: src/components/gooseui/components/ui/theme-toggle.tsx
+  docs: content/components/gooseui/theme-toggle/index.mdx
+  examples:
+    - content/components/gooseui/theme-toggle/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  next-themes: true
+  framer-motion: true
+---
+
+# ThemeToggle 主题切换按钮
+
+点击在亮色（太阳图标）和暗色（月亮图标）之间切换，切换时触发 SVG 路径形变动画和光芒射线的交错动画。
+
+## 使用示例
+
+```tsx
+import { ThemeToggle } from "@/components/ui/gooseui-theme-toggle"
+
+// 默认 24x24 图标
+<ThemeToggle />
+
+// 自定义尺寸 32px
+<ThemeToggle size={32} />
+
+// 添加自定义类名
+<ThemeToggle className="my-custom-class" size={40} />
+```
+
+## API 速览
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| className | `string` | - | 按钮附加 CSS 类名 |
+| size | `number` | `24` | SVG 图标宽高尺寸 |
+
+切换逻辑基于 next-themes 的 `useTheme` hook，动画由 framer-motion 驱动。首次挂载前显示骨架占位（圆角脉冲方块），客户端激活后渲染实际图标以避免 hydration 不匹配。
+
+## 约束
+
+1. 从 `@/components/ui/gooseui-theme-toggle` 导入，不要从 gooseui 内部路径导入。
+2. 确保应用根节点已包裹 next-themes 的 `ThemeProvider`（attribute="class"）。
+3. 不要在调用侧自行实现主题切换逻辑（useState、localStorage 等）。
+4. 不要引入其他主题切换库，组件已内置完整切换逻辑和动画。
+5. 组件仅支持 light/dark 二态切换，不支持 system 模式或主题色切换。如需三态切换用 CSSThemeSwitcher，如需主题色切换用 ThemeCustomizer。
+6. 动画依赖 framer-motion，确保项目已安装 motion 依赖。

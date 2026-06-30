@@ -1,0 +1,106 @@
+ServicesMarquee 是一个基于 CSS animation 的服务卡片无限滚动轮播组件。通过双份列表实现无缝循环，支持速度控制。附带静态网格变体 ServicesGrid。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中展示服务列表或功能卡片，希望以滚动动画形式呈现时使用。适用于落地页、产品首页、服务展示区等需要 "What we offer" 区域的场景。
+
+常见场景：
+
+- 产品首页展示核心服务列表。
+- SaaS 落地页的服务或功能展示区。
+- 企业官网 "我们的服务" 板块。
+
+不推荐：
+
+- 需要用户手动控制滚动的场景（应使用 Carousel 组件）。
+- 服务数量极少（&lt; 4 个）无法形成连续滚动视觉效果的场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+ServicesMarquee 内置 8 个服务卡片（Web Development、UI/UX Design、API Integration 等），默认 `speed="normal"` 滚动。通过 `speed` 切换速度，通过 `className` 自定义样式。
+
+<ComponentShowcase
+  id="gooseui/services-marquee"
+  path="gooseui/services-marquee/basic"
+/>
+
+```tsx
+import { ServicesMarquee } from "@/components/ui/gooseui-services-marquee"
+
+export default function Demo() {
+  return <ServicesMarquee />
+}
+```
+
+### 静态网格模式
+
+使用 `ServicesGrid` 以静态网格布局展示服务卡片，无滚动动画。
+
+```tsx
+import { ServicesGrid } from "@/components/ui/gooseui-services-marquee"
+
+export default function Demo() {
+  return <ServicesGrid />
+}
+```
+
+<h2 id="api">API</h2>
+
+### ServicesMarquee
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+| speed | 滚动速度 | `"slow"` \| `"normal"` \| `"fast"` | `"normal"` |
+
+速度映射：`slow` 对应 `60s`，`normal` 对应 `40s`，`fast` 对应 `25s`，通过 CSS 自定义属性 `--duration` 注入到滚动轨道。
+
+### ServicesGrid
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+
+滚动容器左右两侧各有渐变遮罩（`from-background to-transparent`），防止卡片硬裁切，遮罩设置 `pointer-events-none` 不阻挡鼠标交互。
+
+每张服务卡片包含：图标（`h-12 w-12 rounded-lg bg-primary/10`）、标题（`text-lg font-semibold`）、描述（`line-clamp-2`）、Learn more 链接，hover 时显示渐变背景并上浮 1px。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义服务列表？
+
+当前服务列表硬编码在组件内部。如需自定义，直接修改 `src/components/gooseui/components/blocks/services/services-marquee.tsx` 中的 `services` 数组。每个服务项结构为 `{ title, description, icon: LucideIcon, gradient }`。
+
+### 如何控制滚动速度？
+
+通过 `speed` 属性，可选 `"slow"`、`"normal"`、`"fast"`，分别对应 60s、40s、25s 的动画时长。如需更精细控制，通过 CSS 覆盖 `--duration` 自定义属性。
+
+```tsx
+<ServicesMarquee speed="slow" />
+```
+
+### 如何切换为静态网格布局？
+
+导入 `ServicesGrid` 代替 `ServicesMarquee`。两者共享相同的服务卡片数据，`ServicesGrid` 以 4 列网格（响应式断点：`sm:grid-cols-2 lg:grid-cols-4`）展示。
+
+```tsx
+import { ServicesGrid } from "@/components/ui/gooseui-services-marquee"
+
+export default function Demo() {
+  return <ServicesGrid />
+}
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/gooseui-services-marquee` 导入 `ServicesMarquee` 或 `ServicesGrid`。
+2. 使用 `speed` 属性控制滚动速度，可选值 `"slow"` / `"normal"` / `"fast"`。
+3. 不要自行拼装服务卡片布局或 DOM 结构，使用组件内置渲染。
+4. 不要引入 Ant Design 相关依赖。
+5. 自定义样式通过 `className` 传入，不要覆写核心 marquee 动画 keyframe。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/services-marquee" />

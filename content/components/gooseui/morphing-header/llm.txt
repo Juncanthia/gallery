@@ -1,0 +1,54 @@
+---
+component: MorphingHeader
+slug: gooseui/morphing-header
+
+import: import { MorphingHeader, MorphingLogo, MorphingNav } from "@/components/ui/gooseui-morphing-header"
+
+usage: |
+  <MorphingHeader compactThreshold={100}>
+    {({ isCompact }) => (
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <MorphingLogo src="/logo.svg" alt="Logo" isCompact={isCompact} />
+          {!isCompact && <span>Brand</span>}
+        </div>
+        <MorphingNav isCompact={isCompact}>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+        </MorphingNav>
+      </div>
+    )}
+  </MorphingHeader>
+
+props:
+  MorphingHeader:
+    children: React.ReactNode | ((isCompact: boolean) => React.ReactNode)  -- 头部内容，支持 render prop
+    className?: string  -- 附加 CSS 类名
+    compactThreshold?: number  -- 触发紧凑模式的滚动阈值（px），默认 100
+
+  MorphingLogo:
+    src: string  -- Logo 图片地址
+    alt?: string  -- 图片替代文本，默认 ""
+    className?: string  -- 附加 CSS 类名
+    compactSize?: number  -- 紧凑模式高度（px），默认 32
+    fullSize?: number  -- 完整模式高度（px），默认 48
+    isCompact?: boolean  -- 当前 Header 是否为紧凑模式，默认 false
+
+  MorphingNav:
+    children: React.ReactNode  -- 导航内容
+    className?: string  -- 附加 CSS 类名
+    isCompact?: boolean  -- 当前 Header 是否为紧凑模式，默认 false
+
+constraints:
+  - 基于 View Transitions API 实现状态切换动画，Chromium 125+ 可用；非 Chromium 环境无过渡动画但有 CSS transition 降级。
+  - MorphingHeader 的 children 推荐使用 render prop 模式，以便子组件根据 isCompact 状态联动。
+  - MorphingLogo 必须传入 src 和 isCompact 属性。
+  - MorphingNav 的 isCompact 属性需与 MorphingHeader 的状态保持同步。
+  - 不引入 framer-motion、@react-spring 等第三方动画库。
+  - 不引入 Ant Design 相关依赖。
+  - 滚动演示需确保页面内容区域有足够高度（如 min-h-[200vh]）。
+
+source: src/components/gooseui/components/ui/morphing-header.tsx
+example: content/components/gooseui/morphing-header/examples/basic.tsx
+docs: content/components/gooseui/morphing-header/index.mdx
+---

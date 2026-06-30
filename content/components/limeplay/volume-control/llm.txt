@@ -1,0 +1,195 @@
+---
+category: Components
+title: VolumeControl
+subtitle: 音量控制
+description: 基于 Base UI Slider primitive 构建的音量控制滑块。
+demo:
+  cols: 1
+group:
+  title: LimePlay
+  order: 4
+source:
+  component: src/components/limeplay/ui/volume-control.tsx
+  examples:
+    - content/components/limeplay/volume-control/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: true
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# VolumeControl 音量控制
+
+基于 Base UI Slider primitive 构建的音量控制组件。提供水平或垂直方向的音量滑块，内置媒体状态感知、静音切换和音量百分比显示。
+
+本组件是 LimePlay 播放器 UI 生态的一部分，封装了媒体音量 Store 的状态同步逻辑。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js 或历史兼容语法糖。
+
+## 何时使用 {#when-to-use}
+
+适合在需要音量调节能力的 LimePlay 播放器界面中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
+
+常见场景：
+
+- 音频播放器、视频播放器的音量调节面板
+- 需要静音/取消静音、音量百分比反馈的场景
+- 作为 LimePlay 播放器生态的一部分与其他控件组合使用
+
+不推荐：
+
+- 泛型滑块需求（数值范围选择等）——使用 Slider 组件
+- 非媒体相关的滑动控制——本组件依赖媒体 Store
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import * as VolumeControl from "@/components/limeplay/ui/volume-control"
+
+export default function Demo() {
+  return (
+    <VolumeControl.Root className="relative flex h-5 w-full max-w-xs touch-none items-center select-none">
+      <VolumeControl.Track className="relative h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+        <VolumeControl.Progress className="absolute h-full bg-primary" />
+      </VolumeControl.Track>
+      <VolumeControl.Thumb />
+    </VolumeControl.Root>
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。Root 内必须包含 Track、Progress、Thumb 子组件，形成完整的滑块结构。
+
+## 核心导出 {#exports}
+
+- `Root`（也通过 `@/components/ui/limeplay-volume-control` 单独导出）
+- `Track`
+- `Progress`
+- `Thumb`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+export const Root = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
+>((props, ref) => { /* ... */ })
+```
+
+Root props 来自 `SliderPrimitive.Root`（`@base-ui/react/slider`），额外接受：
+
+| 属性 | 类型 | 默认值 |
+| --- | --- | --- |
+| orientation | `"horizontal"` \| `"vertical"` | `"horizontal"` |
+| disabled | `boolean` | `false` |
+
+```ts
+export const Track = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Track>
+>((props, ref) => { /* ... */ })
+```
+
+```ts
+export const Progress = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Track>
+>((props, ref) => { /* ... */ })
+```
+
+```ts
+interface ThumbProps extends React.ComponentPropsWithoutRef<
+  typeof SliderPrimitive.Thumb
+> {
+  /** @default true */
+  showVolumeText?: boolean
+}
+
+export const Thumb = React.forwardRef<HTMLDivElement, ThumbProps>(
+  (props, ref) => { /* ... */ }
+)
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `aria-label="Volume"` on Thumb
+- `aria-valuenow`、`aria-valuemax`、`aria-valuemin`、`aria-valuetext` on Thumb
+- `data-disabled` on disabled elements
+- `data-[orientation=vertical]` on Progress for vertical mode
+
+CSS 变量：
+
+- `--lp-volume-value`: 当前音量百分比（字符串，如 `"75%"`），由 Progress 的 inline style 注入
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性。
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 无 CVA ——变体逻辑内联在组件内部（orientation、disabled 状态）。
+- 包装 Base UI Slider primitive，交互状态、键盘行为和 ARIA 基础能力来自底层 primitive。
+- 主题颜色使用 `bg-primary`、`bg-secondary`、`bg-primary/30` 等 Tailwind 实用类。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/limeplay/ui/volume-control.tsx`
+- `src/components/ui/limeplay-volume-control.tsx`（Root 的 re-export wrapper）
+
+直接依赖：
+
+- `@base-ui/react/slider`
+- `@hyper/limeplay/hooks/use-playback`
+- `@hyper/limeplay/hooks/use-volume`
+- `@hyper/limeplay/hooks/use-track-events`
+- `@hyper/limeplay/lib/utils`
+
+实现注意：
+
+1. Root 自动从 `useVolumeStore` 读取 `level`、`muted`、`hasAudio` 状态。
+2. Root 自动从 `usePlaybackStore` 读取 `readyState`，未就绪时自动禁用。
+3. 静音时 Progress 收缩为 0%；音量值 0 但未静音时显示 5%（VOLUME_RESET_BASE）视觉填充。
+4. 拖拽交互通过 `useTrackEvents` hook 处理，支持 pointer down/move 事件。
+5. Root 的 `max`、`min`、`step` 由组件内部固定，不可通过 props 覆盖。
+
+## 可访问性 {#accessibility}
+
+- Thumb 提供 `aria-label="Volume"` 和 `aria-valuetext`（如 "75% volume"）。
+- 可通过 `showVolumeText={false}` 关闭 ARIA 百分比文本。
+- 底层 Base UI Slider 提供键盘操作能力（Arrow 键调节值）。
+- 禁用状态通过 `data-disabled` 属性标记。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/limeplay/ui/volume-control.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和 Base UI Slider primitive |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 独立设计，不承诺 AntD Slider API 兼容 |
+| 媒体集成 | 深度集成 LimePlay Store（useVolumeStore、usePlaybackStore） |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 VolumeControl 代码时，应遵守：
+
+1. 从 `@/components/ui/limeplay-volume-control` 导入 Root，或使用命名空间导入 `import * as VolumeControl from "@/components/limeplay/ui/volume-control"`。
+2. Root 内必须包含 Track、Progress、Thumb 子组件，不可单独使用 Root。
+3. 垂直模式（`orientation="vertical"`）需为 Root 设置 `h-32` 等固定高度。
+4. 不要从 `antd` 导入任何滑块或音量相关组件。
+5. 组件依赖 LimePlay MediaProvider 上下文，不可脱离播放器环境独立使用。
+6. 只使用本文件 API 摘要和源码中存在的 props。
+7. 交互组件必须保留键盘和 ARIA 语义，Thumb 默认提供 `aria-label`。
+8. 如果不确定某个 API 是否存在，先检查 `src/components/limeplay/ui/volume-control.tsx`。

@@ -1,0 +1,82 @@
+3D 书是一个交互式翻书组件，通过鼠标拖拽或指针移动控制书本的打开程度，展示多页 3D 透视效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以 3D 书本形式展示内容时使用。通过光标位置控制翻页角度，模拟真实书本的开合动画。
+
+常见场景：
+
+- 作品集展示页面，以书本形式陈列项目或案例。
+- 产品宣传页面，用翻书交互引导用户浏览。
+- 创意着陆页，提供独特的视觉交互体验。
+
+不推荐：
+
+- 需要精确页面导航的场景（应使用分页或轮播）。
+- 大量文本内容展示（3D 透视会降低可读性）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件无需任何 props 即可使用，通过光标在书本区域的水平位置控制翻页进程。
+
+<ComponentShowcase
+  id="uselayouts/3d-book"
+  path="uselayouts/3d-book/basic"
+/>
+
+```tsx
+import InteractiveBook from "@/components/ui/uselayouts-3d-book"
+
+export default function Demo() {
+  return <InteractiveBook />
+}
+```
+
+<h2 id="api">API</h2>
+
+### InteractiveBook
+
+该组件为自包含交互组件，无需传递任何 props。所有交互行为（指针跟踪、拖拽、翻页动画）均由组件内部管理。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 无需传递任何 props | - | - |
+
+组件内部通过 `useRef` 和 `useState` 管理 scroll 区域引用、翻页进程和拖拽状态。翻页动画基于 CSS 3D transform，使用 `perspective: 1500px` 和 `transformOrigin: left` 精确控制每页的旋转角度。
+
+视觉结构：
+
+- 15 层内页，每页旋转角度从 -20deg 到 -160deg 均匀分布。
+- 后封面使用径向渐变网格背景和阴影，固定于页面底部。
+- 前封面包含红色顶栏、书名标签和书脊装饰，旋转角度为 -165deg，响应翻页进度。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义书本内容？
+
+当前组件为视觉演示型组件，页面为空白层。如需添加内容：
+
+1. 修改 `src/components/uselayouts/3d-book.tsx` 中的页面渲染逻辑。
+2. 在每页的 `<div>` 内添加文本、图片或其他 React 子组件。
+3. 注意 3D 透视可能导致内容不可读，建议使用简洁的图形或标题文字。
+
+### 如何调整翻页灵敏度？
+
+翻页进程由 `lerp` 线性插值计算，光标到书本中心的距离映射为 0-1 的进度值。调整 `handlePointerMove` 中的映射公式即可改变灵敏度。
+
+### 组件支持触摸设备吗？
+
+组件使用 `onPointerMove`、`onPointerDown`、`onPointerUp` 和 `onPointerLeave` 事件，理论上支持触摸设备。`touch-none` 类已应用于书本容器以防止原生滚动干扰。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/uselayouts-3d-book` 导入 `InteractiveBook`（default export）。
+2. 组件无需任何 props，直接渲染即可获得完整的 3D 翻书交互。
+3. 组件默认宽度为 `w-32 md:w-52`，高度为 `h-48 md:h-72`。如果需要调整尺寸，通过 `className` 覆写容器样式。
+4. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="uselayouts/3d-book" />

@@ -1,0 +1,101 @@
+MentionHighlighter 提及高亮器。在 MentionInput 输入框内部叠加一层透明文字，对 @提及 内容进行高亮标记。基于 Dice UI Mention 上下文实现，自动同步输入框样式和滚动位置。
+
+&lt;h2 id="when-to-use"&gt;何时使用&lt;/h2&gt;
+
+当需要在 MentionInput 中高亮显示已输入的 @提及 内容时使用。MentionHighlighter 作为 MentionInput 的内部组件自动渲染，无需手动调用。
+
+常见场景：
+- 评论区 @用户 的高亮显示
+- 编辑器中的 @提及 标记
+- 协作系统中的人员引用展示
+
+MentionHighlighter 必须置于 MentionRoot 上下文内才能正常工作。通常由 MentionInput 自动创建，无需手动添加。
+
+&lt;h2 id="examples"&gt;代码演示&lt;/h2&gt;
+
+### 基础用法
+
+MentionHighlighter 由 MentionInput 内部自动渲染，输入 @ 并选择用户后即可看到高亮效果。
+
+&lt;ComponentShowcase id="dice/mention-highlighter" path="dice/mention-highlighter/basic" /&gt;
+
+```tsx
+import { MentionHighlighter } from "@/components/ui/dice-mention-highlighter"
+import { MentionRoot } from "@/components/dice/mention/mention-root"
+import { MentionInput } from "@/components/dice/mention/mention-input"
+import { MentionContent } from "@/components/dice/mention/mention-content"
+import { MentionItem } from "@/components/dice/mention/mention-item"
+import { MentionPortal } from "@/components/dice/mention/mention-portal"
+
+&lt;MentionRoot&gt;
+  &lt;MentionInput placeholder="输入 @ 提及用户..." /&gt;
+  &lt;MentionPortal&gt;
+    &lt;MentionContent&gt;
+      &lt;MentionItem value="zhangsan" label="张三" /&gt;
+      &lt;MentionItem value="lisi" label="李四" /&gt;
+    &lt;/MentionContent&gt;
+  &lt;/MentionPortal&gt;
+&lt;/MentionRoot&gt;
+```
+
+&lt;h2 id="api"&gt;API&lt;/h2&gt;
+
+### MentionHighlighter
+
+MentionHighlighter 是一个透明的覆盖层，叠加在 MentionInput 上方，用于对 @提及 文本添加高亮标记。它从 MentionRoot 上下文获取提及位置信息，并自动同步输入框的字体样式、尺寸和滚动位置。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类 | `string` | - |
+| style | 内联样式，会与输入框的 computedStyle 合并 | `React.CSSProperties` | - |
+
+MentionHighlighter 继承所有 `React.HTMLAttributes&lt;HTMLDivElement&gt;` 属性。
+
+### 内部行为
+
+- 使用 `ResizeObserver` 和 `MutationObserver` 监听输入框的样式变化，自动同步 `fontSize`、`lineHeight`、`fontFamily`、`padding`、`border` 等属性。
+- 通过 `requestAnimationFrame` 同步输入框的滚动位置。
+- 将 `context.mentions` 数组中的提及范围渲染为 `&lt;span data-tag=""&gt;` 元素以实现高亮。
+
+### data-slot
+
+| data-slot | 元素 | 说明 |
+| --- | --- | --- |
+| `tag` | span | 高亮的 @提及 文本片段 |
+
+&lt;h2 id="faq"&gt;常见问题&lt;/h2&gt;
+
+### 如何自定义高亮样式？
+
+通过 CSS 覆盖 `[data-tag]` 选择器：
+
+```css
+[data-tag] {
+  background-color: #e6f4ff;
+  color: #1890ff;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+```
+
+也可以通过 `&lt;MentionHighlighter style={{...}} /&gt;` 传入自定义样式，会与输入框的 computedStyle 合并。
+
+### MentionHighlighter 和 MentionInput 的关系？
+
+MentionInput 内部自动渲染 `&lt;MentionHighlighter /&gt;`，两者位于同一个 `position: relative` 容器中，MentionHighlighter 以 `position: absolute` 覆盖在输入框上方实现高亮效果。一般情况下无需手动添加 MentionHighlighter。
+
+### 为什么 MentionHighlighter 是透明的？
+
+MentionHighlighter 的文字颜色为 `transparent`，只有 `[data-tag]` 元素通过 CSS 显示颜色。这样用户看到的输入框文字是由底层 `&lt;input&gt;` 渲染的，而 @提及 的高亮背景由高亮层提供，两者叠加实现既保持输入框交互又实现高亮效果。
+
+&lt;h2 id="llm-rules"&gt;LLM 使用规则&lt;/h2&gt;
+
+1. 从 `@/components/ui/dice-mention-highlighter` 导入 MentionHighlighter。
+2. MentionHighlighter 必须在 MentionRoot 上下文内使用，否则会抛出错误。
+3. MentionHighlighter 通常由 MentionInput 自动创建，无需手动添加。仅在需要自定义高亮覆盖层行为时手动使用。
+4. 接受标准 HTML div 属性（className、style 等）。
+5. 不要从 `antd` 导入任何相关组件。
+6. 自定义高亮样式推荐通过 CSS 覆盖 `[data-tag]` 选择器。
+
+&lt;h2 id="source"&gt;源码&lt;/h2&gt;
+&lt;SourceViewer componentId="dice/mention-highlighter" /&gt;

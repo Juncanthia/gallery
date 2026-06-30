@@ -1,0 +1,166 @@
+---
+category: Components
+title: AdaptiveGrid
+subtitle: 自适应网格
+description: 基于 CSS Container Queries 的自适应网格布局，列数随容器宽度自动调整。
+demo:
+  cols: 2
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/ui/gooseui-adaptive-grid.tsx
+  examples:
+    - content/components/gooseui/adaptive-grid/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# AdaptiveGrid 自适应网格
+
+基于 CSS Container Queries 的自适应网格布局组件。网格列数随父容器宽度自动调整，配合 `AdaptiveCard` 实现卡片内自适应横排/纵排切换。
+
+本组件借鉴 GooseUI 的容器查询心智模型，但不是第三方的兼容层。实现以本地源码为准，不引入外部运行时依赖或 CSS-in-JS。
+
+## 何时使用 {#when-to-use}
+
+适合需要卡片网格列表且布局需随父容器自适应调整的场景。优先通过组件自身 props 表达配置，避免在业务侧重复拼接 className。
+
+常见场景：
+
+- 仪表盘或 CMS 面板中的卡片网格布局。
+- 商品列表或图库的响应式展示。
+- 嵌套在可调整大小的面板中的网格布局。
+
+不推荐：
+
+- 需要服务端渲染精确列数的场景。
+- 对 CSS `:has()` 不兼容的旧浏览器环境。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { AdaptiveGrid, AdaptiveCard } from "@/components/ui/gooseui-adaptive-grid"
+
+export default function Demo() {
+  return (
+    <AdaptiveGrid>
+      <AdaptiveCard
+        image="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
+        title="Mountain Sunrise"
+      >
+        Golden light breaks over snow-capped peaks.
+      </AdaptiveCard>
+      <AdaptiveCard title="Text-Only Card">
+        This card renders as a flex column layout.
+      </AdaptiveCard>
+    </AdaptiveGrid>
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。更多配置项参见下方 API 摘要。
+
+## 核心导出 {#exports}
+
+- `AdaptiveGrid`
+- `AdaptiveCard`
+- `AdaptiveGridProps`
+- `AdaptiveCardProps`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface AdaptiveGridProps {
+  children: React.ReactNode;
+  className?: string;
+  /** 最小卡片宽度 */
+  minCardWidth?: number;
+}
+
+interface AdaptiveCardProps {
+  children: React.ReactNode;
+  className?: string;
+  /** 卡片配图 */
+  image?: string;
+  /** 卡片标题 */
+  title?: string;
+}
+```
+
+默认值：`minCardWidth=280`。
+
+## Semantic DOM {#semantic-dom}
+
+AdaptiveGrid 渲染为带 `@container` 的 CSS Grid 容器，子卡片通过 `grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 @2xl:grid-cols-4` 实现容器级响应列数。
+
+AdaptiveCard 渲染为带 `@container` 和 `group/card` 的卡片容器：
+
+- 有图片时（`has-[img]`）：使用 CSS Grid 布局，`@sm` 下 `140px` 侧图 + 内容区两列，`@md` 下 `200px` 侧图。
+- 无图片时（`:not(:has(img))`）：使用 flex 纵向布局。
+- 图片容器：`@sm` 以上 `aspect-auto h-full`，窄屏 `aspect-video`。
+- 图片 hover 效果：`group-hover/card:scale-105` 缩放过渡。
+- 内容区：`flex flex-col gap-2 p-4 @sm:p-5`。
+
+所有样式使用 Tailwind CSS，不依赖 CSS-in-JS 或运行时 token。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/ui/gooseui-adaptive-grid.tsx`（re-export）
+- `src/components/gooseui/components/ui/adaptive-grid.tsx`（实现）
+
+直接依赖摘要：
+
+- React
+- `cn` 工具函数（`@hyper/gooseui/lib/utils`）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 列数切换完全由 CSS Container Queries 驱动，无需 JavaScript 监听 resize。
+3. 卡片布局切换由 CSS `:has()` 选择器自动完成，无需手动传参。
+4. `minCardWidth` 通过 CSS 自定义属性 `--min-card-width` 注入到 style 中。
+5. 图片 hover 缩放由 Tailwind `group-hover/card:scale-105` 实现。
+
+## 可访问性 {#accessibility}
+
+- 卡片图片设置 `alt` 属性（取 `title` 值），无图片卡片不渲染 `<img>` 元素。
+- 标题使用 `<h3>` 语义标签。
+- 布局切换为纯 CSS，不触发 DOM 重构。
+- 无闪烁或高频动画。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/gooseui/components/ui/adaptive-grid.tsx` 的 TypeScript 类型为准 |
+| 响应方案 | CSS Container Queries，不依赖视口媒体查询或 JS resize |
+| 布局切换 | CSS `:has()` 选择器自动判断 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 非 AntD 组件，无兼容需求 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 AdaptiveGrid 代码时，应遵守：
+
+1. 从 `@/components/ui/gooseui-adaptive-grid` 导入 `AdaptiveGrid` 和 `AdaptiveCard`。
+2. 使用 `AdaptiveCard` 的 `image` 和 `title` 属性控制卡片内容。
+3. 不要自行拼装卡片网格布局 className，使用组件内置的容器查询机制。
+4. 布局切换由 CSS `:has()` 自动完成，不要在业务层手动判断有无图片来切换 className。
+5. 不要引入 Ant Design 相关依赖。
+6. 自定义样式通过 `className` 传入，不要覆写核心容器查询断点。

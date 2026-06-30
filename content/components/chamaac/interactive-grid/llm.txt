@@ -1,0 +1,10 @@
+---
+category: chamaac
+title: InteractiveGridBackground
+subtitle: 交互网点背景
+description: 基于 Canvas 2D 的交互式网点背景，鼠标附近网点放大变色，产生跟随光标的视觉响应。
+demo: { cols: 1 }
+group: { title: 视觉效果, order: 20 }
+source: { component: src/components/chamaac/interactive-grid/interactive-grid-background.tsx, docs: content/components/chamaac/interactive-grid/index.mdx, examples: [content/components/chamaac/interactive-grid/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, canvas: true }
+---

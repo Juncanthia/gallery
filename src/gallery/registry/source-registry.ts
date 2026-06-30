@@ -96,6 +96,29 @@ import treeSelectTsx from "../../../src/components/ui/tree-select.tsx?raw"
 import typographyTsx from "../../../src/components/ui/typography.tsx?raw"
 import watermarkTsx from "../../../src/components/ui/watermark.tsx?raw"
 
+// DT (Data Table Filters) components
+import dtDataTableToolbarTsx from "../../../src/components/data-table-filters/components/data-table/data-table-toolbar.tsx?raw"
+
+// Chamaac UI components
+import chamaacNebulaTsx from "../../../src/components/chamaac/nebula/nebula.tsx?raw"
+import chamaacElectricMistTsx from "../../../src/components/chamaac/electric-mist/electric-mist.tsx?raw"
+import chamaacGridBloomTsx from "../../../src/components/chamaac/grid-bloom/grid-bloom.tsx?raw"
+import chamaacLiquidMorphTsx from "../../../src/components/chamaac/liquid-morph/liquid-morph.tsx?raw"
+import chamaacEmissiveDotGridTsx from "../../../src/components/chamaac/emissive-dot-grid/emissive-dot-grid.tsx?raw"
+import chamaacIridescentWindowsTsx from "../../../src/components/chamaac/iridescent-windows/iridescent-windows.tsx?raw"
+import chamaacWaterCausticTsx from "../../../src/components/chamaac/water-caustic/water-caustic.tsx?raw"
+import chamaacDancingLettersTsx from "../../../src/components/chamaac/dancing-letters/dancing-letters.tsx?raw"
+import chamaacGaugeTsx from "../../../src/components/chamaac/gauge/gauge.tsx?raw"
+import chamaacTextLoopTsx from "../../../src/components/chamaac/text-loop/text-loop.tsx?raw"
+import chamaacShimmerButtonTsx from "../../../src/components/chamaac/shimmer-button/shimmer-button.tsx?raw"
+import chamaacFeatureStepsTsx from "../../../src/components/chamaac/feature-steps/feature-steps.tsx?raw"
+import chamaacCarouselTsx from "../../../src/components/chamaac/carousel/carousel.tsx?raw"
+// UseLayouts components
+import uselayoutsDiscoverButtonTsx from "../../../src/components/uselayouts/discover-button.tsx?raw"
+import uselayoutsMultiStepFormTsx from "../../../src/components/uselayouts/multi-step-form.tsx?raw"
+import uselayoutsStatusButtonTsx from "../../../src/components/uselayouts/status-button.tsx?raw"
+import uselayoutsVerticalTabsTsx from "../../../src/components/uselayouts/vertical-tabs.tsx?raw"
+
 // React Bits components
 import glitchTextTsx from "../../../src/components/react-bits/glitch-text.tsx?raw"
 import gradientTextTsx from "../../../src/components/react-bits/gradient-text.tsx?raw"
@@ -113,6 +136,58 @@ import textTypeTsx from "../../../src/components/react-bits/text-type.tsx?raw"
 import trueFocusTsx from "../../../src/components/react-bits/true-focus.tsx?raw"
 import variableProximityTsx from "../../../src/components/react-bits/variable-proximity.tsx?raw"
 import sabramanSliderTsx from "../../../src/components/sabraman/components/legacy-slider.tsx?raw"
+
+// GooseUI components
+import gooseuiBorderBeamTsx from "../../../src/components/gooseui/components/effects/border-beam.tsx?raw"
+import gooseuiCheckboxTsx from "../../../src/components/gooseui/components/ui/checkbox.tsx?raw"
+import gooseuiCurvedTextTsx from "../../../src/components/gooseui/components/ui/curved-text.tsx?raw"
+import gooseuiStackingCardsTsx from "../../../src/components/gooseui/components/ui/stacking-cards.tsx?raw"
+import gooseuiPromoBannerTsx from "../../../src/components/gooseui/components/ui/promo-banner.tsx?raw"
+import gooseuiParallaxCardsTsx from "../../../src/components/gooseui/components/effects/parallax-cards.tsx?raw"
+import gooseuiFeaturesGridTsx from "../../../src/components/gooseui/components/blocks/features/features-grid.tsx?raw"
+import gooseuiFooterColumnsTsx from "../../../src/components/gooseui/components/blocks/footers/footer-columns.tsx?raw"
+import gooseuiFooterSimpleTsx from "../../../src/components/gooseui/components/blocks/footers/footer-simple.tsx?raw"
+import gooseuiFooterNewsletterTsx from "../../../src/components/gooseui/components/blocks/footers/footer-newsletter.tsx?raw"
+import gooseuiCurvedTextMarqueeTsx from "../../../src/components/gooseui/components/blocks/marketing/curved-text-marquee.tsx?raw"
+import gooseuiHeaderWithCtaTsx from "../../../src/components/gooseui/components/blocks/headers/header-with-cta.tsx?raw"
+
+// Manifest components
+import manifestContactFormTsx from "../../../src/components/ui/manifest-contact-form.tsx?raw"
+import manifestFormContactFormTsx from "../../../src/components/manifest/form/contact-form.tsx?raw"
+import manifestFormCountriesTs from "../../../src/components/manifest/form/countries.ts?raw"
+import manifestFormDemoFormTs from "../../../src/components/manifest/form/demo/form.ts?raw"
+import manifestDateTimePickerTsx from "../../../src/components/ui/manifest-date-time-picker.tsx?raw"
+import manifestFormDateTimePickerTsx from "../../../src/components/manifest/form/date-time-picker.tsx?raw"
+import manifestEmptyStateTsx from "../../../src/components/ui/manifest-empty-state.tsx?raw"
+import manifestFormEmptyStateTsx from "../../../src/components/manifest/status/empty-state.tsx?raw"
+import manifestFileUploaderTsx from "../../../src/components/ui/manifest-file-uploader.tsx?raw"
+import manifestFormFileUploaderTsx from "../../../src/components/manifest/form/file-uploader.tsx?raw"
+import manifestSettingsPanelTsx from "../../../src/components/ui/manifest-settings-panel.tsx?raw"
+import manifestFormSettingsPanelTsx from "../../../src/components/manifest/form/settings-panel.tsx?raw"
+
+// Limeplay components
+import limeplayAudioSourceTsx from "../../../src/components/ui/limeplay-audio-source.tsx?raw"
+import limeplayAudioSourceCoreTsx from "../../../src/components/limeplay/blocks/audio-player/components/audio-source.tsx?raw"
+import limeplayTimelineControlTsx from "../../../src/components/ui/limeplay-timeline-control.tsx?raw"
+import limeplayTimelineControlCoreTsx from "../../../src/components/limeplay/ui/timeline-control.tsx?raw"
+import limeplayVolumeControlTsx from "../../../src/components/ui/limeplay-volume-control.tsx?raw"
+import limeplayVolumeControlCoreTsx from "../../../src/components/limeplay/ui/volume-control.tsx?raw"
+
+// Extend components
+import extendESignatureTsx from "../../../src/components/ui/extend-e-signature.tsx?raw"
+import extendESignatureBlockTsx from "../../../src/components/extend/components/blocks/e-signature.tsx?raw"
+import extendLayoutBlocksBlockTsx from "../../../src/components/ui/extend-layout-blocks-block.tsx?raw"
+import extendLayoutBlocksBlockSourceTsx from "../../../src/components/extend/components/blocks/layout-blocks-block.tsx?raw"
+import extendLayoutBlocksTsx from "../../../src/components/extend/components/ui/layout-blocks.tsx?raw"
+import extendDocumentSplitsBlockTsx from "../../../src/components/ui/extend-document-splits-block.tsx?raw"
+
+// Tool UI components
+import toolCitationListTsx from "../../../src/components/ui/tool-citation-list.tsx?raw"
+import citationListTsx from "../../../src/components/tool/citation/citation-list.tsx?raw"
+
+// Dice UI components
+import diceHitboxTsx from "../../../src/components/dice/components/hitbox.tsx?raw"
+import diceColorSwatchTsx from "../../../src/components/dice/ui/color-swatch.tsx?raw"
 
 export type ComponentSourceFile = {
   name: string
@@ -213,6 +288,20 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "typography": [{ name: "typography.tsx", source: typographyTsx }],
   "watermark": [{ name: "watermark.tsx", source: watermarkTsx }],
 
+  // Chamaac UI
+  "chamaac/nebula": [{ name: "nebula.tsx", source: chamaacNebulaTsx }],
+  "chamaac/electric-mist": [{ name: "electric-mist.tsx", source: chamaacElectricMistTsx }],
+  "chamaac/grid-bloom": [{ name: "grid-bloom.tsx", source: chamaacGridBloomTsx }],
+  "chamaac/liquid-morph": [{ name: "liquid-morph.tsx", source: chamaacLiquidMorphTsx }],
+  "chamaac/emissive-dot-grid": [{ name: "emissive-dot-grid.tsx", source: chamaacEmissiveDotGridTsx }],
+  "chamaac/iridescent-windows": [{ name: "iridescent-windows.tsx", source: chamaacIridescentWindowsTsx }],
+  "chamaac/water-caustic": [{ name: "water-caustic.tsx", source: chamaacWaterCausticTsx }],
+  "chamaac/gauge": [{ name: "gauge.tsx", source: chamaacGaugeTsx }],
+  "chamaac/dancing-letters": [{ name: "dancing-letters.tsx", source: chamaacDancingLettersTsx }],
+  "chamaac/text-loop": [{ name: "text-loop.tsx", source: chamaacTextLoopTsx }],
+  "chamaac/shimmer-button": [{ name: "shimmer-button.tsx", source: chamaacShimmerButtonTsx }],
+  "chamaac/feature-steps": [{ name: "feature-steps.tsx", source: chamaacFeatureStepsTsx }],
+  "chamaac/carousel": [{ name: "carousel.tsx", source: chamaacCarouselTsx }],
   // React Bits - Text Animations
   "glitch-text": [{ name: "glitch-text.tsx", source: glitchTextTsx }],
   "gradient-text": [{ name: "gradient-text.tsx", source: gradientTextTsx }],
@@ -229,6 +318,53 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "text-type": [{ name: "text-type.tsx", source: textTypeTsx }],
   "true-focus": [{ name: "true-focus.tsx", source: trueFocusTsx }],
   "variable-proximity": [{ name: "variable-proximity.tsx", source: variableProximityTsx }],
+
+  // UseLayouts
+  "uselayouts/discover-button": [{ name: "discover-button.tsx", source: uselayoutsDiscoverButtonTsx }],
+  "uselayouts/multi-step-form": [{ name: "multi-step-form.tsx", source: uselayoutsMultiStepFormTsx }],
+  "uselayouts/status-button": [{ name: "status-button.tsx", source: uselayoutsStatusButtonTsx }],
+  "uselayouts/vertical-tabs": [{ name: "vertical-tabs.tsx", source: uselayoutsVerticalTabsTsx }],
+
+  // DT (Data Table Filters)
+  "dt/data-table-toolbar": [{ name: "data-table-toolbar.tsx", source: dtDataTableToolbarTsx }],
+
+  // GooseUI
+  "gooseui/border-beam": [{ name: "border-beam.tsx", source: gooseuiBorderBeamTsx }],
+  "gooseui/checkbox": [{ name: "checkbox.tsx", source: gooseuiCheckboxTsx }],
+  "gooseui/curved-text": [{ name: "curved-text.tsx", source: gooseuiCurvedTextTsx }],
+  "gooseui/stacking-cards": [{ name: "stacking-cards.tsx", source: gooseuiStackingCardsTsx }],
+  "gooseui/promo-banner": [{ name: "promo-banner.tsx", source: gooseuiPromoBannerTsx }],
+  "gooseui/parallax-cards": [{ name: "parallax-cards.tsx", source: gooseuiParallaxCardsTsx }],
+  "gooseui/features-grid": [{ name: "features-grid.tsx", source: gooseuiFeaturesGridTsx }],
+  "gooseui/footer-columns": [{ name: "footer-columns.tsx", source: gooseuiFooterColumnsTsx }],
+  "gooseui/footer-simple": [{ name: "footer-simple.tsx", source: gooseuiFooterSimpleTsx }],
+  "gooseui/footer-newsletter": [{ name: "footer-newsletter.tsx", source: gooseuiFooterNewsletterTsx }],
+  "gooseui/curved-text-marquee": [{ name: "curved-text-marquee.tsx", source: gooseuiCurvedTextMarqueeTsx }],
+  "gooseui/header-with-cta": [{ name: "header-with-cta.tsx", source: gooseuiHeaderWithCtaTsx }],
+
+  // Manifest
+  "manifest/contact-form": [{ name: "manifest-contact-form.tsx", source: manifestContactFormTsx }, { name: "contact-form.tsx", source: manifestFormContactFormTsx }, { name: "countries.ts", source: manifestFormCountriesTs }, { name: "demo/form.ts", source: manifestFormDemoFormTs }],
+  "manifest/date-time-picker": [{ name: "manifest-date-time-picker.tsx", source: manifestDateTimePickerTsx }, { name: "date-time-picker.tsx", source: manifestFormDateTimePickerTsx }],
+  "manifest/empty-state": [{ name: "manifest-empty-state.tsx", source: manifestEmptyStateTsx }, { name: "empty-state.tsx", source: manifestFormEmptyStateTsx }],
+  "manifest/file-uploader": [{ name: "manifest-file-uploader.tsx", source: manifestFileUploaderTsx }, { name: "file-uploader.tsx", source: manifestFormFileUploaderTsx }],
+  "manifest/settings-panel": [{ name: "manifest-settings-panel.tsx", source: manifestSettingsPanelTsx }, { name: "settings-panel.tsx", source: manifestFormSettingsPanelTsx }],
+
+  // Limeplay
+  "limeplay/audio-source": [{ name: "limeplay-audio-source.tsx", source: limeplayAudioSourceTsx }, { name: "audio-source.tsx", source: limeplayAudioSourceCoreTsx }],
+  "limeplay/timeline-control": [{ name: "limeplay-timeline-control.tsx", source: limeplayTimelineControlTsx }, { name: "timeline-control.tsx", source: limeplayTimelineControlCoreTsx }],
+  "limeplay/volume-control": [{ name: "limeplay-volume-control.tsx", source: limeplayVolumeControlTsx }, { name: "volume-control.tsx", source: limeplayVolumeControlCoreTsx }],
+
+  // Extend
+  "extend/e-signature": [{ name: "extend-e-signature.tsx", source: extendESignatureTsx }, { name: "e-signature.tsx", source: extendESignatureBlockTsx }],
+  "extend/layout-blocks-block": [{ name: "extend-layout-blocks-block.tsx", source: extendLayoutBlocksBlockTsx }, { name: "layout-blocks-block.tsx", source: extendLayoutBlocksBlockSourceTsx }, { name: "layout-blocks.tsx", source: extendLayoutBlocksTsx }],
+  "extend/document-splits-block": [{ name: "extend-document-splits-block.tsx", source: extendDocumentSplitsBlockTsx }],
+
+  // Tool UI
+  "citation-list": [{ name: "tool-citation-list.tsx", source: toolCitationListTsx }, { name: "citation-list.tsx", source: citationListTsx }],
+
+  // Dice UI
+  "dice/hitbox": [{ name: "hitbox.tsx", source: diceHitboxTsx }],
+  "dice/color-swatch": [{ name: "color-swatch.tsx", source: diceColorSwatchTsx }],
 }
 
 export function getComponentSources(componentId: string): ComponentSourceFile[] {

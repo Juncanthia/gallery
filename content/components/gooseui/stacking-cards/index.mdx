@@ -1,0 +1,153 @@
+StackingCards 堆叠卡片。基于 CSS `position: sticky` + 滚动驱动动画实现卡片层叠效果，滚动时卡片依次堆叠并伴随缩放与透明度变化。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在单个视口区域逐层展示多张卡片，通过滚动动画形成视觉层叠关系时使用。
+
+常见场景：
+
+- 产品特性逐条展示，用户滚动时卡片依次覆盖叠加。
+- 步骤引导或说明页面，每张卡片代表一个步骤。
+- 时间线或进度展示，以卡片堆叠形式呈现事件顺序。
+- 内容摘要页，高亮多组信息并保持空间紧凑。
+
+不推荐：
+
+- 卡片数量极多（>10 张）的列表，层叠偏移累积可能导致视觉杂乱。
+- 需要精确像素级定位的场景，sticky 偏移量受容器高度制约。
+- 不支持 CSS `view-timeline` 和 `animation-timeline` 的旧浏览器中动画不生效。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 StackingCardsAnimated 包裹一组卡片，每张卡片在滚动时自动获得堆叠位置和缩放动画。
+
+<ComponentShowcase
+  id="gooseui/stacking-cards"
+  path="gooseui/stacking-cards/basic"
+/>
+
+```tsx
+import { StackingCardsAnimated } from "@/components/ui/gooseui-stacking-cards"
+
+export default function Demo() {
+  return (
+    <StackingCardsAnimated>
+      <div className="rounded-xl border bg-card p-6 shadow-lg">
+        <h3 className="text-lg font-semibold">卡片一</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          向下滚动查看堆叠效果。
+        </p>
+      </div>
+      <div className="rounded-xl border bg-card p-6 shadow-lg">
+        <h3 className="text-lg font-semibold">卡片二</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          第二张卡片将堆叠在第一张之上。
+        </p>
+      </div>
+    </StackingCardsAnimated>
+  )
+}
+```
+
+### 手动控制偏移量
+
+使用 StackingCardsContainer 包裹 StackingCard，通过 `index` 属性手动控制每张卡片的堆叠偏移。
+
+```tsx
+import {
+  StackingCardsContainer,
+  StackingCard,
+} from "@/components/ui/gooseui-stacking-cards"
+
+export default function Demo() {
+  return (
+    <StackingCardsContainer>
+      <StackingCard>
+        <div className="p-6">
+          <h3 className="text-lg font-semibold">卡片一</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            使用 StackingCard 手动控制。
+          </p>
+        </div>
+      </StackingCard>
+      <StackingCard>
+        <div className="p-6">
+          <h3 className="text-lg font-semibold">卡片二</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            自动计算 index 偏移。
+          </p>
+        </div>
+      </StackingCard>
+    </StackingCardsContainer>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### StackingCard
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片内容 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+| index | 卡片索引（0-based），控制堆叠 top 偏移和缩放比例 | `number` | `0` |
+
+StackingCard 使用 `position: sticky` 实现粘性定位，`top` 偏移量 = `100 + index * 20`（px），`zIndex` = `index + 1`，`transform: scale(1 - index * 0.02)`。
+
+### StackingCardsContainer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 多个 StackingCard 组件 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+
+StackingCardsContainer 自动为每个子元素注入 `index` prop，底部填充 `50vh` 确保最后一张卡片有足够空间取消粘性定位。
+
+### StackingCardsAnimated
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片内容（任意 ReactNode） | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+
+StackingCardsAnimated 在 StackingCardsContainer 基础上增加了滚动驱动的缩放动画（CSS `view-timeline`），卡片离开视口时自动缩小至 `scale(0.95)` 并降低透明度。
+
+<h2 id="faq">常见问题</h2>
+
+### StackingCardsContainer 和 StackingCardsAnimated 有什么区别？
+
+StackingCardsContainer 提供基础的 sticky 堆叠偏移和 z-index 层级，不包含动画。StackingCardsAnimated 在此基础上增加了 CSS 滚动驱动动画（`animation-timeline: view()`），卡片离开视口时产生缩小和淡出效果。如果不需要动画，使用 StackingCardsContainer 即可。
+
+### StackingCardsContainer 中是否必须使用 StackingCard？
+
+建议使用 StackingCard 以利用其内置的 sticky 定位和缩放计算。直接传入普通 div 不会自动获得 sticky 属性，但 StackingCardsContainer 仍会为其注入 `index` prop。
+
+### 如何调整堆叠偏移距离？
+
+StackingCard 的 top 偏移公式为 `100 + index * 20`（px）。如需调整，修改源码中 `topOffset` 变量或直接传入 `className` 配合自定义 CSS。
+
+### 动画在 Firefox / Safari 中为什么不生效？
+
+滚动驱动动画（`animation-timeline`）和 `view-timeline` 需要 Chromium 115+ 支持。Firefox 和 Safari 中卡片依然保持 sticky 堆叠效果，但不会产生缩放动画。降级方案：使用 StackingCardsContainer 替代 StackingCardsAnimated 确保基础布局正常。
+
+### 如何自定义动画效果？
+
+StackingCardsAnimated 的动画通过全局注入的 CSS keyframes `stack-scale` 控制。修改组件源码中 `STACKING_CARDS_STYLES` 的 `@keyframes stack-scale` 可调整缩放目标值和透明度。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 StackingCards 代码时：
+
+1. 从 `@/components/ui/gooseui-stacking-cards` 导入所需组件。
+2. 大部分场景使用 StackingCardsAnimated 包裹卡片列表，无需手动指定 index。
+3. 需要精确控制单张卡片偏移时，使用 StackingCardsContainer + StackingCard 组合。
+4. 每张卡片内容的样式（背景、边框、阴影、内边距）由调用侧控制，组件仅提供 sticky 定位和堆叠逻辑。
+5. 不要引入 Ant Design 或 `antd` 相关依赖。
+6. 注意滚动驱动动画仅 Chromium 115+ 支持；需要告知用户低版本浏览器的行为差异。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/stacking-cards" />

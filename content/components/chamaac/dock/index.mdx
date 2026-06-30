@@ -1,0 +1,206 @@
+Dock 是一个 macOS 风格的底部导航栏组件，支持下拉菜单、图标导航、外部链接和移动端适配，内置暗色模式支持和流畅的动画过渡。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要为页面或应用提供一个固定在底部的导航栏时使用。Dock 提供桌面端下拉菜单和移动端全屏菜单两种交互模式，适合用作：
+
+- 营销网站或产品首页的全局导航。
+- 文档站点的分类目录导航。
+- 需要展示多层级导航结构的应用。
+- 品牌官网的产品分类和资源入口。
+
+组件固定在页面底部，桌面端居中显示为胶囊导航条，hover 时展开下拉菜单；移动端切换为汉堡菜单，点击后展开全屏导航。
+
+不推荐在内容密集型后台管理系统（通常使用侧边栏导航）中使用，Dock 更适合面向终端用户的展示型导航场景。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认包含导航链接、下拉菜单、图标导航和外部链接四种元素类型。
+
+<ComponentShowcase
+  id="chamaac/dock"
+  path="chamaac/dock/basic"
+/>
+
+```tsx
+import {
+  Dock,
+  DockItem,
+  DockDropdownItem,
+  DockIcon,
+  DockLink,
+} from "@/components/ui/chamaac-dock"
+
+export default function Demo() {
+  return (
+    <div className="relative h-[500px] w-full">
+      <Dock bottomOffset="60px">
+        <DockLink label="Home" href="/" />
+
+        <DockItem label="Products" id="products">
+          <DockDropdownItem label="Analytics" href="/products/analytics" />
+          <DockDropdownItem label="Engagement" href="/products/engagement" />
+        </DockItem>
+
+        <DockIcon icon={<SettingsIcon />} href="/settings" />
+      </Dock>
+    </div>
+  )
+}
+```
+
+### 自定义底部距离
+
+通过 `bottomOffset` 控制 Dock 距离页面底部的间距。
+
+<ComponentShowcase
+  id="chamaac/dock-offset"
+  path="chamaac/dock/offset"
+/>
+
+```tsx
+<Dock bottomOffset="20px">
+  <DockLink label="Home" href="/" />
+  <DockLink label="About" href="/about" />
+</Dock>
+```
+
+### 带图标和外部链接
+
+`DockLink` 支持 `icon` 和 `external` 属性。外部链接会在新标签页打开，hover 时图标有位移动画。
+
+<ComponentShowcase
+  id="chamaac/dock-icons"
+  path="chamaac/dock/icons"
+/>
+
+```tsx
+<Dock>
+  <DockLink label="Home" href="/" icon={<Home size={14} />} />
+  <DockLink
+    label="GitHub"
+    href="https://github.com"
+    external
+    icon={<ExternalLink size={14} />}
+  />
+</Dock>
+```
+
+<h2 id="api">API</h2>
+
+### Dock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 子组件，必须为 DockItem / DockIcon / DockLink | `ReactNode` | - |
+| closeDelay | 下拉菜单关闭延迟（毫秒） | `number` | `100` |
+| bottomOffset | Dock 距离页面底部的距离（CSS 值） | `string` | `"60px"` |
+| activePage | 手动指定当前激活页面路径 | `string` | - |
+| className | 附加样式类名，合并到导航容器 | `string` | - |
+
+### DockItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 下拉菜单项，必须为 DockDropdownItem | `ReactNode` | - |
+| label | 导航项显示的标签文字 | `string` | - |
+| id | 唯一标识，未提供时自动从 label 生成 | `string` | - |
+| className | 附加样式类名 | `string` | - |
+
+### DockDropdownItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| href | 导航目标链接 | `string` | - |
+| label | 菜单项显示的文字 | `string` | - |
+| image | 菜单项配图 URL | `string` | - |
+| className | 附加样式类名 | `string` | - |
+
+### DockIcon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| icon | 图标组件 | `ReactNode` | - |
+| href | 导航目标链接 | `string` | - |
+| className | 附加样式类名 | `string` | - |
+
+### DockLink
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 链接显示的文字 | `string` | - |
+| href | 导航目标链接 | `string` | - |
+| icon | 链接右侧图标 | `ReactNode` | - |
+| external | 是否为外部链接，为 true 时在新标签页打开 | `boolean` | `false` |
+| id | 唯一标识 | `string` | - |
+| className | 附加样式类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何改变 Dock 距离底部的间距？
+
+使用 `bottomOffset` 属性，传入 CSS 长度值字符串即可。
+
+```tsx
+<Dock bottomOffset="100px">
+  <DockLink label="Home" href="/" />
+</Dock>
+```
+
+### 如何让导航项高亮当前页面？
+
+Dock 自动读取 `usePathname()`（Next.js），与 DockItem/DockIcon/DockLink 的 `href` 对比，匹配时自动高亮。也支持通过 `activePage` 手动指定。
+
+```tsx
+import { usePathname } from "next/navigation"
+
+export default function Layout() {
+  const pathname = usePathname()
+
+  return (
+    <Dock activePage={pathname}>
+      {/* ... */}
+    </Dock>
+  )
+}
+```
+
+### 如何添加下拉菜单项配图？
+
+在 `DockDropdownItem` 中传入 `image` 属性。hover 菜单项时右侧会展示对应的预览图，配图尺寸为 80x80 圆角矩形。
+
+```tsx
+<DockItem label="Products" id="products">
+  <DockDropdownItem
+    label="Analytics"
+    href="/analytics"
+    image="/images/analytics-thumb.png"
+  />
+</DockItem>
+```
+
+### 移动端适配是如何工作的？
+
+桌面端（md 及以上）显示胶囊式底部导航条。移动端隐藏导航条，改为右下角 "Menu" 按钮，点击后展开全屏菜单，展示所有导航项和下拉内容。
+
+### 如何自定义暗色模式行为？
+
+Dock 通过 `next-themes` 的 `useTheme()` 自动获取当前主题，内部根据 `isDark` 切换背景色和文字色。无需额外配置，只需确保应用已包裹 `ThemeProvider`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Dock 代码时：
+
+1. 从 `@/components/ui/chamaac-dock` 导入 `Dock`、`DockItem`、`DockDropdownItem`、`DockIcon`、`DockLink`。
+2. 所有子组件必须放在 `<Dock>` 内部，Dock 使用 Context 管理状态。
+3. `bottomOffset` 接受 CSS 长度值字符串（如 `"60px"`、`"2rem"`）。
+4. `DockDropdownItem` 只能放在 `DockItem` 内部。
+5. 外部链接（`external={true}`）使用 `<m.a>` 在新标签页打开，内部链接使用 Next.js `Link`。
+6. 图标使用 `lucide-react`，无需额外安装。
+7. Dock 依赖 `motion/react`、`next/navigation`、`next-themes`，确保这些依赖已在项目中安装。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="chamaac/dock" />

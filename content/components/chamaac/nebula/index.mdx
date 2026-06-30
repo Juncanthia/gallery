@@ -1,0 +1,116 @@
+Nebula 星云背景。基于 Three.js 和 GLSL 着色器实现，通过程序化噪声和分形布朗运动（FBM）生成动态星云视觉效果。适合用作页面背景或氛围装饰。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为页面或区块添加动态星云、宇宙背景等氛围型视觉效果时使用。
+
+常见场景：
+- 全屏背景装饰，如 Hero 区域、品牌展示页。
+- 深色主题页面的动态背景层。
+- 科幻、宇宙、星空主题的营销页面。
+
+不推荐：
+- 性能敏感的低端设备页面，WebGL 着色器开销较高。
+- 需要精确视觉一致性的场景，着色器效果受 GPU 差异影响。
+- 纯信息展示的文本密集型页面，动态背景会分散注意力。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="chamaac/nebula" path="chamaac/nebula/basic" />
+
+### 基础用法
+
+Nebula 默认铺满父容器（`absolute inset-0`），需确保父容器 `relative` 且有明确尺寸。
+
+```tsx
+import { Nebula } from "@/components/ui/chamaac-nebula"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#1a0b2e]"&gt;
+      &lt;Nebula /&gt;
+      &lt;div className="absolute inset-0 flex items-center justify-center"&gt;
+        &lt;p className="text-white/80 text-lg font-medium"&gt;Nebula&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义配色
+
+通过 `color1`、`color2`、`color3` 自定义星云的三层颜色。
+
+```tsx
+import { Nebula } from "@/components/ui/chamaac-nebula"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#0a0a1a]"&gt;
+      &lt;Nebula
+        color1="#ff6b6b"
+        color2="#4ecdc4"
+        color3="#0a0a1a"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整动画速度
+
+通过 `speed` 控制星云流动速度，默认为 `2.0`。
+
+```tsx
+import { Nebula } from "@/components/ui/chamaac-nebula"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded overflow-hidden bg-[#1a0b2e]"&gt;
+      &lt;Nebula speed={0.5} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Nebula
+
+星云背景组件。基于 WebGL 着色器实现，铺满父容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| speed | 星云流动速度 | `number` | `2.0` |
+| color1 | 高光/裂隙颜色 | `string` | `"#5efff4"` |
+| color2 | 星云主色调 | `string` | `"#763b65"` |
+| color3 | 深空底色 | `string` | `"#1a0b2e"` |
+
+<h2 id="faq">常见问题</h2>
+
+### Nebula 为什么没有显示？
+
+确保父容器设置了 `position: relative`（或 `absolute`/`fixed`）且有明确的宽高。Nebula 使用 `absolute inset-0` 铺满父容器，如果父容器没有尺寸或定位上下文，Canvas 不会渲染。
+
+### 如何减少性能开销？
+
+默认 DPR 为 `[1, 2]`，渲染帧率上限约 30fps。如需进一步优化，可以：
+- 仅在用户可见时渲染（通过条件渲染或 IntersectionObserver）。
+- 减小父容器尺寸，降低 GPU 填充率。
+- 在低端设备上降级为静态背景色。
+
+### 颜色格式支持什么？
+
+color1、color2、color3 接受 CSS 颜色字符串（如 hex `"#ff6b6b"`、rgb `"rgb(255,107,107)"`、命名颜色 `"red"` 等），内部通过 `new THREE.Color()` 解析。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/chamaac-nebula` 导入 Nebula，不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 确保父容器有 `position: relative` 和明确尺寸。
+3. Nebula 自带 `pointer-events-none`，前景内容需要独立的点击层。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="chamaac/nebula" />

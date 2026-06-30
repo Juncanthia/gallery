@@ -1,0 +1,183 @@
+---
+category: Components
+title: Switch
+subtitle: Switch
+description: Switch 是 dice-ui 开关组件，基于 Radix Switch 和 Tailwind CSS。
+demo:
+  cols: 1
+group:
+  title: dice-ui
+  order: 1
+source:
+  component: src/components/dice/ui/switch.tsx
+  docs: content/components/dice/switch/index.mdx
+  examples:
+    - content/components/dice/switch/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Switch 开关
+
+Switch 是 dice-ui 开关组件，基于 Radix Switch 和 Tailwind CSS 实现。用于在两种互斥状态间即时切换。
+
+本组件是项目内 dice-ui 库的基础组件，API 和行为以源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合需要用户在开/关两种状态间即时切换的场景。
+
+常见场景：
+- 设置页中的功能开关（通知、定位、暗黑模式等）
+- 列表项中的快速开关操作
+- 表单中的布尔值字段
+- 状态切换（启用/禁用某个选项）
+
+不推荐：
+- 需要多种选项时（使用 Checkbox 或 Radio）
+- 需要提交操作才能生效时（使用 Button）
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Switch } from "@/components/ui/dice-switch"
+
+export default function Demo() {
+  return (
+    <Switch defaultChecked />
+  )
+}
+```
+
+### 受控用法
+
+```tsx
+import { Switch } from "@/components/ui/dice-switch"
+import { useState } from "react"
+
+export default function Demo() {
+  const [checked, setChecked] = useState(false)
+
+  return (
+    <div className="flex items-center gap-2">
+      <Switch checked={checked} onCheckedChange={setChecked} />
+      <span>{checked ? "开" : "关"}</span>
+    </div>
+  )
+}
+```
+
+### 表单用法
+
+```tsx
+import { Switch } from "@/components/ui/dice-switch"
+
+export default function Demo() {
+  return (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <div className="flex items-center gap-2">
+        <Switch name="notifications" defaultChecked />
+        <label>启用通知</label>
+      </div>
+    </form>
+  )
+}
+```
+
+## 核心导出 {#exports}
+
+- `Switch`
+
+## API 摘要 {#api}
+
+```ts
+type SwitchProps = React.ComponentProps<typeof SwitchPrimitive.Root> & {
+  className?: string;
+};
+```
+
+Switch 继承 Radix Switch.Root 的全部属性。核心属性：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| checked | 受控选中状态 | `boolean` | - |
+| defaultChecked | 默认选中状态（非受控） | `boolean` | - |
+| onCheckedChange | 选中状态变化回调 | `(checked: boolean) => void` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| required | 是否必填 | `boolean` | `false` |
+| name | 表单字段名称 | `string` | - |
+| value | 选中时提交的值 | `string` | `"on"` |
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `data-slot="switch"` — SwitchPrimitive.Root
+- `data-slot="switch-thumb"` — SwitchPrimitive.Thumb
+
+额外状态属性：
+- `data-[state="checked"]` / `data-[state="unchecked"]` — 开关状态，控制滑块位移
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 根容器：`inline-flex h-[1.15rem] w-8 items-center rounded-full border border-transparent shadow-xs transition-all`。
+- 选中状态：`data-[state=checked]:bg-primary`。
+- 未选中状态：`data-[state=unchecked]:bg-input`（暗色模式 `dark:data-[state=unchecked]:bg-input/80`）。
+- 滑块：`size-4 rounded-full bg-background`，选中时 `translate-x-[calc(100%-2px)]`，未选中时 `translate-x-0`。
+- 暗色模式滑块：选中时 `dark:data-[state=checked]:bg-primary-foreground`，未选中时 `dark:data-[state=unchecked]:bg-foreground`。
+- 聚焦态：`focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50`。
+- 禁用态：`disabled:cursor-not-allowed disabled:opacity-50`。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+- `src/components/dice/ui/switch.tsx`
+
+直接依赖：
+- `radix-ui` (Switch.Root, Switch.Thumb)
+- `@hyper/dice-ui/lib/utils` (cn)
+
+实现注意：
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 样式应优先通过组件 props 或 `className` 扩展点表达。
+3. 不要把 Radix 文档中的全量 API 视为本地已支持能力——以本地 `src/components/dice/ui/switch.tsx` 源码为准。
+4. 组件通过 `...props` 透传 Radix Switch.Root 的全部属性。
+
+## 可访问性 {#accessibility}
+
+- 基于 Radix Switch primitive，继承其键盘交互（Space/Enter 切换状态）。
+- 开关为可聚焦的交互元素，支持 `role="switch"` 和 `aria-checked`。
+- 禁用状态通过 `disabled` 属性控制，同时移除可交互能力。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/dice/ui/switch.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 未实现 | `checkedChildren`、`unCheckedChildren`、`loading`、`size`、`className`、`styles`、`ConfigProvider` |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Switch 代码时，应遵守：
+
+1. 从 `@/components/ui/dice-switch` 导入，不要从 `antd` 导入。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. 不要生成 AntD 专属的 `checkedChildren`、`unCheckedChildren`、`loading`、`size`。
+4. 受控模式下必须同时提供 `checked` 和 `onCheckedChange`。
+5. 表单场景使用 `name` 属性，不依赖 `Form.Item` 包裹。
+6. 交互组件必须保留键盘和 ARIA 语义，Radix primitive 已内置。
+7. 如果不确定某个 AntD API 是否存在，先检查 `src/components/dice/ui/switch.tsx`，不要凭 AntD 记忆生成。

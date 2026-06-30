@@ -1,0 +1,173 @@
+BorderBeam 是一个基于 CSS `@property` + `@keyframes` 动画的边框流光组件。通过旋转渐变遮罩在容器边缘产生流动的彩色光束效果，无需任何 JavaScript 动画定时器。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在卡片、按钮或其他容器边缘展示动态流光效果以吸引用户注意力时使用。适合用于高亮重点区域、装饰性边框或加载状态指示。
+
+常见场景：
+
+- 重点卡片或促销区块的视觉强化。
+- 表单或仪表盘中的高亮容器。
+- 加载中的占位容器边框动画。
+- 悬停或聚焦状态的动态边框装饰。
+
+不推荐：
+
+- 需要精确颜色渐变控制的场景（旋转动画使颜色位置不断变化）。
+- 对 `@property` 不兼容的旧浏览器（Firefox < 128、Safari < 15.4）。
+- 大量实例同时渲染（每个实例创建独立动画层，可能影响性能）。
+
+BorderBeam 通过 CSS `@property --angle` 和 `mask` 属性实现旋转渐变遮罩效果。父容器需设置 `position: relative` 和 `overflow: hidden`。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+将 BorderBeam 放入 `relative` 容器中，设置 `overflow: hidden` 防止光束溢出。通过 `colorFrom` 和 `colorTo` 控制渐变颜色。
+
+<ComponentShowcase
+  id="gooseui/border-beam"
+  path="gooseui/border-beam/basic"
+/>
+
+```tsx
+import { BorderBeam } from "@/components/ui/gooseui-border-beam"
+
+export default function Demo() {
+  return (
+    <div className="relative overflow-hidden rounded-xl border bg-card p-8 shadow">
+      <h3>边框流光</h3>
+      <p>BorderBeam 绕容器边缘旋转。</p>
+      <BorderBeam
+        size={250}
+        duration={8}
+        colorFrom="#ffaa40"
+        colorTo="#9c40ff"
+        borderWidth={2}
+      />
+    </div>
+  )
+}
+```
+
+### 自定义颜色
+
+通过 `colorFrom` 和 `colorTo` 自定义光束渐变颜色。
+
+```tsx
+import { BorderBeam } from "@/components/ui/gooseui-border-beam"
+
+export default function Demo() {
+  return (
+    <div className="relative overflow-hidden rounded-xl border bg-card p-8 shadow">
+      <h3>冷色调光束</h3>
+      <p>使用蓝-青色渐变。</p>
+      <BorderBeam
+        colorFrom="#06b6d4"
+        colorTo="#3b82f6"
+      />
+    </div>
+  )
+}
+```
+
+### 调整动画速度
+
+通过 `duration`（秒）控制完整旋转周期，`delay`（秒）控制动画相位偏移。
+
+```tsx
+import { BorderBeam } from "@/components/ui/gooseui-border-beam"
+
+export default function Demo() {
+  return (
+    <div className="relative overflow-hidden rounded-xl border bg-card p-8 shadow">
+      <h3>快速旋转</h3>
+      <p>duration=4s 的光束。</p>
+      <BorderBeam duration={4} />
+    </div>
+  )
+}
+```
+
+### squircle 圆角
+
+设置 `squircle` 使角落匹配 iOS 风格的连续曲率圆角（需要 Chrome 139+）。
+
+```tsx
+import { BorderBeam } from "@/components/ui/gooseui-border-beam"
+
+export default function Demo() {
+  return (
+    <div className="relative overflow-hidden rounded-xl border bg-card p-8 shadow">
+      <h3>Squircle 圆角</h3>
+      <p>iOS 风格连续曲率。</p>
+      <BorderBeam squircle />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BorderBeam
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+| size | 光束尺寸（像素），控制渐变区域大小 | `number` | `200` |
+| duration | 完整旋转周期（秒） | `number` | `12` |
+| delay | 动画相位偏移（秒），用于多个实例错开旋转 | `number` | `0` |
+| colorFrom | 光束起始颜色 | `string` | `"#ffaa40"` |
+| colorTo | 光束结束颜色 | `string` | `"#9c40ff"` |
+| borderWidth | 边框宽度（像素） | `number` | `1.5` |
+| squircle | 是否使用 iOS 风格 squircle 圆角（需要 Chrome 139+） | `boolean` | `false` |
+
+BorderBeam 使用 `useGlobalStyles` 全局注入 `@property --angle` 和 `@keyframes border-beam-spin` 样式，全局仅注册一次。通过 `mask` + `maskComposite: exclude` 仅渲染边缘区域，内部内容可见。`size` 和 `borderWidth` 通过 CSS 自定义属性 `--size`、`--border-width` 控制。动画通过 `animation` CSS 属性驱动，无 JavaScript 定时器。
+
+<h2 id="faq">常见问题</h2>
+
+### BorderBeam 需要放在什么容器中？
+
+父容器必须设置 `position: relative`，建议同时设置 `overflow: hidden` 防止光束溢出容器圆角边界。BorderBeam 使用 `absolute inset-0` 铺满父容器。
+
+### 如何让多个卡片同时展示光束？
+
+每个卡片内放入 BorderBeam 实例，通过不同 `delay` 值错开旋转相位，避免视觉上所有光束同步。
+
+```tsx
+<BorderBeam delay={0} />
+<BorderBeam delay={4} />
+<BorderBeam delay={8} />
+```
+
+### borderWidth 过大会发生什么？
+
+`borderWidth` 越大，光束区域越宽。过大的值（如 > 10）会导致边框遮罩区域侵入内部内容，建议保持在 1-4 像素范围内。
+
+### 动画性能如何？
+
+动画完全由 CSS 驱动，使用 `transform` 相关属性（`@property --angle`），不触发 layout 或 paint，仅触发 compositing。每个实例创建一个独立的 compositor 层。大量实例（> 20 个同时可见）可能影响低端设备性能。
+
+### 浏览器兼容性？
+
+依赖 CSS `@property`（Chrome 85+、Safari 15.4+、Firefox 128+）和 `mask` / `mask-composite`（需要 `-webkit-mask` / `-webkit-mask-composite` 回退）。组件已包含 WebKit 前缀。不兼容的浏览器中光束不显示，内容区域不受影响。
+
+### squircle 需要什么条件？
+
+`squircle` 使用 Chrome 139+ 的 `corner-shape: squircle` CSS 属性。不支持的浏览器中退化为普通圆角。注意 BorderBeam 所在的父容器也需要设置 `corner-shape: squircle` 才能与光束边缘匹配。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 BorderBeam 代码时：
+
+1. 从 `@/components/ui/gooseui-border-beam` 导入 `BorderBeam`。
+2. BorderBeam **必须**放在 `position: relative` 的父容器中，并建议父容器同时设置 `overflow: hidden`。
+3. 父容器需要 `rounded-[inherit]` 支持以匹配光束边缘；BorderBeam 内部已设置 `rounded-[inherit]` 跟随父容器。
+4. 多个 BorderBeam 实例通过 `delay` 错开相位，避免同步闪烁。
+5. `size` 参数控制渐变区域大小，较大值产生更弥散的光束，较小值更聚焦。
+6. 不要引入 Ant Design 或 `antd` 相关依赖。
+7. 对于 Firefox 用户，告知 `@property` 动画在 Firefox 128+ 才支持，旧版本中光束静止不旋转。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/border-beam" />

@@ -1,0 +1,224 @@
+DataTable 数据表格。用于展示结构化数据的表格组件，支持排序、格式化、响应式布局（桌面表格 / 移动端卡片），内置多种数据格式化器（货币、百分比、状态徽章、链接等）。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以表格形式展示结构化数据时使用。
+
+常见场景：
+
+- 数据看板中以表格展示指标数据，支持列排序和格式化。
+- 搜索结果以表格列出条目，支持金额、百分比、状态等格式化。
+- 管理后台的列表页面，需要排序、文本截断和响应式适配。
+- AI 生成内容中的数据展示，通过 JSON 序列化传入 columns 和 data。
+
+不推荐：
+
+- 需要行内编辑、拖拽排序、多选等复杂交互的场景，DataTable 当前仅支持列排序。
+- 数据量超过数千行时，建议服务端分页配合 Pagination 组件，而非一次性传入全量数据。
+- 需要嵌套子行、树形数据或行合并的场景，当前不支持。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 `columns`、`data` 和 `rowIdKey`，展示一个带排序和格式化的数据表格。
+
+<ComponentShowcase id="tool/data-table" path="tool/data-table/basic" />
+
+```tsx
+import { DataTable } from "@/components/ui/tool-data-table"
+
+export default function Demo() {
+  return (
+    &lt;DataTable
+      id="data-table-demo"
+      columns={[
+        { key: "name", label: "Name" },
+        { key: "price", label: "Price", format: { kind: "currency", currency: "USD" } },
+        { key: "status", label: "Status", format: { kind: "status", statusMap: { active: { tone: "success", label: "Active" } } } },
+      ]}
+      data={[
+        { id: "1", name: "Bitcoin", price: 67890.5, status: "active" },
+        { id: "2", name: "Ethereum", price: 3456.78, status: "active" },
+      ]}
+      rowIdKey="id"
+    /&gt;
+  )
+}
+```
+
+### Format 格式化器
+
+`column.format` 支持多种格式化类型，自动渲染对应的 UI。
+
+```tsx
+import { DataTable } from "@/components/ui/tool-data-table"
+
+export default function Demo() {
+  return (
+    &lt;DataTable
+      id="formatters-demo"
+      rowIdKey="id"
+      columns={[
+        { key: "name", label: "Name" },
+        { key: "price", label: "Price", format: { kind: "currency", currency: "USD" } },
+        { key: "change", label: "Change", format: { kind: "delta", decimals: 2 } },
+        { key: "share", label: "Share", format: { kind: "percent", decimals: 1 } },
+        { key: "updated", label: "Updated", format: { kind: "date", dateFormat: "relative" } },
+        { key: "active", label: "Active", format: { kind: "boolean", labels: { true: "Yes", false: "No" } } },
+        { key: "status", label: "Status", format: { kind: "status", statusMap: { ok: { tone: "success", label: "OK" }, warn: { tone: "warning", label: "Warning" }, err: { tone: "danger", label: "Error" } } } },
+        { key: "link", label: "Link", format: { kind: "link", external: true } },
+      ]}
+      data={[
+        { id: "1", name: "Alpha", price: 123.45, change: 0.052, share: 0.33, updated: "2025-12-01T10:00:00Z", active: true, status: "ok", link: "example.com/alpha" },
+        { id: "2", name: "Beta", price: 67.89, change: -0.018, share: 0.12, updated: "2025-06-15T08:00:00Z", active: false, status: "warn", link: "example.com/beta" },
+        { id: "3", name: "Gamma", price: 999.0, change: 0.0, share: 0.55, updated: "2025-11-20T12:00:00Z", active: true, status: "err", link: "example.com/gamma" },
+      ]}
+    /&gt;
+  )
+}
+```
+
+### 排序控制
+
+表格默认支持列排序（opt-out），通过 `defaultSort` 设置初始排序，或使用 `sort` + `onSortChange` 实现受控排序。
+
+```tsx
+import { DataTable } from "@/components/ui/tool-data-table"
+
+export default function Demo() {
+  return (
+    &lt;DataTable
+      id="sort-demo"
+      rowIdKey="id"
+      columns={[
+        { key: "name", label: "Name" },
+        { key: "score", label: "Score", sortable: false },
+        { key: "rank", label: "Rank" },
+      ]}
+      data={[
+        { id: "1", name: "Alice", score: 95, rank: 1 },
+        { id: "2", name: "Bob", score: 87, rank: 2 },
+        { id: "3", name: "Charlie", score: 82, rank: 3 },
+      ]}
+      defaultSort={{ by: "rank", direction: "asc" }}
+    /&gt;
+  )
+}
+```
+
+### 表格布局控制
+
+通过 `DataTable.Table`（仅表格）和 `DataTable.Cards`（仅卡片）子组件精确控制布局。
+
+```tsx
+import { DataTable } from "@/components/ui/tool-data-table"
+
+const columns = [
+  { key: "name", label: "Name" },
+  { key: "value", label: "Value", format: { kind: "number", compact: true } },
+]
+const data = [
+  { id: "1", name: "Item A", value: 12345 },
+  { id: "2", name: "Item B", value: 67890 },
+]
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-col gap-4"&gt;
+      &lt;DataTable.Table id="table-only" rowIdKey="id" columns={columns} data={data} /&gt;
+      &lt;DataTable.Cards id="cards-only" rowIdKey="id" columns={columns} data={data} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DataTable
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识 | `string` | - |
+| columns | 列定义数组 | `Column[]` | - |
+| data | 行数据数组（仅含原始值） | `T[]` | - |
+| rowIdKey | 行数据中作为唯一标识的键名，强烈建议提供 | `string` | - |
+| defaultSort | 非受控初始排序 | `{ by?: string; direction?: "asc" \| "desc" }` | - |
+| sort | 受控排序状态 | `{ by?: string; direction?: "asc" \| "desc" }` | - |
+| onSortChange | 受控排序回调 | `(next) => void` | - |
+| emptyMessage | 空数据提示文本 | `string` | `"No data available"` |
+| maxHeight | 表格最大高度（CSS 值），超出滚动 | `string` | - |
+| locale | BCP47 语言标签，影响排序和格式化 | `string` | `"en-US"` |
+| className | 附加样式类名 | `string` | - |
+
+### Column
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| key | 列标识，对应行数据的键名 | `string` | - |
+| label | 列头显示文本 | `string` | - |
+| abbr | 窄视口缩写文本 | `string` | - |
+| sortable | 是否可排序 | `boolean` | `true` |
+| align | 文本对齐 | `"left"` \| `"right"` \| `"center"` | 首列 `left`，数值列 `right` |
+| width | 固定列宽（CSS 值） | `string` | - |
+| truncate | 启用文本截断省略 | `boolean` | - |
+| priority | 移动端显示优先级 | `"primary"` \| `"secondary"` \| `"tertiary"` | 前两列 `primary`，其余 `secondary` |
+| hideOnMobile | 移动端完全隐藏 | `boolean` | - |
+| format | 格式化配置 | `FormatConfig` | - |
+
+### FormatConfig
+
+| kind | 说明 | 关键配置 |
+| --- | --- | --- |
+| `text` | 纯文本（默认） | - |
+| `number` | 数字 | `decimals`, `unit`, `compact`, `showSign` |
+| `currency` | 货币 | `currency`, `decimals` |
+| `percent` | 百分比 | `decimals`, `showSign`, `basis` |
+| `delta` | 变化量（带箭头颜色） | `decimals`, `upIsPositive`, `showSign` |
+| `date` | 日期 | `dateFormat`: `"short"` \| `"long"` \| `"relative"` |
+| `status` | 状态徽章（按值映射） | `statusMap: Record<string, { tone, label? }>` |
+| `boolean` | 布尔徽章 | `labels: { true, false }` |
+| `link` | 超链接 | `hrefKey`, `external` |
+| `badge` | 彩色标签 | `colorMap: Record<string, Tone>` |
+| `array` | 数组标签组 | `maxVisible` |
+
+<h2 id="faq">常见问题</h2>
+
+### 必须提供 rowIdKey 吗？
+
+强烈建议提供 `rowIdKey`。不提供时，DataTable 会使用推断的行键作为降级方案，但在数据排序变化时可能导致 React reconciliation 问题（焦点丢失、动画异常）。对于静态 mock 数据可以省略，生产数据必须提供。
+
+### 如何自定义某个列的排序行为？
+
+设置 `column.sortable = false` 即可禁用该列的排序。排序逻辑按自然顺序（localeCompare / 数值比较），不支持自定义比较函数。
+
+### 如何在移动端控制列的显示？
+
+通过 `priority` 属性控制：
+- `primary`：始终显示在卡片顶部。
+- `secondary`：折叠在可展开区域中。
+- `tertiary`：完全不显示。
+- 未设置时，前两列自动为 primary，其余为 secondary。
+
+也可使用 `hideOnMobile: true` 完全隐藏某列。
+
+### 如何格式化日期列？
+
+使用 `format: { kind: "date", dateFormat: "short" }`。支持三种格式：
+- `short`：`Jun 30, 2026`
+- `long`：`June 30, 2026`
+- `relative`：`2 hours ago` / `in 3 days`
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/tool-data-table` 导入 `DataTable`。
+2. `id`、`columns`、`data` 为必填属性，生产环境必须提供 `rowIdKey`。
+3. `data` 中每行的值必须是原始类型（string / number / boolean / null）或原始类型数组，不要放对象。
+4. 使用 `column.format` 控制单元格的渲染格式，不要在 data 中放入 JSX 或 React 节点。
+5. 排序默认启用（opt-out），不需要排序的列设置 `sortable: false`。
+6. 使用 `DataTable.Table` 仅渲染表格视图，`DataTable.Cards` 仅渲染卡片视图，默认 `DataTable` 为自适应（窄屏卡片 / 宽屏表格）。
+7. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+8. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tool/data-table" />

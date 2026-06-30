@@ -1,0 +1,139 @@
+MarchingWaves 行军波。基于 Three.js 和 GLSL 着色器实现，通过光线步进（Raymarching）算法渲染地形，并结合复古 Bayer 抖动后处理产生像素化扫描线效果。适合用作页面背景或科技感氛围装饰。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为页面或区块添加动态地形、扫描线、复古像素风格等科技感视觉效果时使用。
+
+常见场景：
+
+- 全屏背景装饰，如 Hero 区域、品牌展示页。
+- 科技、数据可视化等主题页面的动态背景层。
+- 需要扫掠/行军线动画效果的科幻主题页面。
+
+不推荐：
+
+- 性能敏感的低端设备页面，WebGL 光线步进着色器开销较高。
+- 需要精确视觉一致性的场景，着色器效果受 GPU 差异影响。
+- 纯信息展示的文本密集型页面，动态背景会分散注意力。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="chamaac/marching-waves" path="chamaac/marching-waves/basic" />
+
+### 基础用法
+
+MarchingWaves 默认铺满父容器，需确保父容器 `relative` 且有明确尺寸（建议最小高度 400px）。
+
+```tsx
+import { MarchingWaves } from "@/components/ui/chamaac-marching-waves"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-[400px] rounded overflow-hidden bg-[#05050f]"&gt;
+      &lt;MarchingWaves /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义配色
+
+通过 `color1`、`color2` 自定义地形渐变颜色。
+
+```tsx
+import { MarchingWaves } from "@/components/ui/chamaac-marching-waves"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-[400px] rounded overflow-hidden bg-[#05050f]"&gt;
+      &lt;MarchingWaves
+        color1="#ff6b6b"
+        color2="#4ecdc4"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整动画速度
+
+通过 `speed` 控制波动速度，默认为 `1.0`。
+
+```tsx
+import { MarchingWaves } from "@/components/ui/chamaac-marching-waves"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-[400px] rounded overflow-hidden bg-[#05050f]"&gt;
+      &lt;MarchingWaves speed={0.5} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整像素效果
+
+通过 `colorNum` 控制色彩量化阶数（复古感），`pixelSize` 控制像素块大小。
+
+```tsx
+import { MarchingWaves } from "@/components/ui/chamaac-marching-waves"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-[400px] rounded overflow-hidden bg-[#05050f]"&gt;
+      &lt;MarchingWaves colorNum={4} pixelSize={5} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### MarchingWaves
+
+行军波背景组件。基于 WebGL 着色器实现光线步进地形渲染和复古像素后处理，铺满父容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| speed | 动画速度倍率 | `number` | `1.0` |
+| color1 | 地形深色/阴影颜色 | `string` | `"#4338ca"` |
+| color2 | 地形高光/亮色颜色 | `string` | `"#ec4899"` |
+| colorNum | 色彩量化阶数，值越小复古感越强 | `number` | `8.0` |
+| pixelSize | 像素块大小，值越大颗粒感越强 | `number` | `3.0` |
+
+<h2 id="faq">常见问题</h2>
+
+### MarchingWaves 为什么没有显示？
+
+确保父容器设置了 `position: relative`（或 `absolute`/`fixed`）且有明确的宽高。组件使用默认类 `relative w-full h-full min-h-[600px]`，需要通过父容器或 `className` 提供尺寸。
+
+### 如何减少性能开销？
+
+默认 Canvas DPR 为 `1`，渲染帧率由着色器内时间驱动。如需进一步优化，可以：
+- 仅在用户可见时渲染（通过条件渲染或 IntersectionObserver）。
+- 减小父容器尺寸，降低 GPU 填充率。
+- 增大 `pixelSize` 以降低后处理阶段的计算密度。
+- 在低端设备上降级为静态背景色。
+
+### 颜色格式支持什么？
+
+color1、color2 接受 CSS 颜色字符串（如 hex `"#ff6b6b"`、rgb `"rgb(255,107,107)"`、命名颜色 `"red"` 等），内部通过 `new THREE.Color()` 解析。
+
+### 如何禁用复古像素后处理？
+
+当前版本未暴露后处理的关闭开关。如需纯光线步进效果（无像素抖动），可以直接在源码中移除 `<RetroEffect>` 组件。如果你需要此功能，欢迎提交 Feature Request。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/chamaac-marching-waves` 导入 `MarchingWaves`（命名导出），不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 确保父容器有 `position: relative` 和明确尺寸，组件本身带有 `min-h-[600px]` 兜底。
+3. 使用 `color1`、`color2` 自定义地形渐变颜色。
+4. 使用 `colorNum`、`pixelSize` 控制复古像素后处理效果。
+5. 组件依赖 `@react-three/fiber`、`three` 和 `@react-three/postprocessing`，确保项目已安装。
+6. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="chamaac-marching-waves" />

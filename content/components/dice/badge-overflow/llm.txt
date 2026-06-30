@@ -1,0 +1,175 @@
+---
+category: Components
+title: BadgeOverflow
+subtitle: 溢出折叠徽章
+description: 在固定宽度容器中渲染 Badge 列表，自动测量宽度并根据行数限制折叠超出部分。
+demo:
+  cols: 1
+group:
+  title: Dice UI
+  order: 1
+source:
+  component: src/components/dice/ui/badge-overflow.tsx
+  examples:
+    - content/components/dice/badge-overflow/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# BadgeOverflow 溢出折叠徽章
+
+在固定宽度容器中渲染 Badge 列表，自动测量每个 Badge 实际宽度，根据行数限制折叠超出部分，以 "+N" 形式展示溢出数量。
+
+本组件借鉴 Ant Design Overflow 的使用心智，但不是 AntD 兼容层。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
+
+## 何时使用 {#when-to-use}
+
+适合在固定宽度容器中展示 Badge 列表，超出自动折叠为 "+N" 的场景。优先通过组件自身 props 表达状态和语义，避免在业务侧手写测量和折叠逻辑。
+
+常见场景：
+
+- 表格列中展示标签/徽章列表（空间受限）。
+- 卡片详情中展示项目关联标签。
+- 搜索筛选条件可视化。
+- 任意需要在固定宽度内自适应折叠 Badge 的场景。
+
+不推荐：
+
+- 为了照搬 Ant Design API 而新增兼容别名。
+- 在调用侧绕过组件 API，直接手写 ResizeObserver 和宽度计算逻辑。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { BadgeOverflow } from "@/components/ui/dice-badge-overflow"
+
+const items = [
+  { label: "React", color: "bg-sky-100 text-sky-700" },
+  { label: "TypeScript", color: "bg-blue-100 text-blue-700" },
+  { label: "Tailwind CSS", color: "bg-teal-100 text-teal-700" },
+]
+
+export default function Demo() {
+  return (
+    <BadgeOverflow
+      items={items}
+      getBadgeLabel={(item) => item.label}
+      lineCount={1}
+      renderBadge={(item) => (
+        <span className={`inline-flex h-5 items-center rounded-md px-1.5 text-xs font-medium ${item.color}`}>
+          {item.label}
+        </span>
+      )}
+    />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。`items` 和 `renderBadge` 为必填 props，对象数组时 `getBadgeLabel` 也为必填。
+
+## 核心导出 {#exports}
+
+- `BadgeOverflow`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface GetBadgeLabel<T> {
+  /** 为每个 item 返回标识文本。对象数组时必填，原始类型数组时可选 */
+  getBadgeLabel: (item: T) => string;
+}
+
+type BadgeOverflowProps<T = string> = {
+  /** Badge 数据数组 */
+  items: T[];
+  /** 最大显示行数。@default 1 */
+  lineCount?: number;
+  /** 渲染单个 Badge，接收 item 和 label */
+  renderBadge: (item: T, label: string) => React.ReactNode;
+  /** 自定义溢出提示渲染。不传使用默认 "+N" 样式 */
+  renderOverflow?: (count: number) => React.ReactNode;
+  /** 是否作为子元素的 Slot 渲染。@default false */
+  asChild?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+} & React.ComponentProps<"div">
+  & (T extends object ? GetBadgeLabel<T> : Partial<GetBadgeLabel<T>>);
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `badge-overflow`
+
+额外状态属性：
+
+- `data-slot`
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 组件包装 Radix Slot primitive，支持 `asChild` 模式。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border` 等项目级语义变量。
+- 默认溢出 Badge 样式：`inline-flex h-5 shrink-0 items-center rounded-md border px-1.5 font-semibold text-xs`。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/dice/ui/badge-overflow.tsx`
+
+直接依赖摘要：
+
+- React、Tailwind CSS、Radix Slot primitive、本地 `useComposedRefs` / `cn` 工具函数。
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 样式应优先通过组件 props（`renderBadge`、`renderOverflow`）表达。
+3. 内部使用两层 DOM 结构：隐藏测量层 + 可见展示层，通过 ResizeObserver 响应容器宽度变化。
+4. 如果需要新增能力，应先修改该组件源码，再更新本 llm 文档。
+5. 不要把第三方文档中的全量 API 视为本地已支持能力。
+
+## 可访问性 {#accessibility}
+
+- 根元素保留 `data-slot="badge-overflow"` 语义属性。
+- `renderBadge` 和 `renderOverflow` 由调用方负责提供可访问性（如 Badge 使用 `role="status"`）。
+- 组件本身不引入额外的 ARIA 角色或键盘交互。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/dice/ui/badge-overflow.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 借鉴 AntD Overflow 使用心智，但不承诺 API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 BadgeOverflow 代码时，应遵守：
+
+1. 从 `@/components/ui/dice-badge-overflow` 导入，不要从 `antd` 导入。
+2. `items` 和 `renderBadge` 为必填 props，对象数组时 `getBadgeLabel` 也为必填。
+3. 只使用本文件 API 摘要和源码中存在的 props。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
+5. 需要自定义样式时，优先使用 `renderBadge` / `renderOverflow` 在渲染回调中控制。
+6. 不要用 `flex-wrap` 手动实现测量折叠——使用 BadgeOverflow 的内置能力。
+7. 如果不确定某个 AntD API 是否存在，先检查 `src/components/ui/dice/badge-overflow.tsx`，不要凭 AntD 记忆生成。

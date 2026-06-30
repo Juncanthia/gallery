@@ -1,0 +1,26 @@
+---
+component: HeroSplit
+slug: gooseui/hero-split
+
+import: |
+  import { HeroSplit } from "@/components/ui/gooseui-hero-split"
+
+usage: |
+  <HeroSplit />
+
+props:
+  HeroSplit:
+    （无公开 props，自包含块组件，直接修改源码进行定制）
+
+constraints:
+  - 左右分栏布局：左侧内容（标题、特性列表、CTA）、右侧产品截图模拟窗口。
+  - 移动端（<md）右侧图像区域隐藏，仅展示左侧内容。
+  - 无公开 props，定制通过直接编辑组件源码实现。
+  - 依赖 lucide-react（ArrowRight, Check）和 @hyper/gooseui 的 Button 组件。
+  - 组件为营销/展示型区块，不应在 Hero 内嵌入复杂交互或数据请求逻辑。
+  - 不要引入 Ant Design 或 antd 相关依赖。
+
+source: src/components/gooseui/components/blocks/hero/hero-split.tsx
+example: content/components/gooseui/hero-split/examples/basic.tsx
+docs: content/components/gooseui/hero-split/index.mdx
+---

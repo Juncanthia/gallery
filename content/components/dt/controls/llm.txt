@@ -1,0 +1,154 @@
+---
+category: Components
+title: ControlsProvider
+subtitle: 筛选控件容器
+description: 管理 DataTable 筛选面板的展开/折叠状态，通过 Context 向下传递状态。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 1
+source:
+  component: src/components/data-table-filters/components/controls.tsx
+  examples:
+    - content/components/dt/controls/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# ControlsProvider 筛选控件容器
+
+ControlsProvider 是 DataTable 筛选体系的基础设施组件，管理筛选面板的展开/折叠状态。通过 React Context 向下传递 `open`/`setOpen` 状态，并在根元素上设置 `data-expanded` 属性，配合 Tailwind 的 `group-data-[expanded=true]/controls` 变体实现 CSS 驱动的显隐切换。
+
+本组件是 DataTable 筛选体系的内部组件，设计为配合 DataTableProvider 使用。API 和行为以源码为准。
+
+## 何时使用 {#when-to-use}
+
+当需要在 DataTable 筛选场景中统一管理筛选面板的展开/折叠状态时使用。
+
+常见场景：
+
+- DataTable 筛选面板的展开/折叠控制。
+- 需要根据筛选面板状态条件性渲染子组件。
+- 需要配合 Tailwind `group-data-[expanded=true]/controls` 变体实现 CSS 驱动的显隐切换。
+
+不推荐：
+
+- 在 DataTable 体系之外单独使用 ControlsProvider。
+- 绕过 Context 直接操作 DOM 属性来控制显隐。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+ControlsProvider 包裹筛选控件区域，子组件通过 `useControls` 获取 `open`/`setOpen` 状态。
+
+```tsx
+import { ControlsProvider } from "@/components/ui/dt-controls"
+import { useControls } from "@/components/data-table-filters/components/controls"
+
+function Demo() {
+  return (
+    <ControlsProvider>
+      {/* 子组件可通过 useControls 访问 open/setOpen */}
+    </ControlsProvider>
+  )
+}
+```
+
+## 核心导出 {#exports}
+
+- `ControlsProvider`
+- `useControls`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码：
+
+```ts
+type ControlsContextType = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+```
+
+```ts
+type ControlsProviderProps = {
+  children: React.ReactNode;
+};
+```
+
+## Semantic DOM {#semantic-dom}
+
+ControlsProvider 渲染的 DOM 结构：
+
+```html
+<div class="group/controls" data-expanded="true">
+  {children}
+</div>
+```
+
+- `class="group/controls"`：Tailwind group 标识，子组件可通过 `group-data-[expanded=true]/controls` 变体响应展开状态。
+- `data-expanded`：布尔属性，`true` 时筛选面板展开，`false` 时折叠。
+
+## 样式模型 {#styling-model}
+
+- 根元素仅设置 `className="group/controls"` 和 `data-expanded` 属性，不附加任何视觉样式。
+- 子组件的显隐和动画由 Tailwind `group-data-[expanded=true]/controls` 变体或 `useControls` 的 `open` 状态控制。
+- 不引入额外的 CSS 模块或 css-in-js。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/data-table-filters/components/controls.tsx`
+
+直接依赖：
+
+- `@hyper/data-table-filters/hooks/use-local-storage`
+- `@hyper/data-table-filters/lib/constants/local-storage`（`CONTROLS_KEY = "controls-open"`）
+- `react`（`createContext`、`useContext`）
+
+实现注意：
+
+1. `open` 状态通过 `useLocalStorage(CONTROLS_KEY, true)` 管理，默认值为 `true`（展开）。
+2. 状态持久化到 localStorage，页面刷新后自动恢复。
+3. Context 未找到时，`useControls` 抛出错误：`"useControls must be used within a ControlsProvider"`。
+4. DataTableProvider 内部自动包裹 ControlsProvider，通常无需手动使用。
+
+## 可访问性 {#accessibility}
+
+- 根元素为普通 `<div>`，无特殊 ARIA 属性。
+- 展开/折叠状态通过 `data-expanded` 属性暴露，可用于自动化测试定位。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+ControlsProvider 是 DataTable 筛选体系的内部基础设施，Ant Design 中无直接对应组件。它借鉴了 Ant Design Table 筛选面板的展开/折叠交互心智，但实现上使用 Context + localStorage 持久化，不依赖 AntD 的 ConfigProvider 或 css-in-js。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/data-table-filters/components/controls.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 无视觉样式，仅提供状态管理 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 配合 DataTable 筛选体系使用，不承诺 AntD API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 ControlsProvider 代码时，应遵守：
+
+1. 从 `@/components/ui/dt-controls` 导入 ControlsProvider。
+2. 在 ControlsProvider 内部使用 `useControls` 获取 `open`/`setOpen` 状态。
+3. 配合 DataTable 体系时，通过 DataTableProvider 间接使用，不要手动包裹 ControlsProvider。
+4. 单独使用时，ControlsProvider 包裹需要使用筛选状态的区域。
+5. 子组件可通过 `useControls` 访问状态，或通过 `group-data-[expanded=true]/controls` Tailwind 变体响应。
+6. 不要引入 Ant Design 相关依赖。
+7. 如果不确定某个 API 是否存在，先检查源码，不要凭猜测生成。

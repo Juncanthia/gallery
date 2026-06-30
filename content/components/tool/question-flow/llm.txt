@@ -1,0 +1,295 @@
+---
+category: Components
+title: QuestionFlow
+subtitle: 问题流
+description: QuestionFlow 用于向用户展示问题并收集选择答案，支持单步渐进、多步问卷和结果回执三种模式。
+demo:
+  cols: 1
+group:
+  title: 工具组件
+  order: 1
+source:
+  component: src/components/tool/question-flow/question-flow.tsx
+  schema: src/components/tool/question-flow/schema.ts
+  reexport: src/components/ui/tool-question-flow.tsx
+  docs: content/components/tool/question-flow/index.mdx
+  examples:
+    - content/components/tool/question-flow/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  zod: true
+  lucideReact: true
+---
+
+# QuestionFlow 问题流
+
+QuestionFlow 用于向用户展示问题并收集选择答案，支持三种调用模式：
+
+- **渐进模式（Progressive）**：单步问题，父组件控制步进逻辑，适合 AI 流式对话中逐题插入。
+- **多步模式（Upfront）**：预定义完整问卷，组件内部管理步进和答案收集。
+- **回执模式（Receipt）**：展示已完成选择的结果摘要。
+
+组件根据传入 props 自动识别模式：`choice` 存在时为回执模式，`steps` 存在时为多步模式，其余为渐进模式。
+
+## 何时使用 {#when-to-use}
+
+适用于 AI 对话界面中的交互式问答、表单引导、偏好收集等场景。当需要在对话中向用户提问、收集结构化答案并在完成后展示摘要时，使用本组件。
+
+## 导入路径
+
+```tsx
+import { QuestionFlow } from "@/components/ui/tool-question-flow"
+```
+
+## 代码演示 {#examples}
+
+### 渐进模式（基础用法）
+
+单步问题，单选模式。通过 `step`、`title`、`options` 定义问题，通过 `onSelect` 回调获取选中结果。
+
+```tsx
+import { QuestionFlow } from "@/components/ui/tool-question-flow"
+
+const options = [
+  { id: "web", label: "Web 应用", description: "浏览器端运行的在线应用" },
+  { id: "mobile", label: "移动应用", description: "iOS / Android 原生 App" },
+  { id: "desktop", label: "桌面应用", description: "macOS / Windows / Linux 原生应用" },
+]
+
+export default function Demo() {
+  return (
+    <QuestionFlow
+      id="demo"
+      step={1}
+      title="你想构建什么类型的项目？"
+      description="选择项目类型以获取对应的模板推荐。"
+      options={options}
+      selectionMode="single"
+      onSelect={(ids) => console.log("选中:", ids)}
+    />
+  )
+}
+```
+
+### 渐进模式（多选）
+
+设置 `selectionMode="multi"` 允许多选。
+
+```tsx
+<QuestionFlow
+  id="multi-demo"
+  step={1}
+  title="你偏好哪些技术？"
+  options={[
+    { id: "react", label: "React" },
+    { id: "vue", label: "Vue" },
+    { id: "svelte", label: "Svelte" },
+  ]}
+  selectionMode="multi"
+  onSelect={(ids) => console.log("多选:", ids)}
+/>
+```
+
+### 渐进模式（带返回按钮）
+
+当 `step > 1` 且传入 `onBack` 时，组件显示返回按钮。
+
+```tsx
+<QuestionFlow
+  id="back-demo"
+  step={2}
+  title="第二步：详细配置"
+  options={options}
+  onBack={() => console.log("返回上一步")}
+  onSelect={(ids) => console.log("选中:", ids)}
+/>
+```
+
+### 渐进模式（默认选中）
+
+通过 `defaultValue` 设置初始选中项。
+
+```tsx
+<QuestionFlow
+  id="default-demo"
+  step={1}
+  title="选择语言"
+  options={[
+    { id: "ts", label: "TypeScript" },
+    { id: "js", label: "JavaScript" },
+  ]}
+  defaultValue={["ts"]}
+/>
+```
+
+### 多步模式
+
+传入 `steps` 定义完整问卷，组件内部管理步进和答案收集。
+
+```tsx
+const steps = [
+  {
+    id: "platform",
+    title: "你的目标平台是什么？",
+    options: [
+      { id: "web", label: "Web" },
+      { id: "mobile", label: "移动端" },
+    ],
+    selectionMode: "single",
+  },
+  {
+    id: "tech",
+    title: "你偏好哪些技术？",
+    description: "可多选",
+    options: [
+      { id: "react", label: "React" },
+      { id: "vue", label: "Vue" },
+      { id: "svelte", label: "Svelte" },
+    ],
+    selectionMode: "multi",
+  },
+]
+
+export default function Demo() {
+  return (
+    <QuestionFlow
+      id="multi-step-demo"
+      steps={steps}
+      onComplete={(answers) => console.log("Answers:", answers)}
+    />
+  )
+}
+```
+
+### 回执模式
+
+传入 `choice` 展示已完成选择的结果摘要。
+
+```tsx
+<QuestionFlow
+  id="receipt-demo"
+  choice={{
+    title: "项目脚手架已生成",
+    summary: [
+      { label: "平台", value: "Web" },
+      { label: "框架", value: "React + Next.js" },
+      { label: "部署", value: "Vercel" },
+    ],
+  }}
+/>
+```
+
+## API {#api}
+
+### QuestionFlow
+
+组件根据传入 props 自动识别模式。三种模式互斥，不要同时传入 `steps`、`choice` 或 `step`。
+
+### QuestionFlowOption
+
+| 属性 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 选项唯一标识 | `string` | 是 |
+| label | 选项文本 | `string` | 是 |
+| description | 选项描述，显示在 label 下方 | `string` | 否 |
+| icon | 选项图标（仅渐进模式可用，多步模式会自动移除 icon） | `ReactNode` | 否 |
+| disabled | 禁用该选项 | `boolean` | 否 |
+
+### 渐进模式（QuestionFlowProgressiveProps）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识，用于 DOM id 和 ARIA 属性 | `string` | - |
+| step | 当前步骤序号（从 1 开始） | `number` | - |
+| title | 问题标题 | `string` | - |
+| description | 问题描述 | `string` | - |
+| options | 选项列表 | `QuestionFlowOption[]` | - |
+| selectionMode | 选择模式 | `"single"` \| `"multi"` | `"single"` |
+| defaultValue | 默认选中项 ID 列表 | `string[]` | - |
+| onSelect | 点击 Next 后回调 | `(optionIds: string[]) => void` | - |
+| onBack | 返回按钮回调（存在时显示返回按钮，仅在 `step > 1` 时有效） | `() => void` | - |
+| className | 附加样式类名 | `string` | - |
+
+### 多步模式（QuestionFlowUpfrontProps）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识 | `string` | - |
+| steps | 步骤定义列表 | `QuestionFlowStepDefinition[]` | - |
+| onStepChange | 步骤切换回调 | `(stepId: string) => void` | - |
+| onComplete | 全部完成回调 | `(answers: Record<string, string[]>) => void` | - |
+| className | 附加样式类名 | `string` | - |
+
+### QuestionFlowStepDefinition
+
+| 属性 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 步骤唯一标识 | `string` | 是 |
+| title | 步骤标题 | `string` | 是 |
+| description | 步骤描述 | `string` | 否 |
+| options | 选项列表（不含 icon） | `Omit<QuestionFlowOption, "icon">[]` | 是 |
+| selectionMode | 选择模式 | `"single"` \| `"multi"` | 否（默认 `"single"`） |
+
+### 回执模式（QuestionFlowReceiptProps）
+
+| 属性 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识 | `string` | 是 |
+| choice | 结果数据 | `{ title: string; summary: { label: string; value: string }[] }` | 是 |
+| className | 附加样式类名 | `string` | 否 |
+
+## 约束与规则 {#constraints}
+
+1. 渐进模式的 `options` 可包含 `icon` 属性；多步模式的 `steps[].options` 不含 `icon`，组件内部会自动移除。
+2. 单选模式下，再次点击已选中项会取消选择；多选模式下，点击已选中项取消该项。
+3. Next 按钮在至少选中一项后启用；无选中时按钮 disabled。
+4. 多步模式仅支持线性前进/返回，不支持任意跳转。复杂跳转逻辑请使用渐进模式由父组件控制。
+5. 组件内置键盘导航：ArrowUp/ArrowDown 移动焦点，Enter/Space 选/切换，Home/End 跳至首/尾。
+6. 步进切换有进出场动画，动画期间禁用交互。
+
+## Semantic DOM {#semantic-dom}
+
+```tsx
+<div data-slot="question-flow" data-tool-ui-id={id} role="form">
+  <div className="bg-card rounded-2xl border p-5 shadow-xs">
+    {/* step indicator + progress bar */}
+    <h2>问题标题</h2>
+    <div role="listbox" aria-multiselectable={/* selectionMode */}>
+      {/* option items as role="option" */}
+    </div>
+    {/* back + next buttons */}
+  </div>
+</div>
+```
+
+回执模式：`data-receipt="true"`，`role="status"`。
+
+## 可访问性 {#accessibility}
+
+- 步骤容器使用 `role="form"` 配合 `aria-labelledby` 链接标题。
+- 选项列表使用 `role="listbox"`，多选时 `aria-multiselectable="true"`。
+- 每个选项使用 `role="option"` + `aria-selected`。
+- 禁用选项不可聚焦且不可选中。
+- 动画期间选项的 `tabIndex` 设为 -1 阻止键盘交互。
+- 回执模式使用 `role="status"` + `aria-label` 提供语义。
+
+## 依赖 {#dependencies}
+
+- `react`：`useState`、`useMemo`、`useCallback`、`useRef`、`useEffect`、`Fragment`
+- `lucide-react`：`Check`、`ChevronLeft` 图标
+- `@hyper/shadcn`：`cn`、`Button`、`Separator`（通过 `_adapter` 引入）
+- `zod`：Schema 定义与序列化校验
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 QuestionFlow 代码时，应遵守：
+
+1. 从 `@/components/ui/tool-question-flow` 导入 `QuestionFlow`
+2. 根据场景选模式：渐进模式传 `step` + `title` + `options`；多步模式传 `steps`；回执模式传 `choice`
+3. 选项的 `id` 必须唯一，`label` 必填
+4. 多选需显式设置 `selectionMode="multi"`
+5. 多步模式不要在选项中使用 `icon` 属性
+6. 不要同时传入互斥的 props（`step`/`steps`/`choice` 三选一）
+7. 渐进模式的返回按钮仅在 `step > 1` 且传入 `onBack` 时显示
+8. 不要依赖 Ant Design 或 rc-component 依赖

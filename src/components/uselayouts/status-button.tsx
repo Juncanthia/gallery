@@ -142,3 +142,5 @@ export function SaveButton() {
     </div>
   );
 }
+
+export default SaveButton;

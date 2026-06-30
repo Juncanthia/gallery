@@ -1,0 +1,52 @@
+---
+component: BalancedHeading
+slug: gooseui/balanced-text
+
+import: |
+  // BalancedHeading
+  import { BalancedHeading } from "@/components/ui/gooseui-balanced-text"
+  // PrettyParagraph, BalancedText
+  import { PrettyParagraph, BalancedText } from "@/components/gooseui/components/ui/balanced-text"
+
+usage: |
+  <BalancedHeading as="h1">
+    跨多行的标题文本，text-wrap: balance 自动均衡每行宽度
+  </BalancedHeading>
+
+  <PrettyParagraph>
+    正文段落，text-wrap: pretty 防止最后一行出现孤行。
+  </PrettyParagraph>
+
+  <BalancedText mode="balance">
+    任意行内文本，按指定 mode 应用 text-wrap 效果。
+  </BalancedText>
+
+props:
+  BalancedHeading:
+    children: React.ReactNode  -- 标题文本内容
+    as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"  -- 标题级别，默认 "h2"
+    className?: string  -- 附加样式类名
+  PrettyParagraph:
+    children: React.ReactNode  -- 段落文本内容
+    className?: string  -- 附加样式类名
+  BalancedText:
+    children: React.ReactNode  -- 行内文本内容
+    mode?: "balance" | "pretty" | "stable"  -- text-wrap 模式，默认 "balance"
+    className?: string  -- 附加样式类名
+
+constraints:
+  - 基于 CSS text-wrap 属性实现，无需 JavaScript 计算。
+  - text-wrap: balance 在 Chrome 114+ / Firefox 121+ / Safari 17.5+ 可用。
+  - text-wrap: pretty 在 Chrome 117+ / Safari 17.5+ 可用。Firefox 暂不支持。
+  - 不支持的浏览器会回退到默认换行行为，不影响可读性。
+  - BalancedHeading 渲染为语义化标题元素（h1-h6），自带字体大小和粗细。
+  - BalancedText 渲染为 span，仅应用 text-wrap，不做任何字体假设。
+  - PrettyParagraph 渲染为 p，应用 text-wrap: pretty 和 leading-relaxed。
+  - 不要在调用侧叠加 white-space 或 word-break，会干扰 text-wrap 行为。
+  - 不要引入第三方排版库。
+
+source: src/components/gooseui/components/ui/balanced-text.tsx
+ui: src/components/ui/gooseui-balanced-text.tsx
+example: content/components/gooseui/balanced-text/examples/basic.tsx
+docs: content/components/gooseui/balanced-text/index.mdx
+---

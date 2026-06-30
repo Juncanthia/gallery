@@ -1,0 +1,111 @@
+---
+category: Components
+title: 3D 书
+subtitle: 3D Book
+description: 3D 书是一个交互式翻书组件，通过光标拖拽控制书本的开合程度。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 1
+source:
+  component: src/components/uselayouts/3d-book.tsx
+  examples:
+    - content/components/uselayouts/3d-book/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# 3D Book 3D 书
+
+3D 书是一个交互式翻书组件，通过鼠标拖拽或指针移动控制书本的打开程度，展示多页 3D 透视效果。
+
+本组件是 UseLayouts 集合中的交互展示组件，提供纯视觉的 3D 翻书体验。
+
+## 何时使用 {#when-to-use}
+
+适合在需要 3D 书本交互效果的界面中使用。组件自包含交互逻辑和视觉呈现，无需额外配置。
+
+常见场景：
+
+- 作品集展示、产品宣传、创意着陆页等需要独特视觉体验的场景。
+- 需要为用户提供类似"翻书"操作的交互式内容展示。
+
+不推荐：
+
+- 精确页面导航场景，应使用分页或轮播组件。
+- 大量文本内容展示，3D 透视会降低可读性。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import InteractiveBook from "@/components/ui/uselayouts-3d-book"
+
+export default function Demo() {
+  return <InteractiveBook />
+}
+```
+
+## 核心导出 {#exports}
+
+- `InteractiveBook` (default)
+
+## API 摘要 {#api}
+
+组件为自包含交互组件，无需传递任何 props。
+
+```ts
+type InteractiveBookProps = Record<string, never>
+```
+
+所有交互行为（指针跟踪、拖拽状态、翻页动画）均由组件内部的 `useRef`、`useState` 和 `onPointer*` 事件处理器管理。
+
+## Semantic DOM {#semantic-dom}
+
+源码中未声明 `data-slot`，使用根元素语义和组件名定位。
+
+## 样式模型 {#styling-model}
+
+- 样式完全通过 Tailwind CSS className 表达。
+- 3D 翻页效果通过 CSS 3D transform 实现，使用 `perspective: 1500px`、`transformStyle: preserve-3d` 和 CSS 自定义属性 `--book-progress` 控制旋转角度。
+- 15 层内页通过 `rotateY(calc(var(--book-progress) * -{angle}deg))` 实现不同角度的翻页效果。
+- 主题颜色使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground`、`bg-muted` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/3d-book.tsx`
+
+实现注意：
+
+1. 组件使用 `lerp` 线性插值将光标位置映射为翻页进度 (0-1)。
+2. 前封面旋转角度为 -165deg，内页从 -20deg 到 -160deg 均匀分布。
+3. 后封面使用径向渐变网格背景，模拟书本封底的纹理效果。
+4. 拖拽释放后书本自动闭合（`setProgress(0)`）。
+5. 光标离开书本区域时，非拖拽状态下书本自动闭合。
+
+## 可访问性 {#accessibility}
+
+- 组件为纯视觉交互组件，不包含键盘可操作性。
+- 如果需要在生产环境使用，建议补充屏幕阅读器说明和键盘控制逻辑。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 3D Book 代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-3d-book` 导入 `InteractiveBook`（default export）。
+2. 组件无需 props，直接渲染即可。
+3. 如需自定义书本尺寸，通过 `className` 覆写外层容器样式。
+4. 如需自定义书本内容，直接修改 `src/components/uselayouts/3d-book.tsx` 中的页面渲染逻辑。
+5. 不要引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。

@@ -1,0 +1,278 @@
+---
+category: Components
+title: DataTable
+subtitle: 数据表格
+description: 用于展示结构化数据的表格组件，支持排序、格式化、响应式布局。
+demo:
+  cols: 2
+group:
+  title: Tool
+  order: 2
+source:
+  component: src/components/tool/data-table/data-table.tsx
+  examples:
+    - content/components/tool/data-table/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTable 数据表格
+
+用于展示结构化数据的表格组件，支持列排序、多种数据格式化器、响应式布局（桌面表格 / 移动端卡片）。
+
+本组件是项目内的本地基础能力，API 和行为以源码为准，不对应 Ant Design 的完整公共组件契约。
+
+## 何时使用 {#when-to-use}
+
+适合在需要表格展示结构化数据的场景中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
+
+常见场景：
+
+- 数据看板中以表格展示指标数据，支持列排序和格式化。
+- 搜索结果以表格列出条目，支持金额、百分比、状态等格式化。
+- 管理后台的列表页面，需要排序、文本截断和响应式适配。
+- AI 生成内容中的数据展示，通过 JSON 序列化传入 columns 和 data。
+
+不推荐：
+
+- 需要行内编辑、拖拽排序、多选等复杂交互的场景，DataTable 当前仅支持列排序。
+- 数据量超过数千行时，建议服务端分页配合 Pagination 组件，而非一次性传入全量数据。
+- 在调用侧绕过组件 API，直接依赖内部 DOM 结构完成业务逻辑。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { DataTable } from "@/components/ui/tool-data-table"
+
+export default function Demo() {
+  return (
+    <DataTable
+      id="demo-table"
+      columns={[
+        { key: "name", label: "Name" },
+        { key: "price", label: "Price", format: { kind: "currency", currency: "USD" } },
+        { key: "change", label: "Change", format: { kind: "delta", decimals: 2 } },
+        { key: "status", label: "Status", format: { kind: "status", statusMap: { active: { tone: "success", label: "Active" } } } },
+      ]}
+      data={[
+        { id: "1", name: "Bitcoin", price: 67890.5, change: 0.034, status: "active" },
+        { id: "2", name: "Ethereum", price: 3456.78, change: -0.021, status: "active" },
+      ]}
+      rowIdKey="id"
+      defaultSort={{ by: "price", direction: "desc" }}
+    />
+  )
+}
+```
+
+### 受控排序
+
+```tsx
+import { DataTable } from "@/components/ui/tool-data-table"
+import { useState } from "react"
+
+export default function Demo() {
+  const [sort, setSort] = useState<{ by?: string; direction?: "asc" | "desc" }>({})
+
+  return (
+    <DataTable
+      id="controlled-sort"
+      columns={[
+        { key: "name", label: "Name" },
+        { key: "score", label: "Score", sortable: false },
+      ]}
+      data={[
+        { id: "1", name: "Alice", score: 95 },
+        { id: "2", name: "Bob", score: 87 },
+      ]}
+      rowIdKey="id"
+      sort={sort}
+      onSortChange={setSort}
+    />
+  )
+}
+```
+
+### 仅表格 / 仅卡片布局
+
+```tsx
+import { DataTable } from "@/components/ui/tool-data-table"
+
+const columns = [
+  { key: "name", label: "Name" },
+  { key: "value", label: "Value", format: { kind: "number", compact: true } },
+]
+const data = [
+  { id: "1", name: "Item A", value: 12345 },
+  { id: "2", name: "Item B", value: 67890 },
+]
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <DataTable.Table id="table-only" rowIdKey="id" columns={columns} data={data} />
+      <DataTable.Cards id="cards-only" rowIdKey="id" columns={columns} data={data} />
+    </div>
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。复杂组件应结合下方 API 摘要和源码类型补充必需 props。
+
+## 核心导出 {#exports}
+
+- `DataTable` — 自适应布局（桌面表格 / 移动端卡片）
+- `DataTable.Table` — 仅表格布局
+- `DataTable.Cards` — 仅卡片布局
+- `DataTable.Provider` — Context Provider（高级用法）
+- `useDataTable` — Context Hook
+- `Column`
+- `DataTableProps`
+- `DataTableSerializableProps`
+- `DataTableClientProps`
+- `DataTableRowData`
+- `RowPrimitive`
+- `ColumnKey`
+- `FormatConfig`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface DataTableProps<T extends object = RowData> {
+  id: string;
+  columns: Column<T>[];
+  data: T[];
+  rowIdKey?: string;
+  defaultSort?: { by?: string; direction?: "asc" | "desc" };
+  sort?: { by?: string; direction?: "asc" | "desc" };
+  onSortChange?: (next: { by?: string; direction?: "asc" | "desc" }) => void;
+  emptyMessage?: string;
+  maxHeight?: string;
+  locale?: string;           // BCP47, default "en-US"
+  className?: string;
+}
+```
+
+```ts
+interface Column<T extends object = DataTableRowData> {
+  key: string;
+  label: string;
+  abbr?: string;
+  sortable?: boolean;        // default true (opt-out)
+  align?: "left" | "right" | "center";
+  width?: string;
+  truncate?: boolean;
+  priority?: "primary" | "secondary" | "tertiary";
+  hideOnMobile?: boolean;
+  format?: FormatConfig;
+}
+```
+
+```ts
+type FormatConfig =
+  | { kind: "text" }
+  | { kind: "number"; decimals?: number; unit?: string; compact?: boolean; showSign?: boolean }
+  | { kind: "currency"; currency: string; decimals?: number }
+  | { kind: "percent"; decimals?: number; showSign?: boolean; basis?: "fraction" | "unit" }
+  | { kind: "date"; dateFormat?: "short" | "long" | "relative" }
+  | { kind: "delta"; decimals?: number; upIsPositive?: boolean; showSign?: boolean }
+  | { kind: "status"; statusMap: Record<string, { tone: Tone; label?: string }> }
+  | { kind: "boolean"; labels?: { true: string; false: string } }
+  | { kind: "link"; hrefKey?: string; external?: boolean }
+  | { kind: "badge"; colorMap?: Record<string, Tone> }
+  | { kind: "array"; maxVisible?: number };
+
+type RowPrimitive = string | number | boolean | null | (string | number | boolean | null)[];
+type DataTableRowData = Record<string, RowPrimitive>;
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `data-slot="data-table"` — 表格容器的语义标记。
+- `data-tool-ui-id` — 组件实例的唯一标识。
+- `data-layout` — 当前布局模式：`auto`、`table`、`cards`。
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 组件包装 shadcn/ui Table、Accordion、Button、Tooltip、Badge 等 primitive。
+- 桌面端渲染为 `<table>` 标签，移动端渲染为 `<Accordion>` 卡片列表。
+- 响应式断点由 `@container` 容器查询驱动（`@md` 断点）。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground`、`ring-ring`、`bg-card` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/tool/data-table/data-table.tsx` — DataTable 主组件
+- `src/components/tool/data-table/types.ts` — TypeScript 类型定义
+- `src/components/tool/data-table/formatters.tsx` — 格式化器渲染函数
+- `src/components/tool/data-table/utilities.ts` — 排序、行键生成等工具函数
+- `src/components/tool/data-table/schema.ts` — Zod schema 与解析
+- `src/components/ui/tool-data-table.tsx` — 统一导出入口
+
+直接依赖摘要：
+
+- `@hyper/shadcn`（Table, Button, Badge, Accordion, Tooltip, cn）
+- `lucide-react`
+- `zod`（schema 校验）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. `data` 中每行的值必须是原始类型或原始类型数组，不要放对象。复杂渲染通过 `column.format` 配置实现。
+3. 排序默认启用（opt-out 模式），不需要排序的列需显式设置 `sortable: false`。
+4. 桌面端使用 `<table>` / `<thead>` / `<tbody>` 语义化结构，移动端使用 `<Accordion>` + `role="listitem"`。
+5. 如果需要新增能力，应先修改该组件源码，再更新本 llm 文档。
+6. 不要把第三方文档中的全量 API 视为本地已支持能力。
+
+## 可访问性 {#accessibility}
+
+- 表头使用 `<th scope="col">` 语义标签，`aria-sort` 属性标记排序状态。
+- 排序按钮有完整的 `aria-label` 描述（如 "Sort by Price (descending)"）。
+- 移动端卡片使用 `role="list"` + `role="listitem"` 语义结构。
+- 排序变化通过 `aria-live="polite"` 区域播报给屏幕阅读器。
+- Accordion 触发器使用 `aria-controls` 和 `aria-label` 建立正确的关联关系。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/tool/data-table/` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 借鉴 AntD Table 使用心智，但不承诺 API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTable 代码时，应遵守：
+
+1. 从 `@/components/ui/tool-data-table` 导入 `DataTable`，不要从 `antd` 导入。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. `id`、`columns`、`data` 为必填属性，生产环境必须提供 `rowIdKey`。
+4. `data` 中每行的值必须是原始类型（string / number / boolean / null）或原始类型数组，不要放对象。复杂渲染通过 `column.format` 配置实现。
+5. 使用 `column.format` 控制单元格的渲染格式，不要在 data 中放入 JSX 或 React 节点。
+6. 排序默认启用（opt-out），不需要排序的列设置 `sortable: false`。
+7. 使用 `DataTable.Table` 仅渲染表格视图，`DataTable.Cards` 仅渲染卡片视图，默认 `DataTable` 为自适应（窄屏卡片 / 宽屏表格）。
+8. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider、Design Token 配置，除非本地源码明确支持。
+9. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+10. 交互组件必须保留键盘和 ARIA 语义，纯图标操作必须补 `aria-label`。
+11. 如果不确定某个 AntD API 是否存在，先检查 `src/components/tool/data-table/` 源码，不要凭 AntD 记忆生成。

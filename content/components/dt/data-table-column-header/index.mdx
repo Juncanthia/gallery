@@ -1,0 +1,182 @@
+DataTableColumnHeader 列头排序组件，为 @tanstack/react-table 的列头提供可点击排序功能，通过 chevron 图标指示当前列的排序状态（升序/降序/未排序）。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在 DataTable 中为可排序列提供点击排序的列头时使用。DataTableColumnHeader 集成 @tanstack/react-table 的 `column.getCanSort()`、`column.toggleSorting()` 和 `column.getIsSorted()` API。
+
+常见场景：
+
+- 表格列头需要支持点击排序，点击后在三态（升序、降序、未排序）之间切换。
+- 需要直观的排序状态指示器（chevron 上下箭头高亮当前排序方向）。
+- 部分列不可排序（如 ID 列），仅显示纯文本标题。
+
+不推荐：
+
+- 在 @tanstack/react-table 体系之外单独使用，组件依赖 `Column` 泛型类型。
+- 用于非表格场景的排序切换。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+DataTableColumnHeader 接收 @tanstack/react-table 的 `column` 对象和 `title` 文本。在 column 定义中通过 `header` 渲染函数传入。
+
+<ComponentShowcase
+  id="dt/data-table-column-header"
+  path="dt/data-table-column-header/basic"
+/>
+
+```tsx
+import { DataTableColumnHeader } from "@/components/ui/dt-data-table-column-header"
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  type ColumnDef,
+  type SortingState,
+} from "@tanstack/react-table"
+import { useState } from "react"
+
+type Person = {
+  id: string
+  name: string
+  age: number
+}
+
+const data: Person[] = [
+  { id: "1", name: "Alice", age: 28 },
+  { id: "2", name: "Bob", age: 35 },
+  { id: "3", name: "Charlie", age: 22 },
+]
+
+const columns: ColumnDef&lt;Person&gt;[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) =&gt; (
+      &lt;DataTableColumnHeader column={column} title="Name" /&gt;
+    ),
+  },
+  {
+    accessorKey: "age",
+    header: ({ column }) =&gt; (
+      &lt;DataTableColumnHeader column={column} title="Age" /&gt;
+    ),
+  },
+  {
+    accessorKey: "id",
+    header: "ID",
+    enableSorting: false,
+  },
+]
+
+export default function Demo() {
+  const [sorting, setSorting] = useState&lt;SortingState&gt;([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { sorting },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  })
+
+  return (
+    &lt;div className="w-full max-w-md rounded-md border"&gt;
+      &lt;table className="w-full"&gt;
+        &lt;thead&gt;
+          {table.getHeaderGroups().map((headerGroup) =&gt; (
+            &lt;tr key={headerGroup.id}&gt;
+              {headerGroup.headers.map((header) =&gt; (
+                &lt;th key={header.id} className="px-4 py-2 text-left"&gt;
+                  {header.isPlaceholder
+                    ? null
+                    : typeof header.column.columnDef.header === "function"
+                      ? header.column.columnDef.header(header.getContext())
+                      : header.column.columnDef.header}
+                &lt;/th&gt;
+              ))}
+            &lt;/tr&gt;
+          ))}
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {table.getRowModel().rows.map((row) =&gt; (
+            &lt;tr key={row.id} className="border-t"&gt;
+              {row.getVisibleCells().map((cell) =&gt; (
+                &lt;td key={cell.id} className="px-4 py-2 text-sm"&gt;
+                  {String(cell.getValue())}
+                &lt;/td&gt;
+              ))}
+            &lt;/tr&gt;
+          ))}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DataTableColumnHeader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| column | @tanstack/react-table 的 Column 对象 | `Column&lt;TData, TValue&gt;` | - |
+| title | 列头显示文本 | `string` | - |
+| className | 附加 CSS 类名 | `string` | - |
+
+组件继承 `React.ComponentProps&lt;typeof Button&gt;`，支持所有 Button 组件的原生属性透传（如 `onClick`、`style` 等）。
+
+### 排序行为
+
+- `column.getCanSort()` 为 `false` 时，返回纯文本 `&lt;div&gt;{title}&lt;/div&gt;`，不可点击。
+- 可排序时，点击后在 **升序 → 降序 → 未排序** 三态间切换（由 `toggleSorting(undefined)` 实现）。
+- 升序激活时 `ChevronUp` 高亮（`text-accent-foreground`），未激活时显示暗色（`text-muted-foreground`）。
+- 降序激活时 `ChevronDown` 高亮，规则同上。
+- 两个 chevron 图标用 `flex-col` 纵向堆叠，`-mb-0.5` 和 `-mt-0.5` 负边距压缩间距。
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么有些列不显示排序箭头？
+
+当 column 的 `enableSorting` 为 `false` 时（如 ID 列），`column.getCanSort()` 返回 `false`，组件直接渲染纯文本标题，不显示排序图标。在 column 定义中设置 `enableSorting: false` 即可。
+
+### 如何改变排序的默认方向？
+
+调用 `toggleSorting(undefined)` 会在三态间循环。如果需要首次点击默认为降序，调用 `toggleSorting(true)` 强制升序或 `toggleSorting(false)` 强制降序。但当前组件封装为 `toggleSorting(undefined)`（三态循环），如需自定义排序行为，直接使用 @tanstack/react-table 的 API。
+
+### 如何将列设置为默认排序？
+
+在 `useReactTable` 的 `initialState.sorting` 或 `state.sorting` 中配置：
+
+```tsx
+const table = useReactTable({
+  data,
+  columns,
+  initialState: {
+    sorting: [{ id: "name", desc: false }],
+  },
+  // ...
+})
+```
+
+### 与 DataTable 筛选体系如何配合？
+
+DataTableColumnHeader 是独立组件，不依赖 DataTableProvider。它只依赖 @tanstack/react-table 的 `Column` 对象。在 DataTable 筛选体系中，通常由 `DataTableToolbar` 等高层组件统一管理列定义。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DataTableColumnHeader 代码时：
+
+1. 从 `@/components/ui/dt-data-table-column-header` 导入 DataTableColumnHeader。
+2. 在 `columnDef.header` 渲染函数中使用，传入 `column` 和 `title` 参数。
+3. `title` 使用英文列名（如 "Name"、"Age"），显示在列头位置。
+4. 不需要手动管理排序状态，@tanstack/react-table 的 `sorting` state 和 `onSortingChange` 自动处理。
+5. 不可排序的列（如 ID）设置 `enableSorting: false`，组件自动降级为纯文本。
+6. 不要引入 Ant Design 相关依赖。
+7. 如果不确定某个 API 是否存在，先检查源码 `src/components/data-table-filters/components/data-table/data-table-column-header.tsx`。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="data-table-column-header" />

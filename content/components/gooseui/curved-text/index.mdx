@@ -1,0 +1,153 @@
+CurvedText 沿着圆弧路径旋转展示文本。基于 SVG textPath 实现，支持自定义方向、速度、弧度和分隔符样式，适合品牌标语、装饰性文字轮播等场景。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将文本沿曲线路径循环旋转展示时使用，常见于品牌展示、装饰性动效、页面顶部标语等视觉场景。
+
+常见场景：
+
+- 首页 Hero 区域的装饰性标语旋转。
+- 品牌页面的动态文字展示。
+- 营销落地页的视觉动效点缀。
+- 加载或过渡页面的动态文字背景。
+
+不推荐：
+
+- 正文或长文本内容，曲线路径会降低可读性。
+- 需要精确排版对齐的场景。
+- 对性能敏感的移动端页面（SVG 动画消耗较高）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+CurvedText 接收 `text` 属性沿着圆弧路径旋转文本，默认 `curve="down"` 向下弯曲、`direction="left"` 向左移动。
+
+<ComponentShowcase
+  id="gooseui/curved-text"
+  path="gooseui/curved-text/basic"
+/>
+
+```tsx
+import { CurvedText } from "@/components/ui/gooseui-curved-text"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col items-center gap-8 py-8">
+      <div className="w-full max-w-2xl">
+        <CurvedText
+          text="GooseUI Curved Text ✦ Smooth & Elegant"
+          direction="left"
+          duration={20}
+          fontSize={36}
+          flatness={1.5}
+          curve="down"
+          separator="✦"
+          separatorClassName="fill-amber-400"
+        />
+      </div>
+      <div className="w-full max-w-2xl">
+        <CurvedText
+          text="Faster. Cleaner. Smarter."
+          direction="right"
+          duration={15}
+          fontSize={28}
+          flatness={2}
+          curve="up"
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CurvedText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 要沿曲线展示的文本内容 | `string` | - |
+| duration | 完整旋转一周的动画时长（秒） | `number` | `30` |
+| direction | 文本移动方向 | `"left"` \| `"right"` | `"left"` |
+| curve | 弧线弯曲方向，"down" 向下弯曲（∩），"up" 向上弯曲（∪） | `"down"` \| `"up"` | `"down"` |
+| fontSize | 文本字号（px） | `number` | `48` |
+| flatness | 弧度控制，值越大曲线越平缓（最小为 1） | `number` | `1.3` |
+| height | 可见区域高度（px），默认由 fontSize 自动计算 | `number` | `fontSize * 3.5` |
+| separator | 分隔符字符，用于样式区分（如 "✦"） | `string` | - |
+| separatorClassName | 分隔符字符的附加 CSS 类名 | `string` | - |
+| className | 附加 CSS 类名 | `string` | - |
+
+CurvedText 基于 SVG &lt;textPath&gt; 和 CSS @keyframes 旋转动画实现。通过 `useId()` 生成唯一 path ID，支持多实例共存。弧线半径由视口宽度、可见高度和 flatness 参数动态计算，确保任意屏幕尺寸下弧线始终延伸到视口之外。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何调整旋转速度？
+
+通过 `duration` 属性设置完整旋转一周的秒数，值越小旋转越快。
+
+```tsx
+<CurvedText text="FAST" duration={10} />
+<CurvedText text="SLOW" duration={60} />
+```
+
+### 如何改变文本弯曲方向？
+
+`curve` 属性控制弧线方向：`"down"` 向下弯曲（∩），`"up"` 向上弯曲（∪）。
+
+```tsx
+<CurvedText text="BEND DOWN" curve="down" />
+<CurvedText text="BEND UP" curve="up" />
+```
+
+### 如何让文本向右移动？
+
+设置 `direction="right"`。
+
+```tsx
+<CurvedText text="MOVING RIGHT" direction="right" />
+```
+
+### 如何在文本中高亮分隔符？
+
+使用 `separator` 指定分隔符字符（如 `"✦"`），配合 `separatorClassName` 设置样式。
+
+```tsx
+<CurvedText
+  text="FEATURE 1 ✦ FEATURE 2 ✦ FEATURE 3"
+  separator="✦"
+  separatorClassName="fill-amber-400"
+/>
+```
+
+### 弧度太弯或太平怎么调整？
+
+通过 `flatness` 属性控制，最小值为 1（弧度最大），值越大曲线越平缓。通常取值在 1.0 ~ 2.5 之间。
+
+```tsx
+<CurvedText text="SHARP CURVE" flatness={1.0} />
+<CurvedText text="FLAT CURVE" flatness={2.5} />
+```
+
+### 多实例会冲突吗？
+
+不会。每个实例通过 React `useId()` 生成唯一的 SVG path ID，确保 CSS 动画互不影响。
+
+### 移动端性能如何？
+
+CurvedText 使用 SVG textPath 配合 CSS transform rotate 动画，由 GPU 加速合成。但在低端设备上建议减少同时运行的实例数，或增大 `duration` 降低动画频率。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/gooseui-curved-text` 导入 `CurvedText`。
+2. 必须传入 `text` 属性，组件依赖此属性渲染内容。
+3. `duration` 单位为秒，不要传入毫秒值。
+4. `fontSize` 单位为像素（px），传入数字即可。
+5. `separator` 传入单个字符，组件通过 `split()` 切分文本。
+6. `separatorClassName` 作用于分隔符的 &lt;tspan&gt; 元素，使用 SVG 属性如 `fill` 而非 Tailwind text color。
+7. 不要在调用侧复制 SVG path 或 keyframe 动画实现，应通过 props 控制行为。
+8. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/curved-text" />

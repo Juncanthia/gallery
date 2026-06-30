@@ -1,0 +1,167 @@
+---
+category: Components
+title: MagnifiedBento
+subtitle: 放大便当
+description: 带放大镜交互的便当卡片布局组件，通过拖拽透镜揭示隐藏的标签内容。
+demo:
+  cols: 1
+group:
+  title: 布局
+  order: 2
+source:
+  component: src/components/uselayouts/magnified-bento.tsx
+  docs: content/components/uselayouts/magnified-bento/index.mdx
+  examples:
+    - content/components/uselayouts/magnified-bento/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+  cva: false
+  radixSlot: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# MagnifiedBento 放大便当
+
+MagnifiedBento 是一个带放大镜交互效果的便当卡片布局组件。底部区域展示自动滚动的技能标签云，顶部拖拽透镜可在标签云上产生放大揭示效果。它是一个无 props 的自包含组件，渲染一个完整的信息展示面板。
+
+本组件来自 UseLayouts 集合，使用 motion/react 驱动拖拽和动画效果，@hugeicons 提供图标，cn 工具函数管理样式合并。
+
+## 何时使用 {#when-to-use}
+
+当需要一个带有交互趣味的技能 / 标签展示面板时使用，尤其适合：
+
+- 团队介绍页，展示团队技能栈和项目阶段。
+- 首页 Banner 下方的能力展示区，吸引用户交互。
+- 服务介绍卡片，以可视化方式呈现服务覆盖范围。
+- 需要轻微趣味交互动效的展示型组件。
+
+MagnifiedBento 是一个完整的自包含组件，包含：
+
+- 自动滚动的三行标签云，每行反向滚动形成视觉差异。
+- 可拖拽的放大镜透镜，揭示下方隐藏的高亮标签版本。
+- 底部标题和描述信息展示区。
+- motion 驱动的拖拽、动画和过渡效果。
+- 渐变遮罩边缘，避免标签溢出边缘的裁剪突兀感。
+
+不推荐：
+
+- 需要动态数据注入的场景（当前标签内容在组件内部 `TAG_ROWS` 中硬编码）。
+- 需要自定义标签样式或行为的场景（标签样式内建，不暴露 props 控制）。
+- 移动端作为首屏核心区域（组件设计偏向桌面和中等宽度屏幕）。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+MagnifiedBento 无需传入任何 props，直接渲染即可获得完整的放大便当面板。
+
+```tsx
+import MagnifiedBento from "@/components/ui/uselayouts-magnified-bento"
+
+export default function Demo() {
+  return <MagnifiedBento />
+}
+```
+
+## API {#api}
+
+MagnifiedBento 为自包含组件，不接受外部 props。所有内部状态（透镜位置、标签配置、动画参数）由组件自行管理。
+
+如需扩展，在 `src/components/uselayouts/magnified-bento.tsx` 中修改以下内部定义：
+
+- `TAG_ROWS`：三行标签配置数组，每行包含一组 `{ id, icon, label }` 对象。
+- `CONFIG`：全局配置对象，包含 `title`（标题）、`description`（描述文案）、`containerHeight`（容器高度 class）、`lensSize`（透镜尺寸）。
+
+## Semantic DOM {#semantic-dom}
+
+MagnifiedBento 未使用 `data-slot` 语义属性暴露结构。组件由 `div`、`motion.div`、`svg` 等元素组合而成。透镜拖拽通过 motion 的 `drag` 能力和 `dragConstraints` 实现，标签云通过 motion 的 `animate` 驱动无限滚动。
+
+## 样式模型 {#styling-model}
+
+MagnifiedBento 的所有样式直接通过 Tailwind CSS class 在组件内部定义，不依赖 CVA 或外部变体文件。
+
+核心样式策略：
+
+- 外层容器：`max-w-[420px] rounded-[2rem] border bg-card shadow-2xl`，hover 时有上浮和阴影增强效果。
+- 标签云：`bg-background/50 backdrop-blur-sm`（底层模糊）和 `bg-background`（挖空层高亮），配合 `border-border/50` 或 `border-primary/20` 边框。
+- 透镜：motion `drag` + `dragConstraints` 限制在容器内，`cursor-grab` / `cursor-grabbing` 光标反馈。
+- 揭示层：通过 `clipPath`（motion value 驱动）实现圆形挖空效果。
+- 底层蒙版：`maskImage` 使用 `radial-gradient` 实现反向遮罩，透镜区域透明。
+- 边缘渐变：左右两侧使用 `bg-linear-to-r` 和 `bg-linear-to-l` 从背景色到透明的过渡。
+
+## 主题变量 {#design-token}
+
+MagnifiedBento 消费 Tailwind 主题变量和语义色 class。所有颜色通过 Tailwind class 引用，不依赖 css-in-js 或 ConfigProvider。
+
+常用变量来源：
+
+| 语义 | Tailwind / CSS token |
+| --- | --- |
+| 卡片背景 | `bg-card` |
+| 页面背景 | `bg-background` |
+| 前景文本 | `text-foreground` |
+| 弱化文本 | `text-muted-foreground` |
+| 主色强调 | `text-primary` |
+| 边框 | `border-border` |
+| 次级背景 | `bg-muted` |
+
+## 可访问性 {#accessibility}
+
+- 放大镜透镜支持拖拽交互，适用于鼠标和触控设备。
+- 透镜拖拽时显示 `cursor-grab` 和 `cursor-grabbing` 光标提示。
+- 当前版本未提供键盘可访问的替代操作方式。
+- 标签云为持续动画，未提供 `prefers-reduced-motion` 的适配。
+- 如需生产环境使用，建议补充：键盘导航替代、动画减少模式适配、ARIA 标签。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/magnified-bento.tsx`：组件主体，包含 MagnifiedBento 和 MagnifyingLens（SVG 透镜渲染）。
+
+关键行为：
+
+1. MagnifiedBento 不接受外部 props，所有内容由 `TAG_ROWS` 和 `CONFIG` 内建配置。
+2. 透镜位置由 `useMotionValue` 驱动的 `lensX` 和 `lensY` 管理。
+3. 揭示层使用 `useMotionTemplate` 动态生成 `clipPath: circle()`，跟随透镜位置。
+4. 底层蒙版使用 `useMotionTemplate` 生成 `radial-gradient` 反遮罩。
+5. 标签云使用三倍数据（`[...row, ...row, ...row]`）实现无缝循环滚动。
+6. 奇数行和偶数行反向滚动，通过 `animate.x` 的 `["0%", "-33.333%"]` 和 `["-33.333%", "0%"]` 实现。
+7. 动画时长 25s，`ease: linear`，`repeat: Infinity`。
+8. 透镜 SVG 由 `MagnifyingLens` 组件独立渲染，支持 `size` 参数控制大小。
+
+## FAQ {#faq}
+
+### MagnifiedBento 可以自定义标签内容吗？
+
+当前版本标签内容在 `TAG_ROWS` 数组中硬编码。如需修改，直接在 `src/components/uselayouts/magnified-bento.tsx` 中编辑 `TAG_ROWS` 数组的 `id`、`icon` 和 `label`。
+
+### 可以自定义标题和描述吗？
+
+标题和描述在 `CONFIG.title` 和 `CONFIG.description` 中配置。修改 `src/components/uselayouts/magnified-bento.tsx` 中的 `CONFIG` 对象即可。
+
+### MagnifiedBento 适合移动端吗？
+
+组件内置响应式间距（`sm:` 断点和 `p-4 sm:p-6`），但标签云需要一定宽度才能产生良好的视觉效果。推荐在 `>=640px` 屏幕宽度下使用。
+
+### 如何调整透镜大小？
+
+修改 `CONFIG.lensSize` 的值（默认 92），同时需调整 `MagnifyingLens` SVG 的缩放和透明白色覆盖层（`absolute top-[6px] left-[6px] w-[60px] h-[60px]`）的尺寸。
+
+### 为什么 MagnifiedBento 没有 props？
+
+MagnifiedBento 设计为一个开箱即用的演示型组件，标签和配置均为内建。如需可配置版本，建议以 MagnifiedBento 源码为蓝本，将 `TAG_ROWS` 和 `CONFIG` 提取为 props。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 MagnifiedBento 相关代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-magnified-bento` 导入 `MagnifiedBento`（default export）。
+2. 不要给 MagnifiedBento 传递任何 props，组件自身管理全部状态。
+3. 如需引入其他依赖（motion、@hugeicons），从组件源码处参考正确的导入路径。
+4. MagnifiedBento 依赖 motion/react 的 useMotionValue、useMotionTemplate、drag，不要移除这些交互逻辑。
+5. 样式使用 Tailwind CSS class 内联定义，不引入 CVA 或其他样式管理方案。
+6. 不要引入 Ant Design 相关依赖（ConfigProvider、antd-style、@ant-design/icons 等）。

@@ -1,0 +1,113 @@
+ColorSwatch 颜色样本。用于展示颜色值的小方块，支持透明度棋盘格背景、尺寸变体和禁用状态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在界面中直观展示颜色值时使用。ColorSwatch 以标准色块形式呈现颜色，支持透明/半透明颜色的棋盘格背景，方便用户辨识颜色的真实呈现效果。
+
+常见场景：
+- 颜色选择器中展示当前选中颜色
+- 列表或表格中展示颜色属性
+- 调色盘或主题编辑器中展示色值预览
+- 设计系统中展示品牌色或语义色
+
+核心能力：
+- 自动检测 CSS 颜色值有效性（通过 CSS.supports API）
+- 对含透明度的颜色自动渲染棋盘格背景，直观展示透明效果
+- 通过 `withoutTransparency` 可关闭棋盘格，仅显示纯色
+- 支持 `default` / `sm` / `lg` 三种尺寸
+- 纯展示组件，不包含交互逻辑
+
+不推荐：
+- 需要颜色选择交互时——使用 ColorPicker 组件
+- 需要颜色对比度计算或 WCAG 检查——ColorSwatch 仅做视觉展示
+- 颜色值为空时（`color` 未传或无效）——组件会渲染错误提示样式
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`color` 传入 CSS 颜色字符串，组件自动渲染色块。支持 hex、rgb、rgba、hsl、hsla、transparent 等格式。
+
+<ComponentShowcase
+  id="dice/color-swatch"
+  path="dice/color-swatch/basic"
+/>
+
+```tsx
+import { ColorSwatch } from "@/components/ui/dice-color-swatch"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-wrap items-center gap-4"&gt;
+      &lt;ColorSwatch color="#3b82f6" /&gt;
+      &lt;ColorSwatch color="#10b981" size="sm" /&gt;
+      &lt;ColorSwatch color="#f59e0b" size="lg" /&gt;
+      &lt;ColorSwatch color="rgba(239, 68, 68, 0.5)" /&gt;
+      &lt;ColorSwatch color="#8b5cf6" disabled /&gt;
+      &lt;ColorSwatch color="transparent" /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ColorSwatch
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 颜色值。支持 hex、rgb、rgba、hsl、hsla、transparent、CSS 变量等格式 | `string` | - |
+| size | 色块尺寸 | `"default"` \| `"sm"` \| `"lg"` | `"default"` |
+| asChild | 是否作为子元素的 Slot 渲染 | `boolean` | `false` |
+| disabled | 是否禁用（降低不透明度） | `boolean` | `false` |
+| withoutTransparency | 关闭透明度棋盘格背景。为 true 时即使颜色含 alpha 也只显示纯色 | `boolean` | `false` |
+| className | 附加 CSS 类名 | `string` | - |
+| style | 附加内联样式 | `React.CSSProperties` | - |
+
+> `color` 为空时，组件渲染错误指示样式（红色 X 对角线）。`color` 为无效 CSS 颜色时，背景回退为 `transparent`。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `color-swatch` | ColorSwatch 根元素 |
+
+额外状态属性：
+- `aria-label` — 显示 "Color swatch: {color}"，无色时显示 "No color selected"
+- `role="img"` — 作为图片语义
+- `aria-disabled` / `data-disabled` — 禁用状态
+
+<h2 id="faq">常见问题</h2>
+
+### 含透明度的颜色如何显示？
+
+对于 `rgba()` / `hsla()` 或含 alpha 通道的现代 CSS 颜色语法（如 `rgb(255 0 0 / 50%)`），ColorSwatch 会自动渲染重复棋盘格背景，通过半透明色填充上方来直观展示透明度效果。如果不需要此效果，设置 `withoutTransparency={true}`。
+
+### 如何判定颜色是否有效？
+
+组件内部使用 `CSS.supports("color", value)` API 判断颜色值是否合法。在 SSR 环境下 CSS API 不可用时会跳过校验，默认认为有效。
+
+### 如何自定义色块尺寸？
+
+通过 `size` prop 选择预设尺寸：
+- `default`：`size-8`（32px）
+- `sm`：`size-6`（24px）
+- `lg`：`size-12`（48px）
+
+如需自定义尺寸，可通过 `className` 覆盖。
+
+### ColorSwatch 与 ColorPicker 的区别？
+
+ColorSwatch 是纯展示组件，仅渲染一个色块。ColorPicker 是功能完整的颜色选择器，内部使用 ColorSwatch 来展示当前选中颜色。如果只需要展示颜色值，使用 ColorSwatch；如果需要用户选择/拾取颜色，使用 ColorPicker。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/dice-color-swatch` 导入 ColorSwatch。
+2. `color` prop 传入 CSS 颜色字符串，支持 hex、rgb、rgba、hsl、hsla、transparent 等格式。
+3. 尺寸使用 `size` prop（`"default"` / `"sm"` / `"lg"`），不要通过 className 覆写尺寸。
+4. 含透明度的颜色默认显示棋盘格背景，如需关闭使用 `withoutTransparency`。
+5. 这是一个纯展示组件，不包含颜色选择交互。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="dice/color-swatch" />

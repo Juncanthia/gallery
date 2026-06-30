@@ -1,0 +1,131 @@
+Checkbox 复选框。在选中和未选中状态之间切换，用于多选场景。基于 Radix Checkbox 和 Tailwind CSS 实现。
+
+&lt;h2 id="when-to-use"&gt;何时使用&lt;/h2&gt;
+
+当需要在一组选项中进行多项选择时使用。Checkbox 提供直观的勾选交互，适合表单中的多选、协议确认等场景。
+
+常见场景：
+- 表单中的多项选择（如兴趣爱好、权限配置）
+- 协议条款确认（"我已阅读并同意..."）
+- 列表项批量选择
+- 设置项开关
+
+不推荐：
+- 二选一的场景（使用 Switch 开关）
+- 多选一场景（使用 Radio 单选框）
+- 即时生效的操作（使用 Toggle 切换按钮）
+
+&lt;h2 id="examples"&gt;代码演示&lt;/h2&gt;
+
+### 基础用法
+
+通过 `checked` / `defaultChecked` 控制选中状态，`onCheckedChange` 监听变化。
+
+&lt;ComponentShowcase id="dice/checkbox" path="dice/checkbox/basic" /&gt;
+
+```tsx
+import { Checkbox } from "@/components/ui/dice-checkbox"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center gap-3"&gt;
+      &lt;Checkbox id="demo-checkbox" /&gt;
+      &lt;label htmlFor="demo-checkbox" className="text-sm"&gt;
+        同意服务条款
+      &lt;/label&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+&lt;h2 id="api"&gt;API&lt;/h2&gt;
+
+### Checkbox
+
+基于 Radix Checkbox.Root，支持其全部属性。以下列出核心 API。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| checked | 受控选中状态。`indeterminate` 表示半选状态 | `boolean` \| `"indeterminate"` | - |
+| defaultChecked | 默认选中状态 | `boolean` | `false` |
+| onCheckedChange | 选中状态变化回调 | `(checked: boolean \| "indeterminate") =&gt; void` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| required | 是否为必填项 | `boolean` | `false` |
+| name | 表单字段名称 | `string` | - |
+| value | 表单提交时的值 | `string` | `"on"` |
+| className | 附加样式类 | `string` | - |
+
+### 语义槽位
+
+| data-slot | 元素 | 说明 |
+| --- | --- | --- |
+| `checkbox` | CheckboxPrimitive.Root | 复选框根容器 |
+| `checkbox-indicator` | CheckboxPrimitive.Indicator | 选中图标容器 |
+
+&lt;h2 id="faq"&gt;常见问题&lt;/h2&gt;
+
+### 如何实现复选框组？
+
+Checkbox 组件本身是单个复选框，可配合 `fieldset` 和多个 Checkbox 实例实现复选框组：
+
+```tsx
+&lt;fieldset&gt;
+  &lt;legend className="text-sm font-medium"&gt;兴趣爱好&lt;/legend&gt;
+  &lt;div className="flex flex-col gap-2 mt-2"&gt;
+    &lt;label className="flex items-center gap-2"&gt;
+      &lt;Checkbox defaultChecked /&gt;
+      阅读
+    &lt;/label&gt;
+    &lt;label className="flex items-center gap-2"&gt;
+      &lt;Checkbox /&gt;
+      运动
+    &lt;/label&gt;
+    &lt;label className="flex items-center gap-2"&gt;
+      &lt;Checkbox /&gt;
+      音乐
+    &lt;/label&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;
+```
+
+### `indeterminate` 半选状态何时使用？
+
+当子选项部分选中时，父级 Checkbox 应显示半选状态。例如"全选"复选框：
+
+```tsx
+const allChecked = checkedItems.length === totalItems
+const someChecked = checkedItems.length &gt; 0 &amp;&amp; checkedItems.length &lt; totalItems
+
+&lt;Checkbox
+  checked={someChecked ? "indeterminate" : allChecked}
+  onCheckedChange={(v) =&gt; {
+    if (v === true) setCheckedItems(allItems)
+    else setCheckedItems([])
+  }}
+/&gt;
+```
+
+### checked 和 defaultChecked 有何区别？
+
+`defaultChecked` 是非受控模式，组件内部管理状态；`checked` + `onCheckedChange` 是受控模式，由调用方管理状态。二者不可同时使用。
+
+### 如何实现禁用状态？
+
+设置 `disabled` 属性即可：
+
+```tsx
+&lt;Checkbox disabled /&gt;
+&lt;Checkbox disabled defaultChecked /&gt;
+```
+
+&lt;h2 id="llm-rules"&gt;LLM 使用规则&lt;/h2&gt;
+
+1. 从 `@/components/ui/dice-checkbox` 导入 Checkbox，不要从 `antd` 导入。
+2. 只使用本地源码中存在的 props（见上方 API 表），不生成 AntD 专属的 `autoFocus`、`indeterminate` 等独立属性。`indeterminate` 作为 `checked` 的字符串值使用。
+3. 受控模式下必须同时提供 `checked` 和 `onCheckedChange`。
+4. 始终为 Checkbox 设置 `id` 并配合 `label htmlFor` 实现可点击标签，提升可访问性。
+5. 表单场景需设置 `name` 和 `value` 属性以参与原生表单提交。
+6. 不要引入 Ant Design 相关依赖。
+
+&lt;h2 id="source"&gt;源码&lt;/h2&gt;
+&lt;SourceViewer componentId="dice/checkbox" /&gt;

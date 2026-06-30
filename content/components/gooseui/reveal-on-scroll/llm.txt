@@ -1,0 +1,33 @@
+---
+component: RevealOnScroll
+slug: gooseui/reveal-on-scroll
+
+import: import { RevealOnScroll } from "@/components/ui/gooseui-reveal-on-scroll"
+
+usage: |
+  <RevealOnScroll direction="up" delay={0} duration={600}>
+    <div>内容</div>
+  </RevealOnScroll>
+
+props:
+  children: React.ReactNode  -- 子元素内容（必填）
+  direction?: "up" | "down" | "left" | "right" | "fade"  -- 动画方向，默认 "up"
+  delay?: number  -- 动画延迟（ms），默认 0
+  duration?: number  -- 动画持续时间（ms），默认 600
+  className?: string  -- 附加样式类名
+
+constraints:
+  - 纯 CSS 实现（animation-timeline: view()），零 JavaScript 性能开销，运行于合成器线程。
+  - 不要用 IntersectionObserver + useState + CSS transition 方案替代。
+  - 不要引入 AOS、ScrollReveal、sal.js 或任何第三方滚动揭示库。
+  - Chrome 115+ 原生支持；不支持 scroll-driven animation 的浏览器中元素直接显示（渐进增强）。
+  - 位移距离固定为 40px，不可通过 props 自定义。如需自定义距离，使用 className 覆盖 CSS 关键帧。
+  - 应用根组件中需渲染一次 RevealOnScrollStyles（从 gooseui 内部路径导入）以注入 @keyframes。
+  - delay 和 duration 在 scroll-driven animation 模式下代表滚动进度偏移和滚动距离范围，非实际时间。
+  - 动画在元素每次进出视口时重新触发。
+  - 组件自动跟踪最近的滚动祖先容器，无需额外配置。
+
+source: src/components/gooseui/components/effects/reveal-on-scroll.tsx
+example: content/components/gooseui/reveal-on-scroll/examples/basic.tsx
+docs: content/components/gooseui/reveal-on-scroll/index.mdx
+---

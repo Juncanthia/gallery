@@ -1,0 +1,65 @@
+# dice/mention-highlighter - LLM Rules
+
+## Import
+```
+import { MentionHighlighter } from "@/components/ui/dice-mention-highlighter"
+```
+
+## Props
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| className | `string` | - | Additional CSS classes |
+| style | `React.CSSProperties` | - | Inline styles, merged with input's computedStyle |
+
+Accepts all `React.HTMLAttributes<HTMLDivElement>` props.
+
+## Code Examples
+
+### Used within MentionInput (auto-rendered)
+```tsx
+import { MentionHighlighter } from "@/components/ui/dice-mention-highlighter"
+import { MentionRoot } from "@/components/dice/mention/mention-root"
+import { MentionInput } from "@/components/dice/mention/mention-input"
+import { MentionContent } from "@/components/dice/mention/mention-content"
+import { MentionItem } from "@/components/dice/mention/mention-item"
+import { MentionPortal } from "@/components/dice/mention/mention-portal"
+
+<MentionRoot>
+  <MentionInput placeholder="输入 @ 提及用户..." />
+  <MentionPortal>
+    <MentionContent>
+      <MentionItem value="zhangsan" label="张三" />
+      <MentionItem value="lisi" label="李四" />
+    </MentionContent>
+  </MentionPortal>
+</MentionRoot>
+```
+
+### Manual usage with custom styles
+```tsx
+<MentionRoot>
+  <div style={{ position: "relative" }}>
+    <MentionHighlighter style={{ fontSize: "16px" }} />
+    <MentionInput />
+  </div>
+</MentionRoot>
+```
+
+### Custom highlight styling via CSS
+```css
+[data-tag] {
+  background-color: #e6f4ff;
+  color: #1890ff;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+```
+
+## Constraints
+- DO NOT import from `antd`. Use `@/components/ui/dice-mention-highlighter`.
+- MUST be used within a `<MentionRoot>` context; throws if used standalone.
+- MentionHighlighter is typically auto-rendered by MentionInput. Manual usage is only needed for custom overlay behavior.
+- The component uses `React.memo` with a custom comparator comparing props by reference.
+- Mention spans are rendered with `data-tag=""` attribute for CSS targeting.
+- The highlighter overlay automatically syncs font styles, padding, borders, and scrolling from the input element.
+- Uses ResizeObserver and MutationObserver to detect input style changes.

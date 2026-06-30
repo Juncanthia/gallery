@@ -1,0 +1,117 @@
+---
+category: Components
+title: 删除按钮
+subtitle: Delete Button
+description: 删除按钮是一个带有撤销倒计时的危险操作交互组件，点击后展开撤销区域与 10 秒倒计时。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 1
+source:
+  component: src/components/uselayouts/delete-button.tsx
+  examples:
+    - content/components/uselayouts/delete-button/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Delete Button 删除按钮
+
+删除按钮是一个带有撤销倒计时的危险操作交互组件。点击"Delete Account"后展开撤销区域，显示 10 秒倒计时和撤销按钮，使用 motion/react 实现流畅的状态切换动画。
+
+本组件是 UseLayouts 集合中的交互组件，展示危险操作二次确认的视觉与动效方案。
+
+## 何时使用 {#when-to-use}
+
+适合在需要为危险操作提供撤销窗口的场景中使用。组件通过 AnimatePresence 实现两个按钮状态的平滑切换，替代传统弹窗二次确认。
+
+常见场景：
+
+- 账号删除、数据清空等不可逆操作前的缓冲确认。
+- 需要几秒钟冷静期的危险操作流程。
+- 用流畅动画替代传统弹窗二次确认的交互方案。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import DeleteButton from "@/components/ui/uselayouts-delete-button"
+
+export default function Demo() {
+  return <DeleteButton />
+}
+```
+
+## 核心导出 {#exports}
+
+- `DeleteButton` (default)
+
+## API 摘要 {#api}
+
+组件为自包含交互组件，无需传递任何 props。所有内部状态（删除确认、倒计时、动画锁）由组件内部管理。
+
+```ts
+type DeleteButtonProps = Record<string, never>
+```
+
+| 内部状态 | 类型 | 说明 |
+| --- | --- | --- |
+| `isDeleting` | `boolean` | 是否处于确认删除状态 |
+| `count` | `number` | 倒计时秒数 (10 → 0) |
+| `isAnimating` | `boolean` | 动画锁 (400ms) |
+
+## Semantic DOM {#semantic-dom}
+
+源码中未声明 `data-slot`，使用 AnimatePresence 的 `key` 属性区分两个按钮状态，以及 `layoutId="deleteButton"` 和 `layoutId="buttonText"` 实现共享布局动画。
+
+## 样式模型 {#styling-model}
+
+- 样式通过 Tailwind CSS className 和内联 style 表达。
+- AnimatePresence `mode="popLayout"` 确保退出元素立即脱离布局流。
+- `layoutId` 用于在 `AnimatePresence` 内跨两个 motion.button 实例共享布局动画。
+- 背景色通过 motion 的 `animate`/`initial`/`exit` 中的 `backgroundColor` 控制：删除态 `#FE322A`，确认态 `#FFEDF1`。
+- 字符逐字动画通过 `motion.span` 的 `y`、`scale`、`opacity` 实现，每个字符延迟 `i * 0.005s`。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/uselayouts/delete-button.tsx`
+
+关键行为：
+
+1. 初始渲染红色"Delete Account"按钮，字符逐个动画入场。
+2. 点击后通过 `AnimatePresence` 切换 key，平滑过渡到确认状态。
+3. 确认态显示撤销图标（Undo03Icon）、"Cancel Deletion"和 10 秒倒计时。
+4. `useEffect` 管理倒计时，每秒递减 count，归零后停止。
+5. `isAnimating` 动画锁 400ms，通过 `pointerEvents: "none"` 防止动画冲突。
+6. 点击撤销按钮或倒计时区域可回到初始状态。
+7. whileTap `scale: 0.95` 提供点击反馈。
+
+## 可访问性 {#accessibility}
+
+- 按钮使用原生 `<button>` 语义。
+- 动画进行中通过 `pointerEvents: "none"` 阻止误触，但不使用 `disabled` 属性以保持样式灵活性。
+- 如需生产环境使用，建议补充 `aria-label` 描述当前状态（"删除账号" / "取消删除，N 秒后自动确认"）。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Delete Button 代码时，应遵守：
+
+1. 从 `@/components/ui/uselayouts-delete-button` 导入 `DeleteButton`（default export）。
+2. 组件自包含，无需 props，直接渲染即可。
+3. 不要移除 motion/react 动画逻辑，包括 AnimatePresence、layoutId、transition 曲线。
+4. 修改文案时更新 `deleteText` 和 `cancelText` 常量。
+5. 修改倒计时时同步更新 `useState(10)` 初始值和 `handleClick` 中的 `setCount(10)`。
+6. 保留 `isAnimating` 动画锁机制。
+7. 不要引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component。

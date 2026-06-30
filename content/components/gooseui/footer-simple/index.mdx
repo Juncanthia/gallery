@@ -1,0 +1,117 @@
+FooterSimple 是一个简洁的页脚区块组件，居中展示品牌 Logo、导航链接、社交媒体图标和版权信息。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当页面底部需要一个简洁、居中对齐的页脚区块时使用。适合页面数量较少、不需要复杂的多列导航链接分类的场景。
+
+常见场景：
+
+- 个人博客或作品集网站的全局页脚。
+- SaaS 产品落地页的简化底部。
+- 不需要复杂导航结构的内容型网站页脚。
+
+FooterSimple 是一个自包含的演示级区块组件，不接收外部 props，直接渲染完整的页脚 UI。内部包含品牌 Logo（占位块 + "Brand" 文字）、水平导航链接列表、四个社交媒体图标链接和版权声明。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+FooterSimple 渲染一个居中布局的简洁页脚，包含 Logo、导航链接、社交图标和版权信息。
+
+<ComponentShowcase
+  id="gooseui/footer-simple"
+  path="gooseui/footer-simple/basic"
+/>
+
+```tsx
+import { FooterSimple } from "@/components/ui/gooseui-footer-simple"
+
+export default function Demo() {
+  return <FooterSimple />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FooterSimple
+
+FooterSimple 为自包含区块组件，无外部 Props。所有内容（导航链接、社交图标、品牌信息）均在组件内部定义。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| 无 | 组件不接受外部属性 | - | - |
+
+组件内部常量：
+
+- `CURRENT_YEAR = 2026` — 编译时确定的年份常量，避免水合不匹配。
+
+### 内部数据结构
+
+**navLinks** — 导航链接数组，每项包含 `label` 和 `href`：
+
+```ts
+{ label: "Features", href: "#features" }
+{ label: "Pricing", href: "#pricing" }
+{ label: "About", href: "#about" }
+{ label: "Blog", href: "#blog" }
+{ label: "Careers", href: "#careers" }
+{ label: "Contact", href: "#contact" }
+```
+
+**socialLinks** — 社交图标数组，每项包含 `icon`（react-icons/fa 或 lucide-react 组件）、`href` 和 `label`：
+
+```ts
+{ icon: FaTwitter, href: "https://twitter.com", label: "Twitter" }
+{ icon: FaGithub, href: "https://github.com", label: "GitHub" }
+{ icon: FaLinkedin, href: "https://linkedin.com", label: "LinkedIn" }
+{ icon: Mail, href: "mailto:hello@company.com", label: "Email" }
+```
+
+### 布局结构
+
+组件使用 Tailwind CSS 实现居中纵向布局：
+
+- 外层 `<footer>` 带有顶部边框 `border-t` 和 `bg-background` 背景。
+- 内容区 `flex flex-col items-center text-center`，子元素垂直间距 `space-y-8`。
+- Logo 区：圆角方形占位块 + "Brand" 文字，使用 `next/link` 指向首页。
+- 导航区：`flex flex-wrap` 响应式换行，链接水平间距 `gap-x-8`。
+- 社交图标区：圆形图标按钮，悬停时背景变为主色。
+- 分隔线：`max-w-xs` 宽度的水平线。
+- 版权栏：居中文本，字号 `text-sm`，颜色 `text-muted-foreground`。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何修改导航链接？
+
+导航链接定义在组件内部的 `navLinks` 常量数组中。直接修改组件源码中每个对象的 `label` 和 `href` 值即可。
+
+### 如何修改社交图标？
+
+社交图标定义在组件内部的 `socialLinks` 常量数组中。替换 `icon` 值为其他 `react-icons/fa` 组件或 `lucide-react` 组件，同时更新 `href` 为对应的链接地址。
+
+### 如何修改品牌信息？
+
+品牌信息位于 Logo 区，包括占位块字母（当前为 "B"）和文字（当前为 "Brand"）。在组件源码中替换 `<Link href="/">` 区块内的对应内容。
+
+### 能否删除某个社交图标？
+
+在 `socialLinks` 数组中移除对应的图标对象即可。删除后社交图标列表会自动重排。
+
+### 如何修改版权年份？
+
+组件内部使用编译时常量 `CURRENT_YEAR = 2026`。如需更新年份，在组件源码中修改该常量值。此方式避免了客户端水合不匹配问题。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FooterSimple 代码时：
+
+1. 从 `@/components/ui/gooseui-footer-simple` 导入 `FooterSimple`。
+2. 直接使用 `<FooterSimple />` 即可渲染完整页脚，无需传入任何 Props。
+3. 不要从 gooseui 内部路径（如 `@/components/gooseui/components/blocks/footers/footer-simple`）导入。
+4. 如需定制导航链接、社交图标或品牌信息，在组件源码中修改，不要在调用处覆盖内部结构。
+5. 不要引入其他第三方 Footer 组件或 Ant Design 相关依赖。
+6. 社交图标混用 `react-icons/fa` 和 `lucide-react`，确保项目中已安装这两个依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui/footer-simple" />

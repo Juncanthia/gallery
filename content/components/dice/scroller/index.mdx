@@ -1,0 +1,104 @@
+Scroller 滚动容器。为内容区域提供滚动支持，可显示溢出阴影指示器及导航按钮。基于 Tailwind CSS 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当内容区域需要在固定高度/宽度内滚动时使用。Scroller 提供视觉溢出指示（滚动阴影），支持垂直和水平方向，可选导航按钮。
+
+常见场景：
+- 列表、卡片容器内内容溢出时提供滚动能力
+- 需要视觉提示告知用户还有更多可滚动内容
+- 水平滚动的标签栏、工具栏等横向内容区域
+- 需要隐藏原生滚动条以保持视觉一致的场景
+
+不推荐：
+- 页面级滚动（由浏览器原生控制）
+- 少量内容不需要滚动时（无溢出无效果）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+通过 `className` 设置容器尺寸，内容溢出时自动产生滚动和阴影效果。
+
+<ComponentShowcase id="dice/scroller" path="dice/scroller/basic" />
+
+```tsx
+import { Scroller } from "@/components/ui/dice-scroller"
+
+export default function Demo() {
+  return (
+    &lt;Scroller className="h-40 w-48 rounded-md border p-3"&gt;
+      &lt;div className="flex flex-col gap-2"&gt;
+        &lt;!-- 内容超出容器高度，自动滚动 --&gt;
+      &lt;/div&gt;
+    &lt;/Scroller&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Scroller
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 滚动方向 | `"vertical"` \| `"horizontal"` | `"vertical"` |
+| hideScrollbar | 是否隐藏原生滚动条 | `boolean` | `false` |
+| withNavigation | 是否显示滚动导航按钮 | `boolean` | `false` |
+| scrollStep | 点击导航按钮时的滚动步长（px） | `number` | `40` |
+| scrollTriggerMode | 导航按钮触发模式 | `"press"` \| `"hover"` \| `"click"` | `"press"` |
+| size | 滚动阴影渐变的区域大小（px） | `number` | `40` |
+| offset | 阴影触发偏移量，滚动超过此值才显示阴影 | `number` | `0` |
+| asChild | 使用 Radix Slot 将 props 合并到子元素 | `boolean` | `false` |
+| className | 容器附加样式类 | `string` | - |
+
+### 语义槽位
+
+| data-slot | 元素 | 说明 |
+| --- | --- | --- |
+| `scroller` | 滚动容器 div | 滚动内容根容器 |
+| `scroll-button` | button | 导航按钮，仅 `withNavigation` 时渲染 |
+
+### 数据属性
+
+滚动容器根据溢出状态设置以下 data 属性，可用于自定义样式：
+
+| 属性 | 说明 |
+| --- | --- |
+| `data-top-scroll="true"` | 垂直方向存在上方溢出内容 |
+| `data-bottom-scroll="true"` | 垂直方向存在下方溢出内容 |
+| `data-top-bottom-scroll="true"` | 垂直方向上下均存在溢出内容 |
+| `data-left-scroll="true"` | 水平方向存在左侧溢出内容 |
+| `data-right-scroll="true"` | 水平方向存在右侧溢出内容 |
+| `data-left-right-scroll="true"` | 水平方向左右均存在溢出内容 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何控制滚动容器尺寸？
+
+通过 `className` 设置容器的高度（垂直滚动）或宽度（水平滚动），例如 `className="h-64 w-full"`。组件本身不内置尺寸，由调用方通过样式控制。
+
+### hideScrollbar 和 withNavigation 有何区别？
+
+`hideScrollbar` 仅隐藏原生滚动条，不影响内容交互（仍可鼠标滚轮/触摸滚动）。`withNavigation` 则在容器边缘显示上/下或左/右箭头按钮，用户可点击按钮逐段滚动。
+
+### scrollTriggerMode 各模式有何区别？
+
+- `press`：按住按钮持续滚动，松手停止。适合桌面端拖拽交互。
+- `hover`：鼠标悬停在按钮上时持续滚动，移开停止。
+- `click`：每次点击滚动一个 `scrollStep` 步长。适合移动端或精确控制。
+
+### 垂直和水平滚动能否同时启用？
+
+当前不支持。`orientation` 为单一选项，要么垂直要么水平。需要同时双向滚动的场景请使用原生 overflow 或嵌套结构。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/ui/dice-scroller` 导入 Scroller，不要从 `antd` 导入。
+2. 只使用本地源码中存在的 props（见上方 API 表），不生成 AntD 专属属性。
+3. 通过 `className` 设置容器的高度/宽度，组件本身不预设尺寸。
+4. 导航按钮仅在 `withNavigation` 为 `true` 时渲染。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="dice/scroller" />

@@ -1,0 +1,59 @@
+---
+category: Components
+title: ExampleForm
+subtitle: 示例表单
+description: 基于 Zod 验证的示例表单组件，包含姓名、邮箱和留言字段。
+group:
+  title: UI
+  order: 1
+library: gooseui
+source:
+  component: src/components/gooseui/components/blocks/example-form/example-form.tsx
+  reexport: src/components/ui/gooseui-example-form.tsx
+  docs: content/components/gooseui/example-form/index.mdx
+  examples:
+    - content/components/gooseui/example-form/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---
+
+# ExampleForm
+
+基于 Zod 验证的示例表单组件，包含姓名、邮箱和留言字段，展示完整的表单输入、验证和提交交互流程。
+
+## 何时使用
+
+- 联系表单、反馈表单等需要多字段输入的页面。
+- 需要客户端表单验证（Zod schema）的业务表单。
+- 作为表单组件的开发和教学参考示例。
+
+## 导入
+
+```tsx
+import { ExampleForm } from "@/components/ui/gooseui-example-form"
+```
+
+## 用法
+
+```tsx
+import { ExampleForm } from "@/components/ui/gooseui-example-form"
+
+function App() {
+  return (
+    &lt;div className="w-full max-w-sm"&gt;
+      &lt;ExampleForm /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+## 约束
+
+- 依赖 Zod 进行客户端表单验证（`z.object` schema）。
+- 使用 Card、Input、Textarea、Label、Button 等基础组件构建。
+- 表单字段：Name（必填）、Email（邮箱格式）、Message（必填）。
+- 验证失败时在每个字段下方显示错误信息，输入框边框变红。
+- 提交时通过 `FormData` 收集数据，`exampleFormSchema.safeParse` 校验。
+- 不要删除或修改 Zod schema 的定义，保持验证规则一致。
+- 不要引入 Ant Design 相关依赖。

@@ -1,0 +1,331 @@
+---
+category: Components
+title: SignIn
+subtitle: 登录
+description: 登录组件，用户身份验证入口，支持邮箱/用户名和密码登录，提供"记住我"、忘记密码和注册引导等辅助功能。
+demo:
+  cols: 1
+group:
+  title: 页面模板
+  order: 7
+source:
+  component: src/components/manifest/.../sign-in.tsx
+  wrapper: src/components/ui/manifest-sign-in.tsx
+  docs: content/components/manifest/sign-in/index.mdx
+  examples:
+    - content/components/manifest/sign-in/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  lucide: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# SignIn 登录
+
+SignIn 是一个用户身份验证入口组件，通过表单容器聚合邮箱输入、密码输入、登录按钮以及"记住我"、忘记密码和注册引导等辅助功能。它采用 data/actions/appearance/control 四层 prop 架构，支持受控加载状态和外部错误注入。
+
+## 何时使用 {#when-to-use}
+
+当需要为用户提供身份验证入口时使用。SignIn 将邮箱输入、密码输入、登录按钮以及辅助链接组合为一个完整的登录表单。
+
+常见场景：
+
+- SaaS 应用的用户登录页面。
+- 会员系统的登录入口。
+- 管理后台的身份验证。
+- 移动端 App 的登录界面。
+
+推荐使用方式：
+
+- 通过 `actions.onSubmit` 处理登录提交，接收邮箱和密码两个参数。
+- 通过 `control.isLoading` 控制登录按钮加载状态。
+- 通过 `control.error` 注入表单级别错误信息。
+- 通过 `data.title`、`data.subtitle`、`data.submitLabel` 自定义文案。
+- 通过 `appearance.showLinks` 控制辅助链接的显隐。
+
+不推荐：
+
+- 仅需单一字段验证（如仅输入手机号发验证码）—— 使用自定义表单。
+- 需要第三方 OAuth 登录（如 Google、GitHub）—— SignIn 专注于邮箱密码登录，社交登录应单独处理。
+- 仅用于展示登录表单样式（非交互）—— SignIn 为交互式表单组件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认展示标题、副标题、邮箱输入框、密码输入框和登录按钮。
+
+```tsx
+import { SignIn } from "@/components/ui/manifest-sign-in"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-md">
+      <SignIn />
+    </div>
+  )
+}
+```
+
+### 处理登录提交
+
+通过 `actions.onSubmit` 回调接收邮箱和密码，可在其中调用 API。
+
+```tsx
+import { SignIn } from "@/components/ui/manifest-sign-in"
+
+export default function Demo() {
+  return (
+    <SignIn
+      actions={{
+        onSubmit: async (email, password) => {
+          console.log("Signing in:", email)
+          await signInAPI(email, password)
+        },
+      }}
+    />
+  )
+}
+```
+
+### 受控模式与加载状态
+
+通过 `control.isLoading` 控制登录按钮加载状态，适用于异步 API 调用。
+
+```tsx
+import { useState } from "react"
+import { SignIn } from "@/components/ui/manifest-sign-in"
+
+export default function Demo() {
+  const [loading, setLoading] = useState(false)
+
+  return (
+    <SignIn
+      control={{ isLoading: loading }}
+      actions={{
+        onSubmit: async (email, password) => {
+          setLoading(true)
+          try {
+            await signInAPI(email, password)
+          } finally {
+            setLoading(false)
+          }
+        },
+      }}
+    />
+  )
+}
+```
+
+### 自定义标题与文案
+
+通过 `data` 自定义标题、副标题、按钮文案和占位符文字。
+
+```tsx
+import { SignIn } from "@/components/ui/manifest-sign-in"
+
+export default function Demo() {
+  return (
+    <SignIn
+      data={{
+        title: "欢迎回来",
+        subtitle: "请输入您的账号和密码登录系统",
+        emailLabel: "邮箱地址",
+        passwordLabel: "登录密码",
+        submitLabel: "登 录",
+        emailPlaceholder: "请输入邮箱",
+        passwordPlaceholder: "请输入密码",
+      }}
+    />
+  )
+}
+```
+
+### 显示错误信息
+
+通过 `control.error` 传入错误文案，组件内部会展示错误提示。
+
+```tsx
+import { useState } from "react"
+import { SignIn } from "@/components/ui/manifest-sign-in"
+
+export default function Demo() {
+  const [error, setError] = useState("")
+
+  return (
+    <SignIn
+      control={{ error }}
+      actions={{
+        onSubmit: async (email, password) => {
+          try {
+            await signInAPI(email, password)
+          } catch (e) {
+            setError("邮箱或密码错误，请重试")
+          }
+        },
+      }}
+    />
+  )
+}
+```
+
+### 隐藏辅助链接
+
+通过 `appearance.showLinks` 控制"忘记密码"和"注册账号"链接的显示。
+
+```tsx
+import { SignIn } from "@/components/ui/manifest-sign-in"
+
+export default function Demo() {
+  return (
+    <SignIn
+      data={{
+        title: "管理后台登录",
+        subtitle: "仅限授权人员访问",
+      }}
+      appearance={{ showLinks: false }}
+    />
+  )
+}
+```
+
+## API {#api}
+
+### SignIn
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 表单数据配置 | `SignInData` | — |
+| data.title | 登录标题 | `string` | `"Sign In"` |
+| data.subtitle | 标题下方描述文字 | `string` | `"Enter your credentials to access your account"` |
+| data.emailLabel | 邮箱输入框标签 | `string` | `"Email"` |
+| data.passwordLabel | 密码输入框标签 | `string` | `"Password"` |
+| data.submitLabel | 登录按钮文字 | `string` | `"Sign In"` |
+| data.emailPlaceholder | 邮箱输入框占位符 | `string` | `"you@example.com"` |
+| data.passwordPlaceholder | 密码输入框占位符 | `string` | `"Enter your password"` |
+| data.rememberMeLabel | "记住我"复选框文字 | `string` | `"Remember me"` |
+| data.forgotPasswordLabel | "忘记密码"链接文字 | `string` | `"Forgot password?"` |
+| data.signUpLabel | "注册账号"链接文字 | `string` | `"Don't have an account? Sign up"` |
+| data.forgotPasswordHref | "忘记密码"链接地址 | `string` | `"#"` |
+| data.signUpHref | "注册账号"链接地址 | `string` | `"#"` |
+| data.initialValues | 预填充的初始值 | `Partial<SignInFormData>` | — |
+| actions | 回调配置 | `SignInActions` | — |
+| actions.onSubmit | 登录提交回调 | `(email: string, password: string) => void` | — |
+| actions.onForgotPassword | "忘记密码"点击回调（覆盖 href 跳转） | `() => void` | — |
+| actions.onSignUp | "注册账号"点击回调（覆盖 href 跳转） | `() => void` | — |
+| appearance | 外观配置 | `SignInAppearance` | — |
+| appearance.showTitle | 是否显示标题区域 | `boolean` | `true` |
+| appearance.showRememberMe | 是否显示"记住我"复选框 | `boolean` | `true` |
+| appearance.showLinks | 是否显示辅助链接（忘记密码、注册） | `boolean` | `true` |
+| control | 控制配置 | `SignInControl` | — |
+| control.isLoading | 登录按钮加载状态 | `boolean` | `false` |
+| control.error | 表单级别错误信息 | `string` | — |
+
+### SignInFormData
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| email | 用户邮箱地址 | `string` | 是 |
+| password | 用户密码 | `string` | 是 |
+| rememberMe | 是否记住登录状态 | `boolean` | 否 |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/manifest/.../sign-in.tsx`：组件渲染、表单管理、提交逻辑。
+- `src/components/ui/manifest-sign-in.tsx`：薄包装，从 manifest 包重新导出。
+
+关键行为：
+
+1. 组件内部管理邮箱和密码的输入状态，调用侧无需自行绑定 value/onChange。
+2. `actions.onSubmit` 接收 `email` 和 `password` 两个参数。
+3. `control.isLoading` 为 `true` 时自动禁用按钮并显示加载状态。
+4. `control.error` 非空时在表单顶部展示错误提示。
+5. 辅助链接（忘记密码、注册）可使用 `data.forgotPasswordHref` / `data.signUpHref` 设置 href，或通过 `actions.onForgotPassword` / `actions.onSignUp` 使用回调。
+6. `appearance.showLinks` 为 `false` 时隐藏忘记密码和注册引导链接。
+7. `appearance.showRememberMe` 为 `false` 时隐藏"记住我"复选框。
+
+## FAQ {#faq}
+
+### 如何获取登录表单数据？
+
+通过 `actions.onSubmit` 回调接收邮箱和密码：
+
+```tsx
+<SignIn
+  actions={{
+    onSubmit: (email, password) => {
+      console.log("Email:", email, "Password:", password)
+      // 发送 API 请求...
+    },
+  }}
+/>
+```
+
+### 如何显示登录错误信息？
+
+使用 `control.error` 传入错误文案：
+
+```tsx
+const [error, setError] = useState("")
+
+<SignIn
+  control={{ error }}
+  actions={{
+    onSubmit: async (email, password) => {
+      try {
+        await signInAPI(email, password)
+      } catch (e) {
+        setError("邮箱或密码错误，请重试")
+      }
+    },
+  }}
+/>
+```
+
+### 如何设置登录加载状态？
+
+使用 `control.isLoading`：
+
+```tsx
+const [loading, setLoading] = useState(false)
+
+<SignIn
+  control={{ isLoading: loading }}
+  actions={{
+    onSubmit: async (email, password) => {
+      setLoading(true)
+      try {
+        await signInAPI(email, password)
+      } finally {
+        setLoading(false)
+      }
+    },
+  }}
+/>
+```
+
+### 如何隐藏辅助链接？
+
+```tsx
+<SignIn appearance={{ showLinks: false }} />
+```
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 SignIn 代码时，应遵守：
+
+1. 从 `@/components/ui/manifest-sign-in` 导入 `SignIn`，不要从 Ant Design 导入 Login 或 Form 组件。
+2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
+3. 登录提交通过 `actions.onSubmit` 处理，回调接收 `email` 和 `password` 两个参数。
+4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用按钮并显示加载状态。
+5. 错误信息通过 `control.error` 传入，组件内部展示错误提示。
+6. 不要手动管理组件内部的表单状态，组件自行处理邮箱和密码的输入绑定。
+7. 辅助链接（忘记密码、注册）可使用 `data.forgotPasswordHref` / `data.signUpHref` 设置 href，或通过 `actions.onForgotPassword` / `actions.onSignUp` 使用回调。
+8. 不要引入 Ant Design 相关依赖（Form、Input、Button 等）。
