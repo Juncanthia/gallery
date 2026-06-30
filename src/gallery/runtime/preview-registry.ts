@@ -4,16 +4,35 @@ type PreviewModule = {
   default: ComponentType
 }
 
-const previews = import.meta.glob<PreviewModule>("../../../examples/**/*.tsx")
-const sources = import.meta.glob<string>("../../../examples/**/*.tsx", {
-  import: "default",
-  query: "?raw",
-})
+const previews = import.meta.glob<PreviewModule>(
+  "../../../content/components/*/examples/*.tsx"
+)
+const sources = import.meta.glob<string>(
+  "../../../content/components/*/examples/*.tsx",
+  {
+    import: "default",
+    query: "?raw",
+  }
+)
 
-const resolveExampleKey = (path: string) => `../../../examples/${path}.tsx`
+const resolveExampleKey = (path: string) => {
+  const [component, example] = path.split("/")
+
+  if (!component || !example) {
+    return null
+  }
+
+  return `../../../content/components/${component}/examples/${example}.tsx`
+}
 
 export async function loadPreview(path: string) {
-  const loader = previews[resolveExampleKey(path)]
+  const key = resolveExampleKey(path)
+
+  if (!key) {
+    return null
+  }
+
+  const loader = previews[key]
 
   if (!loader) {
     return null
@@ -25,7 +44,13 @@ export async function loadPreview(path: string) {
 }
 
 export async function loadPreviewSource(path: string) {
-  const loader = sources[resolveExampleKey(path)]
+  const key = resolveExampleKey(path)
+
+  if (!key) {
+    return null
+  }
+
+  const loader = sources[key]
 
   if (!loader) {
     return null

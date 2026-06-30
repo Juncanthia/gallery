@@ -13,6 +13,8 @@ export default defineConfig({
   plugins: [
     tanstackRouter({
       target: "react",
+      routesDirectory: "./src/app/routes",
+      generatedRouteTree: "./src/app/routeTree.gen.ts",
       autoCodeSplitting: true,
     }),
     { enforce: "pre", ...mdx({ remarkPlugins: [remarkGfm, remarkMath], rehypePlugins: [rehypeKatex] }) },

@@ -5,10 +5,10 @@ type MdxModule = {
   default: ComponentType<MDXProps>
 }
 
-const mdxPages = import.meta.glob<MdxModule>("../../../content/components/*.mdx")
+const mdxPages = import.meta.glob<MdxModule>("../../../content/components/*/index.mdx")
 
 export async function loadComponentMdx(slug: string) {
-  const loader = mdxPages[`../../../content/components/${slug}.mdx`]
+  const loader = mdxPages[`../../../content/components/${slug}/index.mdx`]
 
   if (!loader) {
     return null
