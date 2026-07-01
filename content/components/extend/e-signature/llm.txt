@@ -42,7 +42,7 @@ ESignatureBlock 为 PDF 文档提供电子签名能力。它基于 signature_pad
 传入 PDF 文件 URL，组件渲染 PDF 预览界面并提供签名功能。
 
 ```tsx
-import { ESignatureBlock } from "@/components/ui/extend-e-signature"
+import { ESignatureBlock } from "@/components/ui/e-signature"
 
 export default function Demo() {
   return <ESignatureBlock file="/samples/attention.pdf" />
@@ -95,7 +95,7 @@ export default function Demo() {
 
 当 AI 生成本项目 ESignatureBlock 代码时，应遵守：
 
-1. 从 `@/components/ui/extend-e-signature` 导入 ESIgnatureBlock。
+1. 从 `@/components/ui/e-signature` 导入 ESIgnatureBlock。
 2. 传入 `file` 属性指定 PDF 文件 URL。
 3. 该组件依赖浏览器 Canvas API，仅在 Client Component 中使用。
 4. 签名数据以 Base64 Data URL 形式存储，可直接序列化到后端。

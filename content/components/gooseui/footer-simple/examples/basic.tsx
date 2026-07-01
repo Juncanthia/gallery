@@ -1,4 +1,4 @@
-import { FooterSimple } from "@/components/ui/gooseui-footer-simple"
+import { FooterSimple } from "@/components/ui/footer-simple"
 
 export default function Demo() {
   return <FooterSimple />

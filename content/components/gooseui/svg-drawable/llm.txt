@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { SVGDrawable } from "@/components/ui/gooseui-svg-drawable"
+import { SVGDrawable } from "@/components/ui/svg-drawable"
 
 export default function Demo() {
   return (
@@ -161,7 +161,7 @@ SVGDrawable 内部结构：
 
 当 AI 生成本项目 SVGDrawable 代码时，应遵守：
 
-1. 从 `@/components/ui/gooseui-svg-drawable` 导入 `SVGDrawable`。
+1. 从 `@/components/ui/svg-drawable` 导入 `SVGDrawable`。
 2. `children` 必须是单个 `<svg>` React 元素，其中包含带 `fill="none"` 和 `stroke="currentColor"` 的路径元素。
 3. `draw` 使用 `"0 1"` 字符串格式或 `["0 0", "0 1", "1 1"]` 关键帧数组，不要传入其他格式。
 4. `trigger` 使用 `"mount"`、`"view"`、`"hover"` 字符串，不要使用已废弃的 `animateOnMount` / `animateOnView`。

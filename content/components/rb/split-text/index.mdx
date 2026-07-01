@@ -15,7 +15,7 @@ SplitText 文字逐字入场动画组件，将文字拆分为字符并基于 GSA
 <ComponentShowcase id="rb/split-text" path="rb/split-text/basic" />
 
 ```tsx
-import { SplitText } from "@/components/ui/rb-split-text"
+import { SplitText } from "@/components/ui/split-text"
 
 export default function Demo() {
   return (
@@ -28,7 +28,7 @@ export default function Demo() {
 
 ### 自定义入场方向和标签
 ```tsx
-import { SplitText } from "@/components/ui/rb-split-text"
+import { SplitText } from "@/components/ui/split-text"
 
 export default function Demo() {
   return (
@@ -76,7 +76,7 @@ export default function Demo() {
 组件会等待 `document.fonts.ready` 完成后再初始化动画，确保字符宽度计算准确。如果字体加载时间过长，文字会先以系统字体显示，加载后替换。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-split-text` 导入。
+1. 从 `@/components/ui/split-text` 导入。
 2. 依赖 `gsap`、`gsap/ScrollTrigger` 和 `@gsap/react`，确保全部已安装。
 3. 滚动触发默认 `once: true`，每个实例只播放一次动画。
 4. `from`/`to` 支持任意 GSAP 可动画属性，让动画效果完全可定制。

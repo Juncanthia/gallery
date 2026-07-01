@@ -1,4 +1,4 @@
-import { ASCIIText } from "@/components/ui/rb-ascii-text"
+import { ASCIIText } from "@/components/ui/ascii-text"
 
 export default function ASCIITextBasicExample() {
   return (

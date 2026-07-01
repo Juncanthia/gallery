@@ -1,4 +1,4 @@
-import { Balatro } from "@/components/ui/rb-balatro"
+import { Balatro } from "@/components/ui/balatro"
 
 export default function BalatroBasicExample() {
   return (

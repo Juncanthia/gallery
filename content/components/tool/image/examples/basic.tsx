@@ -1,6 +1,6 @@
 "use client"
 
-import { Image } from "@/components/ui/tool-image"
+import { Image } from "@/components/ui/image-tool"
 
 export default function Demo() {
   return (

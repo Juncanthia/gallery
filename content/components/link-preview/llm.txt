@@ -122,7 +122,7 @@ type PreviewLinkCardImageProps = PreviewLinkCardImagePrimitiveProps;
 
 直接依赖摘要：
 
-- `@/primitives/radix/link-preview`
+- `@/components/_primitives/radix/link-preview`
 
 实现注意：
 

@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { SlidingNumber } from "@/components/gooseui/components/ui/sliding-number"
+import { SlidingNumber } from "@/components/data-display/gooseui/sliding-number"
 import { cn } from "@/lib/utils"
 
 type SliderPrimitiveProps = React.ComponentProps<typeof SliderPrimitive.Root>

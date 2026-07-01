@@ -1,4 +1,4 @@
-import { ScrambledText } from "@/components/ui/rb-scrambled-text"
+import { ScrambledText } from "@/components/ui/scrambled-text"
 
 export default function ScrambledTextBasicExample() {
   return (

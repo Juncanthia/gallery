@@ -1,4 +1,4 @@
-import { StaggeredMenu } from "@/components/ui/rb-staggered-menu"
+import { StaggeredMenu } from "@/components/ui/staggered-menu"
 
 export default function StaggeredMenuBasicExample() {
   return <StaggeredMenu />

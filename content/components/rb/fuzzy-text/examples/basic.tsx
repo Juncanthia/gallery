@@ -1,4 +1,4 @@
-import { FuzzyText } from "@/components/ui/rb-fuzzy-text"
+import { FuzzyText } from "@/components/ui/fuzzy-text"
 
 export default function FuzzyTextBasicExample() {
   return (

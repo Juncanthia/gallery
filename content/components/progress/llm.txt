@@ -210,7 +210,7 @@ type StepsProgressProps = Omit<ProgressPrimitiveProps, 'children'> & {
 
 直接依赖摘要：
 
-- `@/primitives/radix/progress`
+- `@/components/_primitives/radix/progress`
 
 实现注意：
 

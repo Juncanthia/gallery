@@ -16,14 +16,14 @@ Ferrofluid 基于 OGL（WebGL）的磁流体模拟背景组件，多层噪声驱
 <ComponentShowcase id="rb/ferrofluid" path="rb/ferrofluid/basic" />
 
 ```tsx
-import { Ferrofluid } from "@/components/ui/rb-ferrofluid"
+import { Ferrofluid } from "@/components/ui/ferrofluid"
 export default function Demo() { return <Ferrofluid /> }
 ```
 
 ### 自定义颜色与流向
 
 ```tsx
-import { Ferrofluid } from "@/components/ui/rb-ferrofluid"
+import { Ferrofluid } from "@/components/ui/ferrofluid"
 
 export default function Demo() {
   return (
@@ -83,7 +83,7 @@ export default function Demo() {
 当 `mouseInteraction=false` 时鼠标不生效。`mouseDampening=0` 时鼠标位置直接映射无平滑，值越大平滑度越高（指数衰减平滑）。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-ferrofluid` 导入。
+1. 从 `@/components/ui/ferrofluid` 导入。
 2. 依赖 `ogl`（OGL WebGL 框架），确保项目中已安装。
 3. 组件返回纯 div 容器，需通过 `className` 设置宽高，否则 Canvas 尺寸为零。
 4. `colors` 为 hex 字符串数组，自动转换为 RGB，最多支持 8 种颜色。

@@ -146,7 +146,7 @@ type CollapsibleHeaderProps = {
 
 直接依赖摘要：
 
-- `@/primitives/radix/collapsible`
+- `@/components/_primitives/radix/collapsible`
 
 实现注意：
 

@@ -1,4 +1,4 @@
-import { DancingLetters } from "@/components/ui/chamaac-dancing-letters"
+import { DancingLetters } from "@/components/ui/dancing-letters"
 
 export default function Demo() {
   return (

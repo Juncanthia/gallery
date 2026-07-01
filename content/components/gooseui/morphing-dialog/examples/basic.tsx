@@ -8,7 +8,7 @@ import {
   MorphingDialogSubtitle,
   MorphingDialogDescription,
   MorphingDialogClose,
-} from "@/components/ui/gooseui-morphing-dialog"
+} from "@/components/ui/morphing-dialog"
 
 export default function Demo() {
   return (

@@ -20,7 +20,7 @@ BubbleMenu 气泡风格导航菜单组件，圆形菜单项以弹性动画展开
 <ComponentShowcase id="rb/bubble-menu" path="rb/bubble-menu/basic" />
 
 ```tsx
-import { BubbleMenu } from "@/components/ui/rb-bubble-menu"
+import { BubbleMenu } from "@/components/ui/bubble-menu"
 
 export default function Demo() {
   return <BubbleMenu />
@@ -30,7 +30,7 @@ export default function Demo() {
 ### 自定义菜单项
 
 ```tsx
-import { BubbleMenu } from "@/components/ui/rb-bubble-menu"
+import { BubbleMenu } from "@/components/ui/bubble-menu"
 
 export default function CustomDemo() {
   return (
@@ -102,7 +102,7 @@ ResizeObserver 监听窗口宽度变化，宽度 < 900px 时所有气泡的 rota
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/rb-bubble-menu` 导入。
+1. 从 `@/components/ui/bubble-menu` 导入。
 2. 依赖 `gsap` 库。
 3. 附带样式表 `bubble-menu.css`。
 4. `items` 数组为空时使用内置的 5 个默认导航项。

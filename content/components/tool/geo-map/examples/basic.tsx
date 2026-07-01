@@ -1,4 +1,4 @@
-import { GeoMap } from "@/components/ui/tool-geo-map"
+import { GeoMap } from "@/components/ui/geo-map"
 
 export default function Demo() {
   return (

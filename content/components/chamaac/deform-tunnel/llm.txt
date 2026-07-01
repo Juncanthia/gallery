@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { DeformTunnel } from "@/components/ui/chamaac-deform-tunnel"
+import { DeformTunnel } from "@/components/ui/deform-tunnel"
 
 export default function Demo() {
   return (
@@ -137,7 +137,7 @@ interface DeformTunnelProps {
 
 当 AI 生成本项目 DeformTunnel 代码时，应遵守：
 
-1. 从 `@/components/ui/chamaac-deform-tunnel` 导入 `DeformTunnel`，不要从 `@/components/chamaac/deform-tunnel/deform-tunnel` 导入。
+1. 从 `@/components/ui/deform-tunnel` 导入 `DeformTunnel`，不要从 `@/components/effects/backgrounds/chamaac/deform-tunnel/deform-tunnel` 导入。
 2. 外层容器必须设置 `relative` 定位和明确宽高。
 3. 只使用本文件 API 摘要和源码中存在的 props。
 4. 不要引入 `three`、`@react-three/fiber`、`antd` 作为使用该组件的前置依赖。

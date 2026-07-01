@@ -12,7 +12,7 @@ import {
   type CollapsibleProps as CollapsibleRootProps,
   type CollapsibleTriggerProps,
   type CollapsibleContentProps,
-} from '@/primitives/radix/collapsible';
+} from '@/components/_primitives/radix/collapsible';
 
 type CollapsibleTriggerMode = 'header' | 'icon' | 'disabled';
 

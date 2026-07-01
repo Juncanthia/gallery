@@ -53,7 +53,7 @@ ControlsProvider 包裹筛选控件区域，子组件通过 `useControls` 获取
 
 ```tsx
 import { ControlsProvider } from "@/components/ui/dt-controls"
-import { useControls } from "@/components/data-table-filters/components/controls"
+import { useControls } from "@/components/data-display/data-table-filters/components/controls"
 
 function Demo() {
   return (

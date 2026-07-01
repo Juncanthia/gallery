@@ -2,7 +2,7 @@
 
 ## Import
 ```
-import { Hitbox } from "@/components/ui/dice-hitbox"
+import { Hitbox } from "@/components/ui/hitbox"
 ```
 
 ## Props
@@ -19,7 +19,7 @@ import { Hitbox } from "@/components/ui/dice-hitbox"
 
 ### Basic (expand all sides by 12px)
 ```tsx
-import { Hitbox } from "@/components/ui/dice-hitbox"
+import { Hitbox } from "@/components/ui/hitbox"
 
 <Hitbox>
   <button className="size-8 rounded border">×</button>
@@ -78,7 +78,7 @@ import { Hitbox } from "@/components/ui/dice-hitbox"
 ```
 
 ## Constraints
-- DO NOT import from `antd`. Use `@/components/ui/dice-hitbox`.
+- DO NOT import from `antd`. Use `@/components/ui/hitbox`.
 - Hitbox uses Radix Slot; it must wrap a single child element and merges attributes into it.
 - The hit area is created via `::after` pseudo-element — it does NOT change the child's box model or layout.
 - `debug` should be removed in production code.

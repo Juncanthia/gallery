@@ -1,4 +1,4 @@
-import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/bklit-legend"
+import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/legend"
 
 const items = [
   { label: "产品 A", value: 450, maxValue: 600, color: "var(--chart-1)" },

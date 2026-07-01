@@ -1,5 +1,5 @@
-import { ComposedChart } from "@/components/ui/bklit-composed-chart"
-import { Line, Area, SeriesBar } from "@/components/bklit/charts"
+import { ComposedChart } from "@/components/ui/composed-chart-bklit"
+import { Line, Area, SeriesBar } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), line: 100, area: 80, bar: 200 },

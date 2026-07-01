@@ -1,7 +1,7 @@
 [等值区域图 / ChoroplethChart]
-导入: import { ChoroplethChart } from "@/components/ui/bklit-choropleth-chart"
-子组件导入: import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/bklit/charts"
-包来源: @/components/bklit/charts/choropleth
+导入: import { ChoroplethChart } from "@/components/ui/choropleth-chart"
+子组件导入: import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/charts/bklit/charts"
+包来源: @/components/charts/bklit/charts/choropleth
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -63,8 +63,8 @@
 ### 基础用法（带颜色映射和 Tooltip）
 
 ```tsx
-import { ChoroplethChart } from "@/components/ui/bklit-choropleth-chart"
-import { ChoroplethFeatureComponent, ChoroplethTooltip } from "@/components/bklit/charts"
+import { ChoroplethChart } from "@/components/ui/choropleth-chart"
+import { ChoroplethFeatureComponent, ChoroplethTooltip } from "@/components/charts/bklit/charts"
 import type { FeatureCollection, Geometry } from "geojson"
 
 const geoData: FeatureCollection<Geometry, { name: string; value: number }> = {
@@ -97,8 +97,8 @@ export default function Demo() {
 ### 带经纬线和缩放的完整示例
 
 ```tsx
-import { ChoroplethChart } from "@/components/ui/bklit-choropleth-chart"
-import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/bklit/charts"
+import { ChoroplethChart } from "@/components/ui/choropleth-chart"
+import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return (

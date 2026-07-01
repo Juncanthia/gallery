@@ -1,7 +1,7 @@
 [柱状图 / BarChart]
-导入: import { BarChart } from "@/components/ui/bklit-bar-chart"
-子组件导入: import { Bar } from "@/components/bklit/charts"
-包来源: @/components/bklit/charts (bar-chart.tsx, bar.tsx)
+导入: import { BarChart } from "@/components/ui/bar-chart-bklit"
+子组件导入: import { Bar } from "@/components/charts/bklit/charts"
+包来源: @/components/charts/bklit/charts (bar-chart.tsx, bar.tsx)
 组件类型: 图表 / BKLit Charts
 依赖: @visx/scale, @visx/responsive, @visx/event, motion (framer-motion)
 
@@ -54,8 +54,8 @@
 
 ### 基础柱状图
 ```tsx
-import { BarChart } from "@/components/ui/bklit-bar-chart"
-import { Bar } from "@/components/bklit/charts"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { Bar } from "@/components/charts/bklit/charts"
 
 const data = [
   { name: "一月", value: 400 },
@@ -76,8 +76,8 @@ export default function Demo() {
 
 ### 多系列分组对比（分组柱状图）
 ```tsx
-import { BarChart } from "@/components/ui/bklit-bar-chart"
-import { Bar } from "@/components/bklit/charts"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { Bar } from "@/components/charts/bklit/charts"
 
 const data = [
   { month: "1月", budget: 400, actual: 380 },
@@ -99,8 +99,8 @@ export default function Demo() {
 
 ### 堆叠柱状图 + 横向布局
 ```tsx
-import { BarChart } from "@/components/ui/bklit-bar-chart"
-import { Bar } from "@/components/bklit/charts"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { Bar } from "@/components/charts/bklit/charts"
 
 const data = [
   { name: "产品A", 直销: 320, 渠道: 180, 线上: 150 },
@@ -121,7 +121,7 @@ export default function Demo() {
 
 ### 加载骨架状态
 ```tsx
-import { BarChart } from "@/components/ui/bklit-bar-chart"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
 
 export default function LoadingDemo() {
   return <BarChart data={[]} status="loading" />
@@ -137,7 +137,7 @@ export default function LoadingDemo() {
 - 堆叠模式自动计算累计偏移量
 
 ## 约束与最佳实践
-1. 导入路径：主组件 `@/components/ui/bklit-bar-chart`，子组件 `@/components/bklit/charts`
+1. 导入路径：主组件 `@/components/ui/bar-chart-bklit`，子组件 `@/components/charts/bklit/charts`
 2. 数据须为对象数组，每个对象必须包含 xDataKey 字段和一个或多个数值字段
 3. 父容器须有明确尺寸（`aspectRatio` 或固定宽高），否则 SVG 尺寸为零不可见
 4. 至少传入一个 Bar 子组件，否则图表只有空坐标系

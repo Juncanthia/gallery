@@ -1,4 +1,4 @@
-import { ScrollContainer } from "@/components/ui/gooseui-scroll-container"
+import { ScrollContainer } from "@/components/ui/scroll-container"
 
 export default function Demo() {
   return (

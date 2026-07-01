@@ -1,4 +1,4 @@
-import { Beams } from "@/components/ui/rb-beams"
+import { Beams } from "@/components/ui/beams"
 
 export default function BeamsBasicExample() {
   return <Beams />

@@ -1,9 +1,9 @@
-import { Root } from "@/components/ui/limeplay-volume-control"
+import { Root } from "@/components/ui/volume-control"
 import {
   Track,
   Progress,
   Thumb,
-} from "@/components/limeplay/ui/volume-control"
+} from "@/components/media/ui/volume-control"
 
 export default function Demo() {
   return (

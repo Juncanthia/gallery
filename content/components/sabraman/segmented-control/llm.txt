@@ -46,7 +46,7 @@ macOS Aqua 风格的分段控件，用于在多个互斥选项之间切换。Leg
 
 ```tsx
 import { useState } from "react"
-import { LegacySegmentedControl } from "@/components/ui/sabraman-segmented-control"
+import { LegacySegmentedControl } from "@/components/ui/segmented-control"
 
 export default function Demo() {
   const [value, setValue] = useState("option1")
@@ -69,7 +69,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { LegacySegmentedControl } from "@/components/ui/sabraman-segmented-control"
+import { LegacySegmentedControl } from "@/components/ui/segmented-control"
 
 export default function Demo() {
   const [value, setValue] = useState("list")
@@ -91,7 +91,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { LegacySegmentedControl } from "@/components/ui/sabraman-segmented-control"
+import { LegacySegmentedControl } from "@/components/ui/segmented-control"
 
 type ViewMode = "list" | "grid" | "detail"
 
@@ -226,7 +226,7 @@ items={[
 
 当 AI 生成本项目 LegacySegmentedControl 代码时，应遵守：
 
-1. 从 `@/components/ui/sabraman-segmented-control` 导入
+1. 从 `@/components/ui/segmented-control` 导入
 2. 必须同时提供 `value` 和 `onValueChange`（受控组件）
 3. `items` 中每项必须包含 `label` 和 `value`，`width` 可选
 4. 可使用 TypeScript 泛型 `<LegacySegmentedControl<"a" | "b">` 约束 value 类型

@@ -26,7 +26,7 @@ stack:
 
 FooterSimple 是一个自包含的简洁页脚区块组件，无需传入任何 props，直接渲染居中对齐的页脚 UI。
 
-- **导入路径**：`import { FooterSimple } from "@/components/ui/gooseui-footer-simple"`
+- **导入路径**：`import { FooterSimple } from "@/components/ui/footer-simple"`
 - **用法**：`<FooterSimple />`
 - **约束**：
   - 不接收任何 props，所有内容在组件内部定义。

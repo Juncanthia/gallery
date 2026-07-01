@@ -1,6 +1,6 @@
 "use client"
 
-import { ApprovalCard } from "@/components/ui/tool-approval-card"
+import { ApprovalCard } from "@/components/ui/approval-card"
 
 export default function Demo() {
   return (

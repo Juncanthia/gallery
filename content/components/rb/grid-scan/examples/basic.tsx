@@ -1,4 +1,4 @@
-import { GridScan } from "@/components/ui/rb-grid-scan"
+import { GridScan } from "@/components/ui/grid-scan"
 
 export default function GridScanBasicExample() {
   return <GridScan />

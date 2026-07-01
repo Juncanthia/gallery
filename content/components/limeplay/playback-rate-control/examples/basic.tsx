@@ -1,4 +1,4 @@
-import { PlaybackRateControl } from "@/components/ui/limeplay-playback-rate-control"
+import { PlaybackRateControl } from "@/components/ui/playback-rate-control"
 
 export default function Demo() {
   return (

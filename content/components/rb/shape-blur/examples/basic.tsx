@@ -1,4 +1,4 @@
-import { ShapeBlur } from "@/components/ui/rb-shape-blur"
+import { ShapeBlur } from "@/components/ui/shape-blur"
 
 export default function ShapeBlurBasicExample() {
   return (

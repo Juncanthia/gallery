@@ -193,7 +193,7 @@ type AccordionTriggerProps = AccordionTriggerPrimitiveProps & {
 
 直接依赖摘要：
 
-- `@/primitives/radix/accordion`
+- `@/components/_primitives/radix/accordion`
 
 实现注意：
 

@@ -2,7 +2,7 @@
 category: Blocks
 title: Tags
 subtitle: 标签组
-description: 多选标签组件，基于 Combobox + Command + Popover 构建，支持搜索过滤、创建新标签、Badge 展示已选值和移除操作。
+description: 多选标签组件，基于 Command + Popover 构建，支持搜索过滤、创建新标签、Badge 展示已选值和移除操作。
 demo:
   cols: 1
 group:
@@ -27,7 +27,7 @@ stack:
 
 # Tags 标签组
 
-多选标签组件，基于 Combobox + Command + Popover 构建。已合并入 `@/components/blocks/combobox`，`@/components/blocks/tags` 仅作为向后兼容的 barrel 重导出。
+多选标签组件，基于 Command + Popover 构建。实现位于 `src/components/blocks/combobox/index.tsx`（该文件历史上曾同时容纳一个通用 Combobox primitive；该 primitive 与 `@/components/ui/combobox` 完全重复，已删除，现在这个文件只包含 Tags 实现），`@/components/blocks/tags` 作为对外的 barrel 重导出。
 
 本组件为项目本地复合组件，无 Ant Design Select（mode="multiple"）直接对应。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
 
@@ -209,7 +209,7 @@ type TagsItemProps = ComponentProps<typeof CommandItem>;
 ## 样式模型 {#styling-model}
 
 - 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
-- 组件基于 Combobox + Popover + Command 组合，交互和视觉由这些 primitive 提供。
+- 组件基于 Popover + Command 组合，交互和视觉由这些 primitive 提供。
 - `TagsTrigger` 按钮使用 `h-auto w-full justify-between p-2`，支持内容换行。
 - `TagsValue` 基于 Badge 组件，带 `flex items-center gap-2` 布局。
 - `TagsContent` 下拉宽度通过 ResizeObserver 与触发器同步。
@@ -236,7 +236,7 @@ type TagsItemProps = ComponentProps<typeof CommandItem>;
 实现注意：
 
 1. 组件 API 以 `src/components/blocks/combobox/index.tsx` 中 Tags 相关的 TypeScript 类型为准。
-2. Tags 已合并入 Combobox 文件，`@/components/blocks/tags` 仅为重导出，所有修改应在 `combobox/index.tsx` 中进行。
+2. Tags 的实际实现位于 `src/components/blocks/combobox/index.tsx`（该文件不再包含独立的 Combobox primitive），`@/components/blocks/tags` 仅为重导出，所有修改应在 `combobox/index.tsx` 中进行。
 3. 组件使用内部 context（`TagsContext`）共享状态，子组件通过 `useTagsContext` 访问。
 4. `TagsTrigger` 使用 ResizeObserver 自动同步下拉宽度。
 5. 默认导入路径为 `@/components/ui/tags`。

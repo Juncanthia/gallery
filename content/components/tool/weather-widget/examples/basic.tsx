@@ -1,4 +1,4 @@
-import { WeatherWidget } from "@/components/ui/tool-weather-widget"
+import { WeatherWidget } from "@/components/ui/weather-widget"
 
 export default function Demo() {
   return (

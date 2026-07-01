@@ -1,7 +1,7 @@
 [环形图 / RingChart]
-导入: import { RingChart } from "@/components/ui/bklit-ring-chart"
-子组件: import { Ring, RingCenter } from "@/components/bklit/charts"
-包来源: @/components/bklit/charts
+导入: import { RingChart } from "@/components/ui/ring-chart"
+子组件: import { Ring, RingCenter } from "@/components/charts/bklit/charts"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 底层库: @visx/shape, motion (Framer Motion)
 
@@ -72,8 +72,8 @@
 ### 基础用法：三层嵌套环
 
 ```tsx
-import { RingChart } from "@/components/ui/bklit-ring-chart"
-import { Ring } from "@/components/bklit/charts"
+import { RingChart } from "@/components/ui/ring-chart"
+import { Ring } from "@/components/charts/bklit/charts"
 
 const data = [
   { label: "Q1", value: 85, maxValue: 100, color: "var(--chart-1)" },
@@ -95,8 +95,8 @@ export default function Demo() {
 ### 带中心文字
 
 ```tsx
-import { RingChart } from "@/components/ui/bklit-ring-chart"
-import { Ring, RingCenter } from "@/components/bklit/charts"
+import { RingChart } from "@/components/ui/ring-chart"
+import { Ring, RingCenter } from "@/components/charts/bklit/charts"
 
 const data = [
   { label: "完成", value: 75, maxValue: 100, color: "var(--chart-1)" },
@@ -117,8 +117,8 @@ export default function Demo() {
 ### 自定义中心内容
 
 ```tsx
-import { RingChart } from "@/components/ui/bklit-ring-chart"
-import { Ring, RingCenter } from "@/components/bklit/charts"
+import { RingChart } from "@/components/ui/ring-chart"
+import { Ring, RingCenter } from "@/components/charts/bklit/charts"
 
 const data = [
   { label: "已用", value: 65, maxValue: 100, color: "var(--chart-1)" },

@@ -1,4 +1,4 @@
-import { CSSThemeSwitcher } from "@/components/ui/gooseui-css-theme-switcher"
+import { CSSThemeSwitcher } from "@/components/ui/css-theme-switcher"
 
 export default function Demo() {
   return (

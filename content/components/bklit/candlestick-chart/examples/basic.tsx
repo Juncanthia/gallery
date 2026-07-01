@@ -1,5 +1,5 @@
-import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"
-import { Candlestick } from "@/components/bklit/charts"
+import { CandlestickChart } from "@/components/ui/candlestick-chart"
+import { Candlestick } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), open: 100, high: 120, low: 90, close: 110 },

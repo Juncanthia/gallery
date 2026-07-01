@@ -26,8 +26,8 @@
 <ComponentShowcase id="bklit/radar-chart" path="bklit/radar-chart/basic" />
 
 ```tsx
-import { RadarChart } from "@/components/ui/bklit-radar-chart"
-import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/bklit/charts"
+import { RadarChart } from "@/components/ui/radar-chart-bklit"
+import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
 
 const metrics = [
   { key: "speed", label: "速度" },
@@ -182,8 +182,8 @@ const data = [
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入: `import { RadarChart } from "@/components/ui/bklit-radar-chart"`
-- 子组件: `import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/bklit/charts"`
+- 导入: `import { RadarChart } from "@/components/ui/radar-chart-bklit"`
+- 子组件: `import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"`
 - 必须同时提供 `data` 和 `metrics` 两个属性
 - `data` 格式为 `{ label, values: Record<string, number>, color? }[]`
 - `metrics` 格式为 `{ key: string, label: string }[]`

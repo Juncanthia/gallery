@@ -1,7 +1,7 @@
 "use client";
 
-import { ChartContainer } from "@/components/ui/evilcharts-chart";
-import type { ChartConfig } from "@/components/evilcharts/components/chart";
+import { ChartContainer } from "@/components/ui/chart-evilcharts";
+import type { ChartConfig } from "@/components/charts/evilcharts/components/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
 const data = [

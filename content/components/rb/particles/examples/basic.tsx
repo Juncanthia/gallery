@@ -1,4 +1,4 @@
-import { Particles } from "@/components/ui/rb-particles"
+import { Particles } from "@/components/ui/particles"
 
 export default function ParticlesBasicExample() {
   return (

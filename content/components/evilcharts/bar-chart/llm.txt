@@ -29,11 +29,11 @@ EvilBarChart 是一个基于 Recharts 的可组合柱状图组件。主组件持
 
 ```tsx
 // 主组件
-import { EvilBarChart } from "@/components/ui/evilcharts-bar-chart"
+import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
 // 子组件
-import { Bar, XAxis, YAxis, Grid, Tooltip, Legend } from "@/components/evilcharts/components/bar-chart"
+import { Bar, XAxis, YAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 // 类型
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 ```
 
 ## 代码示例
@@ -41,9 +41,9 @@ import { type ChartConfig } from "@/components/evilcharts/components/chart"
 ### 基础柱状图
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/evilcharts-bar-chart"
-import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/evilcharts/components/bar-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data = [
   { month: "1月", revenue: 342, cost: 184 },
@@ -73,8 +73,8 @@ export default function Demo() {
 ### 堆叠 + 变体
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/evilcharts-bar-chart"
-import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/evilcharts/components/bar-chart"
+import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
   return (
@@ -93,8 +93,8 @@ export default function Demo() {
 ### 水平布局 + 缩放刷
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/evilcharts-bar-chart"
-import { Bar, XAxis, YAxis, Grid, Tooltip } from "@/components/evilcharts/components/bar-chart"
+import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { Bar, XAxis, YAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
   return (

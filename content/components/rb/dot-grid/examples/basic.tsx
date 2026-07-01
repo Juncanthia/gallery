@@ -1,4 +1,4 @@
-import { DotGrid } from "@/components/ui/rb-dot-grid"
+import { DotGrid } from "@/components/ui/dot-grid"
 
 export default function DotGridBasicExample() {
   return <DotGrid />

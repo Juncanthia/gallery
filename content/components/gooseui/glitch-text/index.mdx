@@ -29,7 +29,7 @@ GlitchText 接收 `text` 属性渲染故障效果文本，默认 `intensity="med
 />
 
 ```tsx
-import { GlitchText } from "@/components/ui/gooseui-glitch-text"
+import { GlitchText } from "@/components/ui/glitch-text-gooseui"
 
 export default function Demo() {
   return (
@@ -101,7 +101,7 @@ GlitchText 默认使用 `currentColor`，继承父元素的文字颜色。在暗
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/gooseui-glitch-text` 导入 `GlitchText`。
+1. 从 `@/components/ui/glitch-text-gooseui` 导入 `GlitchText`。
 2. 必须传入 `text` 属性，组件依赖此属性渲染内容。
 3. `intensity` 使用 `"low"`、`"medium"`、`"high"` 三档字符串，不要传入数字。
 4. `color` 传入 CSS 颜色字符串（如 `"#00ff88"`），非 Tailwind class。

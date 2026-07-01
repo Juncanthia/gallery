@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { LiquidMorph } from "@/components/ui/chamaac-liquid-morph"
+import { LiquidMorph } from "@/components/ui/liquid-morph"
 
 export default function Demo() {
   return (
@@ -136,7 +136,7 @@ interface LiquidMorphProps {
 
 当 AI 生成本项目 LiquidMorph 代码时，应遵守：
 
-1. 从 `@/components/ui/chamaac-liquid-morph` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/ui/liquid-morph` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器具有 `position: relative` 和明确的宽高尺寸。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
 4. 不要引入 Ant Design 相关依赖。

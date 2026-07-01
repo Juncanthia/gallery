@@ -15,7 +15,7 @@ ShinyText 带光泽扫过动效的文字组件，使用 CSS background-clip 和 
 <ComponentShowcase id="rb/shiny-text" path="rb/shiny-text/basic" />
 
 ```tsx
-import { ShinyText } from "@/components/ui/rb-shiny-text"
+import { ShinyText } from "@/components/ui/shiny-text"
 
 export default function Demo() {
   return (
@@ -28,7 +28,7 @@ export default function Demo() {
 
 ### 金色光泽 + 往返动画
 ```tsx
-import { ShinyText } from "@/components/ui/rb-shiny-text"
+import { ShinyText } from "@/components/ui/shiny-text"
 
 export default function Demo() {
   return (
@@ -74,7 +74,7 @@ export default function Demo() {
 `spread` 参数控制渐变角度，值越小高光带越窄（更锐利的扫光），值越大高光带越宽（更柔和的过渡）。推荐范围 60-150。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-shiny-text` 导入。
+1. 从 `@/components/ui/shiny-text` 导入。
 2. 依赖 `framer-motion`，确保项目已安装。
 3. 组件使用 `useAnimationFrame` 驱动动画，在 `disabled=true` 时会跳过 frame 循环以节省性能。
 4. 适合深色背景使用；浅色背景下请确保 `color` 和背景有足够对比度。

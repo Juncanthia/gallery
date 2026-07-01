@@ -1,8 +1,8 @@
 "use client"
 
-import { EvilRadialChart } from "@/components/ui/evilcharts-radial-chart"
-import { RadialBar, Tooltip, Legend } from "@/components/evilcharts/components/radial-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { EvilRadialChart } from "@/components/ui/radial-chart"
+import { RadialBar, Tooltip, Legend } from "@/components/charts/evilcharts/components/radial-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data = [
   { browser: "chrome", visitors: 275 },

@@ -30,11 +30,11 @@ EvilBrush 核心概念：
 />
 
 ```tsx
-import { EvilBrush } from "@/components/ui/evilcharts-brush"
-import { useEvilBrush } from "@/components/evilcharts/components/brush"
-import { EvilAreaChart } from "@/components/ui/evilcharts-area-chart"
-import { Area, XAxis, Grid, Tooltip } from "@/components/evilcharts/components/area-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { EvilBrush } from "@/components/ui/brush"
+import { useEvilBrush } from "@/components/charts/evilcharts/components/brush"
+import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
+import { Area, XAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/area-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const chartConfig = {
   sales: {
@@ -197,7 +197,7 @@ const [range, setRange] = useState({ startIndex: 0, endIndex: 29 })
 
 AI 生成 EvilBrush 代码时：
 
-1. 从 `@/components/ui/evilcharts-brush` 导入 `EvilBrush`；从 `@/components/evilcharts/components/brush` 导入 `useEvilBrush`。
+1. 从 `@/components/ui/brush` 导入 `EvilBrush`；从 `@/components/charts/evilcharts/components/brush` 导入 `useEvilBrush`。
 2. `chartConfig` 必须满足 `ChartConfig` 类型，键名与 data 中的字段和 `dataKeys` 对应。
 3. 必须提供 `data`（完整数据集）和 `chartConfig`。推荐提供 `xDataKey` 以显示手柄标签。
 4. 联动主图表时使用 `useEvilBrush` hook，不要手动计算 `visibleData`。

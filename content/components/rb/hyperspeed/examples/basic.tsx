@@ -1,4 +1,4 @@
-import { Hyperspeed } from "@/components/ui/rb-hyperspeed"
+import { Hyperspeed } from "@/components/ui/hyperspeed"
 
 export default function HyperspeedBasicExample() {
   return (

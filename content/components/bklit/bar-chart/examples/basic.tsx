@@ -1,5 +1,5 @@
-import { BarChart } from "@/components/ui/bklit-bar-chart"
-import { Bar } from "@/components/bklit/charts"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { Bar } from "@/components/charts/bklit/charts"
 
 const data = [
   { name: "一月", value: 400 },

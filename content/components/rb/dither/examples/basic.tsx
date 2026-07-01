@@ -1,4 +1,4 @@
-import { Dither } from "@/components/ui/rb-dither"
+import { Dither } from "@/components/ui/dither"
 
 export default function DitherBasicExample() {
   return <Dither />

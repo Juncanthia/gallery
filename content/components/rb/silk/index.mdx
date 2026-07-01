@@ -16,13 +16,13 @@ Silk 基于 React Three Fiber 的丝绸纹理着色器效果组件，使用 GLSL
 <ComponentShowcase id="rb/silk" path="rb/silk/basic" />
 
 ```tsx
-import { Silk } from "@/components/ui/rb-silk"
+import { Silk } from "@/components/ui/silk"
 export default function Demo() { return <div className="w-full h-64 relative"><Silk /></div> }
 ```
 
 ### 暖色调 + 高噪声纹理
 ```tsx
-import { Silk } from "@/components/ui/rb-silk"
+import { Silk } from "@/components/ui/silk"
 
 export default function Demo() {
   return (
@@ -60,7 +60,7 @@ export default function Demo() {
 组件使用 `@react-three/fiber` 的 `Canvas` 和 `frameloop="always"`，持续以 60fps 渲染动画。如果组件不在视口内，建议通过条件渲染卸载以节省资源。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-silk` 导入。
+1. 从 `@/components/ui/silk` 导入。
 2. 依赖 `@react-three/fiber` 和 `three`，确保项目已安装。
 3. 组件需要父容器设置明确的宽高。
 4. Canvas 默认 `frameloop="always"`，持续逐帧渲染，非视口内建议条件渲染。

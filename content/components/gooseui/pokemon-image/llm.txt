@@ -49,7 +49,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { PokemonImage } from "@/components/ui/gooseui-pokemon-image"
+import { PokemonImage } from "@/components/ui/pokemon-image"
 
 export default function Demo() {
   return (
@@ -129,7 +129,7 @@ PokemonImage 渲染原生 `<img>` 元素：
 
 当 AI 生成本项目 PokemonImage 代码时，应遵守：
 
-1. 从 `@/components/ui/gooseui-pokemon-image` 导入 `PokemonImage`。
+1. 从 `@/components/ui/pokemon-image` 导入 `PokemonImage`。
 2. 必须传入 `name`（string）和 `number`（number）两个属性。
 3. `number` 为宝可梦全国图鉴编号，数字类型。
 4. 不要引入 Ant Design 相关依赖。

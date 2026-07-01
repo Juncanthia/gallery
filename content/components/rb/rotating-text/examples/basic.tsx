@@ -1,4 +1,4 @@
-import { RotatingText } from "@/components/ui/rb-rotating-text"
+import { RotatingText } from "@/components/ui/rotating-text"
 
 export default function RotatingTextBasicExample() {
   return <RotatingText />

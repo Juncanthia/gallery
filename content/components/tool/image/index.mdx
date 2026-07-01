@@ -31,7 +31,7 @@ Image 基于原生 &lt;img&gt; 元素构建：
 />
 
 ```tsx
-import { Image } from "@/components/ui/tool-image"
+import { Image } from "@/components/ui/image-tool"
 
 export default function Demo() {
   return (
@@ -55,7 +55,7 @@ export default function Demo() {
 仅展示图片，不包含标题和来源标注区域。
 
 ```tsx
-import { Image } from "@/components/ui/tool-image"
+import { Image } from "@/components/ui/image-tool"
 
 export default function Demo() {
   return (
@@ -74,7 +74,7 @@ export default function Demo() {
 通过 `href` 提供跳转链接，点击图片区域导航到目标页面。
 
 ```tsx
-import { Image } from "@/components/ui/tool-image"
+import { Image } from "@/components/ui/image-tool"
 
 export default function Demo() {
   return (
@@ -95,7 +95,7 @@ export default function Demo() {
 通过 `ratio` 控制宽高比，`fit` 控制图片填充模式。
 
 ```tsx
-import { Image } from "@/components/ui/tool-image"
+import { Image } from "@/components/ui/image-tool"
 
 export default function Demo() {
   return (
@@ -198,7 +198,7 @@ Image 通过 `data-*` 属性暴露稳定的语义结构：
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/tool-image` 导入 `Image`。
+1. 从 `@/components/ui/image-tool` 导入 `Image`。
 2. `id`、`assetId`、`src`、`alt` 为必填属性，缺少会导致 schema 校验失败。
 3. `src` 必须为完整的 HTTPS URL，指向可直接访问的图片文件。
 4. `alt` 必须提供有意义的替代文本，不能为空字符串。

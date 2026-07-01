@@ -1,6 +1,6 @@
 "use client"
 
-import { Terminal } from "@/components/ui/tool-terminal"
+import { Terminal } from "@/components/ui/terminal"
 
 export default function Demo() {
   return (

@@ -1,4 +1,4 @@
-import { VideoPlayer } from "@/components/ui/limeplay-media-player"
+import { VideoPlayer } from "@/components/ui/media-player"
 
 const DEMO_SRC =
   "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"

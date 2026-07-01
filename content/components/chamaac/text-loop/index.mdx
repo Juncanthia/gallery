@@ -30,7 +30,7 @@ TextLoop 文字循环。基于 motion/react 的文字轮播组件，固定前缀
 默认前缀文字为 "Design"，循环文字为 "Limitless"、"Timeless"、"Flawless"，每 3 秒自动切换。
 
 ```tsx
-import { TextLoop } from "@/components/ui/chamaac-text-loop"
+import { TextLoop } from "@/components/ui/text-loop"
 
 export default function Demo() {
   return (
@@ -46,7 +46,7 @@ export default function Demo() {
 通过 `staticText` 和 `rotatingTexts` 属性自定义前缀文字和循环文字。
 
 ```tsx
-import { TextLoop } from "@/components/ui/chamaac-text-loop"
+import { TextLoop } from "@/components/ui/text-loop"
 
 export default function Demo() {
   return (
@@ -65,7 +65,7 @@ export default function Demo() {
 通过 `interval` 属性控制文字切换的时间间隔（毫秒）。
 
 ```tsx
-import { TextLoop } from "@/components/ui/chamaac-text-loop"
+import { TextLoop } from "@/components/ui/text-loop"
 
 export default function Demo() {
   return (
@@ -81,7 +81,7 @@ export default function Demo() {
 通过 `staticTextClassName`、`rotatingTextClassName`、`backgroundClassName`、`cursorClassName` 分别控制各部分样式。
 
 ```tsx
-import { TextLoop } from "@/components/ui/chamaac-text-loop"
+import { TextLoop } from "@/components/ui/text-loop"
 
 export default function Demo() {
   return (
@@ -181,7 +181,7 @@ export default function Demo() {
 
 AI 生成 TextLoop 代码时：
 
-1. 从 `@/components/ui/chamaac-text-loop` 导入 `TextLoop`（具名导出）。
+1. 从 `@/components/ui/text-loop` 导入 `TextLoop`（具名导出）。
 2. 自定义前缀文字使用 `staticText` 属性。
 3. 自定义循环文字使用 `rotatingTexts` 属性，传入字符串数组。
 4. 自定义切换间隔使用 `interval` 属性，单位为毫秒。

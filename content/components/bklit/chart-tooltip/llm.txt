@@ -1,6 +1,6 @@
 [图表提示框 / ChartTooltip]
-导入: import { ChartTooltip } from "@/components/ui/bklit-chart-tooltip"
-包来源: @/components/bklit/charts
+导入: import { ChartTooltip } from "@/components/ui/chart-tooltip"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -60,7 +60,7 @@ ChartTooltip 提供开箱即用的默认渲染（数据点彩色圆点 + 标签 
 将 ChartTooltip 作为 LineChart 的子组件，自动展示 tooltip：
 
 ```tsx
-import { LineChart, Line, ChartTooltip } from "@/components/bklit/charts"
+import { LineChart, Line, ChartTooltip } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), value: 100 },
@@ -85,7 +85,7 @@ export default function Demo() {
 使用 `content` 完全接管 tooltip 渲染：
 
 ```tsx
-import { LineChart, Line, ChartTooltip } from "@/components/bklit/charts"
+import { LineChart, Line, ChartTooltip } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return (
@@ -109,7 +109,7 @@ export default function Demo() {
 使用 `rows` 自定义行数据，适用于多系列图表：
 
 ```tsx
-import { LineChart, Line, ChartTooltip } from "@/components/bklit/charts"
+import { LineChart, Line, ChartTooltip } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return (

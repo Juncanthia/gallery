@@ -1,9 +1,9 @@
 [播放速率控制 / PlaybackRateControl]
-导入: import { PlaybackRateControl } from "@/components/ui/limeplay-playback-rate-control"
-子组件导入: import * as PlaybackRate from "@/components/limeplay/ui/playback-rate"
+导入: import { PlaybackRateControl } from "@/components/ui/playback-rate-control"
+子组件导入: import * as PlaybackRate from "@/components/media/ui/playback-rate"
 Select 组件导入: import * as Select from "@/components/ui/select"
-Store hook: import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"
-包来源: @/components/limeplay/blocks/video-player/components/playback-rate-control.tsx
+Store hook: import { usePlaybackRateStore } from "@/components/media/hooks/use-playback-rate"
+包来源: @/components/media/blocks/video-player/components/playback-rate-control.tsx
 组件类型: 媒体控制 / LimePlay Controls
 依赖: zustand, @radix-ui/react-slot, limeplay media-provider
 
@@ -39,7 +39,7 @@ PlaybackRateControl 是完全自包含的组合组件，无外部 Props。内部
 
 ### 基础用法（推荐）
 ```tsx
-import { PlaybackRateControl } from "@/components/ui/limeplay-playback-rate-control"
+import { PlaybackRateControl } from "@/components/ui/playback-rate-control"
 
 export default function Demo() {
   return (
@@ -54,7 +54,7 @@ export default function Demo() {
 ### 自定义样式
 ```tsx
 import * as Select from "@/components/ui/select"
-import * as PlaybackRate from "@/components/limeplay/ui/playback-rate"
+import * as PlaybackRate from "@/components/media/ui/playback-rate"
 
 export default function CustomDemo() {
   return (
@@ -84,7 +84,7 @@ export default function CustomDemo() {
 
 ### 读取当前速率
 ```tsx
-import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"
+import { usePlaybackRateStore } from "@/components/media/hooks/use-playback-rate"
 
 function CurrentRate() {
   const rate = usePlaybackRateStore((state) => state.value)
@@ -94,7 +94,7 @@ function CurrentRate() {
 
 ### 程序化设置速率
 ```tsx
-import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"
+import { usePlaybackRateStore } from "@/components/media/hooks/use-playback-rate"
 
 function SetRate() {
   const setRate = usePlaybackRateStore((state) => state.setPlaybackRate)

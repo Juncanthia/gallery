@@ -1,6 +1,6 @@
 "use client"
 
-import { Video } from "@/components/ui/tool-video"
+import { Video } from "@/components/ui/video"
 
 export default function Demo() {
   return (

@@ -1,4 +1,4 @@
-import { MetallicPaint } from "@/components/ui/rb-metallic-paint"
+import { MetallicPaint } from "@/components/ui/metallic-paint"
 
 export default function MetallicPaintBasicExample() {
   return (

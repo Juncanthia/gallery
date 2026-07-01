@@ -10,7 +10,7 @@
 - 需要自定义文件预览、校验规则或上传状态渲染的场景。
 
 不推荐：
-- 只需要一个开箱即用、带业务视觉（图标动画、装饰边框）的文档上传卡片——优先查看业务层是否已有类似封装（如 `@/components/extend/components/ui/file-upload`），不要重复造轮子。
+- 只需要一个开箱即用、带业务视觉（图标动画、装饰边框）的文档上传卡片——优先查看业务层是否已有类似封装（如 `@/components/document/components/ui/file-upload`），不要重复造轮子。
 - 需要断点续传、分片上传等复杂传输协议——本组件只负责选择、校验和状态展示，`onUpload` 回调里自行对接传输层。
 
 <h2 id="examples">代码演示</h2>
@@ -250,20 +250,20 @@ const fileCount = useFileUpload((state) => state.files.size)
 />
 ```
 
-### 和 `@/components/extend/components/ui/file-upload` 是什么关系？
+### 和 `@/components/document/components/ui/file-upload` 是什么关系？
 
 两者不是两套互相独立的实现，而是 primitive 与预设（preset）的关系：`extend` 的 `FileUpload` 内部就是用本组件的 `FileUpload`/`FileUploadDropzone`/`useFileUpload` 搭建的，拖拽状态机、accept/大小校验、键盘与粘贴上传等逻辑全部复用本组件，`extend` 只额外补充了业务视觉（图标动效、边框光束、缩略图文件列表）和"每次上传替换文件列表"的业务语义。按需要的自由度选：需要自由组合 UI 或对接真实上传进度，直接用本组件搭；需要开箱即用的文档上传卡片，用 `extend` 的封装。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/file-upload` 导入，不要从 `@/components/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入。
+1. 从 `@/components/ui/file-upload` 导入，不要从 `@/components/_shared/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入。
 2. `FileUploadList` 的 children 必须是普通 `ReactNode`（通常是 `files.map(...)` 的结果），不是 render prop。
 3. `FileUploadItem` 必须传入 `value`（对应的 `File` 对象），否则无法关联到内部文件状态。
 4. 优先使用受控模式（`value` + `onValueChange`）维护文件数组。
 5. 需要展示进度时使用 `FileUploadItemProgress`，并在 `onUpload` 回调中调用 `onProgress` 更新进度。
 6. 需要自定义触发按钮样式时，用 `FileUploadTrigger asChild` 包裹项目的 `Button` 组件，不要重新实现点击打开文件选择框的逻辑。
 7. 不要引入 Ant Design 的 `Upload`/`rc-upload`，也不要引入 `react-dropzone` 等第三方拖拽库。
-8. 业务专属的文档缩略图、图标动画、边框光束等视觉效果属于业务层能力，不要塞进本组件；如需要开箱即用的文档上传卡片，改用 `@/components/extend/components/ui/file-upload`。
+8. 业务专属的文档缩略图、图标动画、边框光束等视觉效果属于业务层能力，不要塞进本组件；如需要开箱即用的文档上传卡片，改用 `@/components/document/components/ui/file-upload`。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="file-upload" />

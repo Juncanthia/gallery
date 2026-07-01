@@ -1,4 +1,4 @@
-import { GhostCursor } from "@/components/ui/rb-ghost-cursor"
+import { GhostCursor } from "@/components/ui/ghost-cursor"
 
 export default function GhostCursorBasicExample() {
   return (

@@ -1,4 +1,4 @@
-import { Magnet } from "@/components/ui/rb-magnet"
+import { Magnet } from "@/components/ui/magnet"
 
 export default function MagnetBasicExample() {
   return (

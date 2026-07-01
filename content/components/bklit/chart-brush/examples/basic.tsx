@@ -1,5 +1,5 @@
-import { LineChart, Line } from "@/components/bklit/charts"
-import { ChartBrush } from "@/components/ui/bklit-chart-brush"
+import { LineChart, Line } from "@/components/charts/bklit/charts"
+import { ChartBrush } from "@/components/ui/chart-brush"
 
 const data = Array.from({ length: 100 }, (_, i) => ({
   date: new Date(2024, 0, i + 1),

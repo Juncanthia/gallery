@@ -1,4 +1,4 @@
-import { MagnetLines } from "@/components/ui/rb-magnet-lines"
+import { MagnetLines } from "@/components/ui/magnet-lines"
 
 export default function MagnetLinesBasicExample() {
   return (

@@ -1,4 +1,4 @@
-import { BlobCursor } from "@/components/ui/rb-blob-cursor"
+import { BlobCursor } from "@/components/ui/blob-cursor"
 
 export default function BlobCursorBasicExample() {
   return (

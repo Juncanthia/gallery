@@ -3,7 +3,7 @@ component: LiquidChrome
 slug: chamaac/liquid-chrome
 
 import: |
-  import LiquidChrome from "@/components/ui/chamaac-liquid-chrome"
+  import LiquidChrome from "@/components/ui/liquid-chrome-chamaac"
 
 usage: |
   <div className="relative w-full h-64 rounded-xl overflow-hidden border">

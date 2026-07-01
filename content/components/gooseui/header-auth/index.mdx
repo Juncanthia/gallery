@@ -27,7 +27,7 @@ HeaderAuth 是一个带认证状态的自适应导航头部组件。支持登录
 />
 
 ```tsx
-import { HeaderAuth } from "@/components/ui/gooseui-header-auth"
+import { HeaderAuth } from "@/components/ui/header-auth"
 
 export default function Demo() {
   return <HeaderAuth />
@@ -39,7 +39,7 @@ export default function Demo() {
 设置 `isLoggedIn={true}` 后，右侧显示用户头像（User 图标）、用户名和 Sign out 按钮。
 
 ```tsx
-import { HeaderAuth } from "@/components/ui/gooseui-header-auth"
+import { HeaderAuth } from "@/components/ui/header-auth"
 
 export default function Demo() {
   return <HeaderAuth isLoggedIn userName="Alex" />
@@ -94,11 +94,11 @@ const navItems = [
 
 AI 生成 HeaderAuth 代码时：
 
-1. 从 `@/components/ui/gooseui-header-auth` 导入 `HeaderAuth`。
+1. 从 `@/components/ui/header-auth` 导入 `HeaderAuth`。
 2. 未登录场景直接使用 `<HeaderAuth />`，显示 Log in / Sign up 按钮。
 3. 已登录场景设置 `isLoggedIn` 和 `userName` 属性。
 4. 不要自行拼装 header 导航 DOM 结构，使用组件内置渲染。
-5. 不要从 gooseui 内部路径导入（如 `@/components/gooseui/components/blocks/headers/header-auth`）。
+5. 不要从 gooseui 内部路径导入（如 `@/components/marketing-blocks/gooseui/headers/header-auth`）。
 6. 不要引入 Ant Design 相关依赖或 shadcn/ui 的 navigation-menu。
 7. 导航项自定义需在组件源码中修改，不要在调用处拼 nav 列表。
 

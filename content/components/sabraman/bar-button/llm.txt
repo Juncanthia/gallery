@@ -29,7 +29,7 @@ LegacyBarButton 是 Sabraman 组件库中的工具栏风格按钮，模拟经典
 ## 导入
 
 ```tsx
-import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+import { LegacyBarButton } from "@/components/ui/bar-button"
 ```
 
 ## 何时使用 {#when-to-use}
@@ -122,7 +122,7 @@ type LegacyBarButtonLayout = "text" | "icon" | "text-icon" | "backward"
 ### 基础用法
 
 ```tsx
-import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+import { LegacyBarButton } from "@/components/ui/bar-button"
 
 export default function Demo() {
   return (
@@ -139,7 +139,7 @@ export default function Demo() {
 
 ```tsx
 import { Search, Download, ChevronRight } from "lucide-react"
-import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+import { LegacyBarButton } from "@/components/ui/bar-button"
 
 export default function Demo() {
   return (
@@ -160,7 +160,7 @@ export default function Demo() {
 ### 返回按钮
 
 ```tsx
-import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+import { LegacyBarButton } from "@/components/ui/bar-button"
 
 export default function Demo() {
   return (
@@ -175,7 +175,7 @@ export default function Demo() {
 ### 禁用状态
 
 ```tsx
-import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+import { LegacyBarButton } from "@/components/ui/bar-button"
 
 export default function Demo() {
   return (
@@ -191,7 +191,7 @@ export default function Demo() {
 ### 点击事件
 
 ```tsx
-import { LegacyBarButton } from "@/components/ui/sabraman-bar-button"
+import { LegacyBarButton } from "@/components/ui/bar-button"
 
 export default function Demo() {
   const handleClick = () => {

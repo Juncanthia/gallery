@@ -1,7 +1,7 @@
 import { Toaster } from "sonner"
 import { Button } from "@/components/ui/button"
-import { customToast } from "@/components/gooseui/lib/toast"
-import { CustomToast } from "@/components/ui/gooseui-custom-toast"
+import { customToast } from "@/components/_shared/gooseui/lib/toast"
+import { CustomToast } from "@/components/ui/custom-toast"
 
 export default function CustomToastBasicExample() {
   return (

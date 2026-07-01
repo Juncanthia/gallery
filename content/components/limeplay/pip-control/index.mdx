@@ -27,8 +27,8 @@
 ```tsx
 import { PictureInPictureIcon } from "@phosphor-icons/react"
 import { Button } from "@/components/ui/button"
-import { PictureInPictureControl } from "@/components/ui/limeplay-pip-control"
-import { usePictureInPictureStore } from "@/components/limeplay/hooks/use-picture-in-picture"
+import { PictureInPictureControl } from "@/components/ui/pip-control"
+import { usePictureInPictureStore } from "@/components/media/hooks/use-picture-in-picture"
 
 export default function Demo() {
   const isPictureInPictureActive = usePictureInPictureStore(
@@ -135,7 +135,7 @@ PictureInPictureControl 设计为 VideoPlayer 的子组件，放置在 `MediaPro
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/limeplay-pip-control` 导入 PictureInPictureControl。
+1. 从 `@/components/ui/pip-control` 导入 PictureInPictureControl。
 2. 必须配合 `MediaProvider` 使用，不能单独渲染。
 3. 推荐使用 `asChild` 模式包裹自定义 Button。
 4. 如需展示状态相关图标，通过 `usePictureInPictureStore` 读取 `active`。

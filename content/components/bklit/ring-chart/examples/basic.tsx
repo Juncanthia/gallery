@@ -1,5 +1,5 @@
-import { RingChart } from "@/components/ui/bklit-ring-chart"
-import { Ring } from "@/components/bklit/charts"
+import { RingChart } from "@/components/ui/ring-chart"
+import { Ring } from "@/components/charts/bklit/charts"
 
 const data = [
   { label: "Q1", value: 85, maxValue: 100, color: "var(--chart-1)" },

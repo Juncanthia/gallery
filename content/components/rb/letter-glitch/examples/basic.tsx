@@ -1,4 +1,4 @@
-import { LetterGlitch } from "@/components/ui/rb-letter-glitch"
+import { LetterGlitch } from "@/components/ui/letter-glitch"
 
 export default function LetterGlitchBasicExample() {
   return (

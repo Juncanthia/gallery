@@ -2,7 +2,7 @@
 component: PromoBanner
 slug: gooseui/promo-banner
 
-import: import { PromoBanner } from "@/components/ui/gooseui-promo-banner"
+import: import { PromoBanner } from "@/components/ui/promo-banner"
 
 usage: |
   <PromoBanner

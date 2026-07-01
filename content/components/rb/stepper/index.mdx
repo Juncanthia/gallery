@@ -14,7 +14,7 @@ Stepper 引导用户按步骤完成任务的导航组件，支持步骤指示器
 ### 基础用法
 <ComponentShowcase id="rb/stepper" path="rb/stepper/basic" />
 ```tsx
-import { Stepper, Step } from "@/components/ui/rb-stepper"
+import { Stepper, Step } from "@/components/ui/stepper"
 export default function Demo() {
   return (
     <Stepper>
@@ -28,7 +28,7 @@ export default function Demo() {
 
 ### 自定义配置
 ```tsx
-import { Stepper, Step } from "@/components/ui/rb-stepper"
+import { Stepper, Step } from "@/components/ui/stepper"
 
 export default function Demo() {
   return (
@@ -92,7 +92,7 @@ export default function Demo() {
 使用 `renderStepIndicator` 属性，接收 `{ step, currentStep, onStepClick }` 参数，返回自定义 ReactNode。配合 `disableStepIndicators` 可完全禁用默认指示器。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-stepper` 导入 `Stepper` 和 `Step`。
+1. 从 `@/components/ui/stepper` 导入 `Stepper` 和 `Step`。
 2. 每个直接子元素需用 `<Step>` 包裹作为一个步骤。
 3. 依赖 `motion/react`（`motion`、`AnimatePresence`）。
 4. 步骤编号从 1 开始，内部通过 `Children.toArray` 处理子元素。

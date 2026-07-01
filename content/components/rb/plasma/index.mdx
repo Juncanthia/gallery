@@ -15,7 +15,7 @@ Plasma 等离子体风格的 WebGL 动态背景，支持色相调节、鼠标交
 <ComponentShowcase id="rb/plasma" path="rb/plasma/basic" />
 
 ```tsx
-import { Plasma } from "@/components/ui/rb-plasma"
+import { Plasma } from "@/components/ui/plasma"
 
 export default function Demo() {
   return (
@@ -29,7 +29,7 @@ export default function Demo() {
 ### 自定义颜色 + PingPong 动画
 
 ```tsx
-import { Plasma } from "@/components/ui/rb-plasma"
+import { Plasma } from "@/components/ui/plasma"
 
 export default function Demo() {
   return (
@@ -73,7 +73,7 @@ export default function Demo() {
 Plasma 使用 WebGL 2.0 渲染，在支持 WebGL 2 的设备上性能良好。组件内置 IntersectionObserver 自动在离屏时暂停。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-plasma` 导入。
+1. 从 `@/components/ui/plasma` 导入。
 2. 组件需要放在有明确宽高的容器中。
 3. 依赖 `ogl` 库（WebGL 2.0），请确保项目已安装。
 4. 默认参数即可正常渲染，自定义颜色需传 hex 色值。

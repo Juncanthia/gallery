@@ -3,7 +3,7 @@ component: BorderBeam
 slug: gooseui/border-beam
 
 import: |
-  import { BorderBeam } from "@/components/ui/gooseui-border-beam"
+  import { BorderBeam } from "@/components/ui/border-beam-gooseui"
 
 usage: |
   <div className="relative overflow-hidden rounded-xl border bg-card p-8 shadow">

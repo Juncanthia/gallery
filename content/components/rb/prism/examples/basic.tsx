@@ -1,4 +1,4 @@
-import { Prism } from "@/components/ui/rb-prism"
+import { Prism } from "@/components/ui/prism"
 
 export default function PrismBasicExample() {
   return (

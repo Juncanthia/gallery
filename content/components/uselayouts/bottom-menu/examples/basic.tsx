@@ -1,4 +1,4 @@
-import { BottomMenu } from "@/components/ui/uselayouts-bottom-menu"
+import { BottomMenu } from "@/components/ui/bottom-menu"
 
 export default function Demo() {
   return <BottomMenu />

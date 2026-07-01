@@ -1,4 +1,4 @@
-import { MorphingInput } from "@/components/ui/uselayouts-morphing-input"
+import { MorphingInput } from "@/components/ui/morphing-input"
 
 export default function Demo() {
   return <MorphingInput />

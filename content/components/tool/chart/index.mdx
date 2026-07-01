@@ -23,7 +23,7 @@
 <ComponentShowcase id="tool/chart" path="tool/chart/basic" />
 
 ```tsx
-import { Chart } from "@/components/ui/tool-chart"
+import { Chart } from "@/components/ui/chart-tool"
 
 const data = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -58,7 +58,7 @@ export default function Demo() {
 设置 `type="line"` 渲染折线图，适用于时间序列趋势展示。
 
 ```tsx
-import { Chart } from "@/components/ui/tool-chart"
+import { Chart } from "@/components/ui/chart-tool"
 
 const data = [
   { month: "Jan", revenue: 4000, cost: 2400 },
@@ -93,7 +93,7 @@ export default function Demo() {
 通过 `colors` 数组按顺序为系列分配颜色，或通过 series 中的 `color` 属性为单个系列指定颜色。
 
 ```tsx
-import { Chart } from "@/components/ui/tool-chart"
+import { Chart } from "@/components/ui/chart-tool"
 
 const data = [
   { name: "Page A", uv: 4000, pv: 2400, amt: 2000 },
@@ -125,7 +125,7 @@ export default function Demo() {
 不传 `title` 和 `description` 时，仅渲染图表区域。
 
 ```tsx
-import { Chart } from "@/components/ui/tool-chart"
+import { Chart } from "@/components/ui/chart-tool"
 
 const data = [
   { category: "A", value: 400 },
@@ -219,7 +219,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/tool-chart` 导入 `Chart`。
+1. 从 `@/components/ui/chart-tool` 导入 `Chart`。
 2. `id`、`type`、`data`、`xKey`、`series` 为必填属性。
 3. `type` 仅支持 `"bar"` 和 `"line"` 两种，不要生成其他图表类型。
 4. `data` 数组每行必须包含 `xKey` 和所有 `series.key` 对应字段，y 值必须为 number 或 null。

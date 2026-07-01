@@ -20,7 +20,7 @@ import {
   type FolderContentProps as FolderContentPrimitiveProps,
   type FileProps as FilePrimitiveProps,
   type FileLabelProps as FileLabelPrimitiveProps,
-} from '@/primitives/radix/file-tree';
+} from '@/components/_primitives/radix/file-tree';
 import { cn } from '@/lib/utils';
 
 type GitStatus = 'untracked' | 'modified' | 'deleted';

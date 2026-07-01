@@ -1,5 +1,5 @@
 import { Bell } from "lucide-react"
-import { LegacyNotification } from "@/components/ui/sabraman-notification"
+import { LegacyNotification } from "@/components/ui/notification"
 
 export default function Demo() {
   return (

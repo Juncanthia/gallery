@@ -1,4 +1,4 @@
-import { OrbitImages } from "@/components/ui/rb-orbit-images"
+import { OrbitImages } from "@/components/ui/orbit-images"
 
 const demoImages = [
   "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=64&h=64&fit=crop",

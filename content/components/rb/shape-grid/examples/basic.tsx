@@ -1,4 +1,4 @@
-import { ShapeGrid } from "@/components/ui/rb-shape-grid"
+import { ShapeGrid } from "@/components/ui/shape-grid"
 
 export default function ShapeGridBasicExample() {
   return (

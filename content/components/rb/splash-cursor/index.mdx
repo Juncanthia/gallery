@@ -16,14 +16,14 @@ SplashCursor 基于 WebGL 流体模拟的全屏鼠标飞溅效果组件，鼠标
 <ComponentShowcase id="rb/splash-cursor" path="rb/splash-cursor/basic" />
 
 ```tsx
-import { SplashCursor } from "@/components/ui/rb-splash-cursor"
+import { SplashCursor } from "@/components/ui/splash-cursor"
 
 export default function Demo() { return <SplashCursor /> }
 ```
 
 ### 固定颜色 + 降低性能开销
 ```tsx
-import { SplashCursor } from "@/components/ui/rb-splash-cursor"
+import { SplashCursor } from "@/components/ui/splash-cursor"
 
 export default function Demo() {
   return (
@@ -70,7 +70,7 @@ export default function Demo() {
 是的，组件内部使用 `position: fixed; top: 0; left: 0; width: 100%; height: 100%` 覆盖整个视口，`pointerEvents: "none"` 确保不阻止下层元素交互（鼠标事件通过 window 监听）。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-splash-cursor` 导入。
+1. 从 `@/components/ui/splash-cursor` 导入。
 2. 组件为全屏 fixed 定位，无需额外容器样式，直接在页面根组件中使用。
 3. 使用 WebGL 实现 Navier-Stokes 流体求解器，性能开销大，建议仅在创意/着陆页使用。
 4. 通过 window 事件监听鼠标移动，`pointerEvents: "none"` 确保下层交互不受影响。

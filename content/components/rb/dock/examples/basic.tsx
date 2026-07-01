@@ -1,4 +1,4 @@
-import { Dock } from "@/components/ui/rb-dock"
+import { Dock } from "@/components/ui/dock-rb"
 
 export default function DockBasicExample() {
   return (

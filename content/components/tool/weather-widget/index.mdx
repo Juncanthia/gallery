@@ -23,7 +23,7 @@
 <ComponentShowcase id="tool/weather-widget" path="tool/weather-widget/basic" />
 
 ```tsx
-import { WeatherWidget } from "@/components/ui/tool-weather-widget"
+import { WeatherWidget } from "@/components/ui/weather-widget"
 
 export default function Demo() {
   return (
@@ -61,7 +61,7 @@ export default function Demo() {
 设置 `units.temperature` 为 `"fahrenheit"` 使用华氏温度显示。
 
 ```tsx
-import { WeatherWidget } from "@/components/ui/tool-weather-widget"
+import { WeatherWidget } from "@/components/ui/weather-widget"
 
 export default function Demo() {
   return (
@@ -98,7 +98,7 @@ export default function Demo() {
 传入 `conditionCode: "rain"` 渲染雨天效果和对应的天气图标。
 
 ```tsx
-import { WeatherWidget } from "@/components/ui/tool-weather-widget"
+import { WeatherWidget } from "@/components/ui/weather-widget"
 
 export default function Demo() {
   return (
@@ -135,7 +135,7 @@ export default function Demo() {
 设置 `effects.enabled` 为 `false` 或传入 `effects.reducedMotion` 禁用天气动画，适用于低性能设备或用户偏好。
 
 ```tsx
-import { WeatherWidget } from "@/components/ui/tool-weather-widget"
+import { WeatherWidget } from "@/components/ui/weather-widget"
 
 export default function Demo() {
   return (
@@ -172,7 +172,7 @@ export default function Demo() {
 传入 `conditionCode: "snow"` 渲染雪天效果。
 
 ```tsx
-import { WeatherWidget } from "@/components/ui/tool-weather-widget"
+import { WeatherWidget } from "@/components/ui/weather-widget"
 
 export default function Demo() {
   return (
@@ -300,7 +300,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/tool-weather-widget` 导入 `WeatherWidget`。
+1. 从 `@/components/ui/weather-widget` 导入 `WeatherWidget`。
 2. `version`、`id`、`location`、`units`、`current`、`forecast`、`time` 为必填属性。
 3. `conditionCode` 仅支持上述 13 种天气代码，不要使用未定义的值。
 4. `temperature`、`tempMin`、`tempMax` 数值需与 `units.temperature` 匹配，不要混用摄氏和华氏值。

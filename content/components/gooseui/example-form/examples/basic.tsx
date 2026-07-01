@@ -1,4 +1,4 @@
-import { ExampleForm } from "@/components/ui/gooseui-example-form"
+import { ExampleForm } from "@/components/ui/example-form"
 
 export default function Demo() {
   return (

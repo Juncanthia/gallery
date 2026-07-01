@@ -1,4 +1,4 @@
-import { OrderSummary } from "@/components/ui/tool-order-summary"
+import { OrderSummary } from "@/components/ui/order-summary-tool"
 
 export default function Demo() {
   return (

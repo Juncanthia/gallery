@@ -1,6 +1,6 @@
 "use client"
 
-import { Switch } from "@/components/ui/dice-switch"
+import { Switch } from "@/components/ui/switch-dice"
 import { useState } from "react"
 
 export default function Demo() {

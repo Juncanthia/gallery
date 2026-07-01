@@ -15,14 +15,14 @@ Counter 基于 Motion Spring 的数字滚动计数器，每位数字独立滚动
 <ComponentShowcase id="rb/counter" path="rb/counter/basic" />
 
 ```tsx
-import { Counter } from "@/components/ui/rb-counter"
+import { Counter } from "@/components/ui/counter"
 export default function Demo() { return <Counter value={12345} /> }
 ```
 
 ### 自定义配置
 
 ```tsx
-import { Counter } from "@/components/ui/rb-counter"
+import { Counter } from "@/components/ui/counter"
 
 export default function Demo() {
   return (
@@ -79,7 +79,7 @@ export default function Demo() {
 源码中未对负数做特殊处理，`places` 自动推断不包含负号。如需展示负数，可通过 CSS `::before` 伪元素添加负号。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-counter` 导入。
+1. 从 `@/components/ui/counter` 导入。
 2. `value` 为必填属性。
 3. 组件依赖 `motion/react` 的 `useSpring` 和 `useTransform`。
 4. 每位数字上下均有 0-9 的完整序列，通过 translateY 改变可见范围实现滚动效果，`overflow: hidden` 由外层容器控制。

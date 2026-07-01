@@ -1,4 +1,4 @@
-import { GlitchText } from "@/components/ui/rb-glitch-text"
+import { GlitchText } from "@/components/ui/glitch-text-rb"
 
 export default function GlitchTextBasicExample() {
   return (

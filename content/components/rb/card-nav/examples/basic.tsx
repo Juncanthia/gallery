@@ -1,4 +1,4 @@
-import { CardNav } from "@/components/ui/rb-card-nav"
+import { CardNav } from "@/components/ui/card-nav"
 
 export default function CardNavBasicExample() {
   return (

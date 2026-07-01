@@ -1,6 +1,6 @@
 "use client"
 
-import { Audio } from "@/components/ui/tool-audio"
+import { Audio } from "@/components/ui/audio"
 
 export default function Demo() {
   return (

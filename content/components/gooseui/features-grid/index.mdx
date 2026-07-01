@@ -30,7 +30,7 @@ FeaturesGrid 接收可选的 title、subtitle 和 features 数组，不传入则
 />
 
 ```tsx
-import { FeaturesGrid } from "@/components/ui/gooseui-features-grid"
+import { FeaturesGrid } from "@/components/ui/features-grid"
 
 export default function Demo() {
   return <FeaturesGrid />
@@ -42,7 +42,7 @@ export default function Demo() {
 通过 `title` 和 `subtitle` 自定义区块标题和描述文案。
 
 ```tsx
-import { FeaturesGrid } from "@/components/ui/gooseui-features-grid"
+import { FeaturesGrid } from "@/components/ui/features-grid"
 
 export default function Demo() {
   return (
@@ -60,7 +60,7 @@ export default function Demo() {
 
 ```tsx
 import { Sparkles, Shield, Zap } from "lucide-react"
-import { FeaturesGrid } from "@/components/ui/gooseui-features-grid"
+import { FeaturesGrid } from "@/components/ui/features-grid"
 
 export default function Demo() {
   return (
@@ -132,7 +132,7 @@ FeaturesGrid 内部使用 CSS Grid 响应式布局，移动端单列、平板双
 
 AI 生成 FeaturesGrid 代码时：
 
-1. 从 `@/components/ui/gooseui-features-grid` 导入 `FeaturesGrid`。
+1. 从 `@/components/ui/features-grid` 导入 `FeaturesGrid`。
 2. `features` 数组中的 `icon` 必须是 React 组件（如 `import { Sparkles } from "lucide-react"`），不能是字符串或 URL。
 3. 不传入任何 props 时展示内置的 6 项默认特性。
 4. 每个 feature 的 `title` 和 `description` 建议简洁，适应卡片内有限空间。

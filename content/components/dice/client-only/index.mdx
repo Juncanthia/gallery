@@ -25,7 +25,7 @@ ClientOnly 仅客户端渲染。在 SSR 阶段渲染 fallback 占位，客户端
 <ComponentShowcase id="dice/client-only" path="dice/client-only/basic" />
 
 ```tsx
-import { ClientOnly } from "@/components/ui/dice-client-only"
+import { ClientOnly } from "@/components/ui/client-only"
 
 export default function Demo() {
   return (
@@ -73,7 +73,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/dice-client-only` 导入 ClientOnly，不要从 `antd` 导入。
+1. 从 `@/components/ui/client-only` 导入 ClientOnly，不要从 `antd` 导入。
 2. `children` 为必填 prop，`fallback` 可选，默认 `null`。
 3. 仅包裹真正依赖浏览器 API 的内容，避免过度使用影响 SEO 和首屏渲染。
 4. fallback 应尽量与 children 占据相同空间，避免水合时的布局跳动。

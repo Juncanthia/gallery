@@ -1,4 +1,4 @@
-import { FloatingLines } from "@/components/ui/rb-floating-lines"
+import { FloatingLines } from "@/components/ui/floating-lines"
 
 export default function FloatingLinesBasicExample() {
   return <FloatingLines />

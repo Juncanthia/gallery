@@ -1,4 +1,4 @@
-import { EvilRadarChart } from "@/components/ui/evilcharts-radar-chart"
+import { EvilRadarChart } from "@/components/ui/radar-chart-evilcharts"
 import {
   Radar,
   PolarGrid,
@@ -7,8 +7,8 @@ import {
   Legend,
   Dot,
   ActiveDot,
-} from "@/components/evilcharts/components/radar-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+} from "@/components/charts/evilcharts/components/radar-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data = [
   { skill: "JavaScript", desktop: 186, mobile: 80 },

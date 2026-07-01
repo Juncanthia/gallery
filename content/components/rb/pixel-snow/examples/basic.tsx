@@ -1,4 +1,4 @@
-import { PixelSnow } from "@/components/ui/rb-pixel-snow"
+import { PixelSnow } from "@/components/ui/pixel-snow"
 
 export default function PixelSnowBasicExample() {
   return (

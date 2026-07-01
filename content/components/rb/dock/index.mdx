@@ -15,7 +15,7 @@ Dock 基于 Motion 的 macOS 风格程序坞组件，图标随鼠标距离动态
 <ComponentShowcase id="rb/dock" path="rb/dock/basic" />
 
 ```tsx
-import { Dock } from "@/components/ui/rb-dock"
+import { Dock } from "@/components/ui/dock-rb"
 const items = [
   { icon: <span>🏠</span>, label: "Home", onClick: () => {} },
   { icon: <span>📁</span>, label: "Files", onClick: () => {} },
@@ -26,7 +26,7 @@ export default function Demo() { return <Dock items={items} /> }
 ### 自定义配置
 
 ```tsx
-import { Dock } from "@/components/ui/rb-dock"
+import { Dock } from "@/components/ui/dock-rb"
 
 const items = [
   { icon: <span className="text-2xl">🏠</span>, label: "首页" },
@@ -79,7 +79,7 @@ export default function Demo() {
 `panelHeight` 是 Dock 栏常态高度，`dockHeight` 是悬停时外容器扩展到的最大高度。这个高度应足够容纳放大的图标（>= magnification），否则图标放大后可能被裁剪。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-dock` 导入。
+1. 从 `@/components/ui/dock-rb` 导入。
 2. `items` 为必填属性，每项需提供 `icon` 和 `label`。
 3. 组件依赖 `motion/react` 的 `useMotionValue`、`useSpring`、`useTransform` 和 `AnimatePresence`。
 4. Dock 通过 `isHovered` MotionValue 在子组件间传递悬停状态，`DockLabel` 订阅该值控制 tooltip 显隐。

@@ -51,7 +51,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { ApprovalCard } from "@/components/ui/tool-approval-card"
+import { ApprovalCard } from "@/components/ui/approval-card"
 
 export default function Demo() {
   return (
@@ -77,7 +77,7 @@ export default function Demo() {
 ### 回执模式（已作出审批决定）
 
 ```tsx
-import { ApprovalCard } from "@/components/ui/tool-approval-card"
+import { ApprovalCard } from "@/components/ui/approval-card"
 
 export default function Demo() {
   return (
@@ -93,7 +93,7 @@ export default function Demo() {
 ### 危险操作（destructive 变体）
 
 ```tsx
-import { ApprovalCard } from "@/components/ui/tool-approval-card"
+import { ApprovalCard } from "@/components/ui/approval-card"
 
 export default function Demo() {
   return (
@@ -225,7 +225,7 @@ type ApprovalDecision = "approved" | "denied";
 
 当 AI 生成本项目 ApprovalCard 代码时，应遵守：
 
-1. 从 `@/components/ui/tool-approval-card` 导入 `ApprovalCard`，不要从 `antd` 导入。
+1. 从 `@/components/ui/approval-card` 导入 `ApprovalCard`，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. `id` 和 `title` 为必填属性。
 4. `icon` 属性传入 lucide-react 图标名称（kebab-case 格式，如 `"calendar"`、`"file-text"`、`"alert-triangle"`）。

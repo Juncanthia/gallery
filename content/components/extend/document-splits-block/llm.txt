@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { DocumentSplitsBlock } from "@/components/ui/extend-document-splits-block"
+import { DocumentSplitsBlock } from "@/components/ui/document-splits-block"
 
 export default function Demo() {
   return (
@@ -175,7 +175,7 @@ type DocumentSplitPageId = `page-${number}`
 
 当 AI 生成本项目 DocumentSplitsBlock 代码时，应遵守：
 
-1. 从 `@/components/ui/extend-document-splits-block` 导入，不要从内部路径导入。
+1. 从 `@/components/ui/document-splits-block` 导入，不要从内部路径导入。
 2. 组件为自包含组件，可选传入 `file` 指定预加载的 PDF URL。
 3. 不要手动组合 PdfBlockResizableShell + PDFViewer + DocumentSplits 来模拟本组件行为。
 4. 不要引入 Ant Design 相关依赖。

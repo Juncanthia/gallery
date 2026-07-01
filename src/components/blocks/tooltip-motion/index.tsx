@@ -11,7 +11,7 @@ import {
   type TooltipProps as TooltipPrimitiveProps,
   type TooltipTriggerProps as TooltipTriggerPrimitiveProps,
   type TooltipContentProps as TooltipContentPrimitiveProps,
-} from '@/primitives/animate/tooltip';
+} from '@/components/_primitives/animate/tooltip';
 import { cn } from '@/lib/utils';
 
 type TooltipProviderProps = TooltipProviderPrimitiveProps;

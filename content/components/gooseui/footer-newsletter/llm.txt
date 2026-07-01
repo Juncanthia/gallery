@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { FooterNewsletter } from "@/components/ui/gooseui-footer-newsletter"
+import { FooterNewsletter } from "@/components/ui/footer-newsletter"
 
 export default function Demo() {
   return <FooterNewsletter />
@@ -129,7 +129,7 @@ FooterNewsletter 渲染为 `<footer>` 语义标签，结构为：
 
 当 AI 生成本项目 FooterNewsletter 代码时，应遵守：
 
-1. 从 `@/components/ui/gooseui-footer-newsletter` 导入 `FooterNewsletter`。
+1. 从 `@/components/ui/footer-newsletter` 导入 `FooterNewsletter`。
 2. 直接使用 `<FooterNewsletter />`，无需传入任何 Props。
 3. 不要从 gooseui 内部路径导入。
 4. 定制导航/社交/文案时在组件源码中修改，不要在调用处覆盖内部结构。

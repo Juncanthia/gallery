@@ -1,4 +1,4 @@
-import { DomeGallery } from "@/components/ui/rb-dome-gallery"
+import { DomeGallery } from "@/components/ui/dome-gallery"
 
 export default function DomeGalleryBasicExample() {
   return (

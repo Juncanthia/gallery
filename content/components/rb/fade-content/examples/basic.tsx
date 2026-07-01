@@ -1,4 +1,4 @@
-import { FadeContent } from "@/components/ui/rb-fade-content"
+import { FadeContent } from "@/components/ui/fade-content"
 
 export default function FadeContentBasicExample() {
   return (

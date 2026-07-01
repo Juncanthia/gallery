@@ -37,7 +37,7 @@ stack:
 ## 导入路径
 
 ```tsx
-import { Plan } from "@/components/ui/tool-plan"
+import { Plan } from "@/components/ui/plan"
 ```
 
 ## Props
@@ -67,7 +67,7 @@ import { Plan } from "@/components/ui/tool-plan"
 ### 基础用法
 
 ```tsx
-import { Plan } from "@/components/ui/tool-plan"
+import { Plan } from "@/components/ui/plan"
 
 <Plan
   id="demo"
@@ -152,7 +152,7 @@ import { Plan } from "@/components/ui/tool-plan"
 
 ## 使用约束
 
-1. 从 `@/components/ui/tool-plan` 导入 `Plan`，不要从 `antd` 或其他路径导入。
+1. 从 `@/components/ui/plan` 导入 `Plan`，不要从 `antd` 或其他路径导入。
 2. `id`、`title`、`todos` 为必填属性，`todos` 至少包含 1 个元素，且所有 `id` 唯一。
 3. 每个 todo 必须设置 `status`：`"pending"` / `"in_progress"` / `"completed"` / `"cancelled"`。
 4. 待办项超过 4 个时，建议设置 `maxVisibleTodos` 控制初始展示数量，避免列表过长。

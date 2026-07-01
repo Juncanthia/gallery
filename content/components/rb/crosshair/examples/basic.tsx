@@ -1,4 +1,4 @@
-import { Crosshair } from "@/components/ui/rb-crosshair"
+import { Crosshair } from "@/components/ui/crosshair"
 
 export default function CrosshairBasicExample() {
   return (

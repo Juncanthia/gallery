@@ -13,7 +13,7 @@ import {
   type TabsTriggerProps as TabsTriggerPrimitiveProps,
   type TabsContentProps as TabsContentPrimitiveProps,
   type TabsContentsProps as TabsContentsPrimitiveProps,
-} from '@/primitives/radix/tabs';
+} from '@/components/_primitives/radix/tabs';
 import { cn } from '@/lib/utils';
 
 type TabsSize = 'small' | 'middle' | 'large';

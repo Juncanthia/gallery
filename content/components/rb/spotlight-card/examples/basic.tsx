@@ -1,4 +1,4 @@
-import { SpotlightCard } from "@/components/ui/rb-spotlight-card"
+import { SpotlightCard } from "@/components/ui/spotlight-card"
 
 export default function SpotlightCardBasicExample() {
   return <SpotlightCard />

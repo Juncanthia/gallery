@@ -1,4 +1,4 @@
-import { GooeyNav } from "@/components/ui/rb-gooey-nav"
+import { GooeyNav } from "@/components/ui/gooey-nav"
 
 export default function GooeyNavBasicExample() {
   return <GooeyNav />

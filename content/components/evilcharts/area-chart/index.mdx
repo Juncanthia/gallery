@@ -34,7 +34,7 @@ EvilAreaChart 采用 **组合模式**（Compound Pattern），图表本体提供
 />
 
 ```tsx
-import { EvilAreaChart } from "@/components/ui/evilcharts-area-chart"
+import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
 import {
   Area,
   XAxis,
@@ -105,7 +105,7 @@ export default function Demo() {
 `stackType="stacked"` 使多个 Area 在垂直方向上叠加，展示各系列对总量的贡献。
 
 ```tsx
-import { EvilAreaChart } from "@/components/ui/evilcharts-area-chart"
+import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
 import { Area, XAxis, Grid, Tooltip, Legend, ActiveDot } from "@/components/ui/evilcharts/components/area-chart"
 import type { ChartConfig } from "@/components/ui/evilcharts/components/chart"
 
@@ -653,7 +653,7 @@ const chartConfig = {
 
 AI 生成 EvilAreaChart 代码时：
 
-1. 从 `@/components/ui/evilcharts-area-chart` 导入 `EvilAreaChart`
+1. 从 `@/components/ui/area-chart-evilcharts` 导入 `EvilAreaChart`
 2. 从 `@/components/ui/evilcharts/components/area-chart` 导入 `Area`, `XAxis`, `YAxis`, `Grid`, `Tooltip`, `Legend`, `Dot`, `ActiveDot`
 3. `config` 使用 `satisfies ChartConfig` 确保类型安全；每个系列必须提供 `light` 和 `dark` 颜色
 4. `Area` 的 `dataKey` 必须同时存在于 `data` 和 `config` 中

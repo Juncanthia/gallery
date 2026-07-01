@@ -1,4 +1,4 @@
-import { FluidGlass } from "@/components/ui/rb-fluid-glass"
+import { FluidGlass } from "@/components/ui/fluid-glass"
 
 export default function FluidGlassBasicExample() {
   return (

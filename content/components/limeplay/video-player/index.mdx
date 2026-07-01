@@ -26,7 +26,7 @@ VideoPlayer 是一个基于 Shaka Player 的功能完整的视频播放器组件
 <ComponentShowcase id="limeplay/video-player" path="limeplay/video-player/basic" />
 
 ```tsx
-import { VideoPlayer } from "@/components/ui/limeplay-video-player"
+import { VideoPlayer } from "@/components/ui/video-player-limeplay"
 
 const DEMO_SRC = "https://ad391cc0d55b44c6a86d232548adc225.mediatailor.us-east-1.amazonaws.com/v1/master/d02fedbbc5a68596164208dd24e9b48aa60dadc7/singssai/master.m3u8"
 
@@ -123,7 +123,7 @@ const playlist = [
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/limeplay-video-player` 导入 VideoPlayer。
+1. 从 `@/components/ui/video-player-limeplay` 导入 VideoPlayer。
 2. `source` 支持 `string`（直接 URL）、`Asset` 对象或 `Asset[]`（播放列表）。
 3. 组件已内置 `MediaProvider`，无需额外包裹。
 4. 通过 `className` 控制尺寸和布局，推荐设置 `aspect-video`。

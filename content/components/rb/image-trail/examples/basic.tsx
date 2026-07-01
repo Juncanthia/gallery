@@ -1,4 +1,4 @@
-import { ImageTrail } from "@/components/ui/rb-image-trail"
+import { ImageTrail } from "@/components/ui/image-trail"
 
 export default function ImageTrailBasicExample() {
   return (

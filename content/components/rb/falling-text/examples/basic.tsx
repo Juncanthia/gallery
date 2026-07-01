@@ -1,4 +1,4 @@
-import { FallingText } from "@/components/ui/rb-falling-text"
+import { FallingText } from "@/components/ui/falling-text"
 
 export default function FallingTextBasicExample() {
   return (

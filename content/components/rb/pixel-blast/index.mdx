@@ -15,7 +15,7 @@ PixelBlast 像素化风格的交互动效背景，支持多种像素形状、涟
 <ComponentShowcase id="rb/pixel-blast" path="rb/pixel-blast/basic" />
 
 ```tsx
-import { PixelBlast } from "@/components/ui/rb-pixel-blast"
+import { PixelBlast } from "@/components/ui/pixel-blast"
 
 export default function Demo() {
   return (
@@ -29,7 +29,7 @@ export default function Demo() {
 ### 圆形像素 + 液态效果
 
 ```tsx
-import { PixelBlast } from "@/components/ui/rb-pixel-blast"
+import { PixelBlast } from "@/components/ui/pixel-blast"
 
 export default function Demo() {
   return (
@@ -88,7 +88,7 @@ export default function Demo() {
 调低 `pixelSize`（增大像素块）、禁用 `liquid` 和降噪，并使用 `autoPauseOffscreen={true}`。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-pixel-blast` 导入。
+1. 从 `@/components/ui/pixel-blast` 导入。
 2. 组件需要放在有明确宽高的容器中。
 3. 液态效果需要 `postprocessing` 和 `three` 依赖。
 4. 不需要特殊效果时，仅设置 `color` 和 `variant` 即可。

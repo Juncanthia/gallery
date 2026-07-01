@@ -1,6 +1,6 @@
 "use client"
 
-import { ColorSwatch } from "@/components/ui/dice-color-swatch"
+import { ColorSwatch } from "@/components/ui/color-swatch"
 
 export default function Demo() {
   return (

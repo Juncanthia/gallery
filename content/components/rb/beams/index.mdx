@@ -20,7 +20,7 @@ Beams 基于 Three.js 和 React Three Fiber 的光束背景组件，通过 Shade
 <ComponentShowcase id="rb/beams" path="rb/beams/basic" />
 
 ```tsx
-import { Beams } from "@/components/ui/rb-beams"
+import { Beams } from "@/components/ui/beams"
 
 export default function Demo() {
   return <Beams />
@@ -30,7 +30,7 @@ export default function Demo() {
 ### 自定义光束参数
 
 ```tsx
-import { Beams } from "@/components/ui/rb-beams"
+import { Beams } from "@/components/ui/beams"
 
 export default function CustomDemo() {
   return (
@@ -74,7 +74,7 @@ export default function CustomDemo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/rb-beams` 导入。
+1. 从 `@/components/ui/beams` 导入。
 2. 需要安装 `three`、`@react-three/fiber`、`@react-three/drei` 依赖。
 3. 内部使用 `Canvas` 组件，自动处理 WebGL 上下文的创建和销毁。
 4. 背景色固定为黑色（`<color attach="background" args={["#000000"]} />`）。

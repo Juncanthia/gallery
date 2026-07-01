@@ -1,8 +1,8 @@
 "use client";
 
-import { EvilPieChart } from "@/components/ui/evilcharts-pie-chart";
-import { Pie, Tooltip, Legend } from "@/components/evilcharts/components/pie-chart";
-import { type ChartConfig } from "@/components/evilcharts/components/chart";
+import { EvilPieChart } from "@/components/ui/pie-chart-evilcharts";
+import { Pie, Tooltip, Legend } from "@/components/charts/evilcharts/components/pie-chart";
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart";
 
 const data = [
   { browser: "chrome", visitors: 275 },

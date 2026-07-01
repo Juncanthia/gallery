@@ -2,8 +2,8 @@
 
 import { useEffect } from "react"
 
-import { Playlist } from "@/components/ui/limeplay-playlist"
-import { usePlaylist } from "@/components/limeplay/hooks/use-playlist"
+import { Playlist } from "@/components/ui/playlist"
+import { usePlaylist } from "@/components/media/hooks/use-playlist"
 
 const DEMO_ITEMS = [
   {

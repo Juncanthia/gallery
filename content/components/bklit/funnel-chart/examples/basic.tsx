@@ -1,4 +1,4 @@
-import { FunnelChart } from "@/components/ui/bklit-funnel-chart"
+import { FunnelChart } from "@/components/ui/funnel-chart"
 
 const data = [
   { label: "访问", value: 5000 },

@@ -7,7 +7,7 @@ import: |
     StackingCardsAnimated,
     StackingCardsContainer,
     StackingCard,
-  } from "@/components/ui/gooseui-stacking-cards"
+  } from "@/components/ui/stacking-cards"
 
 usage: |
   <StackingCardsAnimated>

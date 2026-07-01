@@ -1,7 +1,7 @@
 "use client"
 
 import { ControlsProvider } from "@/components/ui/dt-controls"
-import { useControls } from "@/components/data-table-filters/components/controls"
+import { useControls } from "@/components/data-display/data-table-filters/components/controls"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronRight } from "lucide-react"
 

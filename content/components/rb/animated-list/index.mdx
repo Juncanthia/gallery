@@ -20,7 +20,7 @@ AnimatedList 带动画入场与键盘导航的可滚动列表组件。
 <ComponentShowcase id="rb/animated-list" path="rb/animated-list/basic" />
 
 ```tsx
-import { AnimatedList } from "@/components/ui/rb-animated-list"
+import { AnimatedList } from "@/components/ui/animated-list"
 
 export default function Demo() {
   return (
@@ -35,7 +35,7 @@ export default function Demo() {
 ### 禁用渐变与自定义样式
 
 ```tsx
-import { AnimatedList } from "@/components/ui/rb-animated-list"
+import { AnimatedList } from "@/components/ui/animated-list"
 
 export default function CustomDemo() {
   return (
@@ -76,7 +76,7 @@ ArrowDown / Tab 向下移动，ArrowUp / Shift+Tab 向上移动，Enter 触发 o
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/rb-animated-list` 导入。
+1. 从 `@/components/ui/animated-list` 导入。
 2. 依赖 `motion`（framer-motion）库。
 3. `items` 为字符串数组，内部渲染为深色背景圆角卡片。
 4. 附带样式表 `animated-list.css`，引入后列表项有默认的深色卡片样式。

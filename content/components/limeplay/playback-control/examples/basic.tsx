@@ -6,8 +6,8 @@ import {
 } from "@phosphor-icons/react"
 
 import { Button } from "@/components/ui/button"
-import { PlaybackControl } from "@/components/ui/limeplay-playback-control"
-import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
+import { PlaybackControl } from "@/components/ui/playback-control"
+import { usePlaybackStore } from "@/components/media/hooks/use-playback"
 
 export default function PlaybackControlBasicExample() {
   const status = usePlaybackStore((state) => state.status)

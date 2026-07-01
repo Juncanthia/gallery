@@ -2,7 +2,7 @@
 component: HeaderSimple
 slug: gooseui/header-simple
 
-import: import { HeaderSimple } from "@/components/ui/gooseui-header-simple"
+import: import { HeaderSimple } from "@/components/ui/header-simple"
 
 usage: |
   <HeaderSimple />

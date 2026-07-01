@@ -1,4 +1,4 @@
-import { HeroClassic } from "@/components/ui/gooseui-hero-classic"
+import { HeroClassic } from "@/components/ui/hero-classic"
 
 export default function Demo() {
   return <HeroClassic />

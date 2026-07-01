@@ -208,8 +208,8 @@ interface DataTableStateContextType {
 
 直接依赖：
 
-- `@/components/data-table-filters/components/data-table/data-table-provider`（useDataTable）
-- `@/components/data-table-filters/components/custom/sortable`（Sortable、SortableDragHandle、SortableItem）
+- `@/components/data-display/data-table-filters/components/data-table/data-table-provider`（useDataTable）
+- `@/components/data-display/data-table-filters/components/custom/sortable`（Sortable、SortableDragHandle、SortableItem）
 - `@/components/ui/button`
 - `@/components/ui/command`
 - `@/components/ui/popover`

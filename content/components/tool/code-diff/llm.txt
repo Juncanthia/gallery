@@ -37,7 +37,7 @@ stack:
 ## 导入路径
 
 ```tsx
-import { CodeDiff } from "@/components/ui/tool-code-diff"
+import { CodeDiff } from "@/components/ui/code-diff"
 ```
 
 ## Props
@@ -89,7 +89,7 @@ import { CodeDiff } from "@/components/ui/tool-code-diff"
 ### 基础 file-diff
 
 ```tsx
-import { CodeDiff } from "@/components/ui/tool-code-diff"
+import { CodeDiff } from "@/components/ui/code-diff"
 
 <CodeDiff
   id="demo"
@@ -150,7 +150,7 @@ import { CodeDiff } from "@/components/ui/tool-code-diff"
 
 ## 使用约束
 
-1. 从 `@/components/ui/tool-code-diff` 导入，不要从 `antd` 或其他路径导入。
+1. 从 `@/components/ui/code-diff` 导入，不要从 `antd` 或其他路径导入。
 2. `id` 必须提供且唯一。
 3. 不能在同一个组件实例上同时设置 `patch` 和 `oldCode`/`newCode`。
 4. `language` 尽量指定实际值（如 `typescript`、`python`），以获得准确的语法高亮。

@@ -1,4 +1,4 @@
-import { OrderSummary } from "@/components/ui/manifest-order-summary"
+import { OrderSummary } from "@/components/ui/order-summary-manifest"
 
 const sampleData = {
   items: [

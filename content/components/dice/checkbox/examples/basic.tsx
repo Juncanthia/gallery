@@ -1,6 +1,6 @@
 "use client"
 
-import { Checkbox } from "@/components/ui/dice-checkbox"
+import { Checkbox } from "@/components/ui/checkbox-dice"
 import { useState } from "react"
 
 export default function Demo() {

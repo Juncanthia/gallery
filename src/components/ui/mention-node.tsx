@@ -15,8 +15,8 @@ import {
 } from 'platejs/react';
 
 import { cn } from '@/lib/utils';
-import { useMounted } from '@/hooks/use-mounted';
-import { inlineSuggestionVariants } from '@/lib/suggestion';
+import { useMounted } from '@/components/_shared/hooks/use-mounted';
+import { inlineSuggestionVariants } from '@/components/_shared/lib/suggestion';
 
 import {
   InlineCombobox,

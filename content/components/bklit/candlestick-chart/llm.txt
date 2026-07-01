@@ -1,10 +1,10 @@
 [K线图 / CandlestickChart]
 
 导入:
-import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"
-import { Candlestick } from "@/components/bklit/charts"
+import { CandlestickChart } from "@/components/ui/candlestick-chart"
+import { Candlestick } from "@/components/charts/bklit/charts"
 
-包来源: @/components/bklit/charts
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 依赖: @visx/responsive, @visx/scale, d3-array, motion (motion/react)
 
@@ -61,8 +61,8 @@ import { Candlestick } from "@/components/bklit/charts"
 ### 基础用法
 
 ```tsx
-import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"
-import { Candlestick } from "@/components/bklit/charts"
+import { CandlestickChart } from "@/components/ui/candlestick-chart"
+import { Candlestick } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), open: 100, high: 120, low: 90, close: 110 },
@@ -95,8 +95,8 @@ export default function Demo() {
 ### 带坐标轴和提示框
 
 ```tsx
-import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"
-import { Candlestick, XAxis, YAxis, Grid, ChartTooltip } from "@/components/bklit/charts"
+import { CandlestickChart } from "@/components/ui/candlestick-chart"
+import { Candlestick, XAxis, YAxis, Grid, ChartTooltip } from "@/components/charts/bklit/charts"
 
 <CandlestickChart data={data}>
   <Grid />
@@ -111,7 +111,7 @@ import { Candlestick, XAxis, YAxis, Grid, ChartTooltip } from "@/components/bkli
 
 ```tsx
 import { useState } from "react"
-import { ChartBrush } from "@/components/bklit/charts"
+import { ChartBrush } from "@/components/charts/bklit/charts"
 
 const [xDomain, setXDomain] = useState<[Date, Date]>()
 

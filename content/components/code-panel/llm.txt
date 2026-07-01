@@ -99,7 +99,7 @@ export default function Demo() {
 | cursor | 是否显示打字光标动画（最后一行末尾闪烁竖线） | `boolean` | - |
 | className | 附加样式类，与默认代码区样式合并 | `string` | - |
 
-`CodeBlock` 继承 `Omit<CodeBlockPropsPrimitive, 'code'>`，即 CodeBlock primitive 除 `code` 外的所有属性。`code` 从 Context 自动获取，`theme` 由 `useTheme().resolvedTheme` 自动推断（`'dark'` 或 `'light'`）。代码高亮和打字动画由底层 `CodeBlockPrimitive`（`@/primitives/animate/code-block`）处理。
+`CodeBlock` 继承 `Omit<CodeBlockPropsPrimitive, 'code'>`，即 CodeBlock primitive 除 `code` 外的所有属性。`code` 从 Context 自动获取，`theme` 由 `useTheme().resolvedTheme` 自动推断（`'dark'` 或 `'light'`）。代码高亮和打字动画由底层 `CodeBlockPrimitive`（`@/components/_primitives/animate/code-block`）处理。
 
 ## 样式模型 {#styling-model}
 
@@ -123,7 +123,7 @@ export default function Demo() {
 
 - React（`useRef`、Context）
 - `next-themes`（`useTheme`，用于暗色模式主题切换）
-- `@/primitives/animate/code-block`（`CodeBlock` primitive 及类型）
+- `@/components/_primitives/animate/code-block`（`CodeBlock` primitive 及类型）
 - `@/components/ui/copy-button`（复制按钮）
 - `@/lib/get-strict-context`（强类型 Context 工具）
 - `@/lib/utils`（`cn` 样式合并）

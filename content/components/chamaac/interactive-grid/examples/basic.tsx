@@ -1,4 +1,4 @@
-import { InteractiveGridBackground } from "@/components/ui/chamaac-interactive-grid-background"
+import { InteractiveGridBackground } from "@/components/ui/interactive-grid-background"
 
 export default function Demo() {
   return (

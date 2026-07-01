@@ -1,4 +1,4 @@
-import { TextLoop } from "@/components/ui/chamaac-text-loop"
+import { TextLoop } from "@/components/ui/text-loop"
 
 export default function Demo() {
   return (

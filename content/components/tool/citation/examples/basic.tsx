@@ -1,4 +1,4 @@
-import { Citation } from "@/components/ui/tool-citation"
+import { Citation } from "@/components/ui/citation"
 
 export default function Demo() {
   return (

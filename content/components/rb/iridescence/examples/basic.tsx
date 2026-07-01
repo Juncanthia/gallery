@@ -1,4 +1,4 @@
-import { Iridescence } from "@/components/ui/rb-iridescence"
+import { Iridescence } from "@/components/ui/iridescence"
 
 export default function IridescenceBasicExample() {
   return (

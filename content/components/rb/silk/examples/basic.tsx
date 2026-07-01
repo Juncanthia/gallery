@@ -1,4 +1,4 @@
-import { Silk } from "@/components/ui/rb-silk"
+import { Silk } from "@/components/ui/silk"
 
 export default function SilkBasicExample() {
   return (

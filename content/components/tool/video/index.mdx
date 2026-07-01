@@ -29,7 +29,7 @@ Video 基于原生 `<video>` 元素构建，通过 React Context 管理播放状
 />
 
 ```tsx
-import { Video } from "@/components/ui/tool-video"
+import { Video } from "@/components/ui/video"
 
 export default function Demo() {
   return (
@@ -55,7 +55,7 @@ export default function Demo() {
 仅展示视频播放器，不包含标题浮层和元数据区域。
 
 ```tsx
-import { Video } from "@/components/ui/tool-video"
+import { Video } from "@/components/ui/video"
 
 export default function Demo() {
   return (
@@ -73,7 +73,7 @@ export default function Demo() {
 通过 `href` 提供跳转链接，悬浮层中显示 Open 按钮。
 
 ```tsx
-import { Video } from "@/components/ui/tool-video"
+import { Video } from "@/components/ui/video"
 
 export default function Demo() {
   return (
@@ -94,7 +94,7 @@ export default function Demo() {
 通过 `ratio` 控制宽高比，`fit` 控制视频填充模式。
 
 ```tsx
-import { Video } from "@/components/ui/tool-video"
+import { Video } from "@/components/ui/video"
 
 export default function Demo() {
   return (
@@ -209,7 +209,7 @@ Video 通过 `data-*` 属性暴露稳定的语义结构：
 
 AI 生成 Video 代码时：
 
-1. 从 `@/components/ui/tool-video` 导入 `Video`
+1. 从 `@/components/ui/video` 导入 `Video`
 2. `id`、`assetId`、`src` 为必填属性
 3. `src` 和 `href` 必须使用完整的 https URL
 4. `durationMs` 单位为毫秒，传入正整数

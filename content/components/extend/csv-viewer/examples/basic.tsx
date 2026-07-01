@@ -1,4 +1,4 @@
-import { CsvViewer } from "@/components/ui/extend-csv-viewer"
+import { CsvViewer } from "@/components/ui/csv-viewer"
 
 const SAMPLE_CSV = `Name,Age,City,Role
 Alice,30,New York,Engineer

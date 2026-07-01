@@ -15,7 +15,7 @@ ScrambledText 鼠标靠近时文字随机乱码效果组件，基于 PointerEven
 <ComponentShowcase id="rb/scrambled-text" path="rb/scrambled-text/basic" />
 
 ```tsx
-import { ScrambledText } from "@/components/ui/rb-scrambled-text"
+import { ScrambledText } from "@/components/ui/scrambled-text"
 
 export default function Demo() {
   return (
@@ -28,7 +28,7 @@ export default function Demo() {
 
 ### 自定义乱码字符集和影响范围
 ```tsx
-import { ScrambledText } from "@/components/ui/rb-scrambled-text"
+import { ScrambledText } from "@/components/ui/scrambled-text"
 
 export default function Demo() {
   return (
@@ -64,7 +64,7 @@ export default function Demo() {
 组件将 `children` 作为段落文本处理，空格正常显示。如需换行，可在文本中直接使用换行符。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-scrambled-text` 导入。
+1. 从 `@/components/ui/scrambled-text` 导入。
 2. `children` 为必填属性，必须是纯文本字符串。
 3. 组件使用 PointerEvent（而非 MouseEvent），支持触摸和笔输入。
 4. 适合暗色背景使用（默认白色文字），若需浅色背景请通过 className 覆盖文字颜色。

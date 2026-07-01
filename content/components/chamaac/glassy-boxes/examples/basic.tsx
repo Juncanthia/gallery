@@ -1,4 +1,4 @@
-import { GlassyBoxes } from "@/components/ui/chamaac-glassy-boxes"
+import { GlassyBoxes } from "@/components/ui/glassy-boxes"
 
 export default function Demo() {
   return (

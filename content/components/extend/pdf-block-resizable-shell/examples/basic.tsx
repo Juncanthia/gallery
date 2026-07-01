@@ -1,4 +1,4 @@
-import { PdfBlockResizableShell } from "@/components/ui/extend-pdf-block-resizable-shell"
+import { PdfBlockResizableShell } from "@/components/ui/pdf-block-resizable-shell"
 
 export default function Demo() {
   return (

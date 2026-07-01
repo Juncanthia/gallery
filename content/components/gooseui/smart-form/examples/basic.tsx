@@ -1,4 +1,4 @@
-import { SmartForm, SmartFormField } from "@/components/ui/gooseui-smart-form"
+import { SmartForm, SmartFormField } from "@/components/ui/smart-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

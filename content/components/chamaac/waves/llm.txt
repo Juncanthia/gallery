@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Waves } from "@/components/ui/chamaac-waves"
+import { Waves } from "@/components/ui/waves-chamaac"
 
 export default function Demo() {
   return (
@@ -138,7 +138,7 @@ interface WavesProps {
 
 当 AI 生成本项目 Waves 代码时，应遵守：
 
-1. 从 `@/components/ui/chamaac-waves` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/ui/waves-chamaac` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器具有 `position: relative` 和明确的宽高尺寸。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
 4. 不要引入 Ant Design 相关依赖。

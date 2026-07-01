@@ -1,6 +1,6 @@
 "use client"
 
-import { EvilLineChart } from "@/components/ui/evilcharts-line-chart"
+import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
 import {
   Line,
   XAxis,
@@ -8,8 +8,8 @@ import {
   Legend,
   Dot,
   ActiveDot,
-} from "@/components/evilcharts/components/line-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+} from "@/components/charts/evilcharts/components/line-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data = [
   { month: "1月", desktop: 342, mobile: 184 },

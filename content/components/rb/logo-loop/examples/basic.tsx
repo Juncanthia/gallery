@@ -1,4 +1,4 @@
-import { LogoLoop } from "@/components/ui/rb-logo-loop"
+import { LogoLoop } from "@/components/ui/logo-loop"
 
 export default function LogoLoopBasicExample() {
   return (

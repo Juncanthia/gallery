@@ -1,4 +1,4 @@
-import { FeatureSteps } from "@/components/ui/chamaac-feature-steps"
+import { FeatureSteps } from "@/components/ui/feature-steps"
 
 const features = [
   {

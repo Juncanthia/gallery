@@ -1,4 +1,4 @@
-import { ClickSpark } from "@/components/ui/rb-click-spark"
+import { ClickSpark } from "@/components/ui/click-spark"
 
 export default function ClickSparkBasicExample() {
   return (

@@ -22,7 +22,7 @@ stack:
 ## 导入
 
 ```tsx
-import { Scroller } from "@/components/ui/dice-scroller"
+import { Scroller } from "@/components/ui/scroller"
 ```
 
 ## 属性
@@ -42,7 +42,7 @@ import { Scroller } from "@/components/ui/dice-scroller"
 ## 基础用法
 
 ```tsx
-import { Scroller } from "@/components/ui/dice-scroller"
+import { Scroller } from "@/components/ui/scroller"
 
 export default function Demo() {
   return (

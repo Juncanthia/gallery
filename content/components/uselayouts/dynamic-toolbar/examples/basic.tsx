@@ -1,4 +1,4 @@
-import { DynamicToolbar } from "@/components/ui/uselayouts-dynamic-toolbar"
+import { DynamicToolbar } from "@/components/ui/dynamic-toolbar"
 
 export default function Demo() {
   return (

@@ -1,4 +1,4 @@
-import { MarchingWaves } from "@/components/ui/chamaac-marching-waves"
+import { MarchingWaves } from "@/components/ui/marching-waves"
 
 export default function Demo() {
   return (

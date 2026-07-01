@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { ColorSwatch } from "@/components/ui/dice-color-swatch"
+import { ColorSwatch } from "@/components/ui/color-swatch"
 
 export default function Demo() {
   return (
@@ -166,7 +166,7 @@ interface ColorSwatchProps
 
 当 AI 生成本项目 ColorSwatch 代码时，应遵守：
 
-1. 从 `@/components/ui/dice-color-swatch` 导入，不要从 `antd` 导入。
+1. 从 `@/components/ui/color-swatch` 导入，不要从 `antd` 导入。
 2. `color` prop 传入 CSS 颜色字符串，支持 hex、rgb、rgba、hsl、hsla、transparent 等格式。
 3. 尺寸使用 `size` prop（`"default"` / `"sm"` / `"lg"`），不要通过 className 覆写尺寸。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。

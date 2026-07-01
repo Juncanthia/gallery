@@ -1,4 +1,4 @@
-import { ElectricBorder } from "@/components/ui/rb-electric-border"
+import { ElectricBorder } from "@/components/ui/electric-border"
 
 export default function ElectricBorderBasicExample() {
   return (

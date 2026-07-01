@@ -1,4 +1,4 @@
-import { DecryptedText } from "@/components/ui/rb-decrypted-text"
+import { DecryptedText } from "@/components/ui/decrypted-text"
 
 export default function DecryptedTextBasicExample() {
   return (

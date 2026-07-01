@@ -1,4 +1,4 @@
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   return (

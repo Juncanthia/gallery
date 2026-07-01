@@ -1,4 +1,4 @@
-import { DeformTunnel } from "@/components/ui/chamaac-deform-tunnel"
+import { DeformTunnel } from "@/components/ui/deform-tunnel"
 
 export default function Demo() {
   return (

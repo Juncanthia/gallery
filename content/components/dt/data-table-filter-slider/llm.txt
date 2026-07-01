@@ -177,9 +177,9 @@ type DataTableSliderFilterField<TData> = {
 直接依赖：
 
 - `@radix-ui/react-slider`（滑块底层实现）
-- `@/components/data-table-filters/components/data-table/data-table-provider`（useDataTable）
-- `@/components/data-table-filters/hooks/use-debounce`（500ms 防抖）
-- `@/components/data-table-filters/lib/is-array`（isArrayOfNumbers）
+- `@/components/data-display/data-table-filters/components/data-table/data-table-provider`（useDataTable）
+- `@/components/data-display/data-table-filters/hooks/use-debounce`（500ms 防抖）
+- `@/components/data-display/data-table-filters/lib/is-array`（isArrayOfNumbers）
 - `@/components/ui/input-group`
 - `@/components/ui/label`
 

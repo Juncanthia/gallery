@@ -2,7 +2,7 @@
 component: CurvedText
 slug: gooseui/curved-text
 
-import: import { CurvedText } from "@/components/ui/gooseui-curved-text"
+import: import { CurvedText } from "@/components/ui/curved-text"
 
 usage: |
   <CurvedText

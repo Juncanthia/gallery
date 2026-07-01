@@ -1,4 +1,4 @@
-import { LineChart, Line, ChartTooltip } from "@/components/bklit/charts"
+import { LineChart, Line, ChartTooltip } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), value: 100 },

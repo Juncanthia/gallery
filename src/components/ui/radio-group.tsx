@@ -8,7 +8,7 @@ import {
   RadioGroupIndicator as RadioGroupIndicatorPrimitive,
   type RadioGroupProps as RadioGroupPrimitiveProps,
   type RadioGroupItemProps as RadioGroupItemPrimitiveProps,
-} from '@/primitives/radix/radio-group';
+} from '@/components/_primitives/radix/radio-group';
 import { cn } from '@/lib/utils';
 
 const radioGroupItemVariants = cva(

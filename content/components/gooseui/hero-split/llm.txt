@@ -3,7 +3,7 @@ component: HeroSplit
 slug: gooseui/hero-split
 
 import: |
-  import { HeroSplit } from "@/components/ui/gooseui-hero-split"
+  import { HeroSplit } from "@/components/ui/hero-split"
 
 usage: |
   <HeroSplit />

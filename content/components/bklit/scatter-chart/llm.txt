@@ -1,7 +1,7 @@
 [散点图 / ScatterChart]
-导入: import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
-Scatter 子组件: import { Scatter } from "@/components/bklit/charts"
-包来源: @/components/bklit/charts (基于 @visx)
+导入: import { ScatterChart } from "@/components/ui/scatter-chart"
+Scatter 子组件: import { Scatter } from "@/components/charts/bklit/charts"
+包来源: @/components/charts/bklit/charts (基于 @visx)
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -46,8 +46,8 @@ Scatter 子组件: import { Scatter } from "@/components/bklit/charts"
 
 ### 基础散点图
 ```tsx
-import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
-import { Scatter } from "@/components/bklit/charts"
+import { ScatterChart } from "@/components/ui/scatter-chart"
+import { Scatter } from "@/components/charts/bklit/charts"
 
 const data = [
   { x: 10, y: 20 },
@@ -68,9 +68,9 @@ export default function Demo() {
 
 ### 多系列散点 + Y 轴渐变
 ```tsx
-import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
-import { Scatter } from "@/components/bklit/charts"
-import { Grid } from "@/components/bklit/charts"
+import { ScatterChart } from "@/components/ui/scatter-chart"
+import { Scatter } from "@/components/charts/bklit/charts"
+import { Grid } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: "2024-01-01", revenue: 120, cost: 80 },
@@ -93,8 +93,8 @@ export default function Demo() {
 
 ### 完整配置（含 tooltip 和坐标轴）
 ```tsx
-import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
-import { Scatter, Grid, ChartTooltip, XAxis } from "@/components/bklit/charts"
+import { ScatterChart } from "@/components/ui/scatter-chart"
+import { Scatter, Grid, ChartTooltip, XAxis } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date("2024-01-01"), value: 42 },

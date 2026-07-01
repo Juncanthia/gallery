@@ -1,4 +1,4 @@
-import { Radar } from "@/components/ui/rb-radar"
+import { Radar } from "@/components/ui/radar"
 
 export default function RadarBasicExample() {
   return (

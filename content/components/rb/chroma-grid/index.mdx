@@ -20,7 +20,7 @@ ChromaGrid 色度网格卡片组件，以网格形式展示卡片并带有跟随
 <ComponentShowcase id="rb/chroma-grid" path="rb/chroma-grid/basic" />
 
 ```tsx
-import { ChromaGrid } from "@/components/ui/rb-chroma-grid"
+import { ChromaGrid } from "@/components/ui/chroma-grid"
 
 export default function Demo() {
   return <ChromaGrid />
@@ -30,7 +30,7 @@ export default function Demo() {
 ### 自定义数据和布局
 
 ```tsx
-import { ChromaGrid } from "@/components/ui/rb-chroma-grid"
+import { ChromaGrid } from "@/components/ui/chroma-grid"
 
 const items = [
   {
@@ -98,7 +98,7 @@ ChromaGridItem 类型：
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/rb-chroma-grid` 导入。
+1. 从 `@/components/ui/chroma-grid` 导入。
 2. 依赖 `gsap` 库。
 3. 附带样式表 `chroma-grid.css`。
 4. 点击卡片时若存在 `url` 属性，会通过 `window.open` 新标签页打开。

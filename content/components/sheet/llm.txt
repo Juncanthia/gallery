@@ -179,7 +179,7 @@ type SheetTitleProps = SheetTitlePrimitiveProps;
 直接依赖摘要：
 
 - `@/components/ui/button`
-- `@/primitives/radix/sheet`
+- `@/components/_primitives/radix/sheet`
 
 实现注意：
 

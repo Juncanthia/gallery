@@ -1,5 +1,5 @@
-import { CaptionsContainer } from "@/components/ui/limeplay-captions"
-import { CaptionsStateControl } from "@/components/ui/limeplay-captions-state-control"
+import { CaptionsContainer } from "@/components/ui/captions"
+import { CaptionsStateControl } from "@/components/ui/captions-state-control"
 
 export default function CaptionsStateControlBasicExample() {
   return (

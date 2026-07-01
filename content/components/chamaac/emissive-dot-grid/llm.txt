@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { BurntOrangeDotGrid } from "@/components/ui/chamaac-emissive-dot-grid"
+import { BurntOrangeDotGrid } from "@/components/ui/emissive-dot-grid"
 
 export default function Demo() {
   return (
@@ -136,7 +136,7 @@ interface EmissiveDotGridProps {
 
 当 AI 生成本项目 EmissiveDotGrid 代码时，应遵守：
 
-1. 从 `@/components/ui/chamaac-emissive-dot-grid` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/ui/emissive-dot-grid` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 组件作为全局背景层使用，注意 z-index 层级规划。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
 4. 不要引入 Ant Design 相关依赖。

@@ -1,4 +1,4 @@
-import { BrandsCarousel } from "@/components/ui/gooseui-brands-carousel"
+import { BrandsCarousel } from "@/components/ui/brands-carousel"
 
 export default function Demo() {
   return (

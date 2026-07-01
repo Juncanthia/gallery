@@ -1,4 +1,4 @@
-import { BillingHistory } from "@/components/ui/manifest-billing-history"
+import { BillingHistory } from "@/components/ui/billing-history"
 
 export default function Demo() {
   return (

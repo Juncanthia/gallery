@@ -4,7 +4,7 @@ import {
   Progress as ProgressPrimitive,
   ProgressIndicator as ProgressIndicatorPrimitive,
   type ProgressProps as ProgressPrimitiveProps,
-} from '@/primitives/radix/progress';
+} from '@/components/_primitives/radix/progress';
 import { cn } from '@/lib/utils';
 
 type ProgressStatus = 'normal' | 'exception' | 'active' | 'success';

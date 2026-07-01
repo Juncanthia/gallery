@@ -1,4 +1,4 @@
-import { TrueFocus } from "@/components/ui/rb-true-focus"
+import { TrueFocus } from "@/components/ui/true-focus"
 
 export default function TrueFocusBasicExample() {
   return (

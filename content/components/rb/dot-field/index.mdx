@@ -15,14 +15,14 @@ DotField 基于 Canvas 2D 的点阵交互背景，鼠标悬停时点阵向外膨
 <ComponentShowcase id="rb/dot-field" path="rb/dot-field/basic" />
 
 ```tsx
-import { DotField } from "@/components/ui/rb-dot-field"
+import { DotField } from "@/components/ui/dot-field"
 export default function Demo() { return <DotField /> }
 ```
 
 ### 自定义配置
 
 ```tsx
-import { DotField } from "@/components/ui/rb-dot-field"
+import { DotField } from "@/components/ui/dot-field"
 
 export default function Demo() {
   return (
@@ -76,7 +76,7 @@ export default function Demo() {
 叠加正弦波全局动画，使所有点在 Y/X 轴方向按正弦函数振荡。振幅越大振荡越剧烈。设为 0 则无波形效果。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-dot-field` 导入。
+1. 从 `@/components/ui/dot-field` 导入。
 2. 组件使用 `React.memo` 包裹以提高性能。
 3. 点阵通过 Canvas 2D 绘制，光晕使用独立 SVG `<circle>` + `<radialGradient>` 叠加层。
 4. 支持通过 `{...rest}` 将额外 props 传递到外层 `div` 容器。

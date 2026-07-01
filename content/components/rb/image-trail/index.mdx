@@ -15,7 +15,7 @@ ImageTrail 鼠标移动时依次展示图片序列的拖尾效果组件。
 ### 基础用法
 <ComponentShowcase id="rb/image-trail" path="rb/image-trail/basic" />
 ```tsx
-import { ImageTrail } from "@/components/ui/rb-image-trail"
+import { ImageTrail } from "@/components/ui/image-trail"
 
 const images = [
   "https://picsum.photos/200/250?random=1",
@@ -47,7 +47,7 @@ export default function Demo() {
 鼠标移动速度越快，图片序列切换越频繁。组件内部使用 `threshold=80` 像素作为距离阈值，只有鼠标移动超过该距离才会展示下一张图片。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-image-trail` 导入。
+1. 从 `@/components/ui/image-trail` 导入。
 2. `items` 为图片 URL 数组，至少传入 3 个以上以获得明显效果。
 3. 组件高度固定为 400px，容器含 `overflow-hidden`。
 4. 同时支持 `mousemove` 和 `touchmove` 事件。

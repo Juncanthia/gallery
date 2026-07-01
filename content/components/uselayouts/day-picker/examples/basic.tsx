@@ -1,4 +1,4 @@
-import { TwentyThreeFour } from "@/components/ui/uselayouts-day-picker"
+import { TwentyThreeFour } from "@/components/ui/day-picker"
 
 export default function Demo() {
   return (

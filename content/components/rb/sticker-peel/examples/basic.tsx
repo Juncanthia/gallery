@@ -1,4 +1,4 @@
-import { StickerPeel } from "@/components/ui/rb-sticker-peel"
+import { StickerPeel } from "@/components/ui/sticker-peel"
 
 export default function StickerPeelBasicExample() {
   return (

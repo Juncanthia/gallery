@@ -1,4 +1,4 @@
-import { GradientText } from "@/components/ui/rb-gradient-text"
+import { GradientText } from "@/components/ui/gradient-text"
 
 export default function GradientTextBasicExample() {
   return (

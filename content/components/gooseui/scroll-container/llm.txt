@@ -20,7 +20,7 @@ ScrollContainer 使用现代 CSS `scrollbar-color` + `scrollbar-width`（Chrome 
 ## 使用示例
 
 ```tsx
-import { ScrollContainer } from "@/components/ui/gooseui-scroll-container"
+import { ScrollContainer } from "@/components/ui/scroll-container"
 
 // 默认用法：200px 高容器，default 变体滚动条
 export default function Demo() {
@@ -74,7 +74,7 @@ function ForceVisibleDemo() {
 
 ## 约束
 
-1. 从 `@/components/ui/gooseui-scroll-container` 导入，不要从 gooseui 内部路径导入。
+1. 从 `@/components/ui/scroll-container` 导入，不要从 gooseui 内部路径导入。
 2. 使用现代 CSS `scrollbar-color` / `scrollbar-width` 实现，不要引入 `simplebar`、`overlayscrollbars` 等第三方 JS 滚动条库。
 3. 组件通过 `React.useId` 生成 scoped CSS 类名 + `<style>` 标签实现样式隔离，不会污染全局滚动条样式。
 4. `height` 为数字时自动添加 `px` 单位；字符串直接作为 CSS height 值（支持 `"100%"`、`"50vh"` 等）。

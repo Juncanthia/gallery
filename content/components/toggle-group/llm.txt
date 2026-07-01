@@ -129,7 +129,7 @@ type ToggleGroupItemProps = ToggleGroupItemPrimitiveProps &
 直接依赖摘要：
 
 - `class-variance-authority`
-- `@/primitives/radix/toggle-group`
+- `@/components/_primitives/radix/toggle-group`
 - `@/components/ui/toggle`
 
 实现注意：

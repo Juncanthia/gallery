@@ -1,4 +1,4 @@
-import { ThemeCustomizer, ThemeCustomizerBar } from "@/components/ui/gooseui-theme-customizer"
+import { ThemeCustomizer, ThemeCustomizerBar } from "@/components/ui/theme-customizer"
 
 export default function Demo() {
   return (

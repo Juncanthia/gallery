@@ -28,8 +28,8 @@
 <ComponentShowcase id="bklit/area-chart" path="bklit/area-chart/basic" />
 
 ```tsx
-import { AreaChart } from "@/components/ui/bklit-area-chart"
-import { Area, Grid } from "@/components/bklit/charts"
+import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { Area, Grid } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), value: 100 },
@@ -140,7 +140,7 @@ Grid 为 AreaChart 的可选子组件，用于渲染坐标网格线。
 使用 pattern 图案填充：
 
 ```tsx
-import { PatternArea } from "@/components/bklit/charts"
+import { PatternArea } from "@/components/charts/bklit/charts"
 
 <AreaChart data={data}>
   <PatternArea dataKey="value" pattern="circles" stroke="var(--chart-1)" />
@@ -152,8 +152,8 @@ import { PatternArea } from "@/components/bklit/charts"
 设置 `status="loading"` 并提供 `loadingLabel`。配合 `generateChartSkeletonData` 生成骨架数据可实现无缝过渡：
 
 ```tsx
-import { AreaChart } from "@/components/ui/bklit-area-chart"
-import { Area, Grid, generateChartSkeletonData } from "@/components/bklit/charts"
+import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { Area, Grid, generateChartSkeletonData } from "@/components/charts/bklit/charts"
 
 const skeletonData = generateChartSkeletonData({ dataKey: "value", pointCount: 8 })
 
@@ -190,7 +190,7 @@ const multiSeriesData = [
 使用 `ChartTooltip` 子组件，配合 `TooltipIndicator`、`TooltipBox` 和 `TooltipContent`：
 
 ```tsx
-import { ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/bklit/charts"
+import { ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/charts/bklit/charts"
 
 <AreaChart data={data}>
   <Grid />
@@ -209,7 +209,7 @@ import { ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/co
 通过 `ChartBrush` 与 `ChartBrushLayout` 联动设置 `xDomain`：
 
 ```tsx
-import { ChartBrushLayout, useChartInteraction } from "@/components/bklit/charts"
+import { ChartBrushLayout, useChartInteraction } from "@/components/charts/bklit/charts"
 
 function ZoomableChart() {
   const { selection, clearSelection } = useChartInteraction()
@@ -230,8 +230,8 @@ function ZoomableChart() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入: `import { AreaChart } from "@/components/ui/bklit-area-chart"`
-- 子组件: `import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/bklit/charts"`
+- 导入: `import { AreaChart } from "@/components/ui/area-chart-bklit"`
+- 子组件: `import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/charts/bklit/charts"`
 - 来自 BKLit Charts 库（基于 @visx/xychart 和 @visx/shape）
 - 必须提供 `data` 属性（`Record<string, unknown>[]`，每项含 Date 和数值字段）
 - `xDataKey` 默认值为 `"date"`，数据中日期字段为 `Date` 对象

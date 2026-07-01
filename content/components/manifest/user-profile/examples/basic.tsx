@@ -1,4 +1,4 @@
-import { UserProfile } from "@/components/ui/manifest-user-profile"
+import { UserProfile } from "@/components/ui/user-profile"
 
 export default function Demo() {
   return <UserProfile />

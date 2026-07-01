@@ -1,4 +1,4 @@
-import { FileSystemBlock, type FileSystemBlockProps } from "@/components/ui/extend-file-system-block"
+import { FileSystemBlock, type FileSystemBlockProps } from "@/components/ui/file-system-block"
 
 const SAMPLE_ITEMS: FileSystemBlockProps["items"] = [
   {

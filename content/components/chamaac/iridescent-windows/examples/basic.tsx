@@ -1,4 +1,4 @@
-import { IridescentWindows } from "@/components/ui/chamaac-iridescent-windows"
+import { IridescentWindows } from "@/components/ui/iridescent-windows"
 
 export default function Demo() {
   return (

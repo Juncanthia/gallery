@@ -24,8 +24,8 @@ K 线图专门用于展示金融时间序列的开高低收四维数据，帮助
 <ComponentShowcase id="bklit/candlestick-chart" path="bklit/candlestick-chart/basic" />
 
 ```tsx
-import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"
-import { Candlestick } from "@/components/bklit/charts"
+import { CandlestickChart } from "@/components/ui/candlestick-chart"
+import { Candlestick } from "@/components/charts/bklit/charts"
 const data = [
   { date: new Date(2024, 0, 1), open: 100, high: 120, low: 90, close: 110 },
   // ...
@@ -124,8 +124,8 @@ const [xDomain, setXDomain] = useState<[Date, Date] | undefined>()
 
 ## LLM 使用规则
 
-- 导入: `import { CandlestickChart } from "@/components/ui/bklit-candlestick-chart"`
-- 导入: `import { Candlestick } from "@/components/bklit/charts"`
+- 导入: `import { CandlestickChart } from "@/components/ui/candlestick-chart"`
+- 导入: `import { Candlestick } from "@/components/charts/bklit/charts"`
 - 来自 BKLit Charts 库（基于 @visx）
 - 需要提供 `data` 属性
 - `data` 中每条记录必须包含 `date`、`open`、`high`、`low`、`close` 五个必填字段

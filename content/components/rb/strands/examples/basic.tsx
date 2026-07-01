@@ -1,4 +1,4 @@
-import { Strands } from "@/components/ui/rb-strands"
+import { Strands } from "@/components/ui/strands"
 
 export default function StrandsBasicExample() {
   return (

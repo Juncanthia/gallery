@@ -1,4 +1,4 @@
-import { CurvedLoop } from "@/components/ui/rb-curved-loop"
+import { CurvedLoop } from "@/components/ui/curved-loop"
 
 export default function CurvedLoopBasicExample() {
   return (

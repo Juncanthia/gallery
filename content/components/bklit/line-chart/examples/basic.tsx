@@ -1,5 +1,5 @@
-import { LineChart } from "@/components/ui/bklit-line-chart"
-import { Line } from "@/components/bklit/charts"
+import { LineChart } from "@/components/ui/line-chart-bklit"
+import { Line } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), value: 100 },

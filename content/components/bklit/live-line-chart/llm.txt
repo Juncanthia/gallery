@@ -1,6 +1,6 @@
 [实时折线图 / LiveLineChart]
-导入: import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
-包来源: @/components/bklit/charts
+导入: import { LiveLineChart } from "@/components/ui/live-line-chart"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -64,8 +64,8 @@
 ### 基础用法
 
 ```tsx
-import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
-import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/bklit/charts"
+import { LiveLineChart } from "@/components/ui/live-line-chart"
+import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/charts/bklit/charts"
 
 function BasicDemo() {
   const data = Array.from({ length: 50 }, (_, i) => ({
@@ -86,8 +86,8 @@ function BasicDemo() {
 ### 动量颜色
 
 ```tsx
-import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
-import { LiveLine } from "@/components/bklit/charts"
+import { LiveLineChart } from "@/components/ui/live-line-chart"
+import { LiveLine } from "@/components/charts/bklit/charts"
 
 function MomentumDemo() {
   const data = Array.from({ length: 50 }, (_, i) => ({
@@ -113,8 +113,8 @@ function MomentumDemo() {
 ### 自定义窗口和格式化
 
 ```tsx
-import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
-import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/bklit/charts"
+import { LiveLineChart } from "@/components/ui/live-line-chart"
+import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/charts/bklit/charts"
 
 function CustomWindowDemo() {
   const data = Array.from({ length: 100 }, (_, i) => ({

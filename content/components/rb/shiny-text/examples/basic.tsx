@@ -1,4 +1,4 @@
-import { ShinyText } from "@/components/ui/rb-shiny-text"
+import { ShinyText } from "@/components/ui/shiny-text"
 
 export default function ShinyTextBasicExample() {
   return (

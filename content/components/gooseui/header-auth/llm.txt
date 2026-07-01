@@ -3,7 +3,7 @@ component: HeaderAuth
 slug: gooseui/header-auth
 
 import: |
-  import { HeaderAuth } from "@/components/ui/gooseui-header-auth"
+  import { HeaderAuth } from "@/components/ui/header-auth"
 
 usage: |
   <HeaderAuth />
@@ -18,7 +18,7 @@ props:
     userName?: string  -- 登录用户名，默认 "John"，仅在 isLoggedIn 为 true 时显示
 
 constraints:
-  - 从 @/components/ui/gooseui-header-auth 导入，不要从 gooseui 内部路径导入。
+  - 从 @/components/ui/header-auth 导入，不要从 gooseui 内部路径导入。
   - 依赖 next/link 的 Link 组件，须在有 Next.js 路由的环境中渲染。
   - 导航项（navItems）当前硬编码在组件内部，如需自定义导航项需修改组件源码。
   - 移动端菜单通过内部 useState(isOpen) 管理展开/收起，无需外部控制。

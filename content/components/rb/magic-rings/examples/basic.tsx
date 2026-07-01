@@ -1,4 +1,4 @@
-import { MagicRings } from "@/components/ui/rb-magic-rings"
+import { MagicRings } from "@/components/ui/magic-rings"
 
 export default function MagicRingsBasicExample() {
   return <MagicRings />

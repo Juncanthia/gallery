@@ -36,20 +36,20 @@ stack:
 
 ```tsx
 // 辅助方法（推荐）
-import { customToast } from "@/components/gooseui/lib/toast"
+import { customToast } from "@/components/_shared/gooseui/lib/toast"
 
 // Toaster 容器
 import { Toaster } from "sonner"
 
 // 组件本身（仅在需要直接使用时导入）
-import { CustomToast } from "@/components/ui/gooseui-custom-toast"
+import { CustomToast } from "@/components/ui/custom-toast"
 ```
 
 ## 用法
 
 ```tsx
 import { Toaster } from "sonner"
-import { customToast } from "@/components/gooseui/lib/toast"
+import { customToast } from "@/components/_shared/gooseui/lib/toast"
 
 function App() {
   return (

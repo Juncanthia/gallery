@@ -1,8 +1,8 @@
 "use client"
 
-import { EvilBarChart } from "@/components/ui/evilcharts-bar-chart"
-import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/evilcharts/components/bar-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data = [
   { month: "1月", revenue: 342, cost: 184 },

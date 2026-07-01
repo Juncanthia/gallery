@@ -1,4 +1,4 @@
-import { MetaBalls } from "@/components/ui/rb-metaballs"
+import { MetaBalls } from "@/components/ui/metaballs"
 
 export default function MetaBallsBasicExample() {
   return (

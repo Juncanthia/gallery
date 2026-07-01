@@ -45,7 +45,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { SaveButton } from "@/components/ui/uselayouts-status-button"
+import { SaveButton } from "@/components/ui/status-button"
 
 export default function Demo() {
   return <SaveButton />
@@ -108,7 +108,7 @@ type SaveButtonProps = Record<string, never>
 
 当 AI 生成本项目 Status Button 代码时，应遵守：
 
-1. 从 `@/components/ui/uselayouts-status-button` 导入 `SaveButton`（named export）。
+1. 从 `@/components/ui/status-button` 导入 `SaveButton`（named export）。
 2. 组件自包含，无需 props，直接渲染即可。
 3. 不要移除 motion/react 动画逻辑，包括 AnimatePresence、motion.span、transition 曲线。
 4. 修改文案时更新 `useMemo` 中三个状态的返回文字。

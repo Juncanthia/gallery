@@ -23,7 +23,7 @@ GridBloom 网格绽放。基于 Three.js 和 GLSL 着色器实现，通过程序
 GridBloom 默认铺满父容器（`absolute inset-0`），需确保父容器 `relative` 且有明确尺寸。
 
 ```tsx
-import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+import { GridBloom } from "@/components/ui/grid-bloom"
 
 export default function Demo() {
   return (
@@ -42,7 +42,7 @@ export default function Demo() {
 通过 `color` 自定义绽放网格的颜色，默认为洋红色 `"#e040fb"`。
 
 ```tsx
-import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+import { GridBloom } from "@/components/ui/grid-bloom"
 
 export default function Demo() {
   return (
@@ -58,7 +58,7 @@ export default function Demo() {
 通过 `speed` 控制整体动画速度，`gridScale` 控制网格密度（值越大瓦片越密）。
 
 ```tsx
-import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+import { GridBloom } from "@/components/ui/grid-bloom"
 
 export default function Demo() {
   return (
@@ -74,7 +74,7 @@ export default function Demo() {
 通过 `rotationSpeed` 和 `distortionAmount` 增加动态旋转和有机扭曲效果。
 
 ```tsx
-import { GridBloom } from "@/components/ui/chamaac-grid-bloom"
+import { GridBloom } from "@/components/ui/grid-bloom"
 
 export default function Demo() {
   return (
@@ -135,7 +135,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/chamaac-grid-bloom` 导入 GridBloom，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/ui/grid-bloom` 导入 GridBloom，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器有 `position: relative` 和明确尺寸。
 3. GridBloom 自带 `pointer-events-none`，前景内容需要独立的点击层。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。

@@ -1,4 +1,4 @@
-import { notification } from "@/components/ui/manifest-notifications"
+import { notification } from "@/components/ui/notifications"
 import { Button } from "@/components/ui/button"
 
 export default function Demo() {

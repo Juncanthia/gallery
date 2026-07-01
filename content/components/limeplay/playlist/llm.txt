@@ -28,7 +28,7 @@ Playlist 是 Limeplay 播放器体系中的播放列表组件。它通过 Dropdo
 ## 导入路径
 
 ```tsx
-import { Playlist } from "@/components/ui/limeplay-playlist"
+import { Playlist } from "@/components/ui/playlist"
 ```
 
 Playlist 不接受外部 props。所有数据通过 zustand store 读取，需要 `MediaProvider` 上下文。
@@ -52,7 +52,7 @@ Playlist 不负责数据加载。调用侧通过 `usePlaylist` 或 `usePlaylistS
 
 ```tsx
 import { useEffect } from "react"
-import { usePlaylist } from "@/components/limeplay/hooks/use-playlist"
+import { usePlaylist } from "@/components/media/hooks/use-playlist"
 
 const { load } = usePlaylist()
 

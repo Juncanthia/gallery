@@ -16,13 +16,13 @@ SoftAurora 基于 OGL（WebGL）的柔和极光背景效果组件，使用多层
 <ComponentShowcase id="rb/soft-aurora" path="rb/soft-aurora/basic" />
 
 ```tsx
-import { SoftAurora } from "@/components/ui/rb-soft-aurora"
+import { SoftAurora } from "@/components/ui/soft-aurora"
 export default function Demo() { return <div className="w-full h-64 relative bg-black"><SoftAurora /></div> }
 ```
 
 ### 绿色极光 + 禁用鼠标交互
 ```tsx
-import { SoftAurora } from "@/components/ui/rb-soft-aurora"
+import { SoftAurora } from "@/components/ui/soft-aurora"
 
 export default function Demo() {
   return (
@@ -71,7 +71,7 @@ export default function Demo() {
 颜色会与余弦渐变（cosineGradient）混合，最终颜色是 `color1`/`color2` 乘以渐变结果。如果颜色看起来偏灰，尝试增大 `brightness`。颜色以乘法方式参与最终片段着色器输出。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-soft-aurora` 导入。
+1. 从 `@/components/ui/soft-aurora` 导入。
 2. 依赖 OGL（`ogl`），确保项目已安装。
 3. 组件需要父容器设置明确的宽高。
 4. 使用 Perlin 3D 噪声，3 层 fbm（分形布朗运动），计算量较单层噪声大。

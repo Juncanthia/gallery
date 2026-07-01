@@ -1,5 +1,5 @@
-import { PieChart } from "@/components/ui/bklit-pie-chart"
-import { PieSlice } from "@/components/bklit/charts"
+import { PieChart } from "@/components/ui/pie-chart-bklit"
+import { PieSlice } from "@/components/charts/bklit/charts"
 
 const data = [
   { label: "A", value: 40, color: "var(--chart-line-primary)" },

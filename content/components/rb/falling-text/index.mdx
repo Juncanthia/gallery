@@ -16,7 +16,7 @@ FallingText 基于 Matter.js 物理引擎的文字下落效果，单词逐个掉
 <ComponentShowcase id="rb/falling-text" path="rb/falling-text/basic" />
 
 ```tsx
-import { FallingText } from "@/components/ui/rb-falling-text"
+import { FallingText } from "@/components/ui/falling-text"
 export default function Demo() {
   return (
     <FallingText
@@ -31,7 +31,7 @@ export default function Demo() {
 ### 高亮词 + 点击触发
 
 ```tsx
-import { FallingText } from "@/components/ui/rb-falling-text"
+import { FallingText } from "@/components/ui/falling-text"
 
 export default function Demo() {
   return (
@@ -73,7 +73,7 @@ export default function Demo() {
 不会。Matter.js 世界设置了四面边界墙（floor、leftWall、rightWall、ceiling），文字单词会被边界反弹并最终停留在底部。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-falling-text` 导入。
+1. 从 `@/components/ui/falling-text` 导入。
 2. 依赖 `matter-js`，确保项目中已安装。
 3. `text` 属性为必填，组件按空格分词并为每个词创建独立的 Matter.js 刚体。
 4. 组件容器默认 `minHeight: 300px`，建议在使用时确保容器有足够的垂直空间。

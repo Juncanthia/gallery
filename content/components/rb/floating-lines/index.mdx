@@ -16,14 +16,14 @@ FloatingLines 基于 Three.js 的浮动波纹线条背景组件，ShaderMaterial
 <ComponentShowcase id="rb/floating-lines" path="rb/floating-lines/basic" />
 
 ```tsx
-import { FloatingLines } from "@/components/ui/rb-floating-lines"
+import { FloatingLines } from "@/components/ui/floating-lines"
 export default function Demo() { return <FloatingLines /> }
 ```
 
 ### 自定义配置
 
 ```tsx
-import { FloatingLines } from "@/components/ui/rb-floating-lines"
+import { FloatingLines } from "@/components/ui/floating-lines"
 
 export default function Demo() {
   return (
@@ -80,7 +80,7 @@ export default function Demo() {
 每个波形位置有各自的默认值：topWavePosition 默认 `{ x: 10, y: 0.5, rotate: -0.4 }`，middleWavePosition 默认 `{ x: 5, y: 0, rotate: 0.2 }`。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-floating-lines` 导入。
+1. 从 `@/components/ui/floating-lines` 导入。
 2. 依赖 `three`（Three.js），确保项目中已安装。
 3. 组件返回纯 div 容器，需通过 `className` 设置宽高。
 4. `linesGradient` 默认为不设置，此时使用内置的蓝/粉色渐变（BLUE/PINK），建议显式传入颜色以获得预期效果。

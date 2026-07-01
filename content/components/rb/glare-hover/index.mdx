@@ -16,7 +16,7 @@ GlareHover 鼠标悬停时产生光泽扫描效果的卡片容器组件，光泽
 <ComponentShowcase id="rb/glare-hover" path="rb/glare-hover/basic" />
 
 ```tsx
-import { GlareHover } from "@/components/ui/rb-glare-hover"
+import { GlareHover } from "@/components/ui/glare-hover"
 export default function Demo() {
   return (
     <GlareHover>
@@ -29,7 +29,7 @@ export default function Demo() {
 ### 自定义光泽
 
 ```tsx
-import { GlareHover } from "@/components/ui/rb-glare-hover"
+import { GlareHover } from "@/components/ui/glare-hover"
 
 export default function Demo() {
   return (
@@ -96,7 +96,7 @@ export default function Demo() {
 支持 hex 格式（3 位或 6 位），组件内部将其转换为 `rgba()` 格式以应用 `glareOpacity` 透明度。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-glare-hover` 导入。
+1. 从 `@/components/ui/glare-hover` 导入。
 2. 纯 CSS + DOM 事件实现，无额外第三方依赖。
 3. `children` 包裹在 `z-10` 层中，确保在光泽层之上显示。
 4. 所有尺寸和颜色属性接受 CSS 合法值，`width`/`height` 建议使用具体单位（如 px）。

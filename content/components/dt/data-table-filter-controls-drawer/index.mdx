@@ -30,10 +30,10 @@ DataTableFilterControlsDrawer 将数据表格的筛选控件收纳在抽屉（Dr
 
 ```tsx
 import { DataTableFilterControlsDrawer } from "@/components/ui/dt-data-table-filter-controls-drawer"
-import { DataTableProvider } from "@/components/data-table-filters"
-import { DataTableStoreProvider } from "@/components/data-table-filters/lib/store/provider/DataTableStoreProvider"
-import { useMemoryAdapter } from "@/components/data-table-filters/lib/store/adapters/memory"
-import { createSchema, field } from "@/components/data-table-filters/lib/store/schema"
+import { DataTableProvider } from "@/components/data-display/data-table-filters"
+import { DataTableStoreProvider } from "@/components/data-display/data-table-filters/lib/store/provider/DataTableStoreProvider"
+import { useMemoryAdapter } from "@/components/data-display/data-table-filters/lib/store/adapters/memory"
+import { createSchema, field } from "@/components/data-display/data-table-filters/lib/store/schema"
 
 export default function Demo() {
   const adapter = useMemoryAdapter(

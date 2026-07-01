@@ -28,7 +28,7 @@ PreferencesPanel 偏好设置面板组件。以分组形式展示用户偏好配
 />
 
 ```tsx
-import { PreferencesPanel } from "@/components/ui/tool-preferences-panel"
+import { PreferencesPanel } from "@/components/ui/preferences-panel"
 
 export default function Demo() {
   return (
@@ -107,7 +107,7 @@ export default function Demo() {
 通过 `actions` 属性自定义操作按钮，并通过 `onAction` 处理按钮点击事件。
 
 ```tsx
-import { PreferencesPanel } from "@/components/ui/tool-preferences-panel"
+import { PreferencesPanel } from "@/components/ui/preferences-panel"
 
 export default function Demo() {
   return (
@@ -157,7 +157,7 @@ export default function Demo() {
 使用 `PreferencesPanel.Receipt` 展示已确认的偏好设置摘要。当 AI 已根据用户选择保存设置后，以只读卡片形式展示最终结果。
 
 ```tsx
-import { PreferencesPanel } from "@/components/ui/tool-preferences-panel"
+import { PreferencesPanel } from "@/components/ui/preferences-panel"
 
 export default function Demo() {
   return (
@@ -318,7 +318,7 @@ Receipt 模式为只读摘要视图，不包含交互控件，以文本形式展
 
 AI 生成 PreferencesPanel 代码时：
 
-1. 从 `@/components/ui/tool-preferences-panel` 导入 `PreferencesPanel` 或 `PreferencesPanel.Receipt`
+1. 从 `@/components/ui/preferences-panel` 导入 `PreferencesPanel` 或 `PreferencesPanel.Receipt`
 2. `id` 和 `sections` 为必填属性
 3. sections 中每个分组的 items 至少包含一个配置项
 4. 配置项的 id 必须唯一，类型为英文小写短横线命名

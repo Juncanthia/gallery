@@ -30,7 +30,7 @@ PDFViewer 用于在浏览器中预览 PDF 文档，基于 @embedpdf 引擎，提
 />
 
 ```tsx
-import { PDFViewer } from "@/components/ui/extend-pdf-viewer"
+import { PDFViewer } from "@/components/ui/pdf-viewer"
 
 export default function Demo() {
   return (
@@ -162,7 +162,7 @@ const ref = useRef<PDFViewerHandle>(null)
 
 AI 生成 PDFViewer 代码时：
 
-1. 从 `@/components/ui/extend-pdf-viewer` 导入 `PDFViewer`。
+1. 从 `@/components/ui/pdf-viewer` 导入 `PDFViewer`。
 2. 必须提供 `src` 属性指定 PDF 文件地址。
 3. 父容器必须有固定高度，组件依赖 `h-full` 填充。
 4. 按需使用 `showToolbar`、`showDownload`、`showRotateControls`、`showUpload` 控制 UI。

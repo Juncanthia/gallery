@@ -22,7 +22,7 @@ stack:
 ## 使用示例
 
 ```tsx
-import { ThemeToggle } from "@/components/ui/gooseui-theme-toggle"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 // 默认 24x24 图标
 <ThemeToggle />
@@ -45,7 +45,7 @@ import { ThemeToggle } from "@/components/ui/gooseui-theme-toggle"
 
 ## 约束
 
-1. 从 `@/components/ui/gooseui-theme-toggle` 导入，不要从 gooseui 内部路径导入。
+1. 从 `@/components/ui/theme-toggle` 导入，不要从 gooseui 内部路径导入。
 2. 确保应用根节点已包裹 next-themes 的 `ThemeProvider`（attribute="class"）。
 3. 不要在调用侧自行实现主题切换逻辑（useState、localStorage 等）。
 4. 不要引入其他主题切换库，组件已内置完整切换逻辑和动画。

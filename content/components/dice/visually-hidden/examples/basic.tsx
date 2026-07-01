@@ -1,4 +1,4 @@
-import { VisuallyHidden } from "@/components/ui/dice-visually-hidden"
+import { VisuallyHidden } from "@/components/ui/visually-hidden"
 
 export default function Demo() {
   return (

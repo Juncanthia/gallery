@@ -160,7 +160,7 @@ type TooltipArrowProps = TooltipArrowPrimitiveProps & {
 
 直接依赖摘要：
 
-- `@/primitives/radix/tooltip`
+- `@/components/_primitives/radix/tooltip`
 
 实现注意：
 

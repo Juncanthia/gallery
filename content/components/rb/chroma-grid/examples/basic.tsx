@@ -1,4 +1,4 @@
-import { ChromaGrid } from "@/components/ui/rb-chroma-grid"
+import { ChromaGrid } from "@/components/ui/chroma-grid"
 
 export default function ChromaGridBasicExample() {
   return <ChromaGrid />

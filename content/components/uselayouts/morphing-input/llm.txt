@@ -52,7 +52,7 @@ MorphingInput 是 UseLayouts 系列布局组件，提供一个带动画变形效
 ### 基础用法
 
 ```tsx
-import { MorphingInput } from "@/components/ui/uselayouts-morphing-input"
+import { MorphingInput } from "@/components/ui/morphing-input"
 
 export default function Demo() {
   return <MorphingInput />
@@ -148,7 +148,7 @@ interface PlaceholderConfig {
 
 当 AI 生成本项目 MorphingInput 代码时，应遵守：
 
-1. 从 `@/components/ui/uselayouts-morphing-input` 导入 `MorphingInput`（named export）。
+1. 从 `@/components/ui/morphing-input` 导入 `MorphingInput`（named export）。
 2. MorphingInput 为零 props 组件，直接渲染即可。
 3. 如需定制搜索类型，修改 `src/components/uselayouts/morphing-input.tsx` 中的 `placeholderOptions` 数组。
 4. 图标使用 `@hugeicons/core-free-icons`，不要使用 `@ant-design/icons` 或 `lucide-react`。

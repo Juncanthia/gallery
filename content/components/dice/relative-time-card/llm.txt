@@ -23,7 +23,7 @@ stack:
 ## 导入
 
 ```tsx
-import { RelativeTimeCard } from "@/components/ui/dice-relative-time-card"
+import { RelativeTimeCard } from "@/components/ui/relative-time-card"
 ```
 
 ## 属性
@@ -39,7 +39,7 @@ import { RelativeTimeCard } from "@/components/ui/dice-relative-time-card"
 ## 基础用法
 
 ```tsx
-import { RelativeTimeCard } from "@/components/ui/dice-relative-time-card"
+import { RelativeTimeCard } from "@/components/ui/relative-time-card"
 
 export default function Demo() {
   return (

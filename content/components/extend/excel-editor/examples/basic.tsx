@@ -1,4 +1,4 @@
-import { ExcelEditorBlock } from "@/components/ui/extend-excel-editor"
+import { ExcelEditorBlock } from "@/components/ui/excel-editor"
 
 export default function Demo() {
   return (

@@ -9,7 +9,7 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
 } from "@tanstack/react-table"
-import type { DataTableFilterField } from "@/components/data-table-filters"
+import type { DataTableFilterField } from "@/components/data-display/data-table-filters"
 
 type Person = {
   id: string

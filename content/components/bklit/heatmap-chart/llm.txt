@@ -1,6 +1,6 @@
 [热力图 / HeatmapChart]
-导入: import { HeatmapChart } from "@/components/ui/bklit-heatmap-chart"
-包来源: @/components/bklit/charts
+导入: import { HeatmapChart } from "@/components/ui/heatmap-chart"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 底层依赖: @visx/heatmap, @visx/responsive, motion (framer-motion)
 
@@ -111,8 +111,8 @@ X 轴自动按月份聚合显示标签，Y 轴固定显示 Mon/Wed/Fri 行标签
 ### 基础用法（GitHub 贡献图风格）
 
 ```tsx
-import { HeatmapChart } from "@/components/ui/bklit-heatmap-chart"
-import { HeatmapCells, HeatmapXAxis, HeatmapYAxis, HeatmapLegend, HeatmapTooltip } from "@/components/bklit/charts"
+import { HeatmapChart } from "@/components/ui/heatmap-chart"
+import { HeatmapCells, HeatmapXAxis, HeatmapYAxis, HeatmapLegend, HeatmapTooltip } from "@/components/charts/bklit/charts"
 
 function d(y: number, m: number, day: number) {
   return new Date(y, m - 1, day)
@@ -194,8 +194,8 @@ export default function Demo() {
 ### 加载骨架屏
 
 ```tsx
-import { HeatmapChart } from "@/components/ui/bklit-heatmap-chart"
-import { HeatmapCells, HeatmapXAxis, HeatmapYAxis } from "@/components/bklit/charts"
+import { HeatmapChart } from "@/components/ui/heatmap-chart"
+import { HeatmapCells, HeatmapXAxis, HeatmapYAxis } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return (
@@ -213,7 +213,7 @@ export default function Demo() {
 }
 
 // 或使用预设加载组件
-// import { HeatmapChartLoading } from "@/components/bklit/charts"
+// import { HeatmapChartLoading } from "@/components/charts/bklit/charts"
 // <HeatmapChartLoading data={realData} label="加载中" />
 ```
 

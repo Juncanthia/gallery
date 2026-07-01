@@ -63,7 +63,7 @@ SettingsPanel 是一个完整的设置面板组件，适用于 SaaS 产品的用
 默认展示标题、副标题、侧边栏导航和 Profile 设置区域。
 
 ```tsx
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   return (
@@ -84,7 +84,7 @@ export default function Demo() {
 通过 `actions.onSave` 回调接收完整的 `SettingsData` 对象：
 
 ```tsx
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   return (
@@ -107,7 +107,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   const [loading, setLoading] = useState(false)
@@ -136,7 +136,7 @@ export default function Demo() {
 
 ```tsx
 import { User, Bell, Key } from "lucide-react"
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 const sections = [
   { id: "profile", label: "个人信息", icon: User },
@@ -154,7 +154,7 @@ export default function Demo() {
 通过 `data.profileDefaults` 预填充 Profile 区域：
 
 ```tsx
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   return (
@@ -181,7 +181,7 @@ export default function Demo() {
 ### 隐藏 Danger Zone
 
 ```tsx
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   return <SettingsPanel appearance={{ showDangerZone: false }} />
@@ -191,7 +191,7 @@ export default function Demo() {
 ### 处理删除账号
 
 ```tsx
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   return (
@@ -352,7 +352,7 @@ const [loading, setLoading] = useState(false)
 
 当 AI 生成 SettingsPanel 代码时，应遵守：
 
-1. 从 `@/components/ui/manifest-settings-panel` 导入 `SettingsPanel`。
+1. 从 `@/components/ui/settings-panel` 导入 `SettingsPanel`。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
 3. 设置保存通过 `actions.onSave` 处理，接收完整的 `SettingsData` 对象。
 4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用按钮并显示加载状态。

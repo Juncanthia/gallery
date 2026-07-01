@@ -1,4 +1,4 @@
-import { PlateEditorsShowcase } from "@/components/ui/plate-editors-showcase"
+import { PlateEditorsShowcase } from "@/components/ui/editors-showcase"
 
 export default function Demo() {
   return (

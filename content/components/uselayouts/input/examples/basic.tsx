@@ -1,4 +1,4 @@
-import Input from "@/components/ui/uselayouts-input"
+import Input from "@/components/ui/input-uselayouts"
 
 export default function Demo() {
   return (

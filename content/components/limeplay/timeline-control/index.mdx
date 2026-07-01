@@ -32,7 +32,7 @@ TimelineControl 通过复合组件模式表达结构语义：
 <ComponentShowcase id="limeplay/timeline-control" path="limeplay/timeline-control/basic" />
 
 ```tsx
-import * as TimelineControl from "@/components/ui/limeplay-timeline-control"
+import * as TimelineControl from "@/components/ui/timeline-control"
 
 export default function Demo() {
   return (
@@ -150,7 +150,7 @@ TimelineControl 与 `limeplay-timeline-labels` 组件协同使用，后者提供
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/limeplay-timeline-control` 导入，使用命名空间导入 `import * as TimelineControl from "..."` 或按需引入 `{ Root, Track, Progress, Buffered, Thumb }`。
+1. 从 `@/components/ui/timeline-control` 导入，使用命名空间导入 `import * as TimelineControl from "..."` 或按需引入 `{ Root, Track, Progress, Buffered, Thumb }`。
 2. Root、Track、Progress、Buffered、Thumb 必须按组合模式嵌套使用，不可独立使用。
 3. Root 必须放在 Limeplay Player Provider 的作用域内。
 4. Track 通常需要 `className="overflow-hidden"` 以限制 Progress 和 Buffered 的溢出。

@@ -1,4 +1,4 @@
-import { Threads } from "@/components/ui/rb-threads"
+import { Threads } from "@/components/ui/threads"
 
 export default function ThreadsBasicExample() {
   return (

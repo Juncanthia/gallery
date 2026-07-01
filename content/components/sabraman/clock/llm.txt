@@ -30,8 +30,8 @@ LegacyClock 是一个内置日间/夜间双主题的模拟时钟组件，以 SVG
 ## 导入
 
 ```tsx
-import { LegacyClock } from "@/components/ui/sabraman-clock"
-import type { LegacyClockProps, LegacyClockVariant } from "@/components/ui/sabraman-clock"
+import { LegacyClock } from "@/components/ui/clock"
+import type { LegacyClockProps, LegacyClockVariant } from "@/components/ui/clock"
 ```
 
 ## Props
@@ -73,7 +73,7 @@ import type { LegacyClockProps, LegacyClockVariant } from "@/components/ui/sabra
 ### 基础用法
 
 ```tsx
-import { LegacyClock } from "@/components/ui/sabraman-clock"
+import { LegacyClock } from "@/components/ui/clock"
 
 export default function Demo() {
   return (

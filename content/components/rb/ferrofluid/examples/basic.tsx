@@ -1,4 +1,4 @@
-import { Ferrofluid } from "@/components/ui/rb-ferrofluid"
+import { Ferrofluid } from "@/components/ui/ferrofluid"
 
 export default function FerrofluidBasicExample() {
   return <Ferrofluid />

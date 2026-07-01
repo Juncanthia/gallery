@@ -1,6 +1,6 @@
 [图表刷选 / ChartBrush]
-导入: import { ChartBrush } from "@/components/ui/bklit-chart-brush"
-包来源: @/components/bklit/charts
+导入: import { ChartBrush } from "@/components/ui/chart-brush"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -42,8 +42,8 @@
 ### 基础用法 — 作为子组件嵌入图表
 
 ```tsx
-import { LineChart, Line } from "@/components/bklit/charts"
-import { ChartBrush } from "@/components/ui/bklit-chart-brush"
+import { LineChart, Line } from "@/components/charts/bklit/charts"
+import { ChartBrush } from "@/components/ui/chart-brush"
 
 const data = Array.from({ length: 100 }, (_, i) => ({
   date: new Date(2024, 0, i + 1),
@@ -64,8 +64,8 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { LineChart, Line } from "@/components/bklit/charts"
-import { ChartBrush, type ChartBrushSelection } from "@/components/ui/bklit-chart-brush"
+import { LineChart, Line } from "@/components/charts/bklit/charts"
+import { ChartBrush, type ChartBrushSelection } from "@/components/ui/chart-brush"
 
 export default function ControlledBrushDemo() {
   const [selection, setSelection] = useState<ChartBrushSelection | null>({
@@ -88,7 +88,7 @@ export default function ControlledBrushDemo() {
 ### 分离式布局 — 使用 ChartBrushLayout
 
 ```tsx
-import { LineChart, Line, ChartBrushLayout, ChartBrush } from "@/components/bklit/charts"
+import { LineChart, Line, ChartBrushLayout, ChartBrush } from "@/components/charts/bklit/charts"
 
 export default function LayoutBrushDemo() {
   return (

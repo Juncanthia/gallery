@@ -26,7 +26,7 @@
 <ComponentShowcase id="manifest/sign-in" path="manifest/sign-in/basic" />
 
 ```tsx
-import { SignIn } from "@/components/ui/manifest-sign-in"
+import { SignIn } from "@/components/ui/sign-in"
 
 export default function Demo() {
   return (
@@ -42,7 +42,7 @@ export default function Demo() {
 通过 `actions.onSubmit` 回调接收邮箱和密码，可在其中调用 API。
 
 ```tsx
-import { SignIn } from "@/components/ui/manifest-sign-in"
+import { SignIn } from "@/components/ui/sign-in"
 
 export default function Demo() {
   return (
@@ -64,7 +64,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { SignIn } from "@/components/ui/manifest-sign-in"
+import { SignIn } from "@/components/ui/sign-in"
 
 export default function Demo() {
   const [loading, setLoading] = useState(false)
@@ -92,7 +92,7 @@ export default function Demo() {
 通过 `data` 自定义标题、副标题、按钮文案和占位符文字。
 
 ```tsx
-import { SignIn } from "@/components/ui/manifest-sign-in"
+import { SignIn } from "@/components/ui/sign-in"
 
 export default function Demo() {
   return (
@@ -116,7 +116,7 @@ export default function Demo() {
 通过 `appearance.showLinks` 控制"忘记密码"和"注册账号"链接的显示。
 
 ```tsx
-import { SignIn } from "@/components/ui/manifest-sign-in"
+import { SignIn } from "@/components/ui/sign-in"
 
 export default function Demo() {
   return (
@@ -274,7 +274,7 @@ const [loading, setLoading] = useState(false)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/manifest-sign-in` 导入 `SignIn`，不要从 Ant Design 导入 Login 或 Form 组件。
+1. 从 `@/components/ui/sign-in` 导入 `SignIn`，不要从 Ant Design 导入 Login 或 Form 组件。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
 3. 登录提交通过 `actions.onSubmit` 处理，回调接收 `email` 和 `password` 两个参数。
 4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用按钮并显示加载状态。

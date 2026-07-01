@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { LegacySlider } from "@/components/ui/sabraman-slider"
+import { LegacySlider } from "@/components/ui/slider-sabraman"
 
 export default function Demo() {
   const [value, setValue] = useState(50)

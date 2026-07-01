@@ -24,7 +24,7 @@ LegacySegmentedControl 呈现经典 macOS Aqua 控件风格：圆角容器、渐
 
 ```tsx
 import { useState } from "react"
-import { LegacySegmentedControl } from "@/components/ui/sabraman-segmented-control"
+import { LegacySegmentedControl } from "@/components/ui/segmented-control"
 
 export default function Demo() {
   const [value, setValue] = useState("option1")
@@ -126,7 +126,7 @@ const [mode, setMode] = useState("list")
 
 AI 生成 LegacySegmentedControl 代码时：
 
-1. 从 `@/components/ui/sabraman-segmented-control` 导入
+1. 从 `@/components/ui/segmented-control` 导入
 2. 必须同时提供 `value` 和 `onValueChange`（受控组件）
 3. `items` 中每项必须包含 `label` 和 `value`，`width` 可选
 4. 使用 TypeScript 泛型时，可通过 `<LegacySegmentedControl<"a" | "b">` 约束 value 类型

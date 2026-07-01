@@ -1,4 +1,4 @@
-import { GlareHover } from "@/components/ui/rb-glare-hover"
+import { GlareHover } from "@/components/ui/glare-hover"
 
 export default function GlareHoverBasicExample() {
   return (

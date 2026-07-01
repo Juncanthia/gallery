@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import EmptyTestimonial from "@/components/ui/uselayouts-empty-testimonial"
+import EmptyTestimonial from "@/components/ui/empty-testimonial"
 
 export default function Demo() {
   return <EmptyTestimonial />
@@ -106,7 +106,7 @@ type EmptyTestimonialProps = Record<string, never>
 
 当 AI 生成本项目 Empty Testimonial 代码时，应遵守：
 
-1. 从 `@/components/ui/uselayouts-empty-testimonial` 导入 `EmptyTestimonial`（default export）。
+1. 从 `@/components/ui/empty-testimonial` 导入 `EmptyTestimonial`（default export）。
 2. 组件无需 props，直接渲染即可。
 3. 组件内部使用 `motion/react` 和 `@hugeicons/react`，调用侧不要重复引入或尝试传递动画配置。
 4. 在有数据时通过条件渲染切换组件：`{data.length === 0 ? <EmptyTestimonial /> : <List />}`。

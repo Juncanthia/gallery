@@ -1,4 +1,4 @@
-import { WaterCaustic } from "@/components/ui/chamaac-water-caustic"
+import { WaterCaustic } from "@/components/ui/water-caustic"
 
 export default function Demo() {
   return (

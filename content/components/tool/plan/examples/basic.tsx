@@ -1,4 +1,4 @@
-import { Plan } from "@/components/ui/tool-plan"
+import { Plan } from "@/components/ui/plan"
 
 export default function Demo() {
   return (

@@ -38,10 +38,10 @@ EvilSankeyChart 采用可组合设计：
 />
 
 ```tsx
-import { EvilSankeyChart } from "@/components/ui/evilcharts-sankey-chart"
-import { Node, NodeLabel, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart"
+import { EvilSankeyChart } from "@/components/ui/sankey-chart-evilcharts"
+import { Node, NodeLabel, Link, Tooltip } from "@/components/charts/evilcharts/components/sankey-chart"
 import type { SankeyData } from "recharts"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data: SankeyData = {
   nodes: [
@@ -125,8 +125,8 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilSankeyChart } from "@/components/ui/evilcharts-sankey-chart"
-import { Node, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart"
+import { EvilSankeyChart } from "@/components/ui/sankey-chart-evilcharts"
+import { Node, Link, Tooltip } from "@/components/charts/evilcharts/components/sankey-chart"
 
 export default function Demo() {
   return (
@@ -149,8 +149,8 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilSankeyChart } from "@/components/ui/evilcharts-sankey-chart"
-import { Node, NodeLabel, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart"
+import { EvilSankeyChart } from "@/components/ui/sankey-chart-evilcharts"
+import { Node, NodeLabel, Link, Tooltip } from "@/components/charts/evilcharts/components/sankey-chart"
 
 export default function Demo() {
   return (
@@ -185,8 +185,8 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilSankeyChart } from "@/components/ui/evilcharts-sankey-chart"
-import { Node, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart"
+import { EvilSankeyChart } from "@/components/ui/sankey-chart-evilcharts"
+import { Node, Link, Tooltip } from "@/components/charts/evilcharts/components/sankey-chart"
 
 export default function Demo() {
   return (
@@ -209,8 +209,8 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilSankeyChart } from "@/components/ui/evilcharts-sankey-chart"
-import { Node, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart"
+import { EvilSankeyChart } from "@/components/ui/sankey-chart-evilcharts"
+import { Node, Link, Tooltip } from "@/components/charts/evilcharts/components/sankey-chart"
 
 export default function Demo() {
   return (
@@ -238,8 +238,8 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilSankeyChart } from "@/components/ui/evilcharts-sankey-chart"
-import { Node, NodeLabel, Link, Tooltip } from "@/components/evilcharts/components/sankey-chart"
+import { EvilSankeyChart } from "@/components/ui/sankey-chart-evilcharts"
+import { Node, NodeLabel, Link, Tooltip } from "@/components/charts/evilcharts/components/sankey-chart"
 
 export default function Demo() {
   return (
@@ -422,8 +422,8 @@ colors: {
 
 AI 生成 EvilSankeyChart 代码时：
 
-1. 从 `@/components/ui/evilcharts-sankey-chart` 导入 `EvilSankeyChart`
-2. 从 `@/components/evilcharts/components/sankey-chart` 导入 `Node`、`NodeLabel`、`Link`、`Tooltip`
+1. 从 `@/components/ui/sankey-chart-evilcharts` 导入 `EvilSankeyChart`
+2. 从 `@/components/charts/evilcharts/components/sankey-chart` 导入 `Node`、`NodeLabel`、`Link`、`Tooltip`
 3. 数据必须符合 `SankeyData` 类型，`links` 中的 `source`/`target` 使用节点索引（number）
 4. `config` 必须以节点 `name` 为 key，每个节点至少提供 `label` 和 `colors`（含 `light`/`dark`）
 5. 子部件必须位于 `&lt;EvilSankeyChart&gt;` 内部，否则会抛出运行时错误

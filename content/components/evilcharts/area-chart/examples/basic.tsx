@@ -1,4 +1,4 @@
-import { EvilAreaChart } from "@/components/ui/evilcharts-area-chart"
+import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
 import {
   Area,
   XAxis,
@@ -7,8 +7,8 @@ import {
   Legend,
   Dot,
   ActiveDot,
-} from "@/components/evilcharts/components/area-chart"
-import type { ChartConfig } from "@/components/evilcharts/components/chart"
+} from "@/components/charts/evilcharts/components/area-chart"
+import type { ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data = [
   { month: "1月", desktop: 342, mobile: 245 },

@@ -1,6 +1,6 @@
 "use client"
 
-import { CodeDiff } from "@/components/ui/tool-code-diff"
+import { CodeDiff } from "@/components/ui/code-diff"
 
 const oldCode = `function greet(name: string): string {
   return "Hello, " + name + "!";

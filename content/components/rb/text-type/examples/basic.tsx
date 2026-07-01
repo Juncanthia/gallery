@@ -1,4 +1,4 @@
-import { TextType } from "@/components/ui/rb-text-type"
+import { TextType } from "@/components/ui/text-type"
 
 export default function TextTypeBasicExample() {
   return (

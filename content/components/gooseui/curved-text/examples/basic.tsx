@@ -1,4 +1,4 @@
-import { CurvedText } from "@/components/ui/gooseui-curved-text"
+import { CurvedText } from "@/components/ui/curved-text"
 
 export default function Demo() {
   return (

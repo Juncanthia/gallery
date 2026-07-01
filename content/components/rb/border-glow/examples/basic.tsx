@@ -1,4 +1,4 @@
-import { BorderGlow } from "@/components/ui/rb-border-glow"
+import { BorderGlow } from "@/components/ui/border-glow"
 
 export default function BorderGlowBasicExample() {
   return (

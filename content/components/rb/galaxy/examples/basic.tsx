@@ -1,4 +1,4 @@
-import { Galaxy } from "@/components/ui/rb-galaxy"
+import { Galaxy } from "@/components/ui/galaxy"
 
 export default function GalaxyBasicExample() {
   return <Galaxy />

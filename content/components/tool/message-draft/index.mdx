@@ -28,7 +28,7 @@ MessageDraft 支持两种渠道模式：
 />
 
 ```tsx
-import { MessageDraft } from "@/components/ui/tool-message-draft"
+import { MessageDraft } from "@/components/ui/message-draft"
 
 export default function Demo() {
   return (
@@ -54,7 +54,7 @@ I've put together the draft for our Q3 product roadmap.`}
 展示 AI 生成的 Slack 频道消息。
 
 ```tsx
-import { MessageDraft } from "@/components/ui/tool-message-draft"
+import { MessageDraft } from "@/components/ui/message-draft"
 
 export default function Demo() {
   return (
@@ -75,7 +75,7 @@ export default function Demo() {
 展示发给个人的 Slack 私信草稿。
 
 ```tsx
-import { MessageDraft } from "@/components/ui/tool-message-draft"
+import { MessageDraft } from "@/components/ui/message-draft"
 
 export default function Demo() {
   return (
@@ -96,7 +96,7 @@ export default function Demo() {
 通过 `undoGracePeriod` 自定义发送倒计时，用户可在倒计时内撤销发送。
 
 ```tsx
-import { MessageDraft } from "@/components/ui/tool-message-draft"
+import { MessageDraft } from "@/components/ui/message-draft"
 
 export default function Demo() {
   return (
@@ -211,7 +211,7 @@ MessageDraft 通过 `data-*` 属性暴露稳定的语义结构：
 
 AI 生成 MessageDraft 代码时：
 
-1. 从 `@/components/ui/tool-message-draft` 导入
+1. 从 `@/components/ui/message-draft` 导入
 2. `channel` 和 `id` 为必填属性
 3. email 模式必须提供 `subject` 和 `to`（至少一项）
 4. slack 模式必须提供 `target`，包含 `type` 和 `name`

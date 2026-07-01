@@ -1,4 +1,4 @@
-import { StackingCardsAnimated } from "@/components/ui/gooseui-stacking-cards"
+import { StackingCardsAnimated } from "@/components/ui/stacking-cards"
 
 const cards = [
   {

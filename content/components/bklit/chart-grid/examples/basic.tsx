@@ -1,6 +1,6 @@
-import { BarChart } from "@/components/ui/bklit-bar-chart"
-import { Bar } from "@/components/bklit/charts"
-import { Grid } from "@/components/ui/bklit-chart-grid"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { Bar } from "@/components/charts/bklit/charts"
+import { Grid } from "@/components/ui/chart-grid"
 
 const data = [
   { name: "A", value: 400 },

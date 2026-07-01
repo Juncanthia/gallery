@@ -1,4 +1,4 @@
-Import path: @/components/ui/gooseui-services-marquee
+Import path: @/components/ui/services-marquee
 Exports: ServicesMarquee, ServicesGrid
 
 Usage:

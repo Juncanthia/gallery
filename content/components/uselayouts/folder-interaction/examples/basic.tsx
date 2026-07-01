@@ -1,4 +1,4 @@
-import { FolderInteraction } from "@/components/ui/uselayouts-folder-interaction"
+import { FolderInteraction } from "@/components/ui/folder-interaction"
 
 export default function Demo() {
   return <FolderInteraction />

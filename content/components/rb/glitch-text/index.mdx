@@ -14,7 +14,7 @@ GlitchText 带故障抖动效果的文本展示组件，支持自动播放和悬
 ### 基础用法
 <ComponentShowcase id="rb/glitch-text" path="rb/glitch-text/basic" />
 ```tsx
-import { GlitchText } from "@/components/ui/rb-glitch-text"
+import { GlitchText } from "@/components/ui/glitch-text-rb"
 
 export default function Demo() {
   return (
@@ -27,7 +27,7 @@ export default function Demo() {
 
 ### 持续动画模式
 ```tsx
-import { GlitchText } from "@/components/ui/rb-glitch-text"
+import { GlitchText } from "@/components/ui/glitch-text-rb"
 
 export default function Demo() {
   return (
@@ -59,7 +59,7 @@ export default function Demo() {
 颜色通过 CSS 的 `text-shadow` 控制（`enableShadows` 启用时），红色（`red`）和青色（`cyan`）为内置颜色。如需自定义，通过 `className` 使用 CSS 变量覆盖 `::after` / `::before` 的 `text-shadow`。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-glitch-text` 导入。
+1. 从 `@/components/ui/glitch-text-rb` 导入。
 2. `children` 是必填的 `string` 类型（非 `ReactNode`），用于设置显示文本和 `data-text` 属性。
 3. 默认仅在 hover 时触发，设为 `enableOnHover={false}` 可持续播放。
 4. 组件使用 `useId()` 生成唯一 CSS 动画名，支持同页多个实例。

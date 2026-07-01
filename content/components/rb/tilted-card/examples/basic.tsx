@@ -1,4 +1,4 @@
-import { TiltedCard } from "@/components/ui/rb-tilted-card"
+import { TiltedCard } from "@/components/ui/tilted-card"
 
 export default function TiltedCardBasicExample() {
   return (

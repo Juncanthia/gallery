@@ -1,4 +1,4 @@
-import { CardSwap, Card } from "@/components/ui/rb-card-swap"
+import { CardSwap, Card } from "@/components/ui/card-swap"
 
 export default function CardSwapBasicExample() {
   return (

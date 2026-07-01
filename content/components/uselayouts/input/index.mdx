@@ -27,7 +27,7 @@ Input 支持所有原生 HTML input 属性，包括 `type`、`placeholder`、`di
 />
 
 ```tsx
-import Input from "@/components/ui/uselayouts-input"
+import Input from "@/components/ui/input-uselayouts"
 
 export default function Demo() {
   return (
@@ -120,7 +120,7 @@ const { register } = useForm()
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/uselayouts-input` 导入 `Input`（default export）。
+1. 从 `@/components/ui/input-uselayouts` 导入 `Input`（default export）。
 2. 受控模式使用 `value` + `onChange`，非受控使用 `defaultValue`。
 3. 需要输入框引用时使用 `ref`，不要在外部通过 DOM 查询获取。
 4. 禁用态使用 `disabled` 属性。

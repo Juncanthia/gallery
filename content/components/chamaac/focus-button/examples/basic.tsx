@@ -1,4 +1,4 @@
-import { FocusButton } from "@/components/ui/chamaac-focus-button"
+import { FocusButton } from "@/components/ui/focus-button"
 
 export default function Demo() {
   return (

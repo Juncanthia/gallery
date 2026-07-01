@@ -1,4 +1,4 @@
-import { PixelBlast } from "@/components/ui/rb-pixel-blast"
+import { PixelBlast } from "@/components/ui/pixel-blast"
 
 export default function PixelBlastBasicExample() {
   return (

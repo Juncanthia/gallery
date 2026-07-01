@@ -38,7 +38,7 @@ ExcelEditorBlock 的核心能力：
 />
 
 ```tsx
-import { ExcelEditorBlock } from "@/components/ui/extend-excel-editor"
+import { ExcelEditorBlock } from "@/components/ui/excel-editor"
 
 export default function Demo() {
   return <ExcelEditorBlock />
@@ -50,7 +50,7 @@ export default function Demo() {
 通过 `file` 属性指定远程 .xlsx 文件路径。
 
 ```tsx
-import { ExcelEditorBlock } from "@/components/ui/extend-excel-editor"
+import { ExcelEditorBlock } from "@/components/ui/excel-editor"
 
 export default function Demo() {
   return <ExcelEditorBlock file="/samples/my-workbook.xlsx" />
@@ -62,7 +62,7 @@ export default function Demo() {
 通过 `heightClassName` 自定义编辑器容器高度。
 
 ```tsx
-import { ExcelEditorBlock } from "@/components/ui/extend-excel-editor"
+import { ExcelEditorBlock } from "@/components/ui/excel-editor"
 
 export default function Demo() {
   return <ExcelEditorBlock heightClassName="h-[500px]" />
@@ -102,7 +102,7 @@ ExcelEditorBlock 内部封装了 `@extend-ai/react-xlsx` 的 `XlsxViewer` 以及
 
 AI 生成 Excel 编辑器代码时：
 
-1. 从 `@/components/ui/extend-excel-editor` 导入 `ExcelEditorBlock`。
+1. 从 `@/components/ui/excel-editor` 导入 `ExcelEditorBlock`。
 2. 默认不需要传任何 props 即可获得完整功能的编辑器。
 3. 需要加载指定文件时使用 `file` prop。
 4. 需要调整高度时使用 `heightClassName` prop，传入 Tailwind 高度类名。

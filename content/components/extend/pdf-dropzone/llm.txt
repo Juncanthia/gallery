@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { PdfDropzoneBlock } from "@/components/ui/extend-pdf-dropzone"
+import { PdfDropzoneBlock } from "@/components/ui/pdf-dropzone"
 
 export default function Demo() {
   return (
@@ -129,7 +129,7 @@ export function PdfDropzoneBlock(): React.ReactElement
 
 当 AI 生成本项目 PdfDropzoneBlock 代码时，应遵守：
 
-1. 从 `@/components/ui/extend-pdf-dropzone` 导入，不要从内部路径导入。
+1. 从 `@/components/ui/pdf-dropzone` 导入，不要从内部路径导入。
 2. 组件为自包含组件，无需传入任何 props。
 3. 不要手动组合 FileUpload + PDFViewer 来模拟本组件行为。
 4. 不要引入 Ant Design 相关依赖。

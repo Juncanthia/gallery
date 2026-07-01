@@ -1,4 +1,4 @@
-import { Masonry } from "@/components/ui/rb-masonry-rb"
+import { Masonry } from "@/components/ui/masonry-rb"
 
 export default function MasonryBasicExample() {
   return <Masonry />

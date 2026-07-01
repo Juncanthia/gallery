@@ -51,7 +51,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { ExcelEditorBlock } from "@/components/ui/extend-excel-editor"
+import { ExcelEditorBlock } from "@/components/ui/excel-editor"
 
 export default function Demo() {
   return <ExcelEditorBlock />
@@ -184,7 +184,7 @@ export default function Demo() {
 
 当 AI 生成本项目 ExcelEditorBlock 代码时，应遵守：
 
-1. 从 `@/components/ui/extend-excel-editor` 导入，不要从 `@hyper/extend-ui` 或 `@extend-ai/react-xlsx` 导入。
+1. 从 `@/components/ui/excel-editor` 导入，不要从 `@hyper/extend-ui` 或 `@extend-ai/react-xlsx` 导入。
 2. 只使用本文件 API 摘要中列出的 props：`file` 和 `heightClassName`。
 3. 默认无需任何 props 即可渲染完整编辑器。
 4. 需要自定义样式时使用 `heightClassName` prop。

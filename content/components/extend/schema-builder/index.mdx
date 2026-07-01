@@ -25,7 +25,7 @@ SchemaBuilderPanel 提供 Form 和 JSON 两个 Tab：Form 标签页通过表格�
 />
 
 ```tsx
-import { SchemaBuilderPanel } from "@/components/ui/extend-schema-builder"
+import { SchemaBuilderPanel } from "@/components/ui/schema-builder"
 
 export default function Demo() {
   return (
@@ -71,7 +71,7 @@ export default function Demo() {
 传入 `schema` 和 `onSchemaChange` 即可进入受控模式：
 
 ```tsx
-import { SchemaBuilderPanel, type SchemaBuilderSchema } from "@/components/ui/extend-schema-builder"
+import { SchemaBuilderPanel, type SchemaBuilderSchema } from "@/components/ui/schema-builder"
 
 function App() {
   const [schema, setSchema] = useState&lt;SchemaBuilderSchema&gt;()
@@ -90,7 +90,7 @@ function App() {
 通过 `defaultSchema` 传入自定义的初始 Schema 结构：
 
 ```tsx
-import { SchemaBuilderPanel } from "@/components/ui/extend-schema-builder"
+import { SchemaBuilderPanel } from "@/components/ui/schema-builder"
 
 const MY_SCHEMA = {
   properties: [
@@ -111,7 +111,7 @@ export default function Demo() {
 使用导出的 `serializeSchema` 函数将 `SchemaBuilderSchema` 转换为标准 JSON Schema 格式：
 
 ```tsx
-import { serializeSchema } from "@/components/ui/extend-schema-builder"
+import { serializeSchema } from "@/components/ui/schema-builder"
 
 const jsonSchema = serializeSchema(schema)
 console.log(JSON.stringify(jsonSchema, null, 2))
@@ -135,7 +135,7 @@ console.log(JSON.stringify(jsonSchema, null, 2))
 
 AI 生成 SchemaBuilderPanel 代码时：
 
-1. 从 `@/components/ui/extend-schema-builder` 导入
+1. 从 `@/components/ui/schema-builder` 导入
 2. 默认用法不需要任何 props，组件内置示例 Schema
 3. 使用 `schema` + `onSchemaChange` 进入受控模式
 4. 通过 `defaultSchema` 自定义初始 Schema 结构

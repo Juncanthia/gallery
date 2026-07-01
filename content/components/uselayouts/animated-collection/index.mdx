@@ -30,7 +30,7 @@
 />
 
 ```tsx
-import { LayoutSwitcher } from "@/components/ui/uselayouts-animated-collection"
+import { LayoutSwitcher } from "@/components/ui/animated-collection"
 
 export default function Demo() {
   return <LayoutSwitcher />
@@ -97,7 +97,7 @@ interface CollectionItem {
 
 AI 生成 LayoutSwitcher 代码时：
 
-1. 从 `@/components/ui/uselayouts-animated-collection` 导入 `LayoutSwitcher`
+1. 从 `@/components/ui/animated-collection` 导入 `LayoutSwitcher`
 2. 组件自包含，无需传入任何 props
 3. 不要移除或修改组件内部的 motion 动画逻辑
 4. 修改内容数据时，保持 `ITEMS` 数组的 `CollectionItem` 接口一致

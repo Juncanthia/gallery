@@ -53,7 +53,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { OcrBlocksBlock } from "@/components/ui/extend-layout-blocks-block"
+import { OcrBlocksBlock } from "@/components/ui/layout-blocks-block"
 
 export default function Demo() {
   return (
@@ -180,7 +180,7 @@ type OcrBlocksPanelProps = {
 
 当 AI 生成本项目 OcrBlocksBlock 代码时，应遵守：
 
-1. 从 `@/components/ui/extend-layout-blocks-block` 导入，不要从内部路径导入。
+1. 从 `@/components/ui/layout-blocks-block` 导入，不要从内部路径导入。
 2. `file` 和 `output` 均有默认值，无 props 时展示内置示例。
 3. 不要手动组合 PDFViewer + OcrBlocksPanel + PdfBlockResizableShell 来模拟本组件行为。
 4. 不要引入 Ant Design 相关依赖。

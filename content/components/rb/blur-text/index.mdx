@@ -20,7 +20,7 @@ BlurText 基于 Motion 的模糊渐入文字动画组件，支持逐字或逐词
 <ComponentShowcase id="rb/blur-text" path="rb/blur-text/basic" />
 
 ```tsx
-import { BlurText } from "@/components/ui/rb-blur-text"
+import { BlurText } from "@/components/ui/blur-text"
 
 export default function Demo() {
   return (
@@ -35,7 +35,7 @@ export default function Demo() {
 ### 逐字母入场与自定义关键帧
 
 ```tsx
-import { BlurText } from "@/components/ui/rb-blur-text"
+import { BlurText } from "@/components/ui/blur-text"
 
 export default function CustomDemo() {
   return (
@@ -87,7 +87,7 @@ export default function CustomDemo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/rb-blur-text` 导入。
+1. 从 `@/components/ui/blur-text` 导入。
 2. 依赖 `motion`（framer-motion）库。
 3. `text` 为空字符串时不渲染任何内容。
 4. 自动基于 IntersectionObserver 触发，无需手动控制可见性。

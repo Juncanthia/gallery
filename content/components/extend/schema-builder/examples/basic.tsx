@@ -1,4 +1,4 @@
-import { SchemaBuilderPanel } from "@/components/ui/extend-schema-builder"
+import { SchemaBuilderPanel } from "@/components/ui/schema-builder"
 
 export default function Demo() {
   return (

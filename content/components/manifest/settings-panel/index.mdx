@@ -28,7 +28,7 @@ SettingsPanel 是一个完整的设置面板组件，提供侧边栏导航和分
 />
 
 ```tsx
-import { SettingsPanel } from "@/components/ui/manifest-settings-panel"
+import { SettingsPanel } from "@/components/ui/settings-panel"
 
 export default function Demo() {
   return (
@@ -264,7 +264,7 @@ const sections = [
 
 AI 生成 SettingsPanel 代码时：
 
-1. 从 `@/components/ui/manifest-settings-panel` 导入 `SettingsPanel`。
+1. 从 `@/components/ui/settings-panel` 导入 `SettingsPanel`。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
 3. 设置保存通过 `actions.onSave` 处理，接收完整的 `SettingsData` 对象。
 4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用按钮并显示"Saving..."文案。

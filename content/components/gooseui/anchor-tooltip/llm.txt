@@ -2,7 +2,7 @@
 component: AnchorTooltip
 slug: gooseui/anchor-tooltip
 
-import: import { AnchorTooltip } from "@/components/ui/gooseui-anchor-tooltip"
+import: import { AnchorTooltip } from "@/components/ui/anchor-tooltip"
 
 usage: |
   <AnchorTooltip content="提示文本" position="top">

@@ -61,7 +61,7 @@ VerticalTabs 的核心交互：
 VerticalTabs 无需传入任何 props，直接渲染即可获得完整的垂直标签页面板。
 
 ```tsx
-import { VerticalTabs } from "@/components/ui/uselayouts-vertical-tabs"
+import { VerticalTabs } from "@/components/ui/vertical-tabs"
 
 export default function Demo() {
   return <VerticalTabs />
@@ -174,7 +174,7 @@ VerticalTabs 消费 Tailwind 主题变量和语义色 class。所有颜色通过
 
 当 AI 生成本项目 VerticalTabs 相关代码时，应遵守：
 
-1. 从 `@/components/ui/uselayouts-vertical-tabs` 导入 `VerticalTabs`（named export）。
+1. 从 `@/components/ui/vertical-tabs` 导入 `VerticalTabs`（named export）。
 2. 不要给 VerticalTabs 传递任何 props，组件自身管理全部状态。
 3. 如需引入其他依赖（motion、@hugeicons），从组件源码处参考正确的导入路径。
 4. VerticalTabs 依赖 motion/react 的 AnimatePresence 和 spring 动画，不要移除这些动画逻辑。

@@ -18,13 +18,13 @@ StarBorder 星光边框组件，带有渐变动画边框的容器，产生旋转
 />
 
 ```tsx
-import { StarBorder } from "@/components/ui/rb-star-border"
+import { StarBorder } from "@/components/ui/star-border"
 export default function Demo() { return <StarBorder>Content</StarBorder> }
 ```
 
 ### 自定义配置
 ```tsx
-import { StarBorder } from "@/components/ui/rb-star-border"
+import { StarBorder } from "@/components/ui/star-border"
 
 export default function Demo() {
   return (
@@ -64,7 +64,7 @@ StarBorder 泛型支持 `as` 属性的具体类型推导，例如 `StarBorder<"a
 星光效果使用 `radial-gradient` 实现，在暗色或黑色 (`#222` 边框) 背景下效果最佳。亮色背景建议使用较深的 `color` 值。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-star-border` 导入。
+1. 从 `@/components/ui/star-border` 导入。
 2. 默认为 `button` 元素，可通过 `as` 属性修改为其他标签。
 3. 内容通过 `children` 传入，内层自动包裹在深色背景容器中。
 4. 无需额外依赖，仅使用 CSS 动画和内联样式。

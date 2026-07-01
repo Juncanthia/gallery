@@ -1,6 +1,6 @@
 [图表网格 / ChartGrid]
-导入: import { Grid } from "@/components/ui/bklit-chart-grid"
-包来源: @/components/bklit/charts (grid.tsx)
+导入: import { Grid } from "@/components/ui/chart-grid"
+包来源: @/components/charts/bklit/charts (grid.tsx)
 组件类型: 图表元素 / BKLit Charts
 依赖: @visx/grid, motion/react
 
@@ -41,9 +41,9 @@
 
 ### 基础：横向网格线
 ```tsx
-import { BarChart } from "@/components/ui/bklit-bar-chart"
-import { Bar } from "@/components/bklit/charts"
-import { Grid } from "@/components/ui/bklit-chart-grid"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { Bar } from "@/components/charts/bklit/charts"
+import { Grid } from "@/components/ui/chart-grid"
 
 export default function Demo() {
   return (
@@ -57,7 +57,7 @@ export default function Demo() {
 
 ### 纵向网格 + 渐变边缘
 ```tsx
-import { Grid } from "@/components/ui/bklit-chart-grid"
+import { Grid } from "@/components/ui/chart-grid"
 
 export default function Demo() {
   return (
@@ -71,7 +71,7 @@ export default function Demo() {
 
 ### 高亮零基线 + 加载闪烁
 ```tsx
-import { Grid } from "@/components/ui/bklit-chart-grid"
+import { Grid } from "@/components/ui/chart-grid"
 
 export default function Demo() {
   return (

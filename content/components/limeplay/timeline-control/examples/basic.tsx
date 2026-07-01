@@ -1,6 +1,6 @@
 "use client"
 
-import * as TimelineControl from "@/components/ui/limeplay-timeline-control"
+import * as TimelineControl from "@/components/ui/timeline-control"
 
 export default function Demo() {
   return (

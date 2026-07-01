@@ -34,7 +34,7 @@ stack:
 ## 导入路径
 
 ```tsx
-import { CaptionsStateControl } from "@/components/ui/limeplay-captions-state-control"
+import { CaptionsStateControl } from "@/components/ui/captions-state-control"
 ```
 
 ## 核心导出
@@ -58,8 +58,8 @@ interface CaptionsControlProps extends React.ButtonHTMLAttributes<HTMLButtonElem
 ## 最小示例
 
 ```tsx
-import { CaptionsContainer } from "@/components/ui/limeplay-captions"
-import { CaptionsStateControl } from "@/components/ui/limeplay-captions-state-control"
+import { CaptionsContainer } from "@/components/ui/captions"
+import { CaptionsStateControl } from "@/components/ui/captions-state-control"
 
 export default function Demo() {
   return (

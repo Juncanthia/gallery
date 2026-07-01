@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { AnimatedTimer } from "@/components/ui/gooseui-animated-timer"
+import { AnimatedTimer } from "@/components/ui/animated-timer"
 
 export default function Demo() {
   return (
@@ -146,7 +146,7 @@ DOM 结构：
 
 当 AI 生成本项目 AnimatedTimer 代码时，应遵守：
 
-1. 从 `@/components/ui/gooseui-animated-timer` 导入 `AnimatedTimer`。
+1. 从 `@/components/ui/animated-timer` 导入 `AnimatedTimer`。
 2. 使用 `showSeconds` 控制秒显（`boolean`），`use24Hour` 控制小时制（`boolean`）。
 3. 不要自行实现数字滚动动画，使用组件内置的 `TimerChar` 动画机制。
 4. 不要在 SSR 阶段依赖组件输出精确时间，挂载后才会启动计时。

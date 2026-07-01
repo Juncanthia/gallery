@@ -1,4 +1,4 @@
-import { LiquidChrome } from "@/components/ui/rb-liquid-chrome"
+import { LiquidChrome } from "@/components/ui/liquid-chrome-rb"
 
 export default function LiquidChromeBasicExample() {
   return (

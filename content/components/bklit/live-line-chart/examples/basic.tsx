@@ -1,5 +1,5 @@
-import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
-import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/bklit/charts"
+import { LiveLineChart } from "@/components/ui/live-line-chart"
+import { LiveLine, LiveXAxis, LiveYAxis } from "@/components/charts/bklit/charts"
 
 const data = Array.from({ length: 50 }, (_, i) => ({
   time: (Date.now() - (50 - i) * 1000) / 1000,

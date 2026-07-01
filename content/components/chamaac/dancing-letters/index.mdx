@@ -29,7 +29,7 @@ DancingLetters 舞动字母。基于 motion/react 的交互式字母动画组件
 默认文字为 "ANIMATE"，hover 或点击任意字母即可触发对应的动画效果。
 
 ```tsx
-import { DancingLetters } from "@/components/ui/chamaac-dancing-letters"
+import { DancingLetters } from "@/components/ui/dancing-letters"
 
 export default function Demo() {
   return (
@@ -45,7 +45,7 @@ export default function Demo() {
 通过 `text` 属性传入任意文字。
 
 ```tsx
-import { DancingLetters } from "@/components/ui/chamaac-dancing-letters"
+import { DancingLetters } from "@/components/ui/dancing-letters"
 
 export default function Demo() {
   return (
@@ -61,7 +61,7 @@ export default function Demo() {
 通过 `letterClassName` 为每个字母附加自定义类名，可调整颜色、字体粗细等。
 
 ```tsx
-import { DancingLetters } from "@/components/ui/chamaac-dancing-letters"
+import { DancingLetters } from "@/components/ui/dancing-letters"
 
 export default function Demo() {
   return (
@@ -130,7 +130,7 @@ export default function Demo() {
 
 AI 生成 DancingLetters 代码时：
 
-1. 从 `@/components/ui/chamaac-dancing-letters` 导入 `DancingLetters`（具名导出）。
+1. 从 `@/components/ui/dancing-letters` 导入 `DancingLetters`（具名导出）。
 2. 自定义文字使用 `text` 属性。
 3. 自定义字母样式使用 `letterClassName`，传入 Tailwind class 字符串。
 4. DancingLetters 依赖 motion/react 和 Outfit 字体，组件内部已处理，不需要额外引入。

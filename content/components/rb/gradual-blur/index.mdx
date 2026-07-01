@@ -15,7 +15,7 @@ GradualBlur 使用多层 backdrop-filter 实现渐变模糊遮罩效果，支持
 ### 基础用法
 <ComponentShowcase id="rb/gradual-blur" path="rb/gradual-blur/basic" />
 ```tsx
-import { GradualBlur } from "@/components/ui/rb-gradual-blur"
+import { GradualBlur } from "@/components/ui/gradual-blur"
 
 export default function Demo() {
   return (
@@ -29,7 +29,7 @@ export default function Demo() {
 
 ### 使用预设和指数衰减
 ```tsx
-import { GradualBlur } from "@/components/ui/rb-gradual-blur"
+import { GradualBlur } from "@/components/ui/gradual-blur"
 
 export default function Demo() {
   return (
@@ -81,7 +81,7 @@ export default function Demo() {
 `parent` 是相对于父容器 `absolute` 定位；`page` 是 `fixed` 定位，覆盖整个视口，通常用于页面级遮罩。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-gradual-blur` 导入。
+1. 从 `@/components/ui/gradual-blur` 导入。
 2. 导出名为 `GradualBlur`（React.memo 包装），类型为 `GradualBlurProps`。
 3. `preset` 属性会覆盖默认值，传入后部分单独属性仍可覆盖 preset。
 4. 垂直方向（top/bottom）使用 `height`，水平方向（left/right）使用 `width`。

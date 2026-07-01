@@ -1,4 +1,4 @@
-import { SoftAurora } from "@/components/ui/rb-soft-aurora"
+import { SoftAurora } from "@/components/ui/soft-aurora"
 
 export default function SoftAuroraBasicExample() {
   return (

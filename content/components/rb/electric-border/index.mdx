@@ -15,7 +15,7 @@ ElectricBorder 基于 Canvas 的多层噪波动画电流边框效果，随机闪
 <ComponentShowcase id="rb/electric-border" path="rb/electric-border/basic" />
 
 ```tsx
-import { ElectricBorder } from "@/components/ui/rb-electric-border"
+import { ElectricBorder } from "@/components/ui/electric-border"
 export default function Demo() {
   return (
     <ElectricBorder>
@@ -28,7 +28,7 @@ export default function Demo() {
 ### 自定义配置
 
 ```tsx
-import { ElectricBorder } from "@/components/ui/rb-electric-border"
+import { ElectricBorder } from "@/components/ui/electric-border"
 
 export default function Demo() {
   return (
@@ -64,7 +64,7 @@ export default function Demo() {
 可以，但每个实例都会启动独立的 requestAnimationFrame 循环和 Canvas 绘制。大量实例时需要考虑性能，建议限制同时可见的数量。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-electric-border` 导入。
+1. 从 `@/components/ui/electric-border` 导入。
 2. 纯 Canvas 实现，无额外第三方依赖（除 React 和 `clsx`/`tailwind-merge` 外）。
 3. `children` 包裹在 `z-10` 层中，如有需要可直接放置文本、图片等任意内容。
 4. 组件内部向外扩展 60px 作为边框绘制区域，设置 `borderRadius` 时需考虑此偏移。

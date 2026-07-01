@@ -29,8 +29,8 @@ PieChart 饼图用于展示各部分占整体的比例关系，支持环形图�
 <ComponentShowcase id="bklit/pie-chart" path="bklit/pie-chart/basic" />
 
 ```tsx
-import { PieChart } from "@/components/ui/bklit-pie-chart"
-import { PieSlice } from "@/components/bklit/charts"
+import { PieChart } from "@/components/ui/pie-chart-bklit"
+import { PieSlice } from "@/components/charts/bklit/charts"
 
 const data = [
   { label: "A", value: 40, color: "var(--chart-line-primary)" },
@@ -57,8 +57,8 @@ export default function Demo() {
 <ComponentShowcase id="bklit/pie-chart" path="bklit/pie-chart/donut" />
 
 ```tsx
-import { PieChart } from "@/components/ui/bklit-pie-chart"
-import { PieCenter, PieSlice } from "@/components/bklit/charts"
+import { PieChart } from "@/components/ui/pie-chart-bklit"
+import { PieCenter, PieSlice } from "@/components/charts/bklit/charts"
 
 const data = [
   { label: "产品 A", value: 400, color: "var(--chart-1)" },
@@ -178,8 +178,8 @@ PieCenter 仅在 `innerRadius > 0`（环形图模式）时渲染。默认显示�
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入 PieChart: `import { PieChart } from "@/components/ui/bklit-pie-chart"`
-- 导入子组件: `import { PieSlice, PieCenter } from "@/components/bklit/charts"`
+- 导入 PieChart: `import { PieChart } from "@/components/ui/pie-chart-bklit"`
+- 导入子组件: `import { PieSlice, PieCenter } from "@/components/charts/bklit/charts"`
 - 数据格式: `{ label: string, value: number, color?: string, fill?: string }[]`
 - 必须为每个 `PieSlice` 提供 `index` 属性，映射到 data 数组索引
 - 环形图需设置 PieChart 的 `innerRadius`，并可选添加 `PieCenter`

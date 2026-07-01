@@ -37,7 +37,7 @@ stack:
 
 - 需要复用统一设计语言、状态样式和可访问性约定。
 - 需要和本项目 Tailwind 主题变量、Radix primitive 或本地交互行为保持一致。
-- 需要让 AI 或业务代码稳定地从 `@/components/ui/limeplay-timeline-control` 引用组件，而不是直接引用第三方底层库。
+- 需要让 AI 或业务代码稳定地从 `@/components/ui/timeline-control` 引用组件，而不是直接引用第三方底层库。
 
 不推荐：
 
@@ -49,7 +49,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import * as TimelineControl from "@/components/ui/limeplay-timeline-control"
+import * as TimelineControl from "@/components/ui/timeline-control"
 
 export default function Demo() {
   return (
@@ -195,7 +195,7 @@ export default function Demo() {
 
 当 AI 生成本项目 TimelineControl 代码时，应遵守：
 
-1. 从 `@/components/ui/limeplay-timeline-control` 导入，推荐使用命名空间 `import * as TimelineControl from "..."`。
+1. 从 `@/components/ui/timeline-control` 导入，推荐使用命名空间 `import * as TimelineControl from "..."`。
 2. Root、Track、Progress、Buffered、Thumb 必须按复合模式嵌套使用。
 3. Root 必须放在 Limeplay Player Provider 作用域内。
 4. Track 推荐添加 `className="overflow-hidden"`。

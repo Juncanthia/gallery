@@ -1,6 +1,6 @@
 [仪表盘 / Gauge]
-导入: import { Gauge } from "@/components/ui/bklit-gauge"
-包来源: @/components/bklit/charts
+导入: import { Gauge } from "@/components/ui/gauge-bklit"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -54,7 +54,7 @@
 
 ### 基础仪表盘
 ```tsx
-import { Gauge } from "@/components/ui/bklit-gauge"
+import { Gauge } from "@/components/ui/gauge-bklit"
 
 export default function Demo() {
   return (
@@ -72,7 +72,7 @@ export default function Demo() {
 
 ### 自定义渐变与角度
 ```tsx
-import { Gauge } from "@/components/ui/bklit-gauge"
+import { Gauge } from "@/components/ui/gauge-bklit"
 
 export default function Demo() {
   return (
@@ -97,7 +97,7 @@ export default function Demo() {
 
 ### 自定义填充 + 图案
 ```tsx
-import { Gauge } from "@/components/ui/bklit-gauge"
+import { Gauge } from "@/components/ui/gauge-bklit"
 
 export default function Demo() {
   return (

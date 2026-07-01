@@ -1,4 +1,4 @@
-import { SplitText } from "@/components/ui/rb-split-text"
+import { SplitText } from "@/components/ui/split-text"
 
 export default function SplitTextBasicExample() {
   return (

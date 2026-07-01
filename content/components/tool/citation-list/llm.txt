@@ -48,7 +48,7 @@ CitationList 通过 `variant` 表达展示形式：
 默认以 `variant="default"` 纵向列表展示所有引用来源。
 
 ```tsx
-import { CitationList } from "@/components/ui/tool-citation-list"
+import { CitationList } from "@/components/ui/citation-list"
 
 const citations = [
   {
@@ -82,7 +82,7 @@ export default function Demo() {
 设置 `variant="inline"` 以横向标签形式展示引用，适合嵌入对话文本：
 
 ```tsx
-import { CitationList } from "@/components/ui/tool-citation-list"
+import { CitationList } from "@/components/ui/citation-list"
 
 export default function Demo() {
   return (
@@ -99,7 +99,7 @@ export default function Demo() {
 设置 `variant="stacked"` 以紧凑的图标堆叠形式展示，hover 弹出完整列表：
 
 ```tsx
-import { CitationList } from "@/components/ui/tool-citation-list"
+import { CitationList } from "@/components/ui/citation-list"
 
 export default function Demo() {
   return (
@@ -113,7 +113,7 @@ export default function Demo() {
 使用 `maxVisible` 控制可见引用数量，超出部分折叠到 hover 触发的溢出面板：
 
 ```tsx
-import { CitationList } from "@/components/ui/tool-citation-list"
+import { CitationList } from "@/components/ui/citation-list"
 
 export default function Demo() {
   return (
@@ -127,7 +127,7 @@ export default function Demo() {
 传入 `onNavigate` 拦截默认的链接跳转行为：
 
 ```tsx
-import { CitationList } from "@/components/ui/tool-citation-list"
+import { CitationList } from "@/components/ui/citation-list"
 
 export default function Demo() {
   return (
@@ -263,7 +263,7 @@ CitationList 使用 Tailwind CSS 内联类名，不依赖 CSS-in-JS 或 ConfigPr
 
 当 AI 生成本项目 CitationList 代码时，应遵守：
 
-1. 从 `@/components/ui/tool-citation-list` 导入 `CitationList`。
+1. 从 `@/components/ui/citation-list` 导入 `CitationList`。
 2. `citations` 数组中每项的 `id` 和 `href` 为必填字段，且 `href` 必须是合法 URL。
 3. `type` 字段建议明确指定（webpage / document / article / api / code / other），以便渲染正确的类型图标。
 4. 在对话消息中展示引用时优先选择 `variant="inline"`，独立区域选择 `variant="default"`。

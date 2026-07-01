@@ -1,4 +1,4 @@
-import { Lightning } from "@/components/ui/rb-lightning"
+import { Lightning } from "@/components/ui/lightning"
 
 export default function LightningBasicExample() {
   return (

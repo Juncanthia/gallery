@@ -2,7 +2,7 @@
 
 ## Import
 ```
-import { Checkbox } from "@/components/ui/dice-checkbox"
+import { Checkbox } from "@/components/ui/checkbox-dice"
 ```
 
 ## Props
@@ -21,7 +21,7 @@ import { Checkbox } from "@/components/ui/dice-checkbox"
 
 ### Basic
 ```tsx
-import { Checkbox } from "@/components/ui/dice-checkbox"
+import { Checkbox } from "@/components/ui/checkbox-dice"
 
 <Checkbox id="agree" defaultChecked />
 <label htmlFor="agree">I agree</label>
@@ -55,7 +55,7 @@ const [checked, setChecked] = useState(false)
 ```
 
 ## Constraints
-- DO NOT import from `antd`. Use `@/components/ui/dice-checkbox`.
+- DO NOT import from `antd`. Use `@/components/ui/checkbox-dice`.
 - `indeterminate` is a value of the `checked` prop, not a separate boolean prop.
 - Always pair `<Checkbox>` with a `<label htmlFor={id}>` for accessibility.
 - For checkbox groups, compose multiple `<Checkbox>` instances inside a `<fieldset>`.

@@ -1,4 +1,4 @@
-import { DateTimePicker } from "@/components/ui/manifest-date-time-picker"
+import { DateTimePicker } from "@/components/ui/date-time-picker"
 
 export default function Demo() {
   return (

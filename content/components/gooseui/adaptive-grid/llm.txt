@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { AdaptiveGrid, AdaptiveCard } from "@/components/ui/gooseui-adaptive-grid"
+import { AdaptiveGrid, AdaptiveCard } from "@/components/ui/adaptive-grid"
 
 export default function Demo() {
   return (
@@ -158,7 +158,7 @@ AdaptiveCard 渲染为带 `@container` 和 `group/card` 的卡片容器：
 
 当 AI 生成本项目 AdaptiveGrid 代码时，应遵守：
 
-1. 从 `@/components/ui/gooseui-adaptive-grid` 导入 `AdaptiveGrid` 和 `AdaptiveCard`。
+1. 从 `@/components/ui/adaptive-grid` 导入 `AdaptiveGrid` 和 `AdaptiveCard`。
 2. 使用 `AdaptiveCard` 的 `image` 和 `title` 属性控制卡片内容。
 3. 不要自行拼装卡片网格布局 className，使用组件内置的容器查询机制。
 4. 布局切换由 CSS `:has()` 自动完成，不要在业务层手动判断有无图片来切换 className。

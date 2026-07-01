@@ -1,4 +1,4 @@
-import { InlineEdit } from "@/components/ui/uselayouts-inline-edit"
+import { InlineEdit } from "@/components/ui/inline-edit"
 
 export default function Demo() {
   return <InlineEdit />

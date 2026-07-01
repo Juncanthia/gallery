@@ -1,4 +1,4 @@
-import { FanCircles } from "@/components/ui/bklit-fan-circles"
+import { FanCircles } from "@/components/ui/fan-circles"
 
 export default function Demo() {
   return <FanCircles />

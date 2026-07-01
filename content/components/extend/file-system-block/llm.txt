@@ -132,7 +132,7 @@ FileSystemBlock Props 继承自 FileSystemProps。
 
 ## LLM 使用规则 {#llm-rules}
 
-1. 从 `@/components/ui/extend-file-system-block` 导入
+1. 从 `@/components/ui/file-system-block` 导入
 2. `items` 必填，每个 item 至少含 `kind` 和 `path`
 3. 文件夹 `path` 以 `/` 结尾
 4. 视图用 `defaultView`（非受控）或 `view` + `onViewChange`（受控）

@@ -1,4 +1,4 @@
-import { ScrollFloat } from "@/components/ui/rb-scroll-float"
+import { ScrollFloat } from "@/components/ui/scroll-float"
 
 export default function ScrollFloatBasicExample() {
   return (

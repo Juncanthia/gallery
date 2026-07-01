@@ -1,4 +1,4 @@
-import { Lightfall } from "@/components/ui/rb-lightfall"
+import { Lightfall } from "@/components/ui/lightfall"
 
 export default function LightfallBasicExample() {
   return (

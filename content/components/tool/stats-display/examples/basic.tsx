@@ -1,4 +1,4 @@
-import { StatsDisplay } from "@/components/ui/tool-stats-display"
+import { StatsDisplay } from "@/components/ui/stats-display"
 
 export default function Demo() {
   return (

@@ -1,4 +1,4 @@
-import { Lanyard } from "@/components/ui/rb-lanyard"
+import { Lanyard } from "@/components/ui/lanyard"
 
 export default function LanyardBasicExample() {
   return <Lanyard />

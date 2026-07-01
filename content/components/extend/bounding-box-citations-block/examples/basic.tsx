@@ -1,4 +1,4 @@
-import { HumanReviewBlock } from "@/components/ui/extend-bounding-box-citations-block"
+import { HumanReviewBlock } from "@/components/ui/bounding-box-citations-block"
 
 export default function Demo() {
   return (

@@ -1,4 +1,4 @@
-import { CitationList } from "@/components/ui/tool-citation-list"
+import { CitationList } from "@/components/ui/citation-list"
 
 const sampleCitations = [
   {

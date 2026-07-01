@@ -19,7 +19,7 @@ Masonry 瀑布流图片网格组件，支持响应式列数自动适配、入场
 <ComponentShowcase id="rb/masonry-rb" path="rb/masonry-rb/basic" />
 
 ```tsx
-import { Masonry } from "@/components/ui/rb-masonry-rb"
+import { Masonry } from "@/components/ui/masonry-rb"
 
 export default function Demo() {
   return <Masonry />
@@ -29,7 +29,7 @@ export default function Demo() {
 ### 自定义配置
 
 ```tsx
-import { Masonry } from "@/components/ui/rb-masonry-rb"
+import { Masonry } from "@/components/ui/masonry-rb"
 
 const items = [
   { id: "1", img: "https://picsum.photos/seed/a/500/600", url: "#", height: 600 },
@@ -90,7 +90,7 @@ export default function Demo() {
 组件会自动预加载所有图片（通过 `preloadImages`），加载完成后才触发入场动画，避免卡顿。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-masonry-rb` 导入。
+1. 从 `@/components/ui/masonry-rb` 导入。
 2. 依赖 `gsap` 库，确保项目中已安装。
 3. 每个 `MasonryItem` 必须提供 `id`、`img`、`url` 和 `height`。
 4. `height` 值用于瀑布流布局计算，应反映图片实际比例。

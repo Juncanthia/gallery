@@ -1,4 +1,4 @@
-import { ElectricMist } from "@/components/ui/chamaac-electric-mist"
+import { ElectricMist } from "@/components/ui/electric-mist"
 
 export default function Demo() {
   return (

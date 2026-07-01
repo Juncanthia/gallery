@@ -1,6 +1,6 @@
 "use client"
 
-import { MessageDraft } from "@/components/ui/tool-message-draft"
+import { MessageDraft } from "@/components/ui/message-draft"
 
 export default function Demo() {
   return (

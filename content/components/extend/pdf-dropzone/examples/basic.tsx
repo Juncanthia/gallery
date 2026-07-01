@@ -1,4 +1,4 @@
-import { PdfDropzoneBlock } from "@/components/ui/extend-pdf-dropzone"
+import { PdfDropzoneBlock } from "@/components/ui/pdf-dropzone"
 
 export default function Demo() {
   return (

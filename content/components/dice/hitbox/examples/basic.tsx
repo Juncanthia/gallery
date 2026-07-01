@@ -1,7 +1,7 @@
 "use client"
 
 import { Target } from "lucide-react"
-import { Hitbox } from "@/components/ui/dice-hitbox"
+import { Hitbox } from "@/components/ui/hitbox"
 
 export default function Demo() {
   return (

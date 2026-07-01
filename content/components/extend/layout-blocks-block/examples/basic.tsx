@@ -1,4 +1,4 @@
-import { OcrBlocksBlock } from "@/components/ui/extend-layout-blocks-block"
+import { OcrBlocksBlock } from "@/components/ui/layout-blocks-block"
 
 export default function Demo() {
   return (

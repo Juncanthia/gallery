@@ -20,7 +20,7 @@
 <ComponentShowcase id="limeplay/volume-control" path="limeplay/volume-control/basic" />
 
 ```tsx
-import * as VolumeControl from "@/components/limeplay/ui/volume-control"
+import * as VolumeControl from "@/components/media/ui/volume-control"
 
 export default function Demo() {
   return (
@@ -35,8 +35,8 @@ export default function Demo() {
 ```
 
 ```tsx
-import { Root } from "@/components/ui/limeplay-volume-control"
-import { Track, Progress, Thumb } from "@/components/limeplay/ui/volume-control"
+import { Root } from "@/components/ui/volume-control"
+import { Track, Progress, Thumb } from "@/components/media/ui/volume-control"
 
 export default function Demo() {
   return (
@@ -53,7 +53,7 @@ export default function Demo() {
 ### 垂直方向
 
 ```tsx
-import * as VolumeControl from "@/components/limeplay/ui/volume-control"
+import * as VolumeControl from "@/components/media/ui/volume-control"
 
 export default function Demo() {
   return (
@@ -125,7 +125,7 @@ Root 组件依赖 `useVolumeStore` 和 `usePlaybackStore`，需要处于 LimePla
 
 ### 如何搭配静音按钮使用？
 
-可结合 `@/components/limeplay/ui/mute-control` 的 MuteControl 组件，或直接使用 `useVolumeStore` 的 `muted`、`toggleMute` 方法实现静音切换。
+可结合 `@/components/media/ui/mute-control` 的 MuteControl 组件，或直接使用 `useVolumeStore` 的 `muted`、`toggleMute` 方法实现静音切换。
 
 ### orientation="vertical" 有什么注意点？
 
@@ -137,7 +137,7 @@ Root 组件依赖 `useVolumeStore` 和 `usePlaybackStore`，需要处于 LimePla
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/limeplay-volume-control` 导入 Root，或使用命名空间导入 `import * as VolumeControl from "@/components/limeplay/ui/volume-control"`。
+1. 从 `@/components/ui/volume-control` 导入 Root，或使用命名空间导入 `import * as VolumeControl from "@/components/media/ui/volume-control"`。
 2. 必须将 Track、Progress、Thumb 组合在 Root 内部使用，形成完整的滑块结构。
 3. 垂直模式下注意为 Root 设置固定高度（如 `h-32`），为 Track 设置 `h-full`。
 4. 不要从 `antd` 或 `@ant-design/icons` 导入音量相关组件。

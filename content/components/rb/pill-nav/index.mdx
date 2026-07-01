@@ -15,7 +15,7 @@ PillNav 胶囊导航栏，hover 时导航项产生圆形放大背景和文字上
 <ComponentShowcase id="rb/pill-nav" path="rb/pill-nav/basic" />
 
 ```tsx
-import { PillNav } from "@/components/ui/rb-pill-nav"
+import { PillNav } from "@/components/ui/pill-nav"
 
 export default function Demo() {
   return (
@@ -35,7 +35,7 @@ export default function Demo() {
 ### 自定义配色
 
 ```tsx
-import { PillNav } from "@/components/ui/rb-pill-nav"
+import { PillNav } from "@/components/ui/pill-nav"
 
 export default function Demo() {
   return (
@@ -89,7 +89,7 @@ export default function Demo() {
 组件在移动端自动切换为汉堡菜单模式，点击汉堡图标展开/收起菜单，`onMobileMenuClick` 回调可用于关闭菜单后执行路由跳转。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-pill-nav` 导入。
+1. 从 `@/components/ui/pill-nav` 导入。
 2. 依赖 `gsap` 库，请确保项目已安装。
 3. 通过 `items` 传入导航链接数组，每个项包含 `href` 和 `label`。
 4. 使用 `baseColor`、`pillColor`、`hoveredPillTextColor` 和 `pillTextColor` 控制配色。

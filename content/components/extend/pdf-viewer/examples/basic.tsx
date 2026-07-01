@@ -1,4 +1,4 @@
-import { PDFViewer } from "@/components/ui/extend-pdf-viewer"
+import { PDFViewer } from "@/components/ui/pdf-viewer"
 
 const SAMPLE_PDF =
   "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"

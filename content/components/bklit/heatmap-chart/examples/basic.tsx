@@ -1,5 +1,5 @@
-import { HeatmapCells, HeatmapLegend, HeatmapTooltip, HeatmapXAxis, HeatmapYAxis } from "@/components/bklit/charts"
-import { HeatmapChart } from "@/components/ui/bklit-heatmap-chart"
+import { HeatmapCells, HeatmapLegend, HeatmapTooltip, HeatmapXAxis, HeatmapYAxis } from "@/components/charts/bklit/charts"
+import { HeatmapChart } from "@/components/ui/heatmap-chart"
 
 function d(y: number, m: number, day: number) {
   return new Date(y, m - 1, day)

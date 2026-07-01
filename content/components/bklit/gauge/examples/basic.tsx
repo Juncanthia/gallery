@@ -1,4 +1,4 @@
-import { Gauge } from "@/components/ui/bklit-gauge"
+import { Gauge } from "@/components/ui/gauge-bklit"
 
 export default function Demo() {
   return (

@@ -3,7 +3,7 @@
 ## Import Path
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/evilcharts-line-chart"
+import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
 import {
   Line,
   XAxis,
@@ -13,13 +13,13 @@ import {
   Grid,
   Dot,
   ActiveDot,
-} from "@/components/evilcharts/components/line-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+} from "@/components/charts/evilcharts/components/line-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 ```
 
 From the evilcharts barrel:
 ```tsx
-import { EvilLineChart } from "@/components/evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 ```
 
 ## Component Overview
@@ -104,9 +104,9 @@ Forwards all Recharts CartesianGrid props. Defaults: `vertical={false} strokeDas
 ### Basic Line Chart
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/evilcharts-line-chart"
-import { Line, XAxis, Tooltip, Legend, Dot, ActiveDot } from "@/components/evilcharts/components/line-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { Line, XAxis, Tooltip, Legend, Dot, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const data = [
   { month: "1月", desktop: 342, mobile: 184 },

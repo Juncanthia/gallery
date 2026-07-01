@@ -1,7 +1,7 @@
 [雷达图 / RadarChart]
-导入: import { RadarChart } from "@/components/ui/bklit-radar-chart"
-子组件: import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/bklit/charts"
-包来源: @/components/bklit/charts
+导入: import { RadarChart } from "@/components/ui/radar-chart-bklit"
+子组件: import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 底层依赖: @visx (shape, scale, group, responsive), motion/react
 
@@ -90,8 +90,8 @@ interface RadarMetric {
 ### 基础单组数据
 
 ```tsx
-import { RadarChart } from "@/components/ui/bklit-radar-chart"
-import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/bklit/charts"
+import { RadarChart } from "@/components/ui/radar-chart-bklit"
+import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
 
 const metrics = [
   { key: "speed", label: "速度" },

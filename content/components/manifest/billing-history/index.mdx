@@ -28,7 +28,7 @@ BillingHistory 以结构化表格展示账单信息：
 />
 
 ```tsx
-import { BillingHistory } from "@/components/ui/manifest-billing-history"
+import { BillingHistory } from "@/components/ui/billing-history"
 
 export default function Demo() {
   return (
@@ -44,7 +44,7 @@ export default function Demo() {
 通过 `data` prop 传入自定义账单记录。
 
 ```tsx
-import { BillingHistory } from "@/components/ui/manifest-billing-history"
+import { BillingHistory } from "@/components/ui/billing-history"
 
 const sampleData = {
   invoices: [
@@ -215,7 +215,7 @@ useEffect(() => {
 
 AI 生成 BillingHistory 代码时：
 
-1. 从 `@/components/ui/manifest-billing-history` 导入 `BillingHistory`。
+1. 从 `@/components/ui/billing-history` 导入 `BillingHistory`。
 2. 通过 `data.invoices` 传入账单记录数组，每条记录必须包含 `id`、`date`、`amount`。
 3. 支付状态使用 `"paid"`、`"pending"`、`"refunded"`、`"overdue"` 四个枚举值。
 4. 查看和下载操作通过 `actions.onViewInvoice` 和 `actions.onDownload` 处理。

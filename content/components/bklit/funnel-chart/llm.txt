@@ -1,7 +1,7 @@
 [漏斗图 / FunnelChart]
-导入: import { FunnelChart } from "@/components/ui/bklit-funnel-chart"
-类型导入: import type { FunnelChartProps, FunnelStage, FunnelGradientStop } from "@/components/ui/bklit-funnel-chart"
-包来源: @/components/bklit/charts
+导入: import { FunnelChart } from "@/components/ui/funnel-chart"
+类型导入: import type { FunnelChartProps, FunnelStage, FunnelGradientStop } from "@/components/ui/funnel-chart"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -59,7 +59,7 @@
 ### 基础用法
 
 ```tsx
-import { FunnelChart } from "@/components/ui/bklit-funnel-chart"
+import { FunnelChart } from "@/components/ui/funnel-chart"
 
 const data = [
   { label: "访问", value: 5000 },
@@ -76,8 +76,8 @@ export default function Demo() {
 ### 自定义颜色与渐变
 
 ```tsx
-import { FunnelChart } from "@/components/ui/bklit-funnel-chart"
-import type { FunnelStage } from "@/components/ui/bklit-funnel-chart"
+import { FunnelChart } from "@/components/ui/funnel-chart"
+import type { FunnelStage } from "@/components/ui/funnel-chart"
 
 const data: FunnelStage[] = [
   { label: "曝光", value: 10000, color: "#8B5CF6" },
@@ -107,7 +107,7 @@ export default function Demo() {
 ### 垂直漏斗 + 直边 + 网格
 
 ```tsx
-import { FunnelChart } from "@/components/ui/bklit-funnel-chart"
+import { FunnelChart } from "@/components/ui/funnel-chart"
 
 const data = [
   { label: "线索", value: 8000 },

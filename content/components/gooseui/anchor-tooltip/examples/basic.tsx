@@ -1,4 +1,4 @@
-import { AnchorTooltip } from "@/components/ui/gooseui-anchor-tooltip"
+import { AnchorTooltip } from "@/components/ui/anchor-tooltip"
 
 export default function Demo() {
   return (

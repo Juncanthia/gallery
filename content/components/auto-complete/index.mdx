@@ -1,4 +1,4 @@
-AutoComplete 自动完成，输入框自动完成功能。本质是对 Select（combobox 模式）的封装，支持自由文本输入和选项过滤。
+AutoComplete 自动完成，输入框自动完成功能。基于 `Command`（cmdk）+ `Popover` 直接实现（输入优先，输入框本身即弹层锚点），支持自由文本输入和选项过滤。
 
 <h2 id="when-to-use">何时使用</h2>
 
@@ -15,7 +15,7 @@ AutoComplete 自动完成，输入框自动完成功能。本质是对 Select（
 - 仅展示不涉及输入的场景，优先使用 Dropdown 或 Popover。
 - 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
 
-AutoComplete 本质是对 Select（combobox 模式）的封装，通过 `showSearch` 和 `mode="combobox"` 实现自由输入+选项过滤。
+AutoComplete 与 Combobox（`@/components/ui/combobox`）的区别：Combobox 是按钮触发、只能从列表中选择一个值；AutoComplete 是输入框触发，允许自由文本，值不要求匹配任何选项。
 
 <h2 id="examples">代码演示</h2>
 
@@ -77,7 +77,7 @@ export default function Demo() {
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| options | 输入时建议的可选项列表，支持平铺和分组格式 | `SelectOptionItem[]` | - |
+| options | 输入时建议的可选项列表，支持平铺和分组格式 | `AutoCompleteOptionItem[]` | - |
 | placeholder | 未输入值时的占位文本 | `React.ReactNode` | - |
 | size | 输入框尺寸 | `"small"` \| `"middle"` \| `"large"` | `"middle"` |
 | variant | 视觉变体 | `"outlined"` \| `"filled"` \| `"borderless"` \| `"underlined"` | `"outlined"` |
@@ -87,14 +87,12 @@ export default function Demo() {
 | prefix | 输入框前渲染的内容 | `React.ReactNode` | - |
 | suffixIcon | 自定义后缀图标，传入 `null` 隐藏 | `React.ReactNode` \| `null` | - |
 | notFoundContent | 无匹配选项时展示的内容 | `React.ReactNode` | `"No results found."` |
-| optionRender | 每个选项的自定义渲染 | `(option: SelectOption, info: { index: number }) => React.ReactNode` | - |
+| optionRender | 每个选项的自定义渲染 | `(option: AutoCompleteOption) => React.ReactNode` | - |
 | popupRender | 包装弹出列表节点，可追加底部按钮等 | `(originNode: React.ReactNode) => React.ReactNode` | - |
-| labelRender | 选中值展示的自定义渲染，仅在值匹配选项时生效 | `(option: SelectOption) => React.ReactNode` | - |
 | placement | 弹出层相对触发器的位置 | `"bottomLeft"` \| `"bottomRight"` \| `"topLeft"` \| `"topRight"` | `"bottomLeft"` |
-| filterOption | 过滤器函数或布尔值控制本地过滤；设为 `false` 用于异步搜索 | `boolean` \| `((input: string, option: SelectOption) => boolean)` | `true` |
-| filterSort | 已过滤选项的自定义排序 | `(a: SelectOption, b: SelectOption, input: string) => number` | - |
+| filterOption | 过滤器函数或布尔值控制本地过滤；设为 `false` 用于异步搜索 | `boolean` \| `((input: string, option: AutoCompleteOption) => boolean)` | `true` |
 | onSearch | 输入值变化时的回调（用户键入），适合异步搜索 | `(value: string) => void` | - |
-| onSelect | 下拉列表中选择选项时的回调 | `(value: string, option: SelectOption) => void` | - |
+| onSelect | 下拉列表中选择选项时的回调 | `(value: string, option: AutoCompleteOption) => void` | - |
 | onClear | 值被清除时的回调 | `() => void` | - |
 | open | 受控的打开状态 | `boolean` | - |
 | defaultOpen | 默认打开状态（非受控） | `boolean` | - |
@@ -113,12 +111,11 @@ export default function Demo() {
 
 ### 派生类型
 
-- `AutoCompleteOption`（别名 `SelectOption`）— 单个选项类型
-- `AutoCompleteOptionGroup`（别名 `SelectOptionGroup`）— 选项分组类型
-- `AutoCompleteOptionItem`（别名 `SelectOptionItem`）— 选项项类型
-- `AutoCompleteSize`（别名 `SelectSize`）— 尺寸类型
-- `AutoCompleteStatus`（别名 `SelectStatus`）— 状态类型
-- `AutoCompleteVariant`（别名 `SelectVariant`）— 变体类型
+- `AutoCompleteOption` — 单个选项类型：`{ label, value, disabled?, description?, keywords?, group? }`
+- `AutoCompleteOptionGroup` — 选项分组类型：`{ label, options }`
+- `AutoCompleteOptionItem` — `AutoCompleteOption | AutoCompleteOptionGroup`
+- `AutoCompletePlacement` — `"bottomLeft" | "bottomRight" | "topLeft" | "topRight"`
+- `AutoCompleteSize`、`AutoCompleteStatus`、`AutoCompleteVariant` — 复用 `@/components/ui/select-variants` 的 `SelectSize` / `SelectStatus` / `SelectVariant`（仅复用视觉样式类型，不依赖 Select 组件本身）
 
 <h2 id="faq">常见问题</h2>
 
@@ -140,11 +137,11 @@ export default function Demo() {
 
 ### 如何自定义选项渲染？
 
-使用 `optionRender` 自定义每个选项的展示内容，或使用 `labelRender` 自定义选中后在触发器中的展示：
+使用 `optionRender` 自定义每个选项的展示内容：
 
 ```tsx
 <AutoComplete
-  optionRender={(option, { index }) => (
+  optionRender={(option) => (
     <div className="flex items-center gap-2">
       <Avatar size="small" />
       <span>{option.label}</span>
@@ -153,16 +150,16 @@ export default function Demo() {
 />
 ```
 
-### AutoComplete 和 Select（combobox 模式）的关系？
+### AutoComplete 和 Combobox 的关系？
 
-`AutoComplete` 本质是对 `<Select mode="combobox" showSearch />` 的封装，类型兼容。如果不需要自由输入（即值必须从选项中选择），直接使用 Select 即可。
+两者都基于 `Command` + `Popover`，但交互模型不同：`Combobox`（`@/components/ui/combobox`）是按钮触发，值必须从 `options` 中选择；`AutoComplete` 是输入框触发，允许自由文本，值不要求匹配任何选项。如果不需要自由输入，直接使用 `Combobox` 即可。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
 1. 从 `@/components/ui/auto-complete` 导入，不要从 `antd` 导入 AutoComplete。
 2. 使用 `options` 提供候选项，`onSearch` 处理异步搜索。
 3. 使用 `filterOption={false}` 关闭本地过滤用于异步搜索场景。
-4. 需要自定义选项或选中值展示时，使用 `optionRender`、`labelRender`。
+4. 需要自定义选项展示时，使用 `optionRender`。
 5. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>

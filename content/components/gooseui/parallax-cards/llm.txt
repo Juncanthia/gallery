@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { ParallaxCard, ParallaxCards } from "@/components/ui/gooseui-parallax-cards"
+import { ParallaxCard, ParallaxCards } from "@/components/ui/parallax-cards"
 
 export default function Demo() {
   return (
@@ -147,7 +147,7 @@ ParallaxCard 渲染一个带圆角边框和阴影的 `<div>`，通过内联 `sty
 
 当 AI 生成本项目 ParallaxCards 代码时，应遵守：
 
-1. 从 `@/components/ui/gooseui-parallax-cards` 导入 `ParallaxCard` 和 `ParallaxCards`。
+1. 从 `@/components/ui/parallax-cards` 导入 `ParallaxCard` 和 `ParallaxCards`。
 2. 必须用 `ParallaxCards` 包裹所有 `ParallaxCard`，否则 keyframes 不会注入。
 3. `intensity` 传入 0 到 1 之间的数字，不要传入字符串。
 4. 不要在调用侧添加动画相关 className，效果由 `intensity` 控制。

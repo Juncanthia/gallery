@@ -1,5 +1,5 @@
-import { RadarChart } from "@/components/ui/bklit-radar-chart"
-import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/bklit/charts"
+import { RadarChart } from "@/components/ui/radar-chart-bklit"
+import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
 
 const metrics = [
   { key: "speed", label: "速度" },

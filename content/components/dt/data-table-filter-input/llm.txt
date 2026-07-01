@@ -61,7 +61,7 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
 } from "@tanstack/react-table"
-import type { DataTableFilterField } from "@/components/data-table-filters"
+import type { DataTableFilterField } from "@/components/data-display/data-table-filters"
 
 type Person = {
   id: string
@@ -219,10 +219,10 @@ type DataTableFilterField<TData> =
 
 直接依赖：
 
-- `@/components/data-table-filters/components/data-table/data-table-provider`（`useDataTable` hook）
+- `@/components/data-display/data-table-filters/components/data-table/data-table-provider`（`useDataTable` hook）
 - `@/components/ui/input-group`（`InputGroup`、`InputGroupAddon`、`InputGroupInput`）
 - `@/components/ui/label`
-- `@/components/data-table-filters/hooks/use-debounce`
+- `@/components/data-display/data-table-filters/hooks/use-debounce`
 - `lucide-react`（`Search` 图标）
 
 实现注意：

@@ -6,7 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { PanelLeft as PanelLeftIcon } from 'lucide-react';
 import { type Transition } from 'motion/react';
 
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/components/_shared/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,8 +28,8 @@ import {
 import {
   Highlight,
   HighlightItem,
-} from '@/primitives/effects/highlight';
-import { getStrictContext } from '@/lib/get-strict-context';
+} from '@/components/_primitives/effects/highlight';
+import { getStrictContext } from '@/components/_shared/lib/get-strict-context';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

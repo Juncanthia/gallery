@@ -1,4 +1,4 @@
-import { LiquidEther } from "@/components/ui/rb-liquid-ether"
+import { LiquidEther } from "@/components/ui/liquid-ether"
 
 export default function LiquidEtherBasicExample() {
   return (

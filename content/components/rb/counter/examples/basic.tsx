@@ -1,4 +1,4 @@
-import { Counter } from "@/components/ui/rb-counter"
+import { Counter } from "@/components/ui/counter"
 
 export default function CounterBasicExample() {
   return (

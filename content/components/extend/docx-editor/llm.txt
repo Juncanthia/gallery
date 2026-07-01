@@ -72,7 +72,7 @@ DocxEditorPreview 通过以下属性表达行为：
 
 ```tsx
 import React from "react"
-import { DocxEditorPreview } from "@/components/ui/extend-docx-editor"
+import { DocxEditorPreview } from "@/components/ui/docx-editor"
 
 export default function Demo() {
   const [isDark, setIsDark] = React.useState(false)
@@ -140,10 +140,10 @@ Ant Design 不提供 Word 文档编辑组件。本组件直接基于 `@extend-ai
 
 ```tsx
 // 编辑模式
-import { DocxEditorPreview } from "@/components/ui/extend-docx-editor"
+import { DocxEditorPreview } from "@/components/ui/docx-editor"
 
 // 仅预览模式
-import { DocxViewerPreview } from "@/components/ui/extend-docx-viewer"
+import { DocxViewerPreview } from "@/components/ui/docx-viewer"
 ```
 
 ### 如何获取编辑后的文档？
@@ -159,7 +159,7 @@ import { DocxViewerPreview } from "@/components/ui/extend-docx-viewer"
 `DocxEditorPreview` 总是显示工具栏。如果不需要工具栏，使用 `DocxViewerPreview` 并传入 `showToolbar={false}`。
 
 ```tsx
-import { DocxViewerPreview } from "@/components/ui/extend-docx-viewer"
+import { DocxViewerPreview } from "@/components/ui/docx-viewer"
 
 &lt;DocxViewerPreview
   src="/samples/demo.docx"
@@ -177,7 +177,7 @@ import { DocxViewerPreview } from "@/components/ui/extend-docx-viewer"
 
 当 AI 生成本项目 DocxEditor 代码时，应遵守：
 
-1. 从 `@/components/ui/extend-docx-editor` 导入 `DocxEditorPreview`。
+1. 从 `@/components/ui/docx-editor` 导入 `DocxEditorPreview`。
 2. 必须提供 `isDark` 和 `onIsDarkChange` 属性。
 3. `src` 指向可访问的 .docx 文件 URL，或留空让用户自行上传。
 4. 不要尝试直接操作 `@extend-ai/react-docx` 的底层 hooks（`useDocxEditor` 等），使用封装好的 `DocxEditorPreview`。

@@ -1,5 +1,5 @@
-import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/bklit/charts"
-import { ChoroplethChart } from "@/components/ui/bklit-choropleth-chart"
+import { ChoroplethFeatureComponent, ChoroplethGraticule, ChoroplethTooltip } from "@/components/charts/bklit/charts"
+import { ChoroplethChart } from "@/components/ui/choropleth-chart"
 import type { FeatureCollection, Geometry } from "geojson"
 
 // 简化的大陆区域 GeoJSON 演示数据

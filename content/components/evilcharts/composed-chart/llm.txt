@@ -33,7 +33,7 @@ stack:
 
 ```tsx
 // 主组件
-import { EvilComposedChart } from "@/components/ui/evilcharts-composed-chart"
+import { EvilComposedChart } from "@/components/ui/composed-chart-evilcharts"
 
 // 子组件（Bar, Line, XAxis, Grid, Tooltip, Legend, Dot, ActiveDot）
 import {
@@ -46,10 +46,10 @@ import {
   Legend,
   ActiveDot,
   Dot,
-} from "@/components/evilcharts/components/composed-chart"
+} from "@/components/charts/evilcharts/components/composed-chart"
 
 // 类型
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 ```
 
 ## 基础示例

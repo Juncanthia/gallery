@@ -1,4 +1,4 @@
-import { Carousel } from "@/components/ui/rb-carousel-rb"
+import { Carousel } from "@/components/ui/carousel-rb"
 
 export default function CarouselBasicExample() {
   return <Carousel />

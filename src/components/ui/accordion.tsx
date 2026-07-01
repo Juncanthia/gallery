@@ -11,7 +11,7 @@ import {
   type AccordionItemProps as AccordionItemPrimitiveProps,
   type AccordionTriggerProps as AccordionTriggerPrimitiveProps,
   type AccordionContentProps as AccordionContentPrimitiveProps,
-} from '@/primitives/radix/accordion';
+} from '@/components/_primitives/radix/accordion';
 import { cn } from '@/lib/utils';
 
 type AccordionSize = 'small' | 'middle' | 'large';

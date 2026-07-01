@@ -125,7 +125,7 @@ type DataTableColumnHeaderProps<TData, TValue> = React.ComponentProps<typeof But
 
 直接依赖：
 
-- `@/components/data-table-filters/lib/utils`（cn）
+- `@/components/data-display/data-table-filters/lib/utils`（cn）
 - `@/components/ui/button`（Button）
 - `lucide-react`（ChevronDown、ChevronUp）
 

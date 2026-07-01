@@ -1,4 +1,4 @@
-import { DecayCard } from "@/components/ui/rb-decay-card"
+import { DecayCard } from "@/components/ui/decay-card"
 
 export default function DecayCardBasicExample() {
   return <DecayCard>Decay</DecayCard>

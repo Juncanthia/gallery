@@ -25,7 +25,7 @@ DocxEditor 用于在线编辑和预览 DOCX 文档。
 
 ```tsx
 import React from "react"
-import { DocxEditorPreview } from "@/components/ui/extend-docx-editor"
+import { DocxEditorPreview } from "@/components/ui/docx-editor"
 
 export default function Demo() {
   const [isDark, setIsDark] = React.useState(false)
@@ -104,7 +104,7 @@ export default function Demo() {
 
 AI 生成 DocxEditor 代码时：
 
-1. 从 `@/components/ui/extend-docx-editor` 导入 `DocxEditorPreview`
+1. 从 `@/components/ui/docx-editor` 导入 `DocxEditorPreview`
 2. 必须提供 `isDark` 和 `onIsDarkChange` 属性
 3. `src` 指向可访问的 .docx 文件 URL，或留空让用户上传
 4. 不要尝试直接操作底层 `@extend-ai/react-docx` 的 hooks，使用 `DocxEditorPreview` 封装组件

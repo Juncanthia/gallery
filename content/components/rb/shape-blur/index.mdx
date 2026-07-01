@@ -16,14 +16,14 @@ ShapeBlur 基于 Three.js 着色器的鼠标交互形状模糊组件，鼠标移
 <ComponentShowcase id="rb/shape-blur" path="rb/shape-blur/basic" />
 
 ```tsx
-import { ShapeBlur } from "@/components/ui/rb-shape-blur"
+import { ShapeBlur } from "@/components/ui/shape-blur"
 
 export default function Demo() { return <ShapeBlur /> }
 ```
 
 ### 三角形 + 自定义参数
 ```tsx
-import { ShapeBlur } from "@/components/ui/rb-shape-blur"
+import { ShapeBlur } from "@/components/ui/shape-blur"
 
 export default function Demo() {
   return (
@@ -63,7 +63,7 @@ export default function Demo() {
 降低 `pixelRatioProp`（如设为 1），可以大幅减少像素处理量。或减小容器尺寸。组件使用 ResizeObserver 响应容器变化。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-shape-blur` 导入。
+1. 从 `@/components/ui/shape-blur` 导入。
 2. 依赖 `three`，确保项目已安装。
 3. 容器必须有明确的宽高，否则 Three.js 渲染器无法初始化。
 4. `variation` 决定核心渲染分支，修改后组件会重新初始化 WebGL 上下文。

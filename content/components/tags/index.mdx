@@ -1,4 +1,4 @@
-Tags 标签组。多选标签组件，基于 Combobox + Command + Popover 构建，支持搜索过滤、分组展示、创建新标签、Badge 展示已选值和逐个移除操作。已合并入 `@/components/blocks/combobox`，`@/components/blocks/tags` 仅作为向后兼容的 barrel 重导出。
+Tags 标签组。多选标签组件，基于 Command + Popover 构建，支持搜索过滤、分组展示、创建新标签、Badge 展示已选值和逐个移除操作。实际实现位于 `src/components/blocks/combobox/index.tsx`（历史上曾与一个通用 Combobox primitive 共享文件；该 primitive 与 `@/components/ui/combobox` 完全重复，已删除，现在这个文件只包含 Tags 实现），`@/components/blocks/tags` 作为对外的 barrel 重导出。
 
 <h2 id="when-to-use">何时使用</h2>
 
@@ -208,7 +208,7 @@ export default function Demo() {
 
 ### Tags 和 Combobox 有什么区别？
 
-Tags 是 Combobox 的一个特定配置——将其包装为多选标签选择器。Tags 的所有组件实际上重导出自 `@/components/blocks/combobox`。Tags 提供更语义化的组件名和默认多选行为，Combobox 更通用。
+Tags 的实现基于同一套 `Command` + `Popover` 组合方式，但直接封装为多选标签选择器（Badge 展示已选值、逐个移除），不依赖 `@/components/ui/combobox`。`Combobox` 更通用，用于单值搜索选择；Tags 专注于多选标签场景。两者是同类交互模型的不同产物，不是继承关系。
 
 ### 已选标签的增删逻辑由谁管理？
 

@@ -1,4 +1,4 @@
-import { TextPressure } from "@/components/ui/rb-text-pressure"
+import { TextPressure } from "@/components/ui/text-pressure"
 
 export default function TextPressureBasicExample() {
   return (

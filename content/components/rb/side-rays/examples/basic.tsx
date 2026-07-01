@@ -1,4 +1,4 @@
-import { SideRays } from "@/components/ui/rb-side-rays"
+import { SideRays } from "@/components/ui/side-rays"
 
 export default function SideRaysBasicExample() {
   return (

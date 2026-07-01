@@ -31,13 +31,13 @@ stack:
 ## 导入
 
 ```tsx
-import { ExampleForm } from "@/components/ui/gooseui-example-form"
+import { ExampleForm } from "@/components/ui/example-form"
 ```
 
 ## 用法
 
 ```tsx
-import { ExampleForm } from "@/components/ui/gooseui-example-form"
+import { ExampleForm } from "@/components/ui/example-form"
 
 function App() {
   return (

@@ -16,14 +16,14 @@ EvilEye 基于 OGL（WebGL）的火焰之眼组件，瞳孔跟踪鼠标移动，
 <ComponentShowcase id="rb/evil-eye" path="rb/evil-eye/basic" />
 
 ```tsx
-import { EvilEye } from "@/components/ui/rb-evil-eye"
+import { EvilEye } from "@/components/ui/evil-eye"
 export default function Demo() { return <EvilEye /> }
 ```
 
 ### 自定义配置
 
 ```tsx
-import { EvilEye } from "@/components/ui/rb-evil-eye"
+import { EvilEye } from "@/components/ui/evil-eye"
 
 export default function Demo() {
   return (
@@ -61,7 +61,7 @@ EvilEye 使用 OGL Renderer，通过 `container.offsetWidth/offsetHeight` 获取
 组件在初始化时生成 256x256 的程序化噪声纹理，注入片段着色器的 `uNoiseTexture` uniform。噪声驱动虹膜环的不规则边界、火焰流动方向和外部光晕细节。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-evil-eye` 导入。
+1. 从 `@/components/ui/evil-eye` 导入。
 2. 依赖 `ogl`（OGL WebGL 框架），确保项目中已安装。
 3. 组件返回一个纯 div 容器，需通过 `className` 设置宽高，否则渲染尺寸为零。
 4. 所有颜色参数使用 hex 字符串格式（如 `"#FF6F37"`），背景色同样支持 hex。

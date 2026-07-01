@@ -1,4 +1,4 @@
-import { BounceCards } from "@/components/ui/rb-bounce-cards"
+import { BounceCards } from "@/components/ui/bounce-cards"
 
 export default function BounceCardsBasicExample() {
   return (

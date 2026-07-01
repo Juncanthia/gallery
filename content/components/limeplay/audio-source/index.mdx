@@ -26,7 +26,7 @@ AudioSourceProvider 音频源提供者。用于向 LimePlay 媒体播放器 Stor
 <ComponentShowcase id="limeplay/audio-source" path="limeplay/audio-source/basic" />
 
 ```tsx
-import { AudioSourceProvider } from "@/components/ui/limeplay-audio-source"
+import { AudioSourceProvider } from "@/components/ui/audio-source"
 
 const DEMO_SOURCE = [
   {
@@ -183,7 +183,7 @@ const { queue, currentItem, load, append } = usePlaylist()
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/limeplay-audio-source` 导入 `AudioSourceProvider`。
+1. 从 `@/components/ui/audio-source` 导入 `AudioSourceProvider`。
 2. 必须在 `MediaProvider` 上下文中使用，否则 Store 不可用。
 3. `source` 支持三种形式：字符串 URL、单个 AudioPlayerAsset 对象、AudioPlayerAsset 数组。
 4. 每个 AudioPlayerAsset 至少需要 `src` 或 `playbackUrls.primary` 之一。

@@ -46,7 +46,7 @@ ShakeTestimonial 是一个自动轮播的评价卡片堆叠组件，内置抖动
 ShakeTestimonial 无需传入任何 props，直接渲染即可获得完整的评价卡片轮播。
 
 ```tsx
-import { ShakeTestimonial } from "@/components/ui/uselayouts-shake-testimonial-card"
+import { ShakeTestimonial } from "@/components/ui/shake-testimonial-card"
 
 export default function Demo() {
   return <ShakeTestimonial />
@@ -126,7 +126,7 @@ ShakeTestimonial 的 shakeslide 动画分为两层：
 
 当 AI 生成本项目 ShakeTestimonial 相关代码时，应遵守：
 
-1. 从 `@/components/ui/uselayouts-shake-testimonial-card` 导入 `ShakeTestimonial`（named export）。
+1. 从 `@/components/ui/shake-testimonial-card` 导入 `ShakeTestimonial`（named export）。
 2. 不要给 ShakeTestimonial 传递任何 props，组件自身管理全部状态。
 3. 如需引入 motion/react 依赖，从组件源码处参考正确的导入路径（`import { motion, AnimatePresence } from "motion/react"`）。
 4. ShakeTestimonial 依赖 motion/react 的 AnimatePresence 和 layout 动画，不要移除这些动画逻辑。

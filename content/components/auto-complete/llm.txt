@@ -30,6 +30,8 @@ stack:
 
 本组件借鉴 Ant Design AutoComplete 的使用心智，但不是 AntD 兼容层。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
 
+底层基于 `Command`（cmdk）+ `Popover` 直接实现（input-first：输入框本身就是弹层锚点），不再依赖 `Select`。这与 `Combobox`（`@/components/ui/combobox`，按钮触发、只能从列表中选择）是两种不同交互模型：AutoComplete 允许自由文本，值不要求匹配任何选项。
+
 ## 何时使用 {#when-to-use}
 
 适合在需要 自动完成 相关能力的界面中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
@@ -68,12 +70,13 @@ export default function Demo() {
 
 - `AutoComplete`
 - `AutoCompleteProps`
-- `SelectOption`
-- `SelectOptionGroup`
-- `SelectOptionItem`
-- `SelectSize`
-- `SelectStatus`
-- `SelectVariant`
+- `AutoCompleteOption`
+- `AutoCompleteOptionGroup`
+- `AutoCompleteOptionItem`
+- `AutoCompletePlacement`
+- `AutoCompleteSize`
+- `AutoCompleteStatus`
+- `AutoCompleteVariant`
 
 ## API {#api}
 
@@ -81,24 +84,22 @@ export default function Demo() {
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| options | 输入时建议的可选项列表，支持平铺和分组格式 | `SelectOptionItem[]` | - |
+| options | 输入时建议的可选项列表，支持平铺和分组格式 | `AutoCompleteOptionItem[]` | - |
 | placeholder | 未输入值时的占位文本 | `React.ReactNode` | - |
-| size | 输入框尺寸 | `SelectSize` | `"middle"` |
-| variant | 视觉变体 | `SelectVariant` | `"outlined"` |
-| status | 校验状态 | `SelectStatus` | - |
+| size | 输入框尺寸 | `AutoCompleteSize` | `"middle"` |
+| variant | 视觉变体 | `AutoCompleteVariant` | `"outlined"` |
+| status | 校验状态 | `AutoCompleteStatus` | - |
 | disabled | 是否禁用输入框 | `boolean` | - |
 | allowClear | 值非空时是否显示清除按钮 | `boolean` | - |
 | prefix | 输入框前渲染的内容 | `React.ReactNode` | - |
 | suffixIcon | 自定义后缀图标，传入 `null` 隐藏 | `React.ReactNode \| null` | - |
 | notFoundContent | 无匹配选项时展示的内容 | `React.ReactNode` | `"No results found."` |
-| optionRender | 每个选项的自定义渲染 | `(option: SelectOption, info: { index: number }) => React.ReactNode` | - |
+| optionRender | 每个选项的自定义渲染 | `(option: AutoCompleteOption) => React.ReactNode` | - |
 | popupRender | 包装弹出列表节点（如追加底部按钮） | `(originNode: React.ReactNode) => React.ReactNode` | - |
-| labelRender | 选中值展示的自定义渲染，仅在值匹配选项时生效 | `(option: SelectOption) => React.ReactNode` | - |
 | placement | 弹出层相对触发器的位置 | `"bottomLeft" \| "bottomRight" \| "topLeft" \| "topRight"` | `"bottomLeft"` |
-| filterOption | 过滤器函数或布尔值控制本地过滤，设为 `false` 用于异步搜索 | `boolean \| ((input: string, option: SelectOption) => boolean)` | `true` |
-| filterSort | 已过滤选项的自定义排序 | `(a: SelectOption, b: SelectOption, input: string) => number` | - |
+| filterOption | 过滤器函数或布尔值控制本地过滤，设为 `false` 用于异步搜索 | `boolean \| ((input: string, option: AutoCompleteOption) => boolean)` | `true` |
 | onSearch | 输入值变化时的回调（用户键入），适合异步搜索场景 | `(value: string) => void` | - |
-| onSelect | 从下拉列表选择选项时的回调 | `(value: string, option: SelectOption) => void` | - |
+| onSelect | 从下拉列表选择选项时的回调 | `(value: string, option: AutoCompleteOption) => void` | - |
 | onClear | 值被清除时的回调 | `() => void` | - |
 | open | 受控的打开状态 | `boolean` | - |
 | defaultOpen | 默认打开状态（非受控） | `boolean` | - |
@@ -115,24 +116,28 @@ export default function Demo() {
 | required | 表单上下文中是否为必填 | `boolean` | - |
 | aria-label | input 的无障碍标签 | `string` | - |
 
+> 相比历史版本，已移除 `labelRender`（自由文本输入没有"选中项"概念，无法可靠地把 React 节点渲染进原生 `<input>`）和 `filterSort`（未被使用）。
+
 ### 派生类型
 
-- `AutoCompleteOption` — 选项类型（别名 `SelectOption`）
-- `AutoCompleteOptionGroup` — 选项分组类型（别名 `SelectOptionGroup`）
-- `AutoCompleteOptionItem` — 选项项类型（别名 `SelectOptionItem`）
-- `AutoCompleteSize` — 尺寸类型（别名 `SelectSize`）
-- `AutoCompleteStatus` — 状态类型（别名 `SelectStatus`）
-- `AutoCompleteVariant` — 变体类型（别名 `SelectVariant`）
+- `AutoCompleteOption` — 选项类型：`{ label, value, disabled?, description?, keywords?, group? }`
+- `AutoCompleteOptionGroup` — 选项分组类型：`{ label, options }`
+- `AutoCompleteOptionItem` — `AutoCompleteOption | AutoCompleteOptionGroup`
+- `AutoCompletePlacement` — `"bottomLeft" | "bottomRight" | "topLeft" | "topRight"`
+- `AutoCompleteSize` — 尺寸类型（复用 `@/components/ui/select-variants` 的 `SelectSize`）
+- `AutoCompleteStatus` — 状态类型（复用 `SelectStatus`）
+- `AutoCompleteVariant` — 变体类型（复用 `SelectVariant`）
 
 ## Semantic DOM {#semantic-dom}
 
 源码中出现的稳定语义槽位：
 
-- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+- `data-slot="auto-complete"` — 根触发器容器（`role="combobox"`，`aria-expanded`）。
 
 额外状态属性：
 
-- 无额外 `data-*` 状态属性。
+- `aria-disabled` — 组件被禁用时。
+- `aria-expanded` — 弹出列表是否展开。
 
 生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
 
@@ -151,7 +156,9 @@ export default function Demo() {
 
 直接依赖摘要：
 
-- `@/components/ui/select`
+- `@/components/ui/command`（`Command`、`CommandList`、`CommandGroup`、`CommandItem`、`CommandEmpty`，以及直接从 `cmdk` 导入的 `Command.Input` 用于自定义触发器样式）
+- `@/components/ui/popover`（`Popover`、`PopoverAnchor`、`PopoverContent`）
+- `@/components/ui/select-variants`（`selectTriggerVariants`、`selectInputVariants` 及其类型，仅复用视觉样式，不依赖 `Select` 组件本身）
 
 实现注意：
 

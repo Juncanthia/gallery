@@ -1,4 +1,4 @@
-import { TargetCursor } from "@/components/ui/rb-target-cursor"
+import { TargetCursor } from "@/components/ui/target-cursor"
 
 export default function TargetCursorBasicExample() {
   return (

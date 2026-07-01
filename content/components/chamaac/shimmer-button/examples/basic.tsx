@@ -1,4 +1,4 @@
-import { ShimmerButton } from "@/components/ui/chamaac-shimmer-button"
+import { ShimmerButton } from "@/components/ui/shimmer-button"
 
 export default function Demo() {
   return (

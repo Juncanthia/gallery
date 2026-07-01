@@ -230,7 +230,7 @@ type DropdownMenuRadioGroupProps = DropdownMenuRadioGroupPrimitiveProps;
 直接依赖摘要：
 
 - `@/components/ui/button`
-- `@/primitives/radix/dropdown-menu`
+- `@/components/_primitives/radix/dropdown-menu`
 
 实现注意：
 

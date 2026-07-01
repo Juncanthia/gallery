@@ -1,4 +1,4 @@
-import { Noise } from "@/components/ui/rb-noise"
+import { Noise } from "@/components/ui/noise"
 
 export default function NoiseBasicExample() {
   return (

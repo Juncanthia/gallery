@@ -1,7 +1,7 @@
 "use client"
 
-import { AvatarGroup } from "@/components/ui/dice-avatar-group"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/dice-avatar"
+import { AvatarGroup } from "@/components/ui/avatar-group"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function Demo() {
   return (

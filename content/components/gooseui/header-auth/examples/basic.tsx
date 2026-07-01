@@ -1,4 +1,4 @@
-import { HeaderAuth } from "@/components/ui/gooseui-header-auth"
+import { HeaderAuth } from "@/components/ui/header-auth"
 
 export default function Demo() {
   return <HeaderAuth />

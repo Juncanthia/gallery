@@ -6,7 +6,7 @@ import {
   SwitchThumb as SwitchThumbPrimitive,
   SwitchIcon as SwitchIconPrimitive,
   type SwitchProps as SwitchPrimitiveProps,
-} from '@/primitives/radix/switch';
+} from '@/components/_primitives/radix/switch';
 import { cn } from '@/lib/utils';
 
 type SwitchSize = 'small' | 'middle';

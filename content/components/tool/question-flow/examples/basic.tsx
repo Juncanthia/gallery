@@ -1,4 +1,4 @@
-import { QuestionFlow } from "@/components/ui/tool-question-flow"
+import { QuestionFlow } from "@/components/ui/question-flow"
 
 const options = [
   { id: "web", label: "Web 应用", description: "浏览器端运行的在线应用" },

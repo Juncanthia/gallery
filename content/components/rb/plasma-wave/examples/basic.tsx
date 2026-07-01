@@ -1,4 +1,4 @@
-import { PlasmaWave } from "@/components/ui/rb-plasma-wave"
+import { PlasmaWave } from "@/components/ui/plasma-wave"
 
 export default function PlasmaWaveBasicExample() {
   return (

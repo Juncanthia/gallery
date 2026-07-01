@@ -1,4 +1,4 @@
-import { Shuffle } from "@/components/ui/rb-shuffle"
+import { Shuffle } from "@/components/ui/shuffle"
 
 export default function ShuffleBasicExample() {
   return (

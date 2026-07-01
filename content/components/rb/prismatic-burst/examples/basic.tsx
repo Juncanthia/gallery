@@ -1,4 +1,4 @@
-import { PrismaticBurst } from "@/components/ui/rb-prismatic-burst"
+import { PrismaticBurst } from "@/components/ui/prismatic-burst"
 
 export default function PrismaticBurstBasicExample() {
   return (

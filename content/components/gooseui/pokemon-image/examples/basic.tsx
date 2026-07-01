@@ -1,4 +1,4 @@
-import { PokemonImage } from "@/components/ui/gooseui-pokemon-image"
+import { PokemonImage } from "@/components/ui/pokemon-image"
 
 export default function Demo() {
   return (

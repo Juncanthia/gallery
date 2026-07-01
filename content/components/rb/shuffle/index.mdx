@@ -15,7 +15,7 @@ Shuffle 字符洗牌动画组件，每个字符通过 GSAP 驱动逐位翻转显
 <ComponentShowcase id="rb/shuffle" path="rb/shuffle/basic" />
 
 ```tsx
-import { Shuffle } from "@/components/ui/rb-shuffle"
+import { Shuffle } from "@/components/ui/shuffle"
 
 export default function Demo() {
   return (
@@ -28,7 +28,7 @@ export default function Demo() {
 
 ### 向上洗牌 + 二进制风格乱码
 ```tsx
-import { Shuffle } from "@/components/ui/rb-shuffle"
+import { Shuffle } from "@/components/ui/shuffle"
 
 export default function Demo() {
   return (
@@ -87,7 +87,7 @@ evenodd：奇偶索引字符分两组，奇数先播放、偶数在奇数完成 
 空字符串时，乱码层使用原始字符的克隆（即实际显示的可读文字），而不是随机乱码。这会让翻转动画看起来像"字符卡片翻转"而非"乱码破译"。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-shuffle` 导入。
+1. 从 `@/components/ui/shuffle` 导入。
 2. 依赖 `gsap`、`gsap/ScrollTrigger` 和 `@gsap/react`，确保全部已安装。
 3. 首次播放由 ScrollTrigger 驱动，播放完成后支持 hover 重播。
 4. 当 `respectReducedMotion=true` 且用户系统设置了减少动画时，组件直接显示最终文本跳过动画。

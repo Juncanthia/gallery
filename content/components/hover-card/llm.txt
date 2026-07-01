@@ -151,7 +151,7 @@ type HoverCardArrowProps = HoverCardArrowPrimitiveProps;
 
 直接依赖摘要：
 
-- `@/primitives/radix/hover-card`
+- `@/components/_primitives/radix/hover-card`
 
 实现注意：
 

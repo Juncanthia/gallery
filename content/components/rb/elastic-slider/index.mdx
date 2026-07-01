@@ -15,14 +15,14 @@ ElasticSlider 弹性滑块组件，拖动时滑块产生弹性形变和拉伸动
 <ComponentShowcase id="rb/elastic-slider" path="rb/elastic-slider/basic" />
 
 ```tsx
-import { ElasticSlider } from "@/components/ui/rb-elastic-slider"
+import { ElasticSlider } from "@/components/ui/elastic-slider"
 export default function Demo() { return <ElasticSlider /> }
 ```
 
 ### 自定义配置
 
 ```tsx
-import { ElasticSlider } from "@/components/ui/rb-elastic-slider"
+import { ElasticSlider } from "@/components/ui/elastic-slider"
 import { Sun, Moon } from "lucide-react"
 
 export default function Demo() {
@@ -71,7 +71,7 @@ export default function Demo() {
 当鼠标从滑块左侧或右侧拖出时，对应的图标会产生弹性缩放动画（scale 1 到 1.4），滑块轨道也会产生拉伸形变。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-elastic-slider` 导入。
+1. 从 `@/components/ui/elastic-slider` 导入。
 2. 依赖 `motion`（Motion for React）和 `lucide-react`，确保项目中已安装。
 3. `leftIcon` 和 `rightIcon` 不带默认样式，建议使用 `lucide-react` 图标并添加 `className="icon"` 以匹配内置样式。
 4. 自定义 `className` 应用于外层 `slider-container` 容器，而非滑块轨道本身。

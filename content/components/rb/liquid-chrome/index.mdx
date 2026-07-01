@@ -17,7 +17,7 @@ LiquidChrome 基于 WebGL 的液态金属风格交互式背景，支持鼠标和
 <ComponentShowcase id="rb/liquid-chrome" path="rb/liquid-chrome/basic" />
 
 ```tsx
-import { LiquidChrome } from "@/components/ui/rb-liquid-chrome"
+import { LiquidChrome } from "@/components/ui/liquid-chrome-rb"
 
 export default function Demo() {
   return (
@@ -31,7 +31,7 @@ export default function Demo() {
 ### 自定义配置
 
 ```tsx
-import { LiquidChrome } from "@/components/ui/rb-liquid-chrome"
+import { LiquidChrome } from "@/components/ui/liquid-chrome-rb"
 
 export default function Demo() {
   return (
@@ -76,7 +76,7 @@ export default function Demo() {
 组件内置 `touchmove` 事件监听，移动端触摸也会产生交互涟漪效果。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-liquid-chrome` 导入。
+1. 从 `@/components/ui/liquid-chrome-rb` 导入。
 2. 组件需要放在有明确宽高的容器中。
 3. 依赖 `ogl` 库，确保项目中已安装。
 4. `baseColor` 使用 RGB 归一化数组格式 `[r, g, b]`，每个通道 0-1。

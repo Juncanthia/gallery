@@ -2,7 +2,7 @@
 
 ## Import
 ```
-import { ClientOnly } from "@/components/ui/dice-client-only"
+import { ClientOnly } from "@/components/ui/client-only"
 ```
 
 ## Props
@@ -15,7 +15,7 @@ import { ClientOnly } from "@/components/ui/dice-client-only"
 
 ### Basic
 ```tsx
-import { ClientOnly } from "@/components/ui/dice-client-only"
+import { ClientOnly } from "@/components/ui/client-only"
 
 <ClientOnly fallback={<div>Loading...</div>}>
   <div>Client-side content</div>
@@ -24,7 +24,7 @@ import { ClientOnly } from "@/components/ui/dice-client-only"
 
 ### Without fallback (renders null during SSR)
 ```tsx
-import { ClientOnly } from "@/components/ui/dice-client-only"
+import { ClientOnly } from "@/components/ui/client-only"
 
 <ClientOnly>
   <Chart />
@@ -33,7 +33,7 @@ import { ClientOnly } from "@/components/ui/dice-client-only"
 
 ### With skeleton placeholder
 ```tsx
-import { ClientOnly } from "@/components/ui/dice-client-only"
+import { ClientOnly } from "@/components/ui/client-only"
 
 <ClientOnly fallback={<div className="animate-pulse h-32 w-full rounded bg-muted" />}>
   <DataVisualization />
@@ -47,7 +47,7 @@ Uses `React.useSyncExternalStore` to detect client-side mounting:
 - After hydration, the component synchronously switches to `children`
 
 ## Constraints
-- DO NOT import from `antd`. Use `@/components/ui/dice-client-only`.
+- DO NOT import from `antd`. Use `@/components/ui/client-only`.
 - `children` is required. `fallback` defaults to `null`.
 - Only wrap content that truly depends on browser-only APIs (`window`, `document`, `localStorage`, etc.).
 - Do NOT use `typeof window === "undefined"` checks inside `ClientOnly` — the component already handles client detection.

@@ -46,7 +46,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Video } from "@/components/ui/tool-video"
+import { Video } from "@/components/ui/video"
 
 export default function Demo() {
   return (
@@ -64,7 +64,7 @@ export default function Demo() {
 ### 完整示例
 
 ```tsx
-import { Video } from "@/components/ui/tool-video"
+import { Video } from "@/components/ui/video"
 
 export default function Demo() {
   return (
@@ -191,7 +191,7 @@ interface SerializableVideo {
 
 当 AI 生成本项目 Video 代码时，应遵守：
 
-1. 从 `@/components/ui/tool-video` 导入，不要从 `antd` 导入。
+1. 从 `@/components/ui/video` 导入，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
 4. `id`、`assetId`、`src` 为必填属性，缺少会导致 schema 校验失败。

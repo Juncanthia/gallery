@@ -1,4 +1,4 @@
-import { PillNav } from "@/components/ui/rb-pill-nav"
+import { PillNav } from "@/components/ui/pill-nav"
 
 export default function PillNavBasicExample() {
   return <PillNav />

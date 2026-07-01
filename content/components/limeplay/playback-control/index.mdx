@@ -27,8 +27,8 @@
 
 ```tsx
 import { Button } from "@/components/ui/button"
-import { PlaybackControl } from "@/components/ui/limeplay-playback-control"
-import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
+import { PlaybackControl } from "@/components/ui/playback-control"
+import { usePlaybackStore } from "@/components/media/hooks/use-playback"
 
 export default function Demo() {
   const status = usePlaybackStore((state) => state.status)
@@ -120,7 +120,7 @@ const status = usePlaybackStore((state) => state.status)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/limeplay-playback-control` 导入 PlaybackControl。
+1. 从 `@/components/ui/playback-control` 导入 PlaybackControl。
 2. 必须配合 `MediaProvider` 使用，不能单独渲染。
 3. 推荐使用 `asChild` 模式包裹自定义 Button。
 4. 如需展示状态相关图标，通过 `usePlaybackStore` 读取 `status`。

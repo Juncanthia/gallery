@@ -1,4 +1,4 @@
-import { Plasma } from "@/components/ui/rb-plasma"
+import { Plasma } from "@/components/ui/plasma"
 
 export default function PlasmaBasicExample() {
   return (

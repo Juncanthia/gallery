@@ -1,10 +1,10 @@
 "use client"
 
-import { EvilBrush } from "@/components/ui/evilcharts-brush"
-import { useEvilBrush } from "@/components/evilcharts/components/brush"
-import { EvilAreaChart } from "@/components/ui/evilcharts-area-chart"
-import { Area, XAxis, Grid, Tooltip } from "@/components/evilcharts/components/area-chart"
-import { type ChartConfig } from "@/components/evilcharts/components/chart"
+import { EvilBrush } from "@/components/ui/brush"
+import { useEvilBrush } from "@/components/charts/evilcharts/components/brush"
+import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
+import { Area, XAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/area-chart"
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
 const chartConfig = {
   sales: {

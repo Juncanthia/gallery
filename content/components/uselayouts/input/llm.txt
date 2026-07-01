@@ -50,7 +50,7 @@ Input 输入框，用于接收用户的文本输入。组件基于原生 `<input
 ### 基础用法
 
 ```tsx
-import Input from "@/components/ui/uselayouts-input"
+import Input from "@/components/ui/input-uselayouts"
 
 export default function Demo() {
   return <Input placeholder="请输入内容" />
@@ -121,7 +121,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 当 AI 生成本项目 Input 代码时，应遵守：
 
-1. 从 `@/components/ui/uselayouts-input` 导入 `Input`（default export）。
+1. 从 `@/components/ui/input-uselayouts` 导入 `Input`（default export）。
 2. 受控模式使用 `value` + `onChange`，非受控模式使用 `defaultValue`。
 3. 需要输入框引用时使用 `ref`，不要通过 DOM 查询直接操作。
 4. 禁用态使用 `disabled` 属性。

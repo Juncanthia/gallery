@@ -25,8 +25,8 @@ LiveLineChart 用于展示实时流式数据，支持动量检测、平滑插值
 <ComponentShowcase id="bklit/live-line-chart" path="bklit/live-line-chart/basic" />
 
 ```tsx
-import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"
-import { LiveLine } from "@/components/bklit/charts"
+import { LiveLineChart } from "@/components/ui/live-line-chart"
+import { LiveLine } from "@/components/charts/bklit/charts"
 const data = Array.from({ length: 50 }, (_, i) => ({
   date: new Date(Date.now() - (50 - i) * 1000),
   value: 100 + Math.sin(i * 0.3) * 30 + Math.random() * 10,
@@ -67,7 +67,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入: `import { LiveLineChart } from "@/components/ui/bklit-live-line-chart"`
+- 导入: `import { LiveLineChart } from "@/components/ui/live-line-chart"`
 - 来自 BKLit Charts 库（基于 @visx）
 - 需要提供 `data` 属性
 

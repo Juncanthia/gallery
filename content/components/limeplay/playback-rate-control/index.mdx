@@ -24,7 +24,7 @@ PlaybackRateControl 播放速率控制用于切换媒体播放速度，支持 0.
 <ComponentShowcase id="limeplay/playback-rate-control" path="limeplay/playback-rate-control/basic" />
 
 ```tsx
-import { PlaybackRateControl } from "@/components/ui/limeplay-playback-rate-control"
+import { PlaybackRateControl } from "@/components/ui/playback-rate-control"
 
 export default function Demo() {
   return (
@@ -82,17 +82,17 @@ PlaybackRateControl 是一个组合组件，内部使用以下子组件构建：
 使用 `usePlaybackRateStore` hook：
 
 ```tsx
-import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"
+import { usePlaybackRateStore } from "@/components/media/hooks/use-playback-rate"
 
 const rate = usePlaybackRateStore((state) => state.value)
 ```
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入: `import { PlaybackRateControl } from "@/components/ui/limeplay-playback-rate-control"`
-- 子组件导入: `import * as PlaybackRate from "@/components/limeplay/ui/playback-rate"`
+- 导入: `import { PlaybackRateControl } from "@/components/ui/playback-rate-control"`
+- 子组件导入: `import * as PlaybackRate from "@/components/media/ui/playback-rate"`
 - Select 组件: `import * as Select from "@/components/ui/select"`
-- Store hook: `import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"`
+- Store hook: `import { usePlaybackRateStore } from "@/components/media/hooks/use-playback-rate"`
 - 必须在 LimePlay `MediaProvider` 中注册 `playbackRateFeature()`
 - 默认速率选项为 [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]，不可删除 1x
 - `SelectRoot` 的 `value` 和 `onValueChange` 由 store 自动管理，无需手动绑定

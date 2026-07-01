@@ -15,7 +15,7 @@ PixelTrail 像素拖尾组件，基于 Three.js 和 R3F 实现鼠标像素拖尾
 <ComponentShowcase id="rb/pixel-trail" path="rb/pixel-trail/basic" />
 
 ```tsx
-import { PixelTrail } from "@/components/ui/rb-pixel-trail"
+import { PixelTrail } from "@/components/ui/pixel-trail"
 
 export default function Demo() {
   return (
@@ -29,7 +29,7 @@ export default function Demo() {
 ### 彩色像素 + 自定义网格大小
 
 ```tsx
-import { PixelTrail } from "@/components/ui/rb-pixel-trail"
+import { PixelTrail } from "@/components/ui/pixel-trail"
 
 export default function Demo() {
   return (
@@ -75,7 +75,7 @@ export default function Demo() {
 R3F Canvas 使用绝对定位覆盖父容器，父容器设置为 `relative` 可确保 Canvas 正确定位在其内部。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/rb-pixel-trail` 导入。
+1. 从 `@/components/ui/pixel-trail` 导入。
 2. 该组件依赖 `@react-three/fiber` 和 `@react-three/drei`，请确保项目已安装。
 3. 父容器需要 `relative` 定位并有明确尺寸。
 4. 拖尾仅在鼠标在 Canvas 区域内移动时生效。

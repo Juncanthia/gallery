@@ -37,9 +37,9 @@ LegacySlider 是一个 Windows 经典风格的滑块组件。它基于 Radix Sli
 ## Import
 
 ```tsx
-import { LegacySlider } from "@/components/ui/sabraman-slider"
+import { LegacySlider } from "@/components/ui/slider-sabraman"
 // 类型
-import type { LegacySliderProps } from "@/components/ui/sabraman-slider"
+import type { LegacySliderProps } from "@/components/ui/slider-sabraman"
 ```
 
 ## Props
@@ -78,7 +78,7 @@ export interface LegacySliderProps
 ### 基础（非受控）
 
 ```tsx
-import { LegacySlider } from "@/components/ui/sabraman-slider"
+import { LegacySlider } from "@/components/ui/slider-sabraman"
 
 export default function Demo() {
   return <LegacySlider defaultValue={50} />
@@ -89,7 +89,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { LegacySlider } from "@/components/ui/sabraman-slider"
+import { LegacySlider } from "@/components/ui/slider-sabraman"
 
 export default function Demo() {
   const [value, setValue] = useState(60)
@@ -105,7 +105,7 @@ export default function Demo() {
 ### 自定义范围
 
 ```tsx
-import { LegacySlider } from "@/components/ui/sabraman-slider"
+import { LegacySlider } from "@/components/ui/slider-sabraman"
 
 export default function Demo() {
   return <LegacySlider defaultValue={30} max={50} min={10} />
@@ -115,7 +115,7 @@ export default function Demo() {
 ### 使用步长
 
 ```tsx
-import { LegacySlider } from "@/components/ui/sabraman-slider"
+import { LegacySlider } from "@/components/ui/slider-sabraman"
 
 export default function Demo() {
   return <LegacySlider defaultValue={50} step={25} />
@@ -125,7 +125,7 @@ export default function Demo() {
 ### 值提交回调
 
 ```tsx
-import { LegacySlider } from "@/components/ui/sabraman-slider"
+import { LegacySlider } from "@/components/ui/slider-sabraman"
 
 export default function Demo() {
   return (
@@ -142,6 +142,6 @@ export default function Demo() {
 1. 仅支持单值滑块，不支持范围选择（双滑块）。
 2. `value` 和 `defaultValue` 必须为 `number`，不可传入 `number[]`。
 3. `onValueChange` 和 `onValueCommit` 回调参数为 `number`，非数组。
-4. 导入路径为 `@/components/ui/sabraman-slider`，不可从 `@radix-ui/react-slider` 直接导入。
+4. 导入路径为 `@/components/ui/slider-sabraman`，不可从 `@radix-ui/react-slider` 直接导入。
 5. 视觉样式为 Windows 经典风格，自定义样式通过 `className` 透传。
 6. 组件使用 `min` 作为 `defaultValue` 的兜底值，当 `defaultValue` 为 `undefined` 时回退到 `min`。

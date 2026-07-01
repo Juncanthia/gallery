@@ -143,8 +143,8 @@ export default function Demo() {
 
 关键依赖：
 
-- `@/primitives/texts/scrolling-number`：数字滚轮原语（ScrollingNumberContainer、ScrollingNumber、ScrollingNumberItems、ScrollingNumberHighlight）。
-- `@/primitives/effects/particles`：粒子特效（Particles、ParticlesEffect）。
+- `@/components/_primitives/texts/scrolling-number`：数字滚轮原语（ScrollingNumberContainer、ScrollingNumber、ScrollingNumberItems、ScrollingNumberHighlight）。
+- `@/components/_primitives/effects/particles`：粒子特效（Particles、ParticlesEffect）。
 - `lucide-react`：StarIcon。
 - `@/lib/utils`：`cn` 工具函数。
 

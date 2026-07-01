@@ -24,7 +24,7 @@ Switch 开关。用于在两种互斥状态间切换，基于 Radix Switch 和 T
 <ComponentShowcase id="dice/switch" path="dice/switch/basic" />
 
 ```tsx
-import { Switch } from "@/components/ui/dice-switch"
+import { Switch } from "@/components/ui/switch-dice"
 
 export default function Demo() {
   return (
@@ -97,7 +97,7 @@ Switch 用于即时生效的开关操作，强调状态切换的即时性；Chec
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/dice-switch` 导入 Switch，不要从 `antd` 导入。
+1. 从 `@/components/ui/switch-dice` 导入 Switch，不要从 `antd` 导入。
 2. 只使用本地源码中存在的 props（见上方 API 表），不生成 AntD 专属的 `checkedChildren`、`unCheckedChildren`、`loading`、`size` 等属性。
 3. 受控模式下必须同时提供 `checked` 和 `onCheckedChange`。
 4. 表单场景需设置 `name` 属性以参与表单提交。

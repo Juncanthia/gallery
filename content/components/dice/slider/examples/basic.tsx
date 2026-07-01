@@ -1,6 +1,6 @@
 "use client"
 
-import { Slider } from "@/components/ui/dice-slider"
+import { Slider } from "@/components/ui/slider-dice"
 import { useState } from "react"
 
 export default function Demo() {

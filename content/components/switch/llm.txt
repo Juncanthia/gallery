@@ -117,7 +117,7 @@ type SwitchProps = Omit<SwitchPrimitiveProps, 'onChange'> & {
 
 直接依赖摘要：
 
-- `@/primitives/radix/switch`
+- `@/components/_primitives/radix/switch`
 
 实现注意：
 

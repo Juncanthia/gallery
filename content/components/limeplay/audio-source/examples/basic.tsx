@@ -1,6 +1,6 @@
 "use client"
 
-import { AudioSourceProvider } from "@/components/ui/limeplay-audio-source"
+import { AudioSourceProvider } from "@/components/ui/audio-source"
 
 const DEMO_SOURCE = [
   {

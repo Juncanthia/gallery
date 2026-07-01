@@ -1,4 +1,4 @@
-import { Stepper } from "@/components/ui/rb-stepper"
+import { Stepper } from "@/components/ui/stepper"
 
 export default function StepperBasicExample() {
   return (

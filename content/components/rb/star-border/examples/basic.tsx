@@ -1,4 +1,4 @@
-import { StarBorder } from "@/components/ui/rb-star-border"
+import { StarBorder } from "@/components/ui/star-border"
 
 export default function StarBorderBasicExample() {
   return (

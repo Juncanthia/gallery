@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import * as VolumeControl from "@/components/limeplay/ui/volume-control"
+import * as VolumeControl from "@/components/media/ui/volume-control"
 
 export default function Demo() {
   return (
@@ -68,7 +68,7 @@ export default function Demo() {
 
 ## 核心导出 {#exports}
 
-- `Root`（也通过 `@/components/ui/limeplay-volume-control` 单独导出）
+- `Root`（也通过 `@/components/ui/volume-control` 单独导出）
 - `Track`
 - `Progress`
 - `Thumb`
@@ -185,7 +185,7 @@ CSS 变量：
 
 当 AI 生成本项目 VolumeControl 代码时，应遵守：
 
-1. 从 `@/components/ui/limeplay-volume-control` 导入 Root，或使用命名空间导入 `import * as VolumeControl from "@/components/limeplay/ui/volume-control"`。
+1. 从 `@/components/ui/volume-control` 导入 Root，或使用命名空间导入 `import * as VolumeControl from "@/components/media/ui/volume-control"`。
 2. Root 内必须包含 Track、Progress、Thumb 子组件，不可单独使用 Root。
 3. 垂直模式（`orientation="vertical"`）需为 Root 设置 `h-32` 等固定高度。
 4. 不要从 `antd` 导入任何滑块或音量相关组件。

@@ -51,7 +51,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Citation } from "@/components/ui/tool-citation"
+import { Citation } from "@/components/ui/citation"
 
 export default function Demo() {
   return (
@@ -70,7 +70,7 @@ export default function Demo() {
 ### Inline 内联模式
 
 ```tsx
-import { Citation } from "@/components/ui/tool-citation"
+import { Citation } from "@/components/ui/citation"
 
 export default function Demo() {
   return (
@@ -89,7 +89,7 @@ export default function Demo() {
 ### 使用 CitationList 管理引用列表
 
 ```tsx
-import { CitationList } from "@/components/ui/tool-citation-list"
+import { CitationList } from "@/components/ui/citation-list"
 
 export default function Demo() {
   return (
@@ -192,8 +192,8 @@ type CitationType = "webpage" | "document" | "article" | "api" | "code" | "other
 - `src/components/tool/citation/citation.tsx` — Citation 单引用组件
 - `src/components/tool/citation/citation-list.tsx` — CitationList 引用列表组件
 - `src/components/tool/citation/schema.ts` — Zod schema 与类型定义
-- `src/components/ui/tool-citation.tsx` — 统一导出入口，`export { Citation } from "@/components/tool/citation/citation"`
-- `src/components/ui/tool-citation-list.tsx` — 统一导出入口，`export { CitationList } from "@/components/tool/citation/citation-list"`
+- `src/components/ui/tool-citation.tsx` — 统一导出入口，`export { Citation } from "@/components/agent-tools/citation/citation"`
+- `src/components/ui/tool-citation-list.tsx` — 统一导出入口，`export { CitationList } from "@/components/agent-tools/citation/citation-list"`
 
 直接依赖摘要：
 
@@ -230,7 +230,7 @@ type CitationType = "webpage" | "document" | "article" | "api" | "code" | "other
 
 当 AI 生成本项目 Citation / CitationList 代码时，应遵守：
 
-1. 从 `@/components/ui/tool-citation` 导入 `Citation`，从 `@/components/ui/tool-citation-list` 导入 `CitationList`，不要从 `antd` 导入。
+1. 从 `@/components/ui/citation` 导入 `Citation`，从 `@/components/ui/citation-list` 导入 `CitationList`，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. `id`、`href`、`title` 为必填属性，`href` 必须为合法的绝对 URL（`https://` 开头）。
 4. 使用 `variant` 控制展示形态，不要在外部通过 className 重新实现 variant 逻辑。

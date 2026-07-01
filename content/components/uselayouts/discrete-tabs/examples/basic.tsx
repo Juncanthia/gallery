@@ -1,4 +1,4 @@
-import { DiscreteTabs } from "@/components/ui/uselayouts-discrete-tabs"
+import { DiscreteTabs } from "@/components/ui/discrete-tabs"
 
 export default function Demo() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { EvilComposedChart } from "@/components/ui/evilcharts-composed-chart";
+import { EvilComposedChart } from "@/components/ui/composed-chart-evilcharts";
 import {
   Bar,
   Line,
@@ -10,8 +10,8 @@ import {
   Legend,
   ActiveDot,
   Dot,
-} from "@/components/evilcharts/components/composed-chart";
-import { type ChartConfig } from "@/components/evilcharts/components/chart";
+} from "@/components/charts/evilcharts/components/composed-chart";
+import { type ChartConfig } from "@/components/charts/evilcharts/components/chart";
 
 const data = [
   { month: "1月", revenue: 4200, profit: 1800 },

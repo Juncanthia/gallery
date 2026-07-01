@@ -34,7 +34,7 @@ stack:
 ## 导入路径
 
 ```tsx
-import { PlaybackControl } from "@/components/ui/limeplay-playback-control"
+import { PlaybackControl } from "@/components/ui/playback-control"
 ```
 
 ## 核心导出
@@ -55,7 +55,7 @@ interface PlaybackControlProps extends React.ButtonHTMLAttributes<HTMLButtonElem
 
 ```tsx
 import { Button } from "@/components/ui/button"
-import { PlaybackControl } from "@/components/ui/limeplay-playback-control"
+import { PlaybackControl } from "@/components/ui/playback-control"
 
 export default function Demo() {
   return (

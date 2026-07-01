@@ -1,4 +1,4 @@
-import { AnimatedContent } from "@/components/ui/rb-animated-content"
+import { AnimatedContent } from "@/components/ui/animated-content"
 
 export default function AnimatedContentBasicExample() {
   return (

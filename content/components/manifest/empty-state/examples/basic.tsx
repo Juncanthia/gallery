@@ -1,4 +1,4 @@
-import { EmptyState } from "@/components/ui/manifest-empty-state"
+import { EmptyState } from "@/components/ui/empty-state-manifest"
 
 export default function Demo() {
   return (

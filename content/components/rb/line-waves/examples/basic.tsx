@@ -1,4 +1,4 @@
-import { LineWaves } from "@/components/ui/rb-line-waves"
+import { LineWaves } from "@/components/ui/line-waves"
 
 export default function LineWavesBasicExample() {
   return (

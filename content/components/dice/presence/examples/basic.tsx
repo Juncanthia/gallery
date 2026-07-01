@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Presence } from "@/components/ui/dice-presence"
+import { Presence } from "@/components/ui/presence"
 
 export default function Demo() {
   const [present, setPresent] = useState(true)

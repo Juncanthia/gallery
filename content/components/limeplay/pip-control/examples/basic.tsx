@@ -3,8 +3,8 @@
 import { PictureInPictureIcon } from "@phosphor-icons/react"
 
 import { Button } from "@/components/ui/button"
-import { PictureInPictureControl } from "@/components/ui/limeplay-pip-control"
-import { usePictureInPictureStore } from "@/components/limeplay/hooks/use-picture-in-picture"
+import { PictureInPictureControl } from "@/components/ui/pip-control"
+import { usePictureInPictureStore } from "@/components/media/hooks/use-picture-in-picture"
 
 export default function Demo() {
   const isPictureInPictureActive = usePictureInPictureStore(

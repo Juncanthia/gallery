@@ -32,7 +32,7 @@ DiscreteTabs 是一个带有 layoutId 共享元素动画的标签切换组件。
 ## 导入
 
 ```tsx
-import { DiscreteTabs } from "@/components/ui/uselayouts-discrete-tabs"
+import { DiscreteTabs } from "@/components/ui/discrete-tabs"
 ```
 
 ## 基本用法

@@ -1,5 +1,5 @@
-import { ScatterChart } from "@/components/ui/bklit-scatter-chart"
-import { Scatter } from "@/components/bklit/charts"
+import { ScatterChart } from "@/components/ui/scatter-chart"
+import { Scatter } from "@/components/charts/bklit/charts"
 
 const data = [
   { x: 10, y: 20 },

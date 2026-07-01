@@ -1,11 +1,11 @@
 "use client"
 
-import { MentionHighlighter } from "@/components/ui/dice-mention-highlighter"
-import { MentionRoot } from "@/components/dice/mention/mention-root"
-import { MentionInput } from "@/components/dice/mention/mention-input"
-import { MentionContent } from "@/components/dice/mention/mention-content"
-import { MentionItem } from "@/components/dice/mention/mention-item"
-import { MentionPortal } from "@/components/dice/mention/mention-portal"
+import { MentionHighlighter } from "@/components/ui/mention-highlighter"
+import { MentionRoot } from "@/components/data-entry/dice/mention/mention-root"
+import { MentionInput } from "@/components/data-entry/dice/mention/mention-input"
+import { MentionContent } from "@/components/data-entry/dice/mention/mention-content"
+import { MentionItem } from "@/components/data-entry/dice/mention/mention-item"
+import { MentionPortal } from "@/components/data-entry/dice/mention/mention-portal"
 
 export default function Demo() {
   return (

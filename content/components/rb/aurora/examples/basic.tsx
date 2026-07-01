@@ -1,4 +1,4 @@
-import { Aurora } from "@/components/ui/rb-aurora"
+import { Aurora } from "@/components/ui/aurora"
 
 export default function AuroraBasicExample() {
   return (

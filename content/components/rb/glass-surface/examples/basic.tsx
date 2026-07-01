@@ -1,4 +1,4 @@
-import { GlassSurface } from "@/components/ui/rb-glass-surface"
+import { GlassSurface } from "@/components/ui/glass-surface"
 
 export default function GlassSurfaceBasicExample() {
   return <GlassSurface />

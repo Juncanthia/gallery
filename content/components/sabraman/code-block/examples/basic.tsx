@@ -1,4 +1,4 @@
-import { LegacyCodeBlockCommand } from "@/components/ui/sabraman-code-block"
+import { LegacyCodeBlockCommand } from "@/components/ui/code-block-sabraman"
 
 export default function Demo() {
   return (

@@ -8,7 +8,7 @@ import {
   type PreviewLinkCardTriggerProps as PreviewLinkCardTriggerPrimitiveProps,
   type PreviewLinkCardContentProps as PreviewLinkCardContentPrimitiveProps,
   type PreviewLinkCardImageProps as PreviewLinkCardImagePrimitiveProps,
-} from '@/primitives/radix/link-preview';
+} from '@/components/_primitives/radix/link-preview';
 import { cn } from '@/lib/utils';
 
 type PreviewLinkCardProps = PreviewLinkCardPrimitiveProps;

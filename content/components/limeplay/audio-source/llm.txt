@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { AudioSourceProvider } from "@/components/ui/limeplay-audio-source"
+import { AudioSourceProvider } from "@/components/ui/audio-source"
 
 export default function Demo() {
   return (
@@ -65,7 +65,7 @@ export default function Demo() {
 
 ## 核心导出 {#exports}
 
-- `AudioSourceProvider`（主组件，通过 `@/components/ui/limeplay-audio-source` 导入）
+- `AudioSourceProvider`（主组件，通过 `@/components/ui/audio-source` 导入）
 - `getAudioAssetMetadata`（工具函数，从 `src/components/limeplay/blocks/audio-player/components/audio-source.tsx` 导入）
 
 ## API 摘要 {#api}
@@ -140,7 +140,7 @@ export function getAudioAssetMetadata(
 
 当 AI 生成本项目 AudioSourceProvider 代码时，应遵守：
 
-1. 从 `@/components/ui/limeplay-audio-source` 导入 `AudioSourceProvider`。
+1. 从 `@/components/ui/audio-source` 导入 `AudioSourceProvider`。
 2. 必须在 `MediaProvider` 上下文中使用。
 3. `source` 支持三种形式：字符串 URL、单个 AudioPlayerAsset 对象、AudioPlayerAsset 数组。
 4. 每个 AudioPlayerAsset 至少需要 `src` 或 `playbackUrls.primary` 之一。

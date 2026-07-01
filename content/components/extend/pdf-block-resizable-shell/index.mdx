@@ -27,7 +27,7 @@ PdfBlockResizableShell 是一个可拖拽调整的左右分栏布局容器，专
 />
 
 ```tsx
-import { PdfBlockResizableShell } from "@/components/ui/extend-pdf-block-resizable-shell"
+import { PdfBlockResizableShell } from "@/components/ui/pdf-block-resizable-shell"
 
 export default function Demo() {
   return (
@@ -116,7 +116,7 @@ export default function Demo() {
 
 AI 生成 PdfBlockResizableShell 代码时：
 
-1. 从 `@/components/ui/extend-pdf-block-resizable-shell` 导入 `PdfBlockResizableShell`。
+1. 从 `@/components/ui/pdf-block-resizable-shell` 导入 `PdfBlockResizableShell`。
 2. 必须提供 `autoSaveId` 作为布局持久化的唯一标识，建议使用有意义的命名如 `"pdf-block-xxx"`。
 3. `left` 和 `right` 属性为必填，分别传入文档区和面板区内容。
 4. 通过 `heightClassName` 控制容器高度，默认 `h-[680px]`，最小 420px。

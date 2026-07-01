@@ -29,7 +29,7 @@ Legend 采用组合式 API：
 <ComponentShowcase id="bklit/legend" path="bklit/legend/basic" />
 
 ```tsx
-import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/bklit-legend"
+import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/legend"
 
 const items = [
   { label: "产品 A", value: 450, maxValue: 600, color: "var(--chart-1)" },
@@ -147,7 +147,7 @@ Legend 是独立组件，不依赖 ChartContext。直接将 `items` 数据传入
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/bklit-legend` 导入 `Legend` 及其子组件
+1. 从 `@/components/ui/legend` 导入 `Legend` 及其子组件
 2. 来自 BKLit Charts 库
 3. 始终通过 `items` 属性传入 `LegendItemData[]` 数组
 4. 在 `<Legend>` 中放置单个 `<LegendItem>` 作为子组件模板，内部自动迭代

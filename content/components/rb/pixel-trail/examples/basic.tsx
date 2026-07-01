@@ -1,4 +1,4 @@
-import { PixelTrail } from "@/components/ui/rb-pixel-trail"
+import { PixelTrail } from "@/components/ui/pixel-trail"
 
 export default function PixelTrailBasicExample() {
   return (

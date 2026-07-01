@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { StatsDisplay } from "@/components/ui/tool-stats-display"
+import { StatsDisplay } from "@/components/ui/stats-display"
 
 export default function Demo() {
   return (
@@ -106,7 +106,7 @@ export default function Demo() {
 ### 单一指标大卡片
 
 ```tsx
-import { StatsDisplay } from "@/components/ui/tool-stats-display"
+import { StatsDisplay } from "@/components/ui/stats-display"
 
 export default function Demo() {
   return (
@@ -130,7 +130,7 @@ export default function Demo() {
 ### 环比方向自定义（upIsPositive）
 
 ```tsx
-import { StatsDisplay } from "@/components/ui/tool-stats-display"
+import { StatsDisplay } from "@/components/ui/stats-display"
 
 export default function Demo() {
   return (
@@ -246,7 +246,7 @@ interface StatSparkline {
 - `src/components/tool/stats-display/stats-display.tsx` — StatsDisplay 主组件
 - `src/components/tool/stats-display/sparkline.tsx` — Sparkline SVG 迷你趋势图
 - `src/components/tool/stats-display/schema.ts` — Zod schema 与类型定义
-- `src/components/ui/tool-stats-display.tsx` — 统一导出入口，`export { StatsDisplay } from "@/components/tool/stats-display/stats-display"`
+- `src/components/ui/tool-stats-display.tsx` — 统一导出入口，`export { StatsDisplay } from "@/components/agent-tools/stats-display/stats-display"`
 
 直接依赖摘要：
 
@@ -283,7 +283,7 @@ interface StatSparkline {
 
 当 AI 生成本项目 StatsDisplay 代码时，应遵守：
 
-1. 从 `@/components/ui/tool-stats-display` 导入 `StatsDisplay`，不要从 `antd` 导入。
+1. 从 `@/components/ui/stats-display` 导入 `StatsDisplay`，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. `id` 和 `stats` 为必填属性，`stats` 数组至少包含 1 项。
 4. 每个 `StatItem` 必须提供 `key`（唯一）、`label`（展示标签）和 `value`（数值）。

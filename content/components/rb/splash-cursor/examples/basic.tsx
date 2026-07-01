@@ -1,4 +1,4 @@
-import { SplashCursor } from "@/components/ui/rb-splash-cursor"
+import { SplashCursor } from "@/components/ui/splash-cursor"
 
 export default function SplashCursorBasicExample() {
   return (

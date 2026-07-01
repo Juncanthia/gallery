@@ -1,4 +1,4 @@
-import { DocumentSplitsBlock } from "@/components/ui/extend-document-splits-block"
+import { DocumentSplitsBlock } from "@/components/ui/document-splits-block"
 
 export default function Demo() {
   return (

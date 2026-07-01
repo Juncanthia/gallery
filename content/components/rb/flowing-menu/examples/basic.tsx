@@ -1,4 +1,4 @@
-import { FlowingMenu } from "@/components/ui/rb-flowing-menu"
+import { FlowingMenu } from "@/components/ui/flowing-menu"
 
 export default function FlowingMenuBasicExample() {
   return (

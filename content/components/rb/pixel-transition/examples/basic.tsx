@@ -1,4 +1,4 @@
-import { PixelTransition } from "@/components/ui/rb-pixel-transition"
+import { PixelTransition } from "@/components/ui/pixel-transition"
 
 export default function PixelTransitionBasicExample() {
   return (

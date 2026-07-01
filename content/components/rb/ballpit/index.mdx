@@ -20,7 +20,7 @@ Ballpit 基于 Three.js 的物理模拟球池背景组件，使用 InstancedMesh
 <ComponentShowcase id="rb/ballpit" path="rb/ballpit/basic" />
 
 ```tsx
-import { Ballpit } from "@/components/ui/rb-ballpit"
+import { Ballpit } from "@/components/ui/ballpit"
 
 export default function Demo() {
   return <Ballpit />
@@ -30,7 +30,7 @@ export default function Demo() {
 ### 自定义球体参数
 
 ```tsx
-import { Ballpit } from "@/components/ui/rb-ballpit"
+import { Ballpit } from "@/components/ui/ballpit"
 
 export default function CustomDemo() {
   return (
@@ -89,7 +89,7 @@ Ballpit 通过 `{...props}` 透传以下物理配置到内部引擎：
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/rb-ballpit` 导入。
+1. 从 `@/components/ui/ballpit` 导入。
 2. 需要安装 `three` 依赖。
 3. Canvas 元素会充满父容器（`width:100%; height:100%`），父容器需有明确尺寸。
 4. 物理参数通过 props 透传，TypeScript 类型为 `[key: string]: any`。

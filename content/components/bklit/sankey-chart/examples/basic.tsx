@@ -1,4 +1,4 @@
-import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/ui/bklit-sankey-chart"
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/ui/sankey-chart-bklit"
 
 const data = {
   nodes: [

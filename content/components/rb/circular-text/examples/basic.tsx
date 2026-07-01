@@ -1,4 +1,4 @@
-import { CircularText } from "@/components/ui/rb-circular-text"
+import { CircularText } from "@/components/ui/circular-text"
 
 export default function CircularTextBasicExample() {
   return (

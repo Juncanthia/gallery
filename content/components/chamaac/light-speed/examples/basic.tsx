@@ -1,4 +1,4 @@
-import { LightSpeed } from "@/components/ui/chamaac-light-speed"
+import { LightSpeed } from "@/components/ui/light-speed"
 
 export default function Demo() {
   return (

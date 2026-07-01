@@ -1,4 +1,4 @@
-import { LightRays } from "@/components/ui/rb-light-rays"
+import { LightRays } from "@/components/ui/light-rays"
 
 export default function LightRaysBasicExample() {
   return (

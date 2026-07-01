@@ -1,4 +1,4 @@
-import InteractiveBook from "@/components/ui/uselayouts-3d-book"
+import InteractiveBook from "@/components/ui/3d-book"
 
 export default function Demo() {
   return <InteractiveBook />

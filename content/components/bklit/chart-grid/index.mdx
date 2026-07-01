@@ -27,9 +27,9 @@
 <ComponentShowcase id="bklit/chart-grid" path="bklit/chart-grid/basic" />
 
 ```tsx
-import { BarChart } from "@/components/ui/bklit-bar-chart"
-import { Bar } from "@/components/bklit/charts"
-import { Grid } from "@/components/ui/bklit-chart-grid"
+import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { Bar } from "@/components/charts/bklit/charts"
+import { Grid } from "@/components/ui/chart-grid"
 
 export default function Demo() {
   return (
@@ -115,7 +115,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入 Grid: `import { Grid } from "@/components/ui/bklit-chart-grid"`
+- 导入 Grid: `import { Grid } from "@/components/ui/chart-grid"`
 - Grid 来自 BKLit Charts 库（基于 @visx/grid），作为 BarChart / LineChart / AreaChart 等的子组件使用
 - 内部自动从 ChartContext 获取 scale 信息，无需手动传入
 - 使用 `horizontal` / `vertical` 控制方向，不要使用不存在的 `showRows` / `showColumns`

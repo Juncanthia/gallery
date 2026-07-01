@@ -1,4 +1,4 @@
-import { GridMotion } from "@/components/ui/rb-grid-motion"
+import { GridMotion } from "@/components/ui/grid-motion"
 
 export default function GridMotionBasicExample() {
   return <GridMotion />

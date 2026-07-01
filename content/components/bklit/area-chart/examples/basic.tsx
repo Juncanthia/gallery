@@ -1,5 +1,5 @@
-import { AreaChart } from "@/components/ui/bklit-area-chart"
-import { Area, Grid } from "@/components/bklit/charts"
+import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { Area, Grid } from "@/components/charts/bklit/charts"
 
 const data = [
   { date: new Date(2024, 0, 1), value: 100 },

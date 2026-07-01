@@ -1,6 +1,6 @@
 [图例 / Legend]
-导入: import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/bklit-legend"
-包来源: @/components/bklit/charts
+导入: import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/legend"
+包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 
 ## 何时使用
@@ -64,7 +64,7 @@ Legend 是组合式图例组件，用于展示图表的数据系列说明。支�
 ### 基础用法（颜色标记 + 标签 + 数值 + 进度条）
 
 ```tsx
-import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/bklit-legend"
+import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/legend"
 
 const items = [
   { label: "产品 A", value: 450, maxValue: 600, color: "var(--chart-1)" },
@@ -91,7 +91,7 @@ export default function Demo() {
 ### 精简模式（仅标记 + 标签）
 
 ```tsx
-import { Legend, LegendItem, LegendMarker, LegendLabel } from "@/components/ui/bklit-legend"
+import { Legend, LegendItem, LegendMarker, LegendLabel } from "@/components/ui/legend"
 
 const items = [
   { label: "PV", value: 10000, color: "var(--chart-1)" },
@@ -115,7 +115,7 @@ export default function Demo() {
 ### 带标题和百分比
 
 ```tsx
-import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/bklit-legend"
+import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/ui/legend"
 
 const items = [
   { label: "已完成", value: 780, maxValue: 1000, color: "var(--chart-1)" },

@@ -1,4 +1,4 @@
-import { LightPillar } from "@/components/ui/rb-light-pillar"
+import { LightPillar } from "@/components/ui/light-pillar"
 
 export default function LightPillarBasicExample() {
   return (

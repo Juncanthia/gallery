@@ -1,4 +1,4 @@
-import { Ribbons } from "@/components/ui/rb-ribbons"
+import { Ribbons } from "@/components/ui/ribbons"
 
 export default function RibbonsBasicExample() {
   return (

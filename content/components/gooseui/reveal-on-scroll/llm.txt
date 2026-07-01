@@ -2,7 +2,7 @@
 component: RevealOnScroll
 slug: gooseui/reveal-on-scroll
 
-import: import { RevealOnScroll } from "@/components/ui/gooseui-reveal-on-scroll"
+import: import { RevealOnScroll } from "@/components/ui/reveal-on-scroll"
 
 usage: |
   <RevealOnScroll direction="up" delay={0} duration={600}>

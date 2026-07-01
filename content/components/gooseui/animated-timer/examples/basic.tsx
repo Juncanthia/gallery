@@ -1,4 +1,4 @@
-import { AnimatedTimer } from "@/components/ui/gooseui-animated-timer"
+import { AnimatedTimer } from "@/components/ui/animated-timer"
 
 export default function Demo() {
   return (

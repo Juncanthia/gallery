@@ -1,4 +1,4 @@
-import { ScrollReveal } from "@/components/ui/rb-scroll-reveal"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 export default function ScrollRevealBasicExample() {
   return (

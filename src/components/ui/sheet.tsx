@@ -24,7 +24,7 @@ import {
   type SheetFooterProps as SheetFooterPrimitiveProps,
   type SheetTitleProps as SheetTitlePrimitiveProps,
   type SheetDescriptionProps as SheetDescriptionPrimitiveProps,
-} from '@/primitives/radix/sheet';
+} from '@/components/_primitives/radix/sheet';
 import { cn } from '@/lib/utils';
 
 type SheetPlacement = 'top' | 'bottom' | 'left' | 'right';

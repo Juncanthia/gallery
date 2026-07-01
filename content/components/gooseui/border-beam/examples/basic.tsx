@@ -1,4 +1,4 @@
-import { BorderBeam } from "@/components/ui/gooseui-border-beam"
+import { BorderBeam } from "@/components/ui/border-beam-gooseui"
 
 export default function Demo() {
   return (

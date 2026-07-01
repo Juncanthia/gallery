@@ -1,4 +1,4 @@
-import { StatsCards } from "@/components/ui/chamaac-stats-cards"
+import { StatsCards } from "@/components/ui/stats-cards"
 
 export default function Demo() {
   return (

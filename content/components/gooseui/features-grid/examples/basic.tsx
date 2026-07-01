@@ -1,4 +1,4 @@
-import { FeaturesGrid } from "@/components/ui/gooseui-features-grid"
+import { FeaturesGrid } from "@/components/ui/features-grid"
 
 export default function Demo() {
   return <FeaturesGrid />

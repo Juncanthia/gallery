@@ -24,8 +24,8 @@
 <ComponentShowcase id="bklit/composed-chart" path="bklit/composed-chart/basic" />
 
 ```tsx
-import { ComposedChart } from "@/components/ui/bklit-composed-chart"
-import { Line, Area, SeriesBar } from "@/components/bklit/charts"
+import { ComposedChart } from "@/components/ui/composed-chart-bklit"
+import { Line, Area, SeriesBar } from "@/components/charts/bklit/charts"
 const data = [
   { date: new Date(2024, 0, 1), line: 100, area: 80, bar: 200 },
   // ...
@@ -159,8 +159,8 @@ Line 和 Area 内置加载脉冲动画，通过 `loading` 属性控制。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入: `import { ComposedChart } from "@/components/ui/bklit-composed-chart"`
-- 子组件导入: `import { Line, Area, SeriesBar } from "@/components/bklit/charts"`
+- 导入: `import { ComposedChart } from "@/components/ui/composed-chart-bklit"`
+- 子组件导入: `import { Line, Area, SeriesBar } from "@/components/charts/bklit/charts"`
 - 来自 BKLit Charts 库（基于 @visx）
 - 必须提供 `data` 属性，每行至少包含一个日期字段和若干数值字段
 - 日期字段默认 key 为 `"date"`，可通过 `xDataKey` 自定义

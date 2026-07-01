@@ -1,4 +1,4 @@
-import { ColorBends } from "@/components/ui/rb-color-bends"
+import { ColorBends } from "@/components/ui/color-bends"
 
 export default function ColorBendsBasicExample() {
   return <ColorBends />

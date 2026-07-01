@@ -23,7 +23,7 @@ Bucket 是一个自包含的展示组件，无需传入任何 props 即可使用
 />
 
 ```tsx
-import Bucket from "@/components/ui/uselayouts-bucket"
+import Bucket from "@/components/ui/bucket"
 
 export default function Demo() {
   return <Bucket />
@@ -72,7 +72,7 @@ Bucket 使用 `@hugeicons/core-free-icons` 和 `@hugeicons/react`。如需更换
 
 AI 生成 Bucket 代码时：
 
-1. 从 `@/components/ui/uselayouts-bucket` 导入 Bucket。
+1. 从 `@/components/ui/bucket` 导入 Bucket。
 2. Bucket 为自包含组件，直接渲染 `<Bucket />` 即可，无需传入 props。
 3. 不要尝试通过 props 控制标签内容；标签内容定义在组件内部 `INITIAL_CHIPS`。
 4. Bucket 依赖 `motion/react` 和 `@hugeicons/react`，不要移除这些依赖。

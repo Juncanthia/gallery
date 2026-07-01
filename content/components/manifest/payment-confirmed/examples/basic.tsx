@@ -1,4 +1,4 @@
-import { PaymentConfirmed } from "@/components/ui/manifest-payment-confirmed"
+import { PaymentConfirmed } from "@/components/ui/payment-confirmed"
 
 const sampleData = {
   orderId: "ORD-2024-5678",

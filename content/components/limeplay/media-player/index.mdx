@@ -26,7 +26,7 @@
 <ComponentShowcase id="limeplay/media-player" path="limeplay/media-player/basic" />
 
 ```tsx
-import { VideoPlayer } from "@/components/ui/limeplay-media-player"
+import { VideoPlayer } from "@/components/ui/media-player"
 
 export default function Demo() {
   return (
@@ -92,7 +92,7 @@ Shaka Player 会自动检测流格式并初始化对应的播放策略。
 使用 `usePlaybackStore` hook 访问播放状态：
 
 ```tsx
-import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
+import { usePlaybackStore } from "@/components/media/hooks/use-playback"
 
 const status = usePlaybackStore((s) => s.status)
 ```
@@ -103,7 +103,7 @@ const status = usePlaybackStore((s) => s.status)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/limeplay-media-player` 导入 `VideoPlayer`，不要从 `antd` 导入（AntD 无此组件）。
+1. 从 `@/components/ui/media-player` 导入 `VideoPlayer`，不要从 `antd` 导入（AntD 无此组件）。
 2. `source` 支持字符串 URL 或 `PlayerSource<T>` 对象数组，传入 URL 即可快速启动。
 3. 不要使用原生 `<video controls>` 替代本组件。
 4. 本组件默认包含底部控制栏、字幕容器、错误恢复屏幕和加载海报，无需手动组合子组件。

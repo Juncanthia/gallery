@@ -31,7 +31,7 @@ stack:
 
 本组件为项目本地复合组件（Blocks），无 Ant Design 直接对应。API 和行为以 `src/components/blocks/file-upload/index.tsx` 源码为准。
 
-业务层的 `@/components/extend/components/ui/file-upload`（预制视觉的文档上传卡片）就是基于本组件搭建的预设，服务不同场景，见下文"与 extend FileUpload 的关系"。
+业务层的 `@/components/document/components/ui/file-upload`（预制视觉的文档上传卡片）就是基于本组件搭建的预设，服务不同场景，见下文"与 extend FileUpload 的关系"。
 
 ## 何时使用 {#when-to-use}
 
@@ -45,7 +45,7 @@ stack:
 
 不推荐：
 
-- 只需要一个开箱即用、带业务视觉（图标动画、装饰边框）的文档上传卡片——优先使用 `@/components/extend/components/ui/file-upload`，不要用本组件重新拼一遍。
+- 只需要一个开箱即用、带业务视觉（图标动画、装饰边框）的文档上传卡片——优先使用 `@/components/document/components/ui/file-upload`，不要用本组件重新拼一遍。
 - 需要断点续传、分片上传等复杂传输协议——本组件只负责选择、校验和状态展示，`onUpload` 回调里自行对接传输层。
 - 为了照搬 Ant Design Upload API 而引入本组件——它不对应任何 AntD 组件，API 完全不同。
 
@@ -260,7 +260,7 @@ function useFileUpload<T>(selector: (state: { files: Map<File, FileState>; dragO
 
 ## 与 extend FileUpload 的关系 {#relation-to-extend}
 
-项目中还存在一个业务层组件 `@/components/extend/components/ui/file-upload`（文档见 `content/components/extend/file-upload/`）。两者不是并列的两套实现，而是 primitive 与预设（preset）的关系：extend 版本内部直接组合本组件的 `FileUpload`/`FileUploadDropzone`/`useFileUpload`，复用本组件的拖拽状态机、accept/大小校验、键盘与粘贴上传逻辑，只在其上叠加业务视觉（图标动效、`BorderBeam`、缩略图文件列表）和"每次上传替换文件列表"的业务语义。
+项目中还存在一个业务层组件 `@/components/document/components/ui/file-upload`（文档见 `content/components/extend/file-upload/`）。两者不是并列的两套实现，而是 primitive 与预设（preset）的关系：extend 版本内部直接组合本组件的 `FileUpload`/`FileUploadDropzone`/`useFileUpload`，复用本组件的拖拽状态机、accept/大小校验、键盘与粘贴上传逻辑，只在其上叠加业务视觉（图标动效、`BorderBeam`、缩略图文件列表）和"每次上传替换文件列表"的业务语义。
 
 | 维度 | 本组件（`@/components/ui/file-upload`） | extend `FileUpload` |
 | --- | --- | --- |
@@ -286,12 +286,12 @@ function useFileUpload<T>(selector: (state: { files: Map<File, FileState>; dragO
 
 当 AI 生成本项目 FileUpload 代码时，应遵守：
 
-1. 从 `@/components/ui/file-upload` 导入，不要从 `@/components/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入，也不要从 `antd` 导入 `Upload`。
+1. 从 `@/components/ui/file-upload` 导入，不要从 `@/components/_shared/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入，也不要从 `antd` 导入 `Upload`。
 2. `FileUploadList` 的 `children` 必须是普通 `ReactNode`（通常是 `files.map(...)` 的结果），不是 render prop。
 3. `FileUploadItem` 必须传入 `value`（对应的 `File` 对象），否则无法关联到内部文件状态，组件会返回 `null`。
 4. 优先使用受控模式（`value` + `onValueChange`）维护文件数组，而不是自己另外维护一份独立 state。
 5. 需要展示进度时使用 `FileUploadItemProgress`，并在 `onUpload` 回调中调用 `onProgress` 更新进度、`onSuccess`/`onError` 标记结束状态。
 6. 自定义触发按钮样式时用 `FileUploadTrigger asChild` 包裹项目的 `Button`，不要重新实现"点击打开文件选择框"的逻辑。
 7. 不要引入 Ant Design 的 `Upload`/`rc-upload`，也不要引入 `react-dropzone` 等第三方拖拽库。
-8. 业务专属的文档缩略图、图标动画、装饰性边框光束等视觉效果属于业务层能力，不要塞进本组件的 props；需要开箱即用的文档上传卡片时改用 `@/components/extend/components/ui/file-upload`。
+8. 业务专属的文档缩略图、图标动画、装饰性边框光束等视觉效果属于业务层能力，不要塞进本组件的 props；需要开箱即用的文档上传卡片时改用 `@/components/document/components/ui/file-upload`。
 9. 只使用本文件 API 表格和源码中存在的 props，不要凭 AntD Upload 或其他上传库的记忆生成 API（如 `beforeUpload`、`fileList`、`customRequest` 等均不存在）。

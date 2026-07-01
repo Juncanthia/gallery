@@ -51,7 +51,7 @@ stack:
 直接渲染，无需任何 props。
 
 ```tsx
-import { PlateEditorsShowcase } from "@/components/ui/plate-editors-showcase"
+import { PlateEditorsShowcase } from "@/components/ui/editors-showcase"
 
 export default function Demo() {
   return <PlateEditorsShowcase />
@@ -117,7 +117,7 @@ export default function Demo() {
 
 当 AI 生成本项目代码时，应遵守：
 
-1. 从 `@/components/ui/plate-editors-showcase` 导入 PlatesEditorsShowcase。
+1. 从 `@/components/ui/editors-showcase` 导入 PlatesEditorsShowcase。
 2. 该组件无外部 props，直接渲染即可。
 3. 仅用于文档/展示场景，不作为通用编辑器的替代方案。
 4. 需要实际编辑器能力时，应使用 `Editor` 组件。

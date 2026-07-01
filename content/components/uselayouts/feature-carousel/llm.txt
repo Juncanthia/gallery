@@ -60,7 +60,7 @@ FeatureCarousel 的核心交互：
 FeatureCarousel 无需传入任何 props，直接渲染即可获得完整的特性轮播面板。
 
 ```tsx
-import { FeatureCarousel } from "@/components/ui/uselayouts-feature-carousel"
+import { FeatureCarousel } from "@/components/ui/feature-carousel"
 
 export default function Demo() {
   return <FeatureCarousel />
@@ -173,7 +173,7 @@ FeatureCarousel 消费 Tailwind 主题变量和语义色 class。所有颜色通
 
 当 AI 生成本项目 FeatureCarousel 相关代码时，应遵守：
 
-1. 从 `@/components/ui/uselayouts-feature-carousel` 导入 `FeatureCarousel`（named export）。
+1. 从 `@/components/ui/feature-carousel` 导入 `FeatureCarousel`（named export）。
 2. 不要给 FeatureCarousel 传递任何 props，组件自身管理全部状态。
 3. 如需引入其他依赖（motion、@hugeicons），从组件源码处参考正确的导入路径。
 4. FeatureCarousel 依赖 motion/react 的 AnimatePresence 和 spring 动画，不要移除这些动画逻辑。

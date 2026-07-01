@@ -1,4 +1,4 @@
-import { TextCursor } from "@/components/ui/rb-text-cursor"
+import { TextCursor } from "@/components/ui/text-cursor"
 
 export default function TextCursorBasicExample() {
   return (

@@ -1,4 +1,4 @@
-import { MorphingHeader, MorphingLogo, MorphingNav } from "@/components/ui/gooseui-morphing-header"
+import { MorphingHeader, MorphingLogo, MorphingNav } from "@/components/ui/morphing-header"
 
 export default function Demo() {
   return (

@@ -185,7 +185,7 @@ type DialogDescriptionProps = DialogDescriptionPrimitiveProps;
 直接依赖摘要：
 
 - `@/components/ui/button`
-- `@/primitives/radix/dialog`
+- `@/components/_primitives/radix/dialog`
 
 实现注意：
 

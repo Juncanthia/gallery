@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { WeatherWidget } from "@/components/ui/tool-weather-widget"
+import { WeatherWidget } from "@/components/ui/weather-widget"
 
 export default function Demo() {
   return (
@@ -237,7 +237,7 @@ type PrecipitationLevel = "none" | "light" | "moderate" | "heavy";
 
 当 AI 生成本项目 WeatherWidget 代码时，应遵守：
 
-1. 从 `@/components/ui/tool-weather-widget` 导入 `WeatherWidget`。
+1. 从 `@/components/ui/weather-widget` 导入 `WeatherWidget`。
 2. `version`、`id`、`location`、`units`、`current`、`forecast`、`time` 为必填属性。
 3. `conditionCode` 仅支持 `"clear"`、`"partly-cloudy"`、`"cloudy"`、`"overcast"`、`"fog"`、`"drizzle"`、`"rain"`、`"heavy-rain"`、`"thunderstorm"`、`"snow"`、`"sleet"`、`"hail"`、`"windy"` 这 13 种值。
 4. `temperature`、`tempMin`、`tempMax` 数值需与 `units.temperature` 匹配（摄氏用 0-50 范围，华氏用 32-122 范围）。

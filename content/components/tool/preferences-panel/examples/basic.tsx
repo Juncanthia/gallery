@@ -1,6 +1,6 @@
 "use client"
 
-import { PreferencesPanel } from "@/components/ui/tool-preferences-panel"
+import { PreferencesPanel } from "@/components/ui/preferences-panel"
 
 export default function Demo() {
   return (
