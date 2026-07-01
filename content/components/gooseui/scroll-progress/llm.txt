@@ -20,7 +20,7 @@ ScrollProgress 使用 CSS `animation-timeline: scroll(root)` 实现零 JavaScrip
 ## 使用示例
 
 ```tsx
-import { ScrollProgress } from "@/components/ui/scroll-progress"
+import { ScrollProgress } from "@/components/navigation/gooseui/scroll-progress"
 
 // 默认顶部 3px 进度条
 export default function Demo() {
@@ -49,7 +49,7 @@ function BottomDemo() {
 
 ## 约束
 
-1. 从 `@/components/ui/scroll-progress` 导入，不要从 gooseui 内部路径导入。
+1. 从 `@/components/navigation/gooseui/scroll-progress` 导入，不要从 gooseui 内部路径导入。
 2. 纯 CSS 实现（`animation-timeline: scroll(root)`），无 JavaScript 计算开销。不要用 `scroll` 事件 + `useState` 方案替代。
 3. 不要引入 `nprogress` 或任何第三方进度条库。
 4. `color` 接收 CSS 颜色值（HEX、RGB、HSL 等），不接收 Tailwind 颜色类名。

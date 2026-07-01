@@ -3,7 +3,7 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-} from "@/components/ui/tooltip-motion"
+} from "@/components/blocks/tooltip-motion"
 import { Button } from "@/components/ui/button"
 
 export default function TooltipMotionBasicExample() {

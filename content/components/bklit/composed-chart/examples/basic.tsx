@@ -1,4 +1,4 @@
-import { ComposedChart } from "@/components/ui/composed-chart-bklit"
+import { ComposedChart } from "@/components/charts/bklit/charts"
 import { Line, Area, SeriesBar } from "@/components/charts/bklit/charts"
 
 const data = [

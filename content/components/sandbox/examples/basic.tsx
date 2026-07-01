@@ -7,7 +7,7 @@ import {
   SandboxTabsContent,
   SandboxTabsList,
   SandboxTabsTrigger,
-} from "@/components/ui/sandbox"
+} from "@/components/blocks/sandbox"
 
 const files = {
   "/App.tsx": `export default function App() {

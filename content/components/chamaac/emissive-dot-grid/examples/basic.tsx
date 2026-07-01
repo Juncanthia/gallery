@@ -1,4 +1,4 @@
-import { BurntOrangeDotGrid } from "@/components/ui/emissive-dot-grid"
+import { BurntOrangeDotGrid } from "@/components/effects/backgrounds/chamaac/emissive-dot-grid/emissive-dot-grid"
 
 export default function Demo() {
   return (

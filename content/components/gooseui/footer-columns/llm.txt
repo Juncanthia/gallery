@@ -26,7 +26,7 @@ stack:
 
 FooterColumns 是一个自包含的页脚区块组件，无需传入任何 props，直接渲染完整的页脚 UI。
 
-- **导入路径**：`import { FooterColumns } from "@/components/ui/footer-columns"`
+- **导入路径**：`import { FooterColumns } from "@/components/marketing-blocks/gooseui/footers/footer-columns"`
 - **用法**：`<FooterColumns />`
 - **约束**：
   - 不接收任何 props，所有内容在组件内部定义。

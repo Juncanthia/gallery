@@ -26,7 +26,7 @@ PaymentConfirmed 支持两种展示变体：
 />
 
 ```tsx
-import { PaymentConfirmed } from "@/components/ui/payment-confirmed"
+import { PaymentConfirmed } from "@/components/templates/manifest/payment/payment-confirmed"
 
 const sampleData = {
   orderId: "ORD-2024-5678",
@@ -123,7 +123,7 @@ PaymentConfirmed 当前不支持内置的加载状态。所有数据字段（除
 
 AI 生成 PaymentConfirmed 代码时：
 
-1. 从 `@/components/ui/payment-confirmed` 导入 PaymentConfirmed
+1. 从 `@/components/templates/manifest/payment/payment-confirmed` 导入 PaymentConfirmed
 2. 通过 `data` prop 传入订单确认数据（orderId、productName、productImage、price、deliveryDate 等）
 3. 通过 `actions.onTrackOrder` 处理订单追踪操作
 4. 通过 `appearance.variant` 选择 "default"（详细）或 "compressed"（紧凑）布局

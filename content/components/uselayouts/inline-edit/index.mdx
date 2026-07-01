@@ -36,7 +36,7 @@ InlineEdit 通过编辑态/只读态切换组织交互：
 />
 
 ```tsx
-import { InlineEdit } from "@/components/ui/inline-edit"
+import { InlineEdit } from "@/components/data-entry/uselayouts/inline-edit"
 
 export default function Demo() {
   return &lt;InlineEdit /&gt;
@@ -82,7 +82,7 @@ const [value, setValue] = useState("your-default-value");
 
 AI 生成 InlineEdit 代码时：
 
-1. 从 `@/components/ui/inline-edit` 导入 InlineEdit。
+1. 从 `@/components/data-entry/uselayouts/inline-edit` 导入 InlineEdit。
 2. InlineEdit 为零 props 组件，直接渲染即可。
 3. 如需定制默认值或编辑行为，修改源码中的状态初始值。
 4. 图标使用 `@hugeicons/core-free-icons`，不要使用 `@ant-design/icons`。

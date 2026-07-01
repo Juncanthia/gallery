@@ -1,6 +1,6 @@
 "use client"
 
-import { ThemeSwitcher } from "@/components/ui/theme-switcher"
+import { ThemeSwitcher } from "@/components/blocks/theme-switcher"
 
 export default function ThemeSwitcherBasicExample() {
   return (

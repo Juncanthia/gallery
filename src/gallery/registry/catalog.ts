@@ -1,36 +1,26 @@
-export type GalleryNavItem = {
-  id: string
-  label: string
-  en: string
-  to: string
-  summary: string
-  keywords: string[]
-  /** 是否有 Ant Design 对应组件 */
-  antd?: boolean
-  /** Ant Design API 迁移覆盖率 (0-100) */
-  migration?: number
-  /** 是否具有单入口 props 驱动的 API（非 compound/composition 模式） */
-  api?: boolean
-}
+import type { GalleryNavGroup, GalleryNavItem, GalleryDocMeta, GalleryTocItem } from "./nav-types"
 
-export type GalleryNavGroup = {
-  group: string
-  groupEn: string
-  items: GalleryNavItem[]
-  libraryId?: string
-}
+export type { GalleryNavItem, GalleryNavGroup, GalleryTocItem, GalleryDocMeta } from "./nav-types"
 
-export type GalleryTocItem = {
-  id: string
-  title: string
-  depth: 2 | 3
-}
+import { COMPONENT_REGISTRY } from "./index"
+import { mergeNavItemFromRegistry } from "./derive-catalog"
+import { getCatalogId } from "./registry-utils"
 
-export type GalleryDocMeta = {
-  title: string
-  en: string
-  description: string
-  toc: GalleryTocItem[]
+function applyRegistryNavPatch(groups: GalleryNavGroup[]): GalleryNavGroup[] {
+  const byCatalogId = new Map(COMPONENT_REGISTRY.map((item) => [getCatalogId(item), item]))
+  const byDocsSlug = new Map(COMPONENT_REGISTRY.map((item) => [item.docsSlug, item]))
+
+  return groups.map((group) => ({
+    ...group,
+    items: group.items.map((item) => {
+      const registryItem =
+        byCatalogId.get(item.id) ?? byDocsSlug.get(item.to.replace(/^\/components\//, ""))
+      if (!registryItem) {
+        return item
+      }
+      return mergeNavItemFromRegistry(item, registryItem)
+    }),
+  }))
 }
 
 type ComponentSeed = {
@@ -236,7 +226,7 @@ function componentItem({
   }
 }
 
-export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
+export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = applyRegistryNavPatch([
   {
     group: "通用",
     groupEn: "General",
@@ -1040,7 +1030,7 @@ export const GALLERY_NAV_GROUPS: GalleryNavGroup[] = [
       manifestItem("dashboard","Dashboard","仪表盘"),
     ],
   },
-]
+])
 
 const genericComponentToc = [
   { id: "when-to-use", title: "何时使用", depth: 2 },

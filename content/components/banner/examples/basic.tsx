@@ -4,7 +4,7 @@ import {
   BannerTitle,
   BannerAction,
   BannerClose,
-} from "@/components/ui/banner"
+} from "@/components/blocks/banner"
 import { BellIcon } from "lucide-react"
 
 export default function BannerBasicExample() {

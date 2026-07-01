@@ -1,4 +1,4 @@
-import { BubbleMenu } from "@/components/ui/bubble-menu"
+import { BubbleMenu } from "@/components/navigation/react-bits/bubble-menu"
 
 export default function BubbleMenuBasicExample() {
   return <BubbleMenu />

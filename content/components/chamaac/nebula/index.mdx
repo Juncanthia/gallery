@@ -23,7 +23,7 @@ Nebula 星云背景。基于 Three.js 和 GLSL 着色器实现，通过程序化
 Nebula 默认铺满父容器（`absolute inset-0`），需确保父容器 `relative` 且有明确尺寸。
 
 ```tsx
-import { Nebula } from "@/components/ui/nebula"
+import { Nebula } from "@/components/effects/backgrounds/chamaac/nebula/nebula"
 
 export default function Demo() {
   return (
@@ -42,7 +42,7 @@ export default function Demo() {
 通过 `color1`、`color2`、`color3` 自定义星云的三层颜色。
 
 ```tsx
-import { Nebula } from "@/components/ui/nebula"
+import { Nebula } from "@/components/effects/backgrounds/chamaac/nebula/nebula"
 
 export default function Demo() {
   return (
@@ -62,7 +62,7 @@ export default function Demo() {
 通过 `speed` 控制星云流动速度，默认为 `2.0`。
 
 ```tsx
-import { Nebula } from "@/components/ui/nebula"
+import { Nebula } from "@/components/effects/backgrounds/chamaac/nebula/nebula"
 
 export default function Demo() {
   return (
@@ -106,7 +106,7 @@ color1、color2、color3 接受 CSS 颜色字符串（如 hex `"#ff6b6b"`、rgb 
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/nebula` 导入 Nebula，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/effects/backgrounds/chamaac/nebula/nebula` 导入 Nebula，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器有 `position: relative` 和明确尺寸。
 3. Nebula 自带 `pointer-events-none`，前景内容需要独立的点击层。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。

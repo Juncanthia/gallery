@@ -4,7 +4,7 @@ import {
   PillStatus,
   PillIndicator,
   PillDelta,
-} from "@/components/ui/pill"
+} from "@/components/blocks/pill"
 import { BellIcon } from "lucide-react"
 
 export default function PillBasicExample() {

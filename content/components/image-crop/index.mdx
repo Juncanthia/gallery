@@ -27,7 +27,7 @@ import {
   ImageCropContent,
   ImageCropApply,
   ImageCropReset,
-} from "@/components/ui/image-crop"
+} from "@/components/blocks/image-crop"
 
 export default function Demo() {
   const [file, setFile] = useState<File | null>(null)
@@ -61,7 +61,7 @@ export default function Demo() {
 ### 使用 Cropper 便捷组件
 
 ```tsx
-import { Cropper } from "@/components/ui/image-crop"
+import { Cropper } from "@/components/blocks/image-crop"
 
 export default function Demo() {
   const [file, setFile] = useState<File | null>(null)
@@ -179,7 +179,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/image-crop` 导入所需组件。
+1. 从 `@/components/blocks/image-crop` 导入所需组件。
 2. `ImageCrop` 必须提供 `file` 属性，通过 children 组合子组件。
 3. 完整用法：`ImageCrop` > `ImageCropContent` + `ImageCropApply` + `ImageCropReset`。
 4. 简单场景可使用 `Cropper` 便捷组件，一步完成。

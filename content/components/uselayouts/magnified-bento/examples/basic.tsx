@@ -1,4 +1,4 @@
-import MagnifiedBento from "@/components/ui/magnified-bento"
+import MagnifiedBento from "@/components/layout/uselayouts/magnified-bento"
 
 export default function Demo() {
   return <MagnifiedBento />

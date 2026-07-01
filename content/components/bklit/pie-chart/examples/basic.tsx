@@ -1,4 +1,4 @@
-import { PieChart } from "@/components/ui/pie-chart-bklit"
+import { PieChart } from "@/components/charts/bklit/charts"
 import { PieSlice } from "@/components/charts/bklit/charts"
 
 const data = [

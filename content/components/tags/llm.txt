@@ -65,7 +65,7 @@ import {
   TagsEmpty,
   TagsGroup,
   TagsItem,
-} from "@/components/ui/tags"
+} from "@/components/blocks/tags"
 
 export default function Demo() {
   return (
@@ -239,7 +239,7 @@ type TagsItemProps = ComponentProps<typeof CommandItem>;
 2. Tags 的实际实现位于 `src/components/blocks/combobox/index.tsx`（该文件不再包含独立的 Combobox primitive），`@/components/blocks/tags` 仅为重导出，所有修改应在 `combobox/index.tsx` 中进行。
 3. 组件使用内部 context（`TagsContext`）共享状态，子组件通过 `useTagsContext` 访问。
 4. `TagsTrigger` 使用 ResizeObserver 自动同步下拉宽度。
-5. 默认导入路径为 `@/components/ui/tags`。
+5. 默认导入路径为 `@/components/blocks/tags`。
 6. 如果需要新增能力，应先修改 `src/components/blocks/combobox/index.tsx` 中的 Tags 部分，再更新本 llm 文档。
 
 ## 可访问性 {#accessibility}
@@ -268,7 +268,7 @@ type TagsItemProps = ComponentProps<typeof CommandItem>;
 
 当 AI 生成本项目 Tags 代码时，应遵守：
 
-1. 从 `@/components/ui/tags` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/tags` 导入，不要从 `antd` 导入。
 2. 使用 `Tags` > `TagsTrigger` + `TagsContent` 的标准结构。
 3. `TagsValue` 需要 `onRemove` 回调才能显示移除按钮。
 4. `TagsContent` 内部放置 `TagsInput`、`TagsList`、`TagsGroup`、`TagsItem`。

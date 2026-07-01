@@ -60,7 +60,7 @@ import {
   TickerSymbol,
   TickerPrice,
   TickerPriceChange,
-} from "@/components/ui/ticker"
+} from "@/components/blocks/ticker"
 
 export default function Demo() {
   return (
@@ -227,7 +227,7 @@ type TickerPriceChangeProps = HTMLAttributes<HTMLSpanElement> & {
 
 当 AI 生成本项目 Ticker 代码时，应遵守：
 
-1. 从 `@/components/ui/ticker` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/ticker` 导入，不要从 `antd` 导入。
 2. `Ticker` 必须包裹所有子组件（TickerIcon、TickerSymbol、TickerPrice、TickerPriceChange），以提供格式化 Context。
 3. `TickerSymbol` 的 `symbol` 为必填，会自动转为大写显示。
 4. `TickerPrice` 的 `price` 为必填，格式由 `Ticker` 的 `currency`/`locale` 决定。

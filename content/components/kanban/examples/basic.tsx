@@ -5,7 +5,7 @@ import {
   KanbanHeader,
   KanbanCards,
   KanbanCard,
-} from "@/components/ui/kanban"
+} from "@/components/blocks/kanban"
 
 const columns = [
   { id: "todo", name: "To Do" },

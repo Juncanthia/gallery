@@ -9,8 +9,8 @@ import {
   GanttFeatureListGroup,
   GanttFeatureRow,
   GanttToday,
-} from "@/components/ui/gantt"
-import type { GanttFeature } from "@/components/ui/gantt"
+} from "@/components/blocks/gantt"
+import type { GanttFeature } from "@/components/blocks/gantt"
 
 const features: GanttFeature[] = [
   {

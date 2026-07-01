@@ -41,7 +41,7 @@ VisuallyHidden 与 `display: none` 的本质区别：后者会同时移除视觉
 ## 代码演示 {#examples}
 
 ```tsx
-import { VisuallyHidden } from "@/components/ui/visually-hidden"
+import { VisuallyHidden } from "@/components/general/dice/headless/visually-hidden"
 
 export default function Demo() {
   return (
@@ -60,7 +60,7 @@ export default function Demo() {
 将隐藏样式合并到已有的语义元素上，不额外生成 `div`。
 
 ```tsx
-import { VisuallyHidden } from "@/components/ui/visually-hidden"
+import { VisuallyHidden } from "@/components/general/dice/headless/visually-hidden"
 
 export default function Demo() {
   return (
@@ -88,7 +88,7 @@ export default function Demo() {
 
 当 AI 生成本项目 VisuallyHidden 代码时，应遵守：
 
-1. 从 `@/components/ui/visually-hidden` 导入 VisuallyHidden。
+1. 从 `@/components/general/dice/headless/visually-hidden` 导入 VisuallyHidden。
 2. 隐藏内容应提供有意义的辅助信息，不要放无关文本。
 3. 纯图标按钮添加文本标签时，优先考虑 `aria-label`；VisuallyHidden 适合需要富文本的场景。
 4. 需要合并到已有元素时使用 `asChild`。

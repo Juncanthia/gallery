@@ -1,4 +1,4 @@
-import { ShakeTestimonial } from "@/components/ui/shake-testimonial-card"
+import { ShakeTestimonial } from "@/components/data-display/uselayouts/shake-testimonial-card"
 
 export default function ShakeTestimonialBasicExample() {
   return <ShakeTestimonial />

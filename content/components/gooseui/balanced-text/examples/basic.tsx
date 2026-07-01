@@ -1,4 +1,4 @@
-import { BalancedHeading } from "@/components/ui/balanced-text"
+import { BalancedHeading } from "@/components/effects/text/gooseui/balanced-text"
 
 export default function Demo() {
   return (

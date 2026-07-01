@@ -9,7 +9,12 @@
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc -b",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync:registry": "npx tsx scripts/sync-registry-from-shells.ts",
+    "check:registry": "npx tsx scripts/check-registry.ts",
+    "codemod:registry-examples": "npx tsx scripts/codemod-registry-examples.ts",
+    "codemod:registry-docs": "npx tsx scripts/codemod-registry-docs.ts",
+    "delete:registry-shells": "npx tsx scripts/delete-registry-shells.ts"
   },
   "dependencies": {
     "@ai-sdk/react": "^4.0.5",

@@ -1,4 +1,4 @@
-import LiquidChrome from "@/components/ui/liquid-chrome-chamaac"
+import LiquidChrome from "@/components/effects/backgrounds/chamaac/liquid-chrome/liquid-chrome"
 
 export default function Demo() {
   return (

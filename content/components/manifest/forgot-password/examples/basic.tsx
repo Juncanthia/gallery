@@ -1,4 +1,4 @@
-import { ForgotPassword } from "@/components/ui/forgot-password"
+import { ForgotPassword } from "@/components/templates/manifest/form/forgot-password"
 
 export default function Demo() {
   return (

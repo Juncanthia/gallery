@@ -63,7 +63,7 @@ import {
   StoryAuthorName,
   StoryTitle,
   StoryOverlay,
-} from "@/components/ui/stories"
+} from "@/components/blocks/stories"
 
 export default function Demo() {
   return (
@@ -266,7 +266,7 @@ type StoryOverlayProps = HTMLAttributes<HTMLDivElement> & {
 
 当 AI 生成本项目 Stories 代码时，应遵守：
 
-1. 从 `@/components/ui/stories` 导入，按需引入所需子组件。
+1. 从 `@/components/blocks/stories` 导入，按需引入所需子组件。
 2. `StoryImage` 必须提供 `alt` 属性，这是必填项。
 3. `StoryOverlay` 使用 `side` prop 控制渐变方向，默认为 `"bottom"`。
 4. `StoryVideo` 可通过 `src` URL 的 `#t=秒数` 指定起始播放位置。

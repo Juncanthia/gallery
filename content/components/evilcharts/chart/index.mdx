@@ -28,7 +28,7 @@ ChartContainer 核心概念：
 />
 
 ```tsx
-import { ChartContainer } from "@/components/ui/chart-evilcharts"
+import { ChartContainer } from "@/components/charts/evilcharts"
 import type { ChartConfig } from "@/components/charts/evilcharts/components/chart"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts"
 
@@ -85,7 +85,7 @@ export default function Demo() {
 通过 `LoadingIndicator` 在数据加载期间显示脉冲动画遮罩。`getLoadingData` 可生成随机占位数据。
 
 ```tsx
-import { ChartContainer, LoadingIndicator, getLoadingData } from "@/components/ui/chart-evilcharts"
+import { ChartContainer, LoadingIndicator, getLoadingData } from "@/components/charts/evilcharts"
 import { BarChart, Bar, XAxis, CartesianGrid } from "recharts"
 
 const chartConfig = {
@@ -116,7 +116,7 @@ export default function Demo() {
 `footer` 用于在图表下方放置辅助控件（如 EvilBrush 刷选组件）。EvilBrush 的 `skipStyle` 应设为 `true`，因为 ChartContainer 已注入 CSS 变量。
 
 ```tsx
-import { ChartContainer } from "@/components/ui/chart-evilcharts"
+import { ChartContainer } from "@/components/charts/evilcharts"
 import { EvilBrush } from "@/components/ui/brush"
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip } from "recharts"
 
@@ -251,7 +251,7 @@ ChartContainer 内部使用 Recharts ResponsiveContainer，并透传其大部分
 
 AI 生成 ChartContainer 代码时：
 
-1. `ChartContainer`、`LoadingIndicator`、`getLoadingData`、`useChart` 从 `@/components/ui/chart-evilcharts` 导入。
+1. `ChartContainer`、`LoadingIndicator`、`getLoadingData`、`useChart` 从 `@/components/charts/evilcharts` 导入。
 2. `ChartConfig` 类型从 `@/components/charts/evilcharts/components/chart` 导入。
 3. `config` 必须使用 `satisfies ChartConfig`，每个 key 的 `colors` 至少包含 `light` 或 `dark` 之一。
 4. Recharts 子组件中引用颜色使用 `var(--color-{key}-{index})` 格式。

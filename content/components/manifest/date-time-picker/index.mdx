@@ -26,7 +26,7 @@
 <ComponentShowcase id="manifest/date-time-picker" path="manifest/date-time-picker/basic" />
 
 ```tsx
-import { DateTimePicker } from "@/components/ui/date-time-picker"
+import { DateTimePicker } from "@/components/data-entry/manifest/date-time-picker"
 
 export default function Demo() {
   return (
@@ -57,7 +57,7 @@ export default function Demo() {
 通过 `appearance` 控制标题和时区选择器的显隐。
 
 ```tsx
-import { DateTimePicker } from "@/components/ui/date-time-picker"
+import { DateTimePicker } from "@/components/data-entry/manifest/date-time-picker"
 
 export default function Demo() {
   return (
@@ -85,7 +85,7 @@ export default function Demo() {
 默认为周日（US 风格），可通过 `weekStartsOn` 设置为周一（ISO 8601 标准）。
 
 ```tsx
-import { DateTimePicker } from "@/components/ui/date-time-picker"
+import { DateTimePicker } from "@/components/data-entry/manifest/date-time-picker"
 
 export default function Demo() {
   return (
@@ -117,7 +117,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { DateTimePicker } from "@/components/ui/date-time-picker"
+import { DateTimePicker } from "@/components/data-entry/manifest/date-time-picker"
 
 export default function Demo() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -203,7 +203,7 @@ const weekdays = allDates.filter(d => d.getDay() !== 0 && d.getDay() !== 6)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/date-time-picker` 导入 `DateTimePicker`，不要从 `antd` 导入（AntD 无此组件）。
+1. 从 `@/components/data-entry/manifest/date-time-picker` 导入 `DateTimePicker`，不要从 `antd` 导入（AntD 无此组件）。
 2. `data.availableDates` 必须是 `Date[]`，组件内部使用 `isSameDay` 比较日期，确保传入有效的 Date 对象。
 3. `data.availableTimeSlots` 是字符串数组（如 `["9:00am", "2:30pm"]`），组件不自动生成时间段，需外部传入。
 4. 日期不可选时组件自动置灰，无需外部处理禁用逻辑。

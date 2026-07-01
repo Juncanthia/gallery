@@ -20,7 +20,7 @@ ScrollToTop 提供五个视觉变体：默认圆形按钮（ScrollToTop）、文
 ## 使用示例
 
 ```tsx
-import { ScrollToTop } from "@/components/ui/scroll-to-top"
+import { ScrollToTop } from "@/components/navigation/gooseui/scroll-to-top"
 
 // 默认圆形按钮，阈值 300px，平滑滚动
 export default function Demo() {
@@ -116,7 +116,7 @@ function TextDemo() {
 
 ## 约束
 
-1. ScrollToTop 默认变体从 `@/components/ui/scroll-to-top` 导入。Pill/Minimal/Progress/Text 变体从 `@/components/navigation/gooseui/scroll-to-top` 导入。
+1. ScrollToTop 默认变体从 `@/components/navigation/gooseui/scroll-to-top` 导入。Pill/Minimal/Progress/Text 变体从 `@/components/navigation/gooseui/scroll-to-top` 导入。
 2. 组件使用 `fixed` 定位 + `z-50`，位于页面右下角 `bottom-6 right-6`。
 3. 滚动监听使用 `passive` 事件优化，不要自行用 `window.addEventListener('scroll', ...)` 实现。
 4. 不要在按钮外部包一层 wrapper 来改变行为——所有行为通过 props 控制。

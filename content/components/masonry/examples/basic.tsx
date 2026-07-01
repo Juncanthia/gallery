@@ -1,4 +1,4 @@
-import { Masonry } from "@/components/ui/masonry"
+import { Masonry } from "@/components/blocks/masonry"
 
 const cards = [
   { id: 1, title: "Mountain View", height: "h-32" },

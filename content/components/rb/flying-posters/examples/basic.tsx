@@ -1,4 +1,4 @@
-import { FlyingPosters } from "@/components/ui/flying-posters"
+import { FlyingPosters } from "@/components/marketing-blocks/react-bits/flying-posters"
 
 const defaultImages = [
   "https://picsum.photos/seed/fp1/320/320",

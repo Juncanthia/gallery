@@ -24,7 +24,7 @@ GitHubStarsWheel GitHub 星标数字滚轮组件，自动获取 GitHub 仓库星
 <ComponentShowcase id="github-stars-wheel" path="github-stars-wheel/basic" />
 
 ```tsx
-import { GitHubStarsWheel } from "@/components/ui/github-stars-wheel"
+import { GitHubStarsWheel } from "@/components/blocks/github-stars-wheel"
 
 export default function Demo() {
   return (
@@ -39,7 +39,7 @@ export default function Demo() {
 ### 指定 step 和方向
 
 ```tsx
-import { GitHubStarsWheel } from "@/components/ui/github-stars-wheel"
+import { GitHubStarsWheel } from "@/components/blocks/github-stars-wheel"
 
 export default function Demo() {
   return (
@@ -59,7 +59,7 @@ export default function Demo() {
 传入 `value` 后跳过 API 请求，直接展示固定值。
 
 ```tsx
-import { GitHubStarsWheel } from "@/components/ui/github-stars-wheel"
+import { GitHubStarsWheel } from "@/components/blocks/github-stars-wheel"
 
 export default function Demo() {
   return (
@@ -123,7 +123,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/github-stars-wheel` 导入 `GitHubStarsWheel`（命名导出）。
+1. 从 `@/components/blocks/github-stars-wheel` 导入 `GitHubStarsWheel`（命名导出）。
 2. 如需自动获取真实星标数，必须同时传入 `username` 和 `repo`；否则组件将显示 `0`。
 3. 如需固定星标数不发起 API 请求，仅传入 `value`，不要同时传入 `username`/`repo`。
 4. `step` 默认值为 `100`，星标数会四舍五入到百位；如需精确值，将 `step` 设为 `1`。

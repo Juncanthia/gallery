@@ -31,7 +31,7 @@ import {
   ContributionGraphFooter,
   ContributionGraphTotalCount,
   ContributionGraphLegend,
-} from "@/components/ui/contribution-graph"
+} from "@/components/blocks/contribution-graph"
 
 const data = [
   { date: "2025-01-01", count: 3, level: 2 },
@@ -68,8 +68,8 @@ export default function Demo() {
 import {
   ContributionGraph, ContributionGraphCalendar,
   ContributionGraphFooter, ContributionGraphTotalCount, ContributionGraphLegend,
-} from "@/components/ui/contribution-graph"
-import { ContributionGraphBlock } from "@/components/ui/contribution-graph"
+} from "@/components/blocks/contribution-graph"
+import { ContributionGraphBlock } from "@/components/blocks/contribution-graph"
 
 export default function Demo() {
   return (
@@ -100,7 +100,7 @@ export default function Demo() {
 import {
   ContributionGraph, ContributionGraphCalendar, ContributionGraphBlock,
   ContributionGraphFooter, ContributionGraphTotalCount, ContributionGraphLegend,
-} from "@/components/ui/contribution-graph"
+} from "@/components/blocks/contribution-graph"
 
 const zhLabels = {
   months: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
@@ -238,7 +238,7 @@ type Activity = {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/contribution-graph` 导入所有需要的子组件。
+1. 从 `@/components/blocks/contribution-graph` 导入所有需要的子组件。
 2. `ContributionGraph` 的 `data` prop 为必填，类型为 `Activity[]`，每项包含 `date`、`count`、`level`。
 3. `ContributionGraphCalendar` 使用 render props 模式，回调参数为 `{ activity, dayIndex, weekIndex }`。
 4. `ContributionGraphBlock` 必须传入 `activity`、`dayIndex`、`weekIndex` 三个 prop。

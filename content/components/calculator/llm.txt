@@ -57,7 +57,7 @@ Calculator 是一个完整的拟物风计算器组件，实现了标准四则运
 渲染一个完整的计算器。
 
 ```tsx
-import { Calculator } from "@/components/ui/calculator"
+import { Calculator } from "@/components/blocks/calculator"
 
 export default function Demo() {
   return <Calculator />
@@ -69,7 +69,7 @@ export default function Demo() {
 通过 className 控制容器样式。
 
 ```tsx
-import { Calculator } from "@/components/ui/calculator"
+import { Calculator } from "@/components/blocks/calculator"
 
 export default function Demo() {
   return <Calculator className="mx-auto shadow-2xl" />
@@ -137,7 +137,7 @@ Calculator 是独立功能组件，Ant Design 中无对应组件。AntD 的 Inpu
 
 当 AI 生成本项目 Calculator 代码时，应遵守：
 
-1. 从 `@/components/ui/calculator` 导入 Calculator。
+1. 从 `@/components/blocks/calculator` 导入 Calculator。
 2. 直接渲染 `<Calculator />` 即可，无需传入任何属性（className 可选）。
 3. 不要在同一个页面渲染多个 Calculator 实例——全局键盘监听会冲突。
 4. 不要修改 Calculator 内部的拟物化视觉样式——这是组件的核心设计特征。

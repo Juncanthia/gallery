@@ -3,7 +3,7 @@ component: CurvedTextMarquee
 slug: gooseui/curved-text-marquee
 
 import: |
-  import { CurvedTextMarquee } from "@/components/ui/curved-text-marquee"
+  import { CurvedTextMarquee } from "@/components/marketing-blocks/gooseui/marketing/curved-text-marquee"
 
 usage: |
   <CurvedTextMarquee />

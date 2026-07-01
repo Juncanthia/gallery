@@ -1,4 +1,4 @@
-import { Rating } from "@/components/ui/rating"
+import { Rating } from "@/components/blocks/rating"
 
 export default function RatingBasicExample() {
   return (

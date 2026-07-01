@@ -26,7 +26,7 @@
 <ComponentShowcase id="bklit/gauge" path="bklit/gauge/basic" />
 
 ```tsx
-import { Gauge } from "@/components/ui/gauge-bklit"
+import { Gauge } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return <Gauge value={65} centerValue={65} />
@@ -97,7 +97,7 @@ export default function Demo() {
 
 AI 生成 Gauge 代码时：
 
-1. 从 `@/components/ui/gauge-bklit` 导入
+1. 从 `@/components/charts/bklit/charts` 导入
 2. 必须提供 `value`（0-100）和 `centerValue` 两个必填属性
 3. 如需控制尺寸，建议使用自适应模式（省略 width/height），在父容器设置约束
 4. 自定义颜色优先使用 `activeFill`/`inactiveFill`；渐变场景使用 `useGradient` + `activeGradient`

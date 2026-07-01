@@ -1,4 +1,4 @@
-import { AstralFlow } from "@/components/ui/astral-flow"
+import { AstralFlow } from "@/components/effects/backgrounds/chamaac/astral-flow/astral-flow"
 
 export default function Demo() {
   return (

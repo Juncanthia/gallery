@@ -8,7 +8,7 @@ import {
   StoryAuthorName,
   StoryTitle,
   StoryOverlay,
-} from "@/components/ui/stories"
+} from "@/components/blocks/stories"
 
 const items = [
   {

@@ -2,7 +2,7 @@
 component: CSSThemeSwitcher
 slug: gooseui/css-theme-switcher
 
-import: import { CSSThemeSwitcher } from "@/components/ui/css-theme-switcher"
+import: import { CSSThemeSwitcher } from "@/components/general/gooseui/css-theme-switcher"
 
 usage: |
   &lt;CSSThemeSwitcher /&gt;

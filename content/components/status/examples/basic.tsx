@@ -1,4 +1,4 @@
-import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
+import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
 
 export default function StatusBasicExample() {
   return (

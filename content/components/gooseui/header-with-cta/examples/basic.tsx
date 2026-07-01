@@ -1,4 +1,4 @@
-import { HeaderWithCta } from "@/components/ui/header-with-cta"
+import { HeaderWithCta } from "@/components/marketing-blocks/gooseui/headers/header-with-cta"
 
 export default function Demo() {
   return (

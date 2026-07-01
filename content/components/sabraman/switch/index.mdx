@@ -23,7 +23,7 @@ LegacySwitch 是复古 iOS 风格的开关组件，基于 Radix UI Switch 构建
 
 ```tsx
 import { useState } from "react"
-import { LegacySwitch } from "@/components/ui/switch-sabraman"
+import { LegacySwitch } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   const [checked, setChecked] = useState(false)
@@ -115,7 +115,7 @@ const [checked, setChecked] = useState(false)
 
 AI 生成 LegacySwitch 代码时：
 
-1. 从 `@/components/ui/switch-sabraman` 导入
+1. 从 `@/components/_shared/sabraman` 导入
 2. 使用 `checked` + `onCheckedChange` 实现受控模式
 3. 使用 `defaultChecked` 实现非受控模式
 4. 使用 `offLabel` 和 `onLabel` 自定义标签文字

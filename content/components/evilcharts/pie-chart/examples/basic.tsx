@@ -1,6 +1,6 @@
 "use client";
 
-import { EvilPieChart } from "@/components/ui/pie-chart-evilcharts";
+import { EvilPieChart } from "@/components/charts/evilcharts";
 import { Pie, Tooltip, Legend } from "@/components/charts/evilcharts/components/pie-chart";
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart";
 

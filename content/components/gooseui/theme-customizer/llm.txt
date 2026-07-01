@@ -21,7 +21,7 @@ stack:
 ## 使用示例
 
 ```tsx
-import { ThemeCustomizer, ThemeCustomizerBar } from "@/components/ui/theme-customizer"
+import { ThemeCustomizer, ThemeCustomizerBar } from "@/components/general/gooseui/theme-customizer"
 
 // Pill 变体，默认 fixed 定位
 <ThemeCustomizer />
@@ -38,7 +38,7 @@ import {
   ThemeCustomizerDock,
   ThemeCustomizerCorner,
   ThemeCustomizerToolbar,
-} from "@/components/ui/theme-customizer"
+} from "@/components/general/gooseui/theme-customizer"
 ```
 
 ## API 速览
@@ -57,7 +57,7 @@ import {
 
 ## 约束
 
-1. 从 `@/components/ui/theme-customizer` 导入，不要从 gooseui 内部路径导入。
+1. 从 `@/components/general/gooseui/theme-customizer` 导入，不要从 gooseui 内部路径导入。
 2. 确保应用根节点已包裹 `next-themes` 的 `ThemeProvider`。
 3. Pill/Corner/Sidebar/Dock/Toolbar 变体使用 `fixed` 定位，设计为页面级控件。Pill 传入 `inline` 属性可切换为静态定位。
 4. Bar 变体为普通 flex 容器，非 fixed，可直接嵌入任意布局。

@@ -32,7 +32,7 @@ EmptyTestimonial 是一个带有动画的空状态推荐组件，展示文件夹
 />
 
 ```tsx
-import EmptyTestimonial from "@/components/ui/empty-testimonial"
+import EmptyTestimonial from "@/components/data-display/uselayouts/empty-testimonial"
 
 export default function Demo() {
   return &lt;EmptyTestimonial /&gt;
@@ -96,7 +96,7 @@ href="https://twitter.com/intent/tweet?text=..."
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/empty-testimonial` 导入 `EmptyTestimonial`（default export）。
+1. 从 `@/components/data-display/uselayouts/empty-testimonial` 导入 `EmptyTestimonial`（default export）。
 2. 组件无需任何 props，直接渲染即可获得完整的空状态交互体验。
 3. 组件内部使用 `motion/react` 和 `@hugeicons/react`，不要在外部重复引入。
 4. 组件为全宽 (`w-full`) 布局，内边距为 `py-24 px-4`，如需调整外观通过 `className` 覆写外层容器。

@@ -67,7 +67,7 @@ import {
   DialogStackFooter,
   DialogStackNext,
   DialogStackPrevious,
-} from "@/components/ui/dialog-stack"
+} from "@/components/blocks/dialog-stack"
 
 export default function Demo() {
   return (
@@ -110,7 +110,7 @@ import {
   DialogStackOverlay,
   DialogStackBody,
   DialogStackContent,
-} from "@/components/ui/dialog-stack"
+} from "@/components/blocks/dialog-stack"
 import { Button } from "@/components/ui/button"
 
 export default function Demo() {
@@ -290,7 +290,7 @@ Ant Design 不提供等价的对话框堆叠组件。AntD 的 `Modal` 使用 `Mo
 
 ## LLM 使用规则
 
-1. 从 `@/components/ui/dialog-stack` 导入所有需要的子组件。
+1. 从 `@/components/blocks/dialog-stack` 导入所有需要的子组件。
 2. 组装顺序为：DialogStack > DialogStackTrigger > DialogStackOverlay > DialogStackBody > DialogStackContent[]。
 3. DialogStackContent 按步骤顺序排列，Body 会自动分配索引。
 4. 每个步骤操作区使用 DialogStackFooter 包裹 DialogStackNext / DialogStackPrevious。

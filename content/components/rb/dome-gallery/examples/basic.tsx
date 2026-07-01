@@ -1,4 +1,4 @@
-import { DomeGallery } from "@/components/ui/dome-gallery"
+import { DomeGallery } from "@/components/marketing-blocks/react-bits/dome-gallery"
 
 export default function DomeGalleryBasicExample() {
   return (

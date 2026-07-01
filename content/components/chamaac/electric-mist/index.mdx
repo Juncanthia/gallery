@@ -23,7 +23,7 @@ ElectricMist 电雾。基于 Three.js 和 GLSL 着色器实现，通过分形噪
 ElectricMist 默认铺满父容器（`absolute inset-0`），需确保父容器 `relative` 且有明确尺寸。
 
 ```tsx
-import { ElectricMist } from "@/components/ui/electric-mist"
+import { ElectricMist } from "@/components/effects/backgrounds/chamaac/electric-mist/electric-mist"
 
 export default function Demo() {
   return (
@@ -42,7 +42,7 @@ export default function Demo() {
 通过 `color` 自定义电雾的主色调，默认为深蓝色 `"#191970"`。
 
 ```tsx
-import { ElectricMist } from "@/components/ui/electric-mist"
+import { ElectricMist } from "@/components/effects/backgrounds/chamaac/electric-mist/electric-mist"
 
 export default function Demo() {
   return (
@@ -58,7 +58,7 @@ export default function Demo() {
 通过 `speed`、`detail`、`distortion` 和 `brightness` 精细控制视觉效果。
 
 ```tsx
-import { ElectricMist } from "@/components/ui/electric-mist"
+import { ElectricMist } from "@/components/effects/backgrounds/chamaac/electric-mist/electric-mist"
 
 export default function Demo() {
   return (
@@ -115,7 +115,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/electric-mist` 导入 ElectricMist，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/effects/backgrounds/chamaac/electric-mist/electric-mist` 导入 ElectricMist，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器有 `position: relative` 和明确尺寸。
 3. ElectricMist 自带 `pointer-events-none`，前景内容需要独立的点击层。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。

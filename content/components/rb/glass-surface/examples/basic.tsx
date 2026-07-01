@@ -1,4 +1,4 @@
-import { GlassSurface } from "@/components/ui/glass-surface"
+import { GlassSurface } from "@/components/marketing-blocks/react-bits/glass-surface"
 
 export default function GlassSurfaceBasicExample() {
   return <GlassSurface />

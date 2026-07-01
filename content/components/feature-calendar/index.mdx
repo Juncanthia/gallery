@@ -28,7 +28,7 @@ import {
   CalendarHeader,
   CalendarBody,
   CalendarItem,
-} from "@/components/ui/feature-calendar"
+} from "@/components/blocks/feature-calendar"
 
 const features = [
   {
@@ -74,7 +74,7 @@ import {
   CalendarHeader,
   CalendarBody,
   CalendarItem,
-} from "@/components/ui/feature-calendar"
+} from "@/components/blocks/feature-calendar"
 
 export default function Demo() {
   return (
@@ -240,7 +240,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/feature-calendar` 按需导入所有子组件。
+1. 从 `@/components/blocks/feature-calendar` 按需导入所有子组件。
 2. 所有子组件必须在 `CalendarProvider` 内部使用，否则无法获取 locale 和 startDay 上下文。
 3. `CalendarBody` 必须同时传入 `features`（Feature 数组）和 `children`（render props 函数）。
 4. Feature 的 `endAt` 决定它在日历中显示的日期位置，不是 `startAt`。

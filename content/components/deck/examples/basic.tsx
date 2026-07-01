@@ -1,4 +1,4 @@
-import { Deck, DeckCards, DeckItem } from "@/components/ui/deck"
+import { Deck, DeckCards, DeckItem } from "@/components/blocks/deck"
 
 export default function DeckBasicExample() {
   return (

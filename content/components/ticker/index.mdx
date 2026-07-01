@@ -28,7 +28,7 @@ import {
   TickerSymbol,
   TickerPrice,
   TickerPriceChange,
-} from "@/components/ui/ticker"
+} from "@/components/blocks/ticker"
 
 export default function Demo() {
   return (
@@ -55,7 +55,7 @@ import {
   TickerSymbol,
   TickerPrice,
   TickerPriceChange,
-} from "@/components/ui/ticker"
+} from "@/components/blocks/ticker"
 
 export default function Demo() {
   return (
@@ -137,7 +137,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/ticker` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/ticker` 导入，不要从 `antd` 导入。
 2. `Ticker` 必须包裹所有子组件（TickerIcon、TickerSymbol、TickerPrice、TickerPriceChange），以提供格式化 Context。
 3. `TickerSymbol` 的 `symbol` 为必填，自动转为大写显示。
 4. `TickerPrice` 的 `price` 为必填，格式由 `Ticker` 的 `currency`/`locale` 决定。

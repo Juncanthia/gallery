@@ -14,13 +14,13 @@ StaggeredMenu 交错动画全屏菜单，展开时多层彩色面板和菜单项
 ### 基础用法
 <ComponentShowcase id="rb/staggered-menu" path="rb/staggered-menu/basic" />
 ```tsx
-import { StaggeredMenu } from "@/components/ui/staggered-menu"
+import { StaggeredMenu } from "@/components/navigation/react-bits/staggered-menu"
 export default function Demo() { return <StaggeredMenu /> }
 ```
 
 ### 自定义菜单项
 ```tsx
-import { StaggeredMenu } from "@/components/ui/staggered-menu"
+import { StaggeredMenu } from "@/components/navigation/react-bits/staggered-menu"
 
 export default function Demo() {
   return (
@@ -78,7 +78,7 @@ export default function Demo() {
 每个菜单项通过 `ariaLabel` 设置无障碍标签；菜单按钮通过 `aria-label` 和 `aria-expanded` 提供状态信息；面板通过 `aria-hidden` 控制可见性。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/staggered-menu` 导入。
+1. 从 `@/components/navigation/react-bits/staggered-menu` 导入。
 2. 依赖 `gsap`，确保项目中已安装。
 3. `items` 的类型为 `{ label: string; link: string; ariaLabel?: string }[]`。
 4. 需要对应的 CSS 样式文件支持（`.sm-prelayer`、`.sm-panel-itemLabel` 等类名）。

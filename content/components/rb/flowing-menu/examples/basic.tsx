@@ -1,4 +1,4 @@
-import { FlowingMenu } from "@/components/ui/flowing-menu"
+import { FlowingMenu } from "@/components/navigation/react-bits/flowing-menu"
 
 export default function FlowingMenuBasicExample() {
   return (

@@ -50,7 +50,7 @@ CodeTabs 是一个支持多段代码切换的标签页复合组件。它以 Tabs
 ### 基础用法
 
 ```tsx
-import { CodeTabs } from "@/components/ui/code-tabs"
+import { CodeTabs } from "@/components/blocks/code-tabs"
 
 const codes = {
   npm: "npm install @canthia/ui",
@@ -135,7 +135,7 @@ export default function Demo() {
 
 当 AI 生成本项目 CodeTabs 代码时，应遵守：
 
-1. 从 `@/components/ui/code-tabs` 导入 CodeTabs，不要从 antd 导入。
+1. 从 `@/components/blocks/code-tabs` 导入 CodeTabs，不要从 antd 导入。
 2. `codes` 为必填，类型 `Record<string, string>`，key 用作标签名称。
 3. `lang` 指定 Shiki 语法高亮语言，必须是 Shiki 支持的 bundled language。
 4. 复制按钮默认启用（`copyButton={true}`），`onCopiedChange` 可监听复制事件。

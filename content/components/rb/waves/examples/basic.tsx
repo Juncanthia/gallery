@@ -1,4 +1,4 @@
-import { Waves } from "@/components/ui/waves-rb"
+import { Waves } from "@/components/effects/backgrounds/waves"
 
 export default function WavesBasicExample() {
   return (

@@ -51,7 +51,7 @@ Comparison 是一个图片对比滑块复合组件，由 Comparison 容器、Com
 ### 基础用法（拖拽模式）
 
 ```tsx
-import { Comparison, ComparisonItem, ComparisonHandle } from "@/components/ui/comparison"
+import { Comparison, ComparisonItem, ComparisonHandle } from "@/components/blocks/comparison"
 
 export default function Demo() {
   return (
@@ -73,7 +73,7 @@ export default function Demo() {
 ### 悬停模式
 
 ```tsx
-import { Comparison, ComparisonItem } from "@/components/ui/comparison"
+import { Comparison, ComparisonItem } from "@/components/blocks/comparison"
 
 export default function Demo() {
   return (
@@ -184,7 +184,7 @@ export default function Demo() {
 
 当 AI 生成本项目 Comparison 代码时，应遵守：
 
-1. 从 `@/components/ui/comparison` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/comparison` 导入，不要从 `antd` 导入。
 2. `Comparison` 必须作为最外层容器，所有子组件必须在其内部使用。
 3. `ComparisonItem` 的 `position` prop 为必填，取值为 `'left'` 或 `'right'`。
 4. 两张对比图片应有相同尺寸，以确保 clip-path 裁剪效果正确。

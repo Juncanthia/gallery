@@ -46,7 +46,7 @@ import {
   LegacyAlertDialogHeader,
   LegacyAlertDialogTitle,
   LegacyAlertDialogTrigger,
-} from "@/components/ui/alert-dialog-sabraman"
+} from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -223,7 +223,7 @@ const [open, setOpen] = useState(false)
 
 AI 生成 LegacyAlertDialog 代码时：
 
-1. 从 `@/components/ui/alert-dialog-sabraman` 导入所有命名导出。
+1. 从 `@/components/_shared/sabraman` 导入所有命名导出。
 2. 使用复合组件模式：`LegacyAlertDialog` + `LegacyAlertDialogTrigger` + `LegacyAlertDialogContent`。
 3. `LegacyAlertDialogTrigger` 和 `LegacyAlertDialogClose` 必须配合 `asChild` 使用。
 4. 按钮使用 `LegacyAlertDialogButton` 而非通用 Button。

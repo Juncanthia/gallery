@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Tour, type TourStepConfig } from "@/components/ui/tour"
+import { Tour, type TourStepConfig } from "@/components/blocks/tour"
 import { Button } from "@/components/ui/button"
 
 const steps: TourStepConfig[] = [

@@ -97,6 +97,17 @@ Stage A+ 完成后发现两类新问题：一是 `_shared/`、`_primitives/` 这
 
 **处理**：5 个 `globals.css` 全部删除（而不是"合并成一份"——因为它们当前 0 引用，没有内容需要合并，合并反而会让"到底哪份在生效"更难判断）。删除后，全仓库真正生效的设计令牌来源变成唯一的一处：`src/styles/theme.css`。顺手修正了 `navigation/gooseui/scroll-progress.tsx` 里一处提到"globals.css"的过期注释。`pnpm typecheck` 复核错误集合与删除前完全一致，无新增（CSS 文件不参与 TS 编译图，预期之内）。
 
+## 早期遗留问题：`src/app/api/` 混入 Next.js 专属代码（已隔离）
+
+审计发现 `src/app/api/ai/{command,copilot}/route.ts`、`src/app/api/uploadthing/route.ts` 共 3 个文件（及 `command/` 下 `utils.ts`、`prompt/*.ts` 5 个专属辅助文件）使用 `next/server`（`NextRequest`/`NextResponse`）、`uploadthing/next`，是 **Next.js App Router 的 `app/api/**/route.ts` 文件约定专属写法**——这批文件是集成 Plate.js 编辑器 AI 功能时，从 Plate 官方 demo（Next.js 项目）原样带过来的，从未在本项目（Vite + TanStack Router SPA）里被适配或真正运行过：
+
+- 仓库未安装 `next` 包，这些文件此前一直让 `pnpm typecheck` 报 `TS2307: Cannot find module 'next/server'`（4 处报错）。
+- `vite.config.ts` 的 `routesDirectory` 只指向 `src/app/routes`，Vite/TanStack Router 都不识别 `app/api/**/route.ts` 约定，这批文件从未被当作真实端点执行。
+- 前端调用方（`src/components/editor/use-chat.ts`、`copilot-kit.tsx`）本身已内置"路由未实现"时的假流式兜底逻辑，AI 编辑器功能一直靠这个 mock 运行，从未依赖过这批文件。
+- `src/app/api/` 此前从未出现在本文档任何一轮审计范围里，是纯粹的审计盲区。
+
+**处理**：整体迁移到 `references/next-api-routes/`（该目录已在 `eslint.config.js` 用 `globalIgnores` 排除，且不在任何 `tsconfig` 的 `include` 范围内，不再参与 typecheck/lint），保留代码内容和目录结构不变，附 README 说明背景与未来若要接入真实后端时的迁移路径。`src/lib/uploadthing.ts`（`ourFileRouter` 定义）未移动，继续留在 `src/lib/`，沿用 Stage A+ 的既有结论。`pnpm typecheck` 复核：错误数从 802 降至 798，减少的 4 处正好是这 3 个文件的 `next/server` 报错，其余错误集合不变。
+
 ## `_shared/` 说明（已知的 Stage A 遗留问题）
 
 拆分每个 vendor 库时，绝大多数组件文件都能明确归类，但每个库还留了一批`hooks/`、`lib/`、`globals.css`、`index.ts` 这类被库内部多个组件共用的基础设施代码。这些代码具体被拆分后的哪些新目录依赖，需要逐条 `rg` 引用分析才能精确拆分，属于 Stage B 的工作（届时会和修复 import 路径一起处理）。目前统一临时存放在 `_shared/<原库名>/` 下，不代表最终归属。
@@ -142,11 +153,38 @@ flowchart TD
     Q4 -->|组合功能块| Blocks["放 src/components/blocks/"]
 ```
 
-## Stage B 待办（已暂停，不在本轮执行范围）
+## Stage B 待办（部分已落地：Registry 架构）
 
-1. `ui/*.tsx` 转发壳按新分类重新指向/改名，处理同用途多实现的展示壳命名。
-2. 批量更新 `content/**/*.mdx` 示例的 import 路径（含 Stage A+ 新产生的 4 处 `@/primitives/...` 文档正文提及）。
-3. 更新 `source-registry.ts`、`api-registry.ts` 中的硬编码路径。
-4. 重写 `catalog.ts`：`GALLERY_NAV_GROUPS` 从"按 libraryId 分组"改为"按本文档的功能分类分组"，并修复 react-bits"文本动效"/"TextAnimations" 15 项重复注册的问题。
-5. 逐一拆解 `_shared/` 下各库遗留的 hooks/lib，明确最终归属（含 Stage A+ 记录的 vendor 内部重复 hooks 副本收敛判断）。
+### 已落地：声明式 Component Registry（取代大规模 ui/ 转发壳）
+
+`src/gallery/registry/` 现为 Gallery 的**唯一数据源**，取代原先 `catalog.ts`、`source-registry.ts`、`resolve-showcase.ts` 各自猜测路径的模式：
+
+| 文件 | 职责 |
+| --- | --- |
+| `schema.ts` | `ComponentRegistryItem` 类型：`internalImportPath`（本仓库真实 import）、`registryTarget`（未来 shadcn 安装落点）、`displayImportPath`（复制按钮展示） |
+| `domains/pilot.ts` | gooseui + chamaac 打样条目（手工精修） |
+| `domains/generated.ts` | 由 `pnpm sync:registry` 从剩余 ui/ 转发壳扫描生成 |
+| `index.ts` | 聚合全部 registry 条目 + 查询 API |
+| `source-loader.ts` | `import.meta.glob` 按 `files[].path` 取真实源码 |
+| `derive-catalog.ts` | 从 registry 派生 `GalleryNavItem` |
+
+**维护命令：**
+
+```bash
+pnpm sync:registry          # 扫描 ui/ 壳 → 更新 generated.ts
+pnpm check:registry         # 校验 id 唯一、docsSlug 存在、路径可解析
+pnpm codemod:registry-examples  # 批量改 examples import
+pnpm codemod:registry-docs      # 批量改 llm.txt / index.mdx 文档路径
+pnpm delete:registry-shells     # 删除已登记且无源码引用的纯转发壳
+```
+
+**路径语义（关键）：** shadcn registry 的 `name` 只解耦「安装项 identity」与「源文件路径」，不代表可以 import 不存在的路径。本仓库内部一律使用 `internalImportPath` 指向真实实现；`ui/` 只保留 ~196 个主线 shadcn 真实组件 + 35 个含包装逻辑的组件，不再充当大规模公开名映射层。已删除 220+ 纯转发壳。
+
+### 仍待完成
+
+1. 剩余未登记 ui/ 壳（含 `default as` 改名等 35 个非纯转发）的 registry 登记或保留决策。
+2. 批量更新 `content/**/*.mdx` 中 Stage A+ 遗留的 4 处 `@/primitives/...` 文档正文提及。
+3. `api-registry.ts` key 与 registry `id` 统一。
+4. 重写 `catalog.ts`：`GALLERY_NAV_GROUPS` 从「按 libraryId 分组」改为「按功能分类分组」，并修复 react-bits 重复注册。
+5. 逐一拆解 `_shared/` 下各库遗留的 hooks/lib。
 6. 全量 `tsc -b` + `eslint` + `rg` 零引用校验。

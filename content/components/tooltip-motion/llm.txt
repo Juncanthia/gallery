@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Tooltip } from "@/components/ui/tooltip-motion"
+import { Tooltip } from "@/components/blocks/tooltip-motion"
 
 export default function Demo() {
   return <Tooltip className="w-full max-w-sm" />
@@ -218,7 +218,7 @@ type TooltipContentProps = {
 
 当 AI 生成本项目 TooltipMotion 代码时，应遵守：
 
-1. 从 `@/components/ui/tooltip-motion` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/tooltip-motion` 导入，不要从 `antd` 导入。
 2. 必须用 `TooltipProvider` 包裹所有 Tooltip 实例，推荐在应用根布局中放置。
 3. 每个 Tooltip 内部放置 `TooltipTrigger` 和 `TooltipContent` 两个子组件，顺序不限。
 4. 只使用本文件 API 摘要和源码中存在的 props。

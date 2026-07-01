@@ -1,4 +1,4 @@
-import { DancingLetters } from "@/components/ui/dancing-letters"
+import { DancingLetters } from "@/components/effects/text/chamaac/dancing-letters/dancing-letters"
 
 export default function Demo() {
   return (

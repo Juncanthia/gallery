@@ -1,6 +1,6 @@
 "use client"
 
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 

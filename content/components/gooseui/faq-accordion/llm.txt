@@ -3,7 +3,7 @@ component: FAQAccordion
 slug: gooseui/faq-accordion
 
 import: |
-  import { FAQAccordion } from "@/components/ui/faq-accordion"
+  import { FAQAccordion } from "@/components/marketing-blocks/gooseui/faq/faq-accordion"
 
 usage: |
   <FAQAccordion />
@@ -19,7 +19,7 @@ props:
     className?: string  -- 附加样式类名
 
 constraints:
-  - 从 @/components/ui/faq-accordion 导入，不要从 gooseui 内部路径导入。
+  - 从 @/components/marketing-blocks/gooseui/faq/faq-accordion 导入，不要从 gooseui 内部路径导入。
   - 单展开手风琴模式，每次仅一项展开，再次点击已展开项收起全部。
   - 使用 CSS Grid grid-rows-[1fr]/[0fr] 实现高度展开/收起动画。
   - Plus 图标旋转 45 度表示展开状态，序号数字颜色变化辅助视觉反馈。

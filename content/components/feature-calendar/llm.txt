@@ -57,7 +57,7 @@ import {
   CalendarHeader,
   CalendarBody,
   CalendarItem,
-} from "@/components/ui/feature-calendar"
+} from "@/components/blocks/feature-calendar"
 
 const features = [
   {
@@ -273,7 +273,7 @@ export default function Demo() {
 
 当 AI 生成本项目 FeatureCalendar 代码时，应遵守：
 
-1. 从 `@/components/ui/feature-calendar` 导入所有子组件。
+1. 从 `@/components/blocks/feature-calendar` 导入所有子组件。
 2. 所有子组件必须在 `CalendarProvider` 内部使用，否则无法获取 locale 和 startDay 上下文。
 3. `CalendarBody` 必须同时传入 `features`（Feature 数组）和 `children`（render props 函数）。
 4. Feature 的 `endAt` 决定它在日历中显示的日期位置，不是 `startAt`。

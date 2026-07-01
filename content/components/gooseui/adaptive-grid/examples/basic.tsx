@@ -1,4 +1,4 @@
-import { AdaptiveGrid, AdaptiveCard } from "@/components/ui/adaptive-grid"
+import { AdaptiveGrid, AdaptiveCard } from "@/components/layout/gooseui/adaptive-grid"
 
 export default function Demo() {
   return (

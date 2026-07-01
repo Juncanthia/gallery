@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Gauge } from "@/components/ui/gauge-chamaac"
+import { Gauge } from "@/components/charts/chamaac/gauge/gauge"
 
 export default function Demo() {
   return (
@@ -150,7 +150,7 @@ interface GaugeProps {
 
 当 AI 生成本项目 Gauge 代码时，应遵守：
 
-1. 从 `@/components/ui/gauge-chamaac` 导入，不要从 `motion/react` 直接引用。
+1. 从 `@/components/charts/chamaac/gauge/gauge` 导入，不要从 `motion/react` 直接引用。
 2. 颜色 props（activeColor / inactiveColor）传入 Tailwind CSS 类名，不是 CSS 颜色字符串。
 3. 组件内置响应式逻辑，不需要手动添加响应式 wrapper。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。

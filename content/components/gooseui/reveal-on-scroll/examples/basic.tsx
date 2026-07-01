@@ -1,4 +1,4 @@
-import { RevealOnScroll } from "@/components/ui/reveal-on-scroll"
+import { RevealOnScroll } from "@/components/effects/interactions/gooseui/reveal-on-scroll"
 
 export default function Demo() {
   return (

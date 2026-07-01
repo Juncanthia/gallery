@@ -25,7 +25,7 @@ stack:
 
 # Masonry 瀑布流
 
-提供两套互补实现，均导出自 `@/components/ui/masonry`：
+提供两套互补实现，均导出自 `@/components/blocks/masonry`：
 
 - `Masonry`：基于 CSS Columns 的瀑布流布局组件，通过纯 CSS 实现不等高内容的瀑布流排列，支持固定列数和响应式断点列数配置。不使用任何第三方布局库，完全基于 Tailwind CSS 的 `columns-*` 工具类和 CSS `break-inside: avoid` 实现。**默认优先使用**，零 JS 布局开销。
 - `VirtualMasonry` / `VirtualMasonryItem`：基于区间树（interval tree）+ 最短列优先算法的虚拟化瀑布流，仅渲染可视区域（+ overscan）内的卡片，配合 `ResizeObserver` 自动测量每项高度、滚动节流重新计算可见范围。适合大列表（几十条以上持续增长）或需要精确"最短列优先"排列（而非 CSS Columns 的逐列排满顺序）的场景。
@@ -60,7 +60,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Masonry } from "@/components/ui/masonry"
+import { Masonry } from "@/components/blocks/masonry"
 
 export default function Demo() {
   return (
@@ -79,7 +79,7 @@ export default function Demo() {
 ### 响应式列数
 
 ```tsx
-import { Masonry } from "@/components/ui/masonry"
+import { Masonry } from "@/components/blocks/masonry"
 
 export default function Demo() {
   return (
@@ -99,7 +99,7 @@ export default function Demo() {
 ### 虚拟化瀑布流（大列表）
 
 ```tsx
-import { VirtualMasonry, VirtualMasonryItem } from "@/components/ui/masonry"
+import { VirtualMasonry, VirtualMasonryItem } from "@/components/blocks/masonry"
 
 export default function Demo() {
   return (
@@ -239,7 +239,7 @@ export default function Demo() {
 
 当 AI 生成本项目 Masonry 代码时，应遵守：
 
-1. 从 `@/components/ui/masonry` 导入 Masonry。
+1. 从 `@/components/blocks/masonry` 导入 Masonry。
 2. 固定列数使用 `columns={n}`（n 为 1-6）。
 3. 响应式列数使用 `columns={{ sm: 1, md: 2, lg: 3 }}` 对象形式。
 4. 间距使用 `gap` 属性，其值会乘以 4 转为像素（默认 4 = 16px）。

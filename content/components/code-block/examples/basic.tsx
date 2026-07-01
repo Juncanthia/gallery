@@ -7,7 +7,7 @@ import {
   CodeBlockItem,
   CodeBlockContent,
   CodeBlockCopyButton,
-} from "@/components/ui/code-block"
+} from "@/components/blocks/code-block"
 
 const sampleData = [
   {

@@ -4,7 +4,7 @@ import {
   TabsTrigger,
   TabsContents,
   TabsContent,
-} from "@/components/ui/tabs-motion"
+} from "@/components/blocks/tabs-motion"
 
 export default function TabsMotionBasicExample() {
   return (

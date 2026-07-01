@@ -52,7 +52,7 @@ stack:
 组件无需任何 props，点击文件夹区域即可切换展开和闭合状态。
 
 ```tsx
-import { FolderInteraction } from "@/components/ui/folder-interaction"
+import { FolderInteraction } from "@/components/effects/interactions/uselayouts/folder-interaction"
 
 export default function Demo() {
   return <FolderInteraction />
@@ -113,7 +113,7 @@ export default function Demo() {
 
 当 AI 生成本项目 FolderInteraction 代码时，应遵守：
 
-1. 从 `@/components/ui/folder-interaction` 导入 `FolderInteraction`（named export）。
+1. 从 `@/components/effects/interactions/uselayouts/folder-interaction` 导入 `FolderInteraction`（named export）。
 2. 组件无需 props，直接渲染即可获得完整的文件夹交互效果。
 3. 如需自定义页面内容，直接修改 `src/components/uselayouts/folder-interaction.tsx` 中的 `Page` 子组件。
 4. 如需调整动画参数，修改各层的 `initial`、`open`、`transition` 配置。

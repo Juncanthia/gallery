@@ -1,4 +1,4 @@
-import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { AreaChart } from "@/components/charts/bklit/charts"
 import { Area, Grid } from "@/components/charts/bklit/charts"
 
 const data = [

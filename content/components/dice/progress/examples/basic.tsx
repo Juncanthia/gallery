@@ -1,6 +1,6 @@
 "use client"
 
-import { Progress } from "@/components/ui/progress-dice"
+import { Progress } from "@/components/ui/progress"
 
 export default function Demo() {
   return (

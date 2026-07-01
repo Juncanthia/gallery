@@ -1,4 +1,4 @@
-import { TableProvider, Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/data-table"
+import { TableProvider, Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/blocks/data-table"
 import type { ColumnDef } from "@tanstack/react-table"
 
 type User = { id: string; name: string; email: string; role: string }

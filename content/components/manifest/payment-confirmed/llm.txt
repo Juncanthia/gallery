@@ -54,7 +54,7 @@ PaymentConfirmed 的核心功能：
 默认展示包含订单 ID、产品图片、名称、描述、价格、配送日期和追踪按钮的确认卡片。
 
 ```tsx
-import { PaymentConfirmed } from "@/components/ui/payment-confirmed"
+import { PaymentConfirmed } from "@/components/templates/manifest/payment/payment-confirmed"
 
 const sampleData = {
   orderId: "ORD-2024-5678",
@@ -165,7 +165,7 @@ PaymentConfirmed 当前不支持内置的加载状态。未传入的数据字段
 
 当 AI 生成 PaymentConfirmed 代码时，应遵守：
 
-1. 从 `@/components/ui/payment-confirmed` 导入 PaymentConfirmed。
+1. 从 `@/components/templates/manifest/payment/payment-confirmed` 导入 PaymentConfirmed。
 2. 通过 `data` prop 传入订单确认数据。
 3. 通过 `actions.onTrackOrder` 处理订单追踪操作。
 4. 通过 `appearance.variant` 选择 "default" 或 "compressed" 布局。

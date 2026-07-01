@@ -58,7 +58,7 @@ import {
   ImageCropContent,
   ImageCropApply,
   ImageCropReset,
-} from "@/components/ui/image-crop"
+} from "@/components/blocks/image-crop"
 
 export default function Demo() {
   const [file, setFile] = useState<File | null>(null)
@@ -94,7 +94,7 @@ export default function Demo() {
 简单场景可直接使用 `Cropper` 一步完成。
 
 ```tsx
-import { Cropper } from "@/components/ui/image-crop"
+import { Cropper } from "@/components/blocks/image-crop"
 
 export default function Demo() {
   const [file, setFile] = useState<File | null>(null)
@@ -238,7 +238,7 @@ export default function Demo() {
 
 当 AI 生成本项目 ImageCrop 代码时，应遵守：
 
-1. 从 `@/components/ui/image-crop` 导入所需组件。
+1. 从 `@/components/blocks/image-crop` 导入所需组件。
 2. `ImageCrop` 必须提供 `file` 属性，通过 children 组合子组件。
 3. 需要固定裁剪比例时，通过 `aspect` 属性设置（如 `aspect={1}` 为正方形）。
 4. 完整用法推荐：`ImageCrop` > `ImageCropContent` + `ImageCropApply` + `ImageCropReset`。

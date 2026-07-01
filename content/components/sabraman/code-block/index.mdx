@@ -29,7 +29,7 @@ LegacyCodeBlockCommand 的核心能力：
 />
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/ui/code-block-sabraman"
+import { LegacyCodeBlockCommand } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -50,7 +50,7 @@ export default function Demo() {
 仅提供部分包管理器的命令，未提供的选项会自动隐藏。
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/ui/code-block-sabraman"
+import { LegacyCodeBlockCommand } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -69,7 +69,7 @@ export default function Demo() {
 通过 `initialPackageManager` 指定首次渲染时选中的包管理器。若用户曾手动选择过，则优先使用 localStorage 中的偏好。
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/ui/code-block-sabraman"
+import { LegacyCodeBlockCommand } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -91,7 +91,7 @@ export default function Demo() {
 通过 `headerActions` 在操作栏中插入额外的操作按钮（如"了解更多"链接）。
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/ui/code-block-sabraman"
+import { LegacyCodeBlockCommand } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -122,7 +122,7 @@ export default function Demo() {
 通过 `onCopySuccess` 和 `onCopyError` 监听复制结果。
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/ui/code-block-sabraman"
+import { LegacyCodeBlockCommand } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -147,7 +147,7 @@ export default function Demo() {
 `convertNpmCommand` 可将一条 npm 命令转换为四种包管理器的等效命令。
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/ui/code-block-sabraman"
+import { LegacyCodeBlockCommand } from "@/components/_shared/sabraman"
 import { convertNpmCommand } from "@/components/_shared/sabraman"
 
 export default function Demo() {
@@ -255,7 +255,7 @@ const cmds = convertNpmCommand("npm install react")
 <LegacyCodeBlockCommand {...cmds} />
 ```
 
-注意：`convertNpmCommand` 来自 `@/components/_shared/sabraman`，而 `LegacyCodeBlockCommand` 组件从 `@/components/ui/code-block-sabraman` 导入。
+注意：`convertNpmCommand` 来自 `@/components/_shared/sabraman`，而 `LegacyCodeBlockCommand` 组件从 `@/components/_shared/sabraman` 导入。
 
 ### 如何自定义复制按钮的行为？
 
@@ -284,7 +284,7 @@ const cmds = convertNpmCommand("npm install react")
 
 AI 生成 LegacyCodeBlockCommand 代码时：
 
-1. 从 `@/components/ui/code-block-sabraman` 导入 `LegacyCodeBlockCommand`。
+1. 从 `@/components/_shared/sabraman` 导入 `LegacyCodeBlockCommand`。
 2. 为需要展示的包管理器分别提供 `bun`、`npm`、`pnpm`、`yarn` 命令字符串。
 3. 使用 `convertNpmCommand` 工具函数（从 `@/components/_shared/sabraman` 导入）可快速生成四条命令。
 4. 通过 `initialPackageManager` 设置默认选中项；用户手动选择后优先使用 localStorage 偏好。

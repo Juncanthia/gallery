@@ -42,7 +42,7 @@ import { customToast } from "@/components/_shared/gooseui/lib/toast"
 import { Toaster } from "sonner"
 
 // 组件本身（仅在需要直接使用时导入）
-import { CustomToast } from "@/components/ui/custom-toast"
+import { CustomToast } from "@/components/feedback/gooseui/custom-toast"
 ```
 
 ## 用法

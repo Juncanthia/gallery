@@ -31,7 +31,7 @@ import {
   FileUploadItemMetadata,
   FileUploadItemDelete,
   FileUploadClear,
-} from "@/components/ui/file-upload"
+} from "@/components/blocks/file-upload"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
@@ -256,7 +256,7 @@ const fileCount = useFileUpload((state) => state.files.size)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/file-upload` 导入，不要从 `@/components/_shared/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入。
+1. 从 `@/components/blocks/file-upload` 导入，不要从 `@/components/_shared/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入。
 2. `FileUploadList` 的 children 必须是普通 `ReactNode`（通常是 `files.map(...)` 的结果），不是 render prop。
 3. `FileUploadItem` 必须传入 `value`（对应的 `File` 对象），否则无法关联到内部文件状态。
 4. 优先使用受控模式（`value` + `onValueChange`）维护文件数组。

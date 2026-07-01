@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -76,7 +76,7 @@ export default function Demo() {
 ### Receipt 确认回执
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -104,7 +104,7 @@ export default function Demo() {
 ### 带折扣和免运费
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -263,7 +263,7 @@ type OrderSummaryVariant = "summary" | "receipt";
 
 当 AI 生成本项目 OrderSummary 代码时，应遵守：
 
-1. 从 `@/components/ui/order-summary-tool` 导入 `OrderSummary`，不要从其他路径导入。
+1. 从 `@/components/agent-tools/order-summary/order-summary` 导入 `OrderSummary`，不要从其他路径导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. `id`、`items`、`pricing` 为必填属性。`items` 至少包含 1 项，且每项的 `id` 不可重复。
 4. `pricing.total` 应等于 `subtotal - discount + shipping + tax`，LLM 需自行保证数学正确性。

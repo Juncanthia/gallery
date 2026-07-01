@@ -1,4 +1,4 @@
-import { CursorProvider, Cursor, CursorFollow } from "@/components/ui/cursor-follow"
+import { CursorProvider, Cursor, CursorFollow } from "@/components/blocks/cursor-follow"
 
 export default function CursorFollowBasicExample() {
   return (

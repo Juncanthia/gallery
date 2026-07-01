@@ -1,4 +1,4 @@
-import { Portal } from "@/components/ui/portal"
+import { Portal } from "@/components/general/dice/headless/portal"
 
 export default function Demo() {
   return (

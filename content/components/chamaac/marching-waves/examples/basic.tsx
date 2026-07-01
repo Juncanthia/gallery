@@ -1,4 +1,4 @@
-import { MarchingWaves } from "@/components/ui/marching-waves"
+import { MarchingWaves } from "@/components/effects/backgrounds/chamaac/marching-waves/marching-waves"
 
 export default function Demo() {
   return (

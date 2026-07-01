@@ -1,6 +1,6 @@
 "use client"
 
-import { ClientOnly } from "@/components/ui/client-only"
+import { ClientOnly } from "@/components/general/dice/headless/client-only"
 
 export default function Demo() {
   return (

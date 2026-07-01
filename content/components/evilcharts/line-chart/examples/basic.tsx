@@ -1,6 +1,6 @@
 "use client"
 
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import {
   Line,
   XAxis,

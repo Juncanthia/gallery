@@ -1,5 +1,5 @@
 [组合图 / ComposedChart]
-导入: import { ComposedChart } from "@/components/ui/composed-chart-bklit"
+导入: import { ComposedChart } from "@/components/charts/bklit/charts"
 子组件导入: import { Line, Area, SeriesBar } from "@/components/charts/bklit/charts"
 包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts / 时间序列组合图
@@ -89,7 +89,7 @@
 ### 基础组合图
 
 ```tsx
-import { ComposedChart } from "@/components/ui/composed-chart-bklit"
+import { ComposedChart } from "@/components/charts/bklit/charts"
 import { Line, Area, SeriesBar } from "@/components/charts/bklit/charts"
 
 const data = [
@@ -114,7 +114,7 @@ export default function Demo() {
 ### 堆叠柱状图 + 折线
 
 ```tsx
-import { ComposedChart } from "@/components/ui/composed-chart-bklit"
+import { ComposedChart } from "@/components/charts/bklit/charts"
 import { Line, SeriesBar } from "@/components/charts/bklit/charts"
 
 export default function StackedDemo() {
@@ -131,7 +131,7 @@ export default function StackedDemo() {
 ### 双 Y 轴组合图
 
 ```tsx
-import { ComposedChart } from "@/components/ui/composed-chart-bklit"
+import { ComposedChart } from "@/components/charts/bklit/charts"
 import { Line, Area } from "@/components/charts/bklit/charts"
 
 export default function DualAxisDemo() {

@@ -28,7 +28,7 @@ stack:
 ## 导入路径
 
 ```tsx
-import { LayoutSwitcher } from "@/components/ui/animated-collection"
+import { LayoutSwitcher } from "@/components/effects/interactions/uselayouts/animated-collection"
 ```
 
 ## 使用方式

@@ -1,4 +1,4 @@
-import { SVGDrawable } from "@/components/ui/svg-drawable"
+import { SVGDrawable } from "@/components/effects/interactions/gooseui/svg-drawable"
 
 export default function Demo() {
   return (

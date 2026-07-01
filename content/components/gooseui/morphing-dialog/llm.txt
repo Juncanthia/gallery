@@ -3,7 +3,7 @@ component: MorphingDialog
 slug: gooseui/morphing-dialog
 
 import: |
-  import { MorphingDialog, MorphingDialogTrigger, MorphingDialogContainer, MorphingDialogContent, MorphingDialogClose, MorphingDialogImage, MorphingDialogTitle, MorphingDialogSubtitle, MorphingDialogDescription } from "@/components/ui/morphing-dialog"
+  import { MorphingDialog, MorphingDialogTrigger, MorphingDialogContainer, MorphingDialogContent, MorphingDialogClose, MorphingDialogImage, MorphingDialogTitle, MorphingDialogSubtitle, MorphingDialogDescription } from "@/components/effects/interactions/gooseui/morphing-dialog"
 
 usage: |
   <MorphingDialog>

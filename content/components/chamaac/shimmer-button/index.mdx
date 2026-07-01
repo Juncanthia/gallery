@@ -21,7 +21,7 @@ ShimmerButton 是一组带动画效果的按钮组件，按钮根据传入文字
 <ComponentShowcase id="chamaac/shimmer-button" path="chamaac/shimmer-button/basic" />
 
 ```tsx
-import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { ShimmerButton } from "@/components/general/chamaac/shimmer-button/shimmer-button"
 
 export default function Demo() {
   return <ShimmerButton text="Book a Free Call" />
@@ -33,7 +33,7 @@ export default function Demo() {
 通过 `text` 设置按钮文字，`duration` 控制扫光动画周期（秒）。
 
 ```tsx
-import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { ShimmerButton } from "@/components/general/chamaac/shimmer-button/shimmer-button"
 
 export default function Demo() {
   return (
@@ -50,7 +50,7 @@ export default function Demo() {
 传入 `onClick` 处理点击。
 
 ```tsx
-import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { ShimmerButton } from "@/components/general/chamaac/shimmer-button/shimmer-button"
 
 export default function Demo() {
   return (
@@ -106,7 +106,7 @@ export default function Demo() {
 
 AI 生成 ShimmerButton 代码时：
 
-1. 从 `@/components/ui/shimmer-button` 导入 `ShimmerButton`。
+1. 从 `@/components/general/chamaac/shimmer-button/shimmer-button` 导入 `ShimmerButton`。
 2. `ShimmerButton` 是一个默认导出，使用 `import { ShimmerButton }` 命名导入（barrel 文件使用 named re-export）。
 3. `text` 默认为 `"Book a Free Call"`，传入自定义文字时覆盖。
 4. `duration` 单位为秒，控制 `background-position` 动画速度。

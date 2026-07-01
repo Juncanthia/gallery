@@ -45,7 +45,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import DeleteButton from "@/components/ui/delete-button"
+import DeleteButton from "@/components/general/uselayouts/delete-button"
 
 export default function Demo() {
   return <DeleteButton />
@@ -108,7 +108,7 @@ type DeleteButtonProps = Record<string, never>
 
 当 AI 生成本项目 Delete Button 代码时，应遵守：
 
-1. 从 `@/components/ui/delete-button` 导入 `DeleteButton`（default export）。
+1. 从 `@/components/general/uselayouts/delete-button` 导入 `DeleteButton`（default export）。
 2. 组件自包含，无需 props，直接渲染即可。
 3. 不要移除 motion/react 动画逻辑，包括 AnimatePresence、layoutId、transition 曲线。
 4. 修改文案时更新 `deleteText` 和 `cancelText` 常量。

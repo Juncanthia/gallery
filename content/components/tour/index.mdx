@@ -24,7 +24,7 @@
 
 ```tsx
 import { useState } from "react"
-import { Tour, type TourStepConfig } from "@/components/ui/tour"
+import { Tour, type TourStepConfig } from "@/components/blocks/tour"
 
 const steps: TourStepConfig[] = [
   {
@@ -70,7 +70,7 @@ export default function Demo() {
 ### 非受控模式
 
 ```tsx
-import { Tour, type TourStepConfig } from "@/components/ui/tour"
+import { Tour, type TourStepConfig } from "@/components/blocks/tour"
 
 const steps: TourStepConfig[] = [
   { title: "第一步", description: "这是第一步的说明", placement: "center" },
@@ -93,7 +93,7 @@ export default function Demo() {
 ### 无遮罩模式
 
 ```tsx
-import { Tour, type TourStepConfig } from "@/components/ui/tour"
+import { Tour, type TourStepConfig } from "@/components/blocks/tour"
 
 const steps: TourStepConfig[] = [
   { title: "新功能", description: "看看我们的新功能区", target: "#new-feature", placement: "bottom" },
@@ -163,7 +163,7 @@ Tour 默认是轻量导览，不把遮罩当作强模态层。需要点击遮罩
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/tour` 导入 `Tour` 和 `TourStepConfig`，不要从 `antd` 导入。
+1. 从 `@/components/blocks/tour` 导入 `Tour` 和 `TourStepConfig`，不要从 `antd` 导入。
 2. `steps` 为必填属性，每个 step 至少需提供 `title` 或 `description` 之一。
 3. `target` 可以是 CSS 选择器、HTMLElement、ref，或返回 `HTMLElement | null` 的函数。
 4. 受控模式下同时传入 `current` 和 `onChange`；非受控模式下使用 `defaultCurrent`，二者不可混用。

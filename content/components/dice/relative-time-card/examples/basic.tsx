@@ -1,6 +1,6 @@
 "use client"
 
-import { RelativeTimeCard } from "@/components/ui/relative-time-card"
+import { RelativeTimeCard } from "@/components/data-display/dice/relative-time-card"
 
 export default function Demo() {
   return (

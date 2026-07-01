@@ -1,4 +1,4 @@
-import { Chart } from "@/components/ui/chart-tool"
+import { Chart } from "@/components/agent-tools/chart/chart"
 
 const data = [
   { month: "January", desktop: 186, mobile: 80 },

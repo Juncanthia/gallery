@@ -65,7 +65,7 @@ import {
   FileUploadItemMetadata,
   FileUploadItemDelete,
   FileUploadClear,
-} from "@/components/ui/file-upload"
+} from "@/components/blocks/file-upload"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
@@ -262,7 +262,7 @@ function useFileUpload<T>(selector: (state: { files: Map<File, FileState>; dragO
 
 项目中还存在一个业务层组件 `@/components/document/components/ui/file-upload`（文档见 `content/components/extend/file-upload/`）。两者不是并列的两套实现，而是 primitive 与预设（preset）的关系：extend 版本内部直接组合本组件的 `FileUpload`/`FileUploadDropzone`/`useFileUpload`，复用本组件的拖拽状态机、accept/大小校验、键盘与粘贴上传逻辑，只在其上叠加业务视觉（图标动效、`BorderBeam`、缩略图文件列表）和"每次上传替换文件列表"的业务语义。
 
-| 维度 | 本组件（`@/components/ui/file-upload`） | extend `FileUpload` |
+| 维度 | 本组件（`@/components/blocks/file-upload`） | extend `FileUpload` |
 | --- | --- | --- |
 | 定位 | 无头复合组件，负责状态和交互，不含预制视觉 | 基于本组件搭建的、预制视觉的文档上传业务卡片，开箱即用 |
 | API 形态 | 复合子组件组合（Dropzone/Trigger/List/Item/...） | 单一组件 + 扁平 props |
@@ -286,7 +286,7 @@ function useFileUpload<T>(selector: (state: { files: Map<File, FileState>; dragO
 
 当 AI 生成本项目 FileUpload 代码时，应遵守：
 
-1. 从 `@/components/ui/file-upload` 导入，不要从 `@/components/_shared/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入，也不要从 `antd` 导入 `Upload`。
+1. 从 `@/components/blocks/file-upload` 导入，不要从 `@/components/_shared/dice/ui/file-upload` 或 `@/components/blocks/file-upload` 导入，也不要从 `antd` 导入 `Upload`。
 2. `FileUploadList` 的 `children` 必须是普通 `ReactNode`（通常是 `files.map(...)` 的结果），不是 render prop。
 3. `FileUploadItem` 必须传入 `value`（对应的 `File` 对象），否则无法关联到内部文件状态，组件会返回 `null`。
 4. 优先使用受控模式（`value` + `onValueChange`）维护文件数组，而不是自己另外维护一份独立 state。

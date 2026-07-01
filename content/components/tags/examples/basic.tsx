@@ -11,7 +11,7 @@ import {
   TagsEmpty,
   TagsGroup,
   TagsItem,
-} from "@/components/ui/tags"
+} from "@/components/blocks/tags"
 
 const initialTags = ["react", "typescript"]
 

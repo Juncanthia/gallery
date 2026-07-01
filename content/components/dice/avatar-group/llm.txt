@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { AvatarGroup } from "@/components/ui/avatar-group"
+import { AvatarGroup } from "@/components/data-display/dice/avatar-group"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function Demo() {
@@ -88,7 +88,7 @@ export default function Demo() {
 ### 自定义溢出渲染
 
 ```tsx
-import { AvatarGroup } from "@/components/ui/avatar-group"
+import { AvatarGroup } from "@/components/data-display/dice/avatar-group"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export default function Demo() {
@@ -221,14 +221,14 @@ interface AvatarGroupProps extends Omit<React.ComponentProps<"div">, "dir"> {
 import { AvatarGroup } from "@/components/ui/avatar"
 
 // 增强版（需要截断、方向控制、遮罩裁剪时使用）
-import { AvatarGroup } from "@/components/ui/avatar-group"
+import { AvatarGroup } from "@/components/data-display/dice/avatar-group"
 ```
 
 ## LLM 使用规则 {#llm-rules}
 
 当 AI 生成本项目 AvatarGroup 代码时，应遵守：
 
-1. 从 `@/components/ui/avatar-group` 导入 AvatarGroup，不要从 `antd` 或 `@/components/ui/avatar` 导入。
+1. 从 `@/components/data-display/dice/avatar-group` 导入 AvatarGroup，不要从 `antd` 或 `@/components/ui/avatar` 导入。
 2. 头像 children 建议使用 `@/components/ui/avatar` 的 Avatar 系列组件。
 3. 只使用本文件 API 摘要和源码中存在的 props。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。

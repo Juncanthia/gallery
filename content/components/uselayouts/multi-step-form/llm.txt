@@ -48,7 +48,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import MultiStepFormDemo from "@/components/ui/multi-step-form"
+import MultiStepFormDemo from "@/components/data-entry/uselayouts/multi-step-form"
 
 export default function Demo() {
   return <MultiStepFormDemo />
@@ -117,7 +117,7 @@ type MultiStepFormDemoProps = Record<string, never>
 
 当 AI 生成本项目 MultiStepForm 代码时，应遵守：
 
-1. 从 `@/components/ui/multi-step-form` 导入 `MultiStepFormDemo`（default export）。
+1. 从 `@/components/data-entry/uselayouts/multi-step-form` 导入 `MultiStepFormDemo`（default export）。
 2. 组件无需 props，直接渲染即可。
 3. 如需自定义表单字段和步骤，修改 `src/components/uselayouts/multi-step-form.tsx` 中的 `formSchema`、`stepTitles` 和 `content` 逻辑。
 4. 组件依赖 `react-hook-form`、`zod`、`@hookform/resolvers`、`motion/react`、`react-use-measure`、`date-fns`、`sonner`，使用前确保已安装。

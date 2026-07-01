@@ -1,6 +1,6 @@
 "use client"
 
-import { Scroller } from "@/components/ui/scroller"
+import { Scroller } from "@/components/layout/dice/scroller"
 
 export default function Demo() {
   return (

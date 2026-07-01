@@ -9,7 +9,7 @@ import {
   VideoPlayerTimeRange,
   VideoPlayerMuteButton,
   VideoPlayerVolumeRange,
-} from "@/components/ui/video-player"
+} from "@/components/blocks/video-player"
 
 export default function VideoPlayerBasicExample() {
   return (

@@ -41,7 +41,7 @@
 
 ### 基础：横向网格线
 ```tsx
-import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { BarChart } from "@/components/charts/bklit/charts"
 import { Bar } from "@/components/charts/bklit/charts"
 import { Grid } from "@/components/ui/chart-grid"
 

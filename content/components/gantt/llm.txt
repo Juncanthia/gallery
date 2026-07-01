@@ -65,7 +65,7 @@ import {
   GanttFeatureListGroup,
   GanttFeatureRow,
   GanttToday,
-} from "@/components/ui/gantt"
+} from "@/components/blocks/gantt"
 
 const features = [
   {
@@ -120,7 +120,7 @@ import {
   GanttHeader,
   GanttFeatureList,
   GanttFeatureRow,
-} from "@/components/ui/gantt"
+} from "@/components/blocks/gantt"
 
 export default function Demo() {
   const [features, setFeatures] = useState(initialFeatures)
@@ -371,7 +371,7 @@ Ant Design 无甘特图组件，此为全新实现。
 
 ## LLM 使用规则 {#llm-rules}
 
-1. 从 `@/components/ui/gantt` 按需导入所有子组件。
+1. 从 `@/components/blocks/gantt` 按需导入所有子组件。
 2. 组装顺序：`GanttProvider` > `GanttSidebar` (含 Group/Item) + `GanttTimeline` (含 Header/FeatureList/FeatureRow)。
 3. `GanttProvider` 必须设置 `range`（"daily" | "monthly" | "quarterly"）。
 4. `GanttFeature` 数据必须包含完整的 `status` 对象（`id`、`name`、`color`），`color` 为 CSS 颜色字符串。

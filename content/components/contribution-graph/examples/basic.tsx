@@ -1,4 +1,4 @@
-import { ContributionGraph } from "@/components/ui/contribution-graph"
+import { ContributionGraph } from "@/components/blocks/contribution-graph"
 
 function generateSampleData() {
   const data = []

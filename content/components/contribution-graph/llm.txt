@@ -58,7 +58,7 @@ import {
   ContributionGraphFooter,
   ContributionGraphTotalCount,
   ContributionGraphLegend,
-} from "@/components/ui/contribution-graph"
+} from "@/components/blocks/contribution-graph"
 
 const data = [
   { date: "2025-01-01", count: 3, level: 2 },
@@ -236,7 +236,7 @@ type Activity = {
 
 当 AI 生成本项目 ContributionGraph 代码时，应遵守：
 
-1. 从 `@/components/ui/contribution-graph` 导入所有需要的子组件，不要从 `antd` 导入。
+1. 从 `@/components/blocks/contribution-graph` 导入所有需要的子组件，不要从 `antd` 导入。
 2. `ContributionGraph` 的 `data` prop 为必填，类型为 `Activity[]`，每项包含 `date`、`count`、`level`。
 3. `ContributionGraphCalendar` 使用 render props 模式，回调参数包含 `{ activity, dayIndex, weekIndex }`。
 4. `ContributionGraphBlock` 必须传入 `activity`、`dayIndex`、`weekIndex` 三个 prop。

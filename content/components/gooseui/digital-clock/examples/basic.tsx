@@ -1,4 +1,4 @@
-import { DigitalClock } from "@/components/ui/digital-clock"
+import { DigitalClock } from "@/components/data-display/gooseui/digital-clock"
 
 export default function Demo() {
   return (

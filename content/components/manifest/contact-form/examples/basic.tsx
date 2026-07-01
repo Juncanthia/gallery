@@ -1,4 +1,4 @@
-import { ContactForm } from "@/components/ui/contact-form"
+import { ContactForm } from "@/components/templates/manifest/form/contact-form"
 
 export default function Demo() {
   return (

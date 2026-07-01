@@ -1,4 +1,4 @@
-import { SignUp } from "@/components/ui/sign-up"
+import { SignUp } from "@/components/templates/manifest/form/sign-up"
 
 export default function Demo() {
   return (

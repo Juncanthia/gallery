@@ -3,7 +3,7 @@ import {
   MiniCalendarNavigation,
   MiniCalendarDays,
   MiniCalendarDay,
-} from "@/components/ui/mini-calendar"
+} from "@/components/blocks/mini-calendar"
 
 export default function MiniCalendarBasicExample() {
   return (

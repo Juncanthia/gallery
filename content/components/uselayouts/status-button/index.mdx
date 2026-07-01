@@ -31,7 +31,7 @@
 />
 
 ```tsx
-import { SaveButton } from "@/components/ui/status-button"
+import { SaveButton } from "@/components/general/uselayouts/status-button"
 
 export default function Demo() {
   return <SaveButton />
@@ -131,7 +131,7 @@ function SaveButton({ loadingDuration = 2500, successDuration = 2000 }) { ... }
 
 AI 生成 SaveButton 代码时：
 
-1. 从 `@/components/ui/status-button` 导入 `SaveButton`（named export）
+1. 从 `@/components/general/uselayouts/status-button` 导入 `SaveButton`（named export）
 2. 组件自包含，无需传入任何 props
 3. 不要移除或修改组件内部的 `motion/react` 动画逻辑，包括 AnimatePresence、motion.span、transition 曲线
 4. 修改文案时更新 `useMemo` 中三个状态的返回值

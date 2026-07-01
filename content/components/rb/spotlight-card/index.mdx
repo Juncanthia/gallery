@@ -16,13 +16,13 @@ SpotlightCard 鼠标跟随聚光灯卡片组件，鼠标在卡片上移动时通
 <ComponentShowcase id="rb/spotlight-card" path="rb/spotlight-card/basic" />
 
 ```tsx
-import { SpotlightCard } from "@/components/ui/spotlight-card"
+import { SpotlightCard } from "@/components/marketing-blocks/react-bits/spotlight-card"
 export default function Demo() { return <SpotlightCard><div className="p-8">Content</div></SpotlightCard> }
 ```
 
 ### 蓝色聚光灯 + 自定义内容
 ```tsx
-import { SpotlightCard } from "@/components/ui/spotlight-card"
+import { SpotlightCard } from "@/components/marketing-blocks/react-bits/spotlight-card"
 
 export default function Demo() {
   return (
@@ -55,7 +55,7 @@ export default function Demo() {
 可以。`className` 属性会与 `card-spotlight` 合并，你可以传入 Tailwind 的 `rounded-xl`、`bg-gray-900`、`border` 等类来定义卡片外观，组件只负责注入鼠标跟随的 CSS 变量。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/spotlight-card` 导入。
+1. 从 `@/components/marketing-blocks/react-bits/spotlight-card` 导入。
 2. 组件在 `onMouseMove` 中设置 CSS 自定义属性 `--mouse-x`、`--mouse-y`、`--spotlight-color`，需要在 CSS 中使用这些变量实现光效。
 3. `spotlightColor` 建议使用 rgba 格式以控制透明度，避免光效过亮遮盖内容。
 4. 不包含任何预设样式，外观完全由 `className` 和 CSS 控制。

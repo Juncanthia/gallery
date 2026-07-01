@@ -1,4 +1,4 @@
-import { ImageZoom } from "@/components/ui/image-zoom"
+import { ImageZoom } from "@/components/blocks/image-zoom"
 
 export default function ImageZoomBasicExample() {
   return (

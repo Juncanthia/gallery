@@ -1,4 +1,4 @@
-import { Code, CodeBlock, CodeHeader } from "@/components/ui/code-panel"
+import { Code, CodeBlock, CodeHeader } from "@/components/blocks/code-panel"
 
 const sampleCode = `function greet(name: string) {
   return "Hello, " + name

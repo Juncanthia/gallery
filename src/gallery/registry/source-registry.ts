@@ -92,7 +92,6 @@ import tagTsx from "../../../src/components/ui/tag.tsx?raw"
 import timePickerTsx from "../../../src/components/ui/time-picker.tsx?raw"
 import timePickerBlockTsx from "../../../src/components/blocks/time-picker/index.tsx?raw"
 import timelineTsx from "../../../src/components/ui/timeline.tsx?raw"
-import tourTsx from "../../../src/components/ui/tour.tsx?raw"
 import tourBlockTsx from "../../../src/components/blocks/tour/index.tsx?raw"
 import toasterTsx from "../../../src/components/ui/toaster.tsx?raw"
 import toggleTsx from "../../../src/components/ui/toggle.tsx?raw"
@@ -160,49 +159,40 @@ import gooseuiCurvedTextMarqueeTsx from "../../../src/components/marketing-block
 import gooseuiHeaderWithCtaTsx from "../../../src/components/marketing-blocks/gooseui/headers/header-with-cta.tsx?raw"
 
 // Manifest components
-import manifestContactFormTsx from "../../../src/components/ui/contact-form.tsx?raw"
 import manifestFormContactFormTsx from "../../../src/components/templates/manifest/form/contact-form.tsx?raw"
 import manifestFormCountriesTs from "../../../src/components/templates/manifest/form/countries.ts?raw"
 import manifestFormDemoFormTs from "../../../src/components/templates/manifest/form/demo/form.ts?raw"
-import manifestDateTimePickerTsx from "../../../src/components/ui/date-time-picker.tsx?raw"
 import manifestFormDateTimePickerTsx from "../../../src/components/data-entry/manifest/date-time-picker.tsx?raw"
-import manifestEmptyStateTsx from "../../../src/components/ui/empty-state-manifest.tsx?raw"
 import manifestFormEmptyStateTsx from "../../../src/components/data-display/manifest/empty-state.tsx?raw"
-import manifestFileUploaderTsx from "../../../src/components/ui/file-uploader.tsx?raw"
 import manifestFormFileUploaderTsx from "../../../src/components/data-entry/manifest/file-uploader.tsx?raw"
-import manifestSettingsPanelTsx from "../../../src/components/ui/settings-panel.tsx?raw"
 import manifestFormSettingsPanelTsx from "../../../src/components/templates/manifest/form/settings-panel.tsx?raw"
 
 // Limeplay components
-import limeplayAudioSourceTsx from "../../../src/components/ui/audio-source.tsx?raw"
 import limeplayAudioSourceCoreTsx from "../../../src/components/media/blocks/audio-player/components/audio-source.tsx?raw"
-import limeplayTimelineControlTsx from "../../../src/components/ui/timeline-control.tsx?raw"
 import limeplayTimelineControlCoreTsx from "../../../src/components/media/ui/timeline-control.tsx?raw"
-import limeplayVolumeControlTsx from "../../../src/components/ui/volume-control.tsx?raw"
 import limeplayVolumeControlCoreTsx from "../../../src/components/media/ui/volume-control.tsx?raw"
 
 // Extend components
-import extendESignatureTsx from "../../../src/components/ui/e-signature.tsx?raw"
 import extendESignatureBlockTsx from "../../../src/components/document/components/blocks/e-signature.tsx?raw"
-import extendLayoutBlocksBlockTsx from "../../../src/components/ui/layout-blocks-block.tsx?raw"
 import extendLayoutBlocksBlockSourceTsx from "../../../src/components/document/components/blocks/layout-blocks-block.tsx?raw"
 import extendLayoutBlocksTsx from "../../../src/components/document/components/ui/layout-blocks.tsx?raw"
-import extendDocumentSplitsBlockTsx from "../../../src/components/ui/document-splits-block.tsx?raw"
+import extendDocumentSplitsBlockSourceTsx from "../../../src/components/document/components/blocks/document-splits-block.tsx?raw"
 
 // Tool UI components
-import toolCitationListTsx from "../../../src/components/ui/citation-list.tsx?raw"
 import citationListTsx from "../../../src/components/agent-tools/citation/citation-list.tsx?raw"
 
 // Dice UI components
 import diceHitboxTsx from "../../../src/components/general/dice/headless/hitbox.tsx?raw"
 import diceColorSwatchTsx from "../../../src/components/data-display/dice/color-swatch.tsx?raw"
 
+import { getRegistryComponentSources } from "./source-loader"
+
 export type ComponentSourceFile = {
   name: string
   source: string
 }
 
-const SOURCES: Record<string, ComponentSourceFile[]> = {
+const LEGACY_SOURCES: Record<string, ComponentSourceFile[]> = {
   "accordion": [{ name: "accordion.tsx", source: accordionTsx }],
   "affix": [{ name: "affix.tsx", source: affixTsx }],
   "alert": [{ name: "alert.tsx", source: alertTsx }],
@@ -290,7 +280,7 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "tag": [{ name: "tag.tsx", source: tagTsx }],
   "time-picker": [{ name: "time-picker.tsx", source: timePickerTsx }, { name: "blocks/time-picker.tsx", source: timePickerBlockTsx }],
   "timeline": [{ name: "timeline.tsx", source: timelineTsx }],
-  "tour": [{ name: "tour.tsx", source: tourTsx }, { name: "blocks/tour.tsx", source: tourBlockTsx }],
+  "tour": [{ name: "blocks/tour/index.tsx", source: tourBlockTsx }],
   "toaster": [{ name: "toaster.tsx", source: toasterTsx }],
   "toggle": [{ name: "toggle.tsx", source: toggleTsx }],
   "toggle-group": [{ name: "toggle-group.tsx", source: toggleGroupTsx }],
@@ -357,24 +347,24 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "gooseui/header-with-cta": [{ name: "header-with-cta.tsx", source: gooseuiHeaderWithCtaTsx }],
 
   // Manifest
-  "manifest/contact-form": [{ name: "manifest-contact-form.tsx", source: manifestContactFormTsx }, { name: "contact-form.tsx", source: manifestFormContactFormTsx }, { name: "countries.ts", source: manifestFormCountriesTs }, { name: "demo/form.ts", source: manifestFormDemoFormTs }],
-  "manifest/date-time-picker": [{ name: "manifest-date-time-picker.tsx", source: manifestDateTimePickerTsx }, { name: "date-time-picker.tsx", source: manifestFormDateTimePickerTsx }],
-  "manifest/empty-state": [{ name: "manifest-empty-state.tsx", source: manifestEmptyStateTsx }, { name: "empty-state.tsx", source: manifestFormEmptyStateTsx }],
-  "manifest/file-uploader": [{ name: "manifest-file-uploader.tsx", source: manifestFileUploaderTsx }, { name: "file-uploader.tsx", source: manifestFormFileUploaderTsx }],
-  "manifest/settings-panel": [{ name: "manifest-settings-panel.tsx", source: manifestSettingsPanelTsx }, { name: "settings-panel.tsx", source: manifestFormSettingsPanelTsx }],
+  "manifest/contact-form": [{ name: "contact-form.tsx", source: manifestFormContactFormTsx }, { name: "countries.ts", source: manifestFormCountriesTs }, { name: "demo/form.ts", source: manifestFormDemoFormTs }],
+  "manifest/date-time-picker": [{ name: "date-time-picker.tsx", source: manifestFormDateTimePickerTsx }],
+  "manifest/empty-state": [{ name: "empty-state.tsx", source: manifestFormEmptyStateTsx }],
+  "manifest/file-uploader": [{ name: "file-uploader.tsx", source: manifestFormFileUploaderTsx }],
+  "manifest/settings-panel": [{ name: "settings-panel.tsx", source: manifestFormSettingsPanelTsx }],
 
   // Limeplay
-  "limeplay/audio-source": [{ name: "limeplay-audio-source.tsx", source: limeplayAudioSourceTsx }, { name: "audio-source.tsx", source: limeplayAudioSourceCoreTsx }],
-  "limeplay/timeline-control": [{ name: "limeplay-timeline-control.tsx", source: limeplayTimelineControlTsx }, { name: "timeline-control.tsx", source: limeplayTimelineControlCoreTsx }],
-  "limeplay/volume-control": [{ name: "limeplay-volume-control.tsx", source: limeplayVolumeControlTsx }, { name: "volume-control.tsx", source: limeplayVolumeControlCoreTsx }],
+  "limeplay/audio-source": [{ name: "audio-source.tsx", source: limeplayAudioSourceCoreTsx }],
+  "limeplay/timeline-control": [{ name: "timeline-control.tsx", source: limeplayTimelineControlCoreTsx }],
+  "limeplay/volume-control": [{ name: "volume-control.tsx", source: limeplayVolumeControlCoreTsx }],
 
   // Extend
-  "extend/e-signature": [{ name: "extend-e-signature.tsx", source: extendESignatureTsx }, { name: "e-signature.tsx", source: extendESignatureBlockTsx }],
-  "extend/layout-blocks-block": [{ name: "extend-layout-blocks-block.tsx", source: extendLayoutBlocksBlockTsx }, { name: "layout-blocks-block.tsx", source: extendLayoutBlocksBlockSourceTsx }, { name: "layout-blocks.tsx", source: extendLayoutBlocksTsx }],
-  "extend/document-splits-block": [{ name: "extend-document-splits-block.tsx", source: extendDocumentSplitsBlockTsx }],
+  "extend/e-signature": [{ name: "e-signature.tsx", source: extendESignatureBlockTsx }],
+  "extend/layout-blocks-block": [{ name: "layout-blocks-block.tsx", source: extendLayoutBlocksBlockSourceTsx }, { name: "layout-blocks.tsx", source: extendLayoutBlocksTsx }],
+  "extend/document-splits-block": [{ name: "document-splits-block.tsx", source: extendDocumentSplitsBlockSourceTsx }],
 
   // Tool UI
-  "citation-list": [{ name: "tool-citation-list.tsx", source: toolCitationListTsx }, { name: "citation-list.tsx", source: citationListTsx }],
+  "citation-list": [{ name: "citation-list.tsx", source: citationListTsx }],
 
   // Dice UI
   "dice/hitbox": [{ name: "hitbox.tsx", source: diceHitboxTsx }],
@@ -382,5 +372,9 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
 }
 
 export function getComponentSources(componentId: string): ComponentSourceFile[] {
-  return SOURCES[componentId] ?? []
+  const registrySources = getRegistryComponentSources(componentId)
+  if (registrySources && registrySources.length > 0) {
+    return registrySources
+  }
+  return LEGACY_SOURCES[componentId] ?? []
 }

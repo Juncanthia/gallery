@@ -1,4 +1,4 @@
-import { Dock } from "@/components/ui/dock-rb"
+import { Dock } from "@/components/navigation/react-bits/dock"
 
 export default function DockBasicExample() {
   return (

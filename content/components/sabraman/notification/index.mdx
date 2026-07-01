@@ -41,7 +41,7 @@ LegacyNotification 通过 props 控制内容展示：
 />
 
 ```tsx
-import { LegacyNotification } from "@/components/ui/notification"
+import { LegacyNotification } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -80,14 +80,14 @@ export default function Demo() {
 }
 ```
 
-> `showLegacyNotification` 从 `@/components/_shared/sabraman` 导入；`@/components/ui/notification` 仅导出渲染组件。
+> `showLegacyNotification` 从 `@/components/_shared/sabraman` 导入；`@/components/_shared/sabraman` 仅导出渲染组件。
 
 ### 控制显隐
 
 通过 `showIcon`、`showSubtitle`、`showBody` 控制各区域显隐。
 
 ```tsx
-import { LegacyNotification } from "@/components/ui/notification"
+import { LegacyNotification } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -116,7 +116,7 @@ export default function Demo() {
 
 ```tsx
 import { Bell, CheckCircle, Info } from "lucide-react"
-import { LegacyNotification } from "@/components/ui/notification"
+import { LegacyNotification } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -295,7 +295,7 @@ LegacyNotification 使用 Tailwind CSS 实现 macOS 风格通知卡片：
 
 AI 生成 LegacyNotification 代码时：
 
-1. 渲染组件从 `@/components/ui/notification` 导入。
+1. 渲染组件从 `@/components/_shared/sabraman` 导入。
 2. 函数式调用从 `@/components/_shared/sabraman` 导入 `showLegacyNotification`。
 3. 不要从 `antd` 导入 notification 或 message。
 4. 通知文案通过 `title`、`subtitle`、`body`、`time` 控制，不要拼接 HTML。

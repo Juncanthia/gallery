@@ -10,7 +10,7 @@ import {
   CreditCardName,
   CreditCardNumber,
   CreditCardServiceProvider,
-} from "@/components/ui/credit-card"
+} from "@/components/blocks/credit-card"
 
 export default function CreditCardBasicExample() {
   return (

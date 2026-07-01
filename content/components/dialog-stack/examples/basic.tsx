@@ -10,7 +10,7 @@ import {
   DialogStackFooter,
   DialogStackNext,
   DialogStackPrevious,
-} from "@/components/ui/dialog-stack"
+} from "@/components/blocks/dialog-stack"
 
 export default function DialogStackBasicExample() {
   return (

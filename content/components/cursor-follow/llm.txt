@@ -50,7 +50,7 @@ CursorFollow 是一个光标跟随效果复合组件，由 CursorProvider 容器
 ### 基础用法
 
 ```tsx
-import { CursorProvider, Cursor, CursorFollow } from "@/components/ui/cursor-follow"
+import { CursorProvider, Cursor, CursorFollow } from "@/components/blocks/cursor-follow"
 
 export default function Demo() {
   return (
@@ -71,7 +71,7 @@ export default function Demo() {
 ### 带标签内容
 
 ```tsx
-import { CursorProvider, Cursor, CursorFollow } from "@/components/ui/cursor-follow"
+import { CursorProvider, Cursor, CursorFollow } from "@/components/blocks/cursor-follow"
 
 export default function Demo() {
   return (
@@ -176,7 +176,7 @@ export default function Demo() {
 
 当 AI 生成本项目 CursorFollow 代码时，应遵守：
 
-1. 从 `@/components/ui/cursor-follow` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/cursor-follow` 导入，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. `CursorProvider` 必须包裹所有 `Cursor` 和 `CursorFollow` 子组件，否则它们无法获取光标位置上下文。
 4. `CursorFollow` 必须包含 `children` prop，放置跟随标签的内容（可以包含 `Cursor` 或其他自定义内容）。

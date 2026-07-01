@@ -25,7 +25,7 @@ EmissiveDotGrid 发光点阵。基于 Three.js 实例化渲染和 GLSL 着色器
 EmissiveDotGrid 默认铺满整个视口（`fixed inset-0 w-screen h-screen`），适合作为页面全局背景层。
 
 ```tsx
-import { BurntOrangeDotGrid } from "@/components/ui/emissive-dot-grid"
+import { BurntOrangeDotGrid } from "@/components/effects/backgrounds/chamaac/emissive-dot-grid/emissive-dot-grid"
 
 export default function Demo() {
   return (
@@ -66,7 +66,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/emissive-dot-grid` 导入 BurntOrangeDotGrid，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/effects/backgrounds/chamaac/emissive-dot-grid/emissive-dot-grid` 导入 BurntOrangeDotGrid，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 组件默认覆盖全视口（`fixed inset-0 w-screen h-screen`），作为页面全局背景层使用。
 3. 确保 z-index 层级规划正确，前景内容需要高于组件的 `z-0`。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。

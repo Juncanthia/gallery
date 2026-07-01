@@ -5,7 +5,7 @@ import {
   SnippetTabsContent,
   SnippetTabsList,
   SnippetTabsTrigger,
-} from "@/components/ui/snippet"
+} from "@/components/blocks/snippet"
 
 export default function SnippetBasicExample() {
   return (

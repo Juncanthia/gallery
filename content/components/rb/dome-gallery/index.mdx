@@ -15,14 +15,14 @@ DomeGallery 穹顶画廊，基于 CSS 3D 变换的球面图片网格画廊，支
 <ComponentShowcase id="rb/dome-gallery" path="rb/dome-gallery/basic" />
 
 ```tsx
-import { DomeGallery } from "@/components/ui/dome-gallery"
+import { DomeGallery } from "@/components/marketing-blocks/react-bits/dome-gallery"
 export default function Demo() { return <DomeGallery /> }
 ```
 
 ### 自定义配置
 
 ```tsx
-import { DomeGallery } from "@/components/ui/dome-gallery"
+import { DomeGallery } from "@/components/marketing-blocks/react-bits/dome-gallery"
 
 const myImages = [
   { src: "/gallery/photo1.jpg", alt: "Nature" },
@@ -88,7 +88,7 @@ export default function Demo() {
 点击遮罩层（scrim）或按 Escape 键。退出动画会先将放大图还原到原始瓦片位置再渐隐，过渡时间为 `enlargeTransitionMs`。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/dome-gallery` 导入。
+1. 从 `@/components/marketing-blocks/react-bits/dome-gallery` 导入。
 2. 组件依赖 `@use-gesture/react` 处理拖拽手势。
 3. 球面旋转通过 CSS `transform: translateZ(calc(var(--radius) * -1)) rotateX(...) rotateY(...)` 实现。
 4. 组件通过 ResizeObserver 动态计算球面半径和视口适配，响应式布局自适应。

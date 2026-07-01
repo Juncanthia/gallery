@@ -28,7 +28,7 @@ import {
   KanbanHeader,
   KanbanCards,
   KanbanCard,
-} from "@/components/ui/kanban"
+} from "@/components/blocks/kanban"
 
 const columns = [
   { id: "todo", name: "待办" },
@@ -75,7 +75,7 @@ import {
   KanbanHeader,
   KanbanCards,
   KanbanCard,
-} from "@/components/ui/kanban"
+} from "@/components/blocks/kanban"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 const columns = [
@@ -249,7 +249,7 @@ const data = [
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/kanban` 导入全部子组件。
+1. 从 `@/components/blocks/kanban` 导入全部子组件。
 2. `KanbanProvider` 必须提供 `columns`、`data` 和 `onDataChange`，使用 render prop 模式渲染各列。
 3. 每个 `KanbanBoard` 的 `id` 必须与数据项的 `column` 字段以及 `columns` 中的列 ID 一一对应。
 4. `KanbanCards` 的 `id` 用于过滤数据，children 必须是 `(item) => <KanbanCard />` 的 render prop。

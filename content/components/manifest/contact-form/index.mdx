@@ -22,7 +22,7 @@
 />
 
 ```tsx
-import { ContactForm } from "@/components/ui/contact-form"
+import { ContactForm } from "@/components/templates/manifest/form/contact-form"
 
 export default function Demo() {
   return (
@@ -150,7 +150,7 @@ const [loading, setLoading] = useState(false)
 
 AI 生成 ContactForm 代码时：
 
-1. 从 `@/components/ui/contact-form` 导入 `ContactForm`。
+1. 从 `@/components/templates/manifest/form/contact-form` 导入 `ContactForm`。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
 3. 表单提交通过 `actions.onSubmit` 处理，不要手动管理组件内部的表单状态。
 4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用按钮并显示"Sending..."文案。

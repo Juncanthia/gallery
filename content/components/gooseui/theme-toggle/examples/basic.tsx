@@ -1,4 +1,4 @@
-import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { ThemeToggle } from "@/components/general/gooseui/theme-toggle"
 
 export default function Demo() {
   return (

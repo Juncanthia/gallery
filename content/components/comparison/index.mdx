@@ -24,7 +24,7 @@ Comparison 对比滑块，图片前后对比的复合组件。支持拖拽和悬
 <ComponentShowcase id="comparison" path="comparison/basic" />
 
 ```tsx
-import { Comparison, ComparisonItem, ComparisonHandle } from "@/components/ui/comparison"
+import { Comparison, ComparisonItem, ComparisonHandle } from "@/components/blocks/comparison"
 
 export default function Demo() {
   return (
@@ -44,7 +44,7 @@ export default function Demo() {
 ### 悬停模式
 
 ```tsx
-import { Comparison, ComparisonItem } from "@/components/ui/comparison"
+import { Comparison, ComparisonItem } from "@/components/blocks/comparison"
 
 export default function Demo() {
   return (
@@ -63,7 +63,7 @@ export default function Demo() {
 ### 自定义手柄
 
 ```tsx
-import { Comparison, ComparisonItem, ComparisonHandle } from "@/components/ui/comparison"
+import { Comparison, ComparisonItem, ComparisonHandle } from "@/components/blocks/comparison"
 
 export default function Demo() {
   return (
@@ -132,7 +132,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/comparison` 导入。
+1. 从 `@/components/blocks/comparison` 导入。
 2. `Comparison` 必须作为最外层容器，所有子组件必须在其内部使用。
 3. `ComparisonItem` 的 `position` prop 为必填，取值为 `"left"` 或 `"right"`。
 4. 两张对比图片应有相同尺寸，以确保 clip-path 裁剪效果正确。

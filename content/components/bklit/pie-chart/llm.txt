@@ -1,5 +1,5 @@
 [饼图 / PieChart]
-导入: import { PieChart } from "@/components/ui/pie-chart-bklit"
+导入: import { PieChart } from "@/components/charts/bklit/charts"
 子组件: import { PieSlice, PieCenter } from "@/components/charts/bklit/charts"
 包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
@@ -67,7 +67,7 @@ interface PieData {
 
 ### 基础饼图
 ```tsx
-import { PieChart } from "@/components/ui/pie-chart-bklit"
+import { PieChart } from "@/components/charts/bklit/charts"
 import { PieSlice } from "@/components/charts/bklit/charts"
 
 const data = [
@@ -90,7 +90,7 @@ export default function Demo() {
 
 ### 环形图 + 中心文字
 ```tsx
-import { PieChart } from "@/components/ui/pie-chart-bklit"
+import { PieChart } from "@/components/charts/bklit/charts"
 import { PieCenter, PieSlice } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
@@ -108,7 +108,7 @@ export default function Demo() {
 ### 渐变填充 + 自定义悬停效果
 ```tsx
 import { LinearGradient } from "@visx/gradient"
-import { PieChart } from "@/components/ui/pie-chart-bklit"
+import { PieChart } from "@/components/charts/bklit/charts"
 import { PieSlice } from "@/components/charts/bklit/charts"
 
 export default function Demo() {

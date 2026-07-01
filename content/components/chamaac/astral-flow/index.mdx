@@ -25,7 +25,7 @@ AstralFlow 是一个基于 WebGL Shader 的背景动效组件，使用多层 Per
 />
 
 ```tsx
-import { AstralFlow } from "@/components/ui/astral-flow"
+import { AstralFlow } from "@/components/effects/backgrounds/chamaac/astral-flow/astral-flow"
 
 export default function Demo() {
   return (
@@ -46,7 +46,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { AstralFlow } from "@/components/ui/astral-flow"
+import { AstralFlow } from "@/components/effects/backgrounds/chamaac/astral-flow/astral-flow"
 
 export default function Demo() {
   return (
@@ -72,7 +72,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { AstralFlow } from "@/components/ui/astral-flow"
+import { AstralFlow } from "@/components/effects/backgrounds/chamaac/astral-flow/astral-flow"
 
 export default function Demo() {
   return (
@@ -153,7 +153,7 @@ AstralFlow 天然是全屏层组件（`absolute inset-0`），将其放在 `rela
 
 AI 生成 AstralFlow 代码时：
 
-1. 从 `@/components/ui/astral-flow` 导入 `AstralFlow`（具名导出）。
+1. 从 `@/components/effects/backgrounds/chamaac/astral-flow/astral-flow` 导入 `AstralFlow`（具名导出）。
 2. 将 AstralFlow 放在 `relative` 容器中，容器需有明确宽高。
 3. 自定义颜色时使用 CSS 颜色值字符串，三色按 "暗底 -> 中调 -> 高亮" 的顺序。
 4. 流速用 `speed` 控制，流动强度用 `flowMin`/`flowMax` 范围控制。

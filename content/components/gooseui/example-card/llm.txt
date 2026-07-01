@@ -2,7 +2,7 @@
 component: ExampleCard
 slug: gooseui/example-card
 
-import: import { ExampleCard } from "@/components/ui/example-card"
+import: import { ExampleCard } from "@/components/marketing-blocks/gooseui/example-with-css/example-card"
 
 usage: |
   <ExampleCard />

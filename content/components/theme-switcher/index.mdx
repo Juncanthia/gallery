@@ -21,7 +21,7 @@
 <ComponentShowcase id="theme-switcher" path="theme-switcher/basic" />
 
 ```tsx
-import { ThemeSwitcher } from "@/components/ui/theme-switcher"
+import { ThemeSwitcher } from "@/components/blocks/theme-switcher"
 
 export default function Demo() {
   return <ThemeSwitcher className="w-full max-w-sm" />
@@ -32,7 +32,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { ThemeSwitcher } from "@/components/ui/theme-switcher"
+import { ThemeSwitcher } from "@/components/blocks/theme-switcher"
 
 export default function Demo() {
   const [theme, setTheme] = useState<"light" | "dark" | "system">("system")
@@ -85,7 +85,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/theme-switcher` 导入。
+1. 从 `@/components/blocks/theme-switcher` 导入。
 2. 受控模式使用 `value` + `onChange`；非受控模式使用 `defaultValue`（默认 `"system"`）。
 3. `value`、`onChange` 参数和 `defaultValue` 的值类型为 `"light" | "dark" | "system"`，不要使用其他值。
 4. `ThemeSwitcher` 仅管理 UI 选择状态，实际主题切换逻辑需在 `onChange` 回调中由调用侧实现。

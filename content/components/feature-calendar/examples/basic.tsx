@@ -1,4 +1,4 @@
-import { CalendarBody } from "@/components/ui/feature-calendar"
+import { CalendarBody } from "@/components/blocks/feature-calendar"
 
 const features = [
   { id: "1", name: "首页改版", startAt: new Date(2025, 0, 6), endAt: new Date(2025, 0, 15), status: "success" as const },

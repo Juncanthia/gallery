@@ -3,12 +3,30 @@
  * 1. 如缺少 examples: 块，在 source: 后插入
  * 2. 如已有 examples: 块，替换为实际文件列表
  * 3. 没有 llm.txt 的目录自动创建
+ * 4. 已登记 registry 的组件使用 internalImportPath，否则 fallback 到 ui/
  */
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
+import { getRegistryItem } from "../src/gallery/registry/index"
 
 const COMPONENTS_DIR = join(import.meta.dirname, "..", "content", "components")
 const INDENT = "    "
+
+function resolveImportPath(slug: string): string {
+  const registryItem = getRegistryItem(slug)
+  if (registryItem) {
+    return registryItem.internalImportPath
+  }
+  return `@/components/ui/${slug.split("/").pop()}`
+}
+
+function resolveComponentSourcePath(slug: string): string {
+  const registryItem = getRegistryItem(slug)
+  if (registryItem?.files[0]?.path) {
+    return registryItem.files[0].path
+  }
+  return `src/components/ui/${slug.split("/").pop()}.tsx`
+}
 
 function getExampleFiles(name: string): string[] {
   const examplesDir = join(COMPONENTS_DIR, name, "examples")
@@ -78,7 +96,8 @@ for (const name of componentNames) {
   const paths = files.map((f) => `content/components/${name}/examples/${f}`)
 
   if (!existsSync(llmPath)) {
-    // Create llm.txt from template
+    const importPath = resolveImportPath(name)
+    const componentSource = resolveComponentSourcePath(name)
     const template = `---
 category: Components
 title: ${name}
@@ -86,7 +105,7 @@ description: ${name} 组件。
 demo:
   cols: 2
 source:
-  component: src/components/ui/${name}.tsx
+  component: ${componentSource}
   examples:
 ${paths.map((p) => `    - ${p}`).join("\n")}
 stack:
@@ -104,7 +123,7 @@ See source for props interface.
 
 ## LLM 使用规则
 
-AI 生成代码时从 \`@/components/ui/${name}\` 导入。
+AI 生成代码时从 \`${importPath}\` 导入（本仓库内部真实路径）。
 `
     writeFileSync(llmPath, template, "utf-8")
     console.log(`  🆕 ${name}: created with ${paths.length} examples`)

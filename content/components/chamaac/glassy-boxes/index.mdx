@@ -22,7 +22,7 @@ GlassyBoxes 基于 WebGL Shader 的玻璃质感盒子背景动效，三种颜色
 <ComponentShowcase id="chamaac/glassy-boxes" path="chamaac/glassy-boxes/basic" />
 
 ```tsx
-import { GlassyBoxes } from "@/components/ui/glassy-boxes"
+import { GlassyBoxes } from "@/components/effects/backgrounds/chamaac/glassy-boxes/glassy-boxes"
 
 export default function Demo() {
   return (
@@ -38,7 +38,7 @@ export default function Demo() {
 通过 `color1`、`color2`、`color3` 自定义渐变颜色。
 
 ```tsx
-import { GlassyBoxes } from "@/components/ui/glassy-boxes"
+import { GlassyBoxes } from "@/components/effects/backgrounds/chamaac/glassy-boxes/glassy-boxes"
 
 export default function Demo() {
   return (
@@ -104,7 +104,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/glassy-boxes` 导入 `GlassyBoxes`（命名导出）。
+1. 从 `@/components/effects/backgrounds/chamaac/glassy-boxes/glassy-boxes` 导入 `GlassyBoxes`（命名导出）。
 2. 包裹在 `div` 容器中，通过容器宽高控制尺寸。
 3. 使用 `color1`、`color2`、`color3` 自定义渐变颜色。
 4. 组件依赖 `@react-three/fiber` 和 `three`，确保项目已安装。

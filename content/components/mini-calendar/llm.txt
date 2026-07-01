@@ -46,7 +46,7 @@ import {
   MiniCalendarNavigation,
   MiniCalendarDays,
   MiniCalendarDay,
-} from "@/components/ui/mini-calendar"
+} from "@/components/blocks/mini-calendar"
 
 export default function Demo() {
   return (
@@ -71,7 +71,7 @@ import {
   MiniCalendarNavigation,
   MiniCalendarDays,
   MiniCalendarDay,
-} from "@/components/ui/mini-calendar"
+} from "@/components/blocks/mini-calendar"
 
 export default function Demo() {
   const [selected, setSelected] = useState<Date>()
@@ -176,7 +176,7 @@ export default function Demo() {
 
 ## LLM 使用规则
 
-1. 从 `@/components/ui/mini-calendar` 导入 `MiniCalendar` 及其全部子组件。
+1. 从 `@/components/blocks/mini-calendar` 导入 `MiniCalendar` 及其全部子组件。
 2. 只使用本文件 API 表格和源码中存在的 props。
 3. 使用组合模式：`MiniCalendar` > `MiniCalendarNavigation` + `MiniCalendarDays` + `MiniCalendarDay`。
 4. `MiniCalendarDays` 的 children 必须为 `(date: Date) => ReactNode` render prop。

@@ -1,6 +1,6 @@
 "use client"
 
-import { EvilSankeyChart } from "@/components/ui/sankey-chart-evilcharts"
+import { EvilSankeyChart } from "@/components/charts/evilcharts"
 import { Node, NodeLabel, Link, Tooltip } from "@/components/charts/evilcharts/components/sankey-chart"
 import type { SankeyData } from "recharts"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"

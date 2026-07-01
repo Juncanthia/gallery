@@ -1,4 +1,4 @@
-import DeleteButton from "@/components/ui/delete-button"
+import DeleteButton from "@/components/general/uselayouts/delete-button"
 
 export default function Demo() {
   return <DeleteButton />

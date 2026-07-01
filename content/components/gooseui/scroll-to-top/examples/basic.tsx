@@ -1,4 +1,4 @@
-import { ScrollToTop } from "@/components/ui/scroll-to-top"
+import { ScrollToTop } from "@/components/navigation/gooseui/scroll-to-top"
 
 export default function Demo() {
   return (

@@ -1,4 +1,4 @@
-import { EvilRadarChart } from "@/components/ui/radar-chart-evilcharts"
+import { EvilRadarChart } from "@/components/charts/evilcharts"
 import {
   Radar,
   PolarGrid,

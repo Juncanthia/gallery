@@ -5,7 +5,7 @@ import {
   GlimpseImage,
   GlimpseTitle,
   GlimpseDescription,
-} from "@/components/ui/glimpse"
+} from "@/components/blocks/glimpse"
 
 export default function GlimpseBasicExample() {
   return (

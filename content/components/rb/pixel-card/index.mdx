@@ -15,7 +15,7 @@ PixelCard 像素化卡片边框动画，鼠标 hover 时卡片边缘生成像素
 <ComponentShowcase id="rb/pixel-card" path="rb/pixel-card/basic" />
 
 ```tsx
-import { PixelCard } from "@/components/ui/pixel-card"
+import { PixelCard } from "@/components/marketing-blocks/react-bits/pixel-card"
 
 export default function Demo() {
   return (
@@ -29,7 +29,7 @@ export default function Demo() {
 ### 蓝色主题 + 自定义间距
 
 ```tsx
-import { PixelCard } from "@/components/ui/pixel-card"
+import { PixelCard } from "@/components/marketing-blocks/react-bits/pixel-card"
 
 export default function Demo() {
   return (
@@ -69,7 +69,7 @@ export default function Demo() {
 默认同时响应 hover 和 focus 事件。设置 `noFocus={true}` 后仅响应鼠标 hover，可避免键盘 Tab 导航时的误触发。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/pixel-card` 导入。
+1. 从 `@/components/marketing-blocks/react-bits/pixel-card` 导入。
 2. 需要传入 `children` 作为卡片内容，卡片内部元素会自动居中。
 3. 使用 Canvas API 实现，依赖浏览器 Canvas 支持。
 4. 需要项目中已导入 `PixelCard.css` 样式文件。

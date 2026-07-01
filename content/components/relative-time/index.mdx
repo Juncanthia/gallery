@@ -30,7 +30,7 @@ import {
   RelativeTimeZoneDate,
   RelativeTimeZoneDisplay,
   RelativeTimeZoneLabel,
-} from "@/components/ui/relative-time"
+} from "@/components/blocks/relative-time"
 
 export default function Demo() {
   return (
@@ -64,7 +64,7 @@ import {
   RelativeTimeZoneDate,
   RelativeTimeZoneDisplay,
   RelativeTimeZoneLabel,
-} from "@/components/ui/relative-time"
+} from "@/components/blocks/relative-time"
 
 export default function Demo() {
   return (
@@ -159,7 +159,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/relative-time` 导入所需子组件。
+1. 从 `@/components/blocks/relative-time` 导入所需子组件。
 2. 嵌套层级必须遵循：`RelativeTime` > `RelativeTimeZone` > 子组件。
 3. `zone` 必须使用有效 IANA 时区标识符，不要使用 UTC 偏移量。
 4. 展示实时时钟时不传 `time`（非受控）；展示固定时刻时传 `time`（受控）。

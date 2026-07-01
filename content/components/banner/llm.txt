@@ -31,7 +31,7 @@ import {
   BannerClose,
   BannerIcon,
   BannerTitle,
-} from "@/components/ui/banner"
+} from "@/components/blocks/banner"
 import { BellIcon } from "lucide-react"
 
 export default function Demo() {
@@ -57,7 +57,7 @@ import {
   BannerContent,
   BannerDescription,
   BannerTitle,
-} from "@/components/ui/banner"
+} from "@/components/blocks/banner"
 
 export default function Demo() {
   return (
@@ -78,7 +78,7 @@ export default function Demo() {
 ### 队列横幅
 
 ```tsx
-import { Banner, BannerClose, BannerTitle, Banners } from "@/components/ui/banner"
+import { Banner, BannerClose, BannerTitle, Banners } from "@/components/blocks/banner"
 
 export default function Demo() {
   return (
@@ -141,7 +141,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/banner` 导入 Banner 及子组件。
+1. 从 `@/components/blocks/banner` 导入 Banner 及子组件。
 2. 静态横幅直接使用 `Banner`；需要全局堆叠、优先级、自动消失时使用 `Banners` 包裹。
 3. 简短单行内容使用 `BannerTitle`；双行内容使用 `BannerContent` + `BannerDescription`。
 4. 语义颜色使用 `variant`，不要手写整套颜色 class。

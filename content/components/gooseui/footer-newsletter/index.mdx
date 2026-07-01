@@ -25,7 +25,7 @@ FooterNewsletter 渲染一个完整的页脚区块，包含订阅表单、导航
 />
 
 ```tsx
-import { FooterNewsletter } from "@/components/ui/footer-newsletter"
+import { FooterNewsletter } from "@/components/marketing-blocks/gooseui/footers/footer-newsletter"
 
 export default function Demo() {
   return <FooterNewsletter />
@@ -94,7 +94,7 @@ FooterNewsletter 为自包含区块组件，无外部 Props。所有内容（导
 
 AI 生成 FooterNewsletter 代码时：
 
-1. 从 `@/components/ui/footer-newsletter` 导入 `FooterNewsletter`。
+1. 从 `@/components/marketing-blocks/gooseui/footers/footer-newsletter` 导入 `FooterNewsletter`。
 2. 直接使用 `<FooterNewsletter />` 即可渲染完整页脚，无需传入任何 Props。
 3. 不要从 gooseui 内部路径（如 `@/components/marketing-blocks/gooseui/footers/footer-newsletter`）导入。
 4. 如需定制导航链接或社交图标，在组件源码中修改，不要在调用处覆盖内部结构。

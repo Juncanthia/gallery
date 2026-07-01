@@ -36,7 +36,7 @@ VideoPlayer 是一个基于 Shaka Player 的功能完整的视频播放器组件
 ## 导入路径
 
 ```tsx
-import { VideoPlayer } from "@/components/ui/video-player-limeplay"
+import { VideoPlayer } from "@/components/media/blocks/video-player/components/media-player"
 ```
 
 ## 核心 Props
@@ -55,7 +55,7 @@ import { VideoPlayer } from "@/components/ui/video-player-limeplay"
 ## 示例代码
 
 ```tsx
-import { VideoPlayer } from "@/components/ui/video-player-limeplay"
+import { VideoPlayer } from "@/components/media/blocks/video-player/components/media-player"
 
 export default function Demo() {
   return (
@@ -69,7 +69,7 @@ export default function Demo() {
 
 ```tsx
 // 播放列表模式
-import { VideoPlayer } from "@/components/ui/video-player-limeplay"
+import { VideoPlayer } from "@/components/media/blocks/video-player/components/media-player"
 
 const playlist = [
   { src: "https://example.com/video1.m3u8", title: "视频一" },
@@ -89,7 +89,7 @@ export default function Demo() {
 
 ## 约束
 
-1. 从 `@/components/ui/video-player-limeplay` 导入 VideoPlayer。
+1. 从 `@/components/media/blocks/video-player/components/media-player` 导入 VideoPlayer。
 2. `source` 支持 `string`（直接 URL）、`Asset` 对象或 `Asset[]`（播放列表）。
 3. 组件已内置 `MediaProvider`，无需额外包裹。
 4. 通过 `className` 控制尺寸和布局，推荐设置 `aspect-video`。

@@ -29,7 +29,7 @@ PromoBanner 接收 `headline` 属性渲染主标题，通过 `price`/`originalPr
 />
 
 ```tsx
-import { PromoBanner } from "@/components/ui/promo-banner"
+import { PromoBanner } from "@/components/marketing-blocks/gooseui/promo-banner"
 
 export default function Demo() {
   return (
@@ -118,7 +118,7 @@ PromoBannerConfig 扩展 PromoBannerProps（不含 onClose），额外支持 `ex
 使用 PromoBannerProvider 包裹应用，通过 usePromoBanner Hook 的 show/hide 方法控制。
 
 ```tsx
-import { PromoBannerProvider, usePromoBanner } from "@/components/ui/promo-banner"
+import { PromoBannerProvider, usePromoBanner } from "@/components/marketing-blocks/gooseui/promo-banner"
 
 function App() {
   return (
@@ -197,7 +197,7 @@ show({
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/promo-banner` 导入 `PromoBanner`、`PromoBannerProvider`、`usePromoBanner`。
+1. 从 `@/components/marketing-blocks/gooseui/promo-banner` 导入 `PromoBanner`、`PromoBannerProvider`、`usePromoBanner`。
 2. 必须传入 `headline` 属性，组件依赖此属性渲染主标题。
 3. `price` 和 `originalPrice` 传入数字，折扣百分比自动计算，不要手动传入。
 4. `marqueeText` 以 ` • `（空格+圆点+空格）分隔多段文本。

@@ -28,7 +28,7 @@ FileUpload 文件上传组件，支持点击上传和拖拽上传，带可视化
 />
 
 ```tsx
-import { FileUpload } from "@/components/ui/file-upload-extend"
+import { FileUpload } from "@/components/document/components/ui/file-upload"
 
 export default function Demo() {
   return (
@@ -142,7 +142,7 @@ import { FilePdfIcon } from "@hugeicons/core-free-icons"
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/file-upload-extend` 导入 `FileUpload`。
+1. 从 `@/components/document/components/ui/file-upload` 导入 `FileUpload`。
 2. 使用 `accept` 限制文件类型，使用 `multiple` 控制单/多文件。
 3. 通过 `onFilesChange` 获取完整文件信息，`onFilesAccepted` 获取原生 File 对象。
 4. `onFilesChange` 回调中的文件带有 blob URL，注意在数据同步或持久化前将其转换为 File 或 ArrayBuffer。

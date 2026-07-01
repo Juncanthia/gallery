@@ -1,4 +1,4 @@
-import { Nebula } from "@/components/ui/nebula"
+import { Nebula } from "@/components/effects/backgrounds/chamaac/nebula/nebula"
 
 export default function Demo() {
   return (

@@ -4,7 +4,7 @@ import {
   RelativeTimeZoneDate,
   RelativeTimeZoneDisplay,
   RelativeTimeZoneLabel,
-} from "@/components/ui/relative-time"
+} from "@/components/blocks/relative-time"
 
 export default function RelativeTimeBasicExample() {
   return (

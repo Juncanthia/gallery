@@ -2,7 +2,7 @@ import {
   Marquee,
   MarqueeContent,
   MarqueeItem,
-} from "@/components/ui/marquee"
+} from "@/components/blocks/marquee"
 
 const items = [
   "System maintenance scheduled for July 5th at 2:00 AM UTC",

@@ -28,7 +28,7 @@ LegacySlider 将 Radix Slider 的数组值 API 简化为单数值：
 />
 
 ```tsx
-import { LegacySlider } from "@/components/ui/slider-sabraman"
+import { LegacySlider } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return <LegacySlider defaultValue={50} />
@@ -41,7 +41,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { LegacySlider } from "@/components/ui/slider-sabraman"
+import { LegacySlider } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   const [val, setVal] = useState(60)
@@ -59,7 +59,7 @@ export default function Demo() {
 通过 `min` 和 `max` 设置滑动区间。
 
 ```tsx
-import { LegacySlider } from "@/components/ui/slider-sabraman"
+import { LegacySlider } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return <LegacySlider defaultValue={30} max={50} min={10} />
@@ -71,7 +71,7 @@ export default function Demo() {
 `onValueCommit` 在用户松开滑块时触发，适合需要在拖拽结束后才执行操作的场景。
 
 ```tsx
-import { LegacySlider } from "@/components/ui/slider-sabraman"
+import { LegacySlider } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -129,7 +129,7 @@ export default function Demo() {
 
 AI 生成 LegacySlider 代码时：
 
-1. 从 `@/components/ui/slider-sabraman` 导入 `LegacySlider`。
+1. 从 `@/components/_shared/sabraman` 导入 `LegacySlider`。
 2. `value` 和 `defaultValue` 使用 `number` 类型，不是 `number[]`。
 3. `onValueChange` 和 `onValueCommit` 回调参数为 `number`。
 4. 不要从 `@radix-ui/react-slider` 直接导入 SliderPrimitive，使用封装好的 LegacySlider。

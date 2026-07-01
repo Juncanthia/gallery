@@ -27,7 +27,7 @@ ParallaxCards 提供基于 CSS scroll-driven animations 的视差卡片容器。
 />
 
 ```tsx
-import { ParallaxCard, ParallaxCards } from "@/components/ui/parallax-cards"
+import { ParallaxCard, ParallaxCards } from "@/components/effects/interactions/gooseui/parallax-cards"
 
 export default function Demo() {
   return (
@@ -108,7 +108,7 @@ ParallaxCards 作为容器组件，通过 `useGlobalStyles` 注入 `@keyframes p
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/parallax-cards` 导入 `ParallaxCard` 和 `ParallaxCards`。
+1. 从 `@/components/effects/interactions/gooseui/parallax-cards` 导入 `ParallaxCard` 和 `ParallaxCards`。
 2. 必须用 `ParallaxCards` 包裹所有 `ParallaxCard`，否则 keyframes 不会注入。
 3. `intensity` 传入 0 到 1 之间的数字，非字符串。
 4. 不要在调用侧添加动画相关的 className，效果由 `intensity` 控制。

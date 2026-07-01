@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { IridescentWindows } from "@/components/ui/iridescent-windows"
+import { IridescentWindows } from "@/components/effects/backgrounds/chamaac/iridescent-windows/iridescent-windows"
 
 export default function Demo() {
   return (
@@ -133,7 +133,7 @@ interface IridescentWindowsProps {
 
 当 AI 生成本项目 IridescentWindows 代码时，应遵守：
 
-1. 从 `@/components/ui/iridescent-windows` 导入，使用命名导出 `{ IridescentWindows }`，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/effects/backgrounds/chamaac/iridescent-windows/iridescent-windows` 导入，使用命名导出 `{ IridescentWindows }`，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 组件自带 `bg-black` 和 `min-h-[400px]`，确保父容器具有明确宽度。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
 4. 不要引入 Ant Design 相关依赖。

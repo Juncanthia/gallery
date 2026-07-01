@@ -4,7 +4,7 @@ import {
   TickerSymbol,
   TickerPrice,
   TickerPriceChange,
-} from "@/components/ui/ticker"
+} from "@/components/blocks/ticker"
 
 export default function TickerBasicExample() {
   return (

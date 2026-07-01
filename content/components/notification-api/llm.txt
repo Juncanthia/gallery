@@ -38,7 +38,7 @@ stack:
 
 - 需要复用统一设计语言、状态样式和可访问性约定。
 - 需要和本项目 Tailwind 主题变量、暗色模式、Radix/Base UI primitive 或本地交互行为保持一致。
-- 需要让 AI 或业务代码稳定地从 `@/components/ui/notification-api` 引用组件，而不是直接引用第三方底层库。
+- 需要让 AI 或业务代码稳定地从 `@/components/_shared/sabraman-api` 引用组件，而不是直接引用第三方底层库。
 
 不推荐：
 
@@ -51,7 +51,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { notification } from "@/components/ui/notification-api"
+import { notification } from "@/components/_shared/sabraman-api"
 
 export function openDemo() {
   return notification.open({
@@ -173,7 +173,7 @@ type NotificationClose = () => void
 
 当 AI 生成本项目 Notification 代码时，应遵守：
 
-1. 从 `@/components/ui/notification-api` 导入，不要从 `antd` 导入。
+1. 从 `@/components/_shared/sabraman-api` 导入，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
 4. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。

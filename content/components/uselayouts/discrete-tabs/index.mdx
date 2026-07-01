@@ -29,7 +29,7 @@ DiscreteTabs 离散标签。一个带有 layoutId 动画的标签切换组件，
 /&gt;
 
 ```tsx
-import { DiscreteTabs } from "@/components/ui/discrete-tabs"
+import { DiscreteTabs } from "@/components/navigation/uselayouts/discrete-tabs"
 
 export default function Demo() {
   return (
@@ -103,7 +103,7 @@ transition={{
 
 &lt;h2 id="llm-rules"&gt;LLM 使用规则&lt;/h2&gt;
 
-1. 从 `@/components/ui/discrete-tabs` 导入 `DiscreteTabs`。
+1. 从 `@/components/navigation/uselayouts/discrete-tabs` 导入 `DiscreteTabs`。
 2. 组件无外部 props，直接渲染即可。
 3. 如需自定义标签项，修改源码 `TABS` 数组，不要在外部覆盖。
 4. 每个标签的 `icon` 必须为 SVG 组件，支持 `size` prop。

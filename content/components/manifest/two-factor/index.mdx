@@ -22,7 +22,7 @@
 />
 
 ```tsx
-import { TwoFactor } from "@/components/ui/two-factor"
+import { TwoFactor } from "@/components/templates/manifest/form/two-factor"
 
 export default function Demo() {
   return (
@@ -142,7 +142,7 @@ const [error, setError] = useState&lt;string&gt;()
 
 AI 生成 TwoFactor 代码时：
 
-1. 从 `@/components/ui/two-factor` 导入 `TwoFactor`。
+1. 从 `@/components/templates/manifest/form/two-factor` 导入 `TwoFactor`。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
 3. 验证码通过 `actions.onVerify` 回调获取，不要手动管理组件内部的输入状态。
 4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用验证按钮并显示加载动画。

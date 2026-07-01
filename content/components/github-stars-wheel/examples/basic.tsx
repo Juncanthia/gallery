@@ -1,4 +1,4 @@
-import { GitHubStarsWheel } from "@/components/ui/github-stars-wheel"
+import { GitHubStarsWheel } from "@/components/blocks/github-stars-wheel"
 
 export default function GitHubStarsWheelBasicExample() {
   return (

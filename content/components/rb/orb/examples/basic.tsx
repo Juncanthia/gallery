@@ -1,4 +1,4 @@
-import { Orb } from "@/components/ui/orb-rb"
+import { Orb } from "@/components/effects/backgrounds/orb"
 
 export default function OrbBasicExample() {
   return (

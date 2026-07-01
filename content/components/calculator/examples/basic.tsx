@@ -1,4 +1,4 @@
-import { Calculator } from "@/components/ui/calculator"
+import { Calculator } from "@/components/blocks/calculator"
 
 export default function CalculatorBasicExample() {
   return <Calculator />

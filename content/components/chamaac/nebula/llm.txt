@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Nebula } from "@/components/ui/nebula"
+import { Nebula } from "@/components/effects/backgrounds/chamaac/nebula/nebula"
 
 export default function Demo() {
   return (
@@ -132,7 +132,7 @@ interface NebulaProps {
 
 当 AI 生成本项目 Nebula 代码时，应遵守：
 
-1. 从 `@/components/ui/nebula` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/effects/backgrounds/chamaac/nebula/nebula` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器具有 `position: relative` 和明确的宽高尺寸。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
 4. 不要引入 Ant Design 相关依赖。

@@ -1,5 +1,5 @@
 [折线图 / LineChart]
-导入: import { LineChart } from "@/components/ui/line-chart-bklit"
+导入: import { LineChart } from "@/components/charts/bklit/charts"
 子组件: import { Line, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent, XAxis, YAxis } from "@/components/charts/bklit/charts"
 包来源: @/components/charts/bklit/charts (line-chart.tsx, line.tsx)
 组件类型: 图表 / BKLit Charts
@@ -77,7 +77,7 @@
 ### 基础折线图
 
 ```tsx
-import { LineChart } from "@/components/ui/line-chart-bklit"
+import { LineChart } from "@/components/charts/bklit/charts"
 import { Line, Grid } from "@/components/charts/bklit/charts"
 
 const data = [
@@ -103,7 +103,7 @@ export default function Demo() {
 ### 多系列折线对比
 
 ```tsx
-import { LineChart } from "@/components/ui/line-chart-bklit"
+import { LineChart } from "@/components/charts/bklit/charts"
 import { Line, Grid } from "@/components/charts/bklit/charts"
 
 const data = [
@@ -130,7 +130,7 @@ export default function Demo() {
 ### 带 Tooltip 的折线图
 
 ```tsx
-import { LineChart } from "@/components/ui/line-chart-bklit"
+import { LineChart } from "@/components/charts/bklit/charts"
 import { Line, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
@@ -152,7 +152,7 @@ export default function Demo() {
 ### 加载骨架屏
 
 ```tsx
-import { LineChart } from "@/components/ui/line-chart-bklit"
+import { LineChart } from "@/components/charts/bklit/charts"
 import { Line, Grid, generateChartSkeletonData } from "@/components/charts/bklit/charts"
 
 const skeletonData = generateChartSkeletonData({ dataKey: "value", pointCount: 8 })
@@ -170,7 +170,7 @@ export default function LoadingDemo() {
 ### 投影区间（历史+预测虚线）
 
 ```tsx
-import { LineChart } from "@/components/ui/line-chart-bklit"
+import { LineChart } from "@/components/charts/bklit/charts"
 import { Line, Grid, ProjectionLine } from "@/components/charts/bklit/charts"
 
 const historicalData = [
@@ -215,7 +215,7 @@ export default function Demo() {
 
 ## 约束与最佳实践
 
-1. 导入路径：主组件 `@/components/ui/line-chart-bklit`，子组件 `@/components/charts/bklit/charts`
+1. 导入路径：主组件 `@/components/charts/bklit/charts`，子组件 `@/components/charts/bklit/charts`
 2. 支持从 `@/components/charts/bklit/charts` 导入的常用子组件：`Line`、`Grid`、`ChartTooltip`、`TooltipIndicator`、`TooltipBox`、`TooltipContent`、`XAxis`、`YAxis`、`ChartBrush`、`ChartBrushLayout`、`ChartLegend`、`ReferenceArea`、`ProfitLossLine`、`ProjectionLine`、`ProjectionLineEndMarker`、`SeriesPointMarker`、`generateChartSkeletonData`
 3. data 中日期字段必须为 Date 对象，不能是字符串或时间戳
 4. 每个 data 项的数值字段值必须为 number 类型

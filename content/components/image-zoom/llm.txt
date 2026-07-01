@@ -51,7 +51,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { ImageZoom } from "@/components/ui/image-zoom"
+import { ImageZoom } from "@/components/blocks/image-zoom"
 
 export default function Demo() {
   return (
@@ -70,7 +70,7 @@ export default function Demo() {
 ### 受控模式
 
 ```tsx
-import { ImageZoom } from "@/components/ui/image-zoom"
+import { ImageZoom } from "@/components/blocks/image-zoom"
 
 export default function Demo() {
   const [zoomed, setZoomed] = useState(false)
@@ -156,7 +156,7 @@ export default function Demo() {
 
 当 AI 生成本项目 ImageZoom 代码时，应遵守：
 
-1. 从 `@/components/ui/image-zoom` 导入 ImageZoom。
+1. 从 `@/components/blocks/image-zoom` 导入 ImageZoom。
 2. `ImageZoom` 通过 children 传入被缩放的图片元素。
 3. 需要受控模式时，同时传入 `isZoomed` 和 `onZoomChange`。
 4. 如需自定义遮罩样式，使用 `backdropClassName` 传入。

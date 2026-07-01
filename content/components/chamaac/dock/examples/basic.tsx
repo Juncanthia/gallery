@@ -4,7 +4,7 @@ import {
   DockDropdownItem,
   DockIcon,
   DockLink,
-} from "@/components/ui/dock-chamaac"
+} from "@/components/navigation/chamaac/dock/dock"
 import { Home, Settings, ExternalLink } from "lucide-react"
 
 export default function Demo() {

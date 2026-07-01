@@ -50,7 +50,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { BrandsCarousel } from "@/components/ui/brands-carousel"
+import { BrandsCarousel } from "@/components/marketing-blocks/gooseui/brands/brands-carousel"
 
 export default function Demo() {
   return <BrandsCarousel />
@@ -135,7 +135,7 @@ BrandsCarousel 渲染为 `<section>` 根容器：
 
 当 AI 生成本项目 BrandsCarousel 代码时，应遵守：
 
-1. 从 `@/components/ui/brands-carousel` 导入 `BrandsCarousel`。
+1. 从 `@/components/marketing-blocks/gooseui/brands/brands-carousel` 导入 `BrandsCarousel`。
 2. 使用 `speed` 属性控制滚动速度，可选值 `"slow"` / `"normal"` / `"fast"`。
 3. 使用 `reverse` 属性控制滚动方向，不要自行覆写 `animation-direction`。
 4. 不要自行拼装品牌 logo 布局或 DOM 结构，使用组件内置渲染。

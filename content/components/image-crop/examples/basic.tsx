@@ -6,7 +6,7 @@ import {
   ImageCropContent,
   ImageCropApply,
   ImageCropReset,
-} from "@/components/ui/image-crop"
+} from "@/components/blocks/image-crop"
 
 export default function ImageCropBasicExample() {
   const [file, setFile] = useState<File | null>(null)

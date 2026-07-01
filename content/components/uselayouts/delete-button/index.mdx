@@ -31,7 +31,7 @@
 />
 
 ```tsx
-import DeleteButton from "@/components/ui/delete-button"
+import DeleteButton from "@/components/general/uselayouts/delete-button"
 
 export default function Demo() {
   return <DeleteButton />
@@ -112,7 +112,7 @@ const cancelText = "Cancel Deletion";
 
 AI 生成 DeleteButton 代码时：
 
-1. 从 `@/components/ui/delete-button` 导入 `DeleteButton`（default export）
+1. 从 `@/components/general/uselayouts/delete-button` 导入 `DeleteButton`（default export）
 2. 组件自包含，无需传入任何 props
 3. 不要移除或修改组件内部的 `motion/react` 动画逻辑，包括 AnimatePresence、layoutId、transition 曲线
 4. 修改文案时，保持 `deleteText` 和 `cancelText` 为字符串常量

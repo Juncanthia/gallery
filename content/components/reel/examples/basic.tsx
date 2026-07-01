@@ -1,4 +1,4 @@
-import { Reel } from "@/components/ui/reel"
+import { Reel } from "@/components/blocks/reel"
 
 const reelData = [
   { id: "1", type: "image" as const, src: "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=400&h=600&fit=crop", duration: 3, title: "风景" },

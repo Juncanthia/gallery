@@ -56,7 +56,7 @@ Baseline 层级：
 ### 基础用法
 
 ```tsx
-import { BaselineStatus } from "@/components/ui/baseline-status"
+import { BaselineStatus } from "@/components/data-display/gooseui/baseline-status"
 
 export default function Demo() {
   return <BaselineStatus featureId="container-queries" />
@@ -66,7 +66,7 @@ export default function Demo() {
 ### 静态数据
 
 ```tsx
-import { BaselineStatus } from "@/components/ui/baseline-status"
+import { BaselineStatus } from "@/components/data-display/gooseui/baseline-status"
 
 export default function Demo() {
   return <BaselineStatus status="widely" year={2022} />
@@ -76,7 +76,7 @@ export default function Demo() {
 ### 浏览器实时检测
 
 ```tsx
-import { BaselineStatus } from "@/components/ui/baseline-status"
+import { BaselineStatus } from "@/components/data-display/gooseui/baseline-status"
 
 export default function Demo() {
   return (
@@ -91,7 +91,7 @@ export default function Demo() {
 ### 纯图标
 
 ```tsx
-import { BaselineStatus } from "@/components/ui/baseline-status"
+import { BaselineStatus } from "@/components/data-display/gooseui/baseline-status"
 
 export default function Demo() {
   return <BaselineStatus status="widely" year={2022} iconOnly />
@@ -101,7 +101,7 @@ export default function Demo() {
 ### 服务端渲染
 
 ```tsx
-import { BaselineStatusStatic } from "@/components/ui/baseline-status"
+import { BaselineStatusStatic } from "@/components/data-display/gooseui/baseline-status"
 
 export default function Demo() {
   return <BaselineStatusStatic status="widely" year={2022} />
@@ -199,7 +199,7 @@ interface BaselineStatusProps extends React.HTMLAttributes<HTMLDivElement> {
 
 当 AI 生成本项目 BaselineStatus 代码时，应遵守：
 
-1. 从 `@/components/ui/baseline-status` 导入。
+1. 从 `@/components/data-display/gooseui/baseline-status` 导入。
 2. 优先使用 `featureId` 自动获取数据；服务端组件使用 `BaselineStatusStatic` + `status` + `year`。
 3. 浏览器特性检测使用组件内置 `browserCheck`，不要手写 `CSS.supports()` 逻辑。
 4. 不要自行绘制 Baseline 图标；使用组件内置的官方图标。

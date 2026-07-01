@@ -38,7 +38,7 @@
 />
 
 ```tsx
-import { notification } from "@/components/ui/notifications"
+import { notification } from "@/components/_shared/sabramans"
 import { Button } from "@/components/ui/button"
 
 export default function Demo() {
@@ -202,7 +202,7 @@ notification.success({
 
 AI 生成 Notifications 代码时：
 
-1. 从 `@/components/ui/notifications` 导入 `notification` 对象。
+1. 从 `@/components/_shared/sabramans` 导入 `notification` 对象。
 2. 使用 `notification.success/info/warning/error` 方法，`title` 为必填属性。
 3. 确保页面中已挂载 `&lt;Toaster /&gt;`（来自 `@/components/ui/toaster`）。
 4. 需要不自动关闭的通知设置 `duration: 0`。

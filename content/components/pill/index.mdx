@@ -23,7 +23,7 @@ Pill 药丸标签。胶囊形标签复合组件套件，支持头像、状态指
 <ComponentShowcase id="pill" path="pill/basic" />
 
 ```tsx
-import { Pill } from "@/components/ui/pill"
+import { Pill } from "@/components/blocks/pill"
 
 export default function Demo() {
   return (
@@ -40,7 +40,7 @@ export default function Demo() {
 ### 状态指示组合
 
 ```tsx
-import { Pill, PillIndicator, PillDelta, PillButton } from "@/components/ui/pill"
+import { Pill, PillIndicator, PillDelta, PillButton } from "@/components/blocks/pill"
 
 export default function Demo() {
   return (
@@ -66,7 +66,7 @@ export default function Demo() {
 ### 带头像的标签
 
 ```tsx
-import { Pill, PillAvatar, PillStatus } from "@/components/ui/pill"
+import { Pill, PillAvatar, PillStatus } from "@/components/blocks/pill"
 
 export default function Demo() {
   return (
@@ -177,7 +177,7 @@ Pill 是对 Badge 的样式增强，添加了胶囊形圆角（`rounded-full`）
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/pill` 导入所需的子组件。
+1. 从 `@/components/blocks/pill` 导入所需的子组件。
 2. `Pill` 是基础容器，支持 Badge 的全部属性（`color`、`variant` 等）。
 3. 子组件可自由组合：`PillAvatar` + `PillStatus`（头像+状态）、`PillIndicator` + `PillDelta`（状态指示+增量）、`Pill` + `PillButton`（可关闭标签）。
 4. `PillIndicator` 的 `pulse` 属性仅用于需要强调的实时状态（如"在线"），不要在静态信息上使用。

@@ -71,7 +71,7 @@ import {
   ChoiceboxItemSubtitle,
   ChoiceboxItemDescription,
   ChoiceboxIndicator,
-} from "@/components/ui/choicebox"
+} from "@/components/blocks/choicebox"
 
 export default function Demo() {
   return (
@@ -213,7 +213,7 @@ Choicebox 是本地复合组件，Ant Design 中无直接对应。AntD 的 Radio
 
 当 AI 生成本项目 Choicebox 代码时，应遵守：
 
-1. 从 `@/components/ui/choicebox` 导入全部导出项：Choicebox、ChoiceboxItem、ChoiceboxItemHeader、ChoiceboxItemTitle、ChoiceboxItemSubtitle、ChoiceboxItemDescription、ChoiceboxIndicator。
+1. 从 `@/components/blocks/choicebox` 导入全部导出项：Choicebox、ChoiceboxItem、ChoiceboxItemHeader、ChoiceboxItemTitle、ChoiceboxItemSubtitle、ChoiceboxItemDescription、ChoiceboxIndicator。
 2. Choicebox 的 children 必须是 ChoiceboxItem，不要混入其他组件。
 3. 每个 ChoiceboxItem 必须设置唯一的 `value` 属性。
 4. ChoiceboxItem 内部推荐顺序：ChoiceboxItemHeader（含 Title + Subtitle）-> ChoiceboxItemDescription -> ChoiceboxIndicator。

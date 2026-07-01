@@ -42,7 +42,7 @@ stack:
 AvatarGroup 包裹 Avatar，每个 Avatar 内部可放置 AvatarGroupTooltip 注册悬停提示内容。
 
 ```tsx
-import { AvatarGroup, AvatarGroupTooltip } from "@/components/ui/avatar-tooltip-group";
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Basic() {
@@ -70,7 +70,7 @@ export default function Basic() {
 ### 自定义弹出方向与偏移
 
 ```tsx
-import { AvatarGroup, AvatarGroupTooltip } from "@/components/ui/avatar-tooltip-group";
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function CustomDirection() {
@@ -94,7 +94,7 @@ export default function CustomDirection() {
 通过 `layout` 控制提示框内容变化时的 motion 布局动画模式。
 
 ```tsx
-import { AvatarGroup, AvatarGroupTooltip } from "@/components/ui/avatar-tooltip-group";
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function CustomLayout() {
@@ -118,7 +118,7 @@ export default function CustomLayout() {
 `invertOverlap={false}` 使第一个头像在最上层。
 
 ```tsx
-import { AvatarGroup, AvatarGroupTooltip } from "@/components/ui/avatar-tooltip-group";
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function NoInvert() {
@@ -200,7 +200,7 @@ export default function NoInvert() {
 
 ## LLM 使用规则
 
-1. 从 `@/components/ui/avatar-tooltip-group` 导入 `AvatarGroup` 和 `AvatarGroupTooltip`。
+1. 从 `@/components/blocks/avatar-tooltip-group` 导入 `AvatarGroup` 和 `AvatarGroupTooltip`。
 2. AvatarGroup 的子级应为 Avatar 元素，每个 Avatar 内部可选择性放置 AvatarGroupTooltip 作为提示内容注册。
 3. Avatar 必须以 composed mode 使用——不传 `src` prop，改用 `AvatarImage` 子组件，以确保 AvatarGroupTooltip 的 useEffect 能正常执行。示例：`<Avatar><AvatarImage src="..." /><AvatarFallback>...</AvatarFallback><AvatarGroupTooltip>...</AvatarGroupTooltip></Avatar>`。
 4. AvatarGroupTooltip 的 `children` 即为提示框显示内容，可以是纯文本、React 元素或复杂布局。该组件不存在 `content` prop。

@@ -27,7 +27,7 @@ ServicesMarquee 内置 8 个服务卡片（Web Development、UI/UX Design、API 
 />
 
 ```tsx
-import { ServicesMarquee } from "@/components/ui/services-marquee"
+import { ServicesMarquee } from "@/components/marketing-blocks/gooseui/services/services-marquee"
 
 export default function Demo() {
   return <ServicesMarquee />
@@ -39,7 +39,7 @@ export default function Demo() {
 使用 `ServicesGrid` 以静态网格布局展示服务卡片，无滚动动画。
 
 ```tsx
-import { ServicesGrid } from "@/components/ui/services-marquee"
+import { ServicesGrid } from "@/components/marketing-blocks/gooseui/services/services-marquee"
 
 export default function Demo() {
   return <ServicesGrid />
@@ -86,7 +86,7 @@ export default function Demo() {
 导入 `ServicesGrid` 代替 `ServicesMarquee`。两者共享相同的服务卡片数据，`ServicesGrid` 以 4 列网格（响应式断点：`sm:grid-cols-2 lg:grid-cols-4`）展示。
 
 ```tsx
-import { ServicesGrid } from "@/components/ui/services-marquee"
+import { ServicesGrid } from "@/components/marketing-blocks/gooseui/services/services-marquee"
 
 export default function Demo() {
   return <ServicesGrid />
@@ -95,7 +95,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/services-marquee` 导入 `ServicesMarquee` 或 `ServicesGrid`。
+1. 从 `@/components/marketing-blocks/gooseui/services/services-marquee` 导入 `ServicesMarquee` 或 `ServicesGrid`。
 2. 使用 `speed` 属性控制滚动速度，可选值 `"slow"` / `"normal"` / `"fast"`。
 3. 不要自行拼装服务卡片布局或 DOM 结构，使用组件内置渲染。
 4. 不要引入 Ant Design 相关依赖。

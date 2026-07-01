@@ -58,7 +58,7 @@ DayPicker 是一个带有动画切换的频率选择器，支持 Daily / Weekly 
 DayPicker 为自包含组件，无需外部 props，直接渲染即可。
 
 ```tsx
-import { TwentyThreeFour } from "@/components/ui/day-picker"
+import { TwentyThreeFour } from "@/components/data-entry/uselayouts/day-picker"
 
 export default function Demo() {
   return (
@@ -239,7 +239,7 @@ const springTransition = {
 
 当 AI 生成本项目 DayPicker 代码时，应遵守：
 
-1. 从 `@/components/ui/day-picker` 导入 `TwentyThreeFour`。
+1. 从 `@/components/data-entry/uselayouts/day-picker` 导入 `TwentyThreeFour`。
 2. 组件无外部 props，直接渲染即可。
 3. 如需自定义频率选项或星期文字，修改源码中的 `options` 和 `days` 数组，不要在外部覆盖。
 4. 如需外部控制状态，修改源码添加受控 props（`option` / `onOptionChange` / `day` / `onDayChange`）。

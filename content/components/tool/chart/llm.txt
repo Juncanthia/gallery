@@ -51,7 +51,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { Chart } from "@/components/ui/chart-tool"
+import { Chart } from "@/components/agent-tools/chart/chart"
 
 const data = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -84,7 +84,7 @@ export default function Demo() {
 ### 折线图
 
 ```tsx
-import { Chart } from "@/components/ui/chart-tool"
+import { Chart } from "@/components/agent-tools/chart/chart"
 
 const data = [
   { month: "Jan", revenue: 4000, cost: 2400 },
@@ -117,7 +117,7 @@ export default function Demo() {
 ### 自定义颜色
 
 ```tsx
-import { Chart } from "@/components/ui/chart-tool"
+import { Chart } from "@/components/agent-tools/chart/chart"
 
 const data = [
   { name: "Page A", uv: 4000, pv: 2400, amt: 2000 },
@@ -255,7 +255,7 @@ interface ChartDataPoint {
 
 当 AI 生成本项目 Chart 代码时，应遵守：
 
-1. 从 `@/components/ui/chart-tool` 导入 `Chart`，不要从 `antd` 或 `recharts` 直接导入原始组件。
+1. 从 `@/components/agent-tools/chart/chart` 导入 `Chart`，不要从 `antd` 或 `recharts` 直接导入原始组件。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. `id`、`type`、`data`、`xKey`、`series` 为必填属性。
 4. `type` 仅支持 `"bar"` 和 `"line"` 两种，不要生成其他图表类型。

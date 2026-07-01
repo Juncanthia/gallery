@@ -32,7 +32,7 @@ LiquidChrome 使用 `absolute inset-0` 铺满父容器。父容器需设置 `pos
 />
 
 ```tsx
-import LiquidChrome from "@/components/ui/liquid-chrome-chamaac"
+import LiquidChrome from "@/components/effects/backgrounds/chamaac/liquid-chrome/liquid-chrome"
 
 export default function Demo() {
   return (
@@ -63,7 +63,7 @@ export default function Demo() {
 通过 `color` 和 `color2` 控制金属基色和高光色。
 
 ```tsx
-import LiquidChrome from "@/components/ui/liquid-chrome-chamaac"
+import LiquidChrome from "@/components/effects/backgrounds/chamaac/liquid-chrome/liquid-chrome"
 
 export default function Demo() {
   return (
@@ -87,7 +87,7 @@ export default function Demo() {
 通过 `speed` 控制动画整体速度，`timeScale` 控制噪声运动的缩放。
 
 ```tsx
-import LiquidChrome from "@/components/ui/liquid-chrome-chamaac"
+import LiquidChrome from "@/components/effects/backgrounds/chamaac/liquid-chrome/liquid-chrome"
 
 export default function Demo() {
   return (
@@ -162,7 +162,7 @@ LiquidChrome 默认设置 `pointer-events-none`，上方内容层需显式设置
 
 AI 生成 LiquidChrome 代码时：
 
-1. 从 `@/components/ui/liquid-chrome-chamaac` 导入 `LiquidChrome`（默认导出）。
+1. 从 `@/components/effects/backgrounds/chamaac/liquid-chrome/liquid-chrome` 导入 `LiquidChrome`（默认导出）。
 2. LiquidChrome **必须**放在 `position: relative` 的父容器中，父容器需要明确的高度。
 3. 上方内容层需设置 `z-index`（如 `z-10`），因为 Canvas 层默认占据 `absolute inset-0`。
 4. LiquidChrome 默认 `pointer-events-none`；如需上方元素可交互，显式设置 `pointer-events-auto`。

@@ -39,7 +39,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { HeroClassic } from "@/components/ui/hero-classic"
+import { HeroClassic } from "@/components/marketing-blocks/gooseui/hero/hero-classic"
 
 export default function Demo() {
   return <HeroClassic />
@@ -76,7 +76,7 @@ export default function Demo() {
 
 当 AI 生成本项目 HeroClassic 代码时，应遵守：
 
-1. 从 `@/components/ui/hero-classic` 导入 `HeroClassic`。
+1. 从 `@/components/marketing-blocks/gooseui/hero/hero-classic` 导入 `HeroClassic`。
 2. 零配置渲染，不传任何 props。
 3. 自定义需修改源文件，不要在业务层用 Tailwind 复刻。
 4. 不引入 Ant Design 相关依赖。

@@ -65,7 +65,7 @@ import {
   TabsTrigger,
   TabsContents,
   TabsContent,
-} from "@/components/ui/tabs-motion"
+} from "@/components/blocks/tabs-motion"
 
 export default function Demo() {
   return (
@@ -203,7 +203,7 @@ export default function Demo() {
 
 当 AI 生成本项目 TabsMotion 代码时，应遵守：
 
-1. 从 `@/components/ui/tabs-motion` 导入，不要从 `antd` 或 `radix-ui` 导入 Tabs。
+1. 从 `@/components/blocks/tabs-motion` 导入，不要从 `antd` 或 `radix-ui` 导入 Tabs。
 2. 只使用本文件 API 表格和源码中存在的 props，不要凭 AntD Tabs 的 API 记忆生成（如 `tabPosition`、`type`、`tabBarExtraContent` 等不存在）。
 3. `TabsTrigger` 和 `TabsContent` 的 `value` 属性必须唯一且一一对应。
 4. `TabsContents` 必须包裹所有 `TabsContent`，不要将 `TabsContent` 放在其他容器中。

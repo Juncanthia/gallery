@@ -1,4 +1,4 @@
-import { OrderSummary } from "@/components/ui/order-summary-manifest"
+import { OrderSummary } from "@/components/templates/manifest/payment/order-summary"
 
 const sampleData = {
   items: [

@@ -1,4 +1,4 @@
-import { BaselineStatus } from "@/components/ui/baseline-status"
+import { BaselineStatus } from "@/components/data-display/gooseui/baseline-status"
 
 export default function Demo() {
   return (

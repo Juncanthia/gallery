@@ -37,7 +37,7 @@ import {
   CodeBlockContent,
   CodeBlockCopyButton,
   CodeBlockFilename,
-} from "@/components/ui/code-block"
+} from "@/components/blocks/code-block"
 
 const code = `import { useState } from "react"
 
@@ -88,7 +88,7 @@ import {
   CodeBlockItem,
   CodeBlockContent,
   CodeBlockCopyButton,
-} from "@/components/ui/code-block"
+} from "@/components/blocks/code-block"
 
 const files = [
   { language: "tsx", filename: "app.tsx", code: `export default function App() {\n  return <div>Hello</div>\n}` },
@@ -147,7 +147,7 @@ import {
   CodeBlockContent,
   CodeBlockCopyButton,
   CodeBlockFilename,
-} from "@/components/ui/code-block"
+} from "@/components/blocks/code-block"
 
 const code = `export function greet(name: string) {
   console.log("Hello, " + name) // [!code highlight]
@@ -293,7 +293,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/code-block` 导入所需的全部子组件。
+1. 从 `@/components/blocks/code-block` 导入所需的全部子组件。
 2. CodeBlock 的 `data` 属性为必填，每项必须包含 `language`、`filename`、`code`。
 3. CodeBlockFiles 和 CodeBlockBody 使用 render props 模式，回调中需为每项生成 key。
 4. CodeBlockItem 的 `value` 必须与 data 中的 `language` 字段匹配。

@@ -1,4 +1,4 @@
-import { PromoBanner } from "@/components/ui/promo-banner"
+import { PromoBanner } from "@/components/marketing-blocks/gooseui/promo-banner"
 
 export default function Demo() {
   return (

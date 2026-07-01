@@ -1,4 +1,4 @@
-import { Dashboard } from "@/components/ui/dashboard"
+import { Dashboard } from "@/components/templates/manifest/miscellaneous/dashboard"
 
 export default function Demo() {
   return (

@@ -3,7 +3,7 @@ component: FeaturesGrid
 slug: gooseui/features-grid
 
 import: |
-  import { FeaturesGrid } from "@/components/ui/features-grid"
+  import { FeaturesGrid } from "@/components/marketing-blocks/gooseui/features/features-grid"
 
 usage: |
   <FeaturesGrid

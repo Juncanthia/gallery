@@ -33,7 +33,7 @@ EvilPieChart 核心概念：
 />
 
 ```tsx
-import { EvilPieChart } from "@/components/ui/pie-chart-evilcharts"
+import { EvilPieChart } from "@/components/charts/evilcharts"
 import { Pie, Tooltip, Legend } from "@/components/charts/evilcharts/components/pie-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -260,7 +260,7 @@ import { Pie, Tooltip, Legend } from "@/components/charts/evilcharts/components/
 
 ```tsx
 import { useState } from "react"
-import { EvilPieChart } from "@/components/ui/pie-chart-evilcharts"
+import { EvilPieChart } from "@/components/charts/evilcharts"
 import { Pie, Tooltip, Legend } from "@/components/charts/evilcharts/components/pie-chart"
 
 export default function Demo() {
@@ -418,7 +418,7 @@ Hover 悬浮提示。`isLoading` 时自动隐藏。
 
 AI 生成 EvilPieChart 代码时：
 
-1. `EvilPieChart` 从 `@/components/ui/pie-chart-evilcharts` 导入；`Pie`、`Tooltip`、`Legend`、`Background`、`Label` 从 `@/components/charts/evilcharts/components/pie-chart` 导入；`ChartConfig` 类型从 `@/components/charts/evilcharts/components/chart` 导入。
+1. `EvilPieChart` 从 `@/components/charts/evilcharts` 导入；`Pie`、`Tooltip`、`Legend`、`Background`、`Label` 从 `@/components/charts/evilcharts/components/pie-chart` 导入；`ChartConfig` 类型从 `@/components/charts/evilcharts/components/chart` 导入。
 2. `config` 必须满足 `ChartConfig` 类型——每个键对应数据行中的名称值，包含 `label` 和 `colors: { light: string[], dark: string[] }`。
 3. 至少组合 `<Pie />` + `<Tooltip />` + `<Legend />` 以获得完整的图表交互。
 4. 需要点击选择时使用 `<Pie isClickable />` 和 `<Legend isClickable />`。

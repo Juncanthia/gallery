@@ -1,4 +1,4 @@
-import { StackedList } from "@/components/ui/stacked-list"
+import { StackedList } from "@/components/layout/uselayouts/stacked-list"
 
 export default function Demo() {
   return <StackedList />

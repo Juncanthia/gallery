@@ -37,7 +37,7 @@ StackedList 通过双层布局组织交互：
 />
 
 ```tsx
-import { StackedList } from "@/components/ui/stacked-list"
+import { StackedList } from "@/components/layout/uselayouts/stacked-list"
 
 export default function Demo() {
   return &lt;StackedList /&gt;
@@ -118,7 +118,7 @@ const sweepSpring = {
 
 AI 生成 StackedList 代码时：
 
-1. 从 `@/components/ui/stacked-list` 导入 StackedList。
+1. 从 `@/components/layout/uselayouts/stacked-list` 导入 StackedList。
 2. StackedList 为零 props 组件，直接渲染即可。
 3. 如需定制成员数据或角色，修改源码中的 `ALL_MEMBERS` 和 `styles`。
 4. 图标使用 `@hugeicons/core-free-icons`，不要使用 `@ant-design/icons`。

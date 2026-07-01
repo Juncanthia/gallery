@@ -35,7 +35,7 @@ import {
   ReelPreviousButton,
   ReelProgress,
   ReelVideo,
-} from "@/components/ui/reel"
+} from "@/components/blocks/reel"
 
 const videos = [
   { id: 1, type: "video" as const, src: "/video1.mp4", duration: 10, title: "Video 1" },
@@ -72,7 +72,7 @@ import {
   ReelImage,
   ReelPlayButton,
   ReelProgress,
-} from "@/components/ui/reel"
+} from "@/components/blocks/reel"
 
 const images = [
   { id: 1, type: "image" as const, src: "/img1.jpg", duration: 3, alt: "Image 1", title: "Photo 1" },
@@ -230,7 +230,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/reel` 导入所需子组件。
+1. 从 `@/components/blocks/reel` 导入所需子组件。
 2. `data` 数组每项必须包含 `id`、`type`（`"video"` 或 `"image"`）、`src`、`duration` 四个必填字段。
 3. `ReelContent` 使用 render props 模式：`{(item) => ...}`。
 4. 视频项用 `ReelVideo`，图片项用 `ReelImage`（`alt` 必填）。

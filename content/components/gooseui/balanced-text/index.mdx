@@ -25,7 +25,7 @@ BalancedHeading 支持 h1 到 h6 六种标题级别，默认为 h2。传入 `as`
 />
 
 ```tsx
-import { BalancedHeading } from "@/components/ui/balanced-text"
+import { BalancedHeading } from "@/components/effects/text/gooseui/balanced-text"
 
 export default function Demo() {
   return (
@@ -101,7 +101,7 @@ PrettyParagraph 渲染为 `&lt;p&gt;` 元素，自动应用 `text-wrap: pretty` 
 
 AI 生成 BalancedText 系列组件代码时：
 
-1. BalancedHeading 从 `@/components/ui/balanced-text` 导入。
+1. BalancedHeading 从 `@/components/effects/text/gooseui/balanced-text` 导入。
 2. PrettyParagraph 和 BalancedText 从 `@/components/effects/text/gooseui/balanced-text` 导入。
 3. 使用 `as` 属性指定 BalancedHeading 的标题级别，默认为 h2。
 4. 标题文本长度不宜过短（少于一行不会触发 balance 效果），也不宜过长（超过五六行 balance 效果不明显）。

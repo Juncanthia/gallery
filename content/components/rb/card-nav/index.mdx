@@ -20,7 +20,7 @@ CardNav 卡片式可展开导航栏组件，支持分类卡片展示和 GSAP 动
 <ComponentShowcase id="rb/card-nav" path="rb/card-nav/basic" />
 
 ```tsx
-import { CardNav } from "@/components/ui/card-nav"
+import { CardNav } from "@/components/navigation/react-bits/card-nav"
 
 const items = [
   {
@@ -51,7 +51,7 @@ export default function Demo() {
 ### 自定义颜色主题
 
 ```tsx
-import { CardNav } from "@/components/ui/card-nav"
+import { CardNav } from "@/components/navigation/react-bits/card-nav"
 
 export default function CustomDemo() {
   return (
@@ -105,7 +105,7 @@ NavItem 类型：
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/card-nav` 导入。
+1. 从 `@/components/navigation/react-bits/card-nav` 导入。
 2. 依赖 `gsap` 和 `lucide-react`。
 3. 附带样式表 `card-nav.css`。
 4. 导航栏初始高度 60px，展开后根据内容计算。

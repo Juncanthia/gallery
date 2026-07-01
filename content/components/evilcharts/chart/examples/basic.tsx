@@ -1,6 +1,6 @@
 "use client";
 
-import { ChartContainer } from "@/components/ui/chart-evilcharts";
+import { ChartContainer } from "@/components/charts/evilcharts";
 import type { ChartConfig } from "@/components/charts/evilcharts/components/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 

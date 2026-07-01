@@ -1,4 +1,4 @@
-import { ChromaGrid } from "@/components/ui/chroma-grid"
+import { ChromaGrid } from "@/components/marketing-blocks/react-bits/chroma-grid"
 
 export default function ChromaGridBasicExample() {
   return <ChromaGrid />

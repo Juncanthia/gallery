@@ -51,7 +51,7 @@ Slider 是 dice-ui 滑块组件，基于 Radix Slider 和 Tailwind CSS 实现。
 ### 基础用法
 
 ```tsx
-import { Slider } from "@/components/ui/slider-dice"
+import { Slider } from "@/components/ui/slider"
 
 export default function Demo() {
   return (
@@ -63,7 +63,7 @@ export default function Demo() {
 ### 范围选择
 
 ```tsx
-import { Slider } from "@/components/ui/slider-dice"
+import { Slider } from "@/components/ui/slider"
 
 export default function Demo() {
   return (
@@ -162,7 +162,7 @@ type SliderProps = React.ComponentProps<typeof SliderPrimitive.Root> & {
 
 当 AI 生成本项目 Slider 代码时，应遵守：
 
-1. 从 `@/components/ui/slider-dice` 导入，不要从 `antd` 导入。
+1. 从 `@/components/ui/slider` 导入，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. 不要生成 AntD 专属的 `tooltip`、`marks`、`dots`、`className`、`styles`、`ConfigProvider`、Design Token 配置。
 4. 范围选择通过 `value={[min, max]}` 或 `defaultValue={[min, max]}` 传递数组实现，不使用 AntD 的 `range` prop。

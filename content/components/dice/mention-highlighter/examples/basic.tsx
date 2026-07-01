@@ -1,6 +1,6 @@
 "use client"
 
-import { MentionHighlighter } from "@/components/ui/mention-highlighter"
+import { MentionHighlighter } from "@/components/data-entry/dice/mention/mention-highlighter"
 import { MentionRoot } from "@/components/data-entry/dice/mention/mention-root"
 import { MentionInput } from "@/components/data-entry/dice/mention/mention-input"
 import { MentionContent } from "@/components/data-entry/dice/mention/mention-content"

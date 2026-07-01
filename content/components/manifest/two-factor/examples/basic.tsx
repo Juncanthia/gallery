@@ -1,4 +1,4 @@
-import { TwoFactor } from "@/components/ui/two-factor"
+import { TwoFactor } from "@/components/templates/manifest/form/two-factor"
 
 export default function Demo() {
   return (

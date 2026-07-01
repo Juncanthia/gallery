@@ -27,7 +27,7 @@ ThemeCustomizer 提供 6 种布局变体：浮动圆钮（Pill）、内联工具
 /&gt;
 
 ```tsx
-import { ThemeCustomizer, ThemeCustomizerBar } from "@/components/ui/theme-customizer"
+import { ThemeCustomizer, ThemeCustomizerBar } from "@/components/general/gooseui/theme-customizer"
 
 export default function Demo() {
   return (
@@ -46,7 +46,7 @@ export default function Demo() {
 固定于页面底部中央的浮动控件，包含明暗切换和主题色弹出面板。通过 `className` 调整位置。
 
 ```tsx
-import { ThemeCustomizer } from "@/components/ui/theme-customizer"
+import { ThemeCustomizer } from "@/components/general/gooseui/theme-customizer"
 
 export default function Demo() {
   return &lt;ThemeCustomizer /&gt;
@@ -58,7 +58,7 @@ export default function Demo() {
 水平排列明暗模式切换和主题色选择器，适合嵌入工具栏或卡片内部。
 
 ```tsx
-import { ThemeCustomizerBar } from "@/components/ui/theme-customizer"
+import { ThemeCustomizerBar } from "@/components/general/gooseui/theme-customizer"
 
 export default function Demo() {
   return &lt;ThemeCustomizerBar /&gt;
@@ -70,7 +70,7 @@ export default function Demo() {
 固定于页面右侧中部的垂直控件，自上而下排列明暗切换和所有主题色。
 
 ```tsx
-import { ThemeCustomizerSidebar } from "@/components/ui/theme-customizer"
+import { ThemeCustomizerSidebar } from "@/components/general/gooseui/theme-customizer"
 
 export default function Demo() {
   return &lt;ThemeCustomizerSidebar /&gt;
@@ -82,7 +82,7 @@ export default function Demo() {
 macOS 风格的底部停靠栏，悬停时按钮上浮。固定于页面底部中央。
 
 ```tsx
-import { ThemeCustomizerDock } from "@/components/ui/theme-customizer"
+import { ThemeCustomizerDock } from "@/components/general/gooseui/theme-customizer"
 
 export default function Demo() {
   return &lt;ThemeCustomizerDock /&gt;
@@ -94,7 +94,7 @@ export default function Demo() {
 固定于右下角的收折按钮，点击展开主题色面板和明暗切换。
 
 ```tsx
-import { ThemeCustomizerCorner } from "@/components/ui/theme-customizer"
+import { ThemeCustomizerCorner } from "@/components/general/gooseui/theme-customizer"
 
 export default function Demo() {
   return &lt;ThemeCustomizerCorner /&gt;
@@ -106,7 +106,7 @@ export default function Demo() {
 固定于底部中央的动画工具栏，点击展开为颜色选择面板，带有弹性动画过渡。
 
 ```tsx
-import { ThemeCustomizerToolbar } from "@/components/ui/theme-customizer"
+import { ThemeCustomizerToolbar } from "@/components/general/gooseui/theme-customizer"
 
 export default function Demo() {
   return &lt;ThemeCustomizerToolbar /&gt;
@@ -184,7 +184,7 @@ Pill 变体支持 `inline` 属性，传入后取消 fixed 定位。Bar 变体本
 
 AI 生成 ThemeCustomizer 代码时：
 
-1. 从 `@/components/ui/theme-customizer` 导入所需变体。
+1. 从 `@/components/general/gooseui/theme-customizer` 导入所需变体。
 2. 默认导出 `ThemeCustomizer` 为 Pill 浮动圆钮变体，包含明暗切换和主题色弹出面板。
 3. 需要内联布局时使用 `ThemeCustomizerBar`；需要侧边面板使用 `ThemeCustomizerSidebar`。
 4. 需要 macOS Dock 风格使用 `ThemeCustomizerDock`。

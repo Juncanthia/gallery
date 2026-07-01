@@ -1,4 +1,4 @@
-import { LineChart } from "@/components/ui/line-chart-bklit"
+import { LineChart } from "@/components/charts/bklit/charts"
 import { Line } from "@/components/charts/bklit/charts"
 
 const data = [

@@ -1,4 +1,4 @@
-import { Squircle } from "@/components/ui/corner-shape"
+import { Squircle } from "@/components/effects/interactions/gooseui/corner-shape"
 
 export default function Demo() {
   return (

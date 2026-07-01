@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/ui/data-table-tool"
+import { DataTable } from "@/components/agent-tools/data-table/data-table"
 
 const columns = [
   {

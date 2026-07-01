@@ -31,7 +31,7 @@ BorderBeam 通过 CSS `@property --angle` 和 `mask` 属性实现旋转渐变遮
 />
 
 ```tsx
-import { BorderBeam } from "@/components/ui/border-beam-gooseui"
+import { BorderBeam } from "@/components/effects/interactions/gooseui/border-beam"
 
 export default function Demo() {
   return (
@@ -55,7 +55,7 @@ export default function Demo() {
 通过 `colorFrom` 和 `colorTo` 自定义光束渐变颜色。
 
 ```tsx
-import { BorderBeam } from "@/components/ui/border-beam-gooseui"
+import { BorderBeam } from "@/components/effects/interactions/gooseui/border-beam"
 
 export default function Demo() {
   return (
@@ -76,7 +76,7 @@ export default function Demo() {
 通过 `duration`（秒）控制完整旋转周期，`delay`（秒）控制动画相位偏移。
 
 ```tsx
-import { BorderBeam } from "@/components/ui/border-beam-gooseui"
+import { BorderBeam } from "@/components/effects/interactions/gooseui/border-beam"
 
 export default function Demo() {
   return (
@@ -94,7 +94,7 @@ export default function Demo() {
 设置 `squircle` 使角落匹配 iOS 风格的连续曲率圆角（需要 Chrome 139+）。
 
 ```tsx
-import { BorderBeam } from "@/components/ui/border-beam-gooseui"
+import { BorderBeam } from "@/components/effects/interactions/gooseui/border-beam"
 
 export default function Demo() {
   return (
@@ -160,7 +160,7 @@ BorderBeam 使用 `useGlobalStyles` 全局注入 `@property --angle` 和 `@keyfr
 
 AI 生成 BorderBeam 代码时：
 
-1. 从 `@/components/ui/border-beam-gooseui` 导入 `BorderBeam`。
+1. 从 `@/components/effects/interactions/gooseui/border-beam` 导入 `BorderBeam`。
 2. BorderBeam **必须**放在 `position: relative` 的父容器中，并建议父容器同时设置 `overflow: hidden`。
 3. 父容器需要 `rounded-[inherit]` 支持以匹配光束边缘；BorderBeam 内部已设置 `rounded-[inherit]` 跟随父容器。
 4. 多个 BorderBeam 实例通过 `delay` 错开相位，避免同步闪烁。

@@ -55,7 +55,7 @@ stack:
 
 ```tsx
 import { useState } from "react"
-import { Tour, type TourStepConfig } from "@/components/ui/tour"
+import { Tour, type TourStepConfig } from "@/components/blocks/tour"
 
 const steps: TourStepConfig[] = [
   {
@@ -282,7 +282,7 @@ type TourStepConfig = {
 
 当 AI 生成本项目 Tour 代码时，应遵守：
 
-1. 从 `@/components/ui/tour` 导入 `Tour` 和 `TourStepConfig`，不要从 `antd` 导入。
+1. 从 `@/components/blocks/tour` 导入 `Tour` 和 `TourStepConfig`，不要从 `antd` 导入。
 2. `steps` 为必填属性，每个 step 至少需提供 `title` 或 `description` 之一。
 3. `target` 可以是 CSS 选择器、HTMLElement、ref，或返回 `HTMLElement | null` 的函数。
 4. 受控模式下同时传入 `current` 和 `onChange`；非受控模式下使用 `defaultCurrent`，二者不可混用。

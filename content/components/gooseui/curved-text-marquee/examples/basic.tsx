@@ -1,4 +1,4 @@
-import { CurvedTextMarquee } from "@/components/ui/curved-text-marquee"
+import { CurvedTextMarquee } from "@/components/marketing-blocks/gooseui/marketing/curved-text-marquee"
 
 export default function Demo() {
   return <CurvedTextMarquee />

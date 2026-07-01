@@ -4,7 +4,7 @@ slug: gooseui/balanced-text
 
 import: |
   // BalancedHeading
-  import { BalancedHeading } from "@/components/ui/balanced-text"
+  import { BalancedHeading } from "@/components/effects/text/gooseui/balanced-text"
   // PrettyParagraph, BalancedText
   import { PrettyParagraph, BalancedText } from "@/components/effects/text/gooseui/balanced-text"
 

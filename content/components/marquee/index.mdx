@@ -24,7 +24,7 @@
 <ComponentShowcase id="marquee" path="marquee/basic" />
 
 ```tsx
-import { Marquee, MarqueeContent, MarqueeItem } from "@/components/ui/marquee"
+import { Marquee, MarqueeContent, MarqueeItem } from "@/components/blocks/marquee"
 
 export default function Demo() {
   return (
@@ -47,7 +47,7 @@ import {
   MarqueeContent,
   MarqueeEdge,
   MarqueeItem,
-} from "@/components/ui/marquee"
+} from "@/components/blocks/marquee"
 
 export default function Demo() {
   return (
@@ -67,7 +67,7 @@ export default function Demo() {
 ### 垂直滚动和键盘暂停
 
 ```tsx
-import { Marquee, MarqueeContent, MarqueeEdge, MarqueeItem } from "@/components/ui/marquee"
+import { Marquee, MarqueeContent, MarqueeEdge, MarqueeItem } from "@/components/blocks/marquee"
 
 export default function Demo() {
   return (
@@ -124,7 +124,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/marquee` 导入 `Marquee`、`MarqueeContent`、`MarqueeItem`，需要渐隐时导入 `MarqueeEdge`。
+1. 从 `@/components/blocks/marquee` 导入 `Marquee`、`MarqueeContent`、`MarqueeItem`，需要渐隐时导入 `MarqueeEdge`。
 2. 水平滚动时 `Marquee` 可省略 `side`；垂直滚动时同时给 `Marquee` 和 `MarqueeContent` 设置 `side="top"` 或 `side="bottom"`，并给容器设置高度。
 3. 需要渐隐效果时使用 `MarqueeEdge`，不要直接依赖 `react-fast-marquee` 的 gradient。
 4. 可访问暂停需求使用 `pauseOnKeyboard`，让用户聚焦容器后按空格暂停/恢复。

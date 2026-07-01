@@ -2,7 +2,7 @@ import {
   Comparison,
   ComparisonItem,
   ComparisonHandle,
-} from "@/components/ui/comparison"
+} from "@/components/blocks/comparison"
 
 export default function ComparisonBasicExample() {
   return (

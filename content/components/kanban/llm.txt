@@ -61,7 +61,7 @@ import {
   KanbanHeader,
   KanbanCards,
   KanbanCard,
-} from "@/components/ui/kanban"
+} from "@/components/blocks/kanban"
 
 const columns = [
   { id: "todo", name: "待办" },
@@ -258,7 +258,7 @@ type KanbanColumnProps = {
 
 当 AI 生成本项目 Kanban 代码时，应遵守：
 
-1. 从 `@/components/ui/kanban` 导入全部子组件，不要从 `antd` 导入。
+1. 从 `@/components/blocks/kanban` 导入全部子组件，不要从 `antd` 导入。
 2. `KanbanProvider` 必须提供 `columns`、`data` 和 `onDataChange`，使用 render prop 模式渲染各列。
 3. 每个 `KanbanBoard` 的 `id` 必须与数据项的 `column` 字段以及 `columns` 中的列 ID 对应。
 4. `KanbanCards` 的 `id` 用于过滤数据，`children` 必须是 render prop `(item) => <KanbanCard />`。

@@ -1,4 +1,4 @@
-import { Coursel } from "@/components/ui/carousel-chamaac"
+import { Coursel } from "@/components/data-display/chamaac/carousel/carousel"
 
 const images = [
   "https://picsum.photos/seed/1/400/450",

@@ -50,7 +50,7 @@ Switch 是 dice-ui 开关组件，基于 Radix Switch 和 Tailwind CSS 实现。
 ### 基础用法
 
 ```tsx
-import { Switch } from "@/components/ui/switch-dice"
+import { Switch } from "@/components/ui/switch"
 
 export default function Demo() {
   return (
@@ -62,7 +62,7 @@ export default function Demo() {
 ### 受控用法
 
 ```tsx
-import { Switch } from "@/components/ui/switch-dice"
+import { Switch } from "@/components/ui/switch"
 import { useState } from "react"
 
 export default function Demo() {
@@ -80,7 +80,7 @@ export default function Demo() {
 ### 表单用法
 
 ```tsx
-import { Switch } from "@/components/ui/switch-dice"
+import { Switch } from "@/components/ui/switch"
 
 export default function Demo() {
   return (
@@ -174,7 +174,7 @@ Switch 继承 Radix Switch.Root 的全部属性。核心属性：
 
 当 AI 生成本项目 Switch 代码时，应遵守：
 
-1. 从 `@/components/ui/switch-dice` 导入，不要从 `antd` 导入。
+1. 从 `@/components/ui/switch` 导入，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. 不要生成 AntD 专属的 `checkedChildren`、`unCheckedChildren`、`loading`、`size`。
 4. 受控模式下必须同时提供 `checked` 和 `onCheckedChange`。

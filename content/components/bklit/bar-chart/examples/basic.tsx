@@ -1,4 +1,4 @@
-import { BarChart } from "@/components/ui/bar-chart-bklit"
+import { BarChart } from "@/components/charts/bklit/charts"
 import { Bar } from "@/components/charts/bklit/charts"
 
 const data = [

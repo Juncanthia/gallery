@@ -1,4 +1,4 @@
-import { Waves } from "@/components/ui/waves-chamaac"
+import { Waves } from "@/components/effects/backgrounds/chamaac/waves/waves"
 
 export default function Demo() {
   return (

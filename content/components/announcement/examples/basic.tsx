@@ -2,7 +2,7 @@ import {
   Announcement,
   AnnouncementTag,
   AnnouncementTitle,
-} from "@/components/ui/announcement"
+} from "@/components/blocks/announcement"
 
 export default function AnnouncementBasicExample() {
   return (

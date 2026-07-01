@@ -1,6 +1,6 @@
 "use client"
 
-import { BadgeOverflow } from "@/components/ui/badge-overflow"
+import { BadgeOverflow } from "@/components/data-display/dice/badge-overflow"
 
 const items = [
   { label: "React", color: "bg-sky-100 text-sky-700" },

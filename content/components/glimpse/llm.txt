@@ -60,7 +60,7 @@ import {
   GlimpseImage,
   GlimpseTitle,
   GlimpseDescription,
-} from "@/components/ui/glimpse"
+} from "@/components/blocks/glimpse"
 
 export default function Demo() {
   return (
@@ -94,7 +94,7 @@ import {
   GlimpseContent,
   GlimpseTitle,
   GlimpseDescription,
-} from "@/components/ui/glimpse"
+} from "@/components/blocks/glimpse"
 
 export default function Demo() {
   return (
@@ -226,7 +226,7 @@ Ant Design 不提供等价的 HoverCard 组件。AntD 的 `Popover` 支持 hover
 
 ## LLM 使用规则 {#llm-rules}
 
-1. 从 `@/components/ui/glimpse` 导入所需的子组件。
+1. 从 `@/components/blocks/glimpse` 导入所需的子组件。
 2. Glimpse 必须包含 GlimpseTrigger 和 GlimpseContent 作为直接子节点。
 3. GlimpseContent 内部推荐顺序：GlimpseImage（可选）-> GlimpseTitle -> GlimpseDescription。
 4. GlimpseTrigger 通常使用 `asChild` 包裹触发元素（链接、按钮、文本等）。

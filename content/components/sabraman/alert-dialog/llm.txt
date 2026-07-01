@@ -1,6 +1,6 @@
 ---
 component: LegacyAlertDialog
-import: "@/components/ui/alert-dialog-sabraman"
+import: "@/components/_shared/sabraman"
 exports: LegacyAlertDialog, LegacyAlertDialogTrigger, LegacyAlertDialogContent, LegacyAlertDialogPanel, LegacyAlertDialogHeader, LegacyAlertDialogTitle, LegacyAlertDialogDescription, LegacyAlertDialogFooter, LegacyAlertDialogButton, LegacyAlertDialogClose
 base: Dialog (from @/components/ui/dialog)
 style: macOS 10.15 legacy glass-panel alert
@@ -59,7 +59,7 @@ import {
   LegacyAlertDialogHeader,
   LegacyAlertDialogTitle,
   LegacyAlertDialogTrigger,
-} from "@/components/ui/alert-dialog-sabraman"
+} from "@/components/_shared/sabraman"
 
 function DeleteConfirm() {
   return (
@@ -94,4 +94,4 @@ function DeleteConfirm() {
 - Content structure: Header (Title + Description) → Footer (buttons).
 - The dialog is styled like macOS 10.15 alert panels (glass effect, Helvetica Neue font, gradient buttons).
 - NEVER import from antd or use Ant Design patterns.
-- Import path: `@/components/ui/alert-dialog-sabraman`
+- Import path: `@/components/_shared/sabraman`

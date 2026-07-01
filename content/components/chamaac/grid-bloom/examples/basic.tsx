@@ -1,4 +1,4 @@
-import { GridBloom } from "@/components/ui/grid-bloom"
+import { GridBloom } from "@/components/effects/backgrounds/chamaac/grid-bloom/grid-bloom"
 
 export default function Demo() {
   return (

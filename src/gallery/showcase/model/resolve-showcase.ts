@@ -1,4 +1,6 @@
 import { GALLERY_DOCS } from "../../registry/catalog"
+import { getRegistryItem } from "../../registry/index"
+import { getDisplayImportPath } from "../../registry/registry-utils"
 import { loadPreview, loadPreviewSource } from "../../runtime/preview-registry"
 import { getGalleryApiDoc } from "../../registry/api-registry"
 import type { GalleryApiDoc } from "../../registry/api-types"
@@ -41,7 +43,49 @@ function inferItemId(path: string, explicitId?: string): string | null {
   return first || null
 }
 
+function resolveImportPath(path: string, explicitId?: string): string {
+  const candidates = [explicitId, path.split("/").slice(0, 2).join("/"), path.split("/")[0]].filter(
+    Boolean
+  ) as string[]
+
+  for (const candidate of candidates) {
+    const registryItem = getRegistryItem(candidate)
+    if (registryItem) {
+      return getDisplayImportPath(registryItem).value
+    }
+  }
+
+  const itemId = inferItemId(path, explicitId)
+  if (itemId) {
+    return `@/components/ui/${itemId}`
+  }
+
+  return `@/components/ui/${path.split("/")[0]}`
+}
+
 function getGalleryItem(path: string, explicitId?: string): GalleryItem | null {
+  const registryCandidates = [explicitId, path.split("/").slice(0, 2).join("/")].filter(Boolean) as string[]
+  for (const candidate of registryCandidates) {
+    const registryItem = getRegistryItem(candidate)
+    if (registryItem) {
+      const display = getDisplayImportPath(registryItem)
+      return {
+        id: registryItem.docsSlug,
+        title: `${registryItem.title} ${registryItem.titleEn}`,
+        href: `/components/${registryItem.docsSlug}`,
+        kind: "component",
+        description: `${registryItem.title}。`,
+        implementations: [
+          {
+            source: "local",
+            status: "stable",
+            importPath: display.value,
+          },
+        ],
+      }
+    }
+  }
+
   const itemId = inferItemId(path, explicitId)
   if (!itemId) {
     return null
@@ -62,7 +106,7 @@ function getGalleryItem(path: string, explicitId?: string): GalleryItem | null {
       {
         source: "local",
         status: "stable",
-        importPath: `@/components/ui/${itemId}`,
+        importPath: resolveImportPath(path, explicitId),
       },
     ],
   }

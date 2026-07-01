@@ -2,7 +2,7 @@
 component: CornerShape
 slug: gooseui/corner-shape
 
-import: import { Squircle } from "@/components/ui/corner-shape"
+import: import { Squircle } from "@/components/effects/interactions/gooseui/corner-shape"
 
 usage: |
   <Squircle n={5} radius="20%" className="w-24 h-24 bg-blue-500">

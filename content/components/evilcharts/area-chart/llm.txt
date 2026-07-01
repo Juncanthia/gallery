@@ -4,7 +4,7 @@
 
 ```tsx
 // Primary wrapper (shorter alias)
-import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
+import { EvilAreaChart } from "@/components/charts/evilcharts"
 
 // Composible sub-components
 import {
@@ -132,7 +132,7 @@ Available curveType values (from Recharts): "linear", "bump", "monotone", "step"
 ### Example 1: Basic Stacked Area Chart with Brush
 
 ```tsx
-import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
+import { EvilAreaChart } from "@/components/charts/evilcharts"
 import {
   Area, XAxis, Grid, Tooltip, Legend, Dot, ActiveDot,
 } from "@/components/ui/evilcharts/components/area-chart"

@@ -28,7 +28,7 @@
 <ComponentShowcase id="bklit/area-chart" path="bklit/area-chart/basic" />
 
 ```tsx
-import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { AreaChart } from "@/components/charts/bklit/charts"
 import { Area, Grid } from "@/components/charts/bklit/charts"
 
 const data = [
@@ -152,7 +152,7 @@ import { PatternArea } from "@/components/charts/bklit/charts"
 设置 `status="loading"` 并提供 `loadingLabel`。配合 `generateChartSkeletonData` 生成骨架数据可实现无缝过渡：
 
 ```tsx
-import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { AreaChart } from "@/components/charts/bklit/charts"
 import { Area, Grid, generateChartSkeletonData } from "@/components/charts/bklit/charts"
 
 const skeletonData = generateChartSkeletonData({ dataKey: "value", pointCount: 8 })
@@ -230,7 +230,7 @@ function ZoomableChart() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入: `import { AreaChart } from "@/components/ui/area-chart-bklit"`
+- 导入: `import { AreaChart } from "@/components/charts/bklit/charts"`
 - 子组件: `import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/charts/bklit/charts"`
 - 来自 BKLit Charts 库（基于 @visx/xychart 和 @visx/shape）
 - 必须提供 `data` 属性（`Record<string, unknown>[]`，每项含 Date 和数值字段）

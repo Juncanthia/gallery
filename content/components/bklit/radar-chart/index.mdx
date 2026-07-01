@@ -26,7 +26,7 @@
 <ComponentShowcase id="bklit/radar-chart" path="bklit/radar-chart/basic" />
 
 ```tsx
-import { RadarChart } from "@/components/ui/radar-chart-bklit"
+import { RadarChart } from "@/components/charts/bklit/charts"
 import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
 
 const metrics = [
@@ -182,7 +182,7 @@ const data = [
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-- 导入: `import { RadarChart } from "@/components/ui/radar-chart-bklit"`
+- 导入: `import { RadarChart } from "@/components/charts/bklit/charts"`
 - 子组件: `import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"`
 - 必须同时提供 `data` 和 `metrics` 两个属性
 - `data` 格式为 `{ label, values: Record<string, number>, color? }[]`

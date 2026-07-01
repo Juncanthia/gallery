@@ -23,7 +23,7 @@ OrderSummary 订单摘要。用于展示订单明细与价格汇总，支持 sum
 <ComponentShowcase id="tool/order-summary" path="tool/order-summary/basic" />
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -50,7 +50,7 @@ export default function Demo() {
 设置 `variant="receipt"` 并提供 `choice` 属性，展示订单确认回执，包含绿色勾选图标和订单编号。
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -86,7 +86,7 @@ export default function Demo() {
 当确认了 `choice` 对象必传时，可直接使用 `OrderSummary.Receipt` 子组件，它自动强制 `variant="receipt"`。
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -116,7 +116,7 @@ export default function Demo() {
 通过 `pricing.discount` 和 `pricing.shipping=0` 展示促销信息。`discountLabel` 可自定义折扣名称。
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -146,7 +146,7 @@ export default function Demo() {
 通过 `imageUrl` 为订单项展示缩略图，不传则使用默认的 Package 图标占位。
 
 ```tsx
-import { OrderSummary } from "@/components/ui/order-summary-tool"
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
 
 export default function Demo() {
   return (
@@ -257,7 +257,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/order-summary-tool` 导入 `OrderSummary`，不要从其他路径导入。
+1. 从 `@/components/agent-tools/order-summary/order-summary` 导入 `OrderSummary`，不要从其他路径导入。
 2. `id`、`items`、`pricing` 为必填属性。`items` 至少包含 1 项，且每项的 `id` 不可重复。
 3. `pricing.total` 应等于 `subtotal - discount + shipping + tax`，LLM 需自行保证数学正确性。
 4. receipt 形态必须提供 `choice`，其中 `action` 固定为 `"confirm"`。

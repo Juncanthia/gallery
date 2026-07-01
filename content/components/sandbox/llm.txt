@@ -51,7 +51,7 @@ import {
   SandboxTabsContent,
   SandboxTabsList,
   SandboxTabsTrigger,
-} from "@/components/ui/sandbox"
+} from "@/components/blocks/sandbox"
 
 const files = { "/App.tsx": `export default () => <h1>Hello Sandbox!</h1>` }
 
@@ -91,7 +91,7 @@ import {
   SandboxTabsContent,
   SandboxTabsList,
   SandboxTabsTrigger,
-} from "@/components/ui/sandbox"
+} from "@/components/blocks/sandbox"
 
 export default function Demo() {
   return (
@@ -227,7 +227,7 @@ Ant Design 无等效组件。AntD Tabs 仅提供 Tab 切换 UI，不包含代码
 
 ## LLM 使用规则
 
-1. 从 `@/components/ui/sandbox` 导入所需子组件。
+1. 从 `@/components/blocks/sandbox` 导入所需子组件。
 2. SandboxProvider 必须提供 `files` 和 `template`，包裹 SandboxLayout，SandboxLayout 包裹 SandboxTabs。
 3. SandboxTabs 内部按顺序放置 SandboxTabsList 和 SandboxTabsContent，TabsTrigger 的 `value` 必须与对应 TabsContent 的 `value` 一致。
 4. 代码编辑器用 SandboxCodeEditor，预览用 SandboxPreview，文件浏览用 SandboxFileExplorer，控制台用 SandboxConsole。

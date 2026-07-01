@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { BadgeOverflow } from "@/components/ui/badge-overflow"
+import { BadgeOverflow } from "@/components/data-display/dice/badge-overflow"
 
 const items = [
   { label: "React", color: "bg-sky-100 text-sky-700" },
@@ -166,7 +166,7 @@ type BadgeOverflowProps<T = string> = {
 
 当 AI 生成本项目 BadgeOverflow 代码时，应遵守：
 
-1. 从 `@/components/ui/badge-overflow` 导入，不要从 `antd` 导入。
+1. 从 `@/components/data-display/dice/badge-overflow` 导入，不要从 `antd` 导入。
 2. `items` 和 `renderBadge` 为必填 props，对象数组时 `getBadgeLabel` 也为必填。
 3. 只使用本文件 API 摘要和源码中存在的 props。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。

@@ -1,4 +1,4 @@
-import { CircularGallery } from "@/components/ui/circular-gallery"
+import { CircularGallery } from "@/components/marketing-blocks/react-bits/circular-gallery"
 
 export default function CircularGalleryBasicExample() {
   return (

@@ -1,5 +1,5 @@
 [雷达图 / RadarChart]
-导入: import { RadarChart } from "@/components/ui/radar-chart-bklit"
+导入: import { RadarChart } from "@/components/charts/bklit/charts"
 子组件: import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
 包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
@@ -90,7 +90,7 @@ interface RadarMetric {
 ### 基础单组数据
 
 ```tsx
-import { RadarChart } from "@/components/ui/radar-chart-bklit"
+import { RadarChart } from "@/components/charts/bklit/charts"
 import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
 
 const metrics = [

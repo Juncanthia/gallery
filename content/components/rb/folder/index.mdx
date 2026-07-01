@@ -16,14 +16,14 @@ Folder 文件夹交互组件，点击可展开/收起内部纸张，纸张支持
 <ComponentShowcase id="rb/folder" path="rb/folder/basic" />
 
 ```tsx
-import { Folder } from "@/components/ui/folder"
+import { Folder } from "@/components/marketing-blocks/react-bits/folder"
 export default function Demo() { return <Folder /> }
 ```
 
 ### 自定义颜色和纸张内容
 
 ```tsx
-import { Folder } from "@/components/ui/folder"
+import { Folder } from "@/components/marketing-blocks/react-bits/folder"
 
 export default function Demo() {
   return (
@@ -63,7 +63,7 @@ export default function Demo() {
 组件内部通过 `darkenColor` 函数将传入的 `color` 按 8% 比例暗化，作为文件夹背面的颜色。三张纸张则基于白色分别暗化 10%、5% 和原始白色。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/folder` 导入。
+1. 从 `@/components/marketing-blocks/react-bits/folder` 导入。
 2. 纯 CSS 实现，无额外第三方依赖。
 3. `color` 支持 hex 格式（如 `"#5227FF"`），组件会自动生成配套的暗色调。
 4. `size` 通过 CSS `transform: scale()` 实现，不影响布局空间。

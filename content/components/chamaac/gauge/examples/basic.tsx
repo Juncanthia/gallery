@@ -1,4 +1,4 @@
-import { Gauge } from "@/components/ui/gauge-chamaac"
+import { Gauge } from "@/components/charts/chamaac/gauge/gauge"
 
 export default function Demo() {
   return (

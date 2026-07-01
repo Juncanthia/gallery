@@ -56,7 +56,7 @@ import {
   RelativeTimeZoneDate,
   RelativeTimeZoneDisplay,
   RelativeTimeZoneLabel,
-} from "@/components/ui/relative-time"
+} from "@/components/blocks/relative-time"
 
 export default function Demo() {
   return (
@@ -181,7 +181,7 @@ Ant Design 不提供多时区时间展示组件。AntD 的 DatePicker、Calendar
 
 ## LLM 使用规则
 
-1. 从 `@/components/ui/relative-time` 导入 `RelativeTime`、`RelativeTimeZone`、`RelativeTimeZoneDate`、`RelativeTimeZoneDisplay`、`RelativeTimeZoneLabel`。
+1. 从 `@/components/blocks/relative-time` 导入 `RelativeTime`、`RelativeTimeZone`、`RelativeTimeZoneDate`、`RelativeTimeZoneDisplay`、`RelativeTimeZoneLabel`。
 2. 嵌套层级必须严格遵循：`RelativeTime` > `RelativeTimeZone` > (`RelativeTimeZoneLabel` / `RelativeTimeZoneDate` / `RelativeTimeZoneDisplay`)。
 3. `zone` 必须使用有效 IANA 时区标识符（如 `"Asia/Shanghai"`、`"America/New_York"`、`"UTC"`），不要使用 UTC 偏移量字符串。
 4. 展示实时时钟时不传 `time` prop（非受控模式，每秒自动更新）；展示指定时刻时传入 `time` prop（受控模式，停止自动更新）。

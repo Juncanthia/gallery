@@ -1,5 +1,5 @@
 [桑基图 / SankeyChart]
-导入: import { SankeyChart, SankeyNode, SankeyLink, SankeyTooltip } from "@/components/ui/sankey-chart-bklit"
+导入: import { SankeyChart, SankeyNode, SankeyLink, SankeyTooltip } from "@/components/charts/bklit/charts"
 包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 
@@ -82,7 +82,7 @@ interface SankeyLinkDatum {
 ### 基础用法
 
 ```tsx
-import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/ui/sankey-chart-bklit"
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/bklit/charts"
 
 const data = {
   nodes: [
@@ -116,7 +116,7 @@ export default function Demo() {
 ### 自定义节点颜色
 
 ```tsx
-import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/ui/sankey-chart-bklit"
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return (
@@ -138,7 +138,7 @@ export default function Demo() {
 ### 隐藏数值标签
 
 ```tsx
-import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/ui/sankey-chart-bklit"
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return (
@@ -154,7 +154,7 @@ export default function Demo() {
 ### 自定义 Tooltip
 
 ```tsx
-import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/ui/sankey-chart-bklit"
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/bklit/charts"
 
 export default function Demo() {
   return (

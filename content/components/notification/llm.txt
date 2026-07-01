@@ -56,7 +56,7 @@ stack:
 命令式调用，无需组件声明。
 
 ```tsx
-import { notification } from "@/components/ui/notification"
+import { notification } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -81,7 +81,7 @@ export default function Demo() {
 ### 带操作与配置
 
 ```tsx
-import { notification } from "@/components/ui/notification"
+import { notification } from "@/components/_shared/sabraman"
 
 export default function Demo() {
   return (
@@ -188,7 +188,7 @@ export default function Demo() {
 
 当 AI 生成本项目通知相关代码时，应遵守：
 
-1. 从 `@/components/ui/notification` 导入 `notification` 对象。
+1. 从 `@/components/_shared/sabraman` 导入 `notification` 对象。
 2. 使用 `notification.success/info/warning/error` 方法，传入 `NotificationArgs` 对象。
 3. 确保页面中已挂载 `<Toaster />`（来自 `@/components/ui/toaster`）。
 4. `title` 为必填属性，`description` 为可选。

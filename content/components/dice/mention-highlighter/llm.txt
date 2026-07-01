@@ -2,7 +2,7 @@
 
 ## Import
 ```
-import { MentionHighlighter } from "@/components/ui/mention-highlighter"
+import { MentionHighlighter } from "@/components/data-entry/dice/mention/mention-highlighter"
 ```
 
 ## Props
@@ -17,7 +17,7 @@ Accepts all `React.HTMLAttributes<HTMLDivElement>` props.
 
 ### Used within MentionInput (auto-rendered)
 ```tsx
-import { MentionHighlighter } from "@/components/ui/mention-highlighter"
+import { MentionHighlighter } from "@/components/data-entry/dice/mention/mention-highlighter"
 import { MentionRoot } from "@/components/data-entry/dice/mention/mention-root"
 import { MentionInput } from "@/components/data-entry/dice/mention/mention-input"
 import { MentionContent } from "@/components/data-entry/dice/mention/mention-content"
@@ -56,7 +56,7 @@ import { MentionPortal } from "@/components/data-entry/dice/mention/mention-port
 ```
 
 ## Constraints
-- DO NOT import from `antd`. Use `@/components/ui/mention-highlighter`.
+- DO NOT import from `antd`. Use `@/components/data-entry/dice/mention/mention-highlighter`.
 - MUST be used within a `<MentionRoot>` context; throws if used standalone.
 - MentionHighlighter is typically auto-rendered by MentionInput. Manual usage is only needed for custom overlay behavior.
 - The component uses `React.memo` with a custom comparator comparing props by reference.

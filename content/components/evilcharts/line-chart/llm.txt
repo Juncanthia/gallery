@@ -3,7 +3,7 @@
 ## Import Path
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import {
   Line,
   XAxis,
@@ -104,7 +104,7 @@ Forwards all Recharts CartesianGrid props. Defaults: `vertical={false} strokeDas
 ### Basic Line Chart
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, Tooltip, Legend, Dot, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 

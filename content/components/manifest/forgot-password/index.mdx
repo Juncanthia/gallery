@@ -22,7 +22,7 @@
 />
 
 ```tsx
-import { ForgotPassword } from "@/components/ui/forgot-password"
+import { ForgotPassword } from "@/components/templates/manifest/form/forgot-password"
 
 export default function Demo() {
   return (
@@ -142,7 +142,7 @@ const router = useRouter()
 
 AI 生成 ForgotPassword 代码时：
 
-1. 从 `@/components/ui/forgot-password` 导入 `ForgotPassword`。
+1. 从 `@/components/templates/manifest/form/forgot-password` 导入 `ForgotPassword`。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
 3. 表单提交通过 `actions.onSubmit` 处理，不要手动管理组件内部的表单状态。
 4. 邮箱校验由组件内部处理，包括空值检查和格式验证。

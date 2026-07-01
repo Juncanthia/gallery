@@ -1,4 +1,4 @@
-import { EvilAreaChart } from "@/components/ui/area-chart-evilcharts"
+import { EvilAreaChart } from "@/components/charts/evilcharts"
 import {
   Area,
   XAxis,

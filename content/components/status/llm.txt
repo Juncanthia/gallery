@@ -59,7 +59,7 @@ Status 是一个用于显示服务或系统运行状态的复合组件。它由 
 ### 四种状态
 
 ```tsx
-import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
+import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
 
 export default function Demo() {
   return (
@@ -88,7 +88,7 @@ export default function Demo() {
 ### 自定义中文标签
 
 ```tsx
-import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
+import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
 
 export default function Demo() {
   return (
@@ -113,7 +113,7 @@ export default function Demo() {
 ### 服务状态面板
 
 ```tsx
-import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
+import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
 
 const services = [
   { name: "API Gateway", status: "online" as const },
@@ -263,7 +263,7 @@ Status 是项目本地复合组件，Ant Design 没有直接对应的组件。An
 
 当 AI 生成本项目 Status 代码时，应遵守：
 
-1. 从 `@/components/ui/status` 导入 Status、StatusIndicator、StatusLabel。
+1. 从 `@/components/blocks/status` 导入 Status、StatusIndicator、StatusLabel。
 2. Status 的 `status` prop 可取运行态 `"online"`、`"offline"`、`"maintenance"`、`"degraded"`，也可取语义态 `"default"`、`"success"`、`"error"`、`"warning"`、`"info"`。
 4. StatusIndicator 和 StatusLabel 必须作为 Status 的 children 嵌套使用，不要在外部独立使用。
 5. 不要在 StatusIndicator 或 StatusLabel 上单独设置颜色属性（由 group 选择器自动处理）。

@@ -4,7 +4,7 @@ import {
   CursorBody,
   CursorName,
   CursorMessage,
-} from "@/components/ui/presence-cursor"
+} from "@/components/blocks/presence-cursor"
 
 const users = [
   { id: "1", name: "Alice", color: "text-blue-500", x: 20, y: 30 },

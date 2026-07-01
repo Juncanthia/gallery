@@ -29,7 +29,7 @@ FluidExpandingGrid 使用内置默认图片数据集，无需传入任何 props 
 />
 
 ```tsx
-import { FluidExpandingGrid } from "@/components/ui/fluid-expanding-grid"
+import { FluidExpandingGrid } from "@/components/layout/uselayouts/fluid-expanding-grid"
 
 export default function Demo() {
   return <FluidExpandingGrid />
@@ -89,7 +89,7 @@ FluidExpandingGrid 使用 spring 动画，参数为 `stiffness: 100, damping: 25
 
 AI 生成 FluidExpandingGrid 相关代码时，应遵守：
 
-1. 从 `@/components/ui/fluid-expanding-grid` 导入 `FluidExpandingGrid`（named export）。
+1. 从 `@/components/layout/uselayouts/fluid-expanding-grid` 导入 `FluidExpandingGrid`（named export）。
 2. 默认场景无需传 props，组件使用内建图片数据集。
 3. 自定义数据时传入 `items` 数组，每项必须包含 id、title、subtitle、image、color 五个字段。
 4. 多个实例并存时，为每个实例传入不同的 `id` 以避免 layoutId 冲突。

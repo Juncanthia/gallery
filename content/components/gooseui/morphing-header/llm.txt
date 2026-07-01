@@ -2,7 +2,7 @@
 component: MorphingHeader
 slug: gooseui/morphing-header
 
-import: import { MorphingHeader, MorphingLogo, MorphingNav } from "@/components/ui/morphing-header"
+import: import { MorphingHeader, MorphingLogo, MorphingNav } from "@/components/effects/interactions/gooseui/morphing-header"
 
 usage: |
   <MorphingHeader compactThreshold={100}>

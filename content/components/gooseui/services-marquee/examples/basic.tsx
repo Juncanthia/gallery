@@ -1,4 +1,4 @@
-import { ServicesMarquee } from "@/components/ui/services-marquee"
+import { ServicesMarquee } from "@/components/marketing-blocks/gooseui/services/services-marquee"
 
 export default function Demo() {
   return (

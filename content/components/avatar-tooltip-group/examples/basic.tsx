@@ -1,4 +1,4 @@
-import { AvatarGroup } from "@/components/ui/avatar-tooltip-group"
+import { AvatarGroup } from "@/components/blocks/avatar-tooltip-group"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function AvatarGroupBasicExample() {

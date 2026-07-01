@@ -34,7 +34,7 @@ EvilBarChart 通过可组合的子组件实现灵活配置：
 />
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -88,7 +88,7 @@ export default function Demo() {
 `Bar` 支持 6 种视觉变体：`default`、`hatched`、`duotone`、`duotone-reverse`、`gradient`、`stripped`。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis } from "@/components/charts/evilcharts/components/bar-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -125,7 +125,7 @@ export default function Demo() {
 `stackType="stacked"` 将多个系列堆叠显示；`stackType="percent"` 以百分比形式展示占比。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -152,7 +152,7 @@ export default function Demo() {
 `layout="horizontal"` 将柱状图横向展示，适合类别名称较长的场景。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, YAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -178,7 +178,7 @@ export default function Demo() {
 `Bar` 设置 `isClickable` 后，点击柱状条可选中/取消系列；配合 `Legend` 的 `isClickable` 实现图例联动。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -204,7 +204,7 @@ export default function Demo() {
 `isLoading` 显示骨架屏动画，`loadingBars` 控制骨架柱条数量。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -232,7 +232,7 @@ export default function Demo() {
 `showBrush` 在图表底部渲染缩放刷控件，用户可拖拽选择数据区间。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -259,7 +259,7 @@ export default function Demo() {
 `glowing` 为柱条添加柔和外发光滤镜；`enableHoverHighlight` 在悬停时突出当前柱条并淡化其余。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -285,7 +285,7 @@ export default function Demo() {
 `animationType` 控制柱条生长动画的入场顺序：`left-to-right`（默认）、`right-to-left`、`center-out`、`edges-in`。设为 `"none"` 关闭动画；系统开启"减弱动态效果"时自动回退为 `"none"`。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -310,7 +310,7 @@ export default function Demo() {
 `bufferBar` 将最后一个数据点渲染为斜线填充的"缓冲区"柱条，常用于预期/目标值场景。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -335,7 +335,7 @@ export default function Demo() {
 `barRadius` 控制柱条圆角半径，可针对不同 Bar 独立设置 `radius`。
 
 ```tsx
-import { EvilBarChart } from "@/components/ui/bar-chart-evilcharts"
+import { EvilBarChart } from "@/components/charts/evilcharts"
 import { Bar, XAxis, Grid, Tooltip } from "@/components/charts/evilcharts/components/bar-chart"
 
 export default function Demo() {
@@ -542,7 +542,7 @@ const chartConfig = {
 
 AI 生成 EvilBarChart 代码时：
 
-1. 从 `@/components/ui/bar-chart-evilcharts` 导入 `EvilBarChart`
+1. 从 `@/components/charts/evilcharts` 导入 `EvilBarChart`
 2. 子组件从 `@/components/charts/evilcharts/components/bar-chart` 导入：`Bar`、`XAxis`、`YAxis`、`Grid`、`Tooltip`、`Legend`
 3. `ChartConfig` 类型从 `@/components/charts/evilcharts/components/chart` 导入
 4. `config` 使用 `satisfies ChartConfig` 确保类型安全

@@ -52,7 +52,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { GridBloom } from "@/components/ui/grid-bloom"
+import { GridBloom } from "@/components/effects/backgrounds/chamaac/grid-bloom/grid-bloom"
 
 export default function Demo() {
   return (
@@ -142,7 +142,7 @@ interface GridBloomProps {
 
 当 AI 生成本项目 GridBloom 代码时，应遵守：
 
-1. 从 `@/components/ui/grid-bloom` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/effects/backgrounds/chamaac/grid-bloom/grid-bloom` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器具有 `position: relative` 和明确的宽高尺寸。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
 4. 不要引入 Ant Design 相关依赖。

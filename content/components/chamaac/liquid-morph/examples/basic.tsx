@@ -1,4 +1,4 @@
-import { LiquidMorph } from "@/components/ui/liquid-morph"
+import { LiquidMorph } from "@/components/effects/backgrounds/chamaac/liquid-morph/liquid-morph"
 
 export default function Demo() {
   return (

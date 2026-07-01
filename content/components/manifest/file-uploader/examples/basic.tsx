@@ -1,4 +1,4 @@
-import { FileUploader } from "@/components/ui/file-uploader"
+import { FileUploader } from "@/components/data-entry/manifest/file-uploader"
 
 export default function Demo() {
   return (

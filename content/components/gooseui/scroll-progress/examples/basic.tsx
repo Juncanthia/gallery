@@ -1,4 +1,4 @@
-import { ScrollProgress } from "@/components/ui/scroll-progress"
+import { ScrollProgress } from "@/components/navigation/gooseui/scroll-progress"
 
 export default function Demo() {
   return (

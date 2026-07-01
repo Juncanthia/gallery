@@ -47,7 +47,7 @@ EmptyState 以垂直居中布局展示空状态信息，图标区域展示插画
 默认展示内置的空状态页面模板，包含默认图标、标题、描述和"创建新项目"按钮。
 
 ```tsx
-import { EmptyState } from "@/components/ui/empty-state-manifest"
+import { EmptyState } from "@/components/data-display/manifest/empty-state"
 
 export default function EmptyStateDemo() {
   return (
@@ -63,7 +63,7 @@ export default function EmptyStateDemo() {
 通过 `data` 和 `actions` prop 自定义文案和操作回调。
 
 ```tsx
-import { EmptyState } from "@/components/ui/empty-state-manifest"
+import { EmptyState } from "@/components/data-display/manifest/empty-state"
 
 export default function CustomEmptyStateDemo() {
   return (
@@ -86,7 +86,7 @@ export default function CustomEmptyStateDemo() {
 通过 `data.image` 传入自定义的空状态图标节点。
 
 ```tsx
-import { EmptyState } from "@/components/ui/empty-state-manifest"
+import { EmptyState } from "@/components/data-display/manifest/empty-state"
 import { FileText } from "lucide-react"
 
 export default function CustomIconDemo() {
@@ -112,7 +112,7 @@ export default function CustomIconDemo() {
 通过 `appearance` 和 `control` prop 控制元素显示和加载状态。
 
 ```tsx
-import { EmptyState } from "@/components/ui/empty-state-manifest"
+import { EmptyState } from "@/components/data-display/manifest/empty-state"
 
 export default function StatesDemo() {
   return (
@@ -269,7 +269,7 @@ useEffect(() => {
 
 当 AI 生成 EmptyState 代码时，应遵守：
 
-1. 从 `@/components/ui/empty-state-manifest` 导入 `EmptyState`。
+1. 从 `@/components/data-display/manifest/empty-state` 导入 `EmptyState`。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop，不要直接传入子组件。
 3. 空状态标题通过 `data.title` 设置，描述通过 `data.description` 设置。
 4. 操作按钮文字通过 `data.actionLabel` 设置，点击回调通过 `actions.onAction` 处理。

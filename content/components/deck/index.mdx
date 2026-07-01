@@ -22,7 +22,7 @@
 <ComponentShowcase id="deck" path="deck/basic" />
 
 ```tsx
-import { Deck, DeckCards, DeckItem, DeckEmpty } from "@/components/ui/deck"
+import { Deck, DeckCards, DeckItem, DeckEmpty } from "@/components/blocks/deck"
 
 export default function Demo() {
   return (
@@ -45,7 +45,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { Deck, DeckCards, DeckItem } from "@/components/ui/deck"
+import { Deck, DeckCards, DeckItem } from "@/components/blocks/deck"
 import { Button } from "@/components/ui/button"
 
 export default function Demo() {
@@ -76,7 +76,7 @@ export default function Demo() {
 调整堆叠视觉深度、滑动灵敏度和动画行为。
 
 ```tsx
-import { Deck, DeckCards, DeckItem } from "@/components/ui/deck"
+import { Deck, DeckCards, DeckItem } from "@/components/blocks/deck"
 
 export default function Demo() {
   return (
@@ -196,7 +196,7 @@ const handleReset = () => setIndex(0)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/deck` 导入 Deck、DeckCards、DeckItem、DeckEmpty。
+1. 从 `@/components/blocks/deck` 导入 Deck、DeckCards、DeckItem、DeckEmpty。
 2. 卡片子元素必须作为 DeckCards 的直接子节点传入，内容使用 DeckItem 包裹。
 3. 如需受控索引，使用 currentIndex + onCurrentIndexChange，不要自行管理 state 后传递给不受控 API。
 4. DeckEmpty 放在 Deck 内部、DeckCards 之后，所有卡片消耗后自动显示。

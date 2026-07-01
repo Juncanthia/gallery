@@ -28,7 +28,7 @@ Dashboard 以模块化方式组织数据展示：
 />
 
 ```tsx
-import { Dashboard } from "@/components/ui/dashboard"
+import { Dashboard } from "@/components/templates/manifest/miscellaneous/dashboard"
 
 export default function Demo() {
   return (
@@ -44,7 +44,7 @@ export default function Demo() {
 通过 `data` prop 注入自定义的统计数据、图表数据和活动记录。
 
 ```tsx
-import { Dashboard } from "@/components/ui/dashboard"
+import { Dashboard } from "@/components/templates/manifest/miscellaneous/dashboard"
 
 export default function Demo() {
   return (
@@ -72,7 +72,7 @@ export default function Demo() {
 通过 `appearance` prop 控制标题显示、列数等视觉配置。
 
 ```tsx
-import { Dashboard } from "@/components/ui/dashboard"
+import { Dashboard } from "@/components/templates/manifest/miscellaneous/dashboard"
 
 export default function Demo() {
   return (
@@ -205,7 +205,7 @@ const [loading, setLoading] = useState(true)
 
 AI 生成 Dashboard 代码时：
 
-1. 从 `@/components/ui/dashboard` 导入 `Dashboard`。
+1. 从 `@/components/templates/manifest/miscellaneous/dashboard` 导入 `Dashboard`。
 2. 使用 `data`、`appearance`、`actions`、`control` 四个顶层 prop 配置组件。
 3. 统计数据通过 `data.stats` 传入，每项包含 `label`、`value` 和可选的 `change`、`trend`。
 4. 最近活动通过 `data.recentActivity` 传入，不传时使用默认演示数据。

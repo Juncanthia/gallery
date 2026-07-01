@@ -1,6 +1,6 @@
 "use client";
 
-import { EvilComposedChart } from "@/components/ui/composed-chart-evilcharts";
+import { EvilComposedChart } from "@/components/charts/evilcharts";
 import {
   Bar,
   Line,

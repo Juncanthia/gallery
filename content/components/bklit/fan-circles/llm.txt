@@ -1,5 +1,5 @@
 [扇形扩散 / FanCircles]
-导入: import { FanCircles } from "@/components/ui/fan-circles"
+导入: import { FanCircles } from "@/components/charts/bklit/fan-circles"
 包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 依赖: motion (framer-motion), react
@@ -31,7 +31,7 @@ FanCircles 为纯装饰性动画组件，无需传入任何 Props。直接渲染
 直接导入并使用，无需任何配置：
 
 ```tsx
-import { FanCircles } from "@/components/ui/fan-circles"
+import { FanCircles } from "@/components/charts/bklit/fan-circles"
 
 export default function Demo() {
   return <FanCircles />
@@ -43,7 +43,7 @@ export default function Demo() {
 如需控制组件的外层尺寸和布局，可包裹在自定义容器中：
 
 ```tsx
-import { FanCircles } from "@/components/ui/fan-circles"
+import { FanCircles } from "@/components/charts/bklit/fan-circles"
 
 export default function CustomLayout() {
   return (
@@ -59,7 +59,7 @@ export default function CustomLayout() {
 将 FanCircles 与文字内容组合，增强视觉表现力：
 
 ```tsx
-import { FanCircles } from "@/components/ui/fan-circles"
+import { FanCircles } from "@/components/charts/bklit/fan-circles"
 
 export default function HeroSection() {
   return (

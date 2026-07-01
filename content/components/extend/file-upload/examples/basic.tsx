@@ -1,4 +1,4 @@
-import { FileUpload } from "@/components/ui/file-upload-extend"
+import { FileUpload } from "@/components/document/components/ui/file-upload"
 
 export default function Demo() {
   return (

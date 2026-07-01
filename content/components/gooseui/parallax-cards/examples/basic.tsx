@@ -1,4 +1,4 @@
-import { ParallaxCard, ParallaxCards } from "@/components/ui/parallax-cards"
+import { ParallaxCard, ParallaxCards } from "@/components/effects/interactions/gooseui/parallax-cards"
 
 export default function Demo() {
   return (

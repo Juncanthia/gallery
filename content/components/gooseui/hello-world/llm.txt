@@ -55,7 +55,7 @@ HelloWorld 无需任何 props，直接渲染 `Hello World` 标题。
 />
 
 ```tsx
-import { HelloWorld } from "@/components/ui/hello-world"
+import { HelloWorld } from "@/components/marketing-blocks/gooseui/hello-world/hello-world"
 
 export default function Demo() {
   return <HelloWorld />
@@ -100,7 +100,7 @@ HelloWorld 组件渲染的是硬编码的 "Hello World" 文本，不可更改。
 
 当 AI 生成本项目 HelloWorld 代码时，应遵守：
 
-1. 从 `@/components/ui/hello-world` 导入 `HelloWorld`。
+1. 从 `@/components/marketing-blocks/gooseui/hello-world/hello-world` 导入 `HelloWorld`。
 2. 组件无需任何 props，直接使用 `<HelloWorld />` 即可。
 3. 不要为 HelloWorld 传递任何 props，组件不接受任何参数。
 4. 不要引入 Ant Design 相关依赖。

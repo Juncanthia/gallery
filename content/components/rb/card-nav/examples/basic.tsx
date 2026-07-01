@@ -1,4 +1,4 @@
-import { CardNav } from "@/components/ui/card-nav"
+import { CardNav } from "@/components/navigation/react-bits/card-nav"
 
 export default function CardNavBasicExample() {
   return (

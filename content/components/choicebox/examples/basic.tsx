@@ -8,7 +8,7 @@ import {
   ChoiceboxItemHeader,
   ChoiceboxItemTitle,
   ChoiceboxItemSubtitle,
-} from "@/components/ui/choicebox"
+} from "@/components/blocks/choicebox"
 
 export default function ChoiceboxBasicExample() {
   const [plan, setPlan] = useState("pro")

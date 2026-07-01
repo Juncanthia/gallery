@@ -67,7 +67,7 @@ import {
   CreditCardExpiry,
   CreditCardCvv,
   CreditCardServiceProvider,
-} from "@/components/ui/credit-card"
+} from "@/components/blocks/credit-card"
 
 export default function Demo() {
   return (
@@ -242,7 +242,7 @@ export default function Demo() {
 
 当 AI 生成本项目 CreditCard 代码时，应遵守：
 
-1. 从 `@/components/ui/credit-card` 导入所有需要的子组件，不要从 `antd` 导入。
+1. 从 `@/components/blocks/credit-card` 导入所有需要的子组件，不要从 `antd` 导入。
 2. `CreditCard` 作为最外层容器，`CreditCardFlipper` 包裹正反面，`CreditCardFront`/`CreditCardBack` 各自包含正面/背面内容。
 3. `CreditCardChip` 默认渲染 SVG 芯片图案；需要自定义时传入 `children`（此时渲染为 div 容器）。
 4. `CreditCardMagStripe` 仅在 `CreditCardBack` 内部使用，会自动适配 `safeArea` 宽度。

@@ -51,7 +51,7 @@ CodePanel 是一个结构化的代码展示复合组件，由 Code 容器、Code
 ### 基础用法
 
 ```tsx
-import { Code, CodeHeader, CodeBlock } from "@/components/ui/code-panel"
+import { Code, CodeHeader, CodeBlock } from "@/components/blocks/code-panel"
 import { Terminal } from "lucide-react"
 
 export default function Demo() {
@@ -163,7 +163,7 @@ export default function Demo() {
 
 当 AI 生成本项目 CodePanel 代码时，应遵守：
 
-1. 从 `@/components/ui/code-panel` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/code-panel` 导入，不要从 `antd` 导入。
 2. `Code` 必须作为最外层容器，且 `code` prop 为必填。
 3. `CodeHeader` 和 `CodeBlock` 必须在 `Code` 内部使用，它们依赖 Context 获取代码内容。
 4. 复制功能通过 `CodeHeader` 的 `copyButton` 属性启用；不要单独引入 CopyButton。

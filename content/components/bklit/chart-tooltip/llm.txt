@@ -1,5 +1,5 @@
 [图表提示框 / ChartTooltip]
-导入: import { ChartTooltip } from "@/components/ui/chart-tooltip"
+导入: import { ChartTooltip } from "@/components/agent-tools/chart/charttip"
 包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
 

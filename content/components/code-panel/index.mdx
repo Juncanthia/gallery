@@ -24,7 +24,7 @@ CodePanel 代码面板，由 Code 容器、CodeHeader 标题栏和 CodeBlock 代
 <ComponentShowcase id="code-panel" path="code-panel/basic" />
 
 ```tsx
-import { Code, CodeHeader, CodeBlock } from "@/components/ui/code-panel"
+import { Code, CodeHeader, CodeBlock } from "@/components/blocks/code-panel"
 import { Terminal } from "lucide-react"
 
 export default function Demo() {
@@ -44,7 +44,7 @@ export default function Demo() {
 不使用 CodeHeader，仅展示纯代码内容。
 
 ```tsx
-import { Code, CodeBlock } from "@/components/ui/code-panel"
+import { Code, CodeBlock } from "@/components/blocks/code-panel"
 
 export default function Demo() {
   return (
@@ -60,7 +60,7 @@ export default function Demo() {
 CodePanel 仅负责展示，外部按钮通过状态控制复制等行为。
 
 ```tsx
-import { Code, CodeHeader, CodeBlock } from "@/components/ui/code-panel"
+import { Code, CodeHeader, CodeBlock } from "@/components/blocks/code-panel"
 import { FileCode } from "lucide-react"
 
 const snippet = `npm install @canthia/ui\n# or\nyarn add @canthia/ui`
@@ -129,7 +129,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/code-panel` 导入 `Code`、`CodeHeader`、`CodeBlock`。
+1. 从 `@/components/blocks/code-panel` 导入 `Code`、`CodeHeader`、`CodeBlock`。
 2. `Code` 必须作为最外层容器，且 `code` prop 为必填。
 3. `CodeHeader` 和 `CodeBlock` 必须在 `Code` 内部使用，依赖 Context 获取代码。
 4. 标题栏图标使用 `icon` prop 传入组件类型（如 `Terminal`），不是 React 元素实例。

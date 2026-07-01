@@ -26,7 +26,7 @@
 <ComponentShowcase id="manifest/user-profile" path="manifest/user-profile/basic" />
 
 ```tsx
-import { UserProfile } from "@/components/ui/user-profile"
+import { UserProfile } from "@/components/templates/manifest/form/user-profile"
 
 export default function Demo() {
   return &lt;UserProfile /&gt;
@@ -38,7 +38,7 @@ export default function Demo() {
 通过 `actions.onSave` 回调接收更新后的用户资料数据。
 
 ```tsx
-import { UserProfile } from "@/components/ui/user-profile"
+import { UserProfile } from "@/components/templates/manifest/form/user-profile"
 
 export default function Demo() {
   return (
@@ -59,7 +59,7 @@ export default function Demo() {
 
 ```tsx
 import { useState } from "react"
-import { UserProfile } from "@/components/ui/user-profile"
+import { UserProfile } from "@/components/templates/manifest/form/user-profile"
 
 export default function Demo() {
   const [loading, setLoading] = useState(false)
@@ -87,7 +87,7 @@ export default function Demo() {
 通过 `data` 自定义标题、编辑按钮、保存按钮和取消按钮文字。
 
 ```tsx
-import { UserProfile } from "@/components/ui/user-profile"
+import { UserProfile } from "@/components/templates/manifest/form/user-profile"
 
 export default function Demo() {
   return (
@@ -108,7 +108,7 @@ export default function Demo() {
 通过 `appearance.showAvatar` 控制头像区域的显示。
 
 ```tsx
-import { UserProfile } from "@/components/ui/user-profile"
+import { UserProfile } from "@/components/templates/manifest/form/user-profile"
 
 export default function Demo() {
   return (
@@ -124,7 +124,7 @@ export default function Demo() {
 通过 `appearance.editable` 设置为 `false` 禁用编辑功能，仅展示用户信息。
 
 ```tsx
-import { UserProfile } from "@/components/ui/user-profile"
+import { UserProfile } from "@/components/templates/manifest/form/user-profile"
 
 export default function Demo() {
   return (
@@ -259,7 +259,7 @@ const [loading, setLoading] = useState(false)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/user-profile` 导入 `UserProfile`，不要从 Ant Design 导入 Descriptions 或 Form 组件。
+1. 从 `@/components/templates/manifest/form/user-profile` 导入 `UserProfile`，不要从 Ant Design 导入 Descriptions 或 Form 组件。
 2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件。
 3. 资料保存通过 `actions.onSave` 处理，回调接收 `UserData` 类型的完整用户数据。
 4. 加载状态通过 `control.isLoading` 控制，组件内部自动禁用按钮并显示加载状态。

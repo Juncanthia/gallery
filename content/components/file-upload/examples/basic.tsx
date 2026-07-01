@@ -9,7 +9,7 @@ import {
   FileUploadItemMetadata,
   FileUploadItemDelete,
   FileUploadClear,
-} from "@/components/ui/file-upload"
+} from "@/components/blocks/file-upload"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 

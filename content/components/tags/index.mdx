@@ -35,7 +35,7 @@ import {
   TagsEmpty,
   TagsGroup,
   TagsItem,
-} from "@/components/ui/tags"
+} from "@/components/blocks/tags"
 
 export default function Demo() {
   return (
@@ -68,7 +68,7 @@ import { useState } from "react"
 import {
   Tags, TagsTrigger, TagsValue, TagsContent,
   TagsInput, TagsList, TagsEmpty, TagsGroup, TagsItem,
-} from "@/components/ui/tags"
+} from "@/components/blocks/tags"
 
 const allTags = [
   { value: "react", label: "React", group: "前端" },
@@ -230,7 +230,7 @@ const selectedList = value.split(",").filter(Boolean)
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/tags` 导入，不要从 `antd` 导入。
+1. 从 `@/components/blocks/tags` 导入，不要从 `antd` 导入。
 2. 使用 `Tags` > `TagsTrigger` + `TagsContent` 的标准结构。
 3. `TagsValue` 需要 `onRemove` 回调才能显示移除按钮。
 4. `TagsContent` 内部放置 `TagsInput`、`TagsList`、`TagsGroup`、`TagsItem`。

@@ -1,4 +1,4 @@
-import { TiltedCard } from "@/components/ui/tilted-card"
+import { TiltedCard } from "@/components/marketing-blocks/react-bits/tilted-card"
 
 export default function TiltedCardBasicExample() {
   return (

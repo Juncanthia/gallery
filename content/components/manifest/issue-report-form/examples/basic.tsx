@@ -1,4 +1,4 @@
-import { IssueReportForm } from "@/components/ui/issue-report-form"
+import { IssueReportForm } from "@/components/templates/manifest/form/issue-report-form"
 
 const demoData = {
   title: "Report an Issue",

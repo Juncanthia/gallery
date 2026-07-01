@@ -16,7 +16,7 @@ GlassIcons 玻璃拟态风格图标按钮组，每个图标拥有渐变背景和
 <ComponentShowcase id="rb/glass-icons" path="rb/glass-icons/basic" />
 
 ```tsx
-import { GlassIcons } from "@/components/ui/glass-icons"
+import { GlassIcons } from "@/components/marketing-blocks/react-bits/glass-icons"
 import { Github, Twitter, Linkedin } from "lucide-react"
 
 export default function Demo() {
@@ -35,7 +35,7 @@ export default function Demo() {
 ### 自定义颜色与图标
 
 ```tsx
-import { GlassIcons } from "@/components/ui/glass-icons"
+import { GlassIcons } from "@/components/marketing-blocks/react-bits/glass-icons"
 import { Mail, MessageCircle, Share2 } from "lucide-react"
 
 export default function Demo() {
@@ -88,7 +88,7 @@ export default function Demo() {
 `icon` 为任意 React 节点（建议使用 `lucide-react` 图标或 SVG），`label` 为 `aria-label` 的无障碍文本，同时也是悬浮时显示的底部文字。
 
 <h2 id="llm-rules">LLM 使用规则</h2>
-1. 从 `@/components/ui/glass-icons` 导入。
+1. 从 `@/components/marketing-blocks/react-bits/glass-icons` 导入。
 2. 纯 CSS 实现，无额外第三方依赖。
 3. `items` 为必填属性，每项需提供 `icon`（React 节点）、`label`（文字）和 `color`（预设名或 CSS 背景值）。
 4. 每个按钮通过 `aria-label={item.label}` 提供无障碍支持，`icon` 元素设置 `aria-hidden="true"`。

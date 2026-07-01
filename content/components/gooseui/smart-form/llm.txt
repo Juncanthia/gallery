@@ -31,13 +31,13 @@ stack:
 ## 导入
 
 ```tsx
-import { SmartForm, SmartFormField } from "@/components/ui/smart-form"
+import { SmartForm, SmartFormField } from "@/components/data-entry/gooseui/smart-form"
 ```
 
 ## 用法
 
 ```tsx
-import { SmartForm, SmartFormField } from "@/components/ui/smart-form"
+import { SmartForm, SmartFormField } from "@/components/data-entry/gooseui/smart-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

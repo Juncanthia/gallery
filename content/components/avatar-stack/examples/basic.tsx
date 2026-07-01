@@ -1,4 +1,4 @@
-import { AvatarStack } from "@/components/ui/avatar-stack"
+import { AvatarStack } from "@/components/blocks/avatar-stack"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function AvatarStackBasicExample() {

@@ -53,7 +53,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { WaterCaustic } from "@/components/ui/water-caustic"
+import { WaterCaustic } from "@/components/effects/backgrounds/chamaac/water-caustic/water-caustic"
 
 export default function Demo() {
   return (
@@ -131,7 +131,7 @@ interface WaterCausticProps {
 
 当 AI 生成本项目 WaterCaustic 代码时，应遵守：
 
-1. 从 `@/components/ui/water-caustic` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+1. 从 `@/components/effects/backgrounds/chamaac/water-caustic/water-caustic` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
 2. 确保父容器具有 `position: relative` 和明确的宽高尺寸。
 3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
 4. 不要引入 Ant Design 相关依赖。

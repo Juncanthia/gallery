@@ -1,4 +1,4 @@
-import { GlitchText } from "@/components/ui/glitch-text-gooseui"
+import { GlitchText } from "@/components/effects/text/gooseui/glitch-text-fx"
 
 export default function Demo() {
   return (

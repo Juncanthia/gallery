@@ -66,7 +66,7 @@ import {
   VideoPlayerTimeRange,
   VideoPlayerMuteButton,
   VideoPlayerVolumeRange,
-} from "@/components/ui/video-player"
+} from "@/components/blocks/video-player"
 
 export default function Demo() {
   return (
@@ -196,7 +196,7 @@ export default function Demo() {
 
 ## LLM 使用规则
 
-1. 从 `@/components/ui/video-player` 导入所有需要的子组件，按需导入。
+1. 从 `@/components/blocks/video-player` 导入所有需要的子组件，按需导入。
 2. `VideoPlayerContent` 必须设置 `slot="media"`，否则 MediaController 无法识别媒体源。
 3. 控制按钮（PlayButton、SeekBackwardButton 等）必须放置在 `VideoPlayerControlBar` 内部，否则不会出现在控制栏中。
 4. 不要使用 HTML5 原生 `<video controls>` 替代本组件——会导致播放控制栏风格与项目设计系统不一致。

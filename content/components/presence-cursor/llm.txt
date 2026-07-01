@@ -42,7 +42,7 @@ PresenceCursor 是一个复合组件，由 Cursor（容器）、CursorPointer（
 ```tsx
 import {
   Cursor, CursorBody, CursorMessage, CursorName, CursorPointer,
-} from "@/components/ui/presence-cursor"
+} from "@/components/blocks/presence-cursor"
 
 const users = [
   { id: "1", name: "Alice", color: "text-blue-500", x: 20, y: 30 },
@@ -135,7 +135,7 @@ Ant Design 无协作光标组件，本组件为项目本地纯新增能力。
 
 ## LLM 使用规则
 
-1. 从 `@/components/ui/presence-cursor` 导入 Cursor、CursorPointer、CursorBody、CursorName、CursorMessage。
+1. 从 `@/components/blocks/presence-cursor` 导入 Cursor、CursorPointer、CursorBody、CursorName、CursorMessage。
 2. Cursor 必须设置定位（`className="absolute"` + `style` 坐标）。
 3. CursorPointer 颜色通过 `className` Tailwind 颜色类 + `fill="currentColor"` 控制。
 4. CursorBody 内必须放置 CursorName，可选 CursorMessage。

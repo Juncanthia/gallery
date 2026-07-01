@@ -32,7 +32,7 @@ EvilLineChart 通过组合子组件实现灵活配置：
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import {
   Line,
   XAxis,
@@ -92,7 +92,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, YAxis, Legend, Tooltip, Dot, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -137,7 +137,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, YAxis, Legend, Tooltip, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -169,7 +169,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, YAxis, Tooltip, Dot, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -202,7 +202,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, Tooltip, Legend, Dot, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -242,7 +242,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, Tooltip, Legend, Dot, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -281,7 +281,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, YAxis, Tooltip, Legend } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -309,7 +309,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, YAxis, Tooltip, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -337,7 +337,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, YAxis, Legend, Tooltip, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -369,7 +369,7 @@ export default function Demo() {
 />
 
 ```tsx
-import { EvilLineChart } from "@/components/ui/line-chart-evilcharts"
+import { EvilLineChart } from "@/components/charts/evilcharts"
 import { Line, XAxis, YAxis, Tooltip, ActiveDot } from "@/components/charts/evilcharts/components/line-chart"
 import { type ChartConfig } from "@/components/charts/evilcharts/components/chart"
 
@@ -567,7 +567,7 @@ const chartConfig = {
 
 AI 生成 EvilLineChart 代码时：
 
-1. 从 `@/components/ui/line-chart-evilcharts` 导入 `EvilLineChart`
+1. 从 `@/components/charts/evilcharts` 导入 `EvilLineChart`
 2. 从 `@/components/charts/evilcharts/components/line-chart` 导入 `Line`、`XAxis`、`YAxis`、`Tooltip`、`Legend`、`Dot`、`ActiveDot`、`Grid`
 3. 从 `@/components/charts/evilcharts/components/chart` 导入 `ChartConfig` 类型
 4. `config` 必须满足 `satisfies ChartConfig`，每个序列至少包含一个主题色键（`light` / `dark`）

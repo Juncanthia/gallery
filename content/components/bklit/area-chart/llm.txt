@@ -1,5 +1,5 @@
 [面积图 / AreaChart]
-导入: import { AreaChart } from "@/components/ui/area-chart-bklit"
+导入: import { AreaChart } from "@/components/charts/bklit/charts"
 子组件: import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent, PatternArea, XAxis, YAxis } from "@/components/charts/bklit/charts"
 包来源: @/components/charts/bklit/charts
 组件类型: 图表 / BKLit Charts
@@ -80,7 +80,7 @@
 
 ### 基础面积图
 
-import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { AreaChart } from "@/components/charts/bklit/charts"
 import { Area, Grid } from "@/components/charts/bklit/charts"
 
 const data = [
@@ -100,7 +100,7 @@ const data = [
 
 ### 加载骨架屏
 
-import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { AreaChart } from "@/components/charts/bklit/charts"
 import { Area, Grid, generateChartSkeletonData } from "@/components/charts/bklit/charts"
 
 const skeletonData = generateChartSkeletonData({ dataKey: "value", pointCount: 8 })
@@ -112,7 +112,7 @@ const skeletonData = generateChartSkeletonData({ dataKey: "value", pointCount: 8
 
 ### 带 Tooltip 的面积图
 
-import { AreaChart } from "@/components/ui/area-chart-bklit"
+import { AreaChart } from "@/components/charts/bklit/charts"
 import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/charts/bklit/charts"
 
 <AreaChart data={data}>
@@ -142,7 +142,7 @@ import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent 
 - 不要引入 Recharts、Ant Design Charts、ECharts 等第三方图表库
 - AreaChart 内部使用 ParentSize 自适应容器尺寸，无需手动传 width/height
 - 所有子组件（Area、Grid、ChartTooltip 等）必须通过 children 传入，不要在外层包裹
-- 从 @/components/ui/area-chart-bklit 导入 AreaChart
+- 从 @/components/charts/bklit/charts 导入 AreaChart
 - 从 @/components/charts/bklit/charts 导入 Area、Grid、ChartTooltip、PatternArea 等子组件
 
 ## 最佳实践

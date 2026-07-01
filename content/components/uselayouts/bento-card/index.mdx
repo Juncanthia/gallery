@@ -28,7 +28,7 @@ BentoCard 无需任何 props，直接渲染完整仪表盘。
 />
 
 ```tsx
-import { BentoCard } from "@/components/ui/bento-card"
+import { BentoCard } from "@/components/layout/uselayouts/bento-card"
 
 export default function Demo() {
   return <BentoCard />
@@ -57,7 +57,7 @@ BentoCard 使用 Tailwind CSS 和 motion 实现样式与动画。通过修改 `s
 
 AI 生成 BentoCard 相关代码时，应遵守：
 
-1. 从 `@/components/ui/bento-card` 导入 `BentoCard`（named export）。
+1. 从 `@/components/layout/uselayouts/bento-card` 导入 `BentoCard`（named export）。
 2. 不要给 BentoCard 传递任何 props，组件自身管理全部状态。
 3. 如需引入其他依赖（motion、@hugeicons），从组件源码处参考正确的导入路径。
 4. BentoCard 依赖 motion/react 的 LayoutGroup 和 AnimatePresence，不要移除这些动画逻辑。

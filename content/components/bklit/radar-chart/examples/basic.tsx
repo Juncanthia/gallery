@@ -1,4 +1,4 @@
-import { RadarChart } from "@/components/ui/radar-chart-bklit"
+import { RadarChart } from "@/components/charts/bklit/charts"
 import { RadarArea, RadarGrid, RadarAxis, RadarLabels } from "@/components/charts/bklit/charts"
 
 const metrics = [

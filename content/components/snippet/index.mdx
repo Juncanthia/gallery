@@ -30,7 +30,7 @@ import {
   SnippetTabsList,
   SnippetTabsTrigger,
   SnippetTabsContent,
-} from "@/components/ui/snippet"
+} from "@/components/blocks/snippet"
 
 export default function Demo() {
   return (
@@ -64,7 +64,7 @@ import {
   SnippetTabsList,
   SnippetTabsTrigger,
   SnippetTabsContent,
-} from "@/components/ui/snippet"
+} from "@/components/blocks/snippet"
 
 const codes: Record<string, string> = {
   js: 'const msg = "Hello World";\nconsole.log(msg);',
@@ -178,7 +178,7 @@ const [tab, setTab] = useState("npm")
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/ui/snippet` 导入 Snippet、SnippetHeader、SnippetCopyButton、SnippetTabsList、SnippetTabsTrigger、SnippetTabsContent。
+1. 从 `@/components/blocks/snippet` 导入 Snippet、SnippetHeader、SnippetCopyButton、SnippetTabsList、SnippetTabsTrigger、SnippetTabsContent。
 2. Snippet 作为最外层容器，内部按 SnippetHeader + SnippetTabsContent 的顺序组合。
 3. SnippetHeader 内放置 SnippetTabsList（含 SnippetTabsTrigger）和 SnippetCopyButton，左右排列。
 4. SnippetCopyButton 的 `value` prop 绑定当前激活标签页对应的代码文本；使用受控模式时需在 `onValueChange` 中更新。

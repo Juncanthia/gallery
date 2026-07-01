@@ -59,7 +59,7 @@ Gauge 仪表盘。基于 motion/react 动画实现，通过半圆形排布的条
 
 &lt;h2 id="llm-rules"&gt;LLM 使用规则&lt;/h2&gt;
 
-1. 从 `@/components/ui/gauge-chamaac` 导入 Gauge，不要从 `motion/react` 直接引用。
+1. 从 `@/components/charts/chamaac/gauge/gauge` 导入 Gauge，不要从 `motion/react` 直接引用。
 2. 颜色属性（activeColor / inactiveColor）传入的是 Tailwind CSS 类名，不是 CSS 颜色值。
 3. 组件内置响应式逻辑，小屏自动缩小，不需要手动添加响应式 wrapper。
 4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。

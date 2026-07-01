@@ -19,7 +19,7 @@ Presence 的核心价值在于：普通的条件渲染（`{show && &lt;Component
 <ComponentShowcase id="dice/presence" path="dice/presence/basic" />
 
 ```tsx
-import { Presence } from "@/components/ui/presence"
+import { Presence } from "@/components/general/dice/headless/presence"
 
 export default function Demo() {
   const [present, setPresent] = useState(true)
@@ -95,7 +95,7 @@ Presence 会自动设置 `data-state="open"`（挂载中）和 `data-state="clos
 
 当 AI 生成本项目 Presence 代码时，应遵守：
 
-1. 从 `@/components/ui/presence` 导入，不要从 `radix-ui` 直接导入。
+1. 从 `@/components/general/dice/headless/presence` 导入，不要从 `radix-ui` 直接导入。
 2. `present` 是必需属性，传入 `boolean` 值控制挂载 / 卸载。
 3. 需要退出动画的场景必须使用 Presence，不要用条件渲染替代。
 4. 子元素的动画通过 CSS `animation-name` 定义，Presence 自动检测并等待动画完成。

@@ -53,7 +53,7 @@ stack:
 ### 基础用法
 
 ```tsx
-import { DataTable } from "@/components/ui/data-table-tool"
+import { DataTable } from "@/components/agent-tools/data-table/data-table"
 
 export default function Demo() {
   return (
@@ -79,7 +79,7 @@ export default function Demo() {
 ### 受控排序
 
 ```tsx
-import { DataTable } from "@/components/ui/data-table-tool"
+import { DataTable } from "@/components/agent-tools/data-table/data-table"
 import { useState } from "react"
 
 export default function Demo() {
@@ -107,7 +107,7 @@ export default function Demo() {
 ### 仅表格 / 仅卡片布局
 
 ```tsx
-import { DataTable } from "@/components/ui/data-table-tool"
+import { DataTable } from "@/components/agent-tools/data-table/data-table"
 
 const columns = [
   { key: "name", label: "Name" },
@@ -265,7 +265,7 @@ type DataTableRowData = Record<string, RowPrimitive>;
 
 当 AI 生成本项目 DataTable 代码时，应遵守：
 
-1. 从 `@/components/ui/data-table-tool` 导入 `DataTable`，不要从 `antd` 导入。
+1. 从 `@/components/agent-tools/data-table/data-table` 导入 `DataTable`，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
 3. `id`、`columns`、`data` 为必填属性，生产环境必须提供 `rowIdKey`。
 4. `data` 中每行的值必须是原始类型（string / number / boolean / null）或原始类型数组，不要放对象。复杂渲染通过 `column.format` 配置实现。

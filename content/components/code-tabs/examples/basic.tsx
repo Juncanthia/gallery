@@ -1,4 +1,4 @@
-import { CodeTabs } from "@/components/ui/code-tabs"
+import { CodeTabs } from "@/components/blocks/code-tabs"
 
 export default function CodeTabsBasicExample() {
   return (

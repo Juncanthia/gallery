@@ -25,7 +25,7 @@ FAQAccordion 通过受控的 `openIndex` 状态实现手风琴行为，每次仅
 />
 
 ```tsx
-import { FAQAccordion } from "@/components/ui/faq-accordion"
+import { FAQAccordion } from "@/components/marketing-blocks/gooseui/faq/faq-accordion"
 
 export default function Demo() {
   return <FAQAccordion />
@@ -37,7 +37,7 @@ export default function Demo() {
 通过 `items` 属性传入自定义 FAQItem 数组来替代默认数据。
 
 ```tsx
-import { FAQAccordion } from "@/components/ui/faq-accordion"
+import { FAQAccordion } from "@/components/marketing-blocks/gooseui/faq/faq-accordion"
 
 export default function Demo() {
   const customFaqs = [
@@ -90,7 +90,7 @@ FAQAccordion 内部通过 React `useState` 管理当前展开项的索引，`ope
 
 AI 生成 FAQAccordion 代码时：
 
-1. 从 `@/components/ui/faq-accordion` 导入 `FAQAccordion`。
+1. 从 `@/components/marketing-blocks/gooseui/faq/faq-accordion` 导入 `FAQAccordion`。
 2. 无自定义数据时直接使用 `<FAQAccordion />`，带默认数据展示。
 3. 需要自定义问答内容时，通过 `items` 传入 `{ question, answer }[]` 数组。
 4. 不要从 gooseui 内部路径（如 `@/components/marketing-blocks/gooseui/faq/faq-accordion`）导入。
