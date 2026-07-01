@@ -1,4 +1,4 @@
-时间轴 Timeline。垂直或水平展示时间流信息，按时间顺序排列事件节点，支持多种颜色、布局模式和入场动画。
+时间轴 Timeline。垂直或水平展示时间流信息，按时间顺序排列事件节点，支持多种颜色、布局模式、进度状态和入场动画。
 
 <h2 id="when-to-use">何时使用</h2>
 
@@ -96,6 +96,25 @@ export default function Demo() {
 }
 ```
 
+### 进度状态
+
+```tsx
+import { Timeline } from "@/components/ui/timeline"
+
+export default function Demo() {
+  return (
+    <Timeline
+      activeIndex={1}
+      items={[
+        { title: "已提交", content: "表单已进入审批流程" },
+        { title: "审批中", content: "等待主管确认" },
+        { title: "待归档", content: "完成后自动归档" },
+      ]}
+    />
+  )
+}
+```
+
 <h2 id="api">API</h2>
 
 ### Timeline
@@ -110,6 +129,8 @@ export default function Demo() {
 | reverse | 是否倒序排列 | `boolean` | `false` |
 | className | 附加样式类名 | `string` | - |
 | style | 内联样式 | `React.CSSProperties` | - |
+| activeIndex | 当前进度索引，小于该索引的节点为 completed，等于该索引的节点为 active | `number` | - |
+| animated | 是否启用入场动画 | `boolean` | `true` |
 
 ### TimelineItem（也可用作独立组件）
 
@@ -119,9 +140,11 @@ export default function Demo() {
 | icon | 自定义图标（替代圆点） | `React.ReactNode` | - |
 | color | 圆点颜色 | `"default"` \| `"success"` \| `"warning"` \| `"error"` \| `"blue"` \| `"red"` \| `"green"` \| `"gray"` \| `string` | `"default"` |
 | label | 时间标签 | `React.ReactNode` | - |
+| time | 时间语义标签，渲染为 `<time>` | `React.ReactNode` | - |
 | title | 标题 | `React.ReactNode` | - |
 | content | 内容（与 children 二选一） | `React.ReactNode` | - |
 | children | 子内容（与 content 二选一） | `React.ReactNode` | - |
+| status | 显式节点状态 | `"completed"` \| `"active"` \| `"pending"` | - |
 | pending | 是否为待处理状态（脉冲动画） | `boolean` | `false` |
 | loading | 是否为加载状态（脉冲动画） | `boolean` | `false` |
 | placement | 节点位置 | `"start"` \| `"end"` | - |
@@ -154,8 +177,10 @@ export default function Demo() {
 1. 从 `@/components/ui/timeline` 导入，不要从 `antd` 导入。
 2. 优先使用 `items` 属性声明式配置时间线条目，每个条目至少提供 `content` 或 `children`。
 3. `color` 支持预设色值（`"default"` 等）和自定义 CSS 颜色字符串。
-4. 使用 `pending` 属性添加加载/待处理状态节点，无需手动构造 TimelineItem。
-5. 不要引入 Ant Design 相关依赖。
+4. 使用 `activeIndex` 表示流程进度；需要覆盖单项状态时使用 item 的 `status`。
+5. 使用 `pending` 属性添加加载/待处理状态节点，无需手动构造 TimelineItem。
+6. 需要语义化时间文本时优先使用 `time`，否则使用 `label`。
+7. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="timeline" />

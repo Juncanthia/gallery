@@ -8,4 +8,7 @@ export {
 export type {
   RatingProps,
   RatingButtonProps,
+  RatingOrientation,
+  RatingSize,
+  RatingStep,
 } from "@/components/blocks/rating"

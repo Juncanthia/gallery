@@ -2,7 +2,7 @@
 component: Checkbox
 slug: gooseui/checkbox
 
-import: import { Checkbox } from "@/components/ui/gooseui-checkbox"
+import: import { Checkbox } from "@/components/ui/checkbox"
 
 usage: |
   <Checkbox label="同意条款" />
@@ -32,7 +32,7 @@ constraints:
   - 不要引入 Ant Design Checkbox 或 rc-checkbox。
   - 不要引入 lucide-react 等图标库用于勾选图标。
 
-source: src/components/gooseui/components/ui/checkbox.tsx
+source: src/components/ui/checkbox.tsx
 example: content/components/gooseui/checkbox/examples/basic.tsx
 docs: content/components/gooseui/checkbox/index.mdx
 ---

@@ -26,7 +26,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   DocumentViewerThumbnailSidebar,
   useElementWidth,
@@ -53,7 +53,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/extend/components/ui/select"
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
 import {
@@ -354,9 +354,9 @@ function DocxFileActionsMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+          htmlType="button"
+          variant="text"
+          size="small" shape="square"
           aria-label="Open DOCX actions"
         >
           <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" />
@@ -468,7 +468,7 @@ function DocxPageNumberControl({
           aria-label="Page number"
           inputMode="numeric"
           pattern="[0-9]*"
-          size="sm"
+          size="small"
           value={draftPage}
           className="mx-1 w-14 min-w-14 rounded-md [&_[data-slot=input]]:text-center"
           onBlur={() => setIsEditing(false)}
@@ -486,9 +486,9 @@ function DocxPageNumberControl({
         />
       ) : (
         <Button
-          type="button"
-          variant="ghost"
-          size="sm"
+          htmlType="button"
+          variant="text"
+          size="small"
           className="font-normal"
           aria-label={`Current page ${displayPage}. Edit page number`}
           disabled={controlsDisabled || !pageCount}
@@ -553,9 +553,9 @@ function DocxToolbar({
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <ToolbarTooltip label="Toggle thumbnails">
             <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
+              htmlType="button"
+              variant="text"
+              size="small" shape="square"
               aria-label="Toggle thumbnails"
               disabled={controlsDisabled}
               onClick={onToggleSidebar}
@@ -574,9 +574,9 @@ function DocxToolbar({
           <div className="flex flex-none items-center gap-1">
             <ToolbarTooltip label="Zoom out">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 disabled={controlsDisabled || !canZoomOut}
                 aria-label="Zoom out"
                 onClick={() =>
@@ -595,7 +595,7 @@ function DocxToolbar({
               modal={false}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className="w-[84px] min-w-[84px]"
                 aria-label="Zoom level"
               >
@@ -611,9 +611,9 @@ function DocxToolbar({
             </Select>
             <ToolbarTooltip label="Zoom in">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 disabled={controlsDisabled || !canZoomIn}
                 aria-label="Zoom in"
                 onClick={() =>
@@ -1488,9 +1488,9 @@ function DocxViewerContent({
                   convert to DOCX for best fidelity.
                 </div>
                 <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
+                  htmlType="button"
+                  variant="outlined"
+                  size="small"
                   className="mt-4"
                   onClick={() => fileInputRef.current?.click()}
                 >

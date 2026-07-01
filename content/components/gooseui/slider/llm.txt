@@ -4,7 +4,7 @@ title: Slider
 subtitle: 滑块
 description: 滑块组件，用于在给定的范围内选择一个数值。
 source:
-  component: src/components/gooseui/components/ui/slider.tsx
+  component: src/components/ui/slider.tsx
   docs: content/components/gooseui/slider/index.mdx
   examples:
     - content/components/gooseui/slider/examples/basic.tsx
@@ -20,7 +20,7 @@ Slider 是纯 CSS 实现的 range 滑块组件，无外部依赖。通过 `showV
 ## 使用示例
 
 ```tsx
-import { Slider } from "@/components/ui/gooseui-slider"
+import { Slider } from "@/components/ui/slider"
 
 export default function Demo() {
   return (
@@ -52,7 +52,7 @@ export default function Demo() {
 
 ## 约束
 
-1. 从 `@/components/ui/gooseui-slider` 导入，不要从 gooseui 内部路径导入。
+1. 从 `@/components/ui/slider` 导入，不要从 gooseui 内部路径导入。
 2. 纯 CSS 实现，无外部依赖。不要引入 `rc-slider` 或 Ant Design Slider。
 3. 非受控使用 `defaultValue`，受控使用 `value` + `onValueChange`。
 4. `animateValue` 仅在 `showValue` 为 true 时生效。

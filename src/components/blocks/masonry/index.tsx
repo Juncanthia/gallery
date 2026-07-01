@@ -3,6 +3,12 @@
 import { type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
+export {
+  VirtualMasonry,
+  VirtualMasonryItem,
+  type VirtualMasonryProps,
+} from './virtualized';
+
 type ColumnConfig = {
   sm?: number;
   md?: number;
@@ -74,7 +80,8 @@ export function Masonry({
         (children as ReactNode[]).map((child, index) => (
           <div
             key={index}
-            className={`break-inside-avoid mb-${gap}`}
+            className="break-inside-avoid"
+            style={{ marginBottom: `${gapValue}px` }}
           >
             {child}
           </div>

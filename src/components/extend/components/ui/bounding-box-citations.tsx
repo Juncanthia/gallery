@@ -42,10 +42,10 @@ import {
 import { flushSync } from "react-dom"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Tooltip,
   TooltipContent,
@@ -982,8 +982,8 @@ function HumanReviewValueInput({
         {[true, false].map((option) => (
           <Button
             key={String(option)}
-            type="button"
-            size="sm"
+            htmlType="button"
+            size="small"
             variant={value === option ? "outline" : "ghost"}
             className={cn(
               "h-7 shadow-none",
@@ -1668,9 +1668,9 @@ function HumanReviewArrayValueGrid({
         <div className="absolute inset-0 z-10 flex flex-col bg-background">
           <div className="flex h-8 items-center gap-2 border-b px-2">
             <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
+              htmlType="button"
+              variant="text"
+              size="small" shape="square"
               className="size-6 text-muted-foreground"
               onClick={() =>
                 setNestedStack((current) =>
@@ -1931,9 +1931,9 @@ function HumanReviewFieldCardBase({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
+                  htmlType="button"
+                  variant="text"
+                  size="small" shape="square"
                   className="text-muted-foreground"
                   onClick={onUndo}
                   aria-label={`Undo ${field.key}`}
@@ -1948,9 +1948,9 @@ function HumanReviewFieldCardBase({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
+                  htmlType="button"
+                  variant="text"
+                  size="small" shape="square"
                   className="text-muted-foreground"
                   onClick={onSetNull}
                   aria-label={`Set ${field.key} to null`}

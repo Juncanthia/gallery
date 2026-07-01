@@ -2,7 +2,10 @@
 
 import {
   TimePicker as TimePickerBase,
+  type TimePickerFormat,
+  type TimePickerPeriod,
   type TimePickerProps,
+  type TimePickerSegmentPlaceholder,
 } from "@/components/blocks/time-picker"
 
 function TimePicker(props: TimePickerProps) {
@@ -10,4 +13,9 @@ function TimePicker(props: TimePickerProps) {
 }
 
 export { TimePicker }
-export type { TimePickerProps }
+export type {
+  TimePickerFormat,
+  TimePickerPeriod,
+  TimePickerProps,
+  TimePickerSegmentPlaceholder,
+}

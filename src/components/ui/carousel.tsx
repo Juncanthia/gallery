@@ -23,6 +23,8 @@ type CarouselProps = {
   dotPlacement?: "top" | "bottom" | "start" | "end"
   autoplay?: boolean | { dotDuration?: boolean }
   autoplaySpeed?: number
+  loop?: boolean
+  pauseOnHover?: boolean
   beforeChange?: (current: number, next: number) => void
   afterChange?: (current: number) => void
   contentClassName?: string
@@ -70,6 +72,8 @@ function Carousel({
   dotPlacement = "bottom",
   autoplay = false,
   autoplaySpeed = 3000,
+  loop,
+  pauseOnHover = true,
   beforeChange,
   afterChange,
   contentClassName,
@@ -78,17 +82,23 @@ function Carousel({
   children,
   ...props
 }: React.ComponentProps<"div"> & CarouselProps) {
-  const [carouselRef, api] = useEmblaCarousel(
-    {
+  const mergedOpts = React.useMemo(
+    () => ({
       ...opts,
-      axis: orientation === "horizontal" ? "x" : "y",
-    },
+      axis: orientation === "horizontal" ? ("x" as const) : ("y" as const),
+      loop: loop ?? opts?.loop,
+    }),
+    [loop, opts, orientation]
+  )
+  const [carouselRef, api] = useEmblaCarousel(
+    mergedOpts,
     plugins
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
+  const [isPaused, setIsPaused] = React.useState(false)
   const selectedIndexRef = React.useRef(0)
 
   const onSelect = React.useCallback((api: CarouselApi) => {
@@ -123,10 +133,10 @@ function Carousel({
     beforeChange?.(current, next)
     if (api.canScrollNext()) {
       api.scrollNext()
-    } else {
+    } else if (loop) {
       api.scrollTo(0)
     }
-  }, [api, beforeChange])
+  }, [api, beforeChange, loop])
 
   const scrollTo = React.useCallback((index: number) => {
     if (!api) return
@@ -168,19 +178,23 @@ function Carousel({
   }, [api, onSelect])
 
   React.useEffect(() => {
-    if (!api || !autoplay) return undefined
+    if (!api || !autoplay || isPaused) return undefined
 
     const timer = window.setInterval(() => {
       if (document.hidden) return
 
       const current = api.selectedScrollSnap()
-      const next = api.canScrollNext() ? current + 1 : 0
+      const next = api.canScrollNext() || loop ? current + 1 : 0
       beforeChange?.(current, next)
-      api.scrollTo(next)
+      if (api.canScrollNext()) {
+        api.scrollNext()
+      } else if (loop) {
+        api.scrollTo(0)
+      }
     }, autoplaySpeed)
 
     return () => window.clearInterval(timer)
-  }, [api, autoplay, autoplaySpeed, beforeChange])
+  }, [api, autoplay, autoplaySpeed, beforeChange, isPaused, loop])
 
   const renderedChildren = items ? (
     <>
@@ -223,6 +237,8 @@ function Carousel({
       }}
     >
       <div
+        onMouseEnter={autoplay && pauseOnHover ? () => setIsPaused(true) : undefined}
+        onMouseLeave={autoplay && pauseOnHover ? () => setIsPaused(false) : undefined}
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}
         role="region"

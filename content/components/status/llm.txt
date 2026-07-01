@@ -2,7 +2,7 @@
 category: Blocks
 title: Status
 subtitle: 状态指示
-description: 展示系统或服务的在线、离线、维护中、降级等运行状态。
+description: 展示系统、服务或业务流程的运行状态与语义状态。
 demo:
   cols: 1
 group:
@@ -59,7 +59,7 @@ Status 是一个用于显示服务或系统运行状态的复合组件。它由 
 ### 四种状态
 
 ```tsx
-import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
+import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
 
 export default function Demo() {
   return (
@@ -88,7 +88,7 @@ export default function Demo() {
 ### 自定义中文标签
 
 ```tsx
-import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
+import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
 
 export default function Demo() {
   return (
@@ -113,7 +113,7 @@ export default function Demo() {
 ### 服务状态面板
 
 ```tsx
-import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
+import { Status, StatusIndicator, StatusLabel } from "@/components/ui/status"
 
 const services = [
   { name: "API Gateway", status: "online" as const },
@@ -154,7 +154,7 @@ type StatusProps = Omit<ComponentProps<typeof Badge>, "status"> & {
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| status | 运行状态，通过 CSS group 传递给子组件 | `"online"` \| `"offline"` \| `"maintenance"` \| `"degraded"` | 必填 |
+| status | 运行状态或语义状态，通过 CSS group 传递给子组件 | `"online"` \| `"offline"` \| `"maintenance"` \| `"degraded"` \| `"default"` \| `"success"` \| `"error"` \| `"warning"` \| `"info"` | 必填 |
 | className | 附加 className | `string` | - |
 | children | 子元素，通常为 StatusIndicator + StatusLabel | `ReactNode` | - |
 
@@ -254,33 +254,21 @@ Status 是项目本地复合组件，Ant Design 没有直接对应的组件。An
 | 对应 AntD 组件 | 无直接对应；AntD `Badge.status` 为部分相似功能 |
 | API 来源 | 以 `src/components/blocks/status/index.tsx` 的 TypeScript 类型为准 |
 | 视觉系统 | Tailwind CSS + group 变体机制 |
-| 状态枚举 | `online`/`offline`/`maintenance`/`degraded` 四态，覆盖 SRE 常见场景 |
+| 状态枚举 | 运行态 `online`/`offline`/`maintenance`/`degraded`，语义态 `default`/`success`/`error`/`warning`/`info` |
 | 颜色联动 | CSS group 选择器，声明式状态-颜色映射 |
 | 全局配置 | 不依赖 AntD ConfigProvider |
 | 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
-
-AntD Badge status 与本地 Status 的枚举值映射：
-
-| AntD Badge status | 本地 Status status | 说明 |
-| --- | --- | --- |
-| `success` | `online` | 在线/正常 |
-| `error` | `offline` | 离线/故障 |
-| `processing` | 无直接对应 | - |
-| `warning` | `degraded` | 降级/性能下降 |
-| `default` | 无直接对应 | - |
-| - | `maintenance` | 维护中（本地新增） |
 
 ## LLM 使用规则 {#llm-rules}
 
 当 AI 生成本项目 Status 代码时，应遵守：
 
-1. 从 `@/components/blocks/status` 导入 Status、StatusIndicator、StatusLabel。
-2. Status 的 `status` prop 取值为 `"online"`、`"offline"`、`"maintenance"`、`"degraded"`，不要使用 Badge 的 `status` 枚举值（`success`/`processing`/`default`/`error`/`warning`）。
-3. Status 固定 variant 为 `secondary`，不要传入 `variant` prop。
+1. 从 `@/components/ui/status` 导入 Status、StatusIndicator、StatusLabel。
+2. Status 的 `status` prop 可取运行态 `"online"`、`"offline"`、`"maintenance"`、`"degraded"`，也可取语义态 `"default"`、`"success"`、`"error"`、`"warning"`、`"info"`。
 4. StatusIndicator 和 StatusLabel 必须作为 Status 的 children 嵌套使用，不要在外部独立使用。
 5. 不要在 StatusIndicator 或 StatusLabel 上单独设置颜色属性（由 group 选择器自动处理）。
 6. 如需自定义状态文本，通过 StatusLabel 的 children 传入，不要修改 DOM 中的隐藏 span。
 7. 服务状态面板场景：用 `.map()` 遍历数据源，每行放置服务名 + Status 组合。
 8. 不要从 Ant Design 导入 Badge 替代本地 Status。
 9. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
-10. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/status/index.tsx`，不要凭 Ant Design 记忆生成。
+9. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/status/index.tsx`，不要凭 Ant Design 记忆生成。

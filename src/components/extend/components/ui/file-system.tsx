@@ -30,7 +30,7 @@ import { FileTree as PierreFileTree, useFileTree } from "@pierre/trees/react"
 import { createPortal } from "react-dom"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -71,9 +71,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/extend/components/ui/select"
+} from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
-import { Tabs, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const LazyPDFViewer = React.lazy(() =>
   import("@/components/extend/components/ui/pdf-viewer").then((mod) => ({
@@ -2029,7 +2029,7 @@ export function FileSystem({
   const viewerCloseToolbarAction = (
     <DialogClose
       aria-label="Close preview"
-      render={<Button type="button" variant="ghost" size="icon-sm" />}
+      render={<Button htmlType="button" variant="text" size="small" shape="square" />}
     >
       <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
     </DialogClose>
@@ -2088,7 +2088,7 @@ export function FileSystem({
             onValueChange={(value) => setView(value as FileSystemView)}
           >
             <SelectTrigger
-              size="sm"
+              size="small"
               aria-label="View"
               // Icon-only like the sort select: sheds the base min-width to
               // hug icon + chevron at the filter button's 28px height.
@@ -2466,7 +2466,7 @@ function FileSystemSortSelect({
       onValueChange={(value) => onKeyChange(value as FileSystemSortKey)}
     >
       <SelectTrigger
-        size="sm"
+        size="small"
         aria-label="Sort by"
         title="Sort by"
         className="h-7 min-h-7 w-auto min-w-0 shrink-0 [&_svg]:size-4"
@@ -2598,9 +2598,9 @@ function FileSystemFilterMenu({
       <DropdownMenuTrigger
         render={
           <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
+            htmlType="button"
+            variant="outlined"
+            size="small" shape="square"
             aria-label="Filter"
             title="Filter"
             className="relative size-7 sm:size-7"
@@ -3113,9 +3113,9 @@ function FileSystemDateRangeDialog({
             {DATE_RANGE_DIALOG_PRESETS.map((preset) => (
               <Button
                 key={preset}
-                type="button"
-                variant="outline"
-                size="sm"
+                htmlType="button"
+                variant="outlined"
+                size="small"
                 onClick={() => selectRange(dateRangePresetRange(preset))}
               >
                 {preset}
@@ -3124,11 +3124,11 @@ function FileSystemDateRangeDialog({
           </div>
         </DialogPanel>
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={onClose}>
+          <Button htmlType="button" variant="outlined" onClick={onClose}>
             Cancel
           </Button>
           <Button
-            type="button"
+            htmlType="button"
             disabled={!range.from || !range.to}
             onClick={() => {
               if (!range.from || !range.to) return

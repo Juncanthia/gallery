@@ -140,16 +140,27 @@ export default function Demo() {
 | onValueChange | 选中值变化回调 | `(value: string \| undefined) => void` | - |
 | onChange | `onValueChange` 的别名 | `(value: string \| undefined) => void` | - |
 | onSelect | 选择选项时触发 | `(value: string, option: ComboboxOption) => void` | - |
+| inputValue | 受控搜索输入值 | `string` | - |
+| defaultInputValue | 默认搜索输入值 | `string` | `""` |
+| onInputValueChange | 搜索输入值变化回调 | `(value: string) => void` | - |
 | placeholder | 未选择时的占位文本 | `string` | `"请选择"` |
 | searchPlaceholder | 搜索输入框占位文本 | `string` | `"搜索..."` |
 | emptyContent | 无匹配结果内容 | `React.ReactNode` | `"无匹配结果"` |
+| loading | 是否显示加载状态 | `boolean` | `false` |
+| loadingContent | 加载状态内容 | `React.ReactNode` | `"加载中..."` |
 | allowClear | 是否允许清除当前选中值 | `boolean` | `false` |
 | disabled | 是否禁用 | `boolean` | `false` |
+| readOnly | 是否只读，只读时保留展示但禁止打开和选择 | `boolean` | `false` |
+| name | 原生表单字段名，会渲染隐藏 input | `string` | - |
+| required | 是否标记为必填字段 | `boolean` | `false` |
 | open | 受控弹层状态 | `boolean` | - |
 | defaultOpen | 默认弹层状态 | `boolean` | `false` |
 | onOpenChange | 弹层开关变化回调 | `(open: boolean) => void` | - |
+| openOnFocus | 聚焦触发器时打开弹层 | `boolean` | `false` |
 | onSearch | 搜索输入变化回调 | `(value: string) => void` | - |
 | filterOption | 本地过滤逻辑，设为 `false` 可交给外部异步过滤 | `boolean \| ((input, option) => boolean)` | `true` |
+| autoHighlight | 无选中值时默认高亮第一个可用项 | `boolean` | `false` |
+| loop | 键盘导航是否循环 | `boolean` | `true` |
 | optionRender | 自定义选项渲染 | `(option: ComboboxOption) => React.ReactNode` | - |
 | popupRender | 自定义弹层列表包裹 | `(originNode: React.ReactNode) => React.ReactNode` | - |
 | className | 触发器样式 | `string` | - |
@@ -204,9 +215,11 @@ type ComboboxOptionGroup = {
 
 1. 从 `@/components/ui/combobox` 导入 `Combobox` 和类型。
 2. 优先使用 `options` 配置，不要手动拼装底层列表结构。
-3. 异步搜索时设置 `filterOption={false}`，并通过 `onSearch` 更新外部 `options`。
-4. 多选标签输入使用 Tags/MultiSelect，不要把 Chips 逻辑塞进 Combobox。
-5. 不要引入 Ant Design 相关依赖。
+3. 异步搜索时设置 `filterOption={false}`，并通过 `onSearch` 更新外部 `options`，加载中使用 `loading`。
+4. 需要控制搜索框文本时使用 `inputValue` + `onInputValueChange`。
+5. 需要原生表单提交时使用 `name`，组件会生成隐藏 input。
+6. 多选标签输入使用 Tags/MultiSelect，不要把 Chips 逻辑塞进 Combobox。
+7. 不要引入 Ant Design 相关依赖。
 
 <h2 id="source">源码</h2>
 <SourceViewer componentId="combobox" />

@@ -170,25 +170,46 @@ function Tabs({
   );
 }
 
+type TabsVariant = 'default' | 'underline';
+
+const TabsVariantContext = React.createContext<TabsVariant>('default');
+
 type TabsListProps = TabsListPrimitiveProps & {
+  variant?: TabsVariant;
 };
 
-function TabsList({ className, ...props }: TabsListProps) {
+function TabsList({ className, variant = 'default', ...props }: TabsListProps) {
+  if (variant === 'underline') {
+    return (
+      <TabsVariantContext.Provider value="underline">
+        <TabsListPrimitive
+          className={cn(
+            'text-muted-foreground inline-flex h-9 w-fit items-center justify-center border-b bg-transparent p-0 data-[orientation=vertical]:h-fit data-[orientation=vertical]:w-full data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:border-r data-[orientation=vertical]:border-b-0',
+            className,
+          )}
+          {...props}
+        />
+      </TabsVariantContext.Provider>
+    );
+  }
+
   return (
-    <TabsHighlightPrimitive
-      className={cn(
-        "absolute z-0 inset-0 rounded-md transition-all duration-200",
-        "border border-transparent bg-background dark:border-input dark:bg-input/30 shadow-sm"
-      )}
-    >
-      <TabsListPrimitive
+    <TabsVariantContext.Provider value="default">
+      <TabsHighlightPrimitive
         className={cn(
-          'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px] data-[orientation=vertical]:h-fit data-[orientation=vertical]:w-full data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
-          className,
+          "absolute z-0 inset-0 rounded-md transition-all duration-200",
+          "border border-transparent bg-background dark:border-input dark:bg-input/30 shadow-sm"
         )}
-        {...props}
-      />
-    </TabsHighlightPrimitive>
+      >
+        <TabsListPrimitive
+          className={cn(
+            'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px] data-[orientation=vertical]:h-fit data-[orientation=vertical]:w-full data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
+            className,
+          )}
+          {...props}
+        />
+      </TabsHighlightPrimitive>
+    </TabsVariantContext.Provider>
   );
 }
 
@@ -196,6 +217,20 @@ type TabsTriggerProps = TabsTriggerPrimitiveProps & {
 };
 
 function TabsTrigger({ className, ...props }: TabsTriggerProps) {
+  const variant = React.useContext(TabsVariantContext);
+
+  if (variant === 'underline') {
+    return (
+      <TabsTriggerPrimitive
+        className={cn(
+          "text-muted-foreground data-[state=active]:text-foreground data-[state=active]:border-b-primary inline-flex h-full flex-1 items-center justify-center gap-1.5 border-b-2 border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+          className,
+        )}
+        {...props}
+      />
+    );
+  }
+
   return (
     <TabsHighlightItemPrimitive value={props.value} className="flex-1">
       <TabsTriggerPrimitive
@@ -217,10 +252,15 @@ function TabsContents(props: TabsContentsProps) {
 
 type TabsContentProps = TabsContentPrimitiveProps;
 
-function TabsContent({ className, ...props }: TabsContentProps) {
+function TabsContent({
+  className,
+  keepMounted,
+  ...props
+}: TabsContentProps & { keepMounted?: boolean }) {
   return (
     <TabsContentPrimitive
       className={cn('flex-1 outline-none', className)}
+      forceMount={keepMounted ? true : props.forceMount}
       {...props}
     />
   );

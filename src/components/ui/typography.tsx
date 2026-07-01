@@ -13,6 +13,8 @@ const textVariants = cva("", {
       warning: "text-yellow-600 dark:text-yellow-500",
       danger: "text-destructive",
       disabled: "text-muted-foreground opacity-50",
+      gradient: "bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent",
+      highlight: "rounded bg-yellow-200 px-1 text-foreground dark:bg-yellow-500/30",
     },
     size: {
       xs: "text-xs",
@@ -37,13 +39,15 @@ const textVariants = cva("", {
 
 type TypographyType = "secondary" | "success" | "warning" | "danger"
 
-const typographyTypeClasses: Record<"default" | "secondary" | "success" | "warning" | "danger" | "disabled", string> = {
+const typographyTypeClasses: Record<"default" | "secondary" | "success" | "warning" | "danger" | "disabled" | "gradient" | "highlight", string> = {
   default: "text-foreground",
   secondary: "text-muted-foreground",
   success: "text-green-600 dark:text-green-500",
   warning: "text-yellow-600 dark:text-yellow-500",
   danger: "text-destructive",
   disabled: "text-muted-foreground opacity-50",
+  gradient: "bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent",
+  highlight: "rounded bg-yellow-200 px-1 text-foreground dark:bg-yellow-500/30",
 };
 type CopyableConfig = {
   text?: string | (() => string | Promise<string>);

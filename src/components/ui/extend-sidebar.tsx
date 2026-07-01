@@ -1,3 +1,3 @@
 "use client"
 
-export { SidebarProvider } from "@/components/extend/components/ui/sidebar"
+export { SidebarProvider } from "@/components/ui/sidebar"

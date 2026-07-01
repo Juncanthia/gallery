@@ -19,6 +19,14 @@ export default function StatusBasicExample() {
         <StatusIndicator />
         <StatusLabel>性能降级</StatusLabel>
       </Status>
+      <Status status="success">
+        <StatusIndicator />
+        <StatusLabel>已完成</StatusLabel>
+      </Status>
+      <Status status="warning">
+        <StatusIndicator />
+        <StatusLabel>需关注</StatusLabel>
+      </Status>
     </div>
   )
 }

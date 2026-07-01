@@ -1,3 +1,3 @@
 "use client"
 
-export { Toaster } from "@/components/dice/ui/sonner"
+export { Toaster } from "@/components/ui/toaster"

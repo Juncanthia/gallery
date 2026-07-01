@@ -12,7 +12,7 @@ import type SignaturePad from "signature_pad"
 import { cn } from "@/components/extend/lib/utils"
 import { PDFViewer } from "@/components/extend/components/ui/pdf-viewer"
 import { PdfBlockResizableShell } from "@/components/extend/components/pdf-block-resizable-shell"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -329,8 +329,8 @@ function SignatureDialog({
         </DialogPanel>
         <DialogFooter className="sm:justify-between">
           <Button
-            type="button"
-            variant="outline"
+            htmlType="button"
+            variant="outlined"
             disabled={!isReady}
             onClick={() => {
               signaturePadRef.current?.clear()
@@ -341,14 +341,14 @@ function SignatureDialog({
           </Button>
           <div className="flex flex-col-reverse gap-2 sm:flex-row">
             <Button
-              type="button"
-              variant="outline"
+              htmlType="button"
+              variant="outlined"
               onClick={() => onOpenChange(false)}
             >
               Cancel
             </Button>
             <Button
-              type="button"
+              htmlType="button"
               disabled={!isReady || !hasSignature}
               onClick={() => {
                 const canvas = canvasRef.current
@@ -497,8 +497,8 @@ function SignatureFieldsPanel({
                 </div>
                 <div className="mt-3 flex gap-2">
                   <Button
-                    type="button"
-                    size="sm"
+                    htmlType="button"
+                    size="small"
                     variant={field.imageDataUrl ? "outline" : "default"}
                     className="flex-1"
                     onClick={onSign}
@@ -508,9 +508,9 @@ function SignatureFieldsPanel({
                   </Button>
                   {field.imageDataUrl ? (
                     <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
+                      htmlType="button"
+                      size="small"
+                      variant="outlined"
                       onClick={onClear}
                     >
                       Clear
@@ -521,7 +521,7 @@ function SignatureFieldsPanel({
             </div>
           </div>
           <Button
-            type="button"
+            htmlType="button"
             className="w-full"
             disabled={!canExport || isDownloading}
             onClick={onDownload}
@@ -561,9 +561,9 @@ export function ESignatureBlock({ file }: { file?: string }) {
             defaultZoom={DEFAULT_ZOOM}
             toolbarActions={
               <Button
-                type="button"
-                size="sm"
-                variant="outline"
+                htmlType="button"
+                size="small"
+                variant="outlined"
                 disabled={!file || !field.imageDataUrl || isDownloading}
                 onClick={handleDownload}
               >

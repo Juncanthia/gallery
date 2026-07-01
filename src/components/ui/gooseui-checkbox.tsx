@@ -1,3 +1,3 @@
 "use client"
 
-export { Checkbox } from "@/components/gooseui/components/ui/checkbox"
+export { Checkbox } from "@/components/ui/checkbox"

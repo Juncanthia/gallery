@@ -1,4 +1,3 @@
-// DiceUI components are consumed via deep imports:
-//   import { ComboboxRoot } from "@/components/dice/combobox"
+// DiceUI components are consumed via explicit deep imports.
 // This barrel is intentionally empty (same convention as other @hyper/* UI packages).
 export {}

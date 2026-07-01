@@ -10,4 +10,6 @@ export type {
   StatusProps,
   StatusIndicatorProps,
   StatusLabelProps,
+  SemanticStatus,
+  ServiceStatus,
 } from "@/components/blocks/status"

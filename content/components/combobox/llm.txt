@@ -73,16 +73,27 @@ export default function Demo() {
 | onValueChange | 选中值变化回调 | `(value: string \| undefined) => void` | - |
 | onChange | `onValueChange` 的别名 | `(value: string \| undefined) => void` | - |
 | onSelect | 选择选项时触发 | `(value: string, option: ComboboxOption) => void` | - |
+| inputValue | 受控搜索输入值 | `string` | - |
+| defaultInputValue | 默认搜索输入值 | `string` | `""` |
+| onInputValueChange | 搜索输入值变化回调 | `(value: string) => void` | - |
 | placeholder | 未选择时的占位文本 | `string` | `"请选择"` |
 | searchPlaceholder | 搜索输入框占位文本 | `string` | `"搜索..."` |
 | emptyContent | 无匹配结果内容 | `React.ReactNode` | `"无匹配结果"` |
+| loading | 是否显示加载状态 | `boolean` | `false` |
+| loadingContent | 加载状态内容 | `React.ReactNode` | `"加载中..."` |
 | allowClear | 是否允许清除当前选中值 | `boolean` | `false` |
 | disabled | 是否禁用 | `boolean` | `false` |
+| readOnly | 是否只读，只读时保留展示但禁止打开和选择 | `boolean` | `false` |
+| name | 原生表单字段名，会渲染隐藏 input | `string` | - |
+| required | 是否标记为必填字段 | `boolean` | `false` |
 | open | 受控弹层状态 | `boolean` | - |
 | defaultOpen | 默认弹层状态 | `boolean` | `false` |
 | onOpenChange | 弹层开关变化回调 | `(open: boolean) => void` | - |
+| openOnFocus | 聚焦触发器时打开弹层 | `boolean` | `false` |
 | onSearch | 搜索输入变化回调 | `(value: string) => void` | - |
 | filterOption | 本地过滤逻辑，设为 `false` 可交给外部异步过滤 | `boolean \| ((input, option) => boolean)` | `true` |
+| autoHighlight | 无选中值时默认高亮第一个可用项 | `boolean` | `false` |
+| loop | 键盘导航是否循环 | `boolean` | `true` |
 | optionRender | 自定义选项渲染 | `(option: ComboboxOption) => React.ReactNode` | - |
 | popupRender | 自定义弹层列表包裹 | `(originNode: React.ReactNode) => React.ReactNode` | - |
 | className | 触发器样式 | `string` | - |
@@ -123,6 +134,7 @@ type ComboboxOptionGroup = {
 - `command-empty`
 - `command-group`
 - `command-item`
+- `combobox-loading`
 
 选项选中状态使用 `data-checked=true`。
 
@@ -151,8 +163,10 @@ type ComboboxOptionGroup = {
 
 1. 组件 API 以本地 TypeScript 类型为准。
 2. 异步搜索时设置 `filterOption={false}`，通过 `onSearch` 更新外部 `options`。
-3. 多选标签输入不属于 Combobox 职责，应使用 Tags 或 MultiSelect。
-4. 不要把第三方文档中的全量 API 视为本地已支持能力。
+3. 需要控制搜索框文本时使用 `inputValue` + `onInputValueChange`。
+4. 加载中使用 `loading` 和 `loadingContent`，不要用 `popupRender` 手写整套加载结构。
+5. 多选标签输入不属于 Combobox 职责，应使用 Tags 或 MultiSelect。
+6. 不要把第三方文档中的全量 API 视为本地已支持能力。
 
 ## 可访问性 {#accessibility}
 
@@ -164,6 +178,8 @@ type ComboboxOptionGroup = {
 
 1. 从 `@/components/ui/combobox` 导入 `Combobox` 和类型。
 2. 使用 `options` 配置，不要生成旧的 primitive 子组件 API。
-3. 不要引入 Ant Design 相关依赖。
-4. 多选标签输入使用 Tags/MultiSelect。
-5. 不确定 API 时检查 `src/components/ui/combobox.tsx`。
+3. 异步搜索时设置 `filterOption={false}` 并配合 `loading`。
+4. 需要原生表单提交时使用 `name`，不要手写重复 hidden input。
+5. 不要引入 Ant Design 相关依赖。
+6. 多选标签输入使用 Tags/MultiSelect。
+7. 不确定 API 时检查 `src/components/ui/combobox.tsx`。

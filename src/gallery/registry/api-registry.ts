@@ -84,8 +84,13 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   },
   "banner": {
     props: [
-      { name: "defaultVisible", type: "boolean", description: "默认可见", defaultValue: "true" },
+      { name: "open", type: "boolean", description: "受控可见性" },
+      { name: "defaultOpen", type: "boolean", description: "默认可见", defaultValue: "true" },
+      { name: "variant", type: "'default' | 'info' | 'success' | 'warning' | 'destructive'", description: "视觉类型", defaultValue: "'default'" },
       { name: "inset", type: "boolean", description: "内嵌模式", defaultValue: "false" },
+      { name: "dismissible", type: "boolean", description: "允许关闭", defaultValue: "true" },
+      { name: "duration", type: "number", description: "队列模式下自动关闭时间" },
+      { name: "priority", type: "number", description: "队列模式下优先级", defaultValue: "0" },
     ],
   },
   "border-beam": {
@@ -178,14 +183,28 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   },
   "color-picker": {
     props: [
-      { name: "value", type: "string", description: "颜色值" },
-      { name: "onChange", type: "(color: string) => void", description: "颜色变化回调" },
+      { name: "value", type: "Parameters<typeof Color>[0]", description: "受控颜色值" },
+      { name: "defaultValue", type: "Parameters<typeof Color>[0]", description: "默认颜色值", defaultValue: "'#000000'" },
+      { name: "format", type: "'hex' | 'rgb' | 'css' | 'hsl' | 'hsb'", description: "受控输出格式" },
+      { name: "defaultFormat", type: "'hex' | 'rgb' | 'css' | 'hsl' | 'hsb'", description: "默认输出格式", defaultValue: "'hex'" },
+      { name: "onChange", type: "([r, g, b, a]: [number, number, number, number]) => void", description: "结构化颜色变化回调，alpha 为 0-1" },
+      { name: "onValueChange", type: "(color: string) => void", description: "当前格式字符串变化回调" },
+      { name: "disabled", type: "boolean", description: "禁用交互", defaultValue: "false" },
+      { name: "readOnly", type: "boolean", description: "只读展示", defaultValue: "false" },
     ],
   },
   "combobox": {
     props: [
-      { name: "options", type: "{ label: string; value: string }[]", description: "选项数组" },
-      { name: "placeholder", type: "string", description: "占位文本" },
+      { name: "options", type: "ComboboxOptionItem[]", description: "选项数组，支持分组" },
+      { name: "value", type: "string", description: "受控选中值" },
+      { name: "onValueChange", type: "(value: string | undefined) => void", description: "选中值变化回调" },
+      { name: "inputValue", type: "string", description: "受控搜索输入值" },
+      { name: "onInputValueChange", type: "(value: string) => void", description: "搜索输入变化回调" },
+      { name: "filterOption", type: "boolean | ((input, option) => boolean)", description: "本地过滤逻辑", defaultValue: "true" },
+      { name: "loading", type: "boolean", description: "显示加载状态", defaultValue: "false" },
+      { name: "allowClear", type: "boolean", description: "允许清除当前选中值", defaultValue: "false" },
+      { name: "readOnly", type: "boolean", description: "只读展示", defaultValue: "false" },
+      { name: "name", type: "string", description: "原生表单字段名" },
     ],
   },
   "command": {
@@ -303,6 +322,18 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "data", type: "TreeNode[]", description: "树数据" },
     ],
   },
+  "file-upload": {
+    props: [
+      { name: "value", type: "File[]", description: "受控文件列表" },
+      { name: "onValueChange", type: "(files: File[]) => void", description: "文件列表变化回调" },
+      { name: "accept", type: "string", description: "接受的文件类型（MIME/扩展名/通配符，逗号分隔）" },
+      { name: "maxFiles", type: "number", description: "最大文件数量" },
+      { name: "maxSize", type: "number", description: "单文件最大体积（字节）" },
+      { name: "multiple", type: "boolean", description: "是否允许多选", defaultValue: "false" },
+      { name: "disabled", type: "boolean", description: "是否禁用", defaultValue: "false" },
+      { name: "onFileReject", type: "(file: File, message: string) => void", description: "文件被拒绝时的回调" },
+    ],
+  },
   "flex": {
     props: [
       { name: "direction", type: "string", description: "排列方向" },
@@ -416,7 +447,12 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   },
   "marquee": {
     props: [
-      { name: "className", type: "string", description: "自定义样式" },
+      { name: "side", type: "'left' | 'right' | 'top' | 'bottom'", description: "滚动边向", defaultValue: "'left'" },
+      { name: "pauseOnKeyboard", type: "boolean", description: "空格键暂停/恢复", defaultValue: "false" },
+      { name: "gap", type: "number | string", description: "MarqueeContent 内部间距" },
+      { name: "speed", type: "number", description: "滚动速度" },
+      { name: "autoFill", type: "boolean", description: "自动填充内容", defaultValue: "true" },
+      { name: "pauseOnHover", type: "boolean", description: "悬停暂停", defaultValue: "true" },
     ],
   },
   "masonry": {
@@ -515,7 +551,11 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   "qr-code": {
     props: [
       { name: "data", type: "string", description: "二维码数据" },
-      { name: "size", type: "number", description: "尺寸", defaultValue: "160" },
+      { name: "value", type: "string", description: "二维码数据别名，优先级高于 data" },
+      { name: "size", type: "number", description: "二维码像素尺寸", defaultValue: "200" },
+      { name: "level", type: "'L' | 'M' | 'Q' | 'H'", description: "容错级别" },
+      { name: "robustness", type: "'L' | 'M' | 'Q' | 'H'", description: "容错级别", defaultValue: "'M'" },
+      { name: "overlay", type: "ReactNode", description: "中心覆盖内容" },
     ],
   },
   "radio-group": {
@@ -534,6 +574,13 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   "rating": {
     props: [
       { name: "defaultValue", type: "number", description: "默认评分", defaultValue: "0" },
+      { name: "value", type: "number", description: "受控评分值" },
+      { name: "onValueChange", type: "(value: number) => void", description: "评分变化回调" },
+      { name: "count", type: "number", description: "自动生成的评分项数量", defaultValue: "5" },
+      { name: "allowHalf", type: "boolean", description: "允许半星", defaultValue: "false" },
+      { name: "clearable", type: "boolean", description: "再次点击当前值时清空", defaultValue: "false" },
+      { name: "size", type: "'sm' | 'default' | 'lg'", description: "评分项尺寸", defaultValue: "'default'" },
+      { name: "orientation", type: "'horizontal' | 'vertical'", description: "排列方向", defaultValue: "'horizontal'" },
     ],
   },
   "reel": {
@@ -636,7 +683,8 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   },
   "status": {
     props: [
-      { name: "variant", type: "'success' | 'error' | 'warning' | 'info'", description: "状态类型" },
+      { name: "status", type: "'online' | 'offline' | 'maintenance' | 'degraded' | 'default' | 'success' | 'error' | 'warning' | 'info'", description: "运行态或语义状态" },
+      { name: "children", type: "ReactNode", description: "通常为 StatusIndicator + StatusLabel" },
     ],
   },
   "steps": {
@@ -697,14 +745,28 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   },
   "time-picker": {
     props: [
-      { name: "value", type: "Date", description: "时间值" },
-      { name: "onChange", type: "(date: Date) => void", description: "变化回调" },
+      { name: "value", type: "string", description: "受控时间值，如 09:30:00" },
+      { name: "defaultValue", type: "string", description: "默认时间值" },
+      { name: "onChange", type: "(value: string) => void", description: "时间变化回调" },
+      { name: "format", type: "'HH:mm:ss' | 'HH:mm'", description: "时间格式", defaultValue: "'HH:mm:ss'" },
+      { name: "use12Hours", type: "boolean", description: "启用 12 小时制和 AM/PM 时段列", defaultValue: "false" },
+      { name: "open", type: "boolean", description: "受控弹层打开状态" },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "弹层状态变化回调" },
+      { name: "name", type: "string", description: "原生表单字段名" },
       { name: "placeholder", type: "string", description: "占位文本" },
+      { name: "allowClear", type: "boolean", description: "显示清空按钮", defaultValue: "true" },
     ],
   },
   "timeline": {
     props: [
-      { name: "items", type: "TimelineItem[]", description: "时间轴数据" },
+      { name: "items", type: "TimelineItemConfig[]", description: "时间轴数据" },
+      { name: "activeIndex", type: "number", description: "当前进度索引，自动派生 completed/active/pending 状态" },
+      { name: "mode", type: "'left' | 'right' | 'start' | 'end' | 'alternate'", description: "布局模式", defaultValue: "'left'" },
+      { name: "orientation", type: "'vertical' | 'horizontal'", description: "排列方向", defaultValue: "'vertical'" },
+      { name: "pending", type: "ReactNode", description: "追加的待处理节点" },
+      { name: "status", type: "'completed' | 'active' | 'pending'", description: "单个 item 的显式状态" },
+      { name: "time", type: "ReactNode", description: "单个 item 的时间语义标签" },
+      { name: "animated", type: "boolean", description: "启用入场动画", defaultValue: "true" },
     ],
   },
   "toaster": {
@@ -737,7 +799,16 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   },
   "tour": {
     props: [
-      { name: "steps", type: "TourStep[]", description: "引导步骤" },
+      { name: "open", type: "boolean", description: "是否显示引导", defaultValue: "false" },
+      { name: "steps", type: "TourStepConfig[]", description: "引导步骤" },
+      { name: "current", type: "number", description: "受控步骤索引" },
+      { name: "onChange", type: "(current: number) => void", description: "步骤变化回调" },
+      { name: "onFinish", type: "() => void", description: "完成最后一步回调" },
+      { name: "onSkip", type: "() => void", description: "跳过或提前关闭回调" },
+      { name: "target", type: "string | HTMLElement | RefObject | (() => HTMLElement | null)", description: "步骤目标元素，配置在 steps 内" },
+      { name: "placement", type: "TourPlacement", description: "步骤卡片位置，配置在 steps 内" },
+      { name: "arrow", type: "boolean", description: "显示目标箭头", defaultValue: "false" },
+      { name: "closeOnEscape", type: "boolean", description: "按 Escape 关闭", defaultValue: "true" },
     ],
   },
   "transfer": {

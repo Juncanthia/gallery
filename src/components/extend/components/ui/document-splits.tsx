@@ -30,7 +30,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
@@ -346,9 +346,9 @@ function SplitGroupCard({
             {group.pages.length}
           </div>
           <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+            htmlType="button"
+            variant="text"
+            size="small" shape="square"
             aria-label={`Remove ${group.title}`}
             disabled={!canRemove}
             onClick={onRemove}
@@ -643,9 +643,9 @@ export function DocumentSplits({
     >
       <div className="flex min-h-12 items-center justify-end gap-3 border-b bg-background px-3">
         <Button
-          type="button"
-          variant="outline"
-          size="sm"
+          htmlType="button"
+          variant="outlined"
+          size="small"
           onClick={() =>
             onSplitsChange([
               ...splits,

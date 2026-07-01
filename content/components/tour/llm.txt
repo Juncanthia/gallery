@@ -2,7 +2,7 @@
 category: Blocks
 title: Tour
 subtitle: 引导漫游
-description: 页面引导漫游组件，使用 Portal + motion 动画实现遮罩高亮和步骤卡片，支持多步骤、多种定位方向、受控/非受控步数管理。
+description: 页面引导漫游组件，使用 Portal + motion + Floating UI 实现遮罩高亮、步骤卡片、自动定位和滚动更新。
 demo:
   cols: 1
 group:
@@ -27,7 +27,7 @@ stack:
 
 # Tour 引导漫游
 
-页面引导漫游（Onboarding Tour）组件，通过遮罩层高亮目标元素，并弹出步骤卡片引导用户完成多步操作熟悉流程。使用 `createPortal` 渲染至 `document.body`，结合 `motion/react` 的 `AnimatePresence` 实现卡片进出场动画。支持 `top` / `bottom` / `left` / `right` / `center` 五种定位方向。
+页面引导漫游（Onboarding Tour）组件，通过遮罩层高亮目标元素，并弹出步骤卡片引导用户完成多步操作熟悉流程。使用 `createPortal` 渲染至 `document.body`，结合 `motion/react` 的 `AnimatePresence` 和 Floating UI 实现卡片动画、定位、碰撞规避和滚动更新。
 
 本组件为项目本地复合组件，功能类似于 Ant Design Tour 但实现独立。以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
 
@@ -66,13 +66,13 @@ const steps: TourStepConfig[] = [
   {
     title: "搜索框",
     description: "在这里搜索你需要的内容",
-    target: () => document.querySelector("#search-input"),
+    target: "#search-input",
     placement: "bottom",
   },
   {
     title: "设置",
     description: "在这里调整你的偏好",
-    target: () => document.querySelector("#settings-panel"),
+    target: "#settings-panel",
     placement: "right",
   },
 ]
@@ -86,8 +86,11 @@ export default function Demo() {
       <Tour
         open={open}
         onClose={() => setOpen(false)}
+        onFinish={() => setOpen(false)}
+        onSkip={() => setOpen(false)}
         steps={steps}
         mask
+        arrow
         gap={{ offset: 10, radius: 4 }}
       />
     </>
@@ -95,13 +98,15 @@ export default function Demo() {
 }
 ```
 
-> 说明：这是面向 LLM 的最小导入示例。`steps` 为必填；`target` 必须是一个返回 `HTMLElement | null` 的函数；完整用法参考下方 API。
+> 说明：这是面向 LLM 的最小导入示例。`steps` 为必填；`target` 可以是 CSS 选择器、ref、HTMLElement 或函数；完整用法参考下方 API。
 
 ## 核心导出 {#exports}
 
 - `Tour`
+- `TourPlacement`
 - `TourProps`
 - `TourStepConfig`
+- `TourTarget`
 
 ## API 摘要 {#api}
 
@@ -115,6 +120,10 @@ type TourProps = {
   open?: boolean; // 默认 false
   /** 关闭回调 */
   onClose?: () => void;
+  /** 完成最后一步回调 */
+  onFinish?: () => void;
+  /** 跳过或提前关闭回调 */
+  onSkip?: () => void;
   /** 当前步骤索引（受控） */
   current?: number;
   /** 步骤变更回调 */
@@ -129,10 +138,18 @@ type TourProps = {
   zIndex?: number;
   /** 目标元素的间距与圆角配置 */
   gap?: { offset?: number; radius?: number }; // 默认 { offset: 10, radius: 0 }
-  /** 是否显示箭头（当前版本未使用） */
+  /** 是否显示箭头，默认 false */
   arrow?: boolean;
-  /** 目标元素滚动到视图的选项，默认 { behavior: "smooth", block: "center" } */
+  /** 切换步骤时是否自动滚动到目标，默认 true */
+  autoScroll?: boolean;
+  /** 自动滚动时目标距离视窗边缘的最小间距，默认 80 */
+  scrollOffset?: number;
+  /** 目标元素滚动到视图的选项 */
   scrollIntoViewOptions?: ScrollIntoViewOptions;
+  /** 是否按 Escape 关闭，默认 true */
+  closeOnEscape?: boolean;
+  /** 是否点击遮罩关闭，默认 false */
+  closeOnOutsideClick?: boolean;
   /** 卡片的附加 className */
   className?: string;
 }
@@ -148,10 +165,10 @@ type TourStepConfig = {
   title?: ReactNode;
   /** 步骤描述 */
   description?: ReactNode;
-  /** 返回目标 DOM 元素的函数，返回 null 时卡片居中显示 */
-  target?: () => HTMLElement | null;
+  /** 目标元素，返回 null 或不传时卡片居中显示 */
+  target?: string | HTMLElement | RefObject<HTMLElement | null> | (() => HTMLElement | null);
   /** 卡片相对于目标的位置，默认 "bottom" */
-  placement?: "top" | "bottom" | "left" | "right" | "center";
+  placement?: "top" | "bottom" | "left" | "right" | "top-start" | "top-end" | "bottom-start" | "bottom-end" | "left-start" | "left-end" | "right-start" | "right-end" | "center";
   /** 步骤封面图/内容 */
   cover?: ReactNode;
   /** 下一步按钮的自定义属性 */
@@ -160,25 +177,25 @@ type TourStepConfig = {
   prevButtonProps?: { children?: ReactNode; className?: string };
   /** 本步骤关闭时的回调 */
   onClose?: () => void;
+  /** 进入本步骤回调 */
+  onStepEnter?: () => void;
+  /** 离开本步骤回调 */
+  onStepLeave?: () => void;
 }
 ```
 
 ### 步骤导航行为
 
-- 第一步：只显示"Next"按钮。
-- 中间步骤：显示"Back"和"Next"按钮。
-- 最后一步：显示"Back"和"Done"按钮，点击"Done"触发 `onClose`。
+- 第一步：只显示"下一步"按钮。
+- 中间步骤：显示"上一步"和"下一步"按钮。
+- 最后一步：显示"上一步"和"完成"按钮，点击"完成"触发 `onFinish` 和 `onClose`。
 - 步骤指示器：底部圆点，激活步为加宽的主色圆点（`bg-primary w-3`），其余为 `bg-muted-foreground/30 h-1.5 w-1.5`。
 
-### 卡片定位算法
+### 卡片定位
 
-| placement | 垂直位置 | 水平位置 |
-| --- | --- | --- |
-| top | 目标 top - 300 - offset | 目标 left + width/2 - 144 |
-| bottom | 目标 bottom + offset | 目标 left + width/2 - 144 |
-| left | 目标 top + height/2 - 100 | 目标 left - 288 - offset |
-| right | 目标 top + height/2 - 100 | 目标 right + offset |
-| center | innerHeight/2 - 100 | innerWidth/2 - 144 |
+- 非 `center` placement 使用 Floating UI 的 `offset`、`shift`、`flip` 和 `arrow` middleware。
+- 目标不存在或 placement 为 `center` 时，卡片居中显示。
+- 窗口 resize、滚动和目标元素位置变化会自动重新计算卡片位置和高亮区域。
 
 ## Semantic DOM {#semantic-dom}
 
@@ -186,7 +203,13 @@ type TourStepConfig = {
 
 - `data-slot="tour"` — 引导漫游根容器
 - `data-slot="tour-mask"` — 遮罩层
+- `data-slot="tour-spotlight"` — 目标高亮区域
 - `data-slot="tour-card"` — 步骤卡片
+- `data-slot="tour-arrow"` — 箭头
+- `data-slot="tour-title"` — 标题
+- `data-slot="tour-description"` — 描述
+- `data-slot="tour-footer"` — 底部导航区
+- `data-slot="tour-indicator"` — 步骤指示器
 
 生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
 
@@ -194,9 +217,9 @@ type TourStepConfig = {
 
 - 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
 - 组件通过 `createPortal` 渲染到 `document.body`，避免 z-index 和 overflow 限制。
-- 遮罩层：`fixed inset-0 bg-black/40 pointer-events-none`。
+- 遮罩层：`fixed inset-0 bg-black/40`，默认不响应外部点击，设置 `closeOnOutsideClick` 后可点击关闭。
 - 镂空高亮：通过 `boxShadow` 以目标元素宽高最大值的 2 倍为扩散半径实现（`0 0 0 [max(w,h)*2]px rgba(0,0,0,0.4)`）。
-- 步骤卡片：`fixed bg-popover border border-border rounded-lg shadow-xl p-5 w-72`（固定 288px 宽）。
+- 步骤卡片：`fixed bg-popover border border-border rounded-lg shadow-xl p-5 w-72`（固定 288px 宽），非居中模式由 Floating UI 定位。
 - 卡片进出场动画：`motion.div` + `AnimatePresence`，初始 `opacity: 0, scale: 0.95`，0.2s 过渡。
 - 步骤指示器：未激活 `bg-muted-foreground/30 h-1.5 w-1.5 rounded-full`，激活 `bg-primary w-3`。
 - 主题颜色使用 `bg-popover`、`bg-primary`、`text-foreground`、`text-muted-foreground`、`border-border` 等项目级语义变量。
@@ -211,6 +234,7 @@ type TourStepConfig = {
 直接依赖摘要：
 
 - `react` / `react-dom` — `useState`、`useEffect`、`createPortal`
+- `@floating-ui/react-dom` — 卡片定位、碰撞规避、自动更新和箭头坐标
 - `motion/react` — `motion.div`、`AnimatePresence`
 - `@/components/ui/button` — 步骤导航按钮
 - `@/lib/utils` — `cn` 样式合并工具
@@ -219,11 +243,11 @@ type TourStepConfig = {
 
 1. 组件 API 以本地 TypeScript 类型为准。
 2. 受控模式下 `current` 由外部管理；非受控模式使用内部 `useState`。
-3. 步骤切换时自动调用 `element.scrollIntoView()`（可配置 `scrollIntoViewOptions`）。
-4. 定位计算依赖 `getBoundingClientRect()` + `window.scrollX/Y`，窗口 resize 不会自动重新计算。
-5. 镂空遮罩通过两层叠加：半透明遮罩层 + boxShadow 镂空区域，均为 `pointer-events-none`。
-6. 不支持遮罩层点击关闭——需通过按钮或外部 `onClose` 控制。
-7. `arrow` prop 在当前版本中已声明但未使用——暂无箭头渲染逻辑。
+3. 步骤切换时默认自动滚动目标元素，可通过 `autoScroll={false}` 关闭。
+4. 定位由 Floating UI 负责，窗口 resize 和滚动会自动重新计算。
+5. 镂空遮罩通过半透明遮罩层 + boxShadow 高亮区域实现。
+6. 默认不支持遮罩层点击关闭；设置 `closeOnOutsideClick` 后会触发 `onSkip` 和 `onClose`。
+7. `arrow` 为真实箭头渲染能力。
 8. 步骤指示器数量与 `steps` 数组长度相同。
 9. 如果需要新增能力，应先修改 `src/components/blocks/tour/index.tsx`，再更新本 llm 文档。
 
@@ -231,10 +255,10 @@ type TourStepConfig = {
 
 - 步骤标题和描述通过 `font-semibold` + `text-muted-foreground` 区分层级。
 - 导航按钮为项目本地 Button 组件，保留键盘语义。
-- 遮罩层和镂空区域均为 `pointer-events-none`，不拦截底层元素交互。
+- 遮罩层默认不拦截底层元素交互；设置 `closeOnOutsideClick` 后会接收点击。
 - 步骤切换时自动 `scrollIntoView` 将目标滚动到可视区域。
 - 当前版本**不包含**焦点陷阱（focus trap）——引导期间用户仍可 Tab 到遮罩后方元素。
-- 当前版本**不包含** Escape 键关闭或 ARIA `role="dialog"` 语义——如需增强可访问性，应在调用侧补充。
+- 步骤卡片带 `role="dialog"`，Escape 默认关闭，可通过 `closeOnEscape={false}` 禁用。
 
 ## 与 Ant Design 的取舍 {#antd-differences}
 
@@ -245,7 +269,7 @@ type TourStepConfig = {
 | 组件来源 | 项目本地复合，非 AntD 封装 |
 | API 来源 | 以 `src/components/blocks/tour/index.tsx` 的 TypeScript 类型为准 |
 | 动画方案 | 使用 motion/react AnimatePresence，非 AntD rc-motion |
-| 定位方案 | 使用 getBoundingClientRect 手动计算，非 AntD rc-trigger |
+| 定位方案 | 使用 Floating UI，非 AntD rc-trigger |
 | 遮罩方案 | boxShadow 镂空技术，非 SVG mask |
 | 焦点管理 | 不包含焦点陷阱 |
 | 步骤指示器 | 圆点样式，非 AntD 数字指示器 |
@@ -260,12 +284,12 @@ type TourStepConfig = {
 
 1. 从 `@/components/ui/tour` 导入 `Tour` 和 `TourStepConfig`，不要从 `antd` 导入。
 2. `steps` 为必填属性，每个 step 至少需提供 `title` 或 `description` 之一。
-3. `target` 必须是一个返回 `HTMLElement | null` 的函数（如 `() => document.querySelector("#id")`），不要传入 ref 或选择器字符串。
+3. `target` 可以是 CSS 选择器、HTMLElement、ref，或返回 `HTMLElement | null` 的函数。
 4. 受控模式下同时传入 `current` 和 `onChange`；非受控模式下使用 `defaultCurrent`，二者不可混用。
 5. 组件通过 `open` / `onClose` 控制显隐，不要在组件外条件渲染 `{open && <Tour />}`。
-6. `placement` 支持 `"top"` | `"bottom"` | `"left"` | `"right"` | `"center"`。
+6. `placement` 支持 `"top"`、`"bottom"`、`"left"`、`"right"` 及 `*-start`、`*-end`，也支持 `"center"`。
 7. `mask` 默认为 `true`，设为 `false` 可去掉遮罩层。
 8. 只使用本文件 API 摘要和源码中存在的 props。
 9. 不要生成 AntD 专属的 `type`、`indicatorsRender`、`maskClassName`、`classNames`、`styles`、`ConfigProvider` 等属性。
-10. 引导期间如需阻断用户其他操作，应在调用侧添加焦点陷阱或模态逻辑——组件本身不提供此能力。
+10. 引导期间如需阻断用户其他操作，应在调用侧添加焦点陷阱或模态逻辑。
 11. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/tour/index.tsx`，不要凭 AntD 记忆生成。

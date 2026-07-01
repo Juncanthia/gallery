@@ -61,8 +61,11 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
-import { ColorPicker, ColorPickerPanel } from "@/components/extend/components/ui/color-picker"
+import { Button } from "@/components/ui/button"
+import {
+  ColorPickerPanel,
+  ColorPickerTriggerButton,
+} from "@/components/ui/color-picker"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,10 +85,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/extend/components/ui/select"
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
-import { ToggleGroup, ToggleGroupItem } from "@/components/extend/components/ui/toggle"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
   Tooltip,
   TooltipContent,
@@ -698,9 +701,9 @@ function ToolbarIconButton({
   return (
     <ToolbarTooltip label={label}>
       <Button
-        type="button"
+        htmlType="button"
         variant={active ? "secondary" : "ghost"}
-        size="icon-sm"
+        size="small" shape="square"
         aria-label={label}
         data-pressed={active ? "" : undefined}
         {...props}
@@ -764,9 +767,9 @@ function MergeCellsMenu({
           label={isMerged ? "Unmerge cells from the menu" : "Merge & Center"}
         >
           <Button
-            type="button"
+            htmlType="button"
             variant={isMerged ? "secondary" : "ghost"}
-            size="sm"
+            size="small"
             aria-label="Merge & Center"
             className="h-7 rounded-r-none border-0 px-2.5 before:rounded-r-none"
             data-pressed={isMerged ? "" : undefined}
@@ -781,9 +784,9 @@ function MergeCellsMenu({
         </ToolbarTooltip>
         <DropdownMenuTrigger asChild>
           <Button
-            type="button"
+            htmlType="button"
             variant={isMerged ? "secondary" : "ghost"}
-            size="icon-sm"
+            size="small" shape="square"
             aria-label="Merge cells options"
             className="h-7 w-6 rounded-l-none border-0 px-0 before:rounded-l-none"
             data-pressed={isMerged ? "" : undefined}
@@ -847,7 +850,7 @@ function NumberFormatSelect({
       disabled={disabled}
     >
       <SelectTrigger
-        size="sm"
+        size="small"
         className={cn(
           "w-[132px] min-w-[132px]",
           XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -913,9 +916,9 @@ function BorderMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+          htmlType="button"
+          variant="text"
+          size="small" shape="square"
           disabled={disabled}
           aria-label="Cell borders"
           className="relative"
@@ -993,9 +996,9 @@ function AlignmentMoreMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+          htmlType="button"
+          variant="text"
+          size="small" shape="square"
           disabled={disabled}
           aria-label="More alignment"
         >
@@ -1042,9 +1045,9 @@ function EditorFileActionsMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+          htmlType="button"
+          variant="text"
+          size="small" shape="square"
           aria-label="Open workbook actions"
         >
           <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" />
@@ -1569,9 +1572,9 @@ function EditorToolbar({
                   label={isDark ? "Use light workbook" : "Use dark workbook"}
                 >
                   <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
+                    htmlType="button"
+                    variant="text"
+                    size="small" shape="square"
                     aria-label={
                       isDark ? "Use light workbook" : "Use dark workbook"
                     }
@@ -1602,9 +1605,9 @@ function EditorToolbar({
           <div className="flex shrink-0 items-center gap-1">
             <ToolbarTooltip label="Undo">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 aria-label="Undo"
                 disabled={!canUndo || readOnly}
                 onClick={undo}
@@ -1614,9 +1617,9 @@ function EditorToolbar({
             </ToolbarTooltip>
             <ToolbarTooltip label="Redo">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 aria-label="Redo"
                 disabled={!canRedo || readOnly}
                 onClick={redo}
@@ -1640,7 +1643,7 @@ function EditorToolbar({
               modal={false}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className={cn(
                   "w-[132px] min-w-[132px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -1674,7 +1677,7 @@ function EditorToolbar({
               modal={false}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className={cn(
                   "w-[78px] min-w-[78px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -1700,7 +1703,7 @@ function EditorToolbar({
           <ToggleGroup
             className="shrink-0"
             disabled={!canStyleSelection}
-            multiple
+            type="multiple"
             spacing="default"
             value={fontToggleValues}
             onValueChange={(value) =>
@@ -1708,19 +1711,19 @@ function EditorToolbar({
             }
           >
             <ToolbarTooltip label="Bold">
-              <ToggleGroupItem aria-label="Bold" size="sm" value="bold">
+              <ToggleGroupItem aria-label="Bold" size="small" value="bold">
                 <HugeiconsIcon icon={TextBoldIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Italic">
-              <ToggleGroupItem aria-label="Italic" size="sm" value="italic">
+              <ToggleGroupItem aria-label="Italic" size="small" value="italic">
                 <HugeiconsIcon icon={TextItalicIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Underline">
               <ToggleGroupItem
                 aria-label="Underline"
-                size="sm"
+                size="small"
                 value="underline"
               >
                 <HugeiconsIcon icon={TextUnderlineIcon} className="size-4" />
@@ -1729,7 +1732,7 @@ function EditorToolbar({
             <ToolbarTooltip label="Strikethrough">
               <ToggleGroupItem
                 aria-label="Strikethrough"
-                size="sm"
+                size="small"
                 value="strikethrough"
               >
                 <HugeiconsIcon
@@ -1741,9 +1744,9 @@ function EditorToolbar({
           </ToggleGroup>
           <ToolbarSeparator />
           <div className="flex shrink-0 items-center gap-1">
-            <ColorPicker
+            <ColorPickerTriggerButton
               label="Text color"
-              icon={TextColorIcon}
+              icon={<HugeiconsIcon icon={TextColorIcon} className="size-4" />}
               color={textColor}
               disabled={!canStyleSelection}
               onChange={(color) => {
@@ -1752,9 +1755,9 @@ function EditorToolbar({
                 applyStyle({ font: { color: toXlsxRgbColor(nextColor) } })
               }}
             />
-            <ColorPicker
+            <ColorPickerTriggerButton
               label="Fill color"
-              icon={PaintBucketIcon}
+              icon={<HugeiconsIcon icon={PaintBucketIcon} className="size-4" />}
               color={fillColor}
               disabled={!canStyleSelection}
               onChange={(color) => {
@@ -1787,7 +1790,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align left">
                 <ToggleGroupItem
                   aria-label="Align left"
-                  size="sm"
+                  size="small"
                   value="left"
                   onClick={() => applyHorizontalAlignment("left")}
                 >
@@ -1800,7 +1803,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align center">
                 <ToggleGroupItem
                   aria-label="Align center"
-                  size="sm"
+                  size="small"
                   value="center"
                   onClick={() => applyHorizontalAlignment("center")}
                 >
@@ -1813,7 +1816,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align right">
                 <ToggleGroupItem
                   aria-label="Align right"
-                  size="sm"
+                  size="small"
                   value="right"
                   onClick={() => applyHorizontalAlignment("right")}
                 >
@@ -1833,7 +1836,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align top">
                 <ToggleGroupItem
                   aria-label="Align top"
-                  size="sm"
+                  size="small"
                   value="top"
                   onClick={() => applyVerticalAlignment("top")}
                 >
@@ -1846,7 +1849,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align middle">
                 <ToggleGroupItem
                   aria-label="Align middle"
-                  size="sm"
+                  size="small"
                   value="center"
                   onClick={() => applyVerticalAlignment("center")}
                 >
@@ -1859,7 +1862,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align bottom">
                 <ToggleGroupItem
                   aria-label="Align bottom"
-                  size="sm"
+                  size="small"
                   value="bottom"
                   onClick={() => applyVerticalAlignment("bottom")}
                 >
@@ -1914,9 +1917,9 @@ function EditorToolbar({
           <div className="flex shrink-0 items-center gap-1">
             <ToolbarTooltip label="Add sheet">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 aria-label="Add sheet"
                 disabled={!hasWorkbook || readOnly}
                 onClick={() => addSheet()}
@@ -1926,9 +1929,9 @@ function EditorToolbar({
             </ToolbarTooltip>
             <ToolbarTooltip label="Remove active sheet">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 aria-label="Remove active sheet"
                 disabled={sheets.length <= 1 || readOnly}
                 onClick={removeActiveSheet}
@@ -1942,7 +1945,7 @@ function EditorToolbar({
               disabled={!hasWorkbook}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className={cn(
                   "w-[150px] min-w-[150px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -1970,9 +1973,9 @@ function EditorToolbar({
           <div className="flex flex-none items-center gap-1">
             <ToolbarTooltip label="Zoom out">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 disabled={!hasWorkbook || !canZoomOut}
                 aria-label="Zoom out"
                 onClick={zoomOut}
@@ -1987,7 +1990,7 @@ function EditorToolbar({
               modal={false}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className={cn(
                   "w-[84px] min-w-[84px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -2010,9 +2013,9 @@ function EditorToolbar({
             </Select>
             <ToolbarTooltip label="Zoom in">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 disabled={!hasWorkbook || !canZoomIn}
                 aria-label="Zoom in"
                 onClick={zoomIn}
@@ -2286,9 +2289,9 @@ function XlsxEditorContent({
               file.
             </p>
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               className="mt-4"
               onClick={() => fileInputRef.current?.click()}
             >
@@ -2321,9 +2324,9 @@ function XlsxEditorContent({
             <p className="font-medium">Unable to edit workbook</p>
             <p className="mt-1 text-muted-foreground">{loadError}</p>
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               className="mt-4"
               onClick={() => fileInputRef.current?.click()}
             >

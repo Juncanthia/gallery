@@ -2,219 +2,143 @@
 category: Components
 title: ColorPicker
 subtitle: 颜色选择器
-description: 用于选择颜色。
-demo:
-  cols: 2
-group:
-  title: 数据录入
-  order: 4
+description: 用于选择颜色，支持复合组件、内嵌面板和工具栏弹出按钮。
 source:
   component: src/components/ui/color-picker.tsx
+  implementation: src/components/blocks/color-picker/index.tsx
   examples:
     - content/components/color-picker/examples/basic.tsx
 stack:
   react: true
   tailwindcss: true
-  cva: false
-  radixSlot: false
-  motion: false
+  radix: true
+  antd: false
   baseUi: false
-  sonner: false
-  rcComponent: false
-  cssInJs: false
 ---
 
 # ColorPicker 颜色选择器
 
-用于选择颜色。
+本地 ColorPicker 是 `Radix + Tailwind + color` 的 API-first 封装，不是 AntD 兼容层，也不是 dice/extend 旧实现的透传。
 
-本组件借鉴 Ant Design ColorPicker 的使用心智，但不是 AntD 兼容层。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
-
-## 何时使用 {#when-to-use}
-
-适合在需要 颜色选择器 相关能力的界面中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
-
-常见场景：
-
-- 需要复用统一设计语言、状态样式和可访问性约定。
-- 需要和本项目 Tailwind 主题变量、暗色模式、Radix/Base UI primitive 或本地交互行为保持一致。
-- 需要让 AI 或业务代码稳定地从 `@/components/ui/color-picker` 引用组件，而不是直接引用第三方底层库。
-
-不推荐：
-
-- 为了照搬 Ant Design API 而新增兼容别名。
-- 在调用侧绕过组件 API，直接依赖内部 DOM 结构完成业务逻辑。
-- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
-
-## 代码演示 {#examples}
-
-### 基础用法
-
-```tsx
-import { ColorPicker } from "@/components/ui/color-picker"
-
-export default function Demo() {
-  return (
-    <ColorPicker>
-      颜色选择器
-    </ColorPicker>
-  )
-}
-```
-
-> 说明：这是面向 LLM 的最小导入示例。复杂组件应结合下方 API 摘要和源码类型补充必需 props，例如 `options`、`items`、`columns`、`dataSource` 等。
-
-## 核心导出 {#exports}
+## 核心导出
 
 - `ColorPicker`
-- `ColorPickerProps`
+- `ColorPickerSelection`
+- `ColorPickerArea`
+- `ColorPickerHue`
+- `ColorPickerHueSlider`
+- `ColorPickerAlpha`
+- `ColorPickerAlphaSlider`
+- `ColorPickerEyeDropper`
+- `ColorPickerOutput`
+- `ColorPickerFormatSelect`
+- `ColorPickerInput`
+- `ColorPickerFormat`
+- `ColorPickerSwatch`
+- `ColorPickerPresets`
+- `ColorPickerPanel`
+- `ColorPickerTriggerButton`
+- `useColorPicker`
 
-## API {#api}
+## 推荐用法
+
+### 复合组件
+
+```tsx
+import {
+  ColorPicker,
+  ColorPickerSelection,
+  ColorPickerHue,
+  ColorPickerAlpha,
+  ColorPickerOutput,
+  ColorPickerFormat,
+} from "@/components/ui/color-picker"
+
+<ColorPicker defaultValue="#3b82f6" className="w-60 gap-3">
+  <ColorPickerSelection className="h-32 rounded" />
+  <ColorPickerHue />
+  <ColorPickerAlpha />
+  <div className="flex items-center gap-2">
+    <ColorPickerFormat className="flex-1" />
+    <ColorPickerOutput />
+  </div>
+</ColorPicker>
+```
+
+### 工具栏弹出按钮
+
+```tsx
+import { ColorPickerTriggerButton } from "@/components/ui/color-picker"
+
+<ColorPickerTriggerButton
+  label="Text color"
+  color={color}
+  icon={icon}
+  onChange={setColor}
+/>
+```
+
+### 内嵌面板
+
+```tsx
+import { ColorPickerPanel } from "@/components/ui/color-picker"
+
+<ColorPickerPanel
+  color="#2563eb"
+  label="Border color"
+  onChange={(color) => setBorderColor(color)}
+/>
+```
+
+## API 摘要
 
 ### ColorPicker
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| value | 受控颜色值 | `string \| { r: number, g: number, b: number } \| [number, number, number]` | - |
-| defaultValue | 默认颜色值（非受控） | 同上 | `"#000000"` |
-| onChange | 颜色变化时的回调 | `(value: { r: number, g: number, b: number, a?: number }) => void` | - |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受所有标准 HTML `div` 元素属性。
-
-### ColorPickerSelection
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 饱和度/亮度二维选择区域。接受所有标准 HTML `div` 元素属性。
-
-### ColorPickerHue
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-| max | 滑块最大值 | `number` | `360` |
-| step | 滑块步长 | `number` | `1` |
-| value | 受控色相值 | `number[]` | - |
-| onValueChange | 值变化回调 | `([hue]: number[]) => void` | - |
-
-> 接受 Radix `Slider.Root` 的所有 props。
-
-### ColorPickerAlpha
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-| max | 滑块最大值 | `number` | `100` |
-| step | 滑块步长 | `number` | `1` |
-| value | 受控透明度值 | `number[]` | - |
-| onValueChange | 值变化回调 | `([alpha]: number[]) => void` | - |
-
-> 透明度滑块。接受 Radix `Slider.Root` 的所有 props。
-
-### ColorPickerEyeDropper
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 吸管取色按钮。接受 `Button` 组件的所有 props。
-
-### ColorPickerOutput
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 颜色格式切换下拉选择器。接受 `Select` 组件的 `SelectSingleApiProps`（不含 `mode`、`onValueChange`、`options`、`value`）。
-
-### ColorPickerFormat
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 颜色值只读输入展示区域，根据当前 mode（hex/rgb/css/hsl）切换格式。接受所有标准 HTML `div` 元素属性。
-
-### useColorPicker
-
-自定义 Hook，必须在 `ColorPicker` 内部使用。返回上下文值：
-
-| 属性 | 说明 | 类型 |
+| 属性 | 类型 | 说明 |
 | --- | --- | --- |
-| hue | 当前色相 | `number` |
-| saturation | 当前饱和度 | `number` |
-| lightness | 当前亮度 | `number` |
-| alpha | 当前透明度 | `number` |
-| mode | 当前格式模式 | `string` |
-| setHue | 设置色相 | `(hue: number) => void` |
-| setSaturation | 设置饱和度 | `(saturation: number) => void` |
-| setLightness | 设置亮度 | `(lightness: number) => void` |
-| setAlpha | 设置透明度 | `(alpha: number) => void` |
-| setMode | 设置格式模式 | `(mode: string) => void` |
+| value | `Parameters<typeof Color>[0]` | 受控颜色值 |
+| defaultValue | `Parameters<typeof Color>[0]` | 默认颜色值，默认 `"#000000"` |
+| format | `"hex" \| "rgb" \| "css" \| "hsl" \| "hsb"` | 受控输出格式 |
+| defaultFormat | 同上 | 默认输出格式，默认 `"hex"` |
+| onChange | `(value: [number, number, number, number]) => void` | 返回 RGBA 数组，alpha 为 0-1 |
+| onValueChange | `(value: string) => void` | 返回当前格式字符串 |
+| onFormatChange | `(format: ColorPickerFormatMode) => void` | 格式变化回调 |
+| disabled | `boolean` | 禁用交互 |
+| readOnly | `boolean` | 只读 |
+| name | `string` | 隐藏表单字段名称 |
 
-## Semantic DOM {#semantic-dom}
+### ColorPickerPanel
 
-源码中出现的稳定语义槽位：
+组合格式切换、色板、色相滑杆、输入框和预设色。适合 Dropdown/Submenu 内嵌。
 
-- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+| 属性 | 类型 | 默认值 |
+| --- | --- | --- |
+| color / value | `Parameters<typeof Color>[0]` | - |
+| onChange | `(color: string) => void` | - |
+| showAlpha | `boolean` | `false` |
+| showEyeDropper | `boolean` | `false` |
+| showFormatSelect | `boolean` | `true` |
+| showPresets | `boolean` | `true` |
+| presets | `readonly string[]` | 内置常用色 |
 
-额外状态属性：
+### ColorPickerTriggerButton
 
-- 无额外 `data-*` 状态属性。
+工具栏和表单常用弹出式取色按钮，内部使用 Popover + `ColorPickerPanel`。
 
-生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+| 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| label | `string` | 可访问名称和 tooltip 文案 |
+| color | `string` | 当前颜色 |
+| icon | `ReactNode` | 按钮图标 |
+| onChange | `(color: string) => void` | 颜色变化回调 |
 
-## 样式模型 {#styling-model}
+## LLM 规则
 
-- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
-- 如果源码使用 CVA，则变体样式集中在组件文件或相邻 `*-variants.ts` 中。
-- 如果源码包装 Radix/Base UI primitive，则交互状态、键盘行为和 ARIA 基础能力来自底层 primitive，本地组件负责视觉和 API 收敛。
-- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground`、`ring-ring` 等项目级语义变量。
-
-## 依赖与实现说明 {#implementation-notes}
-
-核心文件：
-
-- `src/components/ui/color-picker.tsx`
-
-直接依赖摘要：
-
-- `@/components/blocks/color-picker`
-
-实现注意：
-
-1. 组件 API 以本地 TypeScript 类型为准。
-2. 样式应优先通过组件 props、variant 或本地 className 扩展点表达。
-3. 如果需要新增能力，应先修改该组件源码和相邻 variant 文件，再更新本 llm 文档。
-4. 不要把第三方文档中的全量 API 视为本地已支持能力。
-
-## 可访问性 {#accessibility}
-
-- 保留原生元素或底层 primitive 的键盘语义。
-- 交互型组件应提供可访问名称，例如 `aria-label`、`title` 或可见文本。
-- 禁用、加载、展开、选中等状态应优先使用组件已有 props，而不是只改视觉 class。
-- 纯图标触发器必须提供明确的可访问名称。
-
-## 与 Ant Design 的取舍 {#antd-differences}
-
-| 方向 | 本地决策 |
-| --- | --- |
-| API 来源 | 以 `src/components/ui/color-picker.tsx` 的 TypeScript 类型为准 |
-| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
-| 全局配置 | 不依赖 AntD ConfigProvider |
-| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
-| 兼容目标 | 借鉴 AntD 使用心智，但不承诺 API 兼容 |
-
-## LLM 使用规则 {#llm-rules}
-
-当 AI 生成本项目 ColorPicker 代码时，应遵守：
-
-1. 从 `@/components/ui/color-picker` 导入，不要从 `antd` 导入。
-2. 只使用本文件 API 摘要和源码中存在的 props。
-3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
-4. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
-5. 交互组件必须保留键盘和 ARIA 语义，纯图标操作必须补 `aria-label`。
-6. 如果不确定某个 AntD API 是否存在，先检查 `src/components/ui/color-picker.tsx`，不要凭 AntD 记忆生成。
+1. 必须从 `@/components/ui/color-picker` 导入。
+2. 不要从 `src/components/dice/ui/color-picker` 或 `src/components/extend/components/ui/color-picker` 导入。
+3. 工具栏颜色按钮使用 `ColorPickerTriggerButton`。
+4. 下拉菜单内嵌取色面板使用 `ColorPickerPanel`。
+5. 复合子组件必须放在 `ColorPicker` 内部。
+6. `onChange` 的 alpha 是 0-1，不是 0-100。
+7. 字符串颜色值使用 `onValueChange`，或使用 `ColorPickerPanel` / `ColorPickerTriggerButton` 的 `onChange`。
+8. 不要引入 AntD、Base UI 或旧外部库实现。

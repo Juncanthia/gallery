@@ -54,7 +54,7 @@ import {
 import { useTheme } from "next-themes"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Collapsible,
   CollapsiblePanel,
@@ -73,7 +73,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export type SchemaBuilderScalarType =
   | "string"
@@ -1229,9 +1229,9 @@ function SchemaTypeMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="ghost"
-          size="sm"
+          htmlType="button"
+          variant="text"
+          size="small"
           className="h-8 w-full min-w-0 justify-between overflow-hidden rounded-md px-2"
         >
           <SchemaTypeBadge
@@ -1328,9 +1328,9 @@ function ArrayItemTypeMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="outline"
-          size="sm"
+          htmlType="button"
+          variant="outlined"
+          size="small"
           className="h-6 px-2"
           onClick={(event) => event.stopPropagation()}
           onPointerDown={(event) => event.stopPropagation()}

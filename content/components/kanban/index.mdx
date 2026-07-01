@@ -135,9 +135,10 @@ export default function Demo() {
 | onDragStart | 拖拽开始回调 | `(event: DragStartEvent) => void` | - |
 | onDragOver | 拖拽经过回调（跨列时更新 column 字段） | `(event: DragOverEvent) => void` | - |
 | onDragEnd | 拖拽结束回调 | `(event: DragEndEvent) => void` | - |
+| flatCursor | 关闭 grab/grabbing 光标切换，适合触屏或自定义光标场景 | `boolean` | `false` |
 | className | 根容器 CSS 类名 | `string` | - |
 
-同时接受 `DndContextProps` 的其他属性（如 `collisionDetection`、`modifiers` 等），可通过展开传入覆盖默认值。
+同时接受 `DndContextProps` 的其他属性（如 `modifiers` 等），可通过展开传入覆盖默认值；默认 `collisionDetection` 已内置指针优先 + 列内最近卡片兜底的碰撞检测，键盘方向键也已内置感知列边界的坐标换算（跨列用方向键移动更准确），无需自行传入即可获得较好的跨列拖拽体验。
 
 ### KanbanBoard
 

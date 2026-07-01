@@ -74,7 +74,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { flushSync } from "react-dom"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   DocumentViewerSidebarSkeleton,
   DocumentViewerThumbnailSidebar,
@@ -100,7 +100,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/extend/components/ui/select"
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
 import {
@@ -579,9 +579,9 @@ function PDFViewerFileActionsMenu({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+            htmlType="button"
+            variant="text"
+            size="small" shape="square"
             aria-label="Open PDF actions"
           >
             <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" />
@@ -657,7 +657,7 @@ function PDFViewerPageNumberControl({
           aria-label="Page number"
           inputMode="numeric"
           pattern="[0-9]*"
-          size="sm"
+          size="small"
           value={draftPage}
           className="mx-1 w-14 min-w-14 rounded-md [&_[data-slot=input]]:text-center"
           onBlur={() => setIsEditing(false)}
@@ -675,9 +675,9 @@ function PDFViewerPageNumberControl({
         />
       ) : (
         <Button
-          type="button"
-          variant="ghost"
-          size="sm"
+          htmlType="button"
+          variant="text"
+          size="small"
           className="font-normal"
           aria-label={`Current page ${displayPage}. Edit page number`}
           disabled={controlsDisabled || !numPages}
@@ -857,9 +857,9 @@ function PDFViewerSearchControl({
       <ToolbarTooltip label="Search text">
         <PopoverTrigger asChild>
           <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+            htmlType="button"
+            variant="text"
+            size="small" shape="square"
             aria-label="Search text"
             disabled={controlsDisabled}
           >
@@ -903,9 +903,9 @@ function PDFViewerSearchControl({
             </div>
             <div className="flex shrink-0 items-center gap-1">
               <Button
-                type="button"
-                variant="outline"
-                size="icon-sm"
+                htmlType="button"
+                variant="outlined"
+                size="small" shape="square"
                 aria-label="Previous result"
                 disabled={isSearching || state.total === 0}
                 onClick={() => navigate(-1)}
@@ -913,9 +913,9 @@ function PDFViewerSearchControl({
                 <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
               </Button>
               <Button
-                type="button"
-                variant="outline"
-                size="icon-sm"
+                htmlType="button"
+                variant="outlined"
+                size="small" shape="square"
                 aria-label="Next result"
                 disabled={isSearching || state.total === 0}
                 onClick={() => navigate(1)}
@@ -926,9 +926,9 @@ function PDFViewerSearchControl({
           </div>
           <div className="flex justify-end">
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               onClick={clearSearch}
             >
               Clear
@@ -2242,9 +2242,9 @@ function PDFViewerInner({
             <TooltipProvider>
               <ToolbarTooltip label="Toggle thumbnails">
                 <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
+                  htmlType="button"
+                  variant="text"
+                  size="small" shape="square"
                   aria-label="Toggle thumbnails"
                   disabled={controlsDisabled}
                   onClick={() => setSidebarOpen((open) => !open)}
@@ -2267,9 +2267,9 @@ function PDFViewerInner({
                   <div className="flex flex-none items-center gap-1">
                     <ToolbarTooltip label="Rotate counterclockwise">
                       <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon-sm"
+                        htmlType="button"
+                        variant="text"
+                        size="small" shape="square"
                         aria-label="Rotate counterclockwise"
                         disabled={controlsDisabled}
                         onClick={() => rotateSelectedPages(-1)}
@@ -2282,9 +2282,9 @@ function PDFViewerInner({
                     </ToolbarTooltip>
                     <ToolbarTooltip label="Rotate clockwise">
                       <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon-sm"
+                        htmlType="button"
+                        variant="text"
+                        size="small" shape="square"
                         aria-label="Rotate clockwise"
                         disabled={controlsDisabled}
                         onClick={() => rotateSelectedPages(1)}
@@ -2305,9 +2305,9 @@ function PDFViewerInner({
               <div className="flex flex-none items-center gap-1">
                 <ToolbarTooltip label="Zoom out">
                   <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
+                    htmlType="button"
+                    variant="text"
+                    size="small" shape="square"
                     aria-label="Zoom out"
                     disabled={
                       controlsDisabled || currentZoomLevel <= ZOOM_OPTIONS[0]
@@ -2332,7 +2332,7 @@ function PDFViewerInner({
                   disabled={controlsDisabled}
                   modal={false}
                 >
-                  <SelectTrigger size="sm" className="w-[84px] min-w-[84px]">
+                  <SelectTrigger size="small" className="w-[84px] min-w-[84px]">
                     <SelectValue placeholder="Zoom">
                       {Math.round(currentZoomLevel * 100)}%
                     </SelectValue>
@@ -2347,9 +2347,9 @@ function PDFViewerInner({
                 </Select>
                 <ToolbarTooltip label="Zoom in">
                   <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
+                    htmlType="button"
+                    variant="text"
+                    size="small" shape="square"
                     aria-label="Zoom in"
                     disabled={
                       controlsDisabled ||

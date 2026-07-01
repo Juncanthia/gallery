@@ -130,9 +130,10 @@ export default function Demo() {
 | onDragStart | `(event: DragStartEvent) => void` | - | 拖拽开始回调 |
 | onDragOver | `(event: DragOverEvent) => void` | - | 拖拽经过回调 |
 | onDragEnd | `(event: DragEndEvent) => void` | - | 拖拽结束回调 |
+| flatCursor | `boolean` | `false` | 关闭 grab/grabbing 光标切换，适合触屏或自定义光标场景 |
 | className | `string` | - | 根容器 className |
 
-`KanbanProvider` 同时接受 `DndContextProps` 的其他属性（如 `collisionDetection`、`modifiers` 等），可通过展开传入覆盖默认值。
+`KanbanProvider` 同时接受 `DndContextProps` 的其他属性（如 `modifiers` 等），可通过展开传入覆盖默认值；`collisionDetection` 已内置指针优先（`pointerWithin` → `rectIntersection` 兜底）+ 列内最近卡片精确定位的碰撞检测，`KeyboardSensor` 的 `coordinateGetter` 也已内置感知列容器边界的坐标换算，无需自行传入即可获得较好的跨列拖拽体验，展开传入可覆盖默认实现。
 
 ### KanbanBoard
 
@@ -214,7 +215,7 @@ type KanbanColumnProps = {
 
 直接依赖摘要：
 
-- `@dnd-kit/core`（DndContext、DragOverlay、sensors、closestCenter）
+- `@dnd-kit/core`（DndContext、DragOverlay、sensors、pointerWithin/rectIntersection/closestCenter/closestCorners 碰撞检测）
 - `@dnd-kit/sortable`（SortableContext、useSortable、arrayMove）
 - `@dnd-kit/utilities`（CSS.Transform）
 - `tunnel-rat`（DragOverlay portal 隧道）
@@ -225,11 +226,13 @@ type KanbanColumnProps = {
 实现注意：
 
 1. `KanbanProvider` 内部管理 `activeCardId` 状态，用于控制 DragOverlay 中显示拖拽预览。
-2. 传感器默认使用 MouseSensor、TouchSensor、KeyboardSensor，支持鼠标、触屏和键盘拖拽。
-3. 列间移动逻辑：在 `handleDragOver` 中检测跨列拖拽，更新卡片 `column` 字段并调用 `arrayMove` 重排。
-4. announcements 对象提供屏幕阅读器播报，覆盖拖拽全生命周期（开始、经过、结束、取消）。
-5. 组件通过泛型支持扩展数据字段，可在 `KanbanItemProps` 和 `KanbanColumnProps` 上附加任意属性。
-6. DragOverlay 通过 `tunnel-rat` + `createPortal` 渲染到 `document.body`，确保拖拽预览不受父容器 overflow/clip 影响。
+2. 传感器默认使用 MouseSensor、TouchSensor、KeyboardSensor，支持鼠标、触屏和键盘拖拽；`KeyboardSensor` 使用内置的 `kanbanCoordinateGetter`，根据方向键判断相邻可放置容器的相对位置，避免跨列时坐标计算失真。
+3. `collisionDetection` 默认优先使用 `pointerWithin`（指针实际覆盖的容器），无命中时回退 `rectIntersection`；命中列容器且列内有卡片时，再用 `closestCenter` 在列内卡片间精确定位插入位置，跨列拖拽体验比单一 `closestCenter` 更稳定。
+4. 列间移动逻辑：在 `handleDragOver` 中检测跨列拖拽，更新卡片 `column` 字段并调用 `arrayMove` 重排。
+5. announcements 对象提供屏幕阅读器播报，覆盖拖拽全生命周期（开始、经过、结束、取消）。
+6. 组件通过泛型支持扩展数据字段，可在 `KanbanItemProps` 和 `KanbanColumnProps` 上附加任意属性。
+7. DragOverlay 通过 `tunnel-rat` + `createPortal` 渲染到 `document.body`，确保拖拽预览不受父容器 overflow/clip 影响。
+8. `flatCursor` 为 `true` 时，`KanbanCard` 始终使用 `cursor-default`，不再切换 grab/grabbing，适合触屏或需要自定义光标的场景。
 
 ## 可访问性 {#accessibility}
 

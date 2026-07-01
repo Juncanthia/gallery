@@ -11,6 +11,14 @@ const THEMES = { light: "", dark: ".dark" } as const
 
 const INITIAL_DIMENSION = { width: 320, height: 200 } as const
 type TooltipNameType = number | string
+type ThemeKey = keyof typeof THEMES
+type ThemeColors = Partial<Record<ThemeKey, string[]>>
+type AtLeastOneThemeColor = {
+  [K in ThemeKey]: Required<Pick<ThemeColors, K>> &
+    Partial<Omit<ThemeColors, K>>
+}[ThemeKey]
+
+const VALID_THEME_KEYS = Object.keys(THEMES) as ThemeKey[]
 
 export type ChartConfig = Record<
   string,
@@ -18,8 +26,9 @@ export type ChartConfig = Record<
     label?: React.ReactNode
     icon?: React.ComponentType
   } & (
-    | { color?: string; theme?: never }
-    | { color?: never; theme: Record<keyof typeof THEMES, string> }
+    | { color?: string; theme?: never; colors?: never }
+    | { color?: never; theme: Record<keyof typeof THEMES, string>; colors?: never }
+    | { color?: never; theme?: never; colors: AtLeastOneThemeColor }
   )
 >
 
@@ -39,25 +48,67 @@ function useChart() {
   return context
 }
 
+function validateChartConfig(config: ChartConfig): void {
+  for (const [key, value] of Object.entries(config)) {
+    if (!("colors" in value) || !value.colors) {
+      continue
+    }
+
+    const hasValidThemeKey = VALID_THEME_KEYS.some(
+      (themeKey) => value.colors?.[themeKey] !== undefined
+    )
+
+    if (!hasValidThemeKey) {
+      throw new Error(
+        `Invalid chart config for "${key}": colors must include at least one theme key (${VALID_THEME_KEYS.join(", ")}).`
+      )
+    }
+  }
+}
+
+type ChartContainerProps = Omit<React.ComponentProps<"div">, "children"> &
+  Pick<
+    React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>,
+    | "children"
+    | "initialDimension"
+    | "aspect"
+    | "debounce"
+    | "minHeight"
+    | "minWidth"
+    | "maxHeight"
+    | "height"
+    | "width"
+    | "onResize"
+  > & {
+    config: ChartConfig
+    footer?: React.ReactNode
+    innerResponsiveContainerStyle?: React.ComponentProps<
+      typeof RechartsPrimitive.ResponsiveContainer
+    >["style"]
+  }
+
 function ChartContainer({
   id,
   className,
   children,
   config,
   initialDimension = INITIAL_DIMENSION,
+  footer,
+  innerResponsiveContainerStyle,
+  aspect,
+  debounce,
+  minHeight,
+  minWidth,
+  maxHeight,
+  height,
+  width,
+  onResize,
   ...props
-}: React.ComponentProps<"div"> & {
-  config: ChartConfig
-  children: React.ComponentProps<
-    typeof RechartsPrimitive.ResponsiveContainer
-  >["children"]
-  initialDimension?: {
-    width: number
-    height: number
-  }
-}) {
+}: ChartContainerProps) {
   const uniqueId = React.useId()
   const chartId = `chart-${id ?? uniqueId.replace(/:/g, "")}`
+
+  validateChartConfig(config)
 
   return (
     <ChartContext.Provider value={{ config }}>
@@ -65,25 +116,74 @@ function ChartContainer({
         data-slot="chart"
         data-chart={chartId}
         className={cn(
-          "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
+          "relative flex min-h-0 w-full flex-1 justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
+          footer ? "flex-col" : "aspect-video",
           className
         )}
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
         <RechartsPrimitive.ResponsiveContainer
+          aspect={aspect}
+          debounce={debounce}
+          minHeight={minHeight}
+          minWidth={minWidth}
+          maxHeight={maxHeight}
+          height={height}
           initialDimension={initialDimension}
+          onResize={onResize}
+          style={innerResponsiveContainerStyle}
+          width={width}
         >
           {children}
         </RechartsPrimitive.ResponsiveContainer>
+        {footer}
       </div>
     </ChartContext.Provider>
   )
 }
 
+function LoadingIndicator({ isLoading }: { isLoading: boolean }) {
+  if (!isLoading) {
+    return null
+  }
+
+  return (
+    <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+      <div className="flex items-center justify-center gap-2 rounded-md border bg-background px-2 py-0.5 text-primary text-sm">
+        <div className="h-3 w-3 animate-spin rounded-full border border-border border-t-primary" />
+        <span>Loading</span>
+      </div>
+    </div>
+  )
+}
+
+function distributeColors(colors: string[], maxCount: number): string[] {
+  if (colors.length >= maxCount) {
+    return colors.slice(0, maxCount)
+  }
+
+  const result: string[] = []
+  const baseSlots = Math.floor(maxCount / colors.length)
+  const extraSlots = maxCount % colors.length
+
+  for (let colorIndex = 0; colorIndex < colors.length; colorIndex++) {
+    const isExtraColor = colorIndex >= colors.length - extraSlots
+    const slotCount = baseSlots + (isExtraColor ? 1 : 0)
+    for (let slotIndex = 0; slotIndex < slotCount; slotIndex++) {
+      const color = colors[colorIndex]
+      if (color) {
+        result.push(color)
+      }
+    }
+  }
+
+  return result
+}
+
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.theme ?? config.color
+    ([, config]) => config.theme ?? config.color ?? config.colors
   )
 
   if (!colorConfig.length) {
@@ -98,11 +198,22 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
             ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
-  .map(([key, itemConfig]) => {
+  .flatMap(([key, itemConfig]) => {
+    if (itemConfig.colors) {
+      const colors = itemConfig.colors[theme as keyof typeof itemConfig.colors]
+      if (!colors?.length) {
+        return []
+      }
+
+      return distributeColors(colors, getColorsCount(itemConfig)).map(
+        (color, index) => `  --color-${key}-${index}: ${color};`
+      )
+    }
+
     const color =
       itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ??
       itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    return color ? [`  --color-${key}: ${color};`] : []
   })
   .join("\n")}
 }
@@ -130,6 +241,9 @@ function ChartTooltipContent({
   color,
   nameKey,
   labelKey,
+  selected,
+  roundness = "lg",
+  variant = "default",
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
   React.ComponentProps<"div"> & {
     hideLabel?: boolean
@@ -137,6 +251,9 @@ function ChartTooltipContent({
     indicator?: "line" | "dot" | "dashed"
     nameKey?: string
     labelKey?: string
+    selected?: string | null
+    roundness?: "sm" | "md" | "lg" | "xl"
+    variant?: "default" | "frosted-glass"
   } & Omit<
     RechartsPrimitive.DefaultTooltipContentProps<
       TooltipValueType,
@@ -191,7 +308,13 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "grid min-w-32 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+        "grid min-w-32 items-start gap-1.5 border border-border/50 px-2.5 py-1.5 text-xs shadow-xl",
+        roundness === "sm" && "rounded-sm",
+        roundness === "md" && "rounded-md",
+        roundness === "lg" && "rounded-lg",
+        roundness === "xl" && "rounded-xl",
+        variant === "default" && "bg-background",
+        variant === "frosted-glass" && "bg-background/70 backdrop-blur-sm",
         className
       )}
     >
@@ -203,13 +326,15 @@ function ChartTooltipContent({
             const key = `${nameKey ?? item.name ?? item.dataKey ?? "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
             const indicatorColor = color ?? item.payload?.fill ?? item.color
+            const colorCount = itemConfig ? getColorsCount(itemConfig) : 1
 
             return (
               <div
                 key={index}
                 className={cn(
                   "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
-                  indicator === "dot" && "items-center"
+                  indicator === "dot" && "items-center",
+                  selected != null && selected !== item.dataKey && "opacity-30"
                 )}
               >
                 {formatter && item?.value !== undefined && item.name ? (
@@ -231,12 +356,11 @@ function ChartTooltipContent({
                               "my-0.5": nestLabel && indicator === "dashed",
                             }
                           )}
-                          style={
-                            {
-                              "--color-bg": indicatorColor,
-                              "--color-border": indicatorColor,
-                            } as React.CSSProperties
-                          }
+                          style={getIndicatorColorStyle(
+                            key,
+                            colorCount,
+                            indicatorColor
+                          )}
                         />
                       )
                     )}
@@ -363,11 +487,62 @@ function getPayloadConfigFromPayload(
   return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
+function getIndicatorColorStyle(
+  dataKey: string,
+  colorCount: number,
+  fallbackColor?: string
+): React.CSSProperties {
+  if (colorCount <= 1) {
+    return {
+      "--color-bg": fallbackColor ?? `var(--color-${dataKey}-0)`,
+      "--color-border": fallbackColor ?? `var(--color-${dataKey}-0)`,
+    } as React.CSSProperties
+  }
+
+  const stops = Array.from({ length: colorCount }, (_, index) => {
+    const offset = (index / (colorCount - 1)) * 100
+    return `var(--color-${dataKey}-${index}) ${offset}%`
+  }).join(", ")
+
+  return {
+    "--color-bg": `linear-gradient(to right, ${stops})`,
+    "--color-border": fallbackColor ?? `var(--color-${dataKey}-0)`,
+  } as React.CSSProperties
+}
+
+function axisValueToPercentFormatter(value: number) {
+  return `${Math.round(value * 100).toFixed(0)}%`
+}
+
+function getColorsCount(config: ChartConfig[string]): number {
+  if (!("colors" in config) || !config.colors) {
+    return 1
+  }
+
+  const counts = VALID_THEME_KEYS.map(
+    (theme) => config.colors?.[theme]?.length ?? 0
+  )
+  return Math.max(...counts, 1)
+}
+
+const getLoadingData = (points = 10, min = 0, max = 70) => {
+  const range = max - min
+  return Array.from({ length: points }, () => ({
+    loading: Math.floor(Math.random() * range) + min,
+  }))
+}
+
 export {
   ChartContainer,
+  ChartStyle,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-  ChartStyle,
+  LoadingIndicator,
+  axisValueToPercentFormatter,
+  getColorsCount,
+  getLoadingData,
+  getPayloadConfigFromPayload,
+  useChart,
 }

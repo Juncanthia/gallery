@@ -45,22 +45,33 @@ type ComboboxProps = Omit<
   "defaultValue" | "onChange" | "onSelect" | "value"
 > & {
   allowClear?: boolean
+  autoHighlight?: boolean
   contentClassName?: string
+  defaultInputValue?: string
   defaultOpen?: boolean
   defaultValue?: string
   emptyContent?: React.ReactNode
   filterOption?: boolean | ((input: string, option: ComboboxOption) => boolean)
+  inputValue?: string
   listClassName?: string
+  loading?: boolean
+  loadingContent?: React.ReactNode
+  loop?: boolean
+  name?: string
   onChange?: (value: string | undefined) => void
+  onInputValueChange?: (value: string) => void
   onOpenChange?: (open: boolean) => void
   onSearch?: (value: string) => void
   onSelect?: (value: string, option: ComboboxOption) => void
   onValueChange?: (value: string | undefined) => void
   open?: boolean
+  openOnFocus?: boolean
   optionRender?: (option: ComboboxOption) => React.ReactNode
   options?: ComboboxOptionItem[]
   placeholder?: string
   popupRender?: (originNode: React.ReactNode) => React.ReactNode
+  readOnly?: boolean
+  required?: boolean
   searchPlaceholder?: string
   value?: string
 }
@@ -88,24 +99,35 @@ function renderOptionLabel(option: ComboboxOption) {
 
 function Combobox({
   allowClear = false,
+  autoHighlight = false,
   className,
   contentClassName,
+  defaultInputValue = "",
   defaultOpen = false,
   defaultValue,
   disabled = false,
   emptyContent = "无匹配结果",
   filterOption = true,
+  inputValue: inputValueProp,
   listClassName,
+  loading = false,
+  loadingContent = "加载中...",
+  loop = true,
+  name,
   onChange,
+  onInputValueChange,
   onOpenChange,
   onSearch,
   onSelect,
   onValueChange,
   open: openProp,
+  openOnFocus = false,
   optionRender,
   options = [],
   placeholder = "请选择",
   popupRender,
+  readOnly = false,
+  required = false,
   searchPlaceholder = "搜索...",
   value: valueProp,
   variant = "outline",
@@ -124,9 +146,19 @@ function Combobox({
     },
     prop: valueProp,
   })
-  const [search, setSearch] = React.useState("")
+  const [inputValue = "", setInputValue] = useControllableState({
+    defaultProp: defaultInputValue,
+    onChange: (nextInputValue) => {
+      onInputValueChange?.(nextInputValue)
+      onSearch?.(nextInputValue)
+    },
+    prop: inputValueProp,
+  })
   const flatOptions = React.useMemo(() => flattenOptions(options), [options])
   const selectedOption = flatOptions.find((option) => option.value === value)
+  const isInteractiveDisabled = disabled || readOnly
+  const commandValue =
+    value ?? (autoHighlight ? flatOptions.find((option) => !option.disabled)?.value : undefined)
 
   const commandFilter = React.useMemo(() => {
     if (typeof filterOption !== "function") return undefined
@@ -140,65 +172,94 @@ function Combobox({
 
   const handleSelect = React.useCallback(
     (option: ComboboxOption) => {
+      if (isInteractiveDisabled) return
       setValue(option.value)
       onSelect?.(option.value, option)
-      setSearch("")
+      setInputValue("")
       setOpen(false)
     },
-    [onSelect, setOpen, setValue]
+    [isInteractiveDisabled, onSelect, setInputValue, setOpen, setValue]
   )
 
   const handleClear = React.useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault()
       event.stopPropagation()
+      if (isInteractiveDisabled) return
       setValue(undefined)
-      setSearch("")
+      setInputValue("")
     },
-    [setValue]
+    [isInteractiveDisabled, setInputValue, setValue]
+  )
+
+  const handleOpenChange = React.useCallback(
+    (nextOpen: boolean) => {
+      if (nextOpen && isInteractiveDisabled) return
+      setOpen(nextOpen)
+    },
+    [isInteractiveDisabled, setOpen]
   )
 
   const listNode = (
-    <CommandList className={cn("max-h-72", listClassName)}>
-      <CommandEmpty>{emptyContent}</CommandEmpty>
-      {options.map((item) => {
-        if (isOptionGroup(item)) {
-          return (
-            <CommandGroup heading={item.label} key={item.label}>
-              {item.options.map((option) => (
-                <ComboboxCommandItem
-                  key={option.value}
-                  onSelect={handleSelect}
-                  option={option}
-                  optionRender={optionRender}
-                  selected={option.value === value}
-                />
-              ))}
-            </CommandGroup>
-          )
-        }
+      <CommandList className={cn("max-h-72", listClassName)}>
+      {loading ? (
+        <div
+          data-slot="combobox-loading"
+          className="py-6 text-center text-sm text-muted-foreground"
+          role="status"
+        >
+          {loadingContent}
+        </div>
+      ) : (
+        <CommandEmpty>{emptyContent}</CommandEmpty>
+      )}
+      {loading
+        ? null
+        : options.map((item) => {
+            if (isOptionGroup(item)) {
+              return (
+                <CommandGroup heading={item.label} key={item.label}>
+                  {item.options.map((option) => (
+                    <ComboboxCommandItem
+                      key={option.value}
+                      onSelect={handleSelect}
+                      option={option}
+                      optionRender={optionRender}
+                      selected={option.value === value}
+                    />
+                  ))}
+                </CommandGroup>
+              )
+            }
 
-        return (
-          <ComboboxCommandItem
-            key={item.value}
-            onSelect={handleSelect}
-            option={item}
-            optionRender={optionRender}
-            selected={item.value === value}
-          />
-        )
-      })}
+            return (
+              <ComboboxCommandItem
+                key={item.value}
+                onSelect={handleSelect}
+                option={item}
+                optionRender={optionRender}
+                selected={item.value === value}
+              />
+            )
+          })}
     </CommandList>
   )
 
   return (
-    <Popover onOpenChange={setOpen} open={open}>
+    <Popover onOpenChange={handleOpenChange} open={open}>
       <PopoverTrigger asChild>
         <Button
           aria-expanded={open}
+          aria-invalid={props["aria-invalid"]}
+          aria-readonly={readOnly || undefined}
+          aria-required={required || undefined}
           className={cn("w-52 justify-between", className)}
           data-slot="combobox"
+          data-readonly={readOnly || undefined}
           disabled={disabled}
+          onFocus={() => {
+            if (openOnFocus) handleOpenChange(true)
+          }}
           role="combobox"
           type="button"
           variant={variant}
@@ -212,7 +273,7 @@ function Combobox({
           >
             {selectedOption?.label ?? placeholder}
           </span>
-          {allowClear && selectedOption && !disabled ? (
+          {allowClear && selectedOption && !isInteractiveDisabled ? (
             <span
               aria-label="清除选择"
               className="mr-1 flex size-4 shrink-0 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground"
@@ -230,6 +291,15 @@ function Combobox({
           <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
+      {name ? (
+        <input
+          type="hidden"
+          name={name}
+          value={value ?? ""}
+          disabled={disabled}
+          required={required}
+        />
+      ) : null}
       <PopoverContent
         align="start"
         className={cn("w-(--radix-popover-trigger-width) gap-0 p-0", contentClassName)}
@@ -237,16 +307,17 @@ function Combobox({
       >
         <Command
           filter={commandFilter}
+          loop={loop}
           shouldFilter={filterOption !== false}
-          value={value}
+          value={commandValue}
         >
           <CommandInput
             onValueChange={(nextSearch) => {
-              setSearch(nextSearch)
-              onSearch?.(nextSearch)
+              setInputValue(nextSearch)
             }}
             placeholder={searchPlaceholder}
-            value={search}
+            readOnly={readOnly}
+            value={inputValue}
           />
           {popupRender ? popupRender(listNode) : listNode}
         </Command>

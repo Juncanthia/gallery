@@ -32,7 +32,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import Papa from "papaparse"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,7 +51,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/extend/components/ui/select"
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
 import {
@@ -281,9 +281,9 @@ function CsvFileActionsMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+          htmlType="button"
+          variant="text"
+          size="small" shape="square"
           aria-label="Open CSV actions"
           disabled={isPending}
         >
@@ -478,9 +478,9 @@ function CsvSearchPopover({
       <ToolbarTooltip label="Search CSV">
         <PopoverTrigger asChild>
           <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+            htmlType="button"
+            variant="text"
+            size="small" shape="square"
             aria-label="Search CSV"
             disabled={controlsDisabled}
           >
@@ -530,9 +530,9 @@ function CsvSearchPopover({
             </div>
             <div className="flex shrink-0 items-center gap-1">
               <Button
-                type="button"
-                variant="outline"
-                size="icon-sm"
+                htmlType="button"
+                variant="outlined"
+                size="small" shape="square"
                 aria-label="Previous result"
                 disabled={isSearching || searchResults.length === 0}
                 onClick={() => goToRelativeResult(-1)}
@@ -540,9 +540,9 @@ function CsvSearchPopover({
                 <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
               </Button>
               <Button
-                type="button"
-                variant="outline"
-                size="icon-sm"
+                htmlType="button"
+                variant="outlined"
+                size="small" shape="square"
                 aria-label="Next result"
                 disabled={isSearching || searchResults.length === 0}
                 onClick={() => goToRelativeResult(1)}
@@ -553,9 +553,9 @@ function CsvSearchPopover({
           </div>
           <div className="flex justify-end">
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               onClick={clearSearch}
             >
               Clear
@@ -779,8 +779,8 @@ export function CsvViewer({ className, data, search = false }: CsvViewerProps) {
             <div className="flex flex-none items-center gap-1">
               <ToolbarTooltip label="Zoom out">
                 <Button
-                  variant="ghost"
-                  size="icon-sm"
+                  variant="text"
+                  size="small" shape="square"
                   aria-label="Zoom out"
                   disabled={zoom <= ZOOM_OPTIONS[0]}
                   onClick={() => stepZoom(-1)}
@@ -799,7 +799,7 @@ export function CsvViewer({ className, data, search = false }: CsvViewerProps) {
                 modal={false}
               >
                 <SelectTrigger
-                  size="sm"
+                  size="small"
                   className="w-[84px] min-w-[84px]"
                   aria-label="Zoom level"
                 >
@@ -815,8 +815,8 @@ export function CsvViewer({ className, data, search = false }: CsvViewerProps) {
               </Select>
               <ToolbarTooltip label="Zoom in">
                 <Button
-                  variant="ghost"
-                  size="icon-sm"
+                  variant="text"
+                  size="small" shape="square"
                   aria-label="Zoom in"
                   disabled={zoom >= ZOOM_OPTIONS[ZOOM_OPTIONS.length - 1]}
                   onClick={() => stepZoom(1)}
@@ -879,9 +879,9 @@ export function CsvViewer({ className, data, search = false }: CsvViewerProps) {
                 CSV file.
               </p>
               <Button
-                type="button"
-                variant="outline"
-                size="sm"
+                htmlType="button"
+                variant="outlined"
+                size="small"
                 className="mt-4"
                 loading={isPending}
                 onClick={() => inputRef.current?.click()}

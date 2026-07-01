@@ -66,8 +66,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
-import { ColorPicker } from "@/components/extend/components/ui/color-picker"
+import { Button } from "@/components/ui/button"
+import { ColorPickerTriggerButton } from "@/components/ui/color-picker"
 import {
   DocumentViewerThumbnailSidebar,
   useElementWidth,
@@ -98,10 +98,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/extend/components/ui/select"
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
-import { ToggleGroup, ToggleGroupItem } from "@/components/extend/components/ui/toggle"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
   Tooltip,
   TooltipContent,
@@ -563,9 +563,9 @@ function ToolbarIconButton({
   return (
     <ToolbarTooltip label={label}>
       <Button
-        type="button"
+        htmlType="button"
         variant={active ? "secondary" : "ghost"}
-        size="icon-sm"
+        size="small" shape="square"
         aria-label={label}
         data-pressed={active ? "" : undefined}
         {...props}
@@ -976,7 +976,7 @@ function DocxEditorToolbar({
               modal={false}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className="w-[136px] min-w-[136px]"
                 aria-label="Paragraph style"
               >
@@ -1042,7 +1042,7 @@ function DocxEditorToolbar({
             modal={false}
           >
             <SelectTrigger
-              size="sm"
+              size="small"
               className="w-[156px] min-w-[156px]"
               aria-label="Font family"
             >
@@ -1073,7 +1073,7 @@ function DocxEditorToolbar({
             modal={false}
           >
             <SelectTrigger
-              size="sm"
+              size="small"
               className="w-[86px] min-w-[86px]"
               aria-label="Font size"
             >
@@ -1104,7 +1104,7 @@ function DocxEditorToolbar({
             modal={false}
           >
             <SelectTrigger
-              size="sm"
+              size="small"
               className="w-[94px] min-w-[94px]"
               aria-label="Line spacing"
             >
@@ -1128,7 +1128,7 @@ function DocxEditorToolbar({
           <ToggleGroup
             className="shrink-0"
             disabled={!canEdit}
-            multiple
+            type="multiple"
             spacing="default"
             value={fontToggleValues}
             onMouseDown={preserveTextSelection}
@@ -1138,19 +1138,19 @@ function DocxEditorToolbar({
             }
           >
             <ToolbarTooltip label="Bold">
-              <ToggleGroupItem aria-label="Bold" size="sm" value="bold">
+              <ToggleGroupItem aria-label="Bold" size="small" value="bold">
                 <HugeiconsIcon icon={TextBoldIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Italic">
-              <ToggleGroupItem aria-label="Italic" size="sm" value="italic">
+              <ToggleGroupItem aria-label="Italic" size="small" value="italic">
                 <HugeiconsIcon icon={TextItalicIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Underline">
               <ToggleGroupItem
                 aria-label="Underline"
-                size="sm"
+                size="small"
                 value="underline"
               >
                 <HugeiconsIcon icon={TextUnderlineIcon} className="size-4" />
@@ -1159,7 +1159,7 @@ function DocxEditorToolbar({
             <ToolbarTooltip label="Strikethrough">
               <ToggleGroupItem
                 aria-label="Strikethrough"
-                size="sm"
+                size="small"
                 value="strike"
               >
                 <HugeiconsIcon
@@ -1171,7 +1171,7 @@ function DocxEditorToolbar({
             <ToolbarTooltip label="Superscript">
               <ToggleGroupItem
                 aria-label="Superscript"
-                size="sm"
+                size="small"
                 value="superscript"
               >
                 <HugeiconsIcon icon={TextSuperscriptIcon} className="size-4" />
@@ -1180,7 +1180,7 @@ function DocxEditorToolbar({
             <ToolbarTooltip label="Subscript">
               <ToggleGroupItem
                 aria-label="Subscript"
-                size="sm"
+                size="small"
                 value="subscript"
               >
                 <HugeiconsIcon icon={TextSubscriptIcon} className="size-4" />
@@ -1191,13 +1191,13 @@ function DocxEditorToolbar({
           <ToolbarSeparator />
 
           <div className="flex shrink-0 items-center gap-1">
-            <ColorPicker
+            <ColorPickerTriggerButton
               label="Text color"
-              icon={TextColorIcon}
+              icon={<HugeiconsIcon icon={TextColorIcon} className="size-4" />}
               color={textColorValue}
               disabled={!canEdit}
-              onTriggerMouseDown={preserveTextSelection}
-              onTriggerPointerDown={preserveTextSelection}
+              onMouseDown={preserveTextSelection}
+              onPointerDown={preserveTextSelection}
               onChange={(color) =>
                 editor.setTextColor(normalizeHexColor(color))
               }
@@ -1205,9 +1205,9 @@ function DocxEditorToolbar({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
+                  htmlType="button"
+                  variant="text"
+                  size="small" shape="square"
                   disabled={!canEdit}
                   aria-label="Highlight color"
                   className="relative"
@@ -1340,9 +1340,9 @@ function DocxEditorToolbar({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                type="button"
-                variant="ghost"
-                size="sm"
+                htmlType="button"
+                variant="text"
+                size="small"
                 disabled={!canEdit}
                 className="h-7 gap-1 px-2 shadow-none"
               >
@@ -1426,7 +1426,7 @@ function DocxEditorToolbar({
               modal={false}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className="w-[84px] min-w-[84px]"
                 aria-label="Zoom level"
               >
@@ -1855,13 +1855,13 @@ function DocxEditorContent({
               placeholder="https://example.com"
               aria-label="Link URL"
             />
-            <Button type="button" size="sm" onClick={applyLink}>
+            <Button htmlType="button" size="small" onClick={applyLink}>
               Apply
             </Button>
             <Button
-              type="button"
-              size="sm"
-              variant="ghost"
+              htmlType="button"
+              size="small"
+              variant="text"
               onClick={() => {
                 editor.setLink(undefined)
                 setLinkEditorOpen(false)
@@ -1893,9 +1893,9 @@ function DocxEditorContent({
                   {thumbnails.slice(0, pageCount || 0).map((thumbnail) => (
                     <Button
                       key={thumbnail.pageIndex}
-                      type="button"
-                      variant="ghost"
-                      size="sm"
+                      htmlType="button"
+                      variant="text"
+                      size="small"
                       className={cn(
                         "!h-auto w-full flex-col items-center gap-2 p-2 text-xs shadow-none hover:bg-sidebar-accent",
                         thumbnail.pageNumber === activePage &&
@@ -1944,9 +1944,9 @@ function DocxEditorContent({
                   file.
                 </div>
                 <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
+                  htmlType="button"
+                  variant="outlined"
+                  size="small"
                   className="mt-4"
                   onClick={() => fileInputRef.current?.click()}
                 >

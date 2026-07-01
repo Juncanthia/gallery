@@ -2,17 +2,25 @@
 
 import type {
   Announcements,
+  CollisionDetection,
   DndContextProps,
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
+  DroppableContainer,
+  KeyboardCoordinateGetter,
 } from "@dnd-kit/core";
 import {
   closestCenter,
+  closestCorners,
   DndContext,
   DragOverlay,
+  getFirstCollision,
+  KeyboardCode,
   KeyboardSensor,
   MouseSensor,
+  pointerWithin,
+  rectIntersection,
   TouchSensor,
   useDroppable,
   useSensor,
@@ -24,7 +32,9 @@ import {
   createContext,
   type HTMLAttributes,
   type ReactNode,
+  useCallback,
   useContext,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
@@ -36,6 +46,83 @@ import { cn } from "@/lib/utils";
 const t = tunnel();
 
 export type { DragEndEvent } from "@dnd-kit/core";
+
+const keyboardDirections: string[] = [
+  KeyboardCode.Down,
+  KeyboardCode.Right,
+  KeyboardCode.Up,
+  KeyboardCode.Left,
+];
+
+/**
+ * Keyboard coordinate getter that keeps arrow-key navigation aware of
+ * droppable container boundaries, instead of dnd-kit's default straight-line
+ * pointer offset (which breaks down once cards live in separate columns).
+ */
+const kanbanCoordinateGetter: KeyboardCoordinateGetter = (event, { context }) => {
+  const { active, droppableRects, droppableContainers, collisionRect } = context;
+
+  if (!keyboardDirections.includes(event.code)) {
+    return undefined;
+  }
+
+  event.preventDefault();
+
+  if (!active || !collisionRect) return undefined;
+
+  const filteredContainers: DroppableContainer[] = [];
+
+  for (const entry of droppableContainers.getEnabled()) {
+    if (!entry || entry.disabled) continue;
+
+    const rect = droppableRects.get(entry.id);
+    if (!rect) continue;
+
+    switch (event.code) {
+      case KeyboardCode.Down:
+        if (collisionRect.top < rect.top) {
+          filteredContainers.push(entry);
+        }
+        break;
+      case KeyboardCode.Up:
+        if (collisionRect.top > rect.top) {
+          filteredContainers.push(entry);
+        }
+        break;
+      case KeyboardCode.Left:
+        if (collisionRect.left >= rect.left + rect.width) {
+          filteredContainers.push(entry);
+        }
+        break;
+      case KeyboardCode.Right:
+        if (collisionRect.left + collisionRect.width <= rect.left) {
+          filteredContainers.push(entry);
+        }
+        break;
+    }
+  }
+
+  const collisions = closestCorners({
+    active,
+    collisionRect,
+    droppableRects,
+    droppableContainers: filteredContainers,
+    pointerCoordinates: null,
+  });
+  const closestId = getFirstCollision(collisions, "id");
+
+  if (closestId == null) return undefined;
+
+  const newDroppable = droppableContainers.get(closestId);
+  const newRect = newDroppable?.rect.current;
+
+  if (!newRect) return undefined;
+
+  return {
+    x: newRect.left,
+    y: newRect.top,
+  };
+};
 
 type KanbanItemProps = {
   id: string;
@@ -55,12 +142,14 @@ type KanbanContextProps<
   columns: C[];
   data: T[];
   activeCardId: string | null;
+  flatCursor: boolean;
 };
 
 const KanbanContext = createContext<KanbanContextProps>({
   columns: [],
   data: [],
   activeCardId: null,
+  flatCursor: false,
 });
 
 export type KanbanBoardProps = {
@@ -109,7 +198,9 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
   } = useSortable({
     id,
   });
-  const { activeCardId } = useContext(KanbanContext) as KanbanContextProps;
+  const { activeCardId, flatCursor } = useContext(
+    KanbanContext
+  ) as KanbanContextProps;
 
   const style = {
     transition,
@@ -121,8 +212,12 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
       <div style={style} {...listeners} {...attributes} ref={setNodeRef}>
         <Card
           className={cn(
-            "cursor-grab gap-4 rounded-md p-3 shadow-sm",
-            isDragging && "pointer-events-none cursor-grabbing opacity-30",
+            "gap-4 rounded-md p-3 shadow-sm",
+            flatCursor ? "cursor-default" : "cursor-grab",
+            isDragging &&
+              (flatCursor
+                ? "pointer-events-none opacity-30"
+                : "pointer-events-none cursor-grabbing opacity-30"),
             className
           )}
         >
@@ -133,8 +228,9 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
         <t.In>
           <Card
             className={cn(
-              "cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary",
-              isDragging && "cursor-grabbing",
+              "gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary",
+              flatCursor ? "cursor-default" : "cursor-grab",
+              isDragging && !flatCursor && "cursor-grabbing",
               className
             )}
           >
@@ -190,6 +286,8 @@ export type KanbanProviderProps<
   className?: string;
   columns: C[];
   data: T[];
+  /** Disables grab/grabbing cursor changes, useful on touch or custom cursors. */
+  flatCursor?: boolean;
   onDataChange?: (data: T[]) => void;
   onDragStart?: (event: DragStartEvent) => void;
   onDragEnd?: (event: DragEndEvent) => void;
@@ -207,15 +305,62 @@ export const KanbanProvider = <
   className,
   columns,
   data,
+  flatCursor = false,
   onDataChange,
   ...props
 }: KanbanProviderProps<T, C>) => {
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const lastOverIdRef = useRef<string | null>(null);
 
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor),
-    useSensor(KeyboardSensor)
+    useSensor(KeyboardSensor, {
+      coordinateGetter: kanbanCoordinateGetter,
+    })
+  );
+
+  const collisionDetection: CollisionDetection = useCallback(
+    (args) => {
+      const pointerIntersections = pointerWithin(args);
+      const intersections =
+        pointerIntersections.length > 0
+          ? pointerIntersections
+          : rectIntersection(args);
+      let overId = getFirstCollision(intersections, "id");
+
+      if (overId == null) {
+        return lastOverIdRef.current
+          ? [{ id: lastOverIdRef.current }]
+          : [];
+      }
+
+      const overColumn = columns.find((column) => column.id === overId);
+      if (overColumn) {
+        const columnItemIds = data
+          .filter((item) => item.column === overColumn.id)
+          .map((item) => item.id);
+
+        if (columnItemIds.length > 0) {
+          const closestItem = closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter(
+              (container) =>
+                container.id !== overId &&
+                columnItemIds.includes(container.id as string)
+            ),
+          });
+
+          if (closestItem.length > 0) {
+            overId = closestItem[0]?.id ?? overId;
+          }
+        }
+      }
+
+      lastOverIdRef.current = overId as string;
+      return [{ id: overId }];
+    },
+    [columns, data]
   );
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -307,10 +452,10 @@ export const KanbanProvider = <
   };
 
   return (
-    <KanbanContext.Provider value={{ columns, data, activeCardId }}>
+    <KanbanContext.Provider value={{ columns, data, activeCardId, flatCursor }}>
       <DndContext
         accessibility={{ announcements }}
-        collisionDetection={closestCenter}
+        collisionDetection={collisionDetection}
         onDragEnd={handleDragEnd}
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}

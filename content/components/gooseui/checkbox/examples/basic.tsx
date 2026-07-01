@@ -1,4 +1,4 @@
-import { Checkbox } from "@/components/ui/gooseui-checkbox"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function Demo() {
   return (

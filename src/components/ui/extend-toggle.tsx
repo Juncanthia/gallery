@@ -1,3 +1,3 @@
 "use client"
 
-export { Toggle } from "@/components/extend/components/ui/toggle"
+export { Toggle } from "@/components/ui/toggle"

@@ -1,78 +1,42 @@
----
-category: Blocks
-title: Rating
-subtitle: 评分
-description: 评分组件用于收集或展示用户对内容的星级评价。
-demo:
-  cols: 1
-group:
-  title: 复合组件
-  order: 30
-source:
-  component: src/components/blocks/rating/index.tsx
-  docs: content/components/rating/index.mdx
-  examples:
-    - content/components/rating/examples/basic.tsx
-stack:
-  react: true
-  tailwindcss: true
-  cva: false
-  radixSlot: false
-  motion: false
-  rcComponent: false
-  cssInJs: false
----
+Rating 评分复合组件，用于收集或展示用户对内容的星级评价。由 `Rating`（容器）和 `RatingButton`（单个评分项）组合而成，支持受控/非受控、自动生成评分项、半星、清除、只读、禁用、尺寸和方向。
 
-# Rating 评分
+<h2 id="when-to-use">何时使用</h2>
 
-评分组件用于收集用户对内容的星级评价，也支持只读展示模式。基于 Radix `useControllableState` 实现受控/非受控双模式，支持键盘导航和焦点管理。
-
-本组件是复合组件，由 `Rating`（容器）和 `RatingButton`（单个星标按钮）组成，通过 Context 共享状态。无 Ant Design 直接对应。
-
-## 何时使用 {#when-to-use}
-
-当需要对内容进行评分时使用。
+当需要对内容进行星级评分的交互场景时使用。
 
 常见场景：
 
 - 商品、文章、服务等的用户评分入口。
 - 用户评价表单中的星级选择。
 - 只读展示已有的评分结果。
-
-推荐使用方式：
-
-- 使用 `defaultValue`（非受控）或 `value`+`onValueChange`（受控）管理评分值。
-- 评分范围由 children 数量决定，配合 `RatingButton` 子组件。
-- 只读展示时设置 `readOnly`。
+- 需要自定义评分图标或评分数量的场景。
 
 不推荐：
 
-- 绕过 `Rating` 容器直接使用 `RatingButton`。
-- 在 `RatingButton` 上自行管理选中状态——该状态由 Context 统一提供。
+- 绕过 `Rating` 容器直接使用 `RatingButton`（会因缺少 Context 抛出异常）。
+- 在 `RatingButton` 上自行管理选中状态，该状态由 Context 统一提供。
+- 为了照搬 Ant Design Rate API 引入 `antd` 或全局 ConfigProvider。
 
-## 代码演示 {#examples}
+<h2 id="examples">代码演示</h2>
 
 ### 基础用法
 
-默认 5 颗星，初始评分 3。
+<ComponentShowcase id="rating" path="rating/basic" />
 
 ```tsx
-import { Rating, RatingButton } from "@/components/ui/rating"
+import { Rating } from "@/components/ui/rating"
 
 export default function Demo() {
   return (
-    <Rating defaultValue={3} className="w-full max-w-sm">
-      {Array.from({ length: 5 }, (_, i) => (
-        <RatingButton key={i} />
-      ))}
-    </Rating>
+    <div className="flex flex-col gap-3">
+      <Rating defaultValue={3} />
+      <Rating defaultValue={3.5} allowHalf clearable size="lg" />
+    </div>
   )
 }
 ```
 
 ### 自定义图标
-
-可以传入自定义 SVG 图标替换默认星标。
 
 ```tsx
 import { Rating, RatingButton } from "@/components/ui/rating"
@@ -80,7 +44,7 @@ import { Heart } from "lucide-react"
 
 export default function Demo() {
   return (
-    <Rating defaultValue={3}>
+    <Rating defaultValue={3} count={5}>
       {Array.from({ length: 5 }, (_, i) => (
         <RatingButton key={i} icon={<Heart />} />
       ))}
@@ -92,143 +56,119 @@ export default function Demo() {
 ### 受控模式
 
 ```tsx
-import { Rating, RatingButton } from "@/components/ui/rating"
+import { Rating } from "@/components/ui/rating"
 import { useState } from "react"
 
 export default function Demo() {
-  const [value, setValue] = useState(2)
+  const [value, setValue] = useState(2.5)
 
-  return (
-    <Rating value={value} onValueChange={setValue}>
-      {Array.from({ length: 5 }, (_, i) => (
-        <RatingButton key={i} />
-      ))}
-    </Rating>
-  )
+  return <Rating value={value} onValueChange={setValue} allowHalf />
 }
 ```
 
 ### 只读展示
 
 ```tsx
-import { Rating, RatingButton } from "@/components/ui/rating"
+import { Rating } from "@/components/ui/rating"
 
 export default function Demo() {
-  return (
-    <Rating value={4} readOnly>
-      {Array.from({ length: 5 }, (_, i) => (
-        <RatingButton key={i} />
-      ))}
-    </Rating>
-  )
+  return <Rating value={4.5} allowHalf readOnly />
 }
 ```
 
-### 自定义数量
+### 自定义数量和方向
 
 ```tsx
-import { Rating, RatingButton } from "@/components/ui/rating"
+import { Rating } from "@/components/ui/rating"
 
 export default function Demo() {
-  return (
-    <Rating defaultValue={5}>
-      {Array.from({ length: 10 }, (_, i) => (
-        <RatingButton key={i} />
-      ))}
-    </Rating>
-  )
+  return <Rating defaultValue={7} count={10} orientation="vertical" />
 }
 ```
 
-## API {#api}
+<h2 id="api">API</h2>
 
 ### Rating
 
-| 属性 | 类型 | 默认值 | 说明 |
+| 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| defaultValue | `number` | `0` | 非受控模式下的默认评分值 |
-| value | `number` | - | 受控模式下的评分值 |
-| onChange | `(event, value: number) => void` | - | 值变化时的回调，传入原始事件和新的评分值 |
-| onValueChange | `(value: number) => void` | - | 仅通知新值的回调（不含事件对象） |
-| readOnly | `boolean` | `false` | 只读模式，禁止交互 |
-| className | `string` | - | 自定义 CSS 类名 |
-| children | `ReactNode` | - | 通常为 `RatingButton` 元素数组 |
+| defaultValue | 非受控模式下的默认评分值 | `number` | `0` |
+| value | 受控模式下的评分值 | `number` | - |
+| onChange | 值变化回调，传入原始事件和规范化后的值 | `(event: MouseEvent \| KeyboardEvent, value: number) => void` | - |
+| onValueChange | 值变化回调，仅传入新值 | `(value: number) => void` | - |
+| count | 未传 children 时自动生成的评分项数量 | `number` | `5` |
+| max | `count` 的等价别名 | `number` | - |
+| step | 评分步进 | `0.5 \| 1` | `allowHalf ? 0.5 : 1` |
+| allowHalf | 开启半星评分 | `boolean` | `false` |
+| clearable | 再次点击当前值时清空评分 | `boolean` | `false` |
+| size | 评分项尺寸 | `"sm" \| "default" \| "lg"` | `"default"` |
+| orientation | 排列方向 | `"horizontal" \| "vertical"` | `"horizontal"` |
+| disabled | 禁用交互并降低透明度 | `boolean` | `false` |
+| readOnly | 只读展示，禁止交互但保留展示状态 | `boolean` | `false` |
+| className | 根容器 CSS 类名 | `string` | - |
+| children | 自定义评分项，通常为 `RatingButton` 数组 | `ReactNode` | 自动生成 |
+
+未传 `children` 时，`Rating` 会根据 `count`/`max` 自动生成默认星标。传入 `children` 时，容器会通过 `cloneElement` 自动注入 `index`。
 
 ### RatingButton
 
-| 属性 | 类型 | 默认值 | 说明 |
+| 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| index | `number` | 由 Rating 注入 | 星标序号（0-based），由 Rating 容器通过 cloneElement 自动注入 |
-| size | `number` | `20` | 图标像素尺寸 |
-| className | `string` | - | 自定义 CSS 类名 |
-| icon | `ReactElement<LucideProps>` | `<StarIcon />` | 自定义图标元素，激活时会添加 `fill-current` |
-| ...LucideProps | - | - | 透传至图标的其他 Lucide icon 属性 |
+| index | 评分项序号（0-based），通常由 Rating 自动注入 | `number` | 自动注入 |
+| disabled | 禁用当前评分项 | `boolean` | `false` |
+| size | 图标像素尺寸；不传时由 Rating 的 size 推导 | `number` | - |
+| className | 按钮 CSS 类名 | `string` | - |
+| icon | 自定义图标元素，激活时自动填充 | `ReactElement<LucideProps>` | `<StarIcon />` |
 
-## 样式模型 {#styling-model}
+继承 `LucideProps`，可透传 `strokeWidth`、`color` 等图标属性。
 
-- 使用 Tailwind CSS 控制布局和交互样式。
-- 容器使用 `inline-flex items-center gap-0.5`，各星标间隔 2px。
-- 按钮聚焦环使用 `focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`。
-- 激活状态通过 `fill-current` 填充图标颜色。
-- 只读模式移除 `cursor-pointer`，使用 `cursor-default`。
-- 只读和禁用状态通过 `disabled` 属性控制交互。
-- 悬停时实时预览评分效果。
+<h2 id="faq">常见问题</h2>
 
-## 依赖与实现说明 {#implementation-notes}
+### Rating 和 Rate 有什么区别？
 
-核心文件：
+- **Rate**：单一组件，更接近 Ant Design 的使用心智。
+- **Rating**：复合组件，适合需要自定义每个评分项、组合子组件或复用主线 blocks 能力的场景。
+- 当前 Rating 已支持 `count`、`allowHalf`、`clearable` 等常用能力，但 API 仍以本地源码为准，不承诺 Ant Design 兼容。
 
-- `src/components/blocks/rating/index.tsx` — 完整实现
-- `src/components/ui/rating.tsx` — 重导出
+### 如何自定义评分图标？
 
-直接依赖摘要：
+通过 `RatingButton` 的 `icon` prop 传入任意 Lucide 图标或自定义 SVG：
 
-- React（useState, useCallback, useEffect, useRef, createContext, useContext, Children, cloneElement）
-- `@radix-ui/react-use-controllable-state`（useControllableState）
-- `lucide-react`（StarIcon 及可选的其它图标）
-- Tailwind CSS
+```tsx
+<Rating defaultValue={3}>
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+</Rating>
+```
 
-实现注意：
+### 如何开启半星？
 
-1. `Rating` 使用 React Context 向所有 `RatingButton` 子组件分发状态。
-2. `Rating` 通过 `Children.map` + `cloneElement` 自动为每个 `RatingButton` 注入 `index`。
-3. 键盘导航支持 `ArrowRight`/`ArrowLeft`，`Shift`/`Meta` + 方向键可直接跳至首尾。
-4. 悬停预览使用 `hoverValue` 状态，鼠标离开容器后清除。
-5. `focusedStar` 与 `useEffect` 配合确保键盘操作后焦点同步到对应按钮。
-6. 受控/非受控模式由 `useControllableState` 统一管理。
+设置 `allowHalf`，或显式设置 `step={0.5}`：
 
-## 可访问性 {#accessibility}
+```tsx
+<Rating defaultValue={3.5} allowHalf />
+```
 
-- 容器设置 `role="radiogroup"` 和 `aria-label="Rating"`。
-- 每个 `RatingButton` 渲染为 `<button>`，通过 `tabIndex` 管理焦点——仅有当前值的按钮可获焦。
-- 图标设置 `aria-hidden="true"`，避免辅助技术重复朗读。
-- 键盘导航：左右方向键移动评分值，Shift/Meta 键配合方向键直接跳到首/尾。
-- 聚焦样式使用 `focus-visible`，不干扰鼠标点击。
-- `readOnly` 模式下按钮设置 `disabled`，移除交互能力。
+### 如何让评分组件只读？
 
-## 与 Ant Design 的取舍 {#antd-differences}
+设置 `readOnly`。如果需要禁用态的视觉弱化，使用 `disabled`：
 
-该组件为项目本地复合组件，无 Ant Design 直接对应。
+```tsx
+<Rating value={4.5} allowHalf readOnly />
+<Rating value={4.5} allowHalf disabled />
+```
 
-| 方向 | 本地决策 |
-| --- | --- |
-| API 来源 | 以 `src/components/blocks/rating/index.tsx` 的 TypeScript 类型为准 |
-| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
-| 全局配置 | 不依赖 AntD ConfigProvider |
-| 评分方式 | 通过 children 数量控制星数，而非 `count` prop |
-| 图标自定义 | 通过 `icon` prop 接收任意 ReactElement，而非 `character` 字符串 |
-| 键盘行为 | 使用 Radix 风格焦点管理，不同于 AntD Rate 的键盘实现 |
-
-## LLM 使用规则 {#llm-rules}
-
-当 AI 生成本项目 Rating 代码时，应遵守：
+<h2 id="llm-rules">LLM 使用规则</h2>
 
 1. 从 `@/components/ui/rating` 导入 `Rating` 和 `RatingButton`，不要从 `antd` 导入。
-2. 只使用本文件 API 摘要和源码 `src/components/blocks/rating/index.tsx` 中存在的 props。
-3. 不要使用 AntD Rate 的 `count`、`character`、`allowHalf`、`allowClear` 等 props——本组件不支持半星和清除。
-4. 评分数量由 `Rating` 的子元素（`RatingButton`）数量决定，不是通过 prop 配置。
-5. 图标自定义通过 `RatingButton` 的 `icon` prop 传入 ReactElement，不是字符串。
-6. 不要生成 `antd` 专属的 `styles`、`classNames`、`ConfigProvider` 配置。
-7. 受控模式使用 `value`+`onValueChange`，非受控使用 `defaultValue`。
-8. 交互组件必须保留键盘和 ARIA 语义，每个 `RatingButton` 都必须是 `<button>`。
-9. 如果不确定某个能力是否支持，先检查 `src/components/blocks/rating/index.tsx`，不要凭 AntD Rate 记忆生成。
+2. 简单五星评分优先直接使用 `<Rating defaultValue={3} />`，不要手写重复的星标数组。
+3. 需要自定义图标时才显式传入 `RatingButton` children。
+4. 半星使用 `allowHalf` 或 `step={0.5}`；清除使用 `clearable`。
+5. 受控模式使用 `value` + `onValueChange`，非受控使用 `defaultValue`。
+6. 不要生成 AntD 专属的 `character`、`tooltips`、`classNames`、`styles` 或 ConfigProvider 配置。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rating" />

@@ -9,7 +9,7 @@ group:
   title: 工具
   order: 4
 source:
-  component: src/components/dice/ui/sonner.tsx
+  component: src/components/ui/toaster.tsx
   docs: content/components/dice/sonner/index.mdx
   examples:
     - content/components/dice/sonner/examples/basic.tsx
@@ -53,7 +53,7 @@ Sonner 是基于 sonner 库实现的轻量级 Toast 通知组件。提供 Toaste
 
 ```tsx
 import { toast } from "sonner"
-import { Toaster } from "@/components/ui/dice-sonner"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function Demo() {
   return (
@@ -197,7 +197,7 @@ toast(
 
 当 AI 生成本项目 Sonner 代码时，应遵守：
 
-1. 从 `@/components/ui/dice-sonner` 导入 `Toaster`。
+1. 从 `@/components/ui/toaster` 导入 `Toaster`。
 2. 从 `sonner` 导入 `toast` 及其变体方法。
 3. `Toaster` 放在根布局组件中，只渲染一次；不要在每次使用时重复放置。
 4. 使用 `toast()` 创建默认通知。

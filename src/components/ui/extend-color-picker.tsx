@@ -1,3 +1,6 @@
 "use client"
 
-export { ColorPicker } from "@/components/extend/components/ui/color-picker"
+export {
+  ColorPickerPanel,
+  ColorPickerTriggerButton as ColorPicker,
+} from "@/components/ui/color-picker"

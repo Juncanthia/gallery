@@ -148,6 +148,7 @@ type SidebarProps = React.ComponentProps<'div'> & {
   side?: 'left' | 'right';
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
+  reserveSpace?: boolean;
   containerClassName?: string;
   animateOnHover?: boolean;
   transition?: Transition;
@@ -157,6 +158,7 @@ function Sidebar({
   side = 'left',
   variant = 'sidebar',
   collapsible = 'offcanvas',
+  reserveSpace = true,
   className,
   children,
   animateOnHover = true,
@@ -239,6 +241,7 @@ function Sidebar({
           'relative w-(--sidebar-width) bg-transparent transition-[width] duration-400 ease-[cubic-bezier(0.7,-0.15,0.25,1.15)]',
           'group-data-[collapsible=offcanvas]:w-0',
           'group-data-[side=right]:rotate-180',
+          !reserveSpace && 'hidden w-0',
           variant === 'floating' || variant === 'inset'
             ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
             : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',

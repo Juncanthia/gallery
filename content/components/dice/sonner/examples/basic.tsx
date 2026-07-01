@@ -1,7 +1,7 @@
 "use client"
 
 import { toast } from "sonner"
-import { Toaster } from "@/components/ui/dice-sonner"
+import { Toaster } from "@/components/ui/toaster"
 import { Button } from "@/components/ui/button"
 
 export default function Demo() {

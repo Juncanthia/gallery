@@ -10,6 +10,7 @@ import autoCompleteTsx from "../../../src/components/ui/auto-complete.tsx?raw"
 import avatarTsx from "../../../src/components/ui/avatar.tsx?raw"
 import badgeTsx from "../../../src/components/ui/badge.tsx?raw"
 import badgeVariants from "../../../src/components/ui/badge-variants.ts?raw"
+import bannerTsx from "../../../src/components/blocks/banner/index.tsx?raw"
 import borderBeamTsx from "../../../src/components/ui/border-beam.tsx?raw"
 import breadcrumbTsx from "../../../src/components/ui/breadcrumb.tsx?raw"
 import buttonTsx from "../../../src/components/ui/button.tsx?raw"
@@ -51,6 +52,7 @@ import linkPreviewTsx from "../../../src/components/ui/link-preview.tsx?raw"
 import listTsx from "../../../src/components/ui/list.tsx?raw"
 import listItemTsx from "../../../src/components/ui/list-item.tsx?raw"
 import markerTsx from "../../../src/components/ui/marker.tsx?raw"
+import marqueeTsx from "../../../src/components/blocks/marquee/index.tsx?raw"
 import mentionsTsx from "../../../src/components/ui/mentions.tsx?raw"
 import menubarTsx from "../../../src/components/ui/menubar.tsx?raw"
 import messageTsx from "../../../src/components/ui/message.tsx?raw"
@@ -64,8 +66,10 @@ import popconfirmTsx from "../../../src/components/ui/popconfirm.tsx?raw"
 import popoverTsx from "../../../src/components/ui/popover.tsx?raw"
 import progressTsx from "../../../src/components/ui/progress.tsx?raw"
 import qrCodeTsx from "../../../src/components/ui/qr-code.tsx?raw"
+import qrCodeBlockTsx from "../../../src/components/blocks/qr-code/index.tsx?raw"
 import radioGroupTsx from "../../../src/components/ui/radio-group.tsx?raw"
 import rateTsx from "../../../src/components/ui/rate.tsx?raw"
+import ratingTsx from "../../../src/components/blocks/rating/index.tsx?raw"
 import resizableTsx from "../../../src/components/ui/resizable.tsx?raw"
 import resultTsx from "../../../src/components/ui/result.tsx?raw"
 import scrollAreaTsx from "../../../src/components/ui/scroll-area.tsx?raw"
@@ -79,13 +83,17 @@ import sliderTsx from "../../../src/components/ui/slider.tsx?raw"
 import spaceTsx from "../../../src/components/ui/space.tsx?raw"
 import spinTsx from "../../../src/components/ui/spin.tsx?raw"
 import statisticTsx from "../../../src/components/ui/statistic.tsx?raw"
+import statusTsx from "../../../src/components/blocks/status/index.tsx?raw"
 import stepsTsx from "../../../src/components/ui/steps.tsx?raw"
 import switchTsx from "../../../src/components/ui/switch.tsx?raw"
 import tableTsx from "../../../src/components/ui/table.tsx?raw"
 import tabsTsx from "../../../src/components/ui/tabs.tsx?raw"
 import tagTsx from "../../../src/components/ui/tag.tsx?raw"
 import timePickerTsx from "../../../src/components/ui/time-picker.tsx?raw"
+import timePickerBlockTsx from "../../../src/components/blocks/time-picker/index.tsx?raw"
 import timelineTsx from "../../../src/components/ui/timeline.tsx?raw"
+import tourTsx from "../../../src/components/ui/tour.tsx?raw"
+import tourBlockTsx from "../../../src/components/blocks/tour/index.tsx?raw"
 import toasterTsx from "../../../src/components/ui/toaster.tsx?raw"
 import toggleTsx from "../../../src/components/ui/toggle.tsx?raw"
 import toggleGroupTsx from "../../../src/components/ui/toggle-group.tsx?raw"
@@ -139,7 +147,7 @@ import sabramanSliderTsx from "../../../src/components/sabraman/components/legac
 
 // GooseUI components
 import gooseuiBorderBeamTsx from "../../../src/components/gooseui/components/effects/border-beam.tsx?raw"
-import gooseuiCheckboxTsx from "../../../src/components/gooseui/components/ui/checkbox.tsx?raw"
+import gooseuiCheckboxTsx from "../../../src/components/ui/checkbox.tsx?raw"
 import gooseuiCurvedTextTsx from "../../../src/components/gooseui/components/ui/curved-text.tsx?raw"
 import gooseuiStackingCardsTsx from "../../../src/components/gooseui/components/ui/stacking-cards.tsx?raw"
 import gooseuiPromoBannerTsx from "../../../src/components/gooseui/components/ui/promo-banner.tsx?raw"
@@ -205,6 +213,7 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "auto-complete": [{ name: "auto-complete.tsx", source: autoCompleteTsx }],
   "avatar": [{ name: "avatar.tsx", source: avatarTsx }],
   "badge": [{ name: "badge.tsx", source: badgeTsx }, { name: "badge-variants.ts", source: badgeVariants }],
+  "banner": [{ name: "blocks/banner.tsx", source: bannerTsx }],
   "border-beam": [{ name: "border-beam.tsx", source: borderBeamTsx }],
   "breadcrumb": [{ name: "breadcrumb.tsx", source: breadcrumbTsx }],
   "button": [{ name: "button.tsx", source: buttonTsx }, { name: "button-variants.ts", source: buttonVariants }, { name: "button-group.tsx", source: buttonGroupTsx }],
@@ -243,6 +252,7 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "list": [{ name: "list.tsx", source: listTsx }],
   "list-item": [{ name: "list-item.tsx", source: listItemTsx }],
   "marker": [{ name: "marker.tsx", source: markerTsx }],
+  "marquee": [{ name: "blocks/marquee.tsx", source: marqueeTsx }],
   "mentions": [{ name: "mentions.tsx", source: mentionsTsx }],
   "menubar": [{ name: "menubar.tsx", source: menubarTsx }],
   "message": [{ name: "message.tsx", source: messageTsx }],
@@ -255,9 +265,10 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "popconfirm": [{ name: "popconfirm.tsx", source: popconfirmTsx }],
   "popover": [{ name: "popover.tsx", source: popoverTsx }],
   "progress": [{ name: "progress.tsx", source: progressTsx }],
-  "qr-code": [{ name: "qr-code.tsx", source: qrCodeTsx }],
+  "qr-code": [{ name: "qr-code.tsx", source: qrCodeTsx }, { name: "blocks/qr-code.tsx", source: qrCodeBlockTsx }],
   "radio-group": [{ name: "radio-group.tsx", source: radioGroupTsx }],
   "rate": [{ name: "rate.tsx", source: rateTsx }],
+  "rating": [{ name: "blocks/rating.tsx", source: ratingTsx }],
   "resizable": [{ name: "resizable.tsx", source: resizableTsx }],
   "result": [{ name: "result.tsx", source: resultTsx }],
   "scroll-area": [{ name: "scroll-area.tsx", source: scrollAreaTsx }],
@@ -271,13 +282,15 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
   "space": [{ name: "space.tsx", source: spaceTsx }],
   "spin": [{ name: "spin.tsx", source: spinTsx }],
   "statistic": [{ name: "statistic.tsx", source: statisticTsx }],
+  "status": [{ name: "blocks/status.tsx", source: statusTsx }],
   "steps": [{ name: "steps.tsx", source: stepsTsx }],
   "switch": [{ name: "switch.tsx", source: switchTsx }],
   "table": [{ name: "table.tsx", source: tableTsx }],
   "tabs": [{ name: "tabs.tsx", source: tabsTsx }],
   "tag": [{ name: "tag.tsx", source: tagTsx }],
-  "time-picker": [{ name: "time-picker.tsx", source: timePickerTsx }],
+  "time-picker": [{ name: "time-picker.tsx", source: timePickerTsx }, { name: "blocks/time-picker.tsx", source: timePickerBlockTsx }],
   "timeline": [{ name: "timeline.tsx", source: timelineTsx }],
+  "tour": [{ name: "tour.tsx", source: tourTsx }, { name: "blocks/tour.tsx", source: tourBlockTsx }],
   "toaster": [{ name: "toaster.tsx", source: toasterTsx }],
   "toggle": [{ name: "toggle.tsx", source: toggleTsx }],
   "toggle-group": [{ name: "toggle-group.tsx", source: toggleGroupTsx }],
@@ -327,6 +340,7 @@ const SOURCES: Record<string, ComponentSourceFile[]> = {
 
   // DT (Data Table Filters)
   "dt/data-table-toolbar": [{ name: "data-table-toolbar.tsx", source: dtDataTableToolbarTsx }],
+  "dice/sonner": [{ name: "toaster.tsx", source: toasterTsx }],
 
   // GooseUI
   "gooseui/border-beam": [{ name: "border-beam.tsx", source: gooseuiBorderBeamTsx }],

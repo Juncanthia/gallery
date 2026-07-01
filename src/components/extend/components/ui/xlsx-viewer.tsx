@@ -29,7 +29,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { createPortal } from "react-dom"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Button } from "@/components/extend/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -53,10 +53,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/extend/components/ui/select"
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "@/components/ui/spinner"
-import { Tabs, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Tooltip,
   TooltipContent,
@@ -492,9 +492,9 @@ function WorkbookFileActionsMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+          htmlType="button"
+          variant="text"
+          size="small" shape="square"
           aria-label="Open workbook actions"
         >
           <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" />
@@ -564,9 +564,9 @@ export function WorkbookTableHeaderMenu({
       <DropdownMenuTrigger asChild>
         <Button
           {...triggerProps}
-          type="button"
-          variant="ghost"
-          size="icon-sm"
+          htmlType="button"
+          variant="text"
+          size="small" shape="square"
           className={cn("size-6 rounded-sm", triggerProps.className)}
           aria-label="Column menu"
         >
@@ -759,9 +759,9 @@ function WorkbookSearchPopover({
       <ToolbarTooltip label="Search workbook">
         <PopoverTrigger asChild>
           <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+            htmlType="button"
+            variant="text"
+            size="small" shape="square"
             aria-label="Search workbook"
             disabled={controlsDisabled}
           >
@@ -810,9 +810,9 @@ function WorkbookSearchPopover({
             </div>
             <div className="flex shrink-0 items-center gap-1">
               <Button
-                type="button"
-                variant="outline"
-                size="icon-sm"
+                htmlType="button"
+                variant="outlined"
+                size="small" shape="square"
                 aria-label="Previous result"
                 disabled={isSearching || searchResults.length === 0}
                 onClick={() => goToRelativeResult(-1)}
@@ -820,9 +820,9 @@ function WorkbookSearchPopover({
                 <HugeiconsIcon icon={ArrowLeft01Icon} className="size-4" />
               </Button>
               <Button
-                type="button"
-                variant="outline"
-                size="icon-sm"
+                htmlType="button"
+                variant="outlined"
+                size="small" shape="square"
                 aria-label="Next result"
                 disabled={isSearching || searchResults.length === 0}
                 onClick={() => goToRelativeResult(1)}
@@ -833,9 +833,9 @@ function WorkbookSearchPopover({
           </div>
           <div className="flex justify-end">
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               onClick={clearSearch}
             >
               Clear
@@ -885,9 +885,9 @@ function WorkbookToolbar({
           <div className="flex flex-none items-center gap-1">
             <ToolbarTooltip label="Zoom out">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 disabled={!canZoomOut}
                 aria-label="Zoom out"
                 onClick={zoomOut}
@@ -901,7 +901,7 @@ function WorkbookToolbar({
               modal={false}
             >
               <SelectTrigger
-                size="sm"
+                size="small"
                 className="w-[84px] min-w-[84px]"
                 aria-label="Zoom level"
               >
@@ -921,9 +921,9 @@ function WorkbookToolbar({
             </Select>
             <ToolbarTooltip label="Zoom in">
               <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
+                htmlType="button"
+                variant="text"
+                size="small" shape="square"
                 disabled={!canZoomIn}
                 aria-label="Zoom in"
                 onClick={zoomIn}
@@ -1575,9 +1575,9 @@ function XlsxViewerContent({
               Pass an XLSX URL with the <code>src</code> prop or upload a file.
             </p>
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               className="mt-4"
               onClick={() => fileInputRef.current?.click()}
             >
@@ -1615,9 +1615,9 @@ function XlsxViewerContent({
             <p className="font-medium">Unable to display workbook</p>
             <p className="mt-1 text-muted-foreground">{loadError}</p>
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               className="mt-4"
               onClick={() => fileInputRef.current?.click()}
             >

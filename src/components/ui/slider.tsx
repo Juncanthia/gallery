@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { SlidingNumber } from "@/components/gooseui/components/ui/sliding-number"
 import { cn } from "@/lib/utils"
 
 type SliderPrimitiveProps = React.ComponentProps<typeof SliderPrimitive.Root>
@@ -44,14 +45,22 @@ type SliderSharedProps = Omit<
   | "value"
 > & {
   variant?: 'default'
+  animateValue?: boolean
   className?: string
   dots?: boolean
+  formatValue?: (value: number) => React.ReactNode
   included?: boolean
+  label?: string
   marks?: Record<number, SliderMark>
+  onValueChange?: (value: SliderValue) => void
   orientation?: "horizontal" | "vertical"
   reverse?: boolean
+  showValue?: boolean
+  size?: "sm" | "md" | "default" | "lg"
   step?: number | null
   tooltip?: SliderTooltip
+  valueFormatter?: (value: number) => React.ReactNode
+  valuePlacement?: "start" | "end" | "top" | "bottom"
   vertical?: boolean
 }
 
@@ -165,24 +174,55 @@ function getStepDots(min: number, max: number, step: number | null | undefined) 
   return dots
 }
 
+function getSliderDisplayValue(
+  values: number[],
+  range: boolean,
+  formatter?: (value: number) => React.ReactNode
+) {
+  if (range) {
+    const [start = 0, end = 0] = values
+    const startLabel = formatter ? formatter(start) : start
+    const endLabel = formatter ? formatter(end) : end
+
+    return (
+      <>
+        {startLabel}
+        <span className="mx-1 text-muted-foreground">-</span>
+        {endLabel}
+      </>
+    )
+  }
+
+  const value = values[0] ?? 0
+  return formatter ? formatter(value) : value
+}
+
 function Slider({
+  animateValue = false,
   variant = 'default',
   className,
   defaultValue,
   disabled,
   dots = false,
+  formatValue: legacyFormatValue,
   included = true,
+  label,
   marks,
   max = 100,
   min = 0,
   onChange,
   onChangeComplete,
+  onValueChange,
   orientation,
   range = false,
   reverse = false,
+  showValue = false,
+  size = "default",
   step = 1,
   tooltip,
   value,
+  valueFormatter,
+  valuePlacement = "end",
   vertical = false,
   ...props
 }: SliderProps) {
@@ -202,6 +242,11 @@ function Slider({
   const tooltipFormatter = tooltipConfig?.formatter
   const tooltipOpen = tooltipConfig?.open
   const tooltipPlacement = tooltipConfig?.placement ?? (isVertical ? "right" : "top")
+  const displayFormatter = valueFormatter ?? legacyFormatValue
+  const showValueInline =
+    showValue && (valuePlacement === "start" || valuePlacement === "end")
+  const showValueBlock =
+    showValue && (valuePlacement === "top" || valuePlacement === "bottom")
   const markEntries = React.useMemo(
     () =>
       Object.entries(marks ?? {})
@@ -243,8 +288,9 @@ function Slider({
       }
 
       emitChange?.(formatValue(normalizedValues, range))
+      onValueChange?.(formatValue(normalizedValues, range))
     },
-    [emitChange, range, snapValues, step, value]
+    [emitChange, onValueChange, range, snapValues, step, value]
   )
 
   const handleValueCommit = React.useCallback(
@@ -258,6 +304,159 @@ function Slider({
     [emitChangeComplete, range, snapValues, step]
   )
 
+  const sliderRoot = (
+    <>
+      {showValueBlock && valuePlacement === "top" ? (
+        <div
+          data-slot="slider-value"
+          className="mb-2 text-sm font-medium tabular-nums text-muted-foreground"
+        >
+          {animateValue && !range ? (
+            <SlidingNumber value={mergedValues[0] ?? 0} />
+          ) : (
+            getSliderDisplayValue(mergedValues, range, displayFormatter)
+          )}
+        </div>
+      ) : null}
+      <div
+        data-slot="slider-row"
+        className={cn(
+          "flex items-center",
+          isVertical ? "h-full flex-col" : "w-full",
+          showValueInline && !isVertical && "gap-3"
+        )}
+      >
+        {showValueInline && valuePlacement === "start" ? (
+          <span
+            data-slot="slider-value"
+            className="min-w-[3ch] shrink-0 text-sm font-medium tabular-nums text-muted-foreground"
+          >
+            {animateValue && !range ? (
+              <SlidingNumber value={mergedValues[0] ?? 0} />
+            ) : (
+              getSliderDisplayValue(mergedValues, range, displayFormatter)
+            )}
+          </span>
+        ) : null}
+        <SliderPrimitive.Root
+          data-slot="slider"
+          disabled={disabled}
+          inverted={reverse}
+          max={max}
+          min={min}
+          onValueChange={handleValueChange}
+          onValueCommit={handleValueCommit}
+          orientation={isVertical ? "vertical" : "horizontal"}
+          step={step ?? undefined}
+          value={mergedValues}
+          aria-label={label}
+          className={cn(
+            "relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col"
+          )}
+          {...props}
+        >
+          <SliderPrimitive.Track
+            data-slot="slider-track"
+            data-size={size}
+            className={cn(
+              "relative grow overflow-hidden rounded-full transition-all duration-200",
+              variant === 'default'
+                ? "bg-neutral-100 dark:bg-zinc-800 border border-neutral-200/80 dark:border-zinc-700/80 shadow-[inset_0_1.5px_2.5px_rgba(0,0,0,0.12)] data-horizontal:w-full data-vertical:h-full"
+                : "bg-muted data-horizontal:w-full data-vertical:h-full",
+              size === "sm" && "data-horizontal:h-1.5 data-vertical:w-1.5",
+              (size === "default" || size === "md") && "data-horizontal:h-2.5 data-vertical:w-2.5",
+              size === "lg" && "data-horizontal:h-3 data-vertical:w-3"
+            )}
+          >
+            {dotValues.map((dotValue) => {
+              const percent = getMarkPercent(dotValue, min, max, reverse)
+
+              return (
+                <span
+                  data-slot="slider-dot"
+                  key={dotValue}
+                  className={cn(
+                    "absolute z-10 size-1.5 rounded-full bg-background ring-1 ring-muted-foreground/40",
+                    isVertical ? "left-1/2 -translate-x-1/2 translate-y-1/2" : "top-1/2 -translate-y-1/2 -translate-x-1/2"
+                  )}
+                  style={isVertical ? { bottom: `${percent}%` } : { left: `${percent}%` }}
+                />
+              )
+            })}
+            <SliderPrimitive.Range
+              data-slot="slider-range"
+              className={cn(
+                "absolute select-none data-horizontal:h-full data-vertical:w-full transition-all duration-200",
+                included
+                  ? (variant === 'default'
+                      ? "bg-linear-to-b from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]"
+                      : "bg-primary")
+                  : "bg-transparent"
+              )}
+            />
+          </SliderPrimitive.Track>
+          <TooltipProvider delayDuration={0}>
+            {mergedValues.map((thumbValue, index) => {
+              const thumb = (
+                <SliderPrimitive.Thumb
+                  data-slot="slider-thumb"
+                  data-size={size}
+                  key={index}
+                  className={cn(
+                    "block shrink-0 rounded-full select-none focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 transition-all duration-200",
+                    variant === 'default'
+                      ? "bg-linear-to-b from-white to-neutral-50 dark:from-zinc-700 dark:to-zinc-800 border border-neutral-300 dark:border-zinc-600 shadow-[0_2px_4px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95"
+                      : "border border-primary bg-white shadow-sm ring-ring/50 hover:ring-4 focus-visible:ring-4",
+                    size === "sm" && "size-3.5",
+                    (size === "default" || size === "md") && "size-5",
+                    size === "lg" && "size-6"
+                  )}
+                />
+              )
+
+              if (!showTooltip) {
+                return thumb
+              }
+
+              return (
+                <Tooltip key={index} open={tooltipOpen}>
+                  <TooltipTrigger asChild>{thumb}</TooltipTrigger>
+                  <TooltipContent side={tooltipPlacement}>
+                    {tooltipFormatter ? tooltipFormatter(thumbValue) : thumbValue}
+                  </TooltipContent>
+                </Tooltip>
+              )
+            })}
+          </TooltipProvider>
+        </SliderPrimitive.Root>
+        {showValueInline && valuePlacement === "end" ? (
+          <span
+            data-slot="slider-value"
+            className="min-w-[3ch] shrink-0 text-sm font-medium tabular-nums text-muted-foreground"
+          >
+            {animateValue && !range ? (
+              <SlidingNumber value={mergedValues[0] ?? 0} />
+            ) : (
+              getSliderDisplayValue(mergedValues, range, displayFormatter)
+            )}
+          </span>
+        ) : null}
+      </div>
+      {showValueBlock && valuePlacement === "bottom" ? (
+        <div
+          data-slot="slider-value"
+          className="mt-2 text-sm font-medium tabular-nums text-muted-foreground"
+        >
+          {animateValue && !range ? (
+            <SlidingNumber value={mergedValues[0] ?? 0} />
+          ) : (
+            getSliderDisplayValue(mergedValues, range, displayFormatter)
+          )}
+        </div>
+      ) : null}
+    </>
+  )
+
   return (
     <div
       data-slot="slider-wrapper"
@@ -269,88 +468,7 @@ function Slider({
         className
       )}
     >
-      <SliderPrimitive.Root
-        data-slot="slider"
-        disabled={disabled}
-        inverted={reverse}
-        max={max}
-        min={min}
-        onValueChange={handleValueChange}
-        onValueCommit={handleValueCommit}
-        orientation={isVertical ? "vertical" : "horizontal"}
-        step={step ?? undefined}
-        value={mergedValues}
-        className={cn(
-          "relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col"
-        )}
-        {...props}
-      >
-        <SliderPrimitive.Track
-          data-slot="slider-track"
-          className={cn(
-            "relative grow overflow-hidden rounded-full transition-all duration-200",
-            variant === 'default'
-              ? "bg-neutral-100 dark:bg-zinc-800 border border-neutral-200/80 dark:border-zinc-700/80 shadow-[inset_0_1.5px_2.5px_rgba(0,0,0,0.12)] data-horizontal:h-2.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-2.5"
-              : "bg-muted data-horizontal:h-1.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-1.5"
-          )}
-        >
-          {dotValues.map((dotValue) => {
-            const percent = getMarkPercent(dotValue, min, max, reverse)
-
-            return (
-              <span
-                data-slot="slider-dot"
-                key={dotValue}
-                className={cn(
-                  "absolute z-10 size-1.5 rounded-full bg-background ring-1 ring-muted-foreground/40",
-                  isVertical ? "left-1/2 -translate-x-1/2 translate-y-1/2" : "top-1/2 -translate-y-1/2 -translate-x-1/2"
-                )}
-                style={isVertical ? { bottom: `${percent}%` } : { left: `${percent}%` }}
-              />
-            )
-          })}
-          <SliderPrimitive.Range
-            data-slot="slider-range"
-            className={cn(
-              "absolute select-none data-horizontal:h-full data-vertical:w-full transition-all duration-200",
-              included
-                ? (variant === 'default'
-                    ? "bg-linear-to-b from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]"
-                    : "bg-primary")
-                : "bg-transparent"
-            )}
-          />
-        </SliderPrimitive.Track>
-        <TooltipProvider delayDuration={0}>
-          {mergedValues.map((thumbValue, index) => {
-            const thumb = (
-              <SliderPrimitive.Thumb
-                data-slot="slider-thumb"
-                key={index}
-                className={cn(
-                  "block shrink-0 rounded-full select-none focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 transition-all duration-200",
-                  variant === 'default'
-                    ? "size-5 bg-linear-to-b from-white to-neutral-50 dark:from-zinc-700 dark:to-zinc-800 border border-neutral-300 dark:border-zinc-600 shadow-[0_2px_4px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.6)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95"
-                    : "size-4 border border-primary bg-white shadow-sm ring-ring/50 hover:ring-4 focus-visible:ring-4"
-                )}
-              />
-            )
-
-            if (!showTooltip) {
-              return thumb
-            }
-
-            return (
-              <Tooltip key={index} open={tooltipOpen}>
-                <TooltipTrigger asChild>{thumb}</TooltipTrigger>
-                <TooltipContent side={tooltipPlacement}>
-                  {tooltipFormatter ? tooltipFormatter(thumbValue) : thumbValue}
-                </TooltipContent>
-              </Tooltip>
-            )
-          })}
-        </TooltipProvider>
-      </SliderPrimitive.Root>
+      {sliderRoot}
 
       {markEntries.length > 0 && (
         <div

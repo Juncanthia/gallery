@@ -3,6 +3,7 @@
 export {
   Marquee,
   MarqueeContent,
+  MarqueeEdge,
   MarqueeFade,
   MarqueeItem,
 } from "@/components/blocks/marquee"
@@ -12,4 +13,5 @@ export type {
   MarqueeContentProps,
   MarqueeFadeProps,
   MarqueeItemProps,
+  MarqueeSide,
 } from "@/components/blocks/marquee"

@@ -1,12 +1,10 @@
-import { Rating, RatingButton } from "@/components/ui/rating"
-import { Star } from "lucide-react"
+import { Rating } from "@/components/ui/rating"
 
 export default function RatingBasicExample() {
   return (
-    <Rating defaultValue={3} className="w-full max-w-sm">
-      {Array.from({ length: 5 }, (_, i) => (
-        <RatingButton key={i} icon={<Star />} />
-      ))}
-    </Rating>
+    <div className="flex flex-col gap-3">
+      <Rating defaultValue={3} />
+      <Rating defaultValue={3.5} allowHalf clearable size="lg" />
+    </div>
   )
 }

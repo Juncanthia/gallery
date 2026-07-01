@@ -32,7 +32,7 @@ stack:
 
 ## 何时使用 {#when-to-use}
 
-适合在需要 时间选择框 相关能力的界面中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
+适合在需要选择一天中具体时间的界面中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
 
 常见场景：
 
@@ -54,20 +54,19 @@ stack:
 import { TimePicker } from "@/components/ui/time-picker"
 
 export default function Demo() {
-  return (
-    <TimePicker>
-      时间选择框
-    </TimePicker>
-  )
+  return <TimePicker placeholder="选择时间" />
 }
 ```
 
-> 说明：这是面向 LLM 的最小导入示例。复杂组件应结合下方 API 摘要和源码类型补充必需 props，例如 `options`、`items`、`columns`、`dataSource` 等。
+> 说明：这是面向 LLM 的最小导入示例。TimePicker 不使用 children 作为显示值，时间值通过 `value/defaultValue/onChange` 控制。
 
 ## 核心导出 {#exports}
 
 - `TimePicker`
+- `TimePickerFormat`
+- `TimePickerPeriod`
 - `TimePickerProps`
+- `TimePickerSegmentPlaceholder`
 
 ## API 摘要 {#api}
 
@@ -78,27 +77,48 @@ export default function Demo() {
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | value | 当前时间值（受控） | `string` | - |
-| defaultValue | 默认时间值（非受控） | `string` | `"00:00:00"` |
+| defaultValue | 默认时间值（非受控） | `string` | - |
 | onChange | 时间变化回调 | `(value: string) => void` | - |
-| format | 时间显示格式 | `"HH:mm:ss"` \| `"HH:mm"` \| `"mm:ss"` | `"HH:mm:ss"` |
+| format | 时间显示格式 | `"HH:mm:ss"` \| `"HH:mm"` | `"HH:mm:ss"` |
 | use12Hours | 是否使用 12 小时制 | `boolean` | `false` |
+| open | 受控弹层打开状态 | `boolean` | - |
+| defaultOpen | 默认打开状态 | `boolean` | `false` |
+| onOpenChange | 弹层打开状态变化回调 | `(open: boolean) => void` | - |
+| openOnFocus | 聚焦触发器时自动打开弹层 | `boolean` | `false` |
+| name | 原生表单提交字段名，会渲染隐藏 input | `string` | - |
 | disabled | 是否禁用 | `boolean` | `false` |
-| placeholder | 未选择时的占位文本 | `string` | `"Select time"` |
+| readOnly | 是否只读，只读时保留展示但禁止修改 | `boolean` | `false` |
+| required | 是否为必填表单字段 | `boolean` | `false` |
+| invalid | 是否标记为校验失败 | `boolean` | `false` |
+| placeholder | 未选择时的占位文本 | `string` | `"选择时间"` |
+| segmentPlaceholder | 面板未选择时的分段占位文本 | `string \| { hour?: string; minute?: string; second?: string; period?: string }` | `"--"` |
 | hourStep | 小时列步长 | `number` | `1` |
 | minuteStep | 分钟列步长 | `number` | `1` |
 | secondStep | 秒列步长 | `number` | `1` |
+| allowClear | 是否显示清空按钮 | `boolean` | `true` |
 | className | 自定义容器样式类名 | `string` | - |
+| inputGroupClassName | 自定义触发器输入区域样式类名 | `string` | - |
 | triggerClassName | 自定义触发器样式类名 | `string` | - |
+| contentClassName | 自定义弹层样式类名 | `string` | - |
 
 ## Semantic DOM {#semantic-dom}
 
 源码中出现的稳定语义槽位：
 
-- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+- `time-picker`
+- `time-picker-value`
+- `time-picker-clear`
+- `time-picker-content`
+- `time-picker-preview`
+- `time-picker-column`
+- `time-picker-option`
 
 额外状态属性：
 
-- 无额外 `data-*` 状态属性。
+- `data-disabled`
+- `data-readonly`
+- `data-invalid`
+- `data-selected`
 
 生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
 
@@ -114,10 +134,14 @@ export default function Demo() {
 核心文件：
 
 - `src/components/ui/time-picker.tsx`
+- `src/components/blocks/time-picker/index.tsx`
 
 直接依赖摘要：
 
 - `@/components/blocks/time-picker`
+- `@/components/ui/button`
+- `@/components/ui/popover`
+- `@/components/ui/scroll-area`
 
 实现注意：
 
@@ -149,7 +173,9 @@ export default function Demo() {
 
 1. 从 `@/components/ui/time-picker` 导入，不要从 `antd` 导入。
 2. 只使用本文件 API 摘要和源码中存在的 props。
-3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
-4. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
-5. 交互组件必须保留键盘和 ARIA 语义，纯图标操作必须补 `aria-label`。
-6. 如果不确定某个 AntD API 是否存在，先检查 `src/components/ui/time-picker.tsx`，不要凭 AntD 记忆生成。
+3. `format` 只支持 `"HH:mm:ss"` 和 `"HH:mm"`，不要生成 `mm:ss` 时长输入。
+4. 需要表单提交时使用 `name`，不要手写重复 hidden input。
+5. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
+6. 需要自定义样式时，优先使用 `triggerClassName`、`contentClassName` 等组件暴露的 props；最后才使用 `className`。
+7. 交互组件必须保留键盘和 ARIA 语义，纯图标操作必须补 `aria-label`。
+8. 如果不确定某个 AntD API 是否存在，先检查 `src/components/ui/time-picker.tsx`，不要凭 AntD 记忆生成。

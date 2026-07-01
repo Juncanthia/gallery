@@ -13,6 +13,20 @@ import { BorderBeam } from "border-beam"
 import { cn } from "@/components/extend/lib/utils"
 import { Card } from "@/components/ui/card"
 import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
+import {
+  FileUpload as FileUploadPrimitive,
+  FileUploadDropzone,
+  useFileUpload,
+} from "@/components/ui/file-upload"
+
+/**
+ * This is a fully-styled preset built on top of the headless `FileUpload`
+ * primitive (`@/components/ui/file-upload`). It reuses the primitive's
+ * drag/drop state machine, click-to-browse wiring, keyboard support, and
+ * validation pipeline, while keeping its own business-specific visuals
+ * (icon cluster, `BorderBeam`, thumbnail file list) and "replace on each
+ * drop" file-list semantics.
+ */
 
 type FileUploadItem = {
   id: string
@@ -79,6 +93,7 @@ const ICON_TRANSFORMS = [
     active: "translate(14%, -50%) rotate(12deg) scale(1.08)",
   },
 ]
+const REJECTION_MESSAGE = "This file type is not supported here."
 
 function formatBytes(bytes: number) {
   if (bytes === 0) return "0 B"
@@ -110,8 +125,8 @@ function matchesAccept(file: File, accept?: string) {
   })
 }
 
-function toUploadItems(files: FileList | File[]): FileUploadItem[] {
-  return Array.from(files).map((file) => ({
+function toUploadItems(files: File[]): FileUploadItem[] {
+  return files.map((file) => ({
     id: `${file.name}-${file.size}-${file.lastModified}`,
     name: file.name,
     type: file.type || "Unknown type",
@@ -156,67 +171,29 @@ function UploadIconCluster({
   )
 }
 
-export function FileUpload({
-  accept = DEFAULT_ACCEPT,
-  acceptedFileTypes = ACCEPTED_FILE_TYPES,
-  borderBeamTheme = "light",
-  browseLabel = "Browse files",
-  className,
-  description = "PDF, DOC/DOCX, XLSX, CSV, PNG, or JPG",
-  draggingLabel = "Drop to add",
-  multiple = true,
-  showBorderBeam = true,
-  showFileList = true,
-  title = "Click to upload or drop files",
-  onFilesAccepted,
-  onFilesChange,
-}: FileUploadProps) {
-  const dragDepthRef = React.useRef(0)
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  const [isDragging, setIsDragging] = React.useState(false)
-  const [files, setFiles] = React.useState<FileUploadItem[]>([])
-  const [rejectionMessage, setRejectionMessage] = React.useState<string | null>(
-    null
-  )
-
-  const commitFiles = React.useCallback(
-    (nextFiles: FileList | File[]) => {
-      const acceptedFiles = Array.from(nextFiles)
-        .filter((file) => matchesAccept(file, accept))
-        .slice(0, multiple ? undefined : 1)
-
-      if (acceptedFiles.length === 0) {
-        setRejectionMessage("This file type is not supported here.")
-        return
-      }
-
-      setRejectionMessage(null)
-      onFilesAccepted?.(acceptedFiles)
-
-      const items = toUploadItems(acceptedFiles)
-      setFiles((previousFiles) => {
-        previousFiles.forEach((file) => URL.revokeObjectURL(file.url))
-        return items
-      })
-      onFilesChange?.(items)
-    },
-    [accept, multiple, onFilesAccepted, onFilesChange]
-  )
-
-  React.useEffect(() => {
-    return () => {
-      files.forEach((file) => URL.revokeObjectURL(file.url))
-    }
-  }, [files])
-
-  const openFileDialog = React.useCallback(() => {
-    inputRef.current?.click()
-  }, [])
+function FileUploadVisual({
+  acceptedFileTypes,
+  borderBeamTheme,
+  browseLabel,
+  description,
+  draggingLabel,
+  rejectionMessage,
+  showBorderBeam,
+  title,
+}: {
+  acceptedFileTypes: AcceptedFileType[]
+  borderBeamTheme?: React.ComponentProps<typeof BorderBeam>["theme"]
+  browseLabel: string
+  description: string
+  draggingLabel: string
+  rejectionMessage: string | null
+  showBorderBeam: boolean
+  title: string
+}) {
+  const isDragging = useFileUpload((state) => state.dragOver)
 
   const dropzone = (
-    <div
-      role="button"
-      tabIndex={0}
+    <FileUploadDropzone
       className={cn(
         "relative flex min-h-64 cursor-pointer flex-col items-center justify-center gap-5 overflow-hidden rounded-[1.125rem] border border-dashed bg-background px-6 py-10 text-center transition-[border-color,background-color] duration-200 ease-out",
         "motion-reduce:transition-none",
@@ -224,32 +201,6 @@ export function FileUpload({
           ? "border-foreground/40 bg-accent/35"
           : "border-foreground/20 hover:border-foreground/35 hover:bg-muted/35 dark:border-foreground/25 dark:hover:border-foreground/40"
       )}
-      onClick={openFileDialog}
-      onDragEnter={(event) => {
-        event.preventDefault()
-        dragDepthRef.current += 1
-        setIsDragging(true)
-      }}
-      onDragLeave={(event) => {
-        event.preventDefault()
-        dragDepthRef.current = Math.max(0, dragDepthRef.current - 1)
-        if (dragDepthRef.current === 0) setIsDragging(false)
-      }}
-      onDragOver={(event) => event.preventDefault()}
-      onDrop={(event) => {
-        event.preventDefault()
-        dragDepthRef.current = 0
-        setIsDragging(false)
-        if (event.dataTransfer.files.length > 0) {
-          commitFiles(event.dataTransfer.files)
-        }
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault()
-          openFileDialog()
-        }
-      }}
     >
       <UploadIconCluster
         acceptedFileTypes={acceptedFileTypes}
@@ -266,41 +217,102 @@ export function FileUpload({
         <HugeiconsIcon icon={Upload01Icon} className="size-3.5" />
         <span>{isDragging ? draggingLabel : browseLabel}</span>
       </div>
-      <input
-        ref={inputRef}
-        type="file"
-        accept={accept}
-        multiple={multiple}
-        className="hidden"
-        onChange={(event) => {
-          if (event.target.files) {
-            commitFiles(event.target.files)
-            event.currentTarget.value = ""
-          }
-        }}
-      />
-    </div>
+    </FileUploadDropzone>
   )
 
+  if (!showBorderBeam) return dropzone
+
   return (
-    <div className={cn("space-y-3", className)}>
-      {showBorderBeam ? (
-        <BorderBeam
-          active={isDragging}
-          borderRadius={18}
-          brightness={2.4}
-          className="rounded-[1.125rem]"
-          colorVariant="ocean"
-          duration={2.4}
-          size="md"
-          strength={1}
-          theme={borderBeamTheme}
-        >
-          {dropzone}
-        </BorderBeam>
-      ) : (
-        dropzone
-      )}
+    <BorderBeam
+      active={isDragging}
+      borderRadius={18}
+      brightness={2.4}
+      className="rounded-[1.125rem]"
+      colorVariant="ocean"
+      duration={2.4}
+      size="md"
+      strength={1}
+      theme={borderBeamTheme}
+    >
+      {dropzone}
+    </BorderBeam>
+  )
+}
+
+export function FileUpload({
+  accept = DEFAULT_ACCEPT,
+  acceptedFileTypes = ACCEPTED_FILE_TYPES,
+  borderBeamTheme = "light",
+  browseLabel = "Browse files",
+  className,
+  description = "PDF, DOC/DOCX, XLSX, CSV, PNG, or JPG",
+  draggingLabel = "Drop to add",
+  multiple = true,
+  showBorderBeam = true,
+  showFileList = true,
+  title = "Click to upload or drop files",
+  onFilesAccepted,
+  onFilesChange,
+}: FileUploadProps) {
+  const [files, setFiles] = React.useState<FileUploadItem[]>([])
+  const [rejectionMessage, setRejectionMessage] = React.useState<
+    string | null
+  >(null)
+
+  React.useEffect(() => {
+    return () => {
+      files.forEach((file) => URL.revokeObjectURL(file.url))
+    }
+  }, [files])
+
+  // Unlike the primitive's own store (which accumulates files across
+  // drops), this preset replaces the whole list on every accepted batch -
+  // matching the original single-shot "preview the latest drop" behavior.
+  const handleAccept = React.useCallback(
+    (acceptedFiles: File[]) => {
+      const finalFiles = multiple ? acceptedFiles : acceptedFiles.slice(0, 1)
+
+      setRejectionMessage(null)
+      onFilesAccepted?.(finalFiles)
+
+      const items = toUploadItems(finalFiles)
+      setFiles((previousFiles) => {
+        previousFiles.forEach((file) => URL.revokeObjectURL(file.url))
+        return items
+      })
+      onFilesChange?.(items)
+    },
+    [multiple, onFilesAccepted, onFilesChange]
+  )
+
+  const handleFileValidate = React.useCallback(
+    (file: File) => (matchesAccept(file, accept) ? null : REJECTION_MESSAGE),
+    [accept]
+  )
+
+  const handleFileReject = React.useCallback((_file: File, message: string) => {
+    setRejectionMessage(message)
+  }, [])
+
+  return (
+    <FileUploadPrimitive
+      accept={accept}
+      multiple={multiple}
+      onAccept={handleAccept}
+      onFileReject={handleFileReject}
+      onFileValidate={handleFileValidate}
+      className={cn("gap-3", className)}
+    >
+      <FileUploadVisual
+        acceptedFileTypes={acceptedFileTypes}
+        borderBeamTheme={borderBeamTheme}
+        browseLabel={browseLabel}
+        description={description}
+        draggingLabel={draggingLabel}
+        rejectionMessage={rejectionMessage}
+        showBorderBeam={showBorderBeam}
+        title={title}
+      />
       {showFileList && files.length > 0 ? (
         <div className="rounded-xl border bg-background">
           {files.map((file) => (
@@ -331,6 +343,6 @@ export function FileUpload({
           ))}
         </div>
       ) : null}
-    </div>
+    </FileUploadPrimitive>
   )
 }

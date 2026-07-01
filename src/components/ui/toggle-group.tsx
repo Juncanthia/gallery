@@ -21,6 +21,7 @@ type ToggleGroupProps = ToggleGroupPrimitiveProps &
   VariantProps<typeof toggleVariants> & {
     options?: ToggleGroupOption[];
     direction?: 'horizontal' | 'vertical';
+    spacing?: 'default' | 'none';
   };
 
 type ToggleGroupOption = {
@@ -40,14 +41,18 @@ function ToggleGroup({
   options,
   direction = 'horizontal',
   orientation,
+  spacing = 'default',
   ...props
 }: ToggleGroupProps) {
   return (
     <ToggleGroupPrimitive
       data-variant={variant}
       data-size={size}
+      data-spacing={spacing}
       className={cn(
-        'group/toggle-group flex gap-0.5 w-fit items-center rounded-lg data-[variant=outline]:shadow-xs data-[variant=outline]:border data-[variant=outline]:p-0.5',
+        'group/toggle-group flex w-fit items-center rounded-lg data-[variant=outline]:shadow-xs data-[variant=outline]:border data-[variant=outline]:p-0.5',
+        spacing === 'default' && 'gap-0.5',
+        spacing === 'none' && 'gap-0',
         direction === 'vertical' && 'flex-col items-stretch',
         className,
       )}
@@ -120,6 +125,8 @@ function ToggleGroupItem({
             size: contextSize || size,
           }),
           'min-w-0 border-0 flex-1 shrink-0 shadow-none rounded-md focus:z-10 focus-visible:z-10',
+          'group-data-[spacing=none]/toggle-group:rounded-none group-data-[spacing=none]/toggle-group:shadow-none',
+          'group-data-[spacing=none]/toggle-group:first:rounded-l-md group-data-[spacing=none]/toggle-group:last:rounded-r-md',
           className,
         )}
         {...props}
