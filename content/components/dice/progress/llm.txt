@@ -9,7 +9,7 @@ group:
   title: Dice UI
   order: 2
 source:
-  component: src/components/dice/ui/progress.tsx
+  component: src/components/ui/progress.tsx
   reexport: src/components/ui/dice-progress.tsx
   docs: content/components/dice/progress/index.mdx
   examples:

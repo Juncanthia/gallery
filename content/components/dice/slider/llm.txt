@@ -9,7 +9,7 @@ group:
   title: dice-ui
   order: 1
 source:
-  component: src/components/dice/ui/slider.tsx
+  component: src/components/ui/slider.tsx
   docs: content/components/dice/slider/index.mdx
   examples:
     - content/components/dice/slider/examples/basic.tsx
@@ -130,7 +130,7 @@ type SliderProps = React.ComponentProps<typeof SliderPrimitive.Root> & {
 ## 依赖与实现说明 {#implementation-notes}
 
 核心文件：
-- `src/components/dice/ui/slider.tsx`
+- `src/components/ui/slider.tsx`
 
 直接依赖：
 - `radix-ui` (Slider.Root, Slider.Track, Slider.Range, Slider.Thumb)
@@ -140,7 +140,7 @@ type SliderProps = React.ComponentProps<typeof SliderPrimitive.Root> & {
 1. 组件 API 以本地 TypeScript 类型为准。
 2. 范围模式通过数组值 `[min, max]` 自动渲染多个 Thumb。
 3. 样式应优先通过组件 props 或 `className` 扩展点表达。
-4. 不要把 Radix 文档中的全量 API 视为本地已支持能力——以本地 `src/components/dice/ui/slider.tsx` 源码为准。
+4. 不要把 Radix 文档中的全量 API 视为本地已支持能力——以本地 `src/components/ui/slider.tsx` 源码为准。
 
 ## 可访问性 {#accessibility}
 
@@ -152,7 +152,7 @@ type SliderProps = React.ComponentProps<typeof SliderPrimitive.Root> & {
 
 | 方向 | 本地决策 |
 | --- | --- |
-| API 来源 | 以 `src/components/dice/ui/slider.tsx` 的 TypeScript 类型为准 |
+| API 来源 | 以 `src/components/ui/slider.tsx` 的 TypeScript 类型为准 |
 | 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
 | 全局配置 | 不依赖 AntD ConfigProvider |
 | 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
@@ -168,4 +168,4 @@ type SliderProps = React.ComponentProps<typeof SliderPrimitive.Root> & {
 4. 范围选择通过 `value={[min, max]}` 或 `defaultValue={[min, max]}` 传递数组实现，不使用 AntD 的 `range` prop。
 5. 受控模式下必须同时提供 `value` 和 `onValueChange`。
 6. 交互组件必须保留键盘和 ARIA 语义，Radix primitive 已内置。
-7. 如果不确定某个 AntD API 是否存在，先检查 `src/components/dice/ui/slider.tsx`，不要凭 AntD 记忆生成。
+7. 如果不确定某个 AntD API 是否存在，先检查 `src/components/ui/slider.tsx`，不要凭 AntD 记忆生成。

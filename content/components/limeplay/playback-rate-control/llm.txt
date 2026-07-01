@@ -1,7 +1,7 @@
 [播放速率控制 / PlaybackRateControl]
 导入: import { PlaybackRateControl } from "@/components/ui/limeplay-playback-rate-control"
 子组件导入: import * as PlaybackRate from "@/components/limeplay/ui/playback-rate"
-Select 组件导入: import * as Select from "@/components/limeplay/ui/select"
+Select 组件导入: import * as Select from "@/components/ui/select"
 Store hook: import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"
 包来源: @/components/limeplay/blocks/video-player/components/playback-rate-control.tsx
 组件类型: 媒体控制 / LimePlay Controls
@@ -53,7 +53,7 @@ export default function Demo() {
 
 ### 自定义样式
 ```tsx
-import * as Select from "@/components/limeplay/ui/select"
+import * as Select from "@/components/ui/select"
 import * as PlaybackRate from "@/components/limeplay/ui/playback-rate"
 
 export default function CustomDemo() {

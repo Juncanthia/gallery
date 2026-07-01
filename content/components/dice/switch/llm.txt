@@ -9,7 +9,7 @@ group:
   title: dice-ui
   order: 1
 source:
-  component: src/components/dice/ui/switch.tsx
+  component: src/components/ui/switch.tsx
   docs: content/components/dice/switch/index.mdx
   examples:
     - content/components/dice/switch/examples/basic.tsx
@@ -142,7 +142,7 @@ Switch 继承 Radix Switch.Root 的全部属性。核心属性：
 ## 依赖与实现说明 {#implementation-notes}
 
 核心文件：
-- `src/components/dice/ui/switch.tsx`
+- `src/components/ui/switch.tsx`
 
 直接依赖：
 - `radix-ui` (Switch.Root, Switch.Thumb)
@@ -151,7 +151,7 @@ Switch 继承 Radix Switch.Root 的全部属性。核心属性：
 实现注意：
 1. 组件 API 以本地 TypeScript 类型为准。
 2. 样式应优先通过组件 props 或 `className` 扩展点表达。
-3. 不要把 Radix 文档中的全量 API 视为本地已支持能力——以本地 `src/components/dice/ui/switch.tsx` 源码为准。
+3. 不要把 Radix 文档中的全量 API 视为本地已支持能力——以本地 `src/components/ui/switch.tsx` 源码为准。
 4. 组件通过 `...props` 透传 Radix Switch.Root 的全部属性。
 
 ## 可访问性 {#accessibility}
@@ -164,7 +164,7 @@ Switch 继承 Radix Switch.Root 的全部属性。核心属性：
 
 | 方向 | 本地决策 |
 | --- | --- |
-| API 来源 | 以 `src/components/dice/ui/switch.tsx` 的 TypeScript 类型为准 |
+| API 来源 | 以 `src/components/ui/switch.tsx` 的 TypeScript 类型为准 |
 | 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
 | 全局配置 | 不依赖 AntD ConfigProvider |
 | 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
@@ -180,4 +180,4 @@ Switch 继承 Radix Switch.Root 的全部属性。核心属性：
 4. 受控模式下必须同时提供 `checked` 和 `onCheckedChange`。
 5. 表单场景使用 `name` 属性，不依赖 `Form.Item` 包裹。
 6. 交互组件必须保留键盘和 ARIA 语义，Radix primitive 已内置。
-7. 如果不确定某个 AntD API 是否存在，先检查 `src/components/dice/ui/switch.tsx`，不要凭 AntD 记忆生成。
+7. 如果不确定某个 AntD API 是否存在，先检查 `src/components/ui/switch.tsx`，不要凭 AntD 记忆生成。
