@@ -3,8 +3,7 @@
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import React, { useState, useId, useRef } from "react";
 import { useOutsideClick } from "@/components/uselayouts/hooks/use-outside-click";
-import Image from "next/image";
-import { Button } from "@/components/uselayouts/_shared/ui/button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/components/uselayouts/lib/utils";
@@ -107,8 +106,6 @@ export default function ExpandableGallery() {
                   <div className="p-2 rounded-full bg-muted group-hover:bg-accent transition-colors text-foreground">
                     <HugeiconsIcon
                       icon={ArrowLeft01Icon}
-                      width={20}
-                      height={20}
                     />
                   </div>
                   <span className="font-medium">Go back</span>
@@ -184,17 +181,15 @@ export default function ExpandableGallery() {
                       className="w-full h-full relative"
                       transition={transition}
                     >
-                      <Image
+                      <img
                         src={photo.src}
                         alt={photo.alt}
-                        fill
                         className="object-cover select-none pointer-events-none"
                         sizes={
                           isExpanded
                             ? "(max-width: 1024px) 50vw, 33vw"
                             : "240px"
                         }
-                        priority={isPrimary}
                       />
                     </motion.div>
                   </motion.div>
@@ -218,7 +213,8 @@ export default function ExpandableGallery() {
 
                   <div className="flex justify-center">
                     <Button
-                      variant="default"
+                      color="primary"
+                      variant="solid"
                       onClick={() => setIsExpanded(true)}
                       className="rounded-full cursor-pointer py-6 px-8 border-border/40 font-normal group "
                     >
@@ -226,8 +222,6 @@ export default function ExpandableGallery() {
                       <HugeiconsIcon
                         icon={ArrowRight01Icon}
                         className="transition-transform group-hover:translate-x-1"
-                        width={20}
-                        height={20}
                       />
                     </Button>
                   </div>

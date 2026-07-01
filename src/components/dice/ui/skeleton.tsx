@@ -1,13 +1,10 @@
-import { cn } from "@/components/dice/lib/utils";
+"use client";
 
-function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="skeleton"
-      className={cn("animate-pulse rounded-md bg-accent", className)}
-      {...props}
-    />
-  );
-}
-
-export { Skeleton };
+export {
+  Skeleton,
+  SkeletonAvatar,
+  SkeletonButton,
+  SkeletonImage,
+  SkeletonInput,
+  SkeletonNode,
+} from "@/components/ui/skeleton";

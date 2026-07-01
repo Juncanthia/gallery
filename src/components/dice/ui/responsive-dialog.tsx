@@ -17,7 +17,7 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "@/components/dice/ui/dialog";
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -29,7 +29,7 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/dice/ui/drawer";
+} from "@/components/ui/drawer";
 
 const ROOT_NAME = "ResponsiveDialog";
 

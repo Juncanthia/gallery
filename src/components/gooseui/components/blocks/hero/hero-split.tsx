@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowRight, Check } from "lucide-react"
-import { Button } from "@/components/gooseui/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 const features = [
   "Lightning fast performance",
@@ -46,11 +46,11 @@ export function HeroSplit() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col gap-4 sm:flex-row">
-            <Button size="lg" className="cursor-pointer group">
+            <Button variant="solid" color="primary" size="large" className="cursor-pointer group">
               Start Building
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button size="lg" variant="ghost" className="cursor-pointer">
+            <Button size="large" variant="text" className="cursor-pointer">
               View Documentation
             </Button>
           </div>

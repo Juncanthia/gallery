@@ -1,3 +1,3 @@
 "use client"
 
-export { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+export { ScrollArea } from "@/components/ui/scroll-area"

@@ -12,7 +12,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/extend/components/ui/resizable"
+} from "@/components/ui/resizable"
 
 type PdfBlockResizableShellProps = {
   autoSaveId: string

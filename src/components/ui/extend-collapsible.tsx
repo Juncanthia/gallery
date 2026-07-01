@@ -1,3 +1,3 @@
 "use client"
 
-export { Collapsible } from "@/components/extend/components/ui/collapsible"
+export { Collapsible } from "@/components/ui/collapsible"

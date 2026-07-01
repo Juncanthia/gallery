@@ -4,11 +4,11 @@ import { useReactTable, getCoreRowModel, getFilteredRowModel } from "@tanstack/r
 import type { ColumnDef } from "@tanstack/react-table"
 
 import { DataTableFilterControlsDrawer } from "@/components/ui/dt-data-table-filter-controls-drawer"
-import { DataTableProvider } from "@hyper/data-table-filters"
-import { DataTableStoreProvider } from "@hyper/data-table-filters/lib/store/provider/DataTableStoreProvider"
-import { useMemoryAdapter } from "@hyper/data-table-filters/lib/store/adapters/memory"
-import { createSchema, field } from "@hyper/data-table-filters/lib/store/schema"
-import type { DataTableFilterField } from "@hyper/data-table-filters/components/data-table/types"
+import { DataTableProvider } from "@/components/data-table-filters"
+import { DataTableStoreProvider } from "@/components/data-table-filters/lib/store/provider/DataTableStoreProvider"
+import { useMemoryAdapter } from "@/components/data-table-filters/lib/store/adapters/memory"
+import { createSchema, field } from "@/components/data-table-filters/lib/store/schema"
+import type { DataTableFilterField } from "@/components/data-table-filters/components/data-table/types"
 
 type Row = {
   id: string

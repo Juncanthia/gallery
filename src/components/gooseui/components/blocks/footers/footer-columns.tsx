@@ -1,5 +1,4 @@
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa"
-import Link from "next/link"
 
 // Computed at build time, avoids hydration mismatch
 const CURRENT_YEAR = 2026
@@ -56,19 +55,19 @@ export function FooterColumns() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <Link href="/" className="flex items-center space-x-2">
+            <a href="/" className="flex items-center space-x-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
                 B
               </div>
               <span className="font-bold text-xl">Brand</span>
-            </Link>
+            </a>
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
               Building the future of web development with beautiful, accessible
               components.
             </p>
             <div className="mt-6 flex items-center gap-4">
               {socialLinks.map((social) => (
-                <Link
+                <a
                   key={social.label}
                   href={social.href}
                   className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
@@ -77,7 +76,7 @@ export function FooterColumns() {
                 >
                   <social.icon className="h-5 w-5" />
                   <span className="sr-only">{social.label}</span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -89,12 +88,12 @@ export function FooterColumns() {
               <ul className="mt-4 space-y-3">
                 {section.links.map((link) => (
                   <li key={link.href}>
-                    <Link
+                    <a
                       href={link.href}
                       className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -108,18 +107,18 @@ export function FooterColumns() {
             &copy; {CURRENT_YEAR} Brand, Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <Link
+            <a
               href="#privacy"
               className="hover:text-foreground cursor-pointer"
             >
               Privacy Policy
-            </Link>
-            <Link
+            </a>
+            <a
               href="#terms"
               className="hover:text-foreground cursor-pointer"
             >
               Terms of Service
-            </Link>
+            </a>
           </div>
         </div>
       </div>

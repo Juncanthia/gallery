@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/components/manifest/lib/utils'
 import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -166,8 +166,8 @@ export function OptionList({ data, actions, appearance, control }: OptionListPro
       </div>
       {onSubmit && (
         <div className="flex justify-end">
-          <Button
-            size="sm"
+          <Button variant="solid" color="primary"
+            size="small"
             onClick={handleSubmit}
             disabled={!hasSelection}
           >

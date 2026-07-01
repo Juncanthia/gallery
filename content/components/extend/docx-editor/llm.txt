@@ -119,7 +119,7 @@ Ant Design 不提供 Word 文档编辑组件。本组件直接基于 `@extend-ai
 - `@extend-ai/react-docx`：底层 DOCX 渲染与编辑引擎。
 - `@hugeicons/core-free-icons` + `@hugeicons/react`：工具栏图标。
 - `@tanstack/react-virtual`：查看器模式下侧边栏缩略图虚拟滚动。
-- `@base-ui/react/preview-card`：段落样式预览卡片。
+- `radix-ui` Popover：段落样式预览卡片定位与弹出层。
 - Tailwind CSS：所有样式通过 CVA + Tailwind class 管理。
 
 关键行为：

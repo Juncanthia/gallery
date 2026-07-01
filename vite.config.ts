@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
 import { defineConfig } from "vite"
+import { nodePolyfills } from "vite-plugin-node-polyfills"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -22,6 +23,7 @@ export default defineConfig({
       include: /\.(mdx|js|jsx|ts|tsx)$/,
     }),
     tailwindcss(),
+    nodePolyfills(),
   ],
   resolve: {
     alias: {

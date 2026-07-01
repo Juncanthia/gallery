@@ -1,6 +1,6 @@
 "use client";
 
-import { Progress } from "@base-ui/react/progress";
+import * as ProgressPrimitive from "@radix-ui/react-progress";
 import type { ReactNode } from "react";
 import { cn } from "../lib/utils";
 import { intFmt } from "./chart-formatters";
@@ -55,7 +55,7 @@ export interface ChartLegendProps {
   }) => ReactNode;
 }
 
-// Progress bar item using base-ui
+// Progress bar item using Radix primitives
 interface ProgressItemProps {
   item: LegendItem;
   showMarker: boolean;
@@ -76,10 +76,11 @@ function ProgressItem({
   valueClassName,
 }: ProgressItemProps) {
   const percentage = item.maxValue ? (item.value / item.maxValue) * 100 : 0;
+  const progressWidth = Math.max(0, Math.min(100, percentage));
 
   // Note: item.color must remain inline style as it's dynamic data
   return (
-    <Progress.Root
+    <ProgressPrimitive.Root
       className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-1"
       max={item.maxValue}
       value={item.value}
@@ -93,9 +94,9 @@ function ProgressItem({
       )}
 
       {/* Label */}
-      <Progress.Label className={cn("text-legend-foreground", labelClassName)}>
+      <span className={cn("text-legend-foreground", labelClassName)}>
         {item.label}
-      </Progress.Label>
+      </span>
 
       {showValue ? (
         <span className={cn("text-legend-muted-foreground", valueClassName)}>
@@ -104,12 +105,12 @@ function ProgressItem({
       ) : null}
 
       {/* Progress track and indicator */}
-      <Progress.Track className="col-span-full h-1.5 overflow-hidden rounded-full bg-legend-track">
-        <Progress.Indicator
+      <div className="col-span-full h-1.5 overflow-hidden rounded-full bg-legend-track">
+        <ProgressPrimitive.Indicator
           className="h-full rounded-full transition-all duration-500"
-          style={{ backgroundColor: item.color }}
+          style={{ backgroundColor: item.color, width: `${progressWidth}%` }}
         />
-      </Progress.Track>
+      </div>
 
       {/* Percentage */}
       {showPercentage && (
@@ -117,7 +118,7 @@ function ProgressItem({
           {percentage.toFixed(0)}%
         </span>
       )}
-    </Progress.Root>
+    </ProgressPrimitive.Root>
   );
 }
 

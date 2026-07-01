@@ -10,7 +10,7 @@ import { useComposedRefs } from "@/components/dice/lib/compose-refs";
 import { cn } from "@/components/dice/lib/utils";
 import { useAsRef } from "@/components/dice/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
-import { Button } from "@/components/dice/ui/button";
+import { Button } from "@/components/ui/button";
 
 const ROOT_NAME = "ActionBar";
 const GROUP_NAME = "ActionBarGroup";
@@ -573,10 +573,10 @@ function ActionBarItem(props: ActionBarItemProps) {
 
   return (
     <Button
-      type="button"
+      htmlType="button"
       data-slot="action-bar-item"
-      variant="secondary"
-      size="sm"
+      variant="filled"
+      size="small"
       disabled={disabled}
       tabIndex={isTabStop ? 0 : -1}
       {...itemProps}

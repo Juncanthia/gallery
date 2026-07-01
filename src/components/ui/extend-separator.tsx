@@ -1,3 +1,3 @@
 "use client"
 
-export { Separator } from "@/components/extend/components/ui/separator"
+export { Separator } from "@/components/ui/separator"

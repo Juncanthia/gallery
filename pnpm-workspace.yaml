@@ -1,5 +1,6 @@
 allowBuilds:
   es5-ext: true
+  msgpackr-extract: set this to true or false
 minimumReleaseAgeExclude:
   - shadcn@4.12.0
 patchedDependencies:

@@ -16,9 +16,9 @@ import {
   useStreamPanel,
 } from "@/components/limeplay/stream-panel"
 import { useStreamPanelSync } from "@/components/limeplay/stream-panel/use-stream-panel-sync"
-import { Button } from "@/components/limeplay/ui/button"
-import { PopoverTrigger } from "@/components/limeplay/ui/popover"
-import { Tabs, TabsContent, TabsList } from "@/components/limeplay/ui/tabs"
+import { Button } from "@/components/ui/button"
+import { PopoverTrigger } from "@/components/ui/popover"
+import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs"
 import { cn } from "@/components/limeplay/lib/utils"
 import { useAsset } from "@/components/limeplay/hooks/use-asset"
 import { CustomDemoControls } from "@/components/limeplay/internal/custom-demo-controls"
@@ -110,8 +110,8 @@ export function PlayerLayoutDemo({
                 <Button
                   className="size-7 rounded-lg border"
                   onClick={handleReload}
-                  size="icon"
-                  variant="ghost"
+                  shape="square"
+                  variant="text"
                 >
                   <motion.span
                     animate={{ rotate: rotation }}
@@ -265,8 +265,8 @@ function PanelTriggerButton() {
     <Button
       asChild
       className="size-7 rounded-lg border"
-      size="icon"
-      variant="ghost"
+      shape="square"
+      variant="text"
     >
       <PopoverTrigger handle={handle}>
         <CogIcon className="size-3.5" />
@@ -292,12 +292,12 @@ function PlayerErrorScreen() {
   return (
     <ErrorScreen className="rounded-lg" error={error}>
       <div className="flex gap-3">
-        <Button onClick={retryStream} size="sm">
+        <Button variant="solid" color="primary" onClick={retryStream} size="small">
           <RotateCwIcon />
           Retry
         </Button>
         {debug && details.shakaDocsUrl && (
-          <Button asChild variant="secondary">
+          <Button asChild variant="filled">
             <a
               href={details.shakaDocsUrl}
               rel="noopener noreferrer"

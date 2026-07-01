@@ -10,9 +10,8 @@ import { toast } from "sonner";
 import {
   Field,
   FieldLabel,
-  FieldDescription,
   FieldError,
-} from "@/components/uselayouts/_shared/ui/field";
+} from "@/components/ui/form-field";
 import {
   Card,
   CardHeader,
@@ -20,24 +19,24 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/uselayouts/_shared/ui/card";
-import { Button } from "@/components/uselayouts/_shared/ui/button";
-import { Input } from "@/components/uselayouts/_shared/ui/input";
-import { Textarea } from "@/components/uselayouts/_shared/ui/textarea";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/uselayouts/_shared/ui/select";
-import { Badge } from "@/components/uselayouts/_shared/ui/badge";
-import { Calendar } from "@/components/uselayouts/_shared/ui/calendar";
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/uselayouts/_shared/ui/popover";
+} from "@/components/ui/popover";
 import { cn } from "@/components/uselayouts/lib/utils";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import useMeasure from "react-use-measure";
@@ -160,10 +159,9 @@ export default function MultiStepFormDemo() {
             <Field>
               <FieldLabel htmlFor="due-date">Due Date</FieldLabel>
               <Popover>
-                <PopoverTrigger
-                  render={
+                <PopoverTrigger asChild>
                     <Button
-                      variant={"outline"}
+                      variant="outlined"
                       className={cn(
                         "w-full justify-start text-left font-normal",
                         !watchedValues["due-date"] && "text-muted-foreground"
@@ -176,14 +174,12 @@ export default function MultiStepFormDemo() {
                         <span>Pick a date</span>
                       )}
                     </Button>
-                  }
-                />
+                </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={watchedValues["due-date"]}
                     onSelect={(date) => form.setValue("due-date", date)}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
@@ -213,16 +209,15 @@ export default function MultiStepFormDemo() {
               <Field>
                 <FieldLabel htmlFor="team-size">Team Size</FieldLabel>
                 <Select
-                  items={TEAM_SIZE_OPTIONS}
-                  value={watchedValues["team-size"] ?? null}
+                  value={watchedValues["team-size"] ?? undefined}
                   onValueChange={(val: string) => form.setValue("team-size", val)}
                 >
                   <SelectTrigger id="team-size" className="w-full">
-                    <SelectValue />
+                    <SelectValue placeholder="Select team size" />
                   </SelectTrigger>
                   <SelectContent>
-                    {TEAM_SIZE_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.label} value={opt.value as any}>
+                    {TEAM_SIZE_OPTIONS.filter((opt) => opt.value !== null).map((opt) => (
+                      <SelectItem key={opt.label} value={opt.value}>
                         {opt.label}
                       </SelectItem>
                     ))}
@@ -236,16 +231,15 @@ export default function MultiStepFormDemo() {
               <Field>
                 <FieldLabel htmlFor="priority">Priority</FieldLabel>
                 <Select
-                  items={PRIORITY_OPTIONS}
-                  value={watchedValues["priority"] ?? null}
+                  value={watchedValues["priority"] ?? undefined}
                   onValueChange={(val: string) => form.setValue("priority", val)}
                 >
                   <SelectTrigger id="priority" className="w-full">
-                    <SelectValue />
+                    <SelectValue placeholder="Select priority" />
                   </SelectTrigger>
                   <SelectContent>
-                    {PRIORITY_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.label} value={opt.value as any}>
+                    {PRIORITY_OPTIONS.filter((opt) => opt.value !== null).map((opt) => (
+                      <SelectItem key={opt.label} value={opt.value}>
                         {opt.label}
                       </SelectItem>
                     ))}
@@ -423,15 +417,15 @@ export default function MultiStepFormDemo() {
 
               <CardFooter className="flex justify-between items-center border-t py-4">
                 <Button
-                  variant={"secondary"}
-                  type="button"
+                  htmlType="button"
+                  variant="filled"
                   onClick={prevStep}
                   disabled={currentStep === 0}
                 >
                   <ChevronLeft className="h-4 w-4" />
                   Back
                 </Button>
-                <Button type="button" onClick={nextStep}>
+                <Button color="primary" htmlType="button" variant="solid" onClick={nextStep}>
                   {currentStep === stepTitles.length - 1 ? (
                     <>
                       Finish <Check className="h-4 w-4" />

@@ -1,3 +1,3 @@
 "use client"
 
-export { Checkbox } from "@/components/dice/ui/checkbox"
+export { Checkbox } from "@/components/ui/checkbox"

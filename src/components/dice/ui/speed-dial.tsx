@@ -8,7 +8,7 @@ import { cn } from "@/components/dice/lib/utils";
 import { useAsRef } from "@/components/dice/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
 import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
-import { Button } from "@/components/dice/ui/button";
+import { Button } from "@/components/ui/button";
 
 const ROOT_NAME = "SpeedDial";
 const TRIGGER_NAME = "SpeedDialTrigger";
@@ -431,7 +431,7 @@ function SpeedDialTrigger(props: React.ComponentProps<typeof Button>) {
 
   return (
     <Button
-      type="button"
+      htmlType="button"
       role="button"
       id={triggerId}
       aria-controls={contentId}
@@ -440,7 +440,7 @@ function SpeedDialTrigger(props: React.ComponentProps<typeof Button>) {
       data-slot="speed-dial-trigger"
       data-state={getDataState(open)}
       disabled={isDisabled}
-      size="icon"
+      shape="circle"
       {...triggerProps}
       ref={composedRef}
       className={cn("size-11 rounded-full", className)}
@@ -1005,13 +1005,13 @@ function SpeedDialAction(props: SpeedDialActionProps) {
 
   return (
     <Button
-      type="button"
+      htmlType="button"
       role="menuitem"
       id={actionId}
       aria-labelledby={labelId}
       data-slot="speed-dial-action"
-      variant="outline"
-      size="icon"
+      variant="outlined"
+      shape="circle"
       disabled={disabled}
       ref={composedRefs}
       {...actionProps}

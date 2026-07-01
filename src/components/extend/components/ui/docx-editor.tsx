@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card"
 import {
   DocxEditorViewer,
   paragraphLetterheadFloatSideAtNodeIndex,
@@ -84,10 +83,15 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/extend/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
-import { Input } from "@/components/extend/components/ui/input"
-import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+import { Input } from "@/components/ui/input"
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
@@ -95,15 +99,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/extend/components/ui/select"
-import { Separator } from "@/components/extend/components/ui/separator"
-import { Spinner } from "@/components/extend/components/ui/spinner"
+import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 import { ToggleGroup, ToggleGroupItem } from "@/components/extend/components/ui/toggle"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/extend/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 
 const DOCX_MIME_TYPE =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -496,13 +500,6 @@ function paragraphStylePreviewStyle(
   }
 }
 
-function paragraphStylePreviewTriggerId(prefix: string, styleId: string) {
-  return `${prefix}-paragraph-style-preview-${styleId.replace(
-    /[^a-zA-Z0-9_-]/g,
-    "_"
-  )}`
-}
-
 function parseToolbarSectionColumns(
   sectionPropertiesXml?: string
 ): { count: number; gapPx: number } | undefined {
@@ -732,20 +729,18 @@ function DocxEditorToolbar({
     ) ??
     paragraphStyleOptions[0] ??
     FALLBACK_PARAGRAPH_STYLE_OPTIONS[0]
-  const paragraphStylePreviewHandle = React.useMemo(
-    () => PreviewCardPrimitive.createHandle<ParagraphStyleDefinition>(),
-    []
-  )
-  const paragraphStylePreviewIdPrefix = React.useId()
   const [isParagraphStyleMenuOpen, setIsParagraphStyleMenuOpen] =
     React.useState(false)
+  const [paragraphStylePreviewOption, setParagraphStylePreviewOption] =
+    React.useState<ParagraphStyleDefinition | null>(null)
   const openParagraphStylePreview = React.useCallback(
     (styleId: string) => {
-      paragraphStylePreviewHandle.open(
-        paragraphStylePreviewTriggerId(paragraphStylePreviewIdPrefix, styleId)
-      )
+      const previewOption =
+        paragraphStyleOptions.find((option) => option.id === styleId) ??
+        selectedParagraphStyleOption
+      setParagraphStylePreviewOption(previewOption)
     },
-    [paragraphStylePreviewHandle, paragraphStylePreviewIdPrefix]
+    [paragraphStyleOptions, selectedParagraphStyleOption]
   )
   const selectedLineSpacingValue = React.useMemo(() => {
     const current = Number.isFinite(lineSpacing.multiple)
@@ -950,109 +945,91 @@ function DocxEditorToolbar({
 
           <ToolbarSeparator />
 
-          <PreviewCardPrimitive.Root handle={paragraphStylePreviewHandle}>
-            {({ payload }) => {
-              const previewOption = payload ?? selectedParagraphStyleOption
-
-              return (
-                <>
-                  <Select
-                    value={selectedParagraphStyleValue}
-                    onOpenChange={(open) => {
-                      setIsParagraphStyleMenuOpen(open)
-
-                      if (!open) {
-                        paragraphStylePreviewHandle.close()
-                        return
-                      }
-
-                      window.requestAnimationFrame(() => {
-                        openParagraphStylePreview(selectedParagraphStyleValue)
-                      })
-                    }}
-                    onValueChange={(value) => {
-                      if (value) {
-                        setParagraphStyle(value)
-                      }
-                    }}
-                    disabled={!canEdit}
-                    modal={false}
-                  >
-                    <SelectTrigger
-                      size="sm"
-                      className="w-[136px] min-w-[136px]"
-                      aria-label="Paragraph style"
-                    >
-                      <SelectValue placeholder="Style" />
-                    </SelectTrigger>
-                    <SelectContent
-                      align="start"
-                      alignItemWithTrigger={false}
-                      className="z-40 min-w-[210px]"
-                    >
-                      {paragraphStyleOptions.map((option) => {
-                        const previewTriggerId = paragraphStylePreviewTriggerId(
-                          paragraphStylePreviewIdPrefix,
-                          option.id
-                        )
-
-                        return (
-                          <SelectItem
-                            key={option.id}
-                            value={option.id}
-                            label={option.name}
-                            className="relative min-w-[190px]"
-                            onFocus={() => openParagraphStylePreview(option.id)}
-                            onPointerEnter={() =>
-                              openParagraphStylePreview(option.id)
-                            }
-                          >
-                            <span className="block truncate">
-                              {option.name}
-                            </span>
-                            <PreviewCardPrimitive.Trigger
-                              id={previewTriggerId}
-                              handle={paragraphStylePreviewHandle}
-                              payload={option}
-                              delay={0}
-                              closeDelay={120}
-                              render={
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute inset-0 block"
-                                />
-                              }
-                            />
-                          </SelectItem>
-                        )
-                      })}
-                    </SelectContent>
-                  </Select>
-                  {isParagraphStyleMenuOpen && previewOption ? (
-                    <PreviewCardPrimitive.Portal>
-                      <PreviewCardPrimitive.Positioner
-                        side="right"
-                        align="start"
-                        sideOffset={10}
-                        alignOffset={-4}
-                        className="z-40 transition-[top,left,right,bottom,transform] duration-100 ease-out data-instant:transition-none"
-                      >
-                        <PreviewCardPrimitive.Popup
-                          data-slot="paragraph-style-preview-card"
-                          className="origin-(--transform-origin) rounded-lg border bg-popover text-popover-foreground shadow-lg/5 transition-opacity duration-100 outline-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:opacity-0 data-starting-style:opacity-0 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]"
-                        >
-                          <ParagraphStylePreviewCard
-                            documentTheme={documentTheme}
-                            option={previewOption}
-                          />
-                        </PreviewCardPrimitive.Popup>
-                      </PreviewCardPrimitive.Positioner>
-                    </PreviewCardPrimitive.Portal>
-                  ) : null}
-                </>
-              )
+          <Popover
+            open={isParagraphStyleMenuOpen && Boolean(paragraphStylePreviewOption)}
+            onOpenChange={(open) => {
+              if (!open) {
+                setParagraphStylePreviewOption(null)
+              }
             }}
-          </PreviewCardPrimitive.Root>
+          >
+            <Select
+              value={selectedParagraphStyleValue}
+              onOpenChange={(open) => {
+                setIsParagraphStyleMenuOpen(open)
+
+                if (!open) {
+                  setParagraphStylePreviewOption(null)
+                  return
+                }
+
+                window.requestAnimationFrame(() => {
+                  openParagraphStylePreview(selectedParagraphStyleValue)
+                })
+              }}
+              onValueChange={(value) => {
+                if (value) {
+                  setParagraphStyle(value)
+                }
+              }}
+              disabled={!canEdit}
+              modal={false}
+            >
+              <SelectTrigger
+                size="sm"
+                className="w-[136px] min-w-[136px]"
+                aria-label="Paragraph style"
+              >
+                <SelectValue placeholder="Style" />
+              </SelectTrigger>
+              <SelectContent
+                align="start"
+                alignItemWithTrigger={false}
+                className="z-40 min-w-[210px]"
+              >
+                {paragraphStyleOptions.map((option) => {
+                  const isPreviewAnchor =
+                    paragraphStylePreviewOption?.id === option.id
+                  const optionLabel = (
+                    <span className="block truncate">{option.name}</span>
+                  )
+
+                  return (
+                    <SelectItem
+                      key={option.id}
+                      value={option.id}
+                      label={option.name}
+                      className="relative min-w-[190px]"
+                      onFocus={() => openParagraphStylePreview(option.id)}
+                      onPointerEnter={() => openParagraphStylePreview(option.id)}
+                    >
+                      {isPreviewAnchor ? (
+                        <PopoverAnchor asChild>{optionLabel}</PopoverAnchor>
+                      ) : (
+                        optionLabel
+                      )}
+                    </SelectItem>
+                  )
+                })}
+              </SelectContent>
+            </Select>
+            {isParagraphStyleMenuOpen && paragraphStylePreviewOption ? (
+              <PopoverContent
+                side="right"
+                align="start"
+                sideOffset={10}
+                alignOffset={-4}
+                onOpenAutoFocus={(event) => event.preventDefault()}
+                data-slot="paragraph-style-preview-card"
+                className="z-40 p-0 transition-[top,left,right,bottom,transform,opacity] duration-100 ease-out data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
+              >
+                <ParagraphStylePreviewCard
+                  documentTheme={documentTheme}
+                  option={paragraphStylePreviewOption}
+                />
+              </PopoverContent>
+            ) : null}
+          </Popover>
 
           <Select
             value={selectedRunStyle?.fontFamily ?? "Calibri"}

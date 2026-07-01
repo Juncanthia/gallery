@@ -8,7 +8,7 @@ import * as ReactDOM from "react-dom";
 import { cn } from "@/components/dice/lib/utils";
 import { useAsRef } from "@/components/dice/hooks/use-as-ref";
 import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
-import { Button } from "@/components/dice/ui/button";
+import { Button } from "@/components/ui/button";
 
 const BANNER_ANIMATION_DURATION = 400;
 const DEFAULT_BANNER_PRIORITY = 0;
@@ -680,8 +680,9 @@ function BannerClose(props: React.ComponentProps<typeof Button>) {
   return (
     <Button
       data-slot="banner-close"
-      variant="ghost"
-      size="icon-sm"
+      variant="text"
+      size="small"
+      shape="square"
       onClick={onClick}
       disabled={isDisabled}
       {...closeProps}

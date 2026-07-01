@@ -167,6 +167,7 @@ const Collapsible = React.forwardRef<HTMLDivElement, CollapsibleProps>(
 export {
   Collapsible,
   CollapsibleTrigger,
+  CollapsibleContent as CollapsiblePanel,
   CollapsibleContent,
   type CollapsibleProps,
   type CollapsibleTriggerProps,

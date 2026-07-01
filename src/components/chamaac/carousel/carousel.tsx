@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { LazyMotion, domMax, m } from "motion/react";
 import cn from "clsx";
@@ -107,11 +106,9 @@ const Coursel = ({
               "relative flex-shrink-0"
             )}
           >
-            <Image
+            <img
               src={item.item}
               alt={`image-${item.index}`}
-              fill
-              priority={true}
               className="object-cover rounded-[16px]"
               sizes="(max-width: 768px) 100vw, 50vw"
             />

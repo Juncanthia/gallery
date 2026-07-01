@@ -3,7 +3,7 @@
 import { ClosedCaptioningIcon } from "@phosphor-icons/react"
 import { useEffect } from "react"
 
-import { Button } from "@/components/limeplay/ui/button"
+import { Button } from "@/components/ui/button"
 import { useCaptionsStore } from "@/components/limeplay/hooks/use-captions"
 import {
   MediaReadyState,
@@ -54,7 +54,7 @@ export function CaptionsStateControlDemo() {
 
   return (
     <CaptionsControl asChild>
-      <Button size="icon" variant="ghost">
+      <Button shape="square" variant="text">
         <ClosedCaptioningIcon
           size={18}
           weight={textTrackVisible ? "fill" : "regular"}

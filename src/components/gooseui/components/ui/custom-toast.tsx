@@ -10,7 +10,7 @@ import {
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { Button } from "@/components/gooseui/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/components/gooseui/lib/utils"
 
 type ToastType = "success" | "error" | "warning" | "info"
@@ -99,8 +99,8 @@ export function CustomToast({
       </div>
 
       <Button
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         onClick={() => toast.dismiss(id)}
         className="size-6 shrink-0 opacity-70 hover:opacity-100"
       >

@@ -4,7 +4,7 @@ import { DotsThreeVerticalIcon } from "@phosphor-icons/react"
 import { AnimatePresence, motion } from "motion/react"
 import * as React from "react"
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/limeplay/ui/toggle-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Button } from "@/components/limeplay/blocks/audio-player/components/button"
 import {
   DislikeIcon,
@@ -15,21 +15,13 @@ import {
 
 export function ActionControls() {
   const [value, setValue] = React.useState<string>("")
-  const toggleGroupProps = {
-    onValueChange: (next: string | string[]) => {
-      setValue(Array.isArray(next) ? (next[0] ?? "") : next)
-    },
-    spacing: 2,
-    type: "single" as const,
-    value,
-  }
-
   return (
     <div className="flex items-center gap-1">
       <ToggleGroup
-        {...(toggleGroupProps as unknown as React.ComponentProps<
-          typeof ToggleGroup
-        >)}
+        className="gap-2"
+        onValueChange={setValue}
+        type="single"
+        value={value}
       >
         <ToggleGroupItem
           aria-label="Dislike"

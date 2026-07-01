@@ -6,9 +6,8 @@ import {
   EmptyTitle,
   EmptyDescription,
   EmptyContent,
-  EmptyMedia,
 } from '@/components/ui/empty-state'
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { Inbox, Plus } from 'lucide-react'
 
 /**
@@ -109,7 +108,7 @@ export function EmptyState({
       </EmptyHeader>
       {showAction ? (
         <EmptyContent>
-          <Button onClick={actions?.onAction}>
+          <Button variant="solid" color="primary" onClick={actions?.onAction}>
             <Plus className="size-4" />
             {actionLabel}
           </Button>

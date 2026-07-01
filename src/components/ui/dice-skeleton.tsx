@@ -1,3 +1,3 @@
 "use client"
 
-export { Skeleton } from "@/components/dice/ui/skeleton"
+export { Skeleton } from "@/components/ui/skeleton"

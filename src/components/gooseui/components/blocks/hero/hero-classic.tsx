@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowRight, Play } from "lucide-react"
-import { Button } from "@/components/gooseui/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 export function HeroClassic() {
   return (
@@ -33,13 +33,13 @@ export function HeroClassic() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button size="lg" className="cursor-pointer group">
+              <Button variant="solid" color="primary" size="large" className="cursor-pointer group">
                 Get Started Free
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button
-                size="lg"
-                variant="outline"
+                size="large"
+                variant="outlined"
                 className="cursor-pointer group"
               >
                 <Play className="mr-2 h-4 w-4" />

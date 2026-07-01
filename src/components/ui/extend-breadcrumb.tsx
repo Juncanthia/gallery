@@ -1,3 +1,3 @@
 "use client"
 
-export { Breadcrumb } from "@/components/extend/components/ui/breadcrumb"
+export { Breadcrumb } from "@/components/ui/breadcrumb"

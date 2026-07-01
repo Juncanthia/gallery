@@ -1,3 +1,3 @@
 "use client"
 
-export { Progress } from "@/components/dice/ui/progress"
+export { Progress } from "@/components/ui/progress"

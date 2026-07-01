@@ -1,6 +1,6 @@
 "use client"
 
-import { Slider as SliderPrimitive } from "@base-ui/react/slider"
+import * as SliderPrimitive from "@radix-ui/react-slider"
 import React, { useImperativeHandle, useRef } from "react"
 
 import { cn } from "@/components/limeplay/lib/utils"
@@ -13,17 +13,17 @@ import { useTimelineStore } from "@/components/limeplay/hooks/use-timeline"
 import { useTrackEvents } from "@/components/limeplay/hooks/use-track-events"
 
 export type TimelineRootPropsDocs = Pick<
-  React.ComponentProps<typeof SliderPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>,
   "disabled" | "orientation"
 >
 
 export const Root = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof SliderPrimitive.Root>
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
 >((props, ref) => {
-  const internalRef = useRef<HTMLDivElement>(
+  const internalRef = useRef<HTMLSpanElement>(
     null
-  ) as React.RefObject<HTMLDivElement>
+  ) as React.RefObject<HTMLSpanElement>
   const { className, orientation = "horizontal", ...etc } = props
 
   const player = usePlayerStore((state) => state.instance)
@@ -54,7 +54,7 @@ export const Root = React.forwardRef<
   )
 
   const trackEvents = useTrackEvents({
-    onPointerDown: (progress, event) => {
+    onPointerDown: (_progress, event) => {
       if (player) {
         const newTime = getTimeFromEvent(event)
         const seekRange = player.seekRange()
@@ -69,7 +69,7 @@ export const Root = React.forwardRef<
         }
       }
     },
-    onPointerMove: (progress, isPointerDown, event) => {
+    onPointerMove: (_progress, isPointerDown, event) => {
       if (duration && player) {
         const newTime = getTimeFromEvent(event)
         const seekRange = player.seekRange()
@@ -122,8 +122,8 @@ export const Root = React.forwardRef<
 Root.displayName = "SliderRoot"
 
 export const Track = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof SliderPrimitive.Track>
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Track>
 >((props, ref) => {
   const { className, ...etc } = props
 
@@ -146,15 +146,15 @@ export const Track = React.forwardRef<
 Track.displayName = "SliderTrack"
 
 export const Progress = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof SliderPrimitive.Track>
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Range>
 >((props, ref) => {
   const { className, ...etc } = props
 
   const progress = useTimelineStore((state) => state.progress)
 
   return (
-    <SliderPrimitive.Indicator
+    <SliderPrimitive.Range
       className={cn("h-full w-(--lp-played-width)! bg-primary", className)}
       ref={ref}
       style={
@@ -187,9 +187,7 @@ interface BufferedProps extends React.ComponentProps<"div"> {
   variant?: "combined" | "default" | "from-zero"
 }
 
-interface ThumbProps extends React.ComponentProps<
-  typeof SliderPrimitive.Thumb
-> {
+interface ThumbProps extends React.ComponentPropsWithoutRef<"span"> {
   /**
    * Custom position of the thumb in percentage
    */
@@ -219,7 +217,7 @@ export const Buffered = React.forwardRef<HTMLDivElement, BufferedProps>(
     return (
       <div className={cn("absolute size-full", className)} ref={ref} {...etc}>
         {normalizedPercentages.map(({ startPercent, widthPercent }, index) => (
-          <SliderPrimitive.Indicator
+          <span
             className={cn(
               `left-(--lp-buffered-start)! h-full w-(--lp-buffered-width)! bg-foreground/30`,
               variant === "from-zero" && "rounded-e-full",
@@ -241,14 +239,14 @@ export const Buffered = React.forwardRef<HTMLDivElement, BufferedProps>(
 
 Buffered.displayName = "SliderBuffered"
 
-export const Thumb = React.forwardRef<HTMLDivElement, ThumbProps>(
+export const Thumb = React.forwardRef<HTMLSpanElement, ThumbProps>(
   (props, ref) => {
-    const { className, position, showWithHover = false, ...etc } = props
+    const { className, position, showWithHover = false, style, ...etc } = props
     const hoveringTime = useTimelineStore((state) => state.hoveringTime)
     const duration = useTimelineStore((state) => state.duration)
     const currentTime = useTimelineStore((state) => state.currentTime)
 
-    let finalPosition = 0
+    let finalPosition: number
 
     if (!duration) {
       return null
@@ -263,7 +261,7 @@ export const Thumb = React.forwardRef<HTMLDivElement, ThumbProps>(
     }
 
     return (
-      <SliderPrimitive.Thumb
+      <span
         className={cn(
           `
             left-(--lp-timeline-thumb-position)! bg-primary
@@ -272,12 +270,13 @@ export const Thumb = React.forwardRef<HTMLDivElement, ThumbProps>(
           className
         )}
         ref={ref}
-        {...etc}
         style={
           {
+            ...style,
             "--lp-timeline-thumb-position": `${finalPosition}%`,
           } as React.CSSProperties
         }
+        {...etc}
       />
     )
   }

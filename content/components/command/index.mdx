@@ -232,7 +232,7 @@ useEffect(() => {
 
 ### Command 和 Combobox 的区别？
 
-`Command` 基于 cmdk，专为命令面板场景设计，item 支持 `onSelect` 回调，内置搜索过滤和键盘导航。`Combobox` 基于 @base-ui/react，是更通用的下拉选择组件，内部不集成 Portal/Popup 定位，需配合 `CommandDialog` 或手动定位。
+`Command` 基于 cmdk，专为命令面板场景设计，item 支持 `onSelect` 回调，内置搜索过滤和键盘导航。`Combobox` 基于 cmdk 与 Radix Popover 组合，是面向表单选择场景的高层组件，内置触发器、弹层定位和选中值管理。
 
 ### 如何关闭 CommandDialog 后执行命令？
 

@@ -43,10 +43,10 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/extend/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
-import { Input } from "@/components/extend/components/ui/input"
-import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
@@ -54,14 +54,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/extend/components/ui/select"
-import { Separator } from "@/components/extend/components/ui/separator"
-import { Spinner } from "@/components/extend/components/ui/spinner"
+import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/extend/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 
 const DOCX_MIME_TYPE =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"

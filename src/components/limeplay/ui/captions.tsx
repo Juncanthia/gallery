@@ -4,7 +4,7 @@ import { composeRefs } from "@radix-ui/react-compose-refs"
 import { Slot } from "@radix-ui/react-slot"
 import React, { useEffect } from "react"
 
-import { Button } from "@/components/limeplay/ui/button"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/components/limeplay/lib/utils"
 import {
   useCaptions,

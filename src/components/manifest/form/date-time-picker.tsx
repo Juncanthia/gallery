@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@/components/manifest/components/ui/popover'
+} from '@/components/ui/popover'
 import { ArrowLeft, ChevronLeft, ChevronRight, Globe, Search } from 'lucide-react'
 import { cn } from '@/components/manifest/lib/utils'
 import { demoDateTimePickerData } from './demo/form'
@@ -455,7 +455,7 @@ export function DateTimePicker({ data, actions, appearance, control }: DateTimeP
                       {time}
                     </button>
                     {isTimeSelected && (
-                      <Button
+                      <Button variant="solid" color="primary"
                         onClick={handleNext}
                         className="h-[52px] animate-in fade-in slide-in-from-left-2 duration-200"
                       >

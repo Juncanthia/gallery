@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/manifest/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/manifest/components/ui/card"
+} from "@/components/ui/card"
 import { CreditCard, Plus, Check } from "lucide-react"
 
 /**
@@ -202,7 +202,7 @@ export function SavedCards({ data, actions, appearance, control }: SavedCardsPro
       </CardContent>
 
       <CardFooter>
-        <Button
+        <Button variant="solid" color="primary"
           className="w-full"
           onClick={() => selected && onPay?.(selected)}
           disabled={!selected || isLoading}

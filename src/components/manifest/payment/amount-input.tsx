@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useMemo } from "react"
-import { Button } from "@/components/manifest/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Minus, Plus } from "lucide-react"
 import { cn } from "@/components/manifest/lib/utils"
 import { demoAmountPresets } from "./demo/payment"
@@ -221,7 +221,7 @@ export function AmountInput({ data, actions, appearance, control }: AmountInputP
           ))}
         </div>
         {onConfirm && (
-          <Button size="sm" className="w-full sm:w-auto" onClick={() => onConfirm(amount)}>
+          <Button variant="solid" color="primary" size="small" className="w-full sm:w-auto" onClick={() => onConfirm(amount)}>
             Confirm
           </Button>
         )}

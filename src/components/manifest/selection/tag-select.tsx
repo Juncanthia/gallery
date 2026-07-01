@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/components/manifest/lib/utils'
 import { Check, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -183,10 +183,10 @@ export function TagSelect({ data, actions, appearance, control }: TagSelectProps
         )}
 
         {showValidate && (
-          <Button
+          <Button variant="solid" color="primary"
             onClick={handleValidate}
             disabled={selected.length === 0}
-            size="sm"
+            size="small"
           >
             {validateLabel}
             {selected.length > 0 && ` (${selected.length})`}

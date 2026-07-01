@@ -1,19 +1,19 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
-import { Input } from '@/components/manifest/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@/components/manifest/components/ui/popover'
+} from '@/components/ui/popover'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/components/manifest/components/ui/select'
+} from '@/components/ui/select'
 import { cn } from '@/components/manifest/lib/utils'
 import { demoTableColumns, demoTableRows } from './demo/list'
 import {
@@ -486,12 +486,10 @@ export function Table<T extends Record<string, unknown>>({
 
       if (aValue === bValue) return 0
 
-      let comparison = 0
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        comparison = aValue - bValue
-      } else {
-        comparison = String(aValue).localeCompare(String(bValue))
-      }
+      const comparison =
+        typeof aValue === 'number' && typeof bValue === 'number'
+          ? aValue - bValue
+          : String(aValue).localeCompare(String(bValue))
 
       return sortConfig.direction === 'asc' ? comparison : -comparison
     })
@@ -642,8 +640,8 @@ export function Table<T extends Record<string, unknown>>({
           <div className="flex items-center gap-2">
             {selectable === 'single' && onCopy && (
               <Button
-                variant="outline"
-                size="sm"
+                variant="outlined"
+                size="small"
                 onClick={() => onCopy(getSelectedRows())}
                 disabled={!hasSelection}
               >
@@ -655,8 +653,8 @@ export function Table<T extends Record<string, unknown>>({
               <>
                 {onDownload && (
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant="outlined"
+                    size="small"
                     onClick={() => onDownload(getSelectedRows())}
                     disabled={!hasSelection}
                   >
@@ -666,8 +664,8 @@ export function Table<T extends Record<string, unknown>>({
                 )}
                 {onShare && (
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant="outlined"
+                    size="small"
                     onClick={() => onShare(getSelectedRows())}
                     disabled={!hasSelection}
                   >
@@ -785,8 +783,8 @@ export function Table<T extends Record<string, unknown>>({
                   )}
                   <div className="pt-1">
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant="outlined"
+                      size="small"
                       onClick={addFilter}
                       className="text-primary border-primary hover:bg-primary/10"
                     >
@@ -963,8 +961,8 @@ export function Table<T extends Record<string, unknown>>({
                 </span>
                 <div className="flex items-center gap-2">
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant="outlined"
+                    size="small"
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
                   >
@@ -974,8 +972,8 @@ export function Table<T extends Record<string, unknown>>({
                     Page {currentPage} of {totalPages}
                   </span>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant="outlined"
+                    size="small"
                     onClick={() =>
                       setCurrentPage((p) => Math.min(totalPages, p + 1))
                     }

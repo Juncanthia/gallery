@@ -1,11 +1,11 @@
 "use client"
 
 import { Send } from "lucide-react"
-import Link from "next/link"
+
 import * as React from "react"
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa"
-import { Button } from "@/components/gooseui/components/ui/button"
-import { Input } from "@/components/gooseui/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 // Computed at build time, avoids hydration mismatch
 const CURRENT_YEAR = 2026
@@ -59,8 +59,8 @@ export function FooterNewsletter() {
                 required
                 className="flex-1"
               />
-              <Button
-                type="submit"
+              <Button variant="solid" color="primary"
+                htmlType="submit"
                 disabled={isSubmitting}
                 className="cursor-pointer"
               >
@@ -80,18 +80,18 @@ export function FooterNewsletter() {
           <div className="flex flex-col items-start lg:items-end gap-6">
             <nav className="flex flex-wrap gap-x-6 gap-y-2">
               {navLinks.map((link) => (
-                <Link
+                <a
                   key={link.href}
                   href={link.href}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
             </nav>
             <div className="flex items-center gap-4">
               {socialLinks.map((social) => (
-                <Link
+                <a
                   key={social.label}
                   href={social.href}
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
@@ -100,7 +100,7 @@ export function FooterNewsletter() {
                 >
                   <social.icon className="h-5 w-5" />
                   <span className="sr-only">{social.label}</span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -118,18 +118,18 @@ export function FooterNewsletter() {
             &copy; {CURRENT_YEAR} Brand, Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <Link
+            <a
               href="#privacy"
               className="hover:text-foreground cursor-pointer"
             >
               Privacy
-            </Link>
-            <Link
+            </a>
+            <a
               href="#terms"
               className="hover:text-foreground cursor-pointer"
             >
               Terms
-            </Link>
+            </a>
           </div>
         </div>
       </div>

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { LazyMotion, domMax, m } from "motion/react";
-import Image from "next/image";
 import cn from "clsx";
 
 interface Feature {
@@ -96,10 +95,9 @@ export default function FeatureSteps({
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="relative w-full h-full"
           >
-            <Image
+            <img
               src={features[currentFeature].image}
               alt={features[currentFeature].title}
-              fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="rounded object-cover"
             />

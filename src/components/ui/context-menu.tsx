@@ -2,153 +2,12 @@ import * as React from "react"
 import { ContextMenu as ContextMenuPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
-import { ChevronRight as ChevronRightIcon, Check as CheckIcon } from "lucide-react"
-
-type ContextMenuItemOption =
-  | {
-      key?: React.Key
-      type: "label"
-      label: React.ReactNode
-      inset?: boolean
-    }
-  | {
-      key?: React.Key
-      type: "separator"
-    }
-  | {
-      key?: React.Key
-      type?: "item"
-      label: React.ReactNode
-      icon?: React.ReactNode
-      extra?: React.ReactNode
-      shortcut?: React.ReactNode
-      disabled?: boolean
-      danger?: boolean
-      onSelect?: React.ComponentProps<typeof ContextMenuPrimitive.Item>["onSelect"]
-    }
-  | {
-      key?: React.Key
-      type: "checkbox"
-      label: React.ReactNode
-      checked?: boolean
-      disabled?: boolean
-      onCheckedChange?: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem>["onCheckedChange"]
-    }
-  | {
-      key?: React.Key
-      type: "submenu"
-      label: React.ReactNode
-      icon?: React.ReactNode
-      extra?: React.ReactNode
-      disabled?: boolean
-      children: ContextMenuItemOption[]
-    }
-
-type ContextMenuProps = React.ComponentProps<typeof ContextMenuPrimitive.Root> & {
-  trigger?: React.ReactNode
-  items?: ContextMenuItemOption[]
-  contentProps?: React.ComponentProps<typeof ContextMenuPrimitive.Content>
-}
-
-function renderContextMenuTrigger(trigger: React.ReactNode) {
-  if (trigger === undefined) return null
-
-  return (
-    <ContextMenuTrigger asChild>
-      {React.isValidElement(trigger) ? trigger : <div>{trigger}</div>}
-    </ContextMenuTrigger>
-  )
-}
-
-function renderContextMenuItems(items: ContextMenuItemOption[]) {
-  return items.map((item, index) => {
-    const key = item.key ?? index
-
-    if (item.type === "separator") {
-      return <ContextMenuSeparator key={key} />
-    }
-
-    if (item.type === "label") {
-      return (
-        <ContextMenuLabel key={key} inset={item.inset}>
-          {item.label}
-        </ContextMenuLabel>
-      )
-    }
-
-    if (item.type === "checkbox") {
-      return (
-        <ContextMenuCheckboxItem
-          key={key}
-          checked={item.checked}
-          disabled={item.disabled}
-          onCheckedChange={item.onCheckedChange}
-        >
-          {item.label}
-        </ContextMenuCheckboxItem>
-      )
-    }
-
-    if (item.type === "submenu") {
-      return (
-        <ContextMenuSub key={key}>
-          <ContextMenuSubTrigger disabled={item.disabled}>
-            {item.icon}
-            {item.label}
-            {item.extra && (
-              <ContextMenuShortcut>{item.extra}</ContextMenuShortcut>
-            )}
-          </ContextMenuSubTrigger>
-          <ContextMenuSubContent>
-            {renderContextMenuItems(item.children)}
-          </ContextMenuSubContent>
-        </ContextMenuSub>
-      )
-    }
-
-    return (
-      <ContextMenuItem
-        key={key}
-        disabled={item.disabled}
-        variant={item.danger ? "destructive" : "default"}
-        onSelect={item.onSelect}
-      >
-        {item.icon}
-        {item.label}
-        {(item.extra ?? item.shortcut) && (
-          <ContextMenuShortcut>{item.extra ?? item.shortcut}</ContextMenuShortcut>
-        )}
-      </ContextMenuItem>
-    )
-  })
-}
+import { ChevronRightIcon, CheckIcon } from "lucide-react"
 
 function ContextMenu({
-  trigger,
-  items,
-  contentProps,
-  children,
   ...props
-}: ContextMenuProps) {
-  if (trigger === undefined && items === undefined) {
-    return (
-      <ContextMenuPrimitive.Root data-slot="context-menu" {...props}>
-        {children}
-      </ContextMenuPrimitive.Root>
-    )
-  }
-
-  return (
-    <ContextMenuPrimitive.Root data-slot="context-menu" {...props}>
-      {renderContextMenuTrigger(trigger)}
-      {children}
-      {items !== undefined && (
-        <ContextMenuContent {...contentProps}>
-          {renderContextMenuItems(items)}
-        </ContextMenuContent>
-      )}
-    </ContextMenuPrimitive.Root>
-  )
+}: React.ComponentProps<typeof ContextMenuPrimitive.Root>) {
+  return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />
 }
 
 function ContextMenuTrigger({
@@ -399,6 +258,4 @@ export {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuRadioGroup,
-  type ContextMenuProps,
-  type ContextMenuItemOption,
 }

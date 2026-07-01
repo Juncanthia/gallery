@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "@/components/dice/lib/utils";
-import { Separator } from "@/components/dice/ui/separator";
+import { Separator } from "@/components/ui/separator";
 
 function Stat({ className, ...props }: React.ComponentProps<"div">) {
   return (

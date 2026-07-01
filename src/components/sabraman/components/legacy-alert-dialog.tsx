@@ -13,7 +13,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@/components/sabraman/components/ui/dialog";
+} from "@/components/ui/dialog";
 
 const LEGACY_ALERT_BUTTON_BACKGROUNDS = {
 	default:

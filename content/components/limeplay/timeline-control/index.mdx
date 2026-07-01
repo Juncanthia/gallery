@@ -1,4 +1,4 @@
-TimelineControl 时间轴控制组件，基于 Base UI Slider 的复合组件模式，用于媒体播放器的时间轴交互。通过组合 Root、Track、Progress、Buffered、Thumb 等子组件构建完整的时间轴控件，所有子组件通过 Zustand store 共享播放状态。
+TimelineControl 时间轴控制组件，基于 Radix Slider 的复合组件模式，用于媒体播放器的时间轴交互。通过组合 Root、Track、Progress、Buffered、Thumb 等子组件构建完整的时间轴控件，所有子组件通过 Zustand store 共享播放状态。
 
 <h2 id="when-to-use">何时使用</h2>
 
@@ -69,7 +69,7 @@ export default function Demo() {
 | disabled | 禁用交互 | `boolean` | `false` |
 | className | 附加样式类名 | `string` | - |
 
-继承 Base UI `Slider.Root` 的所有 props。自动连接播放器状态（currentTime、duration、isLive、readyState），在未加载元数据时自动禁用。处理 pointer 事件实现拖拽寻址和 hover 预览。
+继承 Radix `Slider.Root` 的所有 props。自动连接播放器状态（currentTime、duration、isLive、readyState），在未加载元数据时自动禁用。处理 pointer 事件实现拖拽寻址和 hover 预览。
 
 ### Track
 
@@ -77,7 +77,7 @@ export default function Demo() {
 | --- | --- | --- | --- |
 | className | 附加样式类名 | `string` | - |
 
-继承 Base UI `Slider.Track` 的所有 props。轨道背景色为 `bg-foreground/20`，支持 focus-visible 键盘焦点样式。
+继承 Radix `Slider.Track` 的所有 props。轨道背景色为 `bg-foreground/20`，支持 focus-visible 键盘焦点样式。
 
 ### Progress
 
@@ -85,7 +85,7 @@ export default function Demo() {
 | --- | --- | --- | --- |
 | className | 附加样式类名 | `string` | - |
 
-继承 Base UI `Slider.Indicator` 的所有 props。宽度通过 CSS 变量 `--lp-played-width` 动态设置，背景色为 `bg-primary`。
+继承 Radix `Slider.Range` 的所有 props。宽度通过 CSS 变量 `--lp-played-width` 动态设置，背景色为 `bg-primary`。
 
 ### Buffered
 
@@ -109,7 +109,7 @@ export default function Demo() {
 | showWithHover | hover 时跟随鼠标位置 | `boolean` | `false` |
 | className | 附加样式类名 | `string` | - |
 
-继承 Base UI `Slider.Thumb` 的所有 props。位置通过 CSS 变量 `--lp-timeline-thumb-position` 动态设置。未提供 `position` 且未启用 `showWithHover` 时，默认显示当前播放位置。duration 为 0 或无效时返回 `null`。
+继承 Radix `Slider.Thumb` 的所有 props。位置通过 CSS 变量 `--lp-timeline-thumb-position` 动态设置。未提供 `position` 且未启用 `showWithHover` 时，默认显示当前播放位置。duration 为 0 或无效时返回 `null`。
 
 <h2 id="faq">常见问题</h2>
 

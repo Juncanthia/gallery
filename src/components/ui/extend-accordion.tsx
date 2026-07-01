@@ -1,3 +1,3 @@
 "use client"
 
-export { Accordion } from "@/components/extend/components/ui/accordion"
+export { Accordion } from "@/components/ui/accordion"

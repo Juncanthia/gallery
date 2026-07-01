@@ -9,9 +9,9 @@ import { VisuallyHiddenInput } from "@/components/dice/components/visually-hidde
 import { useAsRef } from "@/components/dice/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
 import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
-import { Button } from "@/components/dice/ui/button";
-import { Input } from "@/components/dice/ui/input";
-import { Textarea } from "@/components/dice/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const ROOT_NAME = "KeyValue";
 const LIST_NAME = "KeyValueList";
@@ -711,7 +711,7 @@ function KeyValueValueInput(props: KeyValueValueInputProps) {
   );
 }
 
-interface KeyValueRemoveProps extends React.ComponentProps<typeof Button> {}
+type KeyValueRemoveProps = React.ComponentProps<typeof Button>;
 
 function KeyValueRemove(props: KeyValueRemoveProps) {
   const { onClick: onClickProp, children, ...removeProps } = props;
@@ -750,10 +750,10 @@ function KeyValueRemove(props: KeyValueRemoveProps) {
 
   return (
     <Button
-      type="button"
+      htmlType="button"
       data-slot="key-value-remove"
-      variant="outline"
-      size="icon"
+      variant="outlined"
+      shape="square"
       disabled={isDisabled}
       {...removeProps}
       onClick={onClick}
@@ -806,9 +806,9 @@ function KeyValueAdd(props: React.ComponentProps<typeof Button>) {
 
   return (
     <Button
-      type="button"
+      htmlType="button"
       data-slot="key-value-add"
-      variant="outline"
+      variant="outlined"
       disabled={isDisabled}
       {...addProps}
       onClick={onClick}

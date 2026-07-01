@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/components/manifest/lib/utils'
 import {
   MapPin,
@@ -305,13 +305,13 @@ export function EventDetail({ data, actions, appearance }: EventDetailProps) {
 
         {/* CTA Buttons */}
         <div className="flex gap-3">
-          <Button
+          <Button variant="solid" color="primary"
             className="flex-1 bg-primary hover:bg-primary/90"
             onClick={() => onGetTickets?.(event)}
           >
             Get tickets
           </Button>
-          <Button variant="outline" className="flex-1">
+          <Button variant="outlined" className="flex-1">
             Invite friends
           </Button>
         </div>
@@ -504,10 +504,10 @@ export function EventDetail({ data, actions, appearance }: EventDetailProps) {
                 </div>
               </div>
               <div className="mt-3 flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1" onClick={() => onContact?.(event.organizer)}>
+                <Button variant="outlined" size="small" className="flex-1" onClick={() => onContact?.(event.organizer)}>
                   Contact
                 </Button>
-                <Button size="sm" className="flex-1 bg-primary hover:bg-primary/90" onClick={() => onFollow?.(event.organizer)}>
+                <Button variant="solid" color="primary" size="small" className="flex-1 bg-primary hover:bg-primary/90" onClick={() => onFollow?.(event.organizer)}>
                   Follow
                 </Button>
               </div>
@@ -588,7 +588,7 @@ export function EventDetail({ data, actions, appearance }: EventDetailProps) {
               {event.priceRange && <p className="font-semibold">{event.priceRange}</p>}
               {event.startDateTime && <p className="text-sm text-muted-foreground">{formatEventDateTime(event.startDateTime, event.endDateTime)}</p>}
             </div>
-            <Button
+            <Button variant="solid" color="primary"
               className="bg-primary hover:bg-primary/90"
               onClick={() => onGetTickets?.(event)}
             >

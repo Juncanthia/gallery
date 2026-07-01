@@ -2,7 +2,7 @@
 component: LegacyAlertDialog
 import: "@/components/ui/sabraman-alert-dialog"
 exports: LegacyAlertDialog, LegacyAlertDialogTrigger, LegacyAlertDialogContent, LegacyAlertDialogPanel, LegacyAlertDialogHeader, LegacyAlertDialogTitle, LegacyAlertDialogDescription, LegacyAlertDialogFooter, LegacyAlertDialogButton, LegacyAlertDialogClose
-base: Dialog (from @hyper/sabraman/components/ui/dialog)
+base: Dialog (from @/components/ui/dialog)
 style: macOS 10.15 legacy glass-panel alert
 ---
 

@@ -5,23 +5,23 @@ import { PanelLeftIcon } from "lucide-react"
 import { Slot } from "radix-ui"
 import * as React from "react"
 
-import { Button } from "@/components/limeplay/ui/button"
-import { Input } from "@/components/limeplay/ui/input"
-import { Separator } from "@/components/limeplay/ui/separator"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/limeplay/ui/sheet"
-import { Skeleton } from "@/components/limeplay/ui/skeleton"
+} from "@/components/ui/sheet"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/limeplay/ui/tooltip"
+} from "@/components/ui/tooltip"
 import { useIsMobile } from "@/components/limeplay/hooks/use-mobile"
 import { cn } from "@/components/limeplay/lib/utils"
 
@@ -524,8 +524,8 @@ function SidebarTrigger({
         onClick?.(event)
         toggleSidebar()
       }}
-      size="icon"
-      variant="ghost"
+      shape="square"
+      variant="text"
       {...props}
     >
       <PanelLeftIcon />

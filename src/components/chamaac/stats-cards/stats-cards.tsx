@@ -1,12 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import cn from "clsx";
 import { LazyMotion, domAnimation, m } from "motion/react";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-
 interface StatsCardsProps {
   className?: string;
   width?: string;
@@ -25,7 +20,6 @@ export function StatsCards({
       <div
         className={cn(
           "flex flex-wrap items-center justify-center gap-6 sm:gap-4 md:gap-0 px-4 py-4 bg-orange-50",
-          inter.className,
           className
         )}
       >
@@ -74,10 +68,9 @@ export function StatsCards({
             transition: { duration: 0.3, ease: "easeInOut" },
           }}
         >
-          <Image
+          <img
             src={images[0]}
             alt="Model"
-            fill
             sizes="(max-width: 768px) 90vw, 400px"
             className="object-cover"
           />
@@ -130,10 +123,9 @@ export function StatsCards({
             transition: { duration: 0.3, ease: "easeInOut" },
           }}
         >
-          <Image
+          <img
             src={images[1]}
             alt="Campaign"
-            fill
             sizes="(max-width: 768px) 90vw, 400px"
             className="object-cover"
           />

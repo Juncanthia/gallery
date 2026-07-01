@@ -1,12 +1,11 @@
 "use client"
 
 import type * as React from "react"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
+import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Separator } from "@/components/extend/components/ui/separator"
+import { Separator } from "@/components/ui/separator"
 
 export const groupVariants = cva(
   "flex w-fit *:focus-visible:z-1 *:has-focus-visible:z-1 has-[>[data-slot=group]]:gap-2 dark:*:[[data-slot=separator]:has(~button:hover):not(:has(~[data-slot=separator]~[data-slot]:hover)),[data-slot=separator]:has(~[data-slot][data-pressed]):not(:has(~[data-slot=separator]~[data-slot][data-pressed]))]:before:bg-input/64 dark:*:[button:hover~[data-slot=separator]:not([data-slot]:hover~[data-slot=separator]~[data-slot=separator]),[data-slot][data-pressed]~[data-slot=separator]:not([data-slot][data-pressed]~[data-slot=separator]~[data-slot=separator])]:before:bg-input/64",
@@ -24,6 +23,17 @@ export const groupVariants = cva(
     },
   }
 )
+
+type GroupTextProps = React.ComponentPropsWithoutRef<"div"> & {
+  render?:
+    | React.ReactElement
+    | ((
+        props: React.ComponentPropsWithoutRef<"div"> & {
+          "data-slot": "group-text"
+        },
+        state: Record<string, never>
+      ) => React.ReactElement)
+}
 
 export function Group({
   className,
@@ -52,8 +62,11 @@ export function GroupText({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"div">): React.ReactElement {
-  const defaultProps = {
+}: GroupTextProps): React.ReactElement {
+  const mergedProps: React.ComponentPropsWithoutRef<"div"> & {
+    "data-slot": "group-text"
+  } = {
+    ...props,
     className: cn(
       "relative inline-flex items-center gap-2 rounded-lg border border-input bg-muted px-[calc(--spacing(3)-1px)] text-base whitespace-nowrap text-muted-foreground shadow-xs/5 transition-shadow outline-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/6%)] sm:text-sm dark:bg-input/64 dark:before:shadow-[0_-1px_--theme(--color-white/6%)] [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
       className
@@ -61,11 +74,15 @@ export function GroupText({
     "data-slot": "group-text",
   }
 
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps(defaultProps, props),
-    render,
-  })
+  if (typeof render === "function") {
+    return render(mergedProps, {})
+  }
+
+  if (render) {
+    return <Slot {...mergedProps}>{render}</Slot>
+  }
+
+  return <div {...mergedProps} />
 }
 
 export function GroupSeparator({

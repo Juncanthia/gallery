@@ -20,16 +20,13 @@ import { cn } from "@/components/dice/lib/utils";
 import { useAsRef } from "@/components/dice/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
 import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
-import { Button } from "@/components/dice/ui/button";
+import { Button } from "@/components/ui/button";
 
 const ROOT_NAME = "SelectionToolbar";
 const ITEM_NAME = "SelectionToolbarItem";
 
-const SIDE_OPTIONS = ["top", "right", "bottom", "left"] as const;
-const ALIGN_OPTIONS = ["start", "center", "end"] as const;
-
-type Side = (typeof SIDE_OPTIONS)[number];
-type Align = (typeof ALIGN_OPTIONS)[number];
+type Side = "top" | "right" | "bottom" | "left";
+type Align = "start" | "center" | "end";
 type Boundary = Element | null;
 
 interface DivProps extends React.ComponentProps<"div"> {
@@ -664,10 +661,10 @@ function SelectionToolbarItem(props: SelectionToolbarItemProps) {
 
   return (
     <Button
-      type="button"
+      htmlType="button"
       data-slot="selection-toolbar-item"
-      variant="ghost"
-      size="icon"
+      variant="text"
+      shape="square"
       {...itemProps}
       className={cn("size-8", className)}
       ref={composedRef}

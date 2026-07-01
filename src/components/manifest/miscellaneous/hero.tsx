@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/manifest/components/ui/button';
+import { Button } from '@/components/ui/button';
 import type { ReactNode } from 'react';
 import { demoHeroDefault } from './demo/miscellaneous';
 
@@ -211,8 +211,8 @@ export function Hero({ data, actions }: HeroProps) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             {hasPrimaryButton && (
               <Button
-                variant="outline"
-                size="lg"
+                variant="outlined"
+                size="large"
                 className="min-w-[140px]"
                 onClick={actions?.onPrimaryClick}
               >
@@ -221,7 +221,7 @@ export function Hero({ data, actions }: HeroProps) {
               </Button>
             )}
             {hasSecondaryButton && (
-              <Button size="lg" className="min-w-[140px]" onClick={actions?.onSecondaryClick}>
+              <Button variant="solid" color="primary" size="large" className="min-w-[140px]" onClick={actions?.onSecondaryClick}>
                 {secondaryButton.icon && <span className="mr-2">{secondaryButton.icon}</span>}
                 {secondaryButton.label}
               </Button>

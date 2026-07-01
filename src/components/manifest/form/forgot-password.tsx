@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from '@/components/manifest/components/ui/button';
-import { Input } from '@/components/manifest/components/ui/input';
-import { Label } from '@/components/manifest/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/components/manifest/lib/utils';
 import { ArrowLeft, CheckCircle, Loader2, Mail } from 'lucide-react';
 import { useState } from 'react';
@@ -215,8 +215,8 @@ export function ForgotPassword({
           )}
         </div>
 
-        <Button
-          type="submit"
+        <Button variant="solid" color="primary"
+          htmlType="submit"
           className="w-full"
           disabled={isLoading}
         >

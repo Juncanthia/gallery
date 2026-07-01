@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '@/components/manifest/components/ui/button';
-import { Input } from '@/components/manifest/components/ui/input';
-import { Label } from '@/components/manifest/components/ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/manifest/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/manifest/lib/utils';
 import { ChevronDown, Paperclip, Search, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -338,9 +338,9 @@ export function ContactForm({ data, actions, appearance, control }: ContactFormP
             </div>
           ) : (
             <Button
-              type="button"
-              variant="outline"
-              size="sm"
+              htmlType="button"
+              variant="outlined"
+              size="small"
               onClick={() => fileInputRef.current?.click()}
               className="w-full sm:w-auto"
             >
@@ -349,7 +349,7 @@ export function ContactForm({ data, actions, appearance, control }: ContactFormP
             </Button>
           )}
 
-          <Button type="submit" size="sm" disabled={isLoading} className="w-full sm:w-auto">
+          <Button variant="solid" color="primary" htmlType="submit" size="small" disabled={isLoading} className="w-full sm:w-auto">
             {isLoading ? (
               'Sending...'
             ) : (

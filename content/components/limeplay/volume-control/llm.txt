@@ -2,7 +2,7 @@
 category: Components
 title: VolumeControl
 subtitle: 音量控制
-description: 基于 Base UI Slider primitive 构建的音量控制滑块。
+description: 基于 Radix Slider primitive 构建的音量控制滑块。
 demo:
   cols: 1
 group:
@@ -26,7 +26,7 @@ stack:
 
 # VolumeControl 音量控制
 
-基于 Base UI Slider primitive 构建的音量控制组件。提供水平或垂直方向的音量滑块，内置媒体状态感知、静音切换和音量百分比显示。
+基于 Radix Slider primitive 构建的音量控制组件。提供水平或垂直方向的音量滑块，内置媒体状态感知、静音切换和音量百分比显示。
 
 本组件是 LimePlay 播放器 UI 生态的一部分，封装了媒体音量 Store 的状态同步逻辑。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js 或历史兼容语法糖。
 
@@ -84,7 +84,7 @@ export const Root = React.forwardRef<
 >((props, ref) => { /* ... */ })
 ```
 
-Root props 来自 `SliderPrimitive.Root`（`@base-ui/react/slider`），额外接受：
+Root props 来自 `SliderPrimitive.Root`（`@radix-ui/react-slider`），额外接受：
 
 | 属性 | 类型 | 默认值 |
 | --- | --- | --- |
@@ -137,7 +137,7 @@ CSS 变量：
 
 - 样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
 - 无 CVA ——变体逻辑内联在组件内部（orientation、disabled 状态）。
-- 包装 Base UI Slider primitive，交互状态、键盘行为和 ARIA 基础能力来自底层 primitive。
+- 包装 Radix Slider primitive，交互状态、键盘行为和 ARIA 基础能力来自底层 primitive。
 - 主题颜色使用 `bg-primary`、`bg-secondary`、`bg-primary/30` 等 Tailwind 实用类。
 
 ## 依赖与实现说明 {#implementation-notes}
@@ -149,7 +149,7 @@ CSS 变量：
 
 直接依赖：
 
-- `@base-ui/react/slider`
+- `@radix-ui/react-slider`
 - `@hyper/limeplay/hooks/use-playback`
 - `@hyper/limeplay/hooks/use-volume`
 - `@hyper/limeplay/hooks/use-track-events`
@@ -167,7 +167,7 @@ CSS 变量：
 
 - Thumb 提供 `aria-label="Volume"` 和 `aria-valuetext`（如 "75% volume"）。
 - 可通过 `showVolumeText={false}` 关闭 ARIA 百分比文本。
-- 底层 Base UI Slider 提供键盘操作能力（Arrow 键调节值）。
+- 底层 Radix Slider 提供键盘操作能力（Arrow 键调节值）。
 - 禁用状态通过 `data-disabled` 属性标记。
 
 ## 与 Ant Design 的取舍 {#antd-differences}
@@ -175,7 +175,7 @@ CSS 变量：
 | 方向 | 本地决策 |
 | --- | --- |
 | API 来源 | 以 `src/components/limeplay/ui/volume-control.tsx` 的 TypeScript 类型为准 |
-| 视觉系统 | 使用 Tailwind CSS 和 Base UI Slider primitive |
+| 视觉系统 | 使用 Tailwind CSS 和 Radix Slider primitive |
 | 全局配置 | 不依赖 AntD ConfigProvider |
 | 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
 | 兼容目标 | 独立设计，不承诺 AntD Slider API 兼容 |

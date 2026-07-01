@@ -1,9 +1,8 @@
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
+import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
 
-import { Separator } from "@/components/limeplay/ui/separator"
+import { Separator } from "@/components/ui/separator"
 import { cn } from "@/components/limeplay/lib/utils"
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
@@ -68,28 +67,57 @@ const itemVariants = cva(
   }
 )
 
+type ItemState = {
+  size: VariantProps<typeof itemVariants>["size"]
+  slot: "item"
+  variant: VariantProps<typeof itemVariants>["variant"]
+}
+
+type ItemRender = React.ReactElement | ((
+  props: React.ComponentPropsWithoutRef<"div">,
+  state: ItemState
+) => React.ReactElement)
+
+type ItemProps = React.ComponentPropsWithoutRef<"div"> &
+  VariantProps<typeof itemVariants> & {
+    render?: ItemRender
+  }
+
+type ItemMergedProps = React.ComponentPropsWithoutRef<"div"> & {
+  "data-size": ItemState["size"]
+  "data-slot": ItemState["slot"]
+  "data-variant": ItemState["variant"]
+}
+
 function Item({
   className,
   render,
   size = "default",
   variant = "default",
   ...props
-}: useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(
-      {
-        className: cn(itemVariants({ className, size, variant })),
-      },
-      props
-    ),
-    render,
-    state: {
-      size,
-      slot: "item",
-      variant,
-    },
-  })
+}: ItemProps) {
+  const state = {
+    size,
+    slot: "item",
+    variant,
+  } satisfies ItemState
+  const mergedProps = {
+    className: cn(itemVariants({ className, size, variant })),
+    "data-size": size,
+    "data-slot": state.slot,
+    "data-variant": variant,
+    ...props,
+  } satisfies ItemMergedProps
+
+  if (typeof render === "function") {
+    return render(mergedProps, state)
+  }
+
+  if (render) {
+    return <Slot {...mergedProps}>{render}</Slot>
+  }
+
+  return <div {...mergedProps} />
 }
 
 const itemMediaVariants = cva(
@@ -227,4 +255,5 @@ export {
   ItemMedia,
   ItemSeparator,
   ItemTitle,
+  type ItemProps,
 }

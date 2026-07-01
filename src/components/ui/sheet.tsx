@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { X as XIcon } from 'lucide-react';
+import { Slot } from 'radix-ui';
 
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Sheet as SheetPrimitive,
   SheetTrigger as SheetTriggerPrimitive,
@@ -157,6 +159,47 @@ function SheetOverlay({ className, ...props }: SheetOverlayProps) {
   );
 }
 
+function SheetBackdrop({ className, ...props }: SheetOverlayProps) {
+  return (
+    <SheetOverlayPrimitive
+      data-slot="sheet-backdrop"
+      className={cn(
+        'fixed inset-0 z-50 bg-black/32 backdrop-blur-sm data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+type SheetViewportProps = React.ComponentProps<'div'> & {
+  side?: SheetPlacement;
+  variant?: 'default' | 'inset';
+};
+
+function SheetViewport({
+  className,
+  side,
+  variant = 'default',
+  ...props
+}: SheetViewportProps) {
+  return (
+    <div
+      data-slot="sheet-viewport"
+      className={cn(
+        'fixed inset-0 z-50 grid',
+        side === 'bottom' && 'grid-rows-[1fr_auto] pt-12',
+        side === 'top' && 'grid-rows-[auto_1fr] pb-12',
+        side === 'left' && 'flex justify-start',
+        side === 'right' && 'flex justify-end',
+        variant === 'inset' && 'sm:p-4',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
 type SheetCloseProps = SheetClosePrimitiveProps;
 
 function SheetClose(props: SheetCloseProps) {
@@ -226,23 +269,107 @@ function SheetContent({
   );
 }
 
-type SheetHeaderProps = SheetHeaderPrimitiveProps;
+type SheetPopupProps = SheetContentPrimitiveProps & {
+  closeProps?: SheetCloseProps;
+  showCloseButton?: boolean;
+  side?: SheetPlacement;
+  variant?: 'default' | 'inset';
+};
 
-function SheetHeader({ className, ...props }: SheetHeaderProps) {
+function SheetPopup({
+  className,
+  children,
+  closeProps,
+  showCloseButton = true,
+  side = 'right',
+  variant = 'default',
+  ...props
+}: SheetPopupProps) {
   return (
-    <SheetHeaderPrimitive
-      className={cn('flex flex-col gap-1.5 p-4', className)}
+    <SheetPortalPrimitive>
+      <SheetBackdrop />
+      <SheetViewport side={side} variant={variant}>
+        <SheetContentPrimitive
+          data-slot="sheet-popup"
+          className={cn(
+            'relative flex max-h-full min-h-0 w-full min-w-0 flex-col bg-popover text-popover-foreground shadow-lg/5 will-change-transform data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0',
+            side === 'bottom' &&
+              'row-start-2 border-t data-open:slide-in-from-bottom data-closed:slide-out-to-bottom',
+            side === 'top' &&
+              'border-b data-open:slide-in-from-top data-closed:slide-out-to-top',
+            side === 'left' &&
+              'w-[calc(100%-(--spacing(12)))] max-w-md border-e data-open:slide-in-from-left data-closed:slide-out-to-left',
+            side === 'right' &&
+              'col-start-2 w-[calc(100%-(--spacing(12)))] max-w-md border-s data-open:slide-in-from-right data-closed:slide-out-to-right',
+            variant === 'inset' && 'sm:rounded-2xl sm:border',
+            className,
+          )}
+          side={side}
+          {...props}
+        >
+          {children}
+          {showCloseButton && (
+            <SheetClosePrimitive
+              aria-label="Close"
+              asChild
+              className="absolute end-2 top-2"
+              {...closeProps}
+            >
+              <Button variant="text" size="small" shape="square">
+                <XIcon />
+                <span className="sr-only">Close</span>
+              </Button>
+            </SheetClosePrimitive>
+          )}
+        </SheetContentPrimitive>
+      </SheetViewport>
+    </SheetPortalPrimitive>
+  );
+}
+
+type SheetHeaderProps = SheetHeaderPrimitiveProps & {
+  asChild?: boolean;
+};
+
+function SheetHeader({ className, asChild = false, ...props }: SheetHeaderProps) {
+  const Comp = asChild ? Slot.Root : SheetHeaderPrimitive;
+
+  return (
+    <Comp
+      data-slot="sheet-header"
+      className={cn(
+        'flex flex-col gap-1.5 p-4 in-[[data-slot=sheet-popup]:has([data-slot=sheet-panel])]:pb-3',
+        className,
+      )}
       {...props}
     />
   );
 }
 
-type SheetFooterProps = SheetFooterPrimitiveProps;
+type SheetFooterProps = SheetFooterPrimitiveProps & {
+  asChild?: boolean;
+  variant?: 'default' | 'bare';
+};
 
-function SheetFooter({ className, ...props }: SheetFooterProps) {
+function SheetFooter({
+  className,
+  asChild = false,
+  variant = 'default',
+  ...props
+}: SheetFooterProps) {
+  const Comp = asChild ? Slot.Root : SheetFooterPrimitive;
+
   return (
-    <SheetFooterPrimitive
-      className={cn('mt-auto flex flex-col gap-2 p-4', className)}
+    <Comp
+      data-slot="sheet-footer"
+      className={cn(
+        'mt-auto flex flex-col gap-2 p-4',
+        variant === 'default' &&
+          'in-[[data-slot=sheet-popup]]:border-t in-[[data-slot=sheet-popup]]:bg-muted/72',
+        variant === 'bare' &&
+          'in-[[data-slot=sheet-popup]]:pt-4 in-[[data-slot=sheet-popup]]:pb-6 in-[[data-slot=sheet-popup]:has([data-slot=sheet-panel])]:pt-3',
+        className,
+      )}
       {...props}
     />
   );
@@ -270,19 +397,51 @@ function SheetDescription({ className, ...props }: SheetDescriptionProps) {
   );
 }
 
+function SheetPanel({
+  className,
+  scrollFade = true,
+  asChild = false,
+  ...props
+}: React.ComponentProps<'div'> & {
+  scrollFade?: boolean;
+  asChild?: boolean;
+}) {
+  const Comp = asChild ? Slot.Root : 'div';
+
+  return (
+    <ScrollArea scrollFade={scrollFade}>
+      <Comp
+        data-slot="sheet-panel"
+        className={cn(
+          'p-6 in-[[data-slot=sheet-popup]:has([data-slot=sheet-footer]:not(.border-t))]:pb-1 in-[[data-slot=sheet-popup]:has([data-slot=sheet-header])]:pt-1',
+          className,
+        )}
+        {...props}
+      />
+    </ScrollArea>
+  );
+}
+
 export {
   Sheet,
+  SheetBackdrop,
   SheetTrigger,
   SheetClose,
   SheetContent,
   SheetHeader,
   SheetFooter,
+  SheetOverlay,
+  SheetPanel,
+  SheetPopup,
+  SheetPrimitive,
   SheetTitle,
   SheetDescription,
+  SheetViewport,
   type SheetProps,
   type SheetTriggerProps,
   type SheetCloseProps,
   type SheetContentProps,
+  type SheetPopupProps,
   type SheetPlacement,
   type SheetSize,
   type SheetHeaderProps,

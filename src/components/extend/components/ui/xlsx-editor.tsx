@@ -73,9 +73,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/extend/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { Group, GroupSeparator, GroupText } from "@/components/extend/components/ui/group"
-import { Input } from "@/components/extend/components/ui/input"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -83,15 +83,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/extend/components/ui/select"
-import { Separator } from "@/components/extend/components/ui/separator"
-import { Spinner } from "@/components/extend/components/ui/spinner"
+import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 import { ToggleGroup, ToggleGroupItem } from "@/components/extend/components/ui/toggle"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/extend/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 import {
   renderXlsxScroller,
   WorkbookSheetTabs,

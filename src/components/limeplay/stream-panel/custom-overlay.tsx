@@ -4,9 +4,9 @@ import { AnimatePresence, m } from "motion/react"
 import React, { useState } from "react"
 
 import { useStreamPanelStore } from "@/components/limeplay/stream-panel/use-stream-panel"
-import { Button } from "@/components/limeplay/ui/button"
-import { Input } from "@/components/limeplay/ui/input"
-import { Textarea } from "@/components/limeplay/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/components/limeplay/lib/utils"
 
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
@@ -212,11 +212,11 @@ export function CustomOverlay({
         <div className="mt-auto flex gap-2">
           {showSave ? (
             <>
-              <Button
+              <Button variant="solid" color="primary"
                 className="h-9 flex-1 rounded-lg text-sm"
                 disabled={!canSave}
                 onClick={handleSave}
-                size="sm"
+                size="small"
               >
                 Save
               </Button>
@@ -226,19 +226,19 @@ export function CustomOverlay({
                   setShowSave(false)
                   setSaveName("")
                 }}
-                size="sm"
-                variant="ghost"
+                size="small"
+                variant="text"
               >
                 Cancel
               </Button>
             </>
           ) : (
             <>
-              <Button
+              <Button variant="solid" color="primary"
                 className="h-9 flex-1 rounded-lg text-sm"
                 disabled={!canLoad}
                 onClick={handleLoad}
-                size="sm"
+                size="small"
               >
                 Load Stream
               </Button>
@@ -246,8 +246,8 @@ export function CustomOverlay({
                 className="h-9 rounded-lg text-sm"
                 disabled={!canLoad}
                 onClick={() => setShowSave(true)}
-                size="sm"
-                variant="outline"
+                size="small"
+                variant="outlined"
               >
                 Save
               </Button>

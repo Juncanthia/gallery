@@ -2,7 +2,6 @@
 
 import cn from "clsx";
 import { m, LazyMotion, domMax, AnimatePresence } from "motion/react";
-import Image from "next/image";
 import React, {
   useState,
   useRef,
@@ -341,10 +340,9 @@ export function AIInputMessages({
                     <div key={attachIdx} className="relative">
                       {attachment.type === "image" ? (
                         <div className="relative w-20 h-20 rounded-[12px] overflow-hidden border border-black/5 dark:border-white/10">
-                          <Image
+                          <img
                             src={attachment.preview}
                             alt="Attachment"
-                            fill
                             sizes="80px"
                             className="object-cover"
                           />
@@ -437,10 +435,9 @@ export function AIInputFilePreview({
               >
                 {file.type === "image" ? (
                   <div className="relative w-16 h-16 rounded-[12px] overflow-hidden border border-black/5 dark:border-white/10">
-                    <Image
+                    <img
                       src={file.preview}
                       alt={file.file.name}
-                      fill
                       sizes="64px"
                       className="object-cover"
                     />

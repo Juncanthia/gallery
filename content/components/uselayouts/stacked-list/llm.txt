@@ -101,8 +101,8 @@ StackedList 为零 props 组件，内部管理展开状态和搜索过滤。
 - 样式由 Tailwind CSS className 直接控制，不使用 CVA。
 - 动画由 motion/react 的 `motion.div`、`AnimatePresence`、`layout` 动画驱动。
 - 图标使用 `@hugeicons/core-free-icons`（ProfileIcon、Search01Icon、Cancel01Icon、Add01Icon 及角色图标）。
-- Input 组件来自 `@hyper/uselayouts/_shared/ui/input`。
-- Button 组件来自 `@hyper/uselayouts/_shared/ui/button`。
+- Input 组件来自主线 `@/components/ui/input`。
+- Button 组件来自主线 `@/components/ui/button`。
 - class 合并使用 `cn` 工具函数。
 
 动画细节：
@@ -124,8 +124,8 @@ StackedList 为零 props 组件，内部管理展开状态和搜索过滤。
 - `motion/react` — 面板展开动画、列表项入场动画、layoutId 共享动画。
 - `@hugeicons/core-free-icons` — ProfileIcon、Search01Icon、Cancel01Icon、Add01Icon、Briefcase01Icon、PaintBoardIcon、Database01Icon、QuillWrite01Icon。
 - `@hugeicons/react` — `HugeiconsIcon` 组件。
-- `@hyper/uselayouts/_shared/ui/input` — Input 搜索框。
-- `@hyper/uselayouts/_shared/ui/button` — Button 图标按钮。
+- `@/components/ui/input` — Input 搜索框。
+- `@/components/ui/button` — Button 图标按钮。
 - `@hyper/uselayouts/lib/cn` — cn 工具函数。
 
 实现注意：

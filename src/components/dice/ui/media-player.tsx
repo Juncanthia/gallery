@@ -42,8 +42,8 @@ import * as ReactDOM from "react-dom";
 import { useComposedRefs } from "@/components/dice/lib/compose-refs";
 import { cn } from "@/components/dice/lib/utils";
 import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
-import { Badge } from "@/components/dice/ui/badge";
-import { Button } from "@/components/dice/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,12 +53,12 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/dice/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/dice/ui/tooltip";
+} from "@/components/ui/tooltip";
 
 const ROOT_NAME = "MediaPlayer";
 const SEEK_NAME = "MediaPlayerSeek";
@@ -1086,8 +1086,8 @@ function MediaPlayerError(props: MediaPlayerErrorProps) {
           </div>
           <div className="flex items-center gap-2">
             <Button
-              variant="secondary"
-              size="sm"
+              variant="filled"
+              size="small"
               onClick={onRetry}
               disabled={actionState.retryPending}
             >
@@ -1099,8 +1099,8 @@ function MediaPlayerError(props: MediaPlayerErrorProps) {
               Try again
             </Button>
             <Button
-              variant="outline"
-              size="sm"
+              variant="outlined"
+              size="small"
               onClick={onReload}
               disabled={actionState.reloadPending}
             >
@@ -1240,7 +1240,7 @@ function MediaPlayerPlay(props: React.ComponentProps<typeof Button>) {
       shortcut="Space"
     >
       <Button
-        type="button"
+        htmlType="button"
         aria-controls={context.mediaId}
         aria-label={mediaPaused ? "Play" : "Pause"}
         aria-pressed={!mediaPaused}
@@ -1249,8 +1249,8 @@ function MediaPlayerPlay(props: React.ComponentProps<typeof Button>) {
         data-state={mediaPaused ? "off" : "on"}
         disabled={isDisabled}
         {...playButtonProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn(
           "size-8 [&_svg:not([class*='fill-'])]:fill-current",
           className,
@@ -1305,15 +1305,15 @@ function MediaPlayerSeekBackward(props: MediaPlayerSeekBackwardProps) {
       shortcut={context.isVideo ? ["←"] : ["Shift ←"]}
     >
       <Button
-        type="button"
+        htmlType="button"
         aria-controls={context.mediaId}
         aria-label={`Back ${seconds} seconds`}
         data-disabled={isDisabled ? "" : undefined}
         data-slot="media-player-seek-backward"
         disabled={isDisabled}
         {...seekBackwardProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn("size-8", className)}
         onClick={onSeekBackward}
       >
@@ -1370,15 +1370,15 @@ function MediaPlayerSeekForward(props: MediaPlayerSeekForwardProps) {
       shortcut={context.isVideo ? ["→"] : ["Shift →"]}
     >
       <Button
-        type="button"
+        htmlType="button"
         aria-controls={context.mediaId}
         aria-label={`Forward ${seconds} seconds`}
         data-disabled={isDisabled ? "" : undefined}
         data-slot="media-player-seek-forward"
         disabled={isDisabled}
         {...seekForwardProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn("size-8", className)}
         onClick={onSeekForward}
       >
@@ -2027,7 +2027,7 @@ function MediaPlayerSeek(props: MediaPlayerSeekProps) {
       transform: `scale(${scale})`,
       transformOrigin: "top left",
     };
-  }, [thumbnail?.coords, thumbnail?.src]);
+  }, [thumbnail]);
 
   const SeekSlider = (
     <div data-slot="media-player-seek-container" className="relative w-full">
@@ -2242,14 +2242,14 @@ function MediaPlayerVolume(props: MediaPlayerVolumeProps) {
       <MediaPlayerTooltip tooltip="Volume" shortcut="M">
         <Button
           id={volumeTriggerId}
-          type="button"
+          htmlType="button"
           aria-controls={`${context.mediaId} ${sliderId}`}
           aria-label={mediaMuted ? "Unmute" : "Mute"}
           aria-pressed={mediaMuted}
           data-slot="media-player-volume-trigger"
           data-state={mediaMuted ? "on" : "off"}
-          variant="ghost"
-          size="icon"
+          variant="text"
+          shape="square"
           className="size-8"
           disabled={isDisabled}
           onClick={onMute}
@@ -2426,12 +2426,12 @@ function MediaPlayerPlaybackSpeed(props: MediaPlayerPlaybackSpeedProps) {
       <MediaPlayerTooltip tooltip="Playback speed" shortcut={["<", ">"]}>
         <DropdownMenuTrigger asChild>
           <Button
-            type="button"
+            htmlType="button"
             aria-controls={context.mediaId}
             disabled={isDisabled}
             {...playbackSpeedProps}
-            variant="ghost"
-            size="icon"
+            variant="text"
+            shape="square"
             className={cn("h-8 w-16 aria-expanded:bg-accent/50", className)}
           >
             {mediaPlaybackRate}x
@@ -2458,7 +2458,7 @@ function MediaPlayerPlaybackSpeed(props: MediaPlayerPlaybackSpeedProps) {
   );
 }
 
-interface MediaPlayerLoopProps extends React.ComponentProps<typeof Button> {}
+type MediaPlayerLoopProps = React.ComponentProps<typeof Button>;
 
 function MediaPlayerLoop(props: MediaPlayerLoopProps) {
   const { children, className, disabled, ...loopProps } = props;
@@ -2508,7 +2508,7 @@ function MediaPlayerLoop(props: MediaPlayerLoopProps) {
       shortcut="R"
     >
       <Button
-        type="button"
+        htmlType="button"
         aria-controls={context.mediaId}
         aria-label={isLooping ? "Disable loop" : "Enable loop"}
         aria-pressed={isLooping}
@@ -2517,8 +2517,8 @@ function MediaPlayerLoop(props: MediaPlayerLoopProps) {
         data-state={isLooping ? "on" : "off"}
         disabled={isDisabled}
         {...loopProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn("size-8", className)}
         onClick={onLoopToggle}
       >
@@ -2533,8 +2533,7 @@ function MediaPlayerLoop(props: MediaPlayerLoopProps) {
   );
 }
 
-interface MediaPlayerFullscreenProps
-  extends React.ComponentProps<typeof Button> {}
+type MediaPlayerFullscreenProps = React.ComponentProps<typeof Button>;
 
 function MediaPlayerFullscreen(props: MediaPlayerFullscreenProps) {
   const { children, className, disabled, ...fullscreenProps } = props;
@@ -2565,15 +2564,15 @@ function MediaPlayerFullscreen(props: MediaPlayerFullscreenProps) {
   return (
     <MediaPlayerTooltip tooltip="Fullscreen" shortcut="F">
       <Button
-        type="button"
+        htmlType="button"
         aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
         data-disabled={isDisabled ? "" : undefined}
         data-slot="media-player-fullscreen"
         data-state={isFullscreen ? "on" : "off"}
         disabled={isDisabled}
         {...fullscreenProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn("size-8", className)}
         onClick={onFullscreen}
       >
@@ -2635,7 +2634,7 @@ function MediaPlayerPiP(props: MediaPlayerPiPProps) {
   return (
     <MediaPlayerTooltip tooltip="Picture in picture" shortcut="P">
       <Button
-        type="button"
+        htmlType="button"
         aria-controls={context.mediaId}
         aria-label={isPictureInPicture ? "Exit pip" : "Enter pip"}
         data-disabled={isDisabled ? "" : undefined}
@@ -2643,8 +2642,8 @@ function MediaPlayerPiP(props: MediaPlayerPiPProps) {
         data-state={isPictureInPicture ? "on" : "off"}
         disabled={isDisabled}
         {...pipButtonProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn("size-8", className)}
         onClick={onPictureInPicture}
       >
@@ -2687,7 +2686,7 @@ function MediaPlayerCaptions(props: React.ComponentProps<typeof Button>) {
   return (
     <MediaPlayerTooltip tooltip="Captions" shortcut="C">
       <Button
-        type="button"
+        htmlType="button"
         aria-controls={context.mediaId}
         aria-label={isSubtitlesActive ? "Disable captions" : "Enable captions"}
         aria-pressed={isSubtitlesActive}
@@ -2696,8 +2695,8 @@ function MediaPlayerCaptions(props: React.ComponentProps<typeof Button>) {
         data-state={isSubtitlesActive ? "on" : "off"}
         disabled={isDisabled}
         {...captionsProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn("size-8", className)}
         onClick={onCaptionsToggle}
       >
@@ -2738,15 +2737,15 @@ function MediaPlayerDownload(props: React.ComponentProps<typeof Button>) {
   return (
     <MediaPlayerTooltip tooltip="Download" shortcut="D">
       <Button
-        type="button"
+        htmlType="button"
         aria-controls={context.mediaId}
         aria-label="Download"
         data-disabled={isDisabled ? "" : undefined}
         data-slot="media-player-download"
         disabled={isDisabled}
         {...downloadProps}
-        variant="ghost"
-        size="icon"
+        variant="text"
+        shape="square"
         className={cn("size-8", className)}
         onClick={onDownload}
       >
@@ -2756,7 +2755,7 @@ function MediaPlayerDownload(props: React.ComponentProps<typeof Button>) {
   );
 }
 
-interface MediaPlayerSettingsProps extends MediaPlayerPlaybackSpeedProps {}
+type MediaPlayerSettingsProps = MediaPlayerPlaybackSpeedProps;
 
 function MediaPlayerSettings(props: MediaPlayerSettingsProps) {
   const {
@@ -2874,15 +2873,15 @@ function MediaPlayerSettings(props: MediaPlayerSettingsProps) {
       <MediaPlayerTooltip tooltip="Settings">
         <DropdownMenuTrigger asChild>
           <Button
-            type="button"
+            htmlType="button"
             aria-controls={context.mediaId}
             aria-label="Settings"
             data-disabled={isDisabled ? "" : undefined}
             data-slot="media-player-settings"
             disabled={isDisabled}
             {...settingsProps}
-            variant="ghost"
-            size="icon"
+            variant="text"
+            shape="square"
             className={cn("size-8 aria-expanded:bg-accent/50", className)}
           >
             <SettingsIcon />

@@ -2,13 +2,8 @@
 
 import { LazyMotion, domAnimation, m } from "motion/react";
 import { useState, useCallback, useEffect } from "react";
-import { Outfit } from "next/font/google";
 import cn from "clsx";
 
-export const dancingFont = Outfit({
-  subsets: ["latin"],
-  variable: "--font-dancing",
-});
 
 interface DancingLettersProps {
   text?: string;
@@ -150,7 +145,6 @@ const DancingLetters = ({
       <m.div
         className={cn(
           "flex items-center justify-center select-none",
-          dancingFont.variable,
           className
         )}
         style={{ perspective: "1000px" }}

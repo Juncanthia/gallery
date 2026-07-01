@@ -1,4 +1,4 @@
-基于 Base UI Slider primitive 构建的音量控制组件。提供水平或垂直方向的音量滑块，内置媒体状态感知、静音切换和音量百分比显示，支持与媒体播放器 Store 深度集成。
+基于 Radix Slider primitive 构建的音量控制组件。提供水平或垂直方向的音量滑块，内置媒体状态感知、静音切换和音量百分比显示，支持与媒体播放器 Store 深度集成。
 
 <h2 id="when-to-use">何时使用</h2>
 
@@ -82,7 +82,7 @@ export default function Demo() {
 | disabled | 是否禁用 | `boolean` | `false` |
 | className | 附加样式类名 | `string` | - |
 
-Root 继承所有 `@base-ui/react/slider` 的 SliderPrimitive.Root 属性（`max`、`min`、`step` 等），其中 `max` 固定为 `1`，`min` 固定为 `0`，`step` 固定为 `0.01`。
+Root 继承所有 `@radix-ui/react-slider` 的 SliderPrimitive.Root 属性（`max`、`min`、`step` 等），其中 `max` 固定为 `1`，`min` 固定为 `0`，`step` 固定为 `0.01`。
 
 当媒体未就绪（readyState &lt; HAVE_METADATA）或无音频轨道时，组件自动禁用。
 

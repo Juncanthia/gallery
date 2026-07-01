@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-import { Button } from "@/components/limeplay/ui/button"
+import { Button } from "@/components/ui/button"
 import * as TimelineControlPrimitive from "@/components/limeplay/ui/timeline-control"
 import {
   Duration,
@@ -43,8 +43,8 @@ export function TimelineControlDemo() {
         onClick={() => {
           setShowRemaining(!showRemaining)
         }}
-        size="sm"
-        variant="ghost"
+        size="small"
+        variant="text"
       >
         {showRemaining ? (
           <Remaining className="text-xs font-medium" />

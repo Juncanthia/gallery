@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@/components/manifest/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/manifest/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Calendar, Clock, ExternalLink, Maximize2 } from 'lucide-react';
 import { useMemo } from 'react';
 import type { Post } from './types';
@@ -288,7 +288,7 @@ export function PostDetail({ data, actions, appearance }: PostDetailProps) {
               )}
             </div>
 
-            <Button size="sm" onClick={handleReadMore}>
+            <Button variant="solid" color="primary" size="small" onClick={handleReadMore}>
               Read
             </Button>
           </div>
@@ -357,7 +357,7 @@ export function PostDetail({ data, actions, appearance }: PostDetailProps) {
                 </span>
               )}
             </div>
-            <Button size="sm" onClick={handleReadMore}>
+            <Button variant="solid" color="primary" size="small" onClick={handleReadMore}>
               Read
             </Button>
           </div>

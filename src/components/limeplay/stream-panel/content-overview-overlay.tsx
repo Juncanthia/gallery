@@ -11,7 +11,7 @@ import type {
 
 import { cn } from "@/components/limeplay/lib/utils"
 
-import { Separator } from "../ui/separator"
+import { Separator } from "@/components/ui/separator"
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 
 interface ContentOverviewOverlayProps {

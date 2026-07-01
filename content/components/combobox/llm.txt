@@ -2,7 +2,7 @@
 category: Components
 title: Combobox
 subtitle: Combobox
-description: Combobox 是本地基础组件。
+description: Combobox 是基于 cmdk 与 Radix Popover 的搜索选择组件。
 demo:
   cols: 2
 group:
@@ -18,246 +18,118 @@ stack:
   cva: false
   radixSlot: false
   motion: false
-  baseUi: true
+  baseUi: false
   sonner: false
   rcComponent: false
   cssInJs: false
 ---
 
-# Combobox Combobox
+# Combobox
 
-Combobox 是本地基础组件。
-
-本组件是项目内的本地基础能力，API 和行为以源码为准，不对应 Ant Design 的完整公共组件契约。
+Combobox 是本地搜索选择组件，使用高层 `options` API。它基于 `cmdk` 提供搜索、过滤和键盘导航，基于 Radix Popover 提供弹层定位。
 
 ## 何时使用 {#when-to-use}
 
-适合在需要 Combobox 相关能力的界面中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
+适合选项数量较多、需要输入关键词过滤并选择单个值的表单场景。
 
-常见场景：
+不适合：
 
-- 需要复用统一设计语言、状态样式和可访问性约定。
-- 需要和本项目 Tailwind 主题变量、暗色模式、Radix/Base UI primitive 或本地交互行为保持一致。
-- 需要让 AI 或业务代码稳定地从 `@/components/ui/combobox` 引用组件，而不是直接引用第三方底层库。
-
-不推荐：
-
-- 为了照搬 Ant Design API 而新增兼容别名。
-- 在调用侧绕过组件 API，直接依赖内部 DOM 结构完成业务逻辑。
-- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+- 少量固定选项：优先使用 Select。
+- 多选标签输入：使用 Tags 或 MultiSelect。
+- 全局命令面板：直接使用 Command。
 
 ## 代码演示 {#examples}
 
-### 基础用法
-
 ```tsx
-import { Combobox } from "@/components/ui/combobox"
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox"
+
+const options: ComboboxOption[] = [
+  { label: "Apple", value: "apple" },
+  { label: "Banana", value: "banana" },
+]
 
 export default function Demo() {
-  return (
-    <Combobox>
-      Combobox
-    </Combobox>
-  )
+  return <Combobox className="w-48" options={options} placeholder="选择水果" />
 }
 ```
-
-> 说明：这是面向 LLM 的最小导入示例。复杂组件应结合下方 API 摘要和源码类型补充必需 props，例如 `options`、`items`、`columns`、`dataSource` 等。
 
 ## 核心导出 {#exports}
 
 - `Combobox`
-- `ComboboxChip`
-- `ComboboxChips`
-- `ComboboxChipsInput`
-- `ComboboxCollection`
-- `ComboboxContent`
-- `ComboboxEmpty`
-- `ComboboxGroup`
-- `ComboboxInput`
-- `ComboboxItem`
-- `ComboboxLabel`
-- `ComboboxList`
-- `ComboboxSeparator`
-- `ComboboxTrigger`
-- `ComboboxValue`
-- `useComboboxAnchor`
+- `ComboboxOption`
+- `ComboboxOptionGroup`
+- `ComboboxOptionItem`
+- `ComboboxProps`
 
 ## API {#api}
 
 ### Combobox
 
-根组件，直接使用 Base UI `Combobox.Root`。接受其所有 props。
-
-### ComboboxInput
-
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| showTrigger | 是否显示下拉触发器 | `boolean` | `true` |
-| showClear | 是否显示清除按钮 | `boolean` | `false` |
+| options | 选项数组，支持扁平选项和分组选项 | `ComboboxOptionItem[]` | `[]` |
+| value | 受控选中值 | `string` | - |
+| defaultValue | 默认选中值 | `string` | - |
+| onValueChange | 选中值变化回调 | `(value: string \| undefined) => void` | - |
+| onChange | `onValueChange` 的别名 | `(value: string \| undefined) => void` | - |
+| onSelect | 选择选项时触发 | `(value: string, option: ComboboxOption) => void` | - |
+| placeholder | 未选择时的占位文本 | `string` | `"请选择"` |
+| searchPlaceholder | 搜索输入框占位文本 | `string` | `"搜索..."` |
+| emptyContent | 无匹配结果内容 | `React.ReactNode` | `"无匹配结果"` |
+| allowClear | 是否允许清除当前选中值 | `boolean` | `false` |
 | disabled | 是否禁用 | `boolean` | `false` |
-| className | 根元素 CSS 类名 | `string` | - |
+| open | 受控弹层状态 | `boolean` | - |
+| defaultOpen | 默认弹层状态 | `boolean` | `false` |
+| onOpenChange | 弹层开关变化回调 | `(open: boolean) => void` | - |
+| onSearch | 搜索输入变化回调 | `(value: string) => void` | - |
+| filterOption | 本地过滤逻辑，设为 `false` 可交给外部异步过滤 | `boolean \| ((input, option) => boolean)` | `true` |
+| optionRender | 自定义选项渲染 | `(option: ComboboxOption) => React.ReactNode` | - |
+| popupRender | 自定义弹层列表包裹 | `(originNode: React.ReactNode) => React.ReactNode` | - |
+| className | 触发器样式 | `string` | - |
+| contentClassName | 弹层样式 | `string` | - |
+| listClassName | 列表样式 | `string` | - |
 
-> 接受 Base UI `ComboboxPrimitive.Input.Props` 的所有 props。
+### ComboboxOption
 
-### ComboboxTrigger
+```ts
+type ComboboxOption = {
+  label: string
+  value: string
+  disabled?: boolean
+  description?: React.ReactNode
+  keywords?: string[]
+  group?: string
+}
+```
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-| children | 触发器内容 | `React.ReactNode` | - |
+### ComboboxOptionGroup
 
-> 接受 Base UI `ComboboxPrimitive.Trigger.Props` 的所有 props。
-
-### ComboboxContent
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| side | 弹出方向 | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"` |
-| sideOffset | 弹出偏移量 | `number` | `6` |
-| align | 对齐方式 | `"start" \| "center" \| "end"` | `"start"` |
-| alignOffset | 对齐偏移量 | `number` | `0` |
-| anchor | 锚点元素引用 | `HTMLElement \| null` | - |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受 Base UI `ComboboxPrimitive.Popup.Props` 的所有 props。
-
-### ComboboxList
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受 Base UI `ComboboxPrimitive.List.Props` 的所有 props。
-
-### ComboboxItem
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-| children | 选项内容 | `React.ReactNode` | - |
-
-> 接受 Base UI `ComboboxPrimitive.Item.Props` 的所有 props。
-
-### ComboboxGroup
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受 Base UI `ComboboxPrimitive.Group.Props` 的所有 props。
-
-### ComboboxLabel
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受 Base UI `ComboboxPrimitive.GroupLabel.Props` 的所有 props。
-
-### ComboboxValue
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| - | 渲染当前选中值的文本 | - | - |
-
-> 接受 Base UI `ComboboxPrimitive.Value.Props` 的所有 props。
-
-### ComboboxClear
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受 Base UI `ComboboxPrimitive.Clear.Props` 的所有 props。
-
-### ComboboxEmpty
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受 Base UI `ComboboxPrimitive.Empty.Props` 的所有 props。
-
-### ComboboxSeparator
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 接受 Base UI `ComboboxPrimitive.Separator.Props` 的所有 props。
-
-### ComboboxCollection
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| - | 定义选项集合 | - | - |
-
-> 接受 Base UI `ComboboxPrimitive.Collection.Props` 的所有 props。
-
-### ComboboxChips
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 多选标签容器。接受 Base UI `ComboboxPrimitive.Chips.Props` 的所有 props。
-
-### ComboboxChip
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| showRemove | 是否显示移除按钮 | `boolean` | `true` |
-| className | 根元素 CSS 类名 | `string` | - |
-| children | 标签内容 | `React.ReactNode` | - |
-
-> 接受 Base UI `ComboboxPrimitive.Chip.Props` 的所有 props。
-
-### ComboboxChipsInput
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| className | 根元素 CSS 类名 | `string` | - |
-
-> 多选标签中的输入框。接受 Base UI `ComboboxPrimitive.Input.Props` 的所有 props。
-
-### useComboboxAnchor
-
-返回一个 `React.RefObject<HTMLDivElement>`，用于绑定锚点元素。
+```ts
+type ComboboxOptionGroup = {
+  label: string
+  options: ComboboxOption[]
+}
+```
 
 ## Semantic DOM {#semantic-dom}
 
-源码中出现的稳定语义槽位：
+稳定语义槽位：
 
-- `combobox-chip`
-- `combobox-chip-input`
-- `combobox-chip-remove`
-- `combobox-chips`
-- `combobox-clear`
-- `combobox-collection`
-- `combobox-content`
-- `combobox-empty`
-- `combobox-group`
-- `combobox-item`
-- `combobox-label`
-- `combobox-list`
-- `combobox-separator`
-- `combobox-trigger`
-- `combobox-value`
-- `input-group-button`
+- `combobox`
+- `popover-content`
+- `command`
+- `command-input`
+- `command-list`
+- `command-empty`
+- `command-group`
+- `command-item`
 
-额外状态属性：
-
-- `data-chips`
-- `data-slot`
-
-生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+选项选中状态使用 `data-checked=true`。
 
 ## 样式模型 {#styling-model}
 
 - 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
-- 如果源码使用 CVA，则变体样式集中在组件文件或相邻 `*-variants.ts` 中。
-- 如果源码包装 Radix/Base UI primitive，则交互状态、键盘行为和 ARIA 基础能力来自底层 primitive，本地组件负责视觉和 API 收敛。
+- 触发器复用 `Button`，弹层复用 `PopoverContent`，列表复用 `Command`。
 - 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground`、`ring-ring` 等项目级语义变量。
 
 ## 依赖与实现说明 {#implementation-notes}
@@ -268,41 +140,30 @@ export default function Demo() {
 
 直接依赖摘要：
 
-- `@base-ui/react`
+- `cmdk`
+- `radix-ui`
+- `@radix-ui/react-use-controllable-state`
 - `@/components/ui/button`
-- `@/components/ui/input-group`
+- `@/components/ui/command`
+- `@/components/ui/popover`
 
 实现注意：
 
 1. 组件 API 以本地 TypeScript 类型为准。
-2. 样式应优先通过组件 props、variant 或本地 className 扩展点表达。
-3. 如果需要新增能力，应先修改该组件源码和相邻 variant 文件，再更新本 llm 文档。
+2. 异步搜索时设置 `filterOption={false}`，通过 `onSearch` 更新外部 `options`。
+3. 多选标签输入不属于 Combobox 职责，应使用 Tags 或 MultiSelect。
 4. 不要把第三方文档中的全量 API 视为本地已支持能力。
 
 ## 可访问性 {#accessibility}
 
-- 保留原生元素或底层 primitive 的键盘语义。
-- 交互型组件应提供可访问名称，例如 `aria-label`、`title` 或可见文本。
-- 禁用、加载、展开、选中等状态应优先使用组件已有 props，而不是只改视觉 class。
-- 纯图标触发器必须提供明确的可访问名称。
-
-## 与 Ant Design 的取舍 {#antd-differences}
-
-| 方向 | 本地决策 |
-| --- | --- |
-| API 来源 | 以 `src/components/ui/combobox.tsx` 的 TypeScript 类型为准 |
-| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
-| 全局配置 | 不依赖 AntD ConfigProvider |
-| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
-| 兼容目标 | 借鉴 AntD 使用心智，但不承诺 API 兼容 |
+- 触发器使用 `role="combobox"` 与 `aria-expanded`。
+- 搜索和列表键盘行为由 cmdk 提供。
+- 禁用、展开、选中等状态优先使用组件 props 表达。
 
 ## LLM 使用规则 {#llm-rules}
 
-当 AI 生成本项目 Combobox 代码时，应遵守：
-
-1. 从 `@/components/ui/combobox` 导入，不要从 `antd` 导入。
-2. 只使用本文件 API 摘要和源码中存在的 props。
-3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
-4. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
-5. 交互组件必须保留键盘和 ARIA 语义，纯图标操作必须补 `aria-label`。
-6. 如果不确定某个 AntD API 是否存在，先检查 `src/components/ui/combobox.tsx`，不要凭 AntD 记忆生成。
+1. 从 `@/components/ui/combobox` 导入 `Combobox` 和类型。
+2. 使用 `options` 配置，不要生成旧的 primitive 子组件 API。
+3. 不要引入 Ant Design 相关依赖。
+4. 多选标签输入使用 Tags/MultiSelect。
+5. 不确定 API 时检查 `src/components/ui/combobox.tsx`。

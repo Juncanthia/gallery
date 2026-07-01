@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/manifest/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,8 +8,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/manifest/components/ui/card"
-import { Separator } from "@/components/manifest/components/ui/separator"
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import { Check, CreditCard, ShieldCheck } from "lucide-react"
 
 /**
@@ -148,14 +148,14 @@ export function PayConfirm({ data, actions, appearance, control }: PayConfirmPro
       </CardContent>
       <CardFooter className="flex gap-3">
         <Button
-          variant="outline"
+          variant="outlined"
           className="flex-1"
           onClick={onCancel}
           disabled={isLoading}
         >
           Cancel
         </Button>
-        <Button className="flex-1" onClick={onConfirm} disabled={isLoading}>
+        <Button variant="solid" color="primary" className="flex-1" onClick={onConfirm} disabled={isLoading}>
           {isLoading ? "Processing..." : "Confirm"}
         </Button>
       </CardFooter>

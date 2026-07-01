@@ -239,5 +239,5 @@ function BadgeRibbon({
   )
 }
 
-export { Badge, BadgeRibbon }
+export { Badge, BadgeRibbon, badgeVariants }
 export type { BadgeProps, BadgeRibbonProps, BadgeRibbonPlacement, BadgeSize, BadgeStatus }

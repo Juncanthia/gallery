@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { DataTableProvider } from "@/components/ui/dt-data-table-provider"
 import { DataTableFloatingBar } from "@/components/ui/dt-data-table-floating-bar"
-import { Button } from "@hyper/shadcn/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   useReactTable,
   getCoreRowModel,

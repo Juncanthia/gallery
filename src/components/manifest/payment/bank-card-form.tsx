@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { CreditCard, Lock } from 'lucide-react'
 import { useState } from 'react'
 
@@ -142,7 +142,7 @@ export function BankCardForm({ data, actions, appearance }: BankCardFormProps) {
           className="h-8 bg-transparent border-0 outline-none text-sm w-10 sm:text-center placeholder:text-muted-foreground"
         />
       </div>
-      <Button size="sm" onClick={handleSubmit} className="w-full sm:w-auto shrink-0 sm:ml-1">
+      <Button variant="solid" color="primary" size="small" onClick={handleSubmit} className="w-full sm:w-auto shrink-0 sm:ml-1">
         <Lock className="h-3 w-3 mr-1.5" />
         {label}
       </Button>

@@ -1,15 +1,15 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
-import { Input } from '@/components/manifest/components/ui/input'
-import { Label } from '@/components/manifest/components/ui/label'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/components/manifest/components/ui/select'
+} from '@/components/ui/select'
 import { cn } from '@/components/manifest/lib/utils'
 import { demoIssueReportFormData } from './demo/form'
 import { ChevronDown, ChevronUp, Paperclip, Send, X } from 'lucide-react'
@@ -595,17 +595,17 @@ export function IssueReportForm({
         {/* Actions */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2">
           <Button
-            variant="outline"
-            size="sm"
+            variant="outlined"
+            size="small"
             onClick={() => fileInputRef.current?.click()}
             className="h-9 w-full sm:w-auto"
           >
             <Paperclip className="h-4 w-4 mr-1.5" />
             Attach a file
           </Button>
-          <Button
+          <Button variant="solid" color="primary"
             onClick={handleSubmit}
-            size="sm"
+            size="small"
             className="h-9 w-full sm:w-auto"
           >
             <Send className="h-4 w-4 mr-1.5" />

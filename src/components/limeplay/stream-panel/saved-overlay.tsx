@@ -8,8 +8,8 @@ import {
 } from "@/components/limeplay/stream-panel/use-stream-panel"
 import { cn } from "@/components/limeplay/lib/utils"
 
-import { Button } from "../ui/button"
-import { Separator } from "../ui/separator"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 
 interface SavedOverlayProps {
@@ -68,8 +68,8 @@ export function SavedOverlay({
                 hover:bg-foreground/4 hover:text-foreground
               "
               onClick={() => removeSavedStream(stream.id)}
-              size="icon"
-              variant="ghost"
+              shape="square"
+              variant="text"
             >
               <XIcon className="size-3.5" />
             </Button>

@@ -1,15 +1,13 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
-import { Input } from '@/components/manifest/components/ui/input'
-import { Label } from '@/components/manifest/components/ui/label'
-import { Separator } from '@/components/manifest/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { cn } from '@/components/manifest/lib/utils'
 import {
   Bell,
   Check,
-  Globe,
-  Key,
   Loader2,
   Monitor,
   Moon,
@@ -18,7 +16,6 @@ import {
   Shield,
   Sun,
   Trash2,
-  User,
   UserCircle,
 } from 'lucide-react'
 import { useState } from 'react'
@@ -289,12 +286,6 @@ export function SettingsPanel({
     }
     setSaveSuccess(true)
     setTimeout(() => setSaveSuccess(false), 3000)
-  }
-
-  const themeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-    light: Sun,
-    dark: Moon,
-    system: Monitor,
   }
 
   return (
@@ -578,7 +569,7 @@ export function SettingsPanel({
       {/* Footer: Save + Danger Zone */}
       <div className="px-6 py-4 flex flex-col gap-4">
         <div className="flex items-center gap-3">
-          <Button
+          <Button variant="solid" color="primary"
             onClick={handleSave}
             disabled={isLoading}
             className="gap-2"
@@ -615,8 +606,8 @@ export function SettingsPanel({
                 </p>
               </div>
               <Button
-                variant="outline"
-                size="sm"
+                variant="outlined"
+                size="small"
                 onClick={() => actions?.onDeleteAccount?.()}
                 className="text-red-600 border-red-200 hover:bg-red-50 shrink-0 gap-1.5"
               >

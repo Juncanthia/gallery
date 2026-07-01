@@ -98,7 +98,7 @@ InlineEdit 为零 props 组件，内部管理编辑态和文本值状态。
 - 样式由 Tailwind CSS className 直接控制，不使用 CVA。
 - 动画由 motion/react 的 `AnimatePresence`、`motion.div`、`motion.span` 驱动。
 - 图标使用 `@hugeicons/core-free-icons` 的 `Edit01Icon` 和 `Tick02Icon`。
-- Input 组件来自 `@hyper/uselayouts/_shared/ui/input`。
+- Input 组件来自主线 `@/components/ui/input`。
 - class 合并使用 `cn` 工具函数。
 
 动画细节：
@@ -120,7 +120,7 @@ InlineEdit 为零 props 组件，内部管理编辑态和文本值状态。
 - `motion/react` — 图标切换动画、容器 layout 动画。
 - `@hugeicons/core-free-icons` — `Edit01Icon`、`Tick02Icon`。
 - `@hugeicons/react` — `HugeiconsIcon` 组件。
-- `@hyper/uselayouts/_shared/ui/input` — Input 输入框。
+- `@/components/ui/input` — Input 输入框。
 - `@hyper/uselayouts/lib/cn` — cn 工具函数。
 
 实现注意：

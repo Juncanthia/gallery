@@ -14,7 +14,7 @@ import {
   PopoverAnchor,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/dice/ui/popover";
+} from "@/components/ui/popover";
 
 const ROOT_NAME = "TimePicker";
 const LABEL_NAME = "TimePickerLabel";
@@ -1483,9 +1483,8 @@ function useTimePickerGroupContext(consumerName: string) {
   return context;
 }
 
-interface TimePickerContentProps
-  extends DivProps,
-    React.ComponentProps<typeof PopoverContent> {}
+type TimePickerContentProps = DivProps &
+  React.ComponentProps<typeof PopoverContent>;
 
 function TimePickerContent(props: TimePickerContentProps) {
   const {
@@ -1594,7 +1593,7 @@ function TimePickerContent(props: TimePickerContentProps) {
         sideOffset={sideOffset}
         {...contentProps}
         className={cn(
-          "flex w-auto max-w-(--radix-popover-trigger-width) p-0",
+          "flex w-auto max-w-(--radix-popover-trigger-width) gap-0 p-0",
           className,
         )}
         onOpenAutoFocus={onOpenAutoFocus}
@@ -1625,7 +1624,7 @@ function useTimePickerColumnContext(consumerName: string) {
   return context;
 }
 
-interface TimePickerColumnProps extends DivProps {}
+type TimePickerColumnProps = DivProps;
 
 function TimePickerColumn(props: TimePickerColumnProps) {
   const { children, className, ref, ...columnProps } = props;

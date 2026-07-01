@@ -6,12 +6,12 @@ import { HugeiconsIcon } from "@hugeicons/react"
 
 import { cn } from "@/components/extend/lib/utils"
 import { Button } from "@/components/extend/components/ui/button"
-import { Input } from "@/components/extend/components/ui/input"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/extend/components/ui/popover"
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -23,7 +23,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/extend/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 
 const COLOR_PICKER_PRESETS = [
   "#111827",

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/components/manifest/lib/utils'
 import { Minus, Plus, Info } from 'lucide-react'
 import { useState } from 'react'
@@ -158,7 +158,7 @@ export function TicketTierSelect({ data, actions, appearance, control }: TicketT
 
   const getSelectionsList = (sels: Record<number, number> = selections): TicketSelection[] => {
     return Object.entries(sels)
-      .filter(([_, qty]) => qty > 0)
+      .filter(([, qty]) => qty > 0)
       .map(([indexStr, qty]) => {
         const tierIndex = parseInt(indexStr, 10)
         const tier = tiers[tierIndex]
@@ -215,8 +215,8 @@ export function TicketTierSelect({ data, actions, appearance, control }: TicketT
                   {tier.name && <h3 className="font-medium">{tier.name}</h3>}
                   <div className="flex items-center gap-3">
                     <Button
-                      variant="outline"
-                      size="icon"
+                      variant="outlined"
+                      shape="square"
                       className={cn(
                         'h-8 w-8 rounded-full',
                         qty === 0 && 'opacity-50'
@@ -227,8 +227,8 @@ export function TicketTierSelect({ data, actions, appearance, control }: TicketT
                       <Minus className="h-4 w-4" />
                     </Button>
                     <span className="w-6 text-center font-medium">{qty}</span>
-                    <Button
-                      size="icon"
+                    <Button variant="solid" color="primary"
+                      shape="square"
                       className="h-8 w-8 rounded-full"
                       onClick={() => updateQuantity(index, 1)}
                       disabled={qty >= (tier.maxPerOrder ?? 10) || qty >= (tier.available ?? 100)}
@@ -270,9 +270,9 @@ export function TicketTierSelect({ data, actions, appearance, control }: TicketT
 
         {/* Checkout button */}
         <div className="mt-6">
-          <Button
+          <Button variant="solid" color="primary"
             className="w-full"
-            size="lg"
+            size="large"
             onClick={handleCheckout}
             disabled={!hasSelections}
           >

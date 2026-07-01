@@ -324,6 +324,7 @@ function AccordionContent({
 
 export {
   Accordion,
+  AccordionContent as AccordionPanel,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,

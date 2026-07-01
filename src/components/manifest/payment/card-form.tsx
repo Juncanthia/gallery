@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -9,9 +9,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle
-} from '@/components/manifest/components/ui/card'
-import { Input } from '@/components/manifest/components/ui/input'
-import { Label } from '@/components/manifest/components/ui/label'
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { CreditCard, Lock } from 'lucide-react'
 
 /**
@@ -184,7 +184,7 @@ export function CardForm({ actions, control }: CardFormProps) {
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button variant="solid" color="primary" htmlType="submit" className="w-full" disabled={isLoading}>
             {isLoading ? (
               'Processing...'
             ) : (

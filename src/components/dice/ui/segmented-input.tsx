@@ -7,7 +7,7 @@ import {
 } from "radix-ui";
 import * as React from "react";
 import { cn } from "@/components/dice/lib/utils";
-import { Input } from "@/components/dice/ui/input";
+import { Input } from "@/components/ui/input";
 
 const ROOT_NAME = "SegmentedInput";
 const ITEM_NAME = "SegmentedInputItem";

@@ -1,3 +1,3 @@
 "use client"
 
-export { Button } from "@/components/extend/components/ui/button"
+export { Button } from "@/components/ui/button"

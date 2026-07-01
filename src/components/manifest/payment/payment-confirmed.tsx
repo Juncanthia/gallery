@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { Check, ExternalLink } from 'lucide-react'
 import { demoPaymentConfirmed } from './demo/payment'
 
@@ -148,8 +148,8 @@ export function PaymentConfirmed({ data, actions, appearance }: PaymentConfirmed
           )}
 
           <Button
-            variant="outline"
-            size="sm"
+            variant="outlined"
+            size="small"
             onClick={onTrackOrder}
             className="w-full"
           >
@@ -191,8 +191,8 @@ export function PaymentConfirmed({ data, actions, appearance }: PaymentConfirmed
             </div>
           )}
           <Button
-            variant="outline"
-            size="sm"
+            variant="outlined"
+            size="small"
             onClick={onTrackOrder}
             className="flex-shrink-0"
           >
@@ -259,7 +259,7 @@ export function PaymentConfirmed({ data, actions, appearance }: PaymentConfirmed
               )}
             </div>
           )}
-          <Button variant="outline" size="sm" className="w-full" onClick={onTrackOrder}>
+          <Button variant="outlined" size="small" className="w-full" onClick={onTrackOrder}>
             Track order
             <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
           </Button>
@@ -310,7 +310,7 @@ export function PaymentConfirmed({ data, actions, appearance }: PaymentConfirmed
             </div>
           </div>
           <div className="mt-4 pt-4 border-t flex justify-end">
-            <Button variant="outline" size="sm" onClick={onTrackOrder}>
+            <Button variant="outlined" size="small" onClick={onTrackOrder}>
               Track order
               <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
             </Button>

@@ -7,10 +7,10 @@ import type { StreamPanelContentKind } from "@/components/limeplay/stream-panel/
 
 import { getPlaylistPresetsForType } from "@/components/limeplay/stream-panel/content-catalog"
 import { useStreamPanelStore } from "@/components/limeplay/stream-panel/use-stream-panel"
-import { Field, FieldLabel } from "@/components/limeplay/ui/field"
-import { Popover, PopoverContent } from "@/components/limeplay/ui/popover"
-import { Separator } from "@/components/limeplay/ui/separator"
-import { ToggleGroup, ToggleGroupItem } from "@/components/limeplay/ui/toggle-group"
+import { Field, FieldLabel } from "@/components/ui/form-field"
+import { Popover, PopoverContent } from "@/components/ui/popover"
+import { Separator } from "@/components/ui/separator"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { getPresetsForType, type StreamPreset } from "@/components/limeplay/lib/stream-presets"
 import { cn } from "@/components/limeplay/lib/utils"
 
@@ -321,7 +321,7 @@ export function StreamPanel({
         style={
           {
             "--stream-panel-max-height":
-              "min(420px, calc(var(--available-height, 100dvh) - 0.5rem))",
+              "min(420px, calc(var(--radix-popover-content-available-height, 100dvh) - 0.5rem))",
           } as React.CSSProperties
         }
       >
@@ -407,13 +407,14 @@ function PanelToggleRow({
     <div className="flex h-10 items-center justify-between rounded-lg px-2.5 text-sm">
       <span className="font-medium text-foreground/85">{children}</span>
       <ToggleGroup
-        onValueChange={(v) => {
-          const nextValue = v[0]
+        className="gap-2"
+        onValueChange={(nextValue) => {
           if (!nextValue) return
 
           onValueChange(nextValue === "on")
         }}
-        value={value ? ["on"] : ["off"]}
+        type="single"
+        value={value ? "on" : "off"}
       >
         <ToggleGroupItem className="h-7 rounded-lg px-3 text-xs" value="off">
           Off

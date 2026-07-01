@@ -6,7 +6,7 @@ import {
   SelectGroup as SelectGroupPrimitive,
   SelectItem,
   Select as SelectPrimitive,
-} from "@/components/limeplay/ui/select"
+} from "@/components/ui/select"
 import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"
 
 export function SelectRoot(

@@ -21,8 +21,8 @@ import {
   DialogHeader,
   DialogPanel,
   DialogTitle,
-} from "@/components/extend/components/ui/dialog"
-import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+} from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 type BoundingBox = {
   x: number

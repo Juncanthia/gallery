@@ -1,6 +1,6 @@
 "use client"
 
-import { Slider as SliderPrimitive } from "@base-ui/react/slider"
+import * as SliderPrimitive from "@radix-ui/react-slider"
 import React, { useImperativeHandle, useRef, useState } from "react"
 
 import { cn } from "@/components/limeplay/lib/utils"
@@ -14,12 +14,12 @@ import { useVolumeStore } from "@/components/limeplay/hooks/use-volume"
 const VOLUME_RESET_BASE = 0.05
 
 export const Root = React.forwardRef<
-  HTMLDivElement,
+  HTMLSpanElement,
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
 >((props, ref) => {
-  const internalRef = useRef<HTMLDivElement>(
+  const internalRef = useRef<HTMLSpanElement>(
     null
-  ) as React.RefObject<HTMLDivElement>
+  ) as React.RefObject<HTMLSpanElement>
   const { className, orientation = "horizontal", ...etc } = props
   const volume = useVolumeStore((state) => state.level)
   const hasAudio = useVolumeStore((state) => state.hasAudio)
@@ -47,13 +47,13 @@ export const Root = React.forwardRef<
   }
 
   const trackEvents = useTrackEvents({
-    onPointerDown: (progress, event) => {
+    onPointerDown: (_progress, event) => {
       if (disabled) return
       const newVolume = getVolumeFromEvent(event)
       setCurrentValue(newVolume)
       setVolume(newVolume)
     },
-    onPointerMove: (progress, isPointerDown, event) => {
+    onPointerMove: (_progress, isPointerDown, event) => {
       if (disabled) return
       if (isPointerDown) {
         const newVolume = getVolumeFromEvent(event)
@@ -92,7 +92,7 @@ export const Root = React.forwardRef<
 Root.displayName = "VolumeRoot"
 
 export const Track = React.forwardRef<
-  HTMLDivElement,
+  HTMLSpanElement,
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Track>
 >((props, ref) => {
   const { className, ...etc } = props
@@ -112,8 +112,8 @@ export const Track = React.forwardRef<
 Track.displayName = "VolumeTrack"
 
 export const Progress = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Track>
+  HTMLSpanElement,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Range>
 >((props, ref) => {
   const { className, ...etc } = props
   const volume = useVolumeStore((state) => state.level)
@@ -121,7 +121,7 @@ export const Progress = React.forwardRef<
   const currentValue = muted ? 0 : volume
 
   return (
-    <SliderPrimitive.Indicator
+    <SliderPrimitive.Range
       className={cn(
         `
           h-full w-(--lp-volume-value) bg-primary
@@ -153,7 +153,7 @@ interface ThumbProps extends React.ComponentPropsWithoutRef<
   showVolumeText?: boolean
 }
 
-export const Thumb = React.forwardRef<HTMLDivElement, ThumbProps>(
+export const Thumb = React.forwardRef<HTMLSpanElement, ThumbProps>(
   (props, ref) => {
     const { className, showVolumeText = true, ...etc } = props
     const volume = useVolumeStore((state) => state.level)

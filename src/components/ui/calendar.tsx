@@ -9,136 +9,29 @@ import {
 } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { buttonVariants } from "@/components/ui/button-variants"
-import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, ChevronDown as ChevronDownIcon } from "lucide-react"
-
-type CalendarCellInfo = {
-  type: "date";
-  originNode: React.ReactNode;
-  today: Date;
-}
-
-type CalendarPanelMode = "month" | "year"
-
-type CalendarHeaderRenderConfig = {
-  value: Date;
-  type: CalendarPanelMode;
-  onChange: (date: Date) => void;
-  onTypeChange: (type: CalendarPanelMode) => void;
-}
-
-type CalendarProps = React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>["variant"]
-  value?: Date
-  defaultValue?: Date
-  onChange?: (date: Date) => void
-  validRange?: [Date, Date]
-  disabledDate?: (date: Date) => boolean
-  dateCellRender?: (date: Date) => React.ReactNode
-  cellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
-  fullCellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
-  headerRender?: (config: CalendarHeaderRenderConfig) => React.ReactNode
-  fullscreen?: boolean
-  panelMode?: CalendarPanelMode
-  defaultPanelMode?: CalendarPanelMode
-  onPanelChange?: (date: Date, mode: CalendarPanelMode) => void
-  showWeek?: boolean
-}
-
-function isBeforeDay(date: Date, target: Date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate()) < new Date(target.getFullYear(), target.getMonth(), target.getDate())
-}
-
-function isAfterDay(date: Date, target: Date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate()) > new Date(target.getFullYear(), target.getMonth(), target.getDate())
-}
+import { Button, buttonVariants } from "@/components/ui/button"
+import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
   captionLayout = "label",
-  buttonVariant = "text",
+  buttonVariant = "ghost",
   locale,
   formatters,
   components,
-  value,
-  defaultValue,
-  onChange,
-  validRange,
-  disabledDate,
-  dateCellRender,
-  cellRender,
-  fullCellRender,
-  headerRender,
-  fullscreen = false,
-  panelMode,
-  defaultPanelMode = "month",
-  onPanelChange,
-  showWeek,
-  disabled,
-  onMonthChange,
-  showWeekNumber,
   ...props
-}: CalendarProps) {
+}: React.ComponentProps<typeof DayPicker> & {
+  buttonVariant?: React.ComponentProps<typeof Button>["variant"]
+}) {
   const defaultClassNames = getDefaultClassNames()
-  const isSingleApi = value !== undefined || defaultValue !== undefined || onChange !== undefined
-  const [internalValue, setInternalValue] = React.useState(defaultValue ?? value ?? new Date())
-  const [internalPanelMode, setInternalPanelMode] = React.useState(defaultPanelMode)
-  const mergedValue = value ?? internalValue
-  const mergedPanelMode = panelMode ?? internalPanelMode
-  const mergedShowWeekNumber = showWeekNumber ?? showWeek
-
-  const changeValue = React.useCallback((date?: Date) => {
-    if (!date) return
-
-    if (value === undefined) {
-      setInternalValue(date)
-    }
-    onChange?.(date)
-  }, [onChange, value])
-
-  const changePanelValue = React.useCallback((date: Date) => {
-    changeValue(date)
-    onPanelChange?.(date, mergedPanelMode)
-  }, [changeValue, mergedPanelMode, onPanelChange])
-
-  const changePanelMode = React.useCallback((nextMode: CalendarPanelMode) => {
-    if (panelMode === undefined) {
-      setInternalPanelMode(nextMode)
-    }
-    onPanelChange?.(mergedValue, nextMode)
-  }, [mergedValue, onPanelChange, panelMode])
-
-  const handleMonthChange = React.useCallback((date: Date) => {
-    onMonthChange?.(date)
-    onPanelChange?.(date, mergedPanelMode)
-  }, [mergedPanelMode, onMonthChange, onPanelChange])
-
-  const mergedDisabled = React.useMemo(() => {
-    const disabledMatchers = Array.isArray(disabled) ? [...disabled] : disabled ? [disabled] : []
-
-    if (validRange) {
-      disabledMatchers.push((date: Date) => isBeforeDay(date, validRange[0]) || isAfterDay(date, validRange[1]))
-    }
-
-    if (disabledDate) {
-      disabledMatchers.push(disabledDate)
-    }
-
-    return disabledMatchers.length ? disabledMatchers : undefined
-  }, [disabled, disabledDate, validRange])
 
   return (
-    <div data-slot="calendar-wrapper" className={cn(fullscreen && "w-full", !fullscreen && "w-fit")}>
-      {headerRender ? headerRender({ value: mergedValue, type: mergedPanelMode, onChange: changePanelValue, onTypeChange: changePanelMode }) : null}
-      <DayPicker
+    <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
         "group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
-        fullscreen && "w-full",
-        !fullscreen && "rounded-md border",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className
@@ -211,7 +104,7 @@ function Calendar({
         ),
         day: cn(
           "group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)",
-          mergedShowWeekNumber
+          props.showWeekNumber
             ? "[&:nth-child(2)[data-selected=true]_button]:rounded-l-(--cell-radius)"
             : "[&:first-child[data-selected=true]_button]:rounded-l-(--cell-radius)",
           defaultClassNames.day
@@ -240,10 +133,6 @@ function Calendar({
         hidden: cn("invisible", defaultClassNames.hidden),
         ...classNames,
       }}
-      disabled={mergedDisabled}
-      onMonthChange={handleMonthChange}
-      showWeekNumber={mergedShowWeekNumber}
-      {...(isSingleApi ? { ...props, mode: "single" as const, selected: mergedValue, onSelect: changeValue } : props)}
       components={{
         Root: ({ className, rootRef, ...props }) => {
           return (
@@ -273,13 +162,7 @@ function Calendar({
           )
         },
         DayButton: ({ ...props }) => (
-          <CalendarDayButton
-            locale={locale}
-            dateCellRender={dateCellRender}
-            cellRender={cellRender}
-            fullCellRender={fullCellRender}
-            {...props}
-          />
+          <CalendarDayButton locale={locale} {...props} />
         ),
         WeekNumber: ({ children, ...props }) => {
           return (
@@ -292,8 +175,8 @@ function Calendar({
         },
         ...components,
       }}
+      {...props}
     />
-    </div>
   )
 }
 
@@ -302,43 +185,20 @@ function CalendarDayButton({
   day,
   modifiers,
   locale,
-  type,
-  children,
-  dateCellRender,
-  cellRender,
-  fullCellRender,
   ...props
-}: React.ComponentProps<typeof DayButton> & {
-  locale?: Partial<Locale>
-  dateCellRender?: (date: Date) => React.ReactNode
-  cellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
-  fullCellRender?: (date: Date, info: CalendarCellInfo) => React.ReactNode
-}) {
+}: React.ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {
   const defaultClassNames = getDefaultClassNames()
-  const buttonProps = { ...props } as Omit<typeof props, "color">
-  delete (buttonProps as { color?: unknown }).color
 
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
 
-  const originNode = <>{children}</>
-  const cellInfo = { type: "date", originNode, today: new Date() } satisfies CalendarCellInfo
-  const extraNode = cellRender?.(day.date, cellInfo) ?? dateCellRender?.(day.date)
-  const contentNode = fullCellRender?.(day.date, cellInfo) ?? (
-    <>
-      {originNode}
-      {extraNode ? <span data-slot="calendar-cell-extra" className="text-[10px] leading-none opacity-80">{extraNode}</span> : null}
-    </>
-  )
-
   return (
     <Button
       ref={ref}
-      variant="text"
-      shape="square"
-      htmlType={type}
+      variant="ghost"
+      size="icon"
       data-day={day.date.toLocaleDateString(locale?.code)}
       data-selected-single={
         modifiers.selected &&
@@ -354,12 +214,9 @@ function CalendarDayButton({
         defaultClassNames.day,
         className
       )}
-      {...buttonProps}
-    >
-      {contentNode}
-    </Button>
+      {...props}
+    />
   )
 }
 
 export { Calendar, CalendarDayButton }
-export type { CalendarCellInfo, CalendarHeaderRenderConfig, CalendarPanelMode, CalendarProps }

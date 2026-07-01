@@ -231,7 +231,6 @@ type SelectLegacyProps = React.ComponentProps<typeof SelectPrimitive.Root>
 
 直接依赖摘要：
 
-- `@base-ui/react/combobox`
 - `radix-ui`
 - `@/components/ui/button`
 - `@/components/ui/select-variants`

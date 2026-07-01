@@ -25,7 +25,7 @@ stack:
 
 # TimelineControl 时间轴控制
 
-媒体播放器时间轴交互控件。基于 @base-ui/react Slider primitive 的复合组件模式，通过 Zustand store 连接播放器状态实现拖拽寻址、进度展示和缓冲区域显示。Root 为根容器，内部组合 Track、Progress、Buffered、Thumb 构成完整时间轴控件。
+媒体播放器时间轴交互控件。基于 @radix-ui/react-slider 的复合组件模式，通过 Zustand store 连接播放器状态实现拖拽寻址、进度展示和缓冲区域显示。Root 为根容器，内部组合 Track、Progress、Buffered、Thumb 构成完整时间轴控件。
 
 本组件面向 Limeplay 播放器生态，不引入 Ant Design 的 Slider 或 ConfigProvider。
 
@@ -36,7 +36,7 @@ stack:
 常见场景：
 
 - 需要复用统一设计语言、状态样式和可访问性约定。
-- 需要和本项目 Tailwind 主题变量、Base UI primitive 或本地交互行为保持一致。
+- 需要和本项目 Tailwind 主题变量、Radix primitive 或本地交互行为保持一致。
 - 需要让 AI 或业务代码稳定地从 `@/components/ui/limeplay-timeline-control` 引用组件，而不是直接引用第三方底层库。
 
 不推荐：
@@ -97,7 +97,7 @@ export default function Demo() {
 | disabled | 禁用交互 | `boolean` | `false` |
 | className | 根元素 CSS 类名 | `string` | - |
 
-> 继承 Base UI `Slider.Root` 的所有 props。自动连接播放器状态，在 readyState 低于 HAVE_METADATA 时自动禁用。处理 pointer 事件实现拖拽寻址。
+> 继承 Radix `Slider.Root` 的所有 props。自动连接播放器状态，在 readyState 低于 HAVE_METADATA 时自动禁用。处理 pointer 事件实现拖拽寻址。
 
 ### Track
 
@@ -105,7 +105,7 @@ export default function Demo() {
 | --- | --- | --- | --- |
 | className | 根元素 CSS 类名 | `string` | - |
 
-> 继承 Base UI `Slider.Track` 的所有 props。推荐添加 `overflow-hidden` 限制子元素溢出。
+> 继承 Radix `Slider.Track` 的所有 props。推荐添加 `overflow-hidden` 限制子元素溢出。
 
 ### Progress
 
@@ -113,7 +113,7 @@ export default function Demo() {
 | --- | --- | --- | --- |
 | className | 根元素 CSS 类名 | `string` | - |
 
-> 继承 Base UI `Slider.Indicator` 的所有 props。宽度通过 CSS 变量 `--lp-played-width` 由播放进度动态控制。
+> 继承 Radix `Slider.Range` 的所有 props。宽度通过 CSS 变量 `--lp-played-width` 由播放进度动态控制。
 
 ### Buffered
 
@@ -132,17 +132,17 @@ export default function Demo() {
 | showWithHover | hover 时跟随光标 | `boolean` | `false` |
 | className | 根元素 CSS 类名 | `string` | - |
 
-> 继承 Base UI `Slider.Thumb` 的所有 props。位置通过 CSS 变量 `--lp-timeline-thumb-position` 动态设置。duration 为 0 或无效时返回 null。
+> 继承 Radix `Slider.Thumb` 的所有 props。位置通过 CSS 变量 `--lp-timeline-thumb-position` 动态设置。duration 为 0 或无效时返回 null。
 
 ## Semantic DOM {#semantic-dom}
 
-组件通过 Base UI Slider primitive 暴露语义结构：
+组件通过 Radix Slider primitive 暴露语义结构：
 
-- Root 渲染为 Base UI `Slider.Root`，`aria-label` 设为 "Timeline Slider"。
-- Track 渲染为 Base UI `Slider.Track`，`tabIndex={0}` 支持键盘操作。
-- Progress 渲染为 Base UI `Slider.Indicator`。
-- Buffered 渲染为包含多个 `Slider.Indicator` 子元素的 `div` 容器。
-- Thumb 渲染为 Base UI `Slider.Thumb`。
+- Root 渲染为 Radix `Slider.Root`，`aria-label` 设为 "Timeline Slider"。
+- Track 渲染为 Radix `Slider.Track`，`tabIndex={0}` 支持键盘操作。
+- Progress 渲染为 Radix `Slider.Range`。
+- Buffered 渲染为包含多个范围片段的 `div` 容器。
+- Thumb 渲染为 Radix `Slider.Thumb`。
 
 额外状态属性：
 
@@ -158,7 +158,7 @@ export default function Demo() {
 
 直接依赖摘要：
 
-- `@base-ui/react/slider`
+- `@radix-ui/react-slider`
 - `@hyper/limeplay/hooks/use-playback`
 - `@hyper/limeplay/hooks/use-player`
 - `@hyper/limeplay/hooks/use-timeline`
@@ -179,14 +179,14 @@ export default function Demo() {
 - Root 设置 `aria-label="Timeline Slider"`。
 - Track 设置 `tabIndex={0}`，支持键盘焦点和 focus-visible 样式。
 - disabled 状态通过原生 disabled 属性传递，自动禁用键盘和 pointer 交互。
-- 键盘操作和 ARIA 基础能力来自 Base UI Slider primitive。
+- 键盘操作和 ARIA 基础能力来自 Radix Slider primitive。
 
 ## 与 Ant Design 的取舍 {#antd-differences}
 
 | 方向 | 本地决策 |
 | --- | --- |
 | API 来源 | 以 `src/components/limeplay/ui/timeline-control.tsx` 的 TypeScript 类型为准 |
-| primitive | 使用 Base UI Slider，不使用 AntD Slider 或 rc-slider |
+| primitive | 使用 Radix Slider，不使用 AntD Slider 或 rc-slider |
 | 状态管理 | 使用 Zustand store，不依赖 AntD ConfigProvider |
 | 视觉系统 | 使用 Tailwind CSS 和 CSS 变量 |
 | 兼容目标 | Limeplay 生态专用，不承诺 AntD API 兼容 |

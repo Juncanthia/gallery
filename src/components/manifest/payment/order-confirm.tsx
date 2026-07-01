@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
 import { demoOrderConfirm } from './demo/payment'
 
@@ -172,8 +172,8 @@ export function OrderConfirm({ data, actions, appearance, control }: OrderConfir
           )}
         </div>
 
-        <Button
-          size="sm"
+        <Button variant="solid" color="primary"
+          size="small"
           className="w-full sm:w-auto"
           onClick={onConfirm}
           disabled={isLoading}

@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/manifest/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════

@@ -1,3 +1,3 @@
 "use client"
 
-export { Kbd } from "@/components/extend/components/ui/kbd"
+export { Kbd } from "@/components/ui/kbd"

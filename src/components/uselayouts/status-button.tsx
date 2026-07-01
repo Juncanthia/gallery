@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/uselayouts/_shared/ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/components/uselayouts/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { Tick02Icon } from "@hugeicons/core-free-icons";
@@ -41,7 +41,8 @@ export function SaveButton() {
             ? "transition-colors"
             : "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed border-muted shadow-sm"
         )}
-        variant={"default"}
+        color="primary"
+        variant="solid"
         disabled={status !== "idle"}
       >
         <span className="flex items-center justify-center">

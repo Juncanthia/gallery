@@ -14,20 +14,20 @@ import { VisuallyHiddenInput } from "@/components/dice/components/visually-hidde
 import { useAsRef } from "@/components/dice/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/components/dice/hooks/use-isomorphic-layout-effect";
 import { useLazyRef } from "@/components/dice/hooks/use-lazy-ref";
-import { Button } from "@/components/dice/ui/button";
-import { Input } from "@/components/dice/ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/dice/ui/popover";
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/dice/ui/select";
+} from "@/components/ui/select";
 
 const ROOT_NAME = "ColorPicker";
 const ROOT_IMPL_NAME = "ColorPickerImpl";
@@ -609,16 +609,15 @@ function ColorPicker(props: ColorPickerProps) {
   );
 }
 
-interface ColorPickerImplProps
-  extends Omit<
-    ColorPickerProps,
-    | "defaultValue"
-    | "onValueChange"
-    | "onOpenChange"
-    | "format"
-    | "defaultFormat"
-    | "onFormatChange"
-  > {}
+type ColorPickerImplProps = Omit<
+  ColorPickerProps,
+  | "defaultValue"
+  | "onValueChange"
+  | "onOpenChange"
+  | "format"
+  | "defaultFormat"
+  | "onFormatChange"
+>;
 
 function ColorPickerImpl(props: ColorPickerImplProps) {
   const {
@@ -1071,7 +1070,13 @@ function ColorPickerSwatch(props: DivProps) {
 }
 
 function ColorPickerEyeDropper(props: React.ComponentProps<typeof Button>) {
-  const { size: sizeProp, children, disabled, ...buttonProps } = props;
+  const {
+    size: sizeProp,
+    shape: shapeProp,
+    children,
+    disabled,
+    ...buttonProps
+  } = props;
 
   const context = useColorPickerContext(EYE_DROPPER_NAME);
   const store = useStoreContext(EYE_DROPPER_NAME);
@@ -1103,14 +1108,16 @@ function ColorPickerEyeDropper(props: React.ComponentProps<typeof Button>) {
 
   if (!hasEyeDropper) return null;
 
-  const size = sizeProp ?? (children ? "default" : "icon");
+  const size = sizeProp ?? "middle";
+  const shape = shapeProp ?? (children ? "default" : "square");
 
   return (
     <Button
       data-slot="color-picker-eye-dropper"
       {...buttonProps}
-      variant="outline"
+      variant="outlined"
       size={size}
+      shape={shape}
       onClick={onEyeDropper}
       disabled={isDisabled}
     >

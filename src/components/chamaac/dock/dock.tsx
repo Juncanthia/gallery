@@ -10,8 +10,6 @@ import {
   m,
   AnimatePresence,
 } from "motion/react";
-import Link from "next/link";
-import Image from "next/image";
 import React, {
   useState,
   useRef,
@@ -19,7 +17,7 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "@tanstack/react-router";
 import { useTheme } from "next-themes";
 import { X, Menu } from "lucide-react";
 
@@ -176,13 +174,13 @@ export const Dock = ({
                         if ((child.type as any).displayName === "DockLink") {
                           const props = child.props as DockLinkProps;
                           return (
-                            <Link
+                            <a
                               href={props.href}
                               className="text-black dark:text-white text-2xl font-medium"
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
                               {props.label}
-                            </Link>
+                            </a>
                           );
                         }
 
@@ -208,7 +206,7 @@ export const Dock = ({
                                       const subProps =
                                         subChild.props as DockDropdownItemProps;
                                       return (
-                                        <Link
+                                        <a
                                           href={subProps.href}
                                           className="text-black dark:text-white text-xl font-medium flex items-center gap-3"
                                           onClick={() =>
@@ -216,16 +214,14 @@ export const Dock = ({
                                           }
                                         >
                                           {subProps.image && (
-                                            <Image
+                                            <img
                                               src={subProps.image}
                                               alt=""
-                                              width={32}
-                                              height={32}
                                               className="rounded-lg object-cover"
                                             />
                                           )}
                                           {subProps.label}
-                                        </Link>
+                                        </a>
                                       );
                                     }
                                     return null;
@@ -284,7 +280,7 @@ export const DockItem = ({
     isDark,
     activePage,
   } = useDock();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   const itemId = id || label.toLowerCase().replace(/\s+/g, "-");
   const isOpen = openDropdowns[itemId] || false;
@@ -384,7 +380,7 @@ DockItem.displayName = "DockItem";
 
 const DockItemImagePreview = ({ children }: { children: React.ReactNode }) => {
   const { hoveredLink, activePage } = useDock();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   const activeChild = React.Children.toArray(children).find((child) => {
     if (
@@ -447,7 +443,7 @@ export const DockDropdownItem = ({
   className,
 }: DockDropdownItemProps) => {
   const { hoveredLink, setHoveredLink, activePage } = useDock();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   const currentPath = activePage !== undefined ? activePage : pathname;
   const isMenuItemActive = currentPath === href;
@@ -487,7 +483,7 @@ export const DockIcon = ({
   className,
 }: DockIconProps) => {
   const { isDark, activePage } = useDock();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   if (renderType === "content") return null;
 
@@ -495,7 +491,7 @@ export const DockIcon = ({
   const isActive = currentPath === href;
 
   return (
-    <Link href={href}>
+    <a href={href}>
       <m.div
         className={cn(
           "flex items-center justify-center w-[56px] h-[42px] rounded-full cursor-pointer",
@@ -515,7 +511,7 @@ export const DockIcon = ({
       >
         {icon}
       </m.div>
-    </Link>
+    </a>
   );
 };
 DockIcon.displayName = "DockIcon";
@@ -539,7 +535,7 @@ export const DockLink = ({
   className,
 }: DockLinkProps) => {
   const { isDark, activePage } = useDock();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const [isHovered, setIsHovered] = useState(false);
 
   if (renderType === "content") return null;
@@ -615,9 +611,9 @@ export const DockLink = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={href} className={baseClassName}>
+      <a href={href} className={baseClassName}>
         {linkContent}
-      </Link>
+      </a>
     </m.div>
   );
 };

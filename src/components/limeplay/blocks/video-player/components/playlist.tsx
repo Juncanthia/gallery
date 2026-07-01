@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/limeplay/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/limeplay/blocks/video-player/components/button"
 import { useMediaStore } from "@/components/limeplay/hooks/use-media"
 import { usePlayerStore } from "@/components/limeplay/hooks/use-player"

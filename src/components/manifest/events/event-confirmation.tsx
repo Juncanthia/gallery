@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   CheckCircle,
   Mail,
@@ -122,7 +122,7 @@ export function EventConfirmation({ data, actions }: EventConfirmationProps) {
             {orderNumber && <p className="text-sm text-muted-foreground">{orderNumber}</p>}
           </div>
         </div>
-        <Button onClick={onViewTickets} size="lg">
+        <Button variant="solid" color="primary" onClick={onViewTickets} size="large">
           Take me to my tickets
         </Button>
       </div>
@@ -195,7 +195,7 @@ export function EventConfirmation({ data, actions }: EventConfirmationProps) {
                 </p>
               </div>
             </div>
-            <Button variant="outline" onClick={onFollowOrganizer}>
+            <Button variant="outlined" onClick={onFollowOrganizer}>
               Follow
             </Button>
           </div>

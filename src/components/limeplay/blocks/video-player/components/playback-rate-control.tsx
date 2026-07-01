@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import * as Select from "@/components/limeplay/ui/select"
+import * as Select from "@/components/ui/select"
 import * as PlaybackRate from "@/components/limeplay/ui/playback-rate"
 
 export function PlaybackRateControl() {

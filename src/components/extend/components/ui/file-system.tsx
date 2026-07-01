@@ -38,16 +38,16 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/extend/components/ui/command"
+} from "@/components/ui/command"
 import {
   Dialog,
   DialogClose,
-  DialogContent,
   DialogFooter,
   DialogHeader,
   DialogPanel,
+  DialogPopup as DialogContent,
   DialogTitle,
-} from "@/components/extend/components/ui/dialog"
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,15 +56,15 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/extend/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
-import { Input } from "@/components/extend/components/ui/input"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/extend/components/ui/popover"
-import { ScrollArea, ScrollAreaPrimitive } from "@/components/extend/components/ui/scroll-area"
+} from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
@@ -72,7 +72,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/extend/components/ui/select"
-import { Spinner } from "@/components/extend/components/ui/spinner"
+import { Spinner } from "@/components/ui/spinner"
 import { Tabs, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
 
 const LazyPDFViewer = React.lazy(() =>
@@ -4460,7 +4460,7 @@ function FileSystemColumnsView(props: FileSystemViewProps) {
           scrollbar hides; the viewport alone only observes its own box. Its
           built-in inline min-width (fit-content) would beat a min-w-full
           class, so the full-width floor is inline too. */}
-      <ScrollAreaPrimitive.Content
+      <div
         className="flex h-full w-max"
         style={{ minWidth: "100%" }}
         onKeyDown={handleKeyDown}
@@ -4533,7 +4533,7 @@ function FileSystemColumnsView(props: FileSystemViewProps) {
             </div>
           </ScrollArea>
         ) : null}
-      </ScrollAreaPrimitive.Content>
+      </div>
     </ScrollArea>
   )
 }

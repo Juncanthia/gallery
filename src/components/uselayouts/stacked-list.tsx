@@ -1,10 +1,9 @@
 "use client";
 
-import { cn } from "@/components/uselayouts/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useMemo } from "react";
-import { Input } from "@/components/uselayouts/_shared/ui/input";
-import { Button } from "@/components/uselayouts/_shared/ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ProfileIcon,
@@ -223,8 +222,8 @@ export default function StackedList() {
                 </span>
               </h2>
               <Button
-                variant="outline"
-                size="icon"
+                shape="circle"
+                variant="outlined"
                 className="h-9 w-9 rounded-full border-border/50 text-muted-foreground hover:bg-muted/50"
               >
                 <HugeiconsIcon icon={Add01Icon} size={18} strokeWidth={2.5} />

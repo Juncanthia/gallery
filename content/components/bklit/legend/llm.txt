@@ -140,7 +140,7 @@ export default function Demo() {
 
 ## 约束
 
-- 需要 `@base-ui/react/progress` 依赖（LegendProgress 组件使用）
+- 需要 `@radix-ui/react-progress` 依赖（LegendProgress 组件使用）
 - Legend 是独立组件，不依赖 ChartContext，适用于任何场景
 - 颜色推荐使用 CSS 变量（如 `var(--chart-1)`）以支持主题切换
 - `children` 必须是单个 ReactElement（作为模板），内部自动根据 `items` 迭代渲染

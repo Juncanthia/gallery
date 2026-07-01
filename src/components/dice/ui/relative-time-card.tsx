@@ -8,7 +8,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/dice/ui/hover-card";
+} from "@/components/ui/hover-card";
 
 function pluralize(n: number, word: string) {
   return `${n} ${word}${n === 1 ? "" : "s"}`;

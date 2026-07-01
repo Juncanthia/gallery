@@ -4,7 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger
-} from '@/components/manifest/components/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/components/manifest/lib/utils'
 import { demoTextMessages, demoImageMessages, demoReactionMessage, demoVoiceMessage } from './demo/messaging'
 import { Check, CheckCheck, Smile } from 'lucide-react'

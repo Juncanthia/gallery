@@ -1,498 +1,287 @@
-import * as React from 'react';
+import * as React from "react"
+import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
 
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu as DropdownMenuPrimitive,
-  DropdownMenuContent as DropdownMenuContentPrimitive,
-  DropdownMenuGroup as DropdownMenuGroupPrimitive,
-  DropdownMenuHighlightItem as DropdownMenuHighlightItemPrimitive,
-  DropdownMenuHighlight as DropdownMenuHighlightPrimitive,
-  DropdownMenuItem as DropdownMenuItemPrimitive,
-  DropdownMenuItemIndicator as DropdownMenuItemIndicatorPrimitive,
-  DropdownMenuCheckboxItem as DropdownMenuCheckboxItemPrimitive,
-  DropdownMenuRadioGroup as DropdownMenuRadioGroupPrimitive,
-  DropdownMenuRadioItem as DropdownMenuRadioItemPrimitive,
-  DropdownMenuLabel as DropdownMenuLabelPrimitive,
-  DropdownMenuSeparator as DropdownMenuSeparatorPrimitive,
-  DropdownMenuShortcut as DropdownMenuShortcutPrimitive,
-  DropdownMenuSub as DropdownMenuSubPrimitive,
-  DropdownMenuSubContent as DropdownMenuSubContentPrimitive,
-  DropdownMenuSubTrigger as DropdownMenuSubTriggerPrimitive,
-  DropdownMenuTrigger as DropdownMenuTriggerPrimitive,
-  type DropdownMenuProps as DropdownMenuPrimitiveProps,
-  type DropdownMenuContentProps as DropdownMenuContentPrimitiveProps,
-  type DropdownMenuGroupProps as DropdownMenuGroupPrimitiveProps,
-  type DropdownMenuItemProps as DropdownMenuItemPrimitiveProps,
-  type DropdownMenuCheckboxItemProps as DropdownMenuCheckboxItemPrimitiveProps,
-  type DropdownMenuRadioGroupProps as DropdownMenuRadioGroupPrimitiveProps,
-  type DropdownMenuRadioItemProps as DropdownMenuRadioItemPrimitiveProps,
-  type DropdownMenuLabelProps as DropdownMenuLabelPrimitiveProps,
-  type DropdownMenuSeparatorProps as DropdownMenuSeparatorPrimitiveProps,
-  type DropdownMenuShortcutProps as DropdownMenuShortcutPrimitiveProps,
-  type DropdownMenuSubProps as DropdownMenuSubPrimitiveProps,
-  type DropdownMenuSubContentProps as DropdownMenuSubContentPrimitiveProps,
-  type DropdownMenuSubTriggerProps as DropdownMenuSubTriggerPrimitiveProps,
-  type DropdownMenuTriggerProps as DropdownMenuTriggerPrimitiveProps,
-} from '@/primitives/radix/dropdown-menu';
-import { cn } from '@/lib/utils';
-import { Check as CheckIcon, ChevronRight as ChevronRightIcon, Circle as CircleIcon } from 'lucide-react';
-
-type DropdownMenuPlacement =
-  | 'top'
-  | 'bottom'
-  | 'topLeft'
-  | 'topRight'
-  | 'bottomLeft'
-  | 'bottomRight'
-  | 'left'
-  | 'leftTop'
-  | 'leftBottom'
-  | 'right'
-  | 'rightTop'
-  | 'rightBottom';
-
-type DropdownMenuPlacementConfig = Pick<DropdownMenuContentProps, 'align' | 'side'>;
-
-const dropdownMenuPlacementMap: Record<DropdownMenuPlacement, DropdownMenuPlacementConfig> = {
-  top: { side: 'top', align: 'center' },
-  bottom: { side: 'bottom', align: 'center' },
-  topLeft: { side: 'top', align: 'start' },
-  topRight: { side: 'top', align: 'end' },
-  bottomLeft: { side: 'bottom', align: 'start' },
-  bottomRight: { side: 'bottom', align: 'end' },
-  left: { side: 'left', align: 'center' },
-  leftTop: { side: 'left', align: 'start' },
-  leftBottom: { side: 'left', align: 'end' },
-  right: { side: 'right', align: 'center' },
-  rightTop: { side: 'right', align: 'start' },
-  rightBottom: { side: 'right', align: 'end' },
-};
-
-type DropdownMenuItemOption =
-  | {
-      key?: React.Key;
-      type: 'label';
-      label: React.ReactNode;
-      inset?: boolean;
-    }
-  | {
-      key?: React.Key;
-      type: 'separator';
-    }
-  | {
-      key?: React.Key;
-      type?: 'item';
-      label: React.ReactNode;
-      icon?: React.ReactNode;
-      extra?: React.ReactNode;
-      shortcut?: React.ReactNode;
-      disabled?: boolean;
-      danger?: boolean;
-      onSelect?: DropdownMenuItemPrimitiveProps['onSelect'];
-    }
-  | {
-      key?: React.Key;
-      type: 'checkbox';
-      label: React.ReactNode;
-      checked?: boolean;
-      disabled?: boolean;
-      onCheckedChange?: DropdownMenuCheckboxItemPrimitiveProps['onCheckedChange'];
-    }
-  | {
-      key?: React.Key;
-      type: 'submenu';
-      label: React.ReactNode;
-      icon?: React.ReactNode;
-      extra?: React.ReactNode;
-      disabled?: boolean;
-      children: DropdownMenuItemOption[];
-    };
-
-type DropdownMenuProps = DropdownMenuPrimitiveProps & {
-  trigger?: React.ReactNode;
-  items?: DropdownMenuItemOption[];
-  menu?: { items?: DropdownMenuItemOption[] };
-  placement?: DropdownMenuPlacement;
-  contentProps?: DropdownMenuContentProps;
-};
-
-function renderDropdownTrigger(trigger: React.ReactNode) {
-  if (trigger === undefined) return null;
-
-  return (
-    <DropdownMenuTrigger asChild>
-      {React.isValidElement(trigger) ? trigger : <Button>{trigger}</Button>}
-    </DropdownMenuTrigger>
-  );
-}
-
-function renderDropdownItems(items: DropdownMenuItemOption[]) {
-  return items.map((item, index) => {
-    const key = item.key ?? index;
-
-    if (item.type === 'separator') {
-      return <DropdownMenuSeparator key={key} />;
-    }
-
-    if (item.type === 'label') {
-      return (
-        <DropdownMenuLabel key={key} inset={item.inset}>
-          {item.label}
-        </DropdownMenuLabel>
-      );
-    }
-
-    if (item.type === 'checkbox') {
-      return (
-        <DropdownMenuCheckboxItem
-          key={key}
-          checked={item.checked}
-          disabled={item.disabled}
-          onCheckedChange={item.onCheckedChange}
-        >
-          {item.label}
-        </DropdownMenuCheckboxItem>
-      );
-    }
-
-    if (item.type === 'submenu') {
-      return (
-        <DropdownMenuSub key={key}>
-          <DropdownMenuSubTrigger disabled={item.disabled}>
-            {item.icon}
-            {item.label}
-            {item.extra && (
-              <DropdownMenuShortcut>{item.extra}</DropdownMenuShortcut>
-            )}
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            {renderDropdownItems(item.children)}
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-      );
-    }
-
-    return (
-      <DropdownMenuItem
-        key={key}
-        disabled={item.disabled}
-        variant={item.danger ? 'destructive' : 'default'}
-        onSelect={item.onSelect}
-      >
-        {item.icon}
-        {item.label}
-        {(item.extra ?? item.shortcut) && (
-          <DropdownMenuShortcut>{item.extra ?? item.shortcut}</DropdownMenuShortcut>
-        )}
-      </DropdownMenuItem>
-    );
-  });
-}
+import { cn } from "@/lib/utils"
+import { CheckIcon, ChevronRightIcon } from "lucide-react"
 
 function DropdownMenu({
-  trigger,
-  items,
-  menu,
-  placement = 'bottomLeft',
-  contentProps,
-  children,
   ...props
-}: DropdownMenuProps) {
-  const mergedItems = items ?? menu?.items;
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
+  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+}
 
-  if (trigger === undefined && mergedItems === undefined) {
-    return <DropdownMenuPrimitive {...props}>{children}</DropdownMenuPrimitive>;
-  }
-
-  const placementProps = dropdownMenuPlacementMap[placement];
-
+function DropdownMenuPortal({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) {
   return (
-    <DropdownMenuPrimitive {...props}>
-      {renderDropdownTrigger(trigger)}
-      {children}
-      {mergedItems !== undefined && (
-        <DropdownMenuContent {...placementProps} {...contentProps}>
-          {renderDropdownItems(mergedItems)}
-        </DropdownMenuContent>
-      )}
-    </DropdownMenuPrimitive>
-  );
+    <DropdownMenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />
+  )
 }
 
-type DropdownMenuTriggerProps = DropdownMenuTriggerPrimitiveProps;
-
-function DropdownMenuTrigger(props: DropdownMenuTriggerProps) {
-  return <DropdownMenuTriggerPrimitive {...props} />;
+function DropdownMenuTrigger({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
+  return (
+    <DropdownMenuPrimitive.Trigger
+      data-slot="dropdown-menu-trigger"
+      {...props}
+    />
+  )
 }
-
-type DropdownMenuContentProps = DropdownMenuContentPrimitiveProps;
 
 function DropdownMenuContent({
-  sideOffset = 4,
   className,
-  children,
+  container,
+  align = "start",
+  sideOffset = 4,
   ...props
-}: DropdownMenuContentProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Content> & {
+  container?: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>["container"]
+}) {
   return (
-    <DropdownMenuContentPrimitive
-      sideOffset={sideOffset}
-      className={cn(
-        'bg-popover text-popover-foreground z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-none',
-        className,
-      )}
-      {...props}
-    >
-      <DropdownMenuHighlightPrimitive className="absolute inset-0 bg-accent z-0 rounded-sm">
-        {children}
-      </DropdownMenuHighlightPrimitive>
-    </DropdownMenuContentPrimitive>
-  );
+    <DropdownMenuPrimitive.Portal container={container}>
+      <DropdownMenuPrimitive.Content
+        data-slot="dropdown-menu-content"
+        sideOffset={sideOffset}
+        align={align}
+        className={cn("z-50 max-h-(--radix-dropdown-menu-content-available-height) w-(--radix-dropdown-menu-trigger-width) min-w-32 origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:overflow-hidden data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className )}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  )
 }
 
-type DropdownMenuGroupProps = DropdownMenuGroupPrimitiveProps;
-
-function DropdownMenuGroup({ ...props }: DropdownMenuGroupProps) {
-  return <DropdownMenuGroupPrimitive {...props} />;
+function DropdownMenuGroup({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) {
+  return (
+    <DropdownMenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />
+  )
 }
-
-type DropdownMenuItemProps = DropdownMenuItemPrimitiveProps & {
-  inset?: boolean;
-  variant?: 'default' | 'destructive';
-};
 
 function DropdownMenuItem({
   className,
   inset,
-  variant = 'default',
-  disabled,
+  variant = "default",
   ...props
-}: DropdownMenuItemProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
+  inset?: boolean
+  variant?: "default" | "destructive"
+}) {
   return (
-    <DropdownMenuHighlightItemPrimitive
-      activeClassName={
-        variant === 'destructive'
-          ? 'bg-destructive/10 dark:bg-destructive/20'
-          : ''
-      }
-      disabled={disabled}
-    >
-      <DropdownMenuItemPrimitive
-        disabled={disabled}
-        data-inset={inset}
-        data-variant={variant}
-        className={cn(
-          "focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-          className,
-        )}
-        {...props}
-      />
-    </DropdownMenuHighlightItemPrimitive>
-  );
+    <DropdownMenuPrimitive.Item
+      data-slot="dropdown-menu-item"
+      data-inset={inset}
+      data-variant={variant}
+      className={cn(
+        "group/dropdown-menu-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive",
+        className
+      )}
+      {...props}
+    />
+  )
 }
-
-type DropdownMenuCheckboxItemProps = DropdownMenuCheckboxItemPrimitiveProps;
 
 function DropdownMenuCheckboxItem({
   className,
   children,
   checked,
-  disabled,
+  inset,
+  variant = "default",
   ...props
-}: DropdownMenuCheckboxItemProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem> & {
+  inset?: boolean
+  variant?: "default" | "switch"
+}) {
   return (
-    <DropdownMenuHighlightItemPrimitive disabled={disabled}>
-      <DropdownMenuCheckboxItemPrimitive
-        disabled={disabled}
-        className={cn(
-          "focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-          className,
-        )}
-        checked={checked}
-        {...props}
-      >
-        <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
-          <DropdownMenuItemIndicatorPrimitive
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <CheckIcon className="size-4" />
-          </DropdownMenuItemIndicatorPrimitive>
+    <DropdownMenuPrimitive.CheckboxItem
+      data-slot="dropdown-menu-checkbox-item"
+      data-inset={inset}
+      data-variant={variant}
+      className={cn(
+        "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        variant === "switch" && "justify-between pr-2 pl-2",
+        className
+      )}
+      checked={checked}
+      {...props}
+    >
+      {variant === "default" ? (
+        <span
+          className="pointer-events-none absolute right-2 flex items-center justify-center"
+          data-slot="dropdown-menu-checkbox-item-indicator"
+        >
+          <DropdownMenuPrimitive.ItemIndicator>
+            <CheckIcon />
+          </DropdownMenuPrimitive.ItemIndicator>
         </span>
-        {children}
-      </DropdownMenuCheckboxItemPrimitive>
-    </DropdownMenuHighlightItemPrimitive>
-  );
+      ) : null}
+      {children}
+      {variant === "switch" ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none relative ml-4 inline-flex h-4 w-7 shrink-0 items-center rounded-full bg-input transition-colors data-[checked=true]:bg-primary"
+          data-checked={checked ? "true" : "false"}
+        >
+          <span
+            className="size-3 translate-x-0.5 rounded-full bg-background shadow-xs transition-transform data-[checked=true]:translate-x-3.5"
+            data-checked={checked ? "true" : "false"}
+          />
+        </span>
+      ) : null}
+    </DropdownMenuPrimitive.CheckboxItem>
+  )
 }
 
-type DropdownMenuRadioGroupProps = DropdownMenuRadioGroupPrimitiveProps;
-
-function DropdownMenuRadioGroup(props: DropdownMenuRadioGroupProps) {
-  return <DropdownMenuRadioGroupPrimitive {...props} />;
+function DropdownMenuRadioGroup({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) {
+  return (
+    <DropdownMenuPrimitive.RadioGroup
+      data-slot="dropdown-menu-radio-group"
+      {...props}
+    />
+  )
 }
-
-type DropdownMenuRadioItemProps = DropdownMenuRadioItemPrimitiveProps;
 
 function DropdownMenuRadioItem({
   className,
   children,
-  disabled,
+  inset,
   ...props
-}: DropdownMenuRadioItemProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem> & {
+  inset?: boolean
+}) {
   return (
-    <DropdownMenuHighlightItemPrimitive disabled={disabled}>
-      <DropdownMenuRadioItemPrimitive
-        disabled={disabled}
-        className={cn(
-          "focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-          className,
-        )}
-        {...props}
+    <DropdownMenuPrimitive.RadioItem
+      data-slot="dropdown-menu-radio-item"
+      data-inset={inset}
+      className={cn(
+        "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
+      {...props}
+    >
+      <span
+        className="pointer-events-none absolute right-2 flex items-center justify-center"
+        data-slot="dropdown-menu-radio-item-indicator"
       >
-        <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
-          <DropdownMenuItemIndicatorPrimitive layoutId="dropdown-menu-item-indicator-radio">
-            <CircleIcon className="size-2 fill-current" />
-          </DropdownMenuItemIndicatorPrimitive>
-        </span>
-        {children}
-      </DropdownMenuRadioItemPrimitive>
-    </DropdownMenuHighlightItemPrimitive>
-  );
+        <DropdownMenuPrimitive.ItemIndicator>
+          <CheckIcon
+          />
+        </DropdownMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </DropdownMenuPrimitive.RadioItem>
+  )
 }
-
-type DropdownMenuLabelProps = DropdownMenuLabelPrimitiveProps & {
-  inset?: boolean;
-};
 
 function DropdownMenuLabel({
   className,
   inset,
   ...props
-}: DropdownMenuLabelProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {
+  inset?: boolean
+}) {
   return (
-    <DropdownMenuLabelPrimitive
+    <DropdownMenuPrimitive.Label
+      data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        'px-2 py-1.5 text-sm font-medium data-[inset]:pl-8',
-        className,
+        "px-2 py-1.5 text-xs font-medium text-muted-foreground data-inset:pl-8",
+        className
       )}
       {...props}
     />
-  );
+  )
 }
-
-type DropdownMenuSeparatorProps = DropdownMenuSeparatorPrimitiveProps;
 
 function DropdownMenuSeparator({
   className,
   ...props
-}: DropdownMenuSeparatorProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
   return (
-    <DropdownMenuSeparatorPrimitive
-      className={cn('bg-border -mx-1 my-1 h-px', className)}
+    <DropdownMenuPrimitive.Separator
+      data-slot="dropdown-menu-separator"
+      className={cn("-mx-1 my-1 h-px bg-border", className)}
       {...props}
     />
-  );
+  )
 }
-
-type DropdownMenuShortcutProps = DropdownMenuShortcutPrimitiveProps;
 
 function DropdownMenuShortcut({
   className,
   ...props
-}: DropdownMenuShortcutProps) {
+}: React.ComponentProps<"span">) {
   return (
-    <DropdownMenuShortcutPrimitive
+    <span
+      data-slot="dropdown-menu-shortcut"
       className={cn(
-        'text-muted-foreground ml-auto text-xs tracking-widest',
-        className,
+        "ml-auto text-xs tracking-widest text-muted-foreground group-focus/dropdown-menu-item:text-accent-foreground",
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
-type DropdownMenuSubProps = DropdownMenuSubPrimitiveProps;
-
-function DropdownMenuSub(props: DropdownMenuSubProps) {
-  return <DropdownMenuSubPrimitive {...props} />;
+function DropdownMenuSub({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>) {
+  return <DropdownMenuPrimitive.Sub data-slot="dropdown-menu-sub" {...props} />
 }
-
-type DropdownMenuSubTriggerProps = DropdownMenuSubTriggerPrimitiveProps & {
-  inset?: boolean;
-};
 
 function DropdownMenuSubTrigger({
-  disabled,
   className,
   inset,
   children,
   ...props
-}: DropdownMenuSubTriggerProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
+  inset?: boolean
+}) {
   return (
-    <DropdownMenuHighlightItemPrimitive disabled={disabled}>
-      <DropdownMenuSubTriggerPrimitive
-        disabled={disabled}
-        data-inset={inset}
-        className={cn(
-          'focus:text-accent-foreground data-[state=open]:text-accent-foreground flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8',
-          'data-[state=open]:[&_[data-slot=chevron]]:rotate-90 [&_[data-slot=chevron]]:transition-transform [&_[data-slot=chevron]]:duration-300 [&_[data-slot=chevron]]:ease-in-out',
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        <ChevronRightIcon data-slot="chevron" className="ml-auto size-4" />
-      </DropdownMenuSubTriggerPrimitive>
-    </DropdownMenuHighlightItemPrimitive>
-  );
+    <DropdownMenuPrimitive.SubTrigger
+      data-slot="dropdown-menu-sub-trigger"
+      data-inset={inset}
+      className={cn(
+        "flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-8 data-open:bg-accent data-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <ChevronRightIcon className="ml-auto" />
+    </DropdownMenuPrimitive.SubTrigger>
+  )
 }
-
-type DropdownMenuSubContentProps = DropdownMenuSubContentPrimitiveProps;
 
 function DropdownMenuSubContent({
   className,
   ...props
-}: DropdownMenuSubContentProps) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.SubContent>) {
   return (
-    <DropdownMenuSubContentPrimitive
-      className={cn(
-        'bg-popover text-popover-foreground z-50 min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-md border p-1 shadow-lg outline-none',
-        className,
-      )}
+    <DropdownMenuPrimitive.SubContent
+      data-slot="dropdown-menu-sub-content"
+      className={cn("z-50 min-w-[96px] origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className )}
       {...props}
     />
-  );
+  )
 }
 
 export {
   DropdownMenu,
+  DropdownMenuPortal,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenuCheckboxItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-  type DropdownMenuProps,
-  type DropdownMenuTriggerProps,
-  type DropdownMenuContentProps,
-  type DropdownMenuGroupProps,
-  type DropdownMenuItemProps,
-  type DropdownMenuCheckboxItemProps,
-  type DropdownMenuRadioGroupProps,
-  type DropdownMenuRadioItemProps,
-  type DropdownMenuLabelProps,
-  type DropdownMenuSeparatorProps,
-  type DropdownMenuShortcutProps,
-  type DropdownMenuSubProps,
-  type DropdownMenuSubTriggerProps,
-  type DropdownMenuSubContentProps,
-  type DropdownMenuItemOption,
-  type DropdownMenuPlacement,
-};
+}

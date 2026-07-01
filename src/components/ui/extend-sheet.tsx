@@ -1,3 +1,3 @@
 "use client"
 
-export { SheetTrigger } from "@/components/extend/components/ui/sheet"
+export { SheetTrigger } from "@/components/ui/sheet"

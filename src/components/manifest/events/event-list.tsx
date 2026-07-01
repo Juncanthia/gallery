@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
-import { Checkbox } from '@/components/manifest/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/components/manifest/lib/utils'
 import { ChevronDown, ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react'
 import { Suspense, useCallback, useRef, useState } from 'react'
@@ -182,8 +182,8 @@ function FilterPanel({
             )}
           </div>
           <Button
-            variant="ghost"
-            size="icon"
+            variant="text"
+            shape="square"
             className="h-8 w-8"
             onClick={onClose}
             aria-label="Close filters"
@@ -229,7 +229,7 @@ function FilterPanel({
 
         {/* Footer with actions */}
         <div className="border-t px-4 py-3 space-y-2">
-          <Button
+          <Button variant="solid" color="primary"
             className="w-full"
             onClick={onApply}
           >
@@ -237,7 +237,7 @@ function FilterPanel({
           </Button>
           {activeFiltersCount > 0 && (
             <Button
-              variant="ghost"
+              variant="text"
               className="w-full text-muted-foreground hover:text-foreground"
               onClick={onReset}
             >
@@ -541,8 +541,8 @@ export function EventList({ data, actions, appearance }: EventListProps) {
               <span className="text-muted-foreground text-xs whitespace-nowrap">| {filteredEvents.length}</span>
             </div>
             <Button
-              variant="outline"
-              size="sm"
+              variant="outlined"
+              size="small"
               className="gap-2 flex-shrink-0"
               onClick={handleFilterButtonClick}
             >
@@ -562,7 +562,7 @@ export function EventList({ data, actions, appearance }: EventListProps) {
               <div className="flex flex-col items-center justify-center h-full p-8 text-center">
                 <p className="text-muted-foreground">No events match your filters</p>
                 <Button
-                  variant="link"
+                  variant="link" color="primary"
                   className="mt-2"
                   onClick={handleResetFilters}
                 >
@@ -769,8 +769,8 @@ export function EventList({ data, actions, appearance }: EventListProps) {
         {/* Mobile navigation */}
         <div className="flex gap-1 md:hidden">
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={prev}
             disabled={isAtStart}
@@ -779,8 +779,8 @@ export function EventList({ data, actions, appearance }: EventListProps) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={next}
             disabled={isAtEndMobile}
@@ -792,8 +792,8 @@ export function EventList({ data, actions, appearance }: EventListProps) {
         {/* Tablet navigation */}
         <div className="hidden md:flex lg:hidden gap-1">
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={prev}
             disabled={isAtStart}
@@ -802,8 +802,8 @@ export function EventList({ data, actions, appearance }: EventListProps) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={next}
             disabled={isAtEndTablet}
@@ -815,8 +815,8 @@ export function EventList({ data, actions, appearance }: EventListProps) {
         {/* Desktop navigation */}
         <div className="hidden lg:flex gap-1">
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={prev}
             disabled={isAtStart}
@@ -825,8 +825,8 @@ export function EventList({ data, actions, appearance }: EventListProps) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={next}
             disabled={isAtEndDesktop}

@@ -1,10 +1,10 @@
 "use client"
 
 import { Menu, User, X } from "lucide-react"
-import Link from "next/link"
+
 import * as React from "react"
 import { cn } from "@/components/gooseui/lib/utils"
-import { Button } from "@/components/gooseui/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 const navItems = [
   { label: "Dashboard", href: "#dashboard" },
@@ -28,25 +28,25 @@ export function HeaderAuth({
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
+        <a href="/" className="flex items-center space-x-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
             A
           </div>
           <span className="font-bold text-xl hidden sm:inline-block">
             AppName
           </span>
-        </Link>
+        </a>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           {navItems.map((item) => (
-            <Link
+            <a
               key={item.href}
               href={item.href}
               className="transition-colors hover:text-foreground text-muted-foreground cursor-pointer"
             >
               {item.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -60,23 +60,23 @@ export function HeaderAuth({
                 </div>
                 <span className="text-sm font-medium">{userName}</span>
               </div>
-              <Button variant="outline" size="sm" className="cursor-pointer">
+              <Button variant="outlined" size="small" className="cursor-pointer">
                 Sign out
               </Button>
             </div>
           ) : (
             <div className="hidden md:flex items-center space-x-2">
-              <Button variant="ghost" className="cursor-pointer">
+              <Button variant="text" className="cursor-pointer">
                 Log in
               </Button>
-              <Button className="cursor-pointer">Sign up</Button>
+              <Button variant="solid" color="primary" className="cursor-pointer">Sign up</Button>
             </div>
           )}
 
           {/* Mobile Menu Button */}
           <Button
-            variant="ghost"
-            size="icon"
+            variant="text"
+            shape="square"
             className="md:hidden cursor-pointer"
             onClick={() => setIsOpen(!isOpen)}
           >
@@ -106,27 +106,27 @@ export function HeaderAuth({
           )}
           <nav className="flex flex-col space-y-3">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
                 className="text-sm font-medium transition-colors hover:text-foreground text-muted-foreground cursor-pointer"
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
           </nav>
           <div className="flex flex-col space-y-2 pt-4 border-t">
             {isLoggedIn ? (
-              <Button variant="outline" className="w-full cursor-pointer">
+              <Button variant="outlined" className="w-full cursor-pointer">
                 Sign out
               </Button>
             ) : (
               <>
-                <Button variant="outline" className="w-full cursor-pointer">
+                <Button variant="outlined" className="w-full cursor-pointer">
                   Log in
                 </Button>
-                <Button className="w-full cursor-pointer">Sign up</Button>
+                <Button variant="solid" color="primary" className="w-full cursor-pointer">Sign up</Button>
               </>
             )}
           </div>

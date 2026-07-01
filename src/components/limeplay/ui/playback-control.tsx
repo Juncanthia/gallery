@@ -3,7 +3,7 @@
 import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
 
-import { Button } from "@/components/limeplay/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   MediaReadyState,
   usePlaybackStore,

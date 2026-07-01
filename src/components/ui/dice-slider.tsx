@@ -1,3 +1,3 @@
 "use client"
 
-export { Slider } from "@/components/dice/ui/slider"
+export { Slider } from "@/components/ui/slider"

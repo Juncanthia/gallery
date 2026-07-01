@@ -3,9 +3,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "@/components/dice/lib/utils";
-import { Button } from "@/components/dice/ui/button";
-import { Input } from "@/components/dice/ui/input";
-import { Textarea } from "@/components/dice/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -84,15 +84,15 @@ const inputGroupButtonVariants = cva(
 
 function InputGroupButton({
   className,
-  type = "button",
-  variant = "ghost",
+  htmlType = "button",
+  variant = "text",
   size = "xs",
   ...props
 }: Omit<React.ComponentProps<typeof Button>, "size"> &
   VariantProps<typeof inputGroupButtonVariants>) {
   return (
     <Button
-      type={type}
+      htmlType={htmlType}
       data-size={size}
       variant={variant}
       className={cn(inputGroupButtonVariants({ size }), className)}

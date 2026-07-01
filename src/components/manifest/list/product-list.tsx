@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/components/manifest/lib/utils'
 import { Check, ChevronLeft, ChevronRight, ShoppingCart, Star } from 'lucide-react'
 import { useCallback, useState } from 'react'
@@ -746,10 +746,10 @@ function PickerVariant({
             <span>Select products to add to cart</span>
           )}
         </div>
-        <Button
+        <Button variant="solid" color="primary"
           onClick={handleAddToCart}
           disabled={selectedIndexes.size === 0}
-          size="sm"
+          size="small"
         >
           <ShoppingCart className="h-4 w-4 mr-1.5" />
           {buttonLabel}

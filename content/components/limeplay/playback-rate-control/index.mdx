@@ -91,7 +91,7 @@ const rate = usePlaybackRateStore((state) => state.value)
 
 - 导入: `import { PlaybackRateControl } from "@/components/ui/limeplay-playback-rate-control"`
 - 子组件导入: `import * as PlaybackRate from "@/components/limeplay/ui/playback-rate"`
-- Select 组件: `import * as Select from "@/components/limeplay/ui/select"`
+- Select 组件: `import * as Select from "@/components/ui/select"`
 - Store hook: `import { usePlaybackRateStore } from "@/components/limeplay/hooks/use-playback-rate"`
 - 必须在 LimePlay `MediaProvider` 中注册 `playbackRateFeature()`
 - 默认速率选项为 [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]，不可删除 1x

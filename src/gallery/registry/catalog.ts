@@ -62,27 +62,27 @@ function uselayoutsItem(id: string, en: string, label: string): GalleryNavItem {
 }
 
 function manifestItem(id: string, en: string, label: string): GalleryNavItem {
-  return { id, label, en, to: "/components/manifest/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+  return { id, label, en, to: `/components/manifest/${id}`, summary: `${label}。` , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
 }
 
 function dtfItem(id: string, en: string, label: string): GalleryNavItem {
-  return { id, label, en, to: "/components/dt/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+  return { id, label, en, to: `/components/dt/${id}`, summary: `${label}。` , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
 }
 
 function chamaacItem(id: string, en: string, label: string): GalleryNavItem {
-  return { id, label, en, to: "/components/chamaac/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+  return { id, label, en, to: `/components/chamaac/${id}`, summary: `${label}。` , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
 }
 
 function limeplayItem(id: string, en: string, label: string): GalleryNavItem {
-  return { id, label, en, to: "/components/limeplay/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+  return { id, label, en, to: `/components/limeplay/${id}`, summary: `${label}。` , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
 }
 
 function toolItem(id: string, en: string, label: string): GalleryNavItem {
-  return { id, label, en, to: "/components/tool/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+  return { id, label, en, to: `/components/tool/${id}`, summary: `${label}。` , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
 }
 
 function diceItem(id: string, en: string, label: string): GalleryNavItem {
-  return { id, label, en, to: "/components/dice/${id}", summary: "${label}。" , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
+  return { id, label, en, to: `/components/dice/${id}`, summary: `${label}。` , keywords: [id, en, en.toLowerCase(), label], antd: false, migration: 0, api: true }
 }
 
 function extendItem(id: string, en: string, label: string): GalleryNavItem {

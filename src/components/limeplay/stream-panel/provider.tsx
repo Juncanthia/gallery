@@ -1,17 +1,21 @@
 "use client"
 
-import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 import React, {
   createContext,
   use,
   useCallback,
   useMemo,
+  useRef,
   useState,
 } from "react"
 
 import type { StreamPanelPlaylistPreset } from "@/components/limeplay/stream-panel/content-catalog"
 import type { StreamPanelPlayerType } from "@/components/limeplay/stream-panel/use-stream-panel"
 import type { StreamPreset } from "@/components/limeplay/lib/stream-presets"
+import type {
+  PopoverHandle,
+  PopoverOpenChangeDetails,
+} from "@/components/ui/popover"
 
 export interface StreamPanelController {
   onLoadStream?: (src: string, config?: string) => void
@@ -20,14 +24,13 @@ export interface StreamPanelController {
   playerType: StreamPanelPlayerType
 }
 
-type PopoverHandle = ReturnType<typeof PopoverPrimitive.createHandle>
 
 interface StreamPanelContextValue {
   controller: null | StreamPanelController
   handle: PopoverHandle
   onOpenChange: (
     open: boolean,
-    eventDetails: PopoverPrimitive.Root.ChangeEventDetails
+    eventDetails: PopoverOpenChangeDetails
   ) => void
   open: boolean
   registerController: (controller: StreamPanelController) => () => void
@@ -37,21 +40,34 @@ interface StreamPanelContextValue {
 const StreamPanelContext = createContext<null | StreamPanelContextValue>(null)
 
 export function StreamPanelProvider({ children }: React.PropsWithChildren) {
-  const [handle] = useState(() => PopoverPrimitive.createHandle())
   const [open, setOpen] = useState(false)
+  const openRef = useRef(open)
+  const anchorElementRef = useRef<HTMLElement | null>(null)
   const [controller, setController] = useState<null | StreamPanelController>(
     null
   )
 
-  const onOpenChange = useCallback(
-    (
-      isOpen: boolean,
-      _eventDetails: PopoverPrimitive.Root.ChangeEventDetails
-    ) => {
-      setOpen(isOpen)
-    },
+  openRef.current = open
+
+  const handle = useMemo<PopoverHandle>(
+    () => ({
+      close: () => setOpen(false),
+      getAnchorElement: () => anchorElementRef.current,
+      isOpen: () => openRef.current,
+      open: () => setOpen(true),
+      setAnchorElement: (element) => {
+        anchorElementRef.current = element
+      },
+      toggleOpen: () => {
+        setOpen((current) => !current)
+      },
+    }),
     []
   )
+
+  const onOpenChange = useCallback((isOpen: boolean) => {
+    setOpen(isOpen)
+  }, [])
 
   const registerController = useCallback((next: StreamPanelController) => {
     setController(next)

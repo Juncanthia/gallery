@@ -5,7 +5,7 @@ import {
   RepeatIcon,
 } from "@phosphor-icons/react"
 
-import { Button } from "@/components/limeplay/ui/button"
+import { Button } from "@/components/ui/button"
 import { usePlaybackStore } from "@/components/limeplay/hooks/use-playback"
 import { PlaybackControl } from "@/components/limeplay/ui/playback-control"
 
@@ -14,7 +14,7 @@ export function PlaybackStateControlDemo() {
 
   return (
     <PlaybackControl asChild>
-      <Button size="icon" variant="ghost">
+      <Button shape="square" variant="text">
         {status === "playing" ? (
           <PauseIcon weight="fill" />
         ) : status === "ended" ? (

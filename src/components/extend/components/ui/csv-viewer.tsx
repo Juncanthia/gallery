@@ -38,13 +38,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/extend/components/ui/dropdown-menu"
-import { Input } from "@/components/extend/components/ui/input"
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/extend/components/ui/popover"
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -52,14 +52,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/extend/components/ui/select"
-import { Separator } from "@/components/extend/components/ui/separator"
-import { Spinner } from "@/components/extend/components/ui/spinner"
+import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/extend/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 
 const ZOOM_OPTIONS = [0.75, 1, 1.25, 1.5, 2] as const
 const CSV_SEARCH_BATCH_ROW_COUNT = 500

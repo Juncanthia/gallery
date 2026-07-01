@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
-import { Checkbox } from '@/components/manifest/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/components/manifest/lib/utils'
 import { ChevronDown, MapPin, Maximize2, SlidersHorizontal, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -398,8 +398,8 @@ function FilterPanel({
             )}
           </div>
           <Button
-            variant="ghost"
-            size="icon"
+            variant="text"
+            shape="square"
             className="h-8 w-8"
             onClick={onClose}
             aria-label="Close filters"
@@ -423,7 +423,7 @@ function FilterPanel({
 
         {/* Footer with actions */}
         <div className="border-t px-4 py-3 space-y-2">
-          <Button
+          <Button variant="solid" color="primary"
             className="w-full"
             onClick={onApply}
           >
@@ -431,7 +431,7 @@ function FilterPanel({
           </Button>
           {activeFiltersCount > 0 && (
             <Button
-              variant="ghost"
+              variant="text"
               className="w-full text-muted-foreground hover:text-foreground"
               onClick={onReset}
             >
@@ -529,7 +529,7 @@ function VanillaLeafletMap({
       mapInstanceRef.current = null
       leafletRef.current = null
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   // Sync markers whenever locations or selection change
   useEffect(() => {
@@ -895,8 +895,8 @@ export function MapCarousel({ data, actions, appearance }: MapCarouselProps) {
             </div>
             {hasFilters && (
               <Button
-                variant="outline"
-                size="sm"
+                variant="outlined"
+                size="small"
                 className="gap-2 flex-shrink-0"
                 onClick={handleFilterButtonClick}
               >
@@ -917,7 +917,7 @@ export function MapCarousel({ data, actions, appearance }: MapCarouselProps) {
               <div className="flex flex-col items-center justify-center h-full p-8 text-center">
                 <p className="text-muted-foreground">No locations match your filters</p>
                 <Button
-                  variant="link"
+                  variant="link" color="primary"
                   className="mt-2"
                   onClick={handleResetFilters}
                 >
@@ -983,8 +983,8 @@ export function MapCarousel({ data, actions, appearance }: MapCarouselProps) {
       {/* Expand button in top right */}
       <div className="absolute top-3 right-3 z-[1001]">
         <Button
-          variant="secondary"
-          size="icon"
+          variant="filled"
+          shape="square"
           className="h-8 w-8 bg-background/90 backdrop-blur-sm shadow-md"
           onClick={handleExpand}
           aria-label="Expand to fullscreen"

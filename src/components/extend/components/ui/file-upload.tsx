@@ -11,7 +11,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { BorderBeam } from "border-beam"
 
 import { cn } from "@/components/extend/lib/utils"
-import { Card } from "@/components/extend/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
 
 type FileUploadItem = {

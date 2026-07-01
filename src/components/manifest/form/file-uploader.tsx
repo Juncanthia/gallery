@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@/components/manifest/components/ui/button';
-import { Card } from '@/components/manifest/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { cn } from '@/components/manifest/lib/utils';
 import { FileImage, FileSpreadsheet, FileText, Upload, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -265,7 +265,7 @@ export function FileUploader({
 
       {showFileList && files.length > 0 && (
         <div className="rounded-xl border bg-card">
-          {files.map((file, index) => (
+          {files.map((file) => (
             <div
               key={file.id}
               className="flex items-center gap-3 border-b px-3 py-2.5 last:border-b-0"
@@ -284,9 +284,9 @@ export function FileUploader({
                   Ready
                 </span>
                 <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
+                  htmlType="button"
+                  variant="text"
+                  shape="square"
                   className="size-7"
                   aria-label={`Remove ${file.name}`}
                   onClick={(e) => { e.stopPropagation(); removeFile(file.id); }}

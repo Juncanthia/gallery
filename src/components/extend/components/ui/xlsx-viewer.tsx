@@ -39,14 +39,14 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/extend/components/ui/dropdown-menu"
-import { Input } from "@/components/extend/components/ui/input"
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/extend/components/ui/popover"
-import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+} from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
@@ -54,15 +54,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/extend/components/ui/select"
-import { Separator } from "@/components/extend/components/ui/separator"
-import { Spinner } from "@/components/extend/components/ui/spinner"
+import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 import { Tabs, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/extend/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 
 const XLSX_LOADING_INDICATOR_DELAY_MS = 300
 const XLSX_DROPDOWN_Z_INDEX_CLASS = "z-40"

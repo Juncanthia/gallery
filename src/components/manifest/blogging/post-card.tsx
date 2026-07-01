@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 
 // Import types from shared types file to avoid circular dependencies
 import type { Post } from './types'
@@ -186,8 +186,8 @@ export function PostCard({ data, actions, appearance }: PostCardProps) {
                 </div>
               )}
               <Button
-                size="sm"
-                variant="secondary"
+                size="small"
+                variant="filled"
                 className="w-full sm:w-auto"
                 onClick={handleReadMore}
               >
@@ -261,8 +261,8 @@ export function PostCard({ data, actions, appearance }: PostCardProps) {
                 </>
               )}
             </div>
-            <Button
-              size="sm"
+            <Button variant="solid" color="primary"
+              size="small"
               className="w-full sm:w-auto"
               onClick={handleReadMore}
             >
@@ -319,7 +319,7 @@ export function PostCard({ data, actions, appearance }: PostCardProps) {
               </span>
             )}
           </div>
-          <Button size="sm" onClick={handleReadMore}>
+          <Button variant="solid" color="primary" size="small" onClick={handleReadMore}>
             Read more
           </Button>
         </div>
@@ -389,7 +389,7 @@ export function PostCard({ data, actions, appearance }: PostCardProps) {
               </div>
             </div>
           )}
-          <Button size="sm" onClick={handleReadMore}>
+          <Button variant="solid" color="primary" size="small" onClick={handleReadMore}>
             Read
           </Button>
         </div>

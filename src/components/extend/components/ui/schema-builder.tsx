@@ -59,7 +59,7 @@ import {
   Collapsible,
   CollapsiblePanel,
   CollapsibleTrigger,
-} from "@/components/extend/components/ui/collapsible"
+} from "@/components/ui/collapsible"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,8 +71,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/extend/components/ui/dropdown-menu"
-import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+} from "@/components/ui/dropdown-menu"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
 
 export type SchemaBuilderScalarType =

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/manifest/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/components/manifest/lib/utils'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
@@ -251,8 +251,8 @@ export function PostList({ data, actions, appearance }: PostListProps) {
         {/* Mobile navigation */}
         <div className="flex gap-1 md:hidden">
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={prev}
             disabled={isAtStart}
@@ -261,8 +261,8 @@ export function PostList({ data, actions, appearance }: PostListProps) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={next}
             disabled={isAtEndMobile}
@@ -274,8 +274,8 @@ export function PostList({ data, actions, appearance }: PostListProps) {
         {/* Tablet navigation */}
         <div className="hidden md:flex lg:hidden gap-1">
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={prev}
             disabled={isAtStart}
@@ -284,8 +284,8 @@ export function PostList({ data, actions, appearance }: PostListProps) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={next}
             disabled={isAtEndTablet}
@@ -297,8 +297,8 @@ export function PostList({ data, actions, appearance }: PostListProps) {
         {/* Desktop navigation */}
         <div className="hidden lg:flex gap-1">
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={prev}
             disabled={isAtStart}
@@ -307,8 +307,8 @@ export function PostList({ data, actions, appearance }: PostListProps) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
-            variant="outline"
-            size="icon"
+            variant="outlined"
+            shape="square"
             className="h-8 w-8"
             onClick={next}
             disabled={isAtEndDesktop}

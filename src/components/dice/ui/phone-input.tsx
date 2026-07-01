@@ -16,13 +16,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/dice/ui/command";
-import { Input } from "@/components/dice/ui/input";
+} from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/dice/ui/popover";
+} from "@/components/ui/popover";
 
 const ROOT_NAME = "PhoneInput";
 const COUNTRY_SELECT_NAME = "PhoneInputCountrySelect";
@@ -643,7 +643,6 @@ function PhoneInputCountrySelect(props: PhoneInputCountrySelectProps) {
   const {
     disabled: disabledProp,
     className,
-    children,
     onOpenChange: onOpenChangeProp,
     ...popoverProps
   } = props;
@@ -689,7 +688,7 @@ function PhoneInputCountrySelect(props: PhoneInputCountrySelectProps) {
         )}
         <ChevronDown className="size-4 opacity-50" />
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0" align="start">
+      <PopoverContent className="w-[300px] gap-0 p-0" align="start">
         <Command>
           <CommandInput placeholder="Search country..." />
           <CommandList>

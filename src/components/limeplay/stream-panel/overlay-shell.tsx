@@ -6,7 +6,7 @@ import * as React from "react"
 
 import { cn } from "@/components/limeplay/lib/utils"
 
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
 
 export type OverlayShellPlacement = "active" | "covered" | "idle"
 
@@ -81,8 +81,8 @@ export function OverlayShell({
               active:scale-[0.97]
             `}
             onClick={onBack}
-            size="icon"
-            variant="ghost"
+            shape="square"
+            variant="text"
           >
             <ChevronLeft className="size-3.5" />
           </Button>

@@ -1,3 +1,3 @@
 "use client"
 
-export { Alert } from "@/components/extend/components/ui/alert"
+export { Alert } from "@/components/ui/alert"

@@ -43,15 +43,15 @@ import { flushSync } from "react-dom"
 
 import { cn } from "@/components/extend/lib/utils"
 import { Button } from "@/components/extend/components/ui/button"
-import { Input } from "@/components/extend/components/ui/input"
-import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/extend/components/ui/tabs"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/extend/components/ui/tooltip"
+} from "@/components/ui/tooltip"
 
 import "@glideapps/glide-data-grid/dist/index.css"
 

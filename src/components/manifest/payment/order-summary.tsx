@@ -1,14 +1,14 @@
 "use client"
 
-import { Badge } from "@/components/manifest/components/ui/badge"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/manifest/components/ui/card"
-import { Separator } from "@/components/manifest/components/ui/separator"
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import { Package, Percent, Truck } from "lucide-react"
 
 // Import types from shared types file to avoid circular dependencies

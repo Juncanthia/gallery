@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react"
-import Link from "next/link"
+
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa"
 
 // Computed at build time, avoids hydration mismatch
@@ -27,30 +27,30 @@ export function FooterSimple() {
       <div className="container px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="flex flex-col items-center text-center space-y-8">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <a href="/" className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg">
               B
             </div>
             <span className="font-bold text-2xl">Brand</span>
-          </Link>
+          </a>
 
           {/* Navigation */}
           <nav className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </nav>
 
           {/* Social Links */}
           <div className="flex items-center gap-4">
             {socialLinks.map((social) => (
-              <Link
+              <a
                 key={social.label}
                 href={social.href}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
@@ -59,7 +59,7 @@ export function FooterSimple() {
               >
                 <social.icon className="h-5 w-5" />
                 <span className="sr-only">{social.label}</span>
-              </Link>
+              </a>
             ))}
           </div>
 

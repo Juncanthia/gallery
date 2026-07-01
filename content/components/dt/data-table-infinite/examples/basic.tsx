@@ -4,9 +4,9 @@ import { useMemo, useState, useCallback } from "react"
 import type { ColumnDef } from "@tanstack/react-table"
 
 import { DataTableInfinite } from "@/components/ui/dt-data-table-infinite"
-import { DataTableStoreProvider } from "@hyper/data-table-filters/lib/store/provider/DataTableStoreProvider"
-import { useMemoryAdapter } from "@hyper/data-table-filters/lib/store/adapters/memory"
-import { createSchema } from "@hyper/data-table-filters/lib/store/schema"
+import { DataTableStoreProvider } from "@/components/data-table-filters/lib/store/provider/DataTableStoreProvider"
+import { useMemoryAdapter } from "@/components/data-table-filters/lib/store/adapters/memory"
+import { createSchema } from "@/components/data-table-filters/lib/store/schema"
 
 type Record = {
   id: string

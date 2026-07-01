@@ -8,7 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/limeplay/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu"
 import { cn } from "@/components/limeplay/lib/utils"
 import {
   type AudioPlayerAsset,

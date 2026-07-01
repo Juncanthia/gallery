@@ -1,7 +1,7 @@
 import { cache } from "react"
 import { PokemonImage } from "@/components/gooseui/components/blocks/complex-component/components/pokemon-image"
 import { getPokemon } from "@/components/gooseui/components/blocks/complex-component/lib/pokemon"
-import { Card, CardContent } from "@/components/gooseui/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 
 const cachedGetPokemon = cache(getPokemon)
 

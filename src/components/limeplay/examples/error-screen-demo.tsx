@@ -2,7 +2,7 @@
 
 import { ExternalLinkIcon, RotateCwIcon } from "lucide-react"
 
-import { Button } from "@/components/limeplay/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   ErrorScreen,
   getErrorDetails,
@@ -26,12 +26,12 @@ export default function ErrorScreenDemo() {
         error={demoError}
       >
         <div className="flex flex-wrap gap-3">
-          <Button size="sm">
+          <Button variant="solid" color="primary" size="small">
             <RotateCwIcon />
             Retry
           </Button>
           {details.shakaDocsUrl && (
-            <Button asChild size="sm" variant="secondary">
+            <Button asChild size="small" variant="filled">
               <a
                 href={details.shakaDocsUrl}
                 rel="noopener noreferrer"

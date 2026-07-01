@@ -32,7 +32,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { cn } from "@/components/extend/lib/utils"
 import { Button } from "@/components/extend/components/ui/button"
 import { FileThumbnail } from "@/components/extend/components/ui/file-thumbnail"
-import { ScrollArea } from "@/components/extend/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export type DocumentSplitPageId = `page-${number}`
 export type DocumentSplit = {
