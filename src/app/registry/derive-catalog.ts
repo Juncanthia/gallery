@@ -23,17 +23,13 @@ const CATEGORY_TO_GROUP: Partial<Record<DomainCategory, string>> = {
 
 export function registryItemToNavItem(item: ComponentRegistryItem): GalleryNavItem {
   const catalogId = getCatalogId(item)
-  const vendor = item.id.includes("/") ? item.id.split("/")[0] : null
-  const summary = vendor
-    ? `${item.title}，${vendor === "gooseui" ? "GooseUI" : vendor === "chamaac" ? "Chamaac" : vendor} 组件。`
-    : `${item.title}。`
 
   return {
     id: catalogId,
     label: item.title,
     en: item.titleEn,
     to: getDocsRoute(item),
-    summary,
+    summary: `${item.title}。`,
     keywords: [catalogId, item.titleEn, item.titleEn.toLowerCase(), item.title, item.id],
     antd: item.legacy?.antd ?? false,
     migration: item.legacy?.migration ?? 0,

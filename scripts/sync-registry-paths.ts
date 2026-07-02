@@ -67,24 +67,24 @@ const DROP_DUPLICATE_IDS = new Set([
 /** Source module overrides when docsSlug is references/* or legacy shared paths. */
 const IMPORT_OVERRIDES: Record<string, { repoPath: string; alias: string }> = {
   "sabraman/code-block": {
-    repoPath: "src/components/_internal/sabraman/index.ts",
-    alias: "@/components/_internal/sabraman",
+    repoPath: "src/components/legacy-ui/index.ts",
+    alias: "@/components/legacy-ui",
   },
   notification: {
-    repoPath: "src/components/_internal/sabraman/index.ts",
-    alias: "@/components/_internal/sabraman",
+    repoPath: "src/components/legacy-ui/index.ts",
+    alias: "@/components/legacy-ui",
   },
   "sabraman/slider": {
-    repoPath: "src/components/_internal/sabraman/index.ts",
-    alias: "@/components/_internal/sabraman",
+    repoPath: "src/components/legacy-ui/index.ts",
+    alias: "@/components/legacy-ui",
   },
   "sabraman/switch": {
-    repoPath: "src/components/_internal/sabraman/index.ts",
-    alias: "@/components/_internal/sabraman",
+    repoPath: "src/components/legacy-ui/index.ts",
+    alias: "@/components/legacy-ui",
   },
   "sabraman/alert-dialog": {
-    repoPath: "src/components/_internal/sabraman/index.ts",
-    alias: "@/components/_internal/sabraman",
+    repoPath: "src/components/legacy-ui/index.ts",
+    alias: "@/components/legacy-ui",
   },
 }
 

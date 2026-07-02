@@ -54,13 +54,6 @@ export const LIBRARIES: Library[] = [
     hasBlocks: false,
   },
   {
-    id: "dice-ui",
-    label: "Dice UI",
-    labelEn: "Dice UI",
-    routePrefix: "/components/dice",
-    hasBlocks: false,
-  },
-  {
     id: "evilcharts",
     label: "EvilCharts",
     labelEn: "EvilCharts",
@@ -72,13 +65,6 @@ export const LIBRARIES: Library[] = [
     label: "Extend",
     labelEn: "Extend",
     routePrefix: "/components/extend",
-    hasBlocks: false,
-  },
-  {
-    id: "gooseui",
-    label: "Goose UI",
-    labelEn: "Goose UI",
-    routePrefix: "/components/gooseui",
     hasBlocks: false,
   },
   {
@@ -110,24 +96,10 @@ export const LIBRARIES: Library[] = [
     hasBlocks: false,
   },
   {
-    id: "sabraman",
-    label: "Sabraman",
-    labelEn: "Sabraman",
-    routePrefix: "/components/sabraman",
-    hasBlocks: false,
-  },
-  {
     id: "tool-ui",
     label: "Tool UI",
     labelEn: "Tool UI",
     routePrefix: "/components/tool",
-    hasBlocks: false,
-  },
-  {
-    id: "uselayouts",
-    label: "UseLayouts",
-    labelEn: "UseLayouts",
-    routePrefix: "/components/uselayouts",
     hasBlocks: false,
   },
 ]
