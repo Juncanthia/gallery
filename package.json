@@ -13,6 +13,9 @@
     "sync:registry": "npx tsx scripts/sync-registry-paths.ts && npx tsx scripts/sync-registry-from-shells.ts",
     "sync:registry-paths": "npx tsx scripts/sync-docs-slug-from-content.ts && npx tsx scripts/fix-bklit-docs-slug.ts && npx tsx scripts/sync-registry-paths.ts",
     "check:registry": "npx tsx scripts/check-registry.ts",
+    "check:duplicate-hooks": "npx tsx scripts/check-duplicate-hooks.ts",
+    "check:no-vendor-names": "npx tsx scripts/check-no-vendor-names.ts",
+    "verify": "pnpm typecheck && pnpm check:registry && pnpm check:duplicate-hooks && pnpm check:no-vendor-names && pnpm lint",
     "codemod:registry-examples": "npx tsx scripts/codemod-registry-examples.ts",
     "codemod:registry-docs": "npx tsx scripts/codemod-registry-docs.ts",
     "delete:registry-shells": "npx tsx scripts/delete-registry-shells.ts"

@@ -5,6 +5,25 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
+const DOMAINS = ['charts', 'data-table', 'document', 'editor', 'media']
+
+function domainIsolationConfigs() {
+  return DOMAINS.map((domain) => ({
+    files: [`src/_internals/domains/${domain}/**/*.{ts,tsx}`],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: DOMAINS.filter((other) => other !== domain).map((other) => ({
+            group: [`@/_internals/domains/${other}`, `@/_internals/domains/${other}/*`],
+            message: `Cross-domain import: ${domain} must not import ${other}`,
+          })),
+        },
+      ],
+    },
+  }))
+}
+
 export default defineConfig([
   globalIgnores(['dist', 'references']),
   {
@@ -31,6 +50,55 @@ export default defineConfig([
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/static-components': 'off',
       'react-hooks/use-memo': 'off',
+    },
+  },
+  {
+    files: ['src/components/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/app', '@/app/*'],
+              message: 'Components must not import from the Gallery app layer (@/app/*)',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  ...domainIsolationConfigs(),
+  {
+    files: ['src/kit/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/_internals/domains/*', '@/_internals/domains/*/**'],
+              message: 'kit must not import domains directly; use foundations or components',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/app/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'warn',
+        {
+          patterns: [
+            {
+              group: ['@/_internals/domains/*', '@/_internals/domains/*/**'],
+              message: 'Prefer @/kit/* over _internals/domains in app code',
+            },
+          ],
+        },
+      ],
     },
   },
 ])
