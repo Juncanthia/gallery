@@ -1,5 +1,3 @@
-import type React from "react"
-
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -36,55 +34,33 @@ export function noop() {
   // noop
 }
 
-/**
- * Overloaded function for React synthetic events
- */
-export function off<R extends HTMLElement>(
-  element: EventTarget,
-  events: string | string[],
-  callback: (event: React.SyntheticEvent<R>) => void
-): EventTarget
-/**
- * Implementation
- */
 export function off(
   element: EventTarget,
   events: string | string[],
-  callback: (event: any) => void
+  callback: EventListener
 ): EventTarget {
   if (Array.isArray(events)) {
     events.forEach((event) => {
-      element.removeEventListener(event, callback as EventListener)
+      element.removeEventListener(event, callback)
     })
   } else {
-    element.removeEventListener(events, callback as EventListener)
+    element.removeEventListener(events, callback)
   }
 
   return element
 }
 
-/**
- * Overloaded function for React synthetic events
- */
-export function on<R extends HTMLElement>(
-  element: EventTarget,
-  events: string | string[],
-  callback: (event: React.SyntheticEvent<R>) => void
-): EventTarget
-/**
- * Implementation
- */
 export function on(
   element: EventTarget,
   events: string | string[],
-  callback: (event: any) => void
+  callback: EventListener
 ): EventTarget {
   if (Array.isArray(events)) {
     events.forEach((event) => {
-      element.addEventListener(event, callback as EventListener)
+      element.addEventListener(event, callback)
     })
   } else {
-    element.addEventListener(events, callback as EventListener)
+    element.addEventListener(events, callback)
   }
 
   return element

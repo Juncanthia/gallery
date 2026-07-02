@@ -89,16 +89,18 @@ export interface MediaEventSlice<
  * }
  * ```
  */
+/** Widened event map used while feature slices are constructed. */
+type CreateSliceEvents = Record<string, unknown>
+
 export interface MediaFeature<
-  TSlice extends MediaShape,
+  TSlice extends MediaShape = MediaShape,
   TStore extends MediaShape & MediaStore = AnyMediaStore,
 > {
   createSlice: (
     set: ImmerStoreApi<TStore>["setState"],
     get: StoreApi<TStore>["getState"],
     store: ImmerStoreApi<TStore>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    events: MediaEvents<any>
+    events: MediaEvents<CreateSliceEvents>
   ) => TSlice
   key: keyof TSlice & string
   Setup?: React.ComponentType
@@ -113,7 +115,7 @@ export interface MediaFeature<
  * ```
  */
 export type MediaStoreFromFeatures<
-  TFeatures extends readonly MediaFeature<any, any>[],
+  TFeatures extends readonly MediaFeature[],
 > = Simplify<
   MediaStore & UnionToIntersection<SliceFromFeature<TFeatures[number]>>
 >
@@ -146,12 +148,14 @@ interface MediaRuntimeContextValue {
   store: ImmerStoreApi<AnyMediaStore>
 }
 
+// Dynamic feature slices are merged at runtime; permissive values keep Immer drafts usable.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Zustand feature map index
 type MediaShape = Record<string, any>
 
 type Simplify<T> = { [Key in keyof T]: T[Key] } & {}
 
 type SliceFromFeature<TFeature> =
-  TFeature extends MediaFeature<infer TSlice, any> ? TSlice : never
+  TFeature extends MediaFeature<infer TSlice, infer _TStore> ? TSlice : never
 
 type UnionToIntersection<TUnion> = (
   TUnion extends unknown ? (value: TUnion) => void : never
@@ -248,10 +252,12 @@ const MediaRuntimeContext =
  * const api = media.useMediaApi() // full store API for mutations
  * ```
  */
+/* eslint-disable @typescript-eslint/no-explicit-any -- MediaFeature is invariant in TSlice; tuple inference requires erasure */
 export function createMediaKit<
   const TFeatures extends readonly MediaFeature<any, any>[] =
     readonly MediaFeature<any, any>[],
 >({ features }: { features: TFeatures }) {
+/* eslint-enable @typescript-eslint/no-explicit-any */
   type RuntimeStore = MediaStoreFromFeatures<TFeatures>
   type RuntimeEvents = EventsFromStore<RuntimeStore>
 
@@ -267,7 +273,7 @@ export function createMediaKit<
               set as ImmerStoreApi<RuntimeStore>["setState"],
               get as StoreApi<RuntimeStore>["getState"],
               store as ImmerStoreApi<RuntimeStore>,
-              events as unknown as MediaEvents<EventsFromStore<RuntimeStore>>
+              events as unknown as MediaEvents<CreateSliceEvents>
             )
           )
         )

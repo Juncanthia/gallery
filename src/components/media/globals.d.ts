@@ -5,7 +5,7 @@ declare module "*.module.css" {
 
 // lodash.throttle ships JS without bundled .d.ts in some resolutions.
 declare module "lodash.throttle" {
-  const throttle: <T extends (...args: any[]) => any>(
+  const throttle: <T extends (...args: unknown[]) => unknown>(
     func: T,
     wait?: number,
     options?: { leading?: boolean; trailing?: boolean },
