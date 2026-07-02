@@ -1,0 +1,106 @@
+CardSwap 3D 卡片堆叠轮换组件，卡片以倾斜堆叠形式排列，自动循环轮换并支持弹性动画。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示一组卡片，以 3D 堆叠（倾斜）形式排列，并自动进行循环轮换时使用。
+
+常见场景：
+- 产品/服务卡片的多张展示
+- 个人作品集的项目轮播
+- 任意需要卡片堆叠轮换的场景
+
+不推荐：
+- 需要用户主动翻页的轮播（本组件为自动循环）
+- 卡片内容需要复杂交互（子卡片通过 cloneElement 传递 ref，交互受限）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/card-swap" path="rb/card-swap/basic" />
+
+```tsx
+import { CardSwap, Card } from "@/components/core/card-swap"
+
+export default function Demo() {
+  return (
+    <CardSwap>
+      <Card className="bg-blue-500 flex items-center justify-center text-white text-2xl">Card 1</Card>
+      <Card className="bg-green-500 flex items-center justify-center text-white text-2xl">Card 2</Card>
+      <Card className="bg-red-500 flex items-center justify-center text-white text-2xl">Card 3</Card>
+    </CardSwap>
+  )
+}
+```
+
+### 自定义轮换参数
+
+```tsx
+import { CardSwap, Card } from "@/components/core/card-swap"
+
+export default function CustomDemo() {
+  return (
+    <CardSwap
+      width={400}
+      height={300}
+      cardDistance={80}
+      verticalDistance={60}
+      delay={3000}
+      easing="smooth"
+      pauseOnHover
+      skewAmount={10}
+      onCardClick={(index) => console.log("clicked", index)}
+    >
+      <Card className="bg-purple-500">A</Card>
+      <Card className="bg-orange-500">B</Card>
+      <Card className="bg-teal-500">C</Card>
+      <Card className="bg-pink-500">D</Card>
+    </CardSwap>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CardSwap
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | Card 子组件 | `React.ReactNode` | - |
+| width | 卡片宽度（px） | `number` | `500` |
+| height | 卡片高度（px） | `number` | `400` |
+| cardDistance | 卡片之间的 X 轴间距 | `number` | `60` |
+| verticalDistance | 卡片之间的 Y 轴偏移 | `number` | `70` |
+| delay | 自动轮换间隔（ms） | `number` | `5000` |
+| pauseOnHover | 鼠标悬停时暂停轮换 | `boolean` | `false` |
+| onCardClick | 点击卡片回调（参数为 index） | `(index: number) => void` | - |
+| skewAmount | 卡片 Y 轴倾斜角度 | `number` | `6` |
+| easing | 动画缓动类型 | `"elastic" \| "smooth"` | `"elastic"` |
+
+`easing="elastic"` 时使用 `elastic.out(0.6,0.9)`，轮换动画持续时间约 2 秒。`easing="smooth"` 时使用 `power1.inOut`，持续时间约 0.8 秒。
+
+### Card
+
+`Card` 是一个 `forwardRef` 组件，接受所有标准 `HTMLDivElement` 属性，额外支持 `customClass` 属性作为样式类名。
+
+<h2 id="faq">常见问题</h2>
+
+### 轮换逻辑是怎样的？
+
+最前面的卡片先向下掉落消失，同时剩余卡片向前推进一个位置，最后被移除的卡片插入到堆叠末尾。整个过程使用 GSAP Timeline 编排。
+
+### elastic 和 smooth 缓动的区别？
+
+Elastic 为弹性缓动，卡片有回弹效果，轮换周期约 2 秒。Smooth 为 smooth 缓动，过渡更平滑快速，约 0.8 秒。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/card-swap` 导入 `CardSwap` 和 `Card`。
+2. 依赖 `gsap` 库。
+3. 子元素必须使用 `Card` 组件包裹。
+4. 附带样式表 `card-swap.css`。
+5. 卡片使用 `position: absolute` + `gsap.set` 进行 3D 定位（x, y, z, skewY）。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-card-swap" />

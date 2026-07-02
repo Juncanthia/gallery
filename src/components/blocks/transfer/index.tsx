@@ -1,9 +1,9 @@
 import { useState, useMemo, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/core/button";
+import { Checkbox } from "@/components/core/checkbox";
+import { Input } from "@/components/core/input";
+import { ScrollArea } from "@/components/core/scroll-area";
 import { ArrowRight as ArrowRightIcon, ArrowLeft as ArrowLeftIcon } from "lucide-react";
 
 export type TransferItem = {

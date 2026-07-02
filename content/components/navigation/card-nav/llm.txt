@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: CardNav
+subtitle: 卡片导航
+description: 可展开的卡片式导航栏组件，支持分类导航链接。
+demo: { cols: 1 }
+group: { title: Components, order: 5 }
+source: { component: src/components/react-bits/card-nav.tsx, docs: content/components/navigation/card-nav/index.mdx, examples: [content/components/navigation/card-nav/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, gsap: true, lucide: true }
+---

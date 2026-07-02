@@ -1,0 +1,157 @@
+[面积图 / AreaChart]
+导入: import { AreaChart } from "@/components/charts/chart-kit"
+子组件: import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent, PatternArea, XAxis, YAxis } from "@/components/charts/chart-kit"
+包来源: @/components/charts/chart-kit
+组件类型: 图表 / BKLit Charts
+底层依赖: @visx/responsive、@visx/shape、@visx/curve、@visx/scale、motion、d3-array
+
+## 何时使用
+
+面积图适合展示**随时间序列变化的连续数据**，填充区域能增强数值体量的视觉感知。支持入场动画、加载骨架屏、渐变填充、边缘渐隐、缩放联动等能力。
+
+常见场景：时序指标监控、堆叠对比分析、加载骨架屏、缩放联动、渐变填充增强。
+
+不适用场景：离散类别对比（用 BarChart）、占比展示（用 PieChart）、对比维度超过 5 个（拆分为多图或改用 LineChart）。
+
+## AreaChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 时间序列数据，每项需含日期字段和数值字段 | `Record<string, unknown>[]` | — |
+| xDataKey | x 轴（时间）data 字段名 | `string` | `"date"` |
+| margin | 图表边距，可部分覆盖 | `Partial<Margin>` | `{ top: 40, right: 40, bottom: 40, left: 40 }` |
+| aspectRatio | 容器宽高比 | `string` | `"2 / 1"` |
+| className | 容器附加样式类名 | `string` | `""` |
+| style | 容器内联样式 | `CSSProperties` | — |
+| blocks/status | `"loading"` 渲染骨架屏 | `"loading" \| "ready"` | `"ready"` |
+| loadingLabel | 加载时居中 shimmer 标签 | `string` | — |
+| animationDuration | 入场动画时长（ms） | `number` | `1100` |
+| animationEasing | CSS 缓动函数 | `string` | `cubic-bezier(0.85, 0, 0.15, 1)` |
+| enterTransition | Motion 入场过渡 | `Transition` | — |
+| revealSignature | Motion URL 签名，变化时重播 reveal | `string` | — |
+| yDomainTween | 过渡 y-domain | `boolean` | `true` |
+| yDomainTweenDuration | y-domain 过渡时长（ms） | `number` | `500` |
+| xDomain | 可见 x 轴范围（brush 缩放） | `[Date, Date]` | — |
+| xDomainSlotCount | xDomain 时完整数据集长度 | `number` | — |
+| tweenYDomainOnXDomainChange | brush 时过渡 y-domain | `boolean` | `false` |
+| onPhaseChange | 图表阶段变化回调 | `(phase: ChartPhase) => void` | — |
+| children | 子组件 | `ReactNode` | — |
+
+## Area Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| dataKey | y 轴数据字段名 | `string` | — |
+| yAxisId | y 轴分组 ID | `string \| number` | `"left"` |
+| fill | 填充渐变起始色 | `string` | `var(--chart-line-primary)` |
+| fillOpacity | 顶部填充不透明度 | `number` | `0.4` |
+| stroke | 折线描边色 | `string` | 同 fill |
+| strokeWidth | 描边宽度 | `number` | `2` |
+| curve | 曲线插值函数 | `CurveFactory` | `curveMonotoneX` |
+| animate | 入场动画 | `boolean` | `true` |
+| showLine | 显示折线 | `boolean` | `true` |
+| showHighlight | hover 高亮 | `boolean` | `true` |
+| gradientToOpacity | 渐变底部不透明度 | `number` | `0` |
+| gradientSpan | 渐变垂直占比 (0–1) | `number` | `1` |
+| fadeEdges | 边缘渐隐: true/false/"left"/"right" | `true \| false \| "left" \| "right"` | `false` |
+| showMarkers | 数据点散点标记 | `boolean` | `false` |
+| markers | 标记样式 | `SeriesPointMarkerStyle` | — |
+| dashFromIndex | 虚线起始索引（预测期） | `number` | — |
+| dashArray | 虚线 dash 模式 | `string` | `"6,4"` |
+| loading | 加载脉冲覆盖层 | `boolean` | 跟随 phase |
+| loadingStroke | 加载脉冲描边色 | `string` | `var(--foreground)` |
+| loadingStrokeOpacity | 加载脉冲描边不透明度 | `number` | `0.5` |
+| loadingPulseMode | 脉冲模式: loop/exit/enter | `LineLoadingPulseMode` | — |
+| loadingStyle | 加载动画: "pulse"/"sweep" | `"pulse" \| "sweep"` | `"pulse"` |
+
+## Grid Props (可选子组件)
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| horizontal | 水平网格线 | `boolean` | `true` |
+| vertical | 垂直网格线 | `boolean` | `false` |
+| numTicksRows | 水平刻度数 | `number` | `5` |
+| stroke | 网格线颜色 | `string` | `var(--chart-grid)` |
+| strokeDasharray | dash 模式 | `string` | `"4,4"` |
+| fadeHorizontal | 左右渐隐 | `boolean` | `true` |
+| shimmer | shimmer 扫光 | `boolean` | `false` |
+
+## 示例代码
+
+### 基础面积图
+
+import { AreaChart } from "@/components/charts/chart-kit"
+import { Area, Grid } from "@/components/charts/chart-kit"
+
+const data = [
+  { date: new Date(2024, 0, 1), value: 100 },
+  { date: new Date(2024, 0, 2), value: 220 },
+  { date: new Date(2024, 0, 3), value: 150 },
+  { date: new Date(2024, 0, 4), value: 380 },
+  { date: new Date(2024, 0, 5), value: 260 },
+  { date: new Date(2024, 0, 6), value: 310 },
+  { date: new Date(2024, 0, 7), value: 420 },
+]
+
+<AreaChart data={data}>
+  <Grid />
+  <Area dataKey="value" fill="var(--chart-line-primary)" fillOpacity={0.3} stroke="var(--chart-line-primary)" />
+</AreaChart>
+
+### 加载骨架屏
+
+import { AreaChart } from "@/components/charts/chart-kit"
+import { Area, Grid, generateChartSkeletonData } from "@/components/charts/chart-kit"
+
+const skeletonData = generateChartSkeletonData({ dataKey: "value", pointCount: 8 })
+
+<AreaChart data={skeletonData} blocks/status="loading" loadingLabel="数据加载中...">
+  <Grid />
+  <Area dataKey="value" fill="var(--chart-line-primary)" fillOpacity={0.3} />
+</AreaChart>
+
+### 带 Tooltip 的面积图
+
+import { AreaChart } from "@/components/charts/chart-kit"
+import { Area, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/charts/chart-kit"
+
+<AreaChart data={data}>
+  <Grid />
+  <Area dataKey="value" fill="var(--chart-line-primary)" fillOpacity={0.3} stroke="var(--chart-line-primary)" />
+  <ChartTooltip>
+    <TooltipIndicator />
+    <TooltipBox>
+      <TooltipContent />
+    </TooltipBox>
+  </ChartTooltip>
+</AreaChart>
+
+## 约束
+
+- 需要 @visx/* 系列依赖（@visx/responsive、@visx/shape、@visx/curve、@visx/gradient、@visx/scale、@visx/grid）
+- 需要 motion（原 framer-motion）依赖
+- 需要 d3-array 依赖
+- data 中日期字段必须为 Date 对象，不能是字符串或时间戳
+- xDataKey 对应字段值会被转为 Date 进行时间尺度映射
+- 每个 data 项的数据字段值必须为 number 类型
+- 多系列时每个 Area 必须指定唯一的 dataKey
+- 建议在容器中设置 aspectRatio 保证渲染比例
+- 颜色推荐使用 CSS 变量：var(--chart-line-primary)、var(--chart-1)～var(--chart-5)、var(--chart-grid)、var(--foreground)
+- 加载状态用 blocks/status="loading"，不要自行实现骨架屏逻辑
+- 动画通过 animationDuration、animationEasing、enterTransition 控制，不要写自定义动画覆盖
+- 不要引入 Recharts、Ant Design Charts、ECharts 等第三方图表库
+- AreaChart 内部使用 ParentSize 自适应容器尺寸，无需手动传 width/height
+- 所有子组件（Area、Grid、ChartTooltip 等）必须通过 children 传入，不要在外层包裹
+- 从 @/components/charts/chart-kit 导入 AreaChart
+- 从 @/components/charts/chart-kit 导入 Area、Grid、ChartTooltip、PatternArea 等子组件
+
+## 最佳实践
+
+- 始终搭配 Grid 渲染网格线，增强数值可读性
+- 数据点建议 5-100 个，超过 500 个数据点图表默认开启 decimation（降采样）
+- 无数据时用 blocks/status="loading" + loadingLabel 展示骨架屏，而非空白或 "No Data" 文本
+- 需要预测区间时用 dashFromIndex 从实际数据末尾起将折线转为虚线
+- 需要部分透明效果时用 fadeEdges 控制边缘渐隐，而非手动控制 opacity
+- 多系列时使用不同的 CSS 颜色变量区分：var(--chart-1)、var(--chart-2) 等
+- 配合 ChartBrush/ChartBrushLayout 实现缩放时，通过 xDomain 和 tweenYDomainOnXDomainChange 控制
+- pattern 图案填充用 PatternArea 子组件替代 Area，pattern 属性支持 circles、hexagons、lines、waves

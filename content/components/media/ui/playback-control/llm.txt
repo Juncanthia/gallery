@@ -1,0 +1,84 @@
+---
+category: Components
+title: PlaybackControl
+subtitle: 播放控制
+description: 响应用户点击切换媒体播放/暂停状态，自动根据播放状态更新无障碍标签。
+demo:
+  cols: 2
+group:
+  title: Limeplay
+  order: 6
+source:
+  component: src/components/limeplay/ui/playback-control.tsx
+  wrapper: src/components/core/limeplay-playback-control.tsx
+  examples:
+    - content/components/limeplay/playback-control/examples/basic.tsx
+  blocks:
+    - src/components/limeplay/blocks/audio-player/components/playback-controls.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# PlaybackControl 播放控制
+
+播放控制按钮，用于切换媒体播放/暂停状态。
+
+## 导入路径
+
+```tsx
+import { PlaybackControl } from "@/components/core/playback-control"
+```
+
+## 核心导出
+
+- `PlaybackControl`
+
+## API 摘要
+
+```ts
+interface PlaybackControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean           // 使用 Radix Slot 合并到子元素，默认 false
+  render?: React.ReactElement // 渲染自定义子元素
+  shortcut?: string           // 键盘快捷键提示，例 "Space"
+}
+```
+
+## 最小示例
+
+```tsx
+import { Button } from "@/components/core/button"
+import { PlaybackControl } from "@/components/core/playback-control"
+
+export default function Demo() {
+  return (
+    <PlaybackControl asChild shortcut="Space">
+      <Button size="icon" variant="ghost">
+        {blocks/status === "playing" ? <PauseIcon weight="fill" /> : <PlayIcon weight="fill" />}
+      </Button>
+    </PlaybackControl>
+  )
+}
+```
+
+## 关键行为
+
+1. 点击时调用 `usePlaybackStore` 的 `togglePaused()` 方法。
+2. 自动根据 `blocks/status` 生成 `aria-label`（"Play" / "Pause" / "Replay"）。
+3. 传入 `shortcut` 时自动写入 `aria-keyshortcuts` 并在 `aria-label` 中追加提示。
+4. 当 `readyState < HAVE_CURRENT_DATA` 时自动 `disabled`。
+5. `asChild` 模式下通过 Radix Slot 将行为合并到子元素。
+6. `render` 模式下通过 `React.cloneElement` 注入 props。
+
+## 约束
+
+- 必须在 `MediaProvider` 上下文中使用。
+- 不要引入 `antd` 或 `@ant-design/icons`。
+- 推荐 `asChild` 模式包裹 Button，而非直接使用原生 button。

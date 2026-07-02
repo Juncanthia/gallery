@@ -1,0 +1,106 @@
+FooterNewsletter 是一个带邮件订阅功能的页脚区块组件。左侧提供邮件订阅表单，右侧放置导航链接和社交媒体图标，底部展示品牌标识、版权信息和法律链接。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面的底部区域展示品牌信息、导航链接、社交媒体入口，同时提供邮件订阅功能时使用。适用于营销网站、SaaS 产品落地页、企业官网等场景的全局页脚。
+
+常见场景：
+
+- 营销网站的全局页脚，包含订阅 CTA 和社交链接。
+- SaaS 产品落地页底部，提供导航和法律信息入口。
+- 企业官网的底部信息栏，展示品牌和版权声明。
+- 需要收集用户邮箱的页面底部区域。
+
+FooterNewsletter 是一个自包含的演示级区块组件，无外部 Props 配置。订阅表单内置模拟提交逻辑（1 秒延迟后清空邮箱），社交图标使用 `react-icons/fa`，导航链接为占位锚点。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+FooterNewsletter 渲染一个完整的页脚区块，包含订阅表单、导航列表、社交图标和底部信息栏。点击 Subscribe 按钮模拟提交。
+
+<ComponentShowcase
+  id="marketing-blocks/footer-newsletter"
+  path="marketing-blocks/footer-newsletter/basic"
+/>
+
+```tsx
+import { FooterNewsletter } from "@/components/marketing-blocks/footer-newsletter"
+
+export default function Demo() {
+  return <FooterNewsletter />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FooterNewsletter
+
+FooterNewsletter 为自包含区块组件，无外部 Props。所有内容（导航链接、社交图标、订阅文案）均在组件内部定义。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| 无 | 组件不接受外部属性 | - | - |
+
+组件内部状态：
+
+- `email: string` — 邮箱输入框的值，初始为空字符串。
+- `isSubmitting: boolean` — 提交中的加载状态，点击订阅后设为 `true`，1 秒后重置。
+- `CURRENT_YEAR = 2026` — 编译时确定的年份常量，避免水合不匹配。
+
+### 内部数据结构
+
+**navLinks** — 导航链接数组，每项包含 `label` 和 `href`：
+
+```ts
+{ label: "About", href: "#about" }
+{ label: "Features", href: "#features" }
+{ label: "Pricing", href: "#pricing" }
+{ label: "Blog", href: "#blog" }
+{ label: "Contact", href: "#contact" }
+```
+
+**socialLinks** — 社交图标数组，每项包含 `icon`（react-icons/fa 组件）、`href` 和 `label`：
+
+```ts
+{ icon: FaTwitter, href: "https://twitter.com", label: "Twitter" }
+{ icon: FaGithub, href: "https://github.com", label: "GitHub" }
+{ icon: FaLinkedin, href: "https://linkedin.com", label: "LinkedIn" }
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 如何更换导航链接？
+
+导航链接定义在组件内部 `navLinks` 常量数组中。修改组件源码中的 `label` 和 `href` 值即可更换链接文本和地址。
+
+### 如何更换社交图标？
+
+社交图标定义在组件内部 `socialLinks` 常量数组中。替换 `icon` 值为其他 `react-icons/fa` 组件（如 `FaYoutube`、`FaInstagram`），同时更新 `href` 为对应的链接地址。
+
+### 订阅功能如何对接真实 API？
+
+当前订阅为模拟实现（`setTimeout` 延迟 1 秒）。如需对接真实 API，修改组件内部的 `handleSubmit` 函数，将 `await new Promise(...)` 替换为实际的 API 调用（如 `fetch` 或 `axios`）。
+
+### 如何修改版权年份？
+
+组件内部使用编译时常量 `CURRENT_YEAR = 2026`。如需更新年份，在组件源码中修改该常量值。此方式避免了客户端水合不匹配问题。
+
+### 能否在移动端调整布局？
+
+组件使用 Tailwind 响应式类名实现自适应布局：`lg:grid-cols-2` 分左右两栏，`md:flex-row` 底部信息栏在中等屏幕以上水平排列，小屏幕纵向堆叠。如需进一步调整，通过修改组件源码中的响应式类名实现。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FooterNewsletter 代码时：
+
+1. 从 `@/components/marketing-blocks/footer-newsletter` 导入 `FooterNewsletter`。
+2. 直接使用 `<FooterNewsletter />` 即可渲染完整页脚，无需传入任何 Props。
+3. 不要从 gooseui 内部路径（如 `@/components/marketing-blocks/footer-newsletter`）导入。
+4. 如需定制导航链接或社交图标，在组件源码中修改，不要在调用处覆盖内部结构。
+5. 不要引入其他第三方 Footer 组件或 Ant Design 相关依赖。
+6. 邮件订阅功能为演示级实现，生产环境需对接真实 API。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="marketing-blocks/footer-newsletter" />

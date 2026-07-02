@@ -19,7 +19,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CopyButton } from "@/components/ui/copy-button";
+import { CopyButton } from "@/components/core/copy-button";
 import type { IconType } from "react-icons";
 import {
   SiAstro,
@@ -110,7 +110,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/core/select";
 import { cn } from "@/lib/utils";
 
 export type { BundledLanguage } from "shiki";

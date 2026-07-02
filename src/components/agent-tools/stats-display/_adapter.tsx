@@ -9,8 +9,8 @@
  */
 
 export { cn } from "@/lib/utils";
-export { Card } from "@/components/ui/card"
-export { CardHeader } from "@/components/ui/card"
-export { CardTitle } from "@/components/ui/card"
-export { CardDescription } from "@/components/ui/card"
-export { CardContent } from "@/components/ui/card"
+export { Card } from "@/components/core/card"
+export { CardHeader } from "@/components/core/card"
+export { CardTitle } from "@/components/core/card"
+export { CardDescription } from "@/components/core/card"
+export { CardContent } from "@/components/core/card"

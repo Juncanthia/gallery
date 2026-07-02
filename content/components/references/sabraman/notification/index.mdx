@@ -1,0 +1,318 @@
+LegacyNotification 用于展示 macOS 风格的系统通知，支持标题、副标题、正文、图标和时间戳。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要在页面中展示系统级的操作反馈或信息提示时使用，适合需要用户感知但不打断当前操作的场景。
+
+常见场景：
+
+- 操作结果反馈：保存成功、删除完成、提交确认。
+- 系统消息提醒：新版本发布、维护通知、权限变更。
+- 状态更新通知：任务完成、审批通过、数据同步完毕。
+- 即时通讯提示：新消息、未读提醒。
+
+LegacyNotification 通过 props 控制内容展示：
+
+- `title` + `time`：标题行，左侧标题右侧时间。
+- `subtitle`：副标题，位于标题下方。
+- `body`：正文内容，位于副标题下方。
+- `icon`：自定义图标，显示在左侧图标区域。
+- `showIcon` / `showSubtitle` / `showBody`：控制各区域的显隐。
+
+推荐使用方式：
+
+- 直接渲染 `<LegacyNotification>` 作为页面内嵌通知卡片。
+- 通过 `showLegacyNotification()` 函数式调用，底层基于 sonner toast，适合弹出式通知。
+
+不推荐：
+
+- 用 LegacyNotification 替代 Modal 做复杂交互。
+- 在通知中放置过长文本——通知设计为轻量信息展示。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认通知，包含标题、副标题、正文和时间戳。
+
+<ComponentShowcase
+  id="sabraman/references/notification"
+  path="sabraman/references/notification/basic"
+/>
+
+```tsx
+import { LegacyNotification } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <LegacyNotification
+      title="提醒"
+      subtitle="新消息"
+      body="您有一条新的系统通知"
+      time="刚刚"
+    />
+  )
+}
+```
+
+### 函数式调用
+
+通过 `showLegacyNotification` 命令式弹出通知，底层使用 sonner toast。
+
+```tsx
+import { showLegacyNotification } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <button
+      onClick={() =>
+        showLegacyNotification({
+          title: "操作成功",
+          subtitle: "文件管理",
+          body: "文件已成功保存到云端",
+          time: "刚刚",
+        })
+      }
+    >
+      弹出通知
+    </button>
+  )
+}
+```
+
+> `showLegacyNotification` 从 `@/components/_internal/sabraman` 导入；`@/components/_internal/sabraman` 仅导出渲染组件。
+
+### 控制显隐
+
+通过 `showIcon`、`showSubtitle`、`showBody` 控制各区域显隐。
+
+```tsx
+import { LegacyNotification } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-4">
+      <LegacyNotification
+        body="纯文本通知，隐藏图标和副标题"
+        showIcon={false}
+        showSubtitle={false}
+        time="1 分钟前"
+        title="系统消息"
+      />
+      <LegacyNotification
+        body="仅显示图标和正文"
+        showSubtitle={false}
+        time="刚刚"
+        title="提醒"
+      />
+    </div>
+  )
+}
+```
+
+### 自定义图标
+
+通过 `icon` 传入 ReactNode 自定义左侧图标。
+
+```tsx
+import { Bell, CheckCircle, Info } from "lucide-react"
+import { LegacyNotification } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-4">
+      <LegacyNotification
+        body="操作已成功完成"
+        icon={<CheckCircle />}
+        time="刚刚"
+        title="成功"
+      />
+      <LegacyNotification
+        body="请查看最新公告"
+        icon={<Bell />}
+        time="3 分钟前"
+        title="新通知"
+      />
+      <LegacyNotification
+        body="系统将在 30 分钟后维护"
+        icon={<Info />}
+        time="10 分钟前"
+        title="维护提醒"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LegacyNotification
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 标题文字 | `string` | `"Title"` |
+| subtitle | 副标题文字 | `string` | `"Subtitle"` |
+| body | 正文内容 | `string` | `"Body"` |
+| time | 时间戳文字，显示在标题右侧 | `string` | `"now"` |
+| icon | 自定义图标，显示在左侧图标区域 | `React.ReactNode` | - |
+| showIcon | 是否显示图标区域 | `boolean` | `true` |
+| showSubtitle | 是否显示副标题 | `boolean` | `true` |
+| showBody | 是否显示正文 | `boolean` | `true` |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+
+支持所有 `React.HTMLAttributes&lt;HTMLDivElement&gt;`。
+
+### showLegacyNotification
+
+命令式弹出通知，基于 sonner toast。
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 标题文字 | `string` | `"Title"` |
+| subtitle | 副标题文字 | `string` | `"Subtitle"` |
+| body | 正文内容 | `string` | `"Body"` |
+| time | 时间戳文字 | `string` | `"now"` |
+| icon | 自定义图标 | `React.ReactNode` | - |
+| showIcon | 是否显示图标区域 | `boolean` | `true` |
+| showSubtitle | 是否显示副标题 | `boolean` | `true` |
+| showBody | 是否显示正文 | `boolean` | `true` |
+| toastOptions | sonner toast 配置，可覆写 duration、position 等 | `ExternalToast` | `{ duration: 4200, position: "top-center", unstyled: true }` |
+
+返回值：sonner toast 的 ID（`string \| number`），可用于 `toast.dismiss()`。
+
+> 导入路径：`import { showLegacyNotification } from "@/components/_internal/sabraman"`
+
+<h2 id="faq">常见问题</h2>
+
+### 如何弹出通知而不是内嵌显示？
+
+使用 `showLegacyNotification` 函数式调用：
+
+```tsx
+import { showLegacyNotification } from "@/components/_internal/sabraman"
+
+showLegacyNotification({
+  title: "操作成功",
+  body: "数据已保存",
+  time: "刚刚",
+})
+```
+
+### 如何调整通知的显示时长？
+
+通过 `toastOptions.duration` 设置（单位毫秒）：
+
+```tsx
+showLegacyNotification({
+  title: "重要通知",
+  body: "此消息显示 10 秒",
+  time: "刚刚",
+  toastOptions: { duration: 10000 },
+})
+```
+
+### 如何关闭弹出的通知？
+
+```tsx
+import { toast } from "sonner"
+
+const id = showLegacyNotification({ title: "通知", body: "内容", time: "刚刚" })
+toast.dismiss(id)
+```
+
+### 如何自定义通知位置？
+
+通过 `toastOptions.position` 设置：
+
+```tsx
+showLegacyNotification({
+  title: "通知",
+  body: "显示在右下角",
+  time: "刚刚",
+  toastOptions: { position: "bottom-right" },
+})
+```
+
+### 如何隐藏图标？
+
+设置 `showIcon={false}`：
+
+```tsx
+<LegacyNotification
+  showIcon={false}
+  title="纯文本通知"
+  body="不显示图标"
+  time="刚刚"
+/>
+```
+
+## 与 Ant Design 的取舍
+
+LegacyNotification 是 Sabraman 体系的 macOS 风格通知组件，与 Ant Design references/notification 设计理念不同。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 视觉风格 | macOS 风格（黑色半透明毛玻璃、圆角图标），非 AntD 白底卡片风格 |
+| 渲染方式 | 支持组件式渲染（`&lt;LegacyNotification /&gt;`）和函数式调用（`showLegacyNotification`） |
+| 底层实现 | 函数式调用基于 sonner，非 AntD 自建 references/notification 实例 |
+| 通知类型 | 无 type（info/success/warning/error）区分，通过 icon 自由表达语义 |
+| 位置配置 | 通过 `toastOptions.position` 透传 sonner 配置 |
+| 样式定制 | Tailwind CSS 内联，不依赖 AntD ConfigProvider |
+
+## 样式模型
+
+LegacyNotification 使用 Tailwind CSS 实现 macOS 风格通知卡片：
+
+- 容器：黑色半透明背景 `bg-black/80`，圆角 `rounded-[8px]`，阴影 `shadow-[0px_5px_5px_0px_rgba(0,0,0,0.5)]`，黑色边框 `border border-black/60`。
+- 顶部高光：绝对定位的渐变层 `linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.1)_100%)` 模拟 macOS 顶部光泽。
+- 图标区域：`size-[29px]` 圆角灰色渐变背景，内含 `[&_svg]:size-[17px]` 图标容器。
+- 文字区域：白色文字 + `text-shadow`，`text-ellipsis` 溢出截断。
+- 字体：`"Helvetica Neue", Helvetica, Arial, sans-serif` 固定字体族。
+
+## 依赖与实现说明
+
+核心文件：
+
+- `src/components/sabraman/components/legacy-references/notification.tsx`：LegacyNotification 及 showLegacyNotification 定义。
+- `src/components/core/sabraman-references/notification.tsx`：UI 层重导出。
+
+关键行为：
+
+1. `showLegacyNotification` 内部调用 `toast.custom()`，默认 4200ms 自动关闭，位置 `top-center`，`unstyled: true` 避免 sonner 默认样式干扰。
+2. LegacyNotification 为纯展示组件，无交互状态，所有内容通过 props 控制。
+3. `showBody`、`showSubtitle`、`showIcon` 控制对应 DOM 节点的条件渲染，隐藏时不占位。
+4. 组件使用 `React.forwardRef` 支持 ref 透传。
+
+## 可访问性
+
+- LegacyNotification 使用原生 `<div>` 元素，当前未设置 ARIA role。如需提升语义，调用侧可设置 `role="blocks/status"` 或 `role="alert"`。
+- `showLegacyNotification` 弹出的通知使用 sonner 的 toast 容器，其具备基本的 `aria-live` 区域支持。
+- 图标区域为纯装饰性元素，不含交互。
+- 文字内容通过 `text-ellipsis` 和 `overflow-hidden` 处理溢出。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LegacyNotification 代码时：
+
+1. 渲染组件从 `@/components/_internal/sabraman` 导入。
+2. 函数式调用从 `@/components/_internal/sabraman` 导入 `showLegacyNotification`。
+3. 不要从 `antd` 导入 references/notification 或 message。
+4. 通知文案通过 `title`、`subtitle`、`body`、`time` 控制，不要拼接 HTML。
+5. 自定义图标使用 `icon` 属性，传入 lucide-react 图标组件。
+6. `showLegacyNotification` 的 `toastOptions` 用于覆写 sonner 配置（duration、position 等）。
+7. 不引入 Ant Design 的 ConfigProvider、Design Token 或 css-in-js。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+LegacyNotification 当前未设置 `data-slot` 属性。组件内部结构如下：
+
+| 选择器 | 说明 |
+| --- | --- |
+| 容器 div | 根节点，包含 `rounded-[8px]`、`border`、`bg-black/80` |
+| 图标容器 div | `size-[29px]` 圆角灰色渐变区域 |
+| 文字容器 div | `flex-1` 纵向布局，包含 title+time、subtitle、body |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="sabraman/references/notification" />

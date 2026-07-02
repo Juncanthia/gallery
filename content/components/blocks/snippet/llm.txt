@@ -1,0 +1,272 @@
+---
+category: Blocks
+title: Snippet
+subtitle: 代码片段
+description: 代码片段展示复合组件，基于 Tabs 提供多代码片段切换，内置标题栏和 hover 渐显的复制按钮。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 20
+source:
+  component: src/components/blocks/snippet/index.tsx
+  docs: content/components/blocks/snippet/index.mdx
+  examples:
+    - content/components/blocks/snippet/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Snippet 代码片段
+
+Snippet 是一个代码片段展示复合组件，基于 Tabs 封装以提供多标签页切换能力。它通过子组件组合模式提供 SnippetHeader（标题栏）、SnippetCopyButton（hover 渐显复制按钮）、SnippetTabsList、SnippetTabsTrigger 和 SnippetTabsContent，代码内容区通过 `asChild` 模式自动包裹 `<pre>` 标签。
+
+本组件为项目本地复合组件，无 Ant Design 直接对应。实现以本地源码为准。
+
+## 何时使用 {#when-to-use}
+
+需要在文档、API 参考或教程页面中展示代码片段，尤其是需要多语言/多文件切换和便捷复制功能时使用。
+
+常见场景：
+
+- 组件文档中的代码示例展示，支持多个变体（如 JavaScript/TypeScript、npm/yarn/pnpm）切换。
+- 安装命令展示，每个标签页对应不同的包管理器命令。
+- 配置文件展示，标签页区分不同环境的配置内容。
+- API 文档的多语言请求示例（cURL / JavaScript / Python）。
+
+推荐使用方式：
+
+- Snippet 作为最外层容器。内部按 SnippetHeader + SnippetTabsContent 的顺序组合。
+- SnippetHeader 内放置 SnippetTabsList（含 SnippetTabsTrigger）和 SnippetCopyButton。
+- SnippetCopyButton 的 `value` prop 绑定当前激活标签页对应的代码文本。
+- SnippetTabsContent 的 `children` 为纯文本代码串（组件内部已包裹 `<pre>`）。
+
+不推荐：
+
+- 用于导航式标签页（如设置页面的分类切换）—— 应直接使用 Tabs 组件。
+- 在多文件代码展示场景中替代 CodeTabs 复合组件。
+- 在 SnippetTabsContent 中放置非文本内容 —— 内容会被 `<pre>` 包裹。
+- 引入 `antd` 或外部代码展示库。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+标准代码片段，包含标题栏、标签页切换和 hover 渐显的复制按钮。
+
+```tsx
+import {
+  Snippet,
+  SnippetHeader,
+  SnippetCopyButton,
+  SnippetTabsList,
+  SnippetTabsTrigger,
+  SnippetTabsContent,
+} from "@/components/blocks/snippet"
+
+export default function Demo() {
+  return (
+    <Snippet defaultValue="npm">
+      <SnippetHeader>
+        <SnippetTabsList>
+          <SnippetTabsTrigger value="npm">npm</SnippetTabsTrigger>
+          <SnippetTabsTrigger value="yarn">yarn</SnippetTabsTrigger>
+          <SnippetTabsTrigger value="pnpm">pnpm</SnippetTabsTrigger>
+        </SnippetTabsList>
+        <SnippetCopyButton value="npm install @my-lib/core" />
+      </SnippetHeader>
+      <SnippetTabsContent value="npm">npm install @my-lib/core</SnippetTabsContent>
+      <SnippetTabsContent value="yarn">yarn add @my-lib/core</SnippetTabsContent>
+      <SnippetTabsContent value="pnpm">pnpm add @my-lib/core</SnippetTabsContent>
+    </Snippet>
+  )
+}
+```
+
+> 说明：Snippet 继承 Tabs 的全部 API（如 `defaultValue`、`value`、`onValueChange`）。SnippetCopyButton 的 `value` 为复制的文本内容（默认为空字符串）。hover 容器时复制按钮通过 `group-hover` 机制渐显。
+
+### 受控切换 + 动态复制
+
+通过 `value` 和 `onValueChange` 实现受控标签页切换，复制按钮的值动态跟随激活标签页。
+
+```tsx
+import { useState } from "react"
+import {
+  Snippet,
+  SnippetHeader,
+  SnippetCopyButton,
+  SnippetTabsList,
+  SnippetTabsTrigger,
+  SnippetTabsContent,
+} from "@/components/blocks/snippet"
+
+const codes: Record<string, string> = {
+  js: 'const msg = "Hello World";\nconsole.log(msg);',
+  ts: 'const msg: string = "Hello World";\nconsole.log(msg);',
+}
+
+export default function Demo() {
+  const [tab, setTab] = useState("js")
+
+  return (
+    <Snippet value={tab} onValueChange={setTab}>
+      <SnippetHeader>
+        <SnippetTabsList>
+          <SnippetTabsTrigger value="js">app.js</SnippetTabsTrigger>
+          <SnippetTabsTrigger value="ts">app.ts</SnippetTabsTrigger>
+        </SnippetTabsList>
+        <SnippetCopyButton value={codes[tab]} />
+      </SnippetHeader>
+      <SnippetTabsContent value="js">{codes.js}</SnippetTabsContent>
+      <SnippetTabsContent value="ts">{codes.ts}</SnippetTabsContent>
+    </Snippet>
+  )
+}
+```
+
+## API {#api}
+
+以下类型来自 `src/components/blocks/snippet/index.tsx` 源码，是生成代码时的主要依据。
+
+### Snippet
+
+顶层容器，基于 Tabs 封装。继承 `ComponentProps<typeof Tabs>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| defaultValue | 非受控模式下的默认激活标签页 value | `string` | - |
+| value | 受控模式下的激活标签页 value | `string` | - |
+| onValueChange | 标签页切换回调 | `(value: string) => void` | - |
+| className | 附加样式类，与默认 `group w-full gap-0 overflow-hidden rounded-md border` 合并 | `string` | - |
+
+支持 Tabs 的全部属性（包括 `activeKey`、`onChange`、`orientation`、`dir` 等）。内部强制 `gap-0` 覆盖 Tabs 默认间距。
+
+### SnippetHeader
+
+标题栏容器，横向布局，左侧放标签页列表，右侧放复制按钮。继承 `HTMLAttributes<HTMLDivElement>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类，与默认 `flex flex-row items-center justify-between border-b bg-secondary p-1` 合并 | `string` | - |
+| children | 标题栏内容（通常为 SnippetTabsList 和 SnippetCopyButton） | `React.ReactNode` | - |
+
+### SnippetCopyButton
+
+复制按钮，基于 CopyButton 封装。hover Snippet 容器时渐显。继承 `ComponentProps<typeof CopyButton>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 要复制的文本内容 | `string` | `""` |
+| onCopy | 复制成功后的回调 | `() => void` | - |
+| onError | 复制失败时的回调 | `(error: Error) => void` | - |
+| timeout | 复制成功状态持续时间（ms） | `number` | `2000` |
+| className | 附加样式类，与默认 `opacity-0 transition-opacity group-hover:opacity-100` 合并 | `string` | - |
+
+内部固定 `size="small"`、`shape="square"`、`variant="text"`，将 `value` 映射为 CopyButton 的 `content`，`timeout` 映射为 `delay`。支持 CopyButton 的全部属性（`content`、`delay`、`onCopiedChange` 及 Button 的各类属性）。
+
+### SnippetTabsList
+
+标签页列表容器。等同于 TabsList，继承 `ComponentProps<typeof TabsList>`。
+
+无额外属性或样式修改。
+
+### SnippetTabsTrigger
+
+标签页触发器，基于 TabsTrigger 封装。继承 `ComponentProps<typeof TabsTrigger>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 标签页标识值（必填） | `string` | 必填 |
+| disabled | 是否禁用 | `boolean` | - |
+| className | 附加样式类，额外添加 `gap-1.5` | `string` | - |
+
+### SnippetTabsContent
+
+标签页内容区，基于 TabsContent 封装。继承 `ComponentProps<typeof TabsContent>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 对应标签页的标识值（必填） | `string` | 必填 |
+| forceMount | 是否强制挂载隐藏面板的内容 | `boolean` | - |
+| className | 附加样式类，与默认 `mt-0 bg-background p-4 text-sm` 合并 | `string` | - |
+| children | 代码文本内容 | `React.ReactNode` | - |
+
+内部 `asChild` 模式，将样式注入 `<pre className="truncate">` 子元素，内容区 `mt-0` 移除 TabsContent 默认顶部外边距。
+
+## 样式模型 {#styling-model}
+
+样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+
+- **Snippet 容器**：`group w-full gap-0 overflow-hidden rounded-md border`，`group` 驱动子元素 hover 联动，`gap-0` 覆盖 Tabs 默认间距，`rounded-md border` 提供统一卡片外观。
+- **SnippetHeader**：`flex flex-row items-center justify-between border-b bg-secondary p-1`，紧凑标题栏，底部分隔线，次要背景色。
+- **SnippetCopyButton**：`opacity-0 transition-opacity group-hover:opacity-100`，默认隐藏，hover 容器时平滑渐显。
+- **SnippetTabsTrigger**：额外 `gap-1.5`，其余继承 TabsTrigger 样式。
+- **SnippetTabsContent**：`mt-0 bg-background p-4 text-sm` + `asChild` 注入 `<pre className="truncate">`，`mt-0` 移除顶部外边距，背景和字号适配代码展示。
+
+主题颜色优先使用 `bg-background`、`bg-secondary`、`border`、`text-foreground`、`text-muted-foreground` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/snippet/index.tsx`：全部组件定义。
+
+直接依赖：
+
+- `@/components/core/tabs`：Tabs、TabsContent、TabsList、TabsTrigger。
+- `@/components/core/copy-button`：CopyButton 复制按钮（内部依赖 Button 和 motion/react）。
+- `@/lib/utils`：`cn` 样式合并函数。
+
+关键行为：
+
+1. Snippet 是对 UI 层 Tabs 的语义化封装，Tabs 的全部功能（受控/非受控、标签页切换）完全继承。
+2. SnippetTabsList 直接导出为 TabsList，不做任何额外处理，保持 API 一致。
+3. SnippetTabsTrigger 仅添加 `gap-1.5`，其余行为完全继承 TabsTrigger。
+4. SnippetTabsContent 使用 `asChild` 机制，子元素 `<pre className="truncate">` 接收外层 div 的样式和角色属性。
+5. SnippetCopyButton 内部监听 `onCopiedChange` 事件，`copied` 为 true 时触发 `onCopy` 回调。`value` 映射为 CopyButton 的 `content`，`timeout` 映射为 `delay`。
+6. Snippet 设置 `group` class，SnippetCopyButton 通过 `group-hover:opacity-100` 实现 hover 容器时渐显。
+7. 如需新增能力，应先修改该组件源码，再更新本 llm 文档。
+
+## 可访问性 {#accessibility}
+
+- 标签页的键盘导航（方向键切换）和 ARIA 语义（role="tablist"/"tab"/"tabpanel"）由底层 Radix Tabs primitive 提供。
+- SnippetCopyButton 继承 CopyButton 的 ARIA 语义，复制成功时图标切换为 CheckIcon 提供视觉反馈。
+- SnippetTabsTrigger 保留 `data-[state=active]` 属性，辅助技术可识别当前激活标签。
+- 代码内容由 `<pre>` 标签包裹，保留空白和缩进的语义。
+- `truncate` 样式确保超长代码行不破坏布局，但可能截断内容；若需要完整可读性，调用侧可通过 `className` 覆盖。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，无 Ant Design 直接对应。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/snippet/index.tsx` 的 TypeScript 类型为准 |
+| 标签页能力 | 基于本地 Tabs 组件（Radix Tabs primitive），非 AntD Tabs |
+| 复制功能 | 基于本地 CopyButton 组件（navigator.clipboard API），非 AntD 方案 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 组合模式 | 基于复合子组件的显式组合模式 |
+| Hover 交互 | `group-hover` 驱动复制按钮渐显，为本地设计惯例 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Snippet 代码时，应遵守：
+
+1. 从 `@/components/blocks/snippet` 导入 Snippet、SnippetHeader、SnippetCopyButton、SnippetTabsList、SnippetTabsTrigger、SnippetTabsContent。
+2. Snippet 作为最外层容器，内部按 SnippetHeader + SnippetTabsContent 的顺序组合。
+3. SnippetHeader 内放置 SnippetTabsList（含 SnippetTabsTrigger）和 SnippetCopyButton，左右排列。
+4. SnippetCopyButton 的 `value` prop 绑定当前激活标签页对应的代码文本；使用受控模式时需在 `onValueChange` 中更新。
+5. SnippetTabsContent 的 children 为纯文本代码串，不要包裹 `<code>` 或 `<pre>` 标签（组件内部已通过 `asChild` 包裹 `<pre>`）。
+6. SnippetTabsTrigger 和 SnippetTabsContent 必须通过 `value` 属性一一对应。
+7. 不要在 Snippet 中放置非预定义的子组件类型。
+8. 不要将 Snippet 用于导航式标签页或非代码展示场景。
+9. 不要从 `@/components/core/tabs` 或 `@/components/core/copy-button` 重复导入底层组件；直接使用 Snippet 系列即可。
+10. 不确定某个 API 是否存在时，先检查 `src/components/blocks/snippet/index.tsx`，不要凭记忆生成。

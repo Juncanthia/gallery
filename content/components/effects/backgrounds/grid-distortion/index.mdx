@@ -1,0 +1,75 @@
+GridDistortion 是一个基于 Three.js 的网格扭曲图片组件，通过鼠标交互扭曲 DataTexture 产生图片形变效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要对图片进行网格扭曲/形变的交互式背景时使用。
+常见场景：
+- 创意型 Hero 区域的交互式背景图片
+- 作品集展示中带鼠标交互的图片
+- 需要视觉冲击力的产品展示页
+不推荐：
+- 需要精确展示图片细节的场景（扭曲会损失精度）
+- 移动端性能敏感场景（Three.js 持续渲染消耗资源）
+- 作为功能性的图片查看器
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/grid-distortion" path="rb/grid-distortion/basic" />
+```tsx
+import { GridDistortion } from "@/components/core/grid-distortion"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 rounded overflow-hidden">
+      <GridDistortion imageSrc="https://picsum.photos/800/600" />
+    </div>
+  )
+}
+```
+
+### 自定义扭曲参数
+```tsx
+import { GridDistortion } from "@/components/core/grid-distortion"
+
+export default function Demo() {
+  return (
+    <GridDistortion
+      imageSrc="https://picsum.photos/800/600"
+      grid={20}
+      mouse={0.15}
+      strength={0.2}
+      relaxation={0.95}
+      className="rounded-xl"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### GridDistortion
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| imageSrc | 图片地址（必填） | `string` | - |
+| grid | 网格密度（顶点数） | `number` | `15` |
+| mouse | 鼠标影响范围系数 | `number` | `0.1` |
+| strength | 扭曲强度 | `number` | `0.15` |
+| relaxation | 松弛系数（越接近1恢复越慢） | `number` | `0.9` |
+| className | 附加样式类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+### 图片不显示怎么办？
+确保 `imageSrc` 是有效的图片 URL，且支持跨域访问（CORS）。如果图片在其他域名下，需确保服务器配置了 `Access-Control-Allow-Origin`。
+
+### 扭曲效果太强或太弱？
+调整 `strength`（强度）和 `mouse`（影响范围）：增大 `strength` 和 `mouse` 使扭曲更明显；调整 `relaxation` 控制鼠标离开后恢复速度。
+
+### 如何提高性能？
+减小 `grid` 值（如设为 10）可减少顶点计算量。`relaxation` 接近 1 时帧间变化更平滑但计算量相同。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/grid-distortion` 导入。
+2. 依赖 `three`，确保已安装。
+3. `imageSrc` 为必填属性，必须提供有效的图片 URL。
+4. 组件尺寸由父容器决定，确保外层容器有明确的宽高。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-grid-distortion" />

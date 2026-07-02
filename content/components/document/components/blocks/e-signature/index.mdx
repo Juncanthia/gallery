@@ -1,0 +1,73 @@
+ESignatureBlock 为 PDF 文档提供电子签名能力，支持在指定区域绘制签名并导出已签名的 PDF 文件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在 PDF 文档中嵌入电子签名时使用。常见场景：
+
+- 合同签署：用户在 PDF 合同指定位置签名确认。
+- 审批流程：审批人在文档中签署意见。
+- 表单签收：接收方在表单上签名表示已收到。
+
+ESignatureBlock 基于 signature_pad 实现绘制，基于 pdf-lib 实现签名嵌入与导出。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 PDF 文件 URL，组件渲染 PDF 预览界面，默认提供一个签名区域。点击签名区域打开签名面板，可在其中绘制签名。
+
+<ComponentShowcase
+  id="extend/e-signature"
+  path="extend/e-signature/basic"
+/>
+
+```tsx
+import { ESignatureBlock } from "@/components/core/e-signature"
+
+export default function Demo() {
+  return <ESignatureBlock file="/samples/attention.pdf" />
+}
+```
+
+<h2 id="api">API</h2>
+
+### ESignatureBlock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| file | PDF 文件 URL 地址 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何传入 PDF 文件？
+
+通过 `file` 属性传入 PDF 文件的 URL 地址：
+
+```tsx
+<ESignatureBlock file="/path/to/document.pdf" />
+```
+
+### 签名数据如何存储？
+
+签名以 `imageDataUrl`（PNG Base64）格式存储在 `SignatureField` 中，可作为字段数据持久化到后端。
+
+### 如何自定义签名区域？
+
+签名区域通过 `SignatureField` 的 `bbox` 控制，包含坐标和尺寸信息。当前版本默认提供一个签名区域，可通过修改 `INITIAL_FIELD` 常量调整位置和尺寸。
+
+### 签名后如何导出 PDF？
+
+点击界面中的"Export signed PDF"按钮，组件使用 pdf-lib 将签名图像嵌入 PDF 并触发浏览器下载。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ESignatureBlock 代码时：
+
+1. 从 `@/components/core/e-signature` 导入。
+2. 传入 `file` 属性指定 PDF URL。
+3. 该组件为客户端组件，需在 Client Component 中使用。
+4. 签名数据以 Base64 Data URL 形式存储，可直接序列化。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="extend/e-signature" />

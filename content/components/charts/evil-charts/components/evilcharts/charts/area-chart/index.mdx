@@ -1,0 +1,677 @@
+EvilAreaChart 是一个可组合的面积图组件，通过组合 &lt;Area /&gt;、&lt;XAxis /&gt;、&lt;Grid /&gt;、&lt;Tooltip /&gt;、&lt;Legend /&gt; 等子组件构建图表，支持多种填充变体、曲线类型、堆叠模式、进场动画与加载骨架屏。
+
+<h2 id="when-to-use">何时使用</h2>
+
+用于展示数值随时间或其他连续维度的变化趋势，强调数据总量与趋势面积。
+
+常见场景：
+
+- 趋势分析：展示单系列或多系列数据随时间的累积变化。
+- 堆叠比较：比较各分类对总量贡献的同时展示总量趋势。
+- 占比分布：`stackType="expanded"` 将面积转换为百分比视图。
+- 范围交互：通过 `showBrush` 提供刷选工具，实现时间范围缩放。
+- 加载占位：通过 `isLoading` 在数据加载期间展示骨架屏。
+
+EvilAreaChart 采用 **组合模式**（Compound Pattern），图表本体提供数据、主题和上下文；子组件负责视觉呈现：
+
+- `EvilAreaChart`：根容器，持有 data 和 config，管理选中、加载、刷选状态。
+- `Area`：单个面积系列，自包含填充和描边样式定义。
+- `XAxis` / `YAxis`：横纵坐标轴。
+- `Grid`：背景网格线。
+- `Tooltip`：悬停提示框。
+- `Legend`：系列图例，支持点击交互。
+- `Dot` / `ActiveDot`：数据点标记。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础面积图
+
+默认配置为 `curveType="linear"`、`animationType="left-to-right"`、`stackType="default"`。每个 `Area` 默认使用 `variant="gradient"` 和 `strokeVariant="dashed"`。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/basic"
+/>
+
+```tsx
+import { EvilAreaChart } from "@/components/charts/evil-charts"
+import {
+  Area,
+  XAxis,
+  Grid,
+  Tooltip,
+  Legend,
+  Dot,
+  ActiveDot,
+} from "@/components/core/evilcharts/components/area-chart"
+import type { ChartConfig } from "@/components/core/evilcharts/components/chart"
+
+const data = [
+  { month: "1月", desktop: 342, mobile: 245 },
+  { month: "2月", desktop: 876, mobile: 654 },
+  { month: "3月", desktop: 512, mobile: 387 },
+  { month: "4月", desktop: 629, mobile: 521 },
+  { month: "5月", desktop: 458, mobile: 412 },
+  { month: "6月", desktop: 781, mobile: 598 },
+  { month: "7月", desktop: 394, mobile: 312 },
+  { month: "8月", desktop: 925, mobile: 743 },
+  { month: "9月", desktop: 647, mobile: 489 },
+  { month: "10月", desktop: 532, mobile: 476 },
+  { month: "11月", desktop: 803, mobile: 687 },
+  { month: "12月", desktop: 271, mobile: 198 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: { light: ["#047857"], dark: ["#10b981"] },
+  },
+  mobile: {
+    label: "Mobile",
+    colors: { light: ["#be123c"], dark: ["#f43f5e"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+      showBrush
+      xDataKey="month"
+      brushFormatLabel={(value) => String(value).substring(0, 2)}
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(value) => value} /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;Dot variant="border" /&gt;
+        &lt;ActiveDot variant="colored-border" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;Dot variant="border" /&gt;
+        &lt;ActiveDot variant="colored-border" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 堆叠面积图
+
+`stackType="stacked"` 使多个 Area 在垂直方向上叠加，展示各系列对总量的贡献。
+
+```tsx
+import { EvilAreaChart } from "@/components/charts/evil-charts"
+import { Area, XAxis, Grid, Tooltip, Legend, ActiveDot } from "@/components/core/evilcharts/components/area-chart"
+import type { ChartConfig } from "@/components/core/evilcharts/components/chart"
+
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 百分比面积图
+
+`stackType="expanded"` 将堆叠面积归一化为百分比，Y 轴自动格式化为百分号。适合比较各系列占比变化，忽略绝对量差异。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="expanded"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;YAxis /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 填充变体
+
+`Area` 通过 `variant` 控制填充样式，支持 6 种变体：
+
+- `gradient`（默认）：顶部可见到底部透明的渐变填充。
+- `gradient-reverse`：顶部透明到底部可见的反向渐变。
+- `solid`：均匀低透明度填充，无纵向渐变。
+- `dotted`：点状纹理填充。
+- `lines`：斜线纹理填充。
+- `hatched`：条纹填充，每条内有从左到右的渐变。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient"&gt;
+        &lt;Dot variant="border" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="lines"&gt;
+        &lt;Dot variant="border" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 描边变体
+
+`strokeVariant` 控制每个 Area 的描边样式：
+
+- `dashed`（默认）：短虚线描边。
+- `solid`：实线描边。
+- `animated-dashed`：动态虚线描边（仅在无选中时流动）。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" strokeVariant="solid" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" strokeVariant="animated-dashed" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 曲线类型
+
+`curveType` 控制面积曲线的插值方式。在 `EvilAreaChart` 上设置作用于所有 `Area`，在单个 `Area` 上设置覆盖全局值。常用值：
+
+- `linear`（默认）：直线连接。
+- `bump`：自然 S 形曲线。
+- `monotone`：单调插值，保持数据单调性。
+- `step`：阶梯形。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      curveType="bump"
+      stackType="stacked"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;YAxis /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;Dot variant="default" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;Dot variant="default" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 进场动画
+
+`animationType` 控制每个 Area 首次绘制时的揭示动画，使用 motion.dev 驱动的 SVG 遮罩实现。支持：
+
+- `left-to-right`（默认）：从左向右擦除。
+- `right-to-left`：从右向左擦除。
+- `center-out`：从中心向两侧扩展。
+- `edges-in`：从两侧向中心合拢。
+- `none`：关闭动画。系统开启"减弱动态效果"时自动回退为 `none`。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      animationType="center-out"
+      stackType="stacked"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient"&gt;
+        &lt;Dot variant="border" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient"&gt;
+        &lt;Dot variant="border" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 选中交互
+
+将 `Area` 的 `isClickable` 设为 `true`，并将 `Legend` 的 `isClickable` 设为 `true`，即可启用系列选中交互。点击某个系列高亮其图形，未选中的系列自动变淡并切换为条纹填充。再次点击已选中系列或点击其他系列可切换。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;Dot variant="colored-border" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;Dot variant="colored-border" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 数据点标记
+
+通过 `Dot` 和 `ActiveDot` 为面积系列添加数据点和悬停标记。`variant` 支持三种样式：
+
+- `default`：实心点，使用系列渐变色填充。
+- `border`：带背景色边框的大圆点。
+- `colored-border`：带彩色渐变边框的小圆点。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient"&gt;
+        &lt;Dot variant="border" /&gt;
+        &lt;ActiveDot variant="colored-border" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="solid"&gt;
+        &lt;Dot variant="default" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 渐变色
+
+`config` 中每个系列的 `colors` 支持多色数组。单色时整个面积使用该色；多色时从左到右分布渐变。颜色按深浅主题分别指定。
+
+```tsx
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: {
+      light: ["red", "orange", "rosybrown", "purple", "blue"],
+      dark: ["red", "orange", "rosybrown", "purple", "blue"],
+    },
+  },
+  mobile: {
+    label: "Mobile",
+    colors: {
+      light: ["gray"],
+      dark: ["gray"],
+    },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;Dot variant="colored-border" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;Dot variant="colored-border" /&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 刷选缩放
+
+`showBrush` 在图表底部渲染一个缩放刷选区域。刷选工具本身也是一个迷你面积图，支持拖动选区或调整边界来缩放主图视图。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+      showBrush
+      xDataKey="month"
+      brushFormatLabel={(v) => String(v).substring(0, 3)}
+      onBrushChange={(range) => console.log(range)}
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;Dot variant="border" /&gt;
+        &lt;ActiveDot variant="colored-border" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;Dot variant="border" /&gt;
+        &lt;ActiveDot variant="colored-border" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+### 加载状态
+
+`isLoading` 启用加载骨架屏，图表显示带动效闪烁的占位面积。期间坐标轴、提示框和图例自动隐藏。加载结束后骨架渐变消失，真实数据切入。
+
+```tsx
+export default function Demo() {
+  return (
+    &lt;EvilAreaChart
+      data={[]}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      isLoading
+      stackType="stacked"
+      curveType="bump"
+    &gt;
+      &lt;Grid /&gt;
+      &lt;XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} /&gt;
+      &lt;YAxis /&gt;
+      &lt;Legend isClickable /&gt;
+      &lt;Tooltip /&gt;
+      &lt;Area dataKey="desktop" variant="gradient" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+      &lt;Area dataKey="mobile" variant="gradient" isClickable&gt;
+        &lt;ActiveDot variant="default" /&gt;
+      &lt;/Area&gt;
+    &lt;/EvilAreaChart&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### EvilAreaChart
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| config | 系列颜色和标签配置 | `ChartConfig` | - |
+| data | 图表数据行 | `TData[]` | - |
+| children | 组合的子组件 | `ReactNode` | - |
+| className | 容器附加样式类名 | `string` | - |
+| chartProps | 原生 Recharts AreaChart 的 escape hatch | `ComponentProps&lt;typeof RechartsAreaChart&gt;` | - |
+| curveType | 默认曲线插值，所有 Area 继承 | `linear` \| `bump` \| `monotone` \| `step` \| `natural` \| ... | `linear` |
+| animationType | 默认进场揭示动画 | `none` \| `left-to-right` \| `right-to-left` \| `center-out` \| `edges-in` | `left-to-right` |
+| stackType | 多面积堆叠方式 | `default` \| `expanded` \| `stacked` | `default` |
+| defaultSelectedDataKey | 初始选中的系列 dataKey | `string` \| `null` | `null` |
+| onSelectionChange | 选中系列变化回调 | `(selectedDataKey: string \| null) => void` | - |
+| isLoading | 是否显示加载骨架屏 | `boolean` | `false` |
+| loadingPoints | 骨架屏数据点数 | `number` | `14` |
+| showBrush | 是否显示刷选缩放区 | `boolean` | `false` |
+| xDataKey | x 轴数据键名，仅刷选需要 | `string` | - |
+| brushHeight | 刷选预览高度（像素） | `number` | - |
+| brushFormatLabel | 刷选轴标签格式化 | `(value: unknown, index: number) => string` | - |
+| onBrushChange | 刷选范围变化回调 | `(range: EvilBrushRange) => void` | - |
+
+### Area
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataKey | 数据系列键名 | `string` | - |
+| variant | 填充样式 | `gradient` \| `gradient-reverse` \| `solid` \| `dotted` \| `lines` \| `hatched` | `gradient` |
+| strokeVariant | 描边样式 | `solid` \| `dashed` \| `animated-dashed` | `dashed` |
+| curveType | 曲线插值，覆盖图表默认值 | `CurveType` | - |
+| animationType | 进场揭示，覆盖图表默认值 | `AreaAnimationType` | - |
+| connectNulls | 跨空值连接数据段 | `boolean` | `false` |
+| isClickable | 是否可被点击选中 | `boolean` | `false` |
+| children | 可选的 `&lt;Dot /&gt;` 和 `&lt;ActiveDot /&gt;` | `ReactNode` | - |
+| areaProps | 原生 Recharts Area 的 escape hatch | `ComponentType&lt;typeof RechartsArea&gt;` | - |
+
+### Dot / ActiveDot
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 点标记视觉样式 | `default` \| `border` \| `colored-border` | `default` |
+
+### XAxis
+
+继承 Recharts XAxis 所有属性。以下为默认覆盖值：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataKey | 数据键名 | `string` | - |
+| tickFormatter | 刻度标签格式化 | `(value, index) => string` | - |
+| tickLine | 刻度线 | `boolean` | `false` |
+| axisLine | 轴线 | `boolean` | `false` |
+| tickMargin | 刻度边距 | `number` | `8` |
+| minTickGap | 最小刻度间隔 | `number` | `8` |
+
+### YAxis
+
+继承 Recharts YAxis 所有属性。`stackType="expanded"` 时自动使用百分比格式化。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| tickFormatter | 刻度标签格式化 | `(value) => string` | expanded 时自动 `axisValueToPercentFormatter` |
+| tickLine | 刻度线 | `boolean` | `false` |
+| axisLine | 轴线 | `boolean` | `false` |
+| tickMargin | 刻度边距 | `number` | `8` |
+| width | 宽度 | `number` \| `string` | `auto` |
+
+### Grid
+
+继承 Recharts CartesianGrid 所有属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| vertical | 是否显示垂直网格线 | `boolean` | `false` |
+| strokeDasharray | 网格线虚线样式 | `string` | `3 3` |
+
+### Tooltip
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 提示框视觉样式 | `default` \| `frosted-glass` | `default` |
+| roundness | 提示框圆角 | `sm` \| `md` \| `lg` \| `xl` | `lg` |
+| defaultIndex | 无悬停时默认显示的数据索引 | `number` | - |
+| cursor | 是否显示竖线跟随光标 | `boolean` | `true` |
+
+### Legend
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 图例指示器样式 | `square` \| `circle` \| `circle-outline` \| `rounded-square` \| `rounded-square-outline` \| `vertical-bar` \| `horizontal-bar` | `rounded-square` |
+| align | 水平对齐 | `left` \| `center` \| `right` | `right` |
+| verticalAlign | 垂直对齐 | `top` \| `middle` \| `bottom` | `top` |
+| isClickable | 图例项是否可点击切换选中 | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何定义数据颜色？
+
+通过 `config` 属性传入 `ChartConfig` 对象，每个系列键对应一组深浅主题的颜色：
+
+```tsx
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: { light: ["#047857"], dark: ["#10b981"] },
+  },
+} satisfies ChartConfig
+```
+
+多色数组时从左到右渐变分布。`ChartConfig` 使用 `satisfies` 确保类型安全。
+
+### 如何实现系列选中交互？
+
+为 `Area` 设置 `isClickable`，同时为 `Legend` 设置 `isClickable`：
+
+```tsx
+&lt;Legend isClickable /&gt;
+&lt;Area dataKey="desktop" variant="gradient" isClickable&gt;...&lt;/Area&gt;
+```
+
+未选中的系列自动降低透明度并切换为条纹填充。
+
+### 如何格式化坐标轴标签？
+
+通过 `XAxis` 的 `tickFormatter` 实现：
+
+```tsx
+&lt;XAxis dataKey="month" tickFormatter={(value) => value.substring(0, 3)} /&gt;
+```
+
+`expanded` 模式下 Y 轴自动使用百分比格式化，无需手动指定。
+
+### 如何添加刷选缩放？
+
+设置 `showBrush` 并提供 `xDataKey`：
+
+```tsx
+&lt;EvilAreaChart data={data} config={chartConfig} showBrush xDataKey="month"&gt;...&lt;/EvilAreaChart&gt;
+```
+
+`brushFormatLabel` 可格式化刷选轴的标签文字。
+
+### 如何展示加载状态？
+
+设置 `isLoading`，同时传空 `data` 或保持原有数据：
+
+```tsx
+&lt;EvilAreaChart data={isLoading ? [] : data} config={chartConfig} isLoading={isLoading}&gt;...&lt;/EvilAreaChart&gt;
+```
+
+加载期间坐标轴、提示框和图例自动隐藏。`loadingPoints` 控制骨架屏的数据点数（默认 14）。
+
+### 如何关闭进场动画？
+
+将 `animationType` 设为 `"none"`：
+
+```tsx
+&lt;EvilAreaChart data={data} config={chartConfig} animationType="none"&gt;...&lt;/EvilAreaChart&gt;
+```
+
+系统开启"减弱动态效果"（prefers-reduced-motion）时自动回退为 `none`。
+
+### 如何选择曲线类型？
+
+图表级别通过 `curveType` 设置，所有 Area 继承。单个 Area 可通过自己的 `curveType` 覆盖：
+
+```tsx
+&lt;EvilAreaChart data={data} config={chartConfig} curveType="bump"&gt;
+  &lt;Area dataKey="desktop" variant="gradient" curveType="step" /&gt;
+&lt;/EvilAreaChart&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 EvilAreaChart 代码时：
+
+1. 从 `@/components/charts/evil-charts` 导入 `EvilAreaChart`
+2. 从 `@/components/core/evilcharts/components/area-chart` 导入 `Area`, `XAxis`, `YAxis`, `Grid`, `Tooltip`, `Legend`, `Dot`, `ActiveDot`
+3. `config` 使用 `satisfies ChartConfig` 确保类型安全；每个系列必须提供 `light` 和 `dark` 颜色
+4. `Area` 的 `dataKey` 必须同时存在于 `data` 和 `config` 中
+5. 不要跳过坐标轴组件 — 至少需要 `XAxis`
+6. 堆叠模式下自动共享 `stackId`，无需手动设置
+7. 图表采用组合模式 — 所有视觉元素作为 `EvilAreaChart` 的子组件使用
+8. 加载状态传递空数组或原数据均可，`isLoading` 控制骨架屏显示
+9. 不要引入 Recharts 原生组件，使用 EvilCharts 的组合 API
+10. 不要手动设置 `isAnimationActive` — 组件内部已关闭 Recharts 动画并用 motion.dev 替代
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构，可用于测试定位和样式覆写：
+
+| data-slot | 说明 |
+| --- | --- |
+| `chart` | 图表容器（由 ChartContainer 输出） |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="charts/evilcharts" />

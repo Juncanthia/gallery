@@ -1,0 +1,277 @@
+---
+category: Components
+title: OrderSummary
+subtitle: 订单摘要
+description: 用于展示订单明细与价格汇总，支持 summary 和 receipt 两种展示形态。
+demo:
+  cols: 2
+group:
+  title: Tool
+source:
+  component: src/components/agent-tools/order-summary/order-summary/order-summary.tsx
+  examples:
+    - content/components/agent-tools/order-summary/order-summary/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# OrderSummary 订单摘要
+
+用于展示订单明细与价格汇总，支持 summary（预览摘要）和 receipt（确认回执）两种展示形态。
+
+本组件是项目内的本地基础能力，API 和行为以源码为准，不对应 Ant Design 的完整公共组件契约。
+
+## 何时使用 {#when-to-use}
+
+适合在需要展示订单明细和价格拆分的场景中使用。优先通过组件自身 props 表达状态和语义，避免在业务侧堆叠重复 className。
+
+常见场景：
+
+- 电商结算预览，展示商品清单与价格明细。
+- AI 助手生成的订单确认回执。
+- 支付流程中的订单核验卡片。
+
+不推荐：
+
+- 需要编辑数量或删除商品的交互场景，OrderSummary 为只读展示。
+- 在调用侧绕过组件 API，直接依赖内部 DOM 结构完成业务逻辑。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary
+      id="demo"
+      title="Order Summary"
+      items={[
+        { id: "1", name: "商品 A", quantity: 2, unitPrice: 99.99 },
+        { id: "2", name: "商品 B", quantity: 1, unitPrice: 199.99 },
+      ]}
+      pricing={{
+        subtotal: 399.97,
+        shipping: 15.0,
+        tax: 32.0,
+        total: 446.97,
+        currency: "CNY",
+      }}
+    />
+  )
+}
+```
+
+### Receipt 确认回执
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary.Receipt
+      id="receipt-demo"
+      title="Order Confirmed"
+      items={[
+        { id: "1", name: "iPhone 16 Pro", quantity: 1, unitPrice: 999.0 },
+      ]}
+      pricing={{
+        subtotal: 999.0,
+        total: 999.0,
+        currency: "USD",
+      }}
+      choice={{
+        action: "confirm",
+        orderId: "ORD-2026-001",
+        confirmedAt: "2026-06-30T14:30:00Z",
+      }}
+    />
+  )
+}
+```
+
+### 带折扣和免运费
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary.Display
+      id="promo-demo"
+      title="购物车结算"
+      items={[
+        { id: "p1", name: "商品 A", quantity: 1, unitPrice: 300.0 },
+      ]}
+      pricing={{
+        subtotal: 300.0,
+        discount: 60.0,
+        discountLabel: "满300减60",
+        shipping: 0,
+        tax: 19.2,
+        total: 259.2,
+        currency: "CNY",
+      }}
+    />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。复杂组件应结合下方 API 摘要和源码类型补充必需 props。
+
+## 核心导出 {#exports}
+
+- `OrderSummary`
+- `OrderSummary.Display`
+- `OrderSummary.Receipt`
+- `OrderSummaryProps`
+- `OrderSummaryDisplayProps`
+- `OrderSummaryReceiptProps`
+- `SerializableOrderSummary`
+- `OrderItem`
+- `Pricing`
+- `OrderDecision`
+- `OrderSummaryVariant`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface OrderSummaryProps extends SerializableOrderSummary {
+  className?: string;
+}
+```
+
+```ts
+interface SerializableOrderSummary {
+  id: string;
+  role?: ToolUIRole;
+  title?: string;                      // 默认 "Order Summary"
+  variant?: OrderSummaryVariant;       // "summary" | "receipt"，不传则根据 choice 自动推断
+  items: OrderItem[];                  // min 1, id 不可重复
+  pricing: Pricing;
+  choice?: OrderDecision;              // receipt 形态必传
+}
+```
+
+```ts
+interface OrderItem {
+  id: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;                   // 商品缩略图 URL
+  quantity?: number;                   // 正整数，默认 1，为 1 时不显示数量文本
+  unitPrice: number;
+}
+```
+
+```ts
+interface Pricing {
+  subtotal: number;
+  tax?: number;
+  taxLabel?: string;                   // 默认 "Tax"
+  shipping?: number;                   // 为 0 时显示 "Free"
+  discount?: number;                   // 非负数，为 0 或 undefined 时不显示
+  discountLabel?: string;              // 默认 "Discount"
+  total: number;
+  currency?: string;                   // ISO 4217，默认 "USD"
+}
+```
+
+```ts
+interface OrderDecision {
+  action: "confirm";
+  orderId?: string;                    // 展示为 #${orderId}
+  confirmedAt?: string;                // ISO 8601 datetime
+}
+```
+
+```ts
+type OrderSummaryVariant = "summary" | "receipt";
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `data-slot="order-summary"` — 订单摘要容器的语义标记。
+- `data-tool-ui-id` — 组件实例的唯一标识。
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- variant 变体样式集中在组件文件内部，通过 `variant` prop 切换。
+- receipt 形态使用 `bg-card/60` + `opacity-95` 呈现半透明效果，并在标题旁展示绿色 CheckCircle 图标。
+- 主题颜色优先使用 `bg-card`、`text-card-foreground`、`text-muted-foreground`、`text-foreground`、`border-border`、`bg-muted` 等项目级语义变量。
+- 金额列使用 `tabular-nums` 保证数字等宽对齐。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/agent-tools/order-summary/order-summary/order-summary.tsx` — OrderSummary 组件本体
+- `src/components/agent-tools/order-summary/order-summary/schema.ts` — Zod schema 与类型定义
+- `src/components/agent-tools/order-summary/order-summary/_adapter.tsx` — cn、Separator 等适配层
+- `src/components/agent-tools/order-summary/order-summary/index.tsx` — 目录入口
+- `src/components/core/tool-order-summary.tsx` — 统一导出入口
+
+直接依赖摘要：
+
+- `lucide-react`（CheckCircle、Package 图标）
+- `zod`（schema 校验）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 样式应优先通过组件 props（variant、className）表达。
+3. 金额格式化使用 `Intl.NumberFormat`，由 `pricing.currency` 控制。
+4. 如果 variant 未传，组件根据 `choice` 是否存在自动推断：有 choice 则 receipt，无则 summary。
+5. 如果需要新增能力，应先修改该组件源码和相邻 schema 文件，再更新本 llm 文档。
+6. 不要把第三方文档中的全量 API 视为本地已支持能力。
+
+## 可访问性 {#accessibility}
+
+- 根容器使用 `<article>` 语义标签，通过 `aria-labelledby` 关联标题元素。
+- CheckCircle 和 Package 图标均设置 `aria-hidden="true"` + `focusable="false"`，不干扰屏幕阅读器。
+- 标题使用 `<h2>` 语义标签。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/agent-tools/order-summary/order-summary/` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 借鉴 AntD 使用心智，但不承诺 API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 OrderSummary 代码时，应遵守：
+
+1. 从 `@/components/agent-tools/order-summary/order-summary` 导入 `OrderSummary`，不要从其他路径导入。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. `id`、`items`、`pricing` 为必填属性。`items` 至少包含 1 项，且每项的 `id` 不可重复。
+4. `pricing.total` 应等于 `subtotal - discount + shipping + tax`，LLM 需自行保证数学正确性。
+5. receipt 形态必须提供 `choice`，其中 `action` 固定为 `"confirm"`。
+6. 不要在外部通过 className 重新实现 variant 切换逻辑。
+7. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置，除非本地源码明确支持。
+8. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+9. 交互组件必须保留键盘和 ARIA 语义，纯图标操作必须补 `aria-label`。
+10. 如果不确定某个 AntD API 是否存在，先检查 `src/components/agent-tools/order-summary/order-summary/` 源码，不要凭 AntD 记忆生成。
+11. 所有金额字段传入原始数字类型，不要传格式化后的字符串，货币格式化由组件内部 `Intl.NumberFormat` 处理。
+12. 订单项数量较多时（>10），建议在传给组件前自行截断或分页。

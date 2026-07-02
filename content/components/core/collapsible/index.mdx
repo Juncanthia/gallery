@@ -1,0 +1,246 @@
+Collapsible 折叠面板，基于 Radix Collapsible 实现，提供将内容默认隐藏、点击展开的交互能力。支持标题模式、图标触发模式和完全自定义模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将一部分内容默认隐藏，用户点击后展开查看时使用。与 Accordion 的区别：Collapsible 是独立的单区域折叠，Accordion 是多面板手风琴。
+
+常见场景：
+
+- 详情页的"查看更多"区域。
+- 表单中高级选项的展开/收起。
+- 面板中次级信息的折叠展示。
+- 代码示例的展开/收起。
+
+Collapsible 支持三种使用模式：
+- **标题模式**：传入 `title`，自动渲染带标题和箭头的折叠面板。
+- **基础模式**：不传 `title`，使用 `CollapsibleTrigger` + `CollapsibleContent` 完全自定义。
+- **图标触发模式**：`collapsible="icon"`，仅箭头区域可触发，标题不可点击。
+
+不推荐：
+
+- 多面板手风琴场景使用多个 Collapsible——应使用 Accordion。
+- 为了照搬 AntD Collapse API 而新增兼容别名。
+- 传入 `title` 后又手动添加 CollapsibleTrigger——title 模式下头部自动生成。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="collapsible" path="collapsible/basic" />
+
+```tsx
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/core/collapsible"
+import { Button } from "@/components/core/button"
+import { ChevronDown } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Collapsible className="w-full max-w-sm space-y-2">
+      <div className="flex items-center justify-between">
+        <h4 className="text-sm font-semibold">可折叠区域</h4>
+        <CollapsibleTrigger asChild>
+          <Button variant="text" size="small" icon={<ChevronDown className="size-4" />} />
+        </CollapsibleTrigger>
+      </div>
+      <CollapsibleContent className="rounded border px-4 py-3 text-sm text-muted-foreground">
+        折叠面板的内容，展开后可见。
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+```
+
+### 标题模式
+
+传入 `title`，自动渲染带箭头和标题的面板头部，无需手写触发器。
+
+```tsx
+import { Collapsible } from "@/components/core/collapsible"
+
+export default function Demo() {
+  return (
+    <Collapsible title="高级设置" className="w-80">
+      <p className="text-sm text-muted-foreground">这里是一些高级配置选项。</p>
+    </Collapsible>
+  )
+}
+```
+
+### 图标触发模式
+
+`collapsible="icon"` 仅箭头区域可点击触发，标题区域不可点击。
+
+```tsx
+import { Collapsible } from "@/components/core/collapsible"
+import { Settings } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Collapsible
+      title="高级设置"
+      collapsible="icon"
+      icon={<Settings className="size-4" />}
+      className="w-80"
+    >
+      <p className="text-sm text-muted-foreground">仅图标区域可点击展开。</p>
+    </Collapsible>
+  )
+}
+```
+
+### 受控模式
+
+使用 `open` 和 `onOpenChange` 实现外部控制展开/收起。
+
+```tsx
+import { useState } from "react"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/core/collapsible"
+import { Button } from "@/components/core/button"
+
+export default function Demo() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="space-y-2">
+      <Button variant="outlined" onClick={() => setOpen(!open)}>
+        {open ? "收起" : "展开"}
+      </Button>
+      <Collapsible open={open} onOpenChange={setOpen}>
+        <CollapsibleContent className="rounded border p-3 text-sm">
+          受控折叠的内容。
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
+  )
+}
+```
+
+### 带附加操作
+
+通过 `extra` prop 在标题栏右侧添加自定义操作。
+
+```tsx
+import { Collapsible } from "@/components/core/collapsible"
+import { Button } from "@/components/core/button"
+
+export default function Demo() {
+  return (
+    <Collapsible
+      title="订单详情"
+      extra={<Button size="small" variant="text">编辑</Button>}
+      className="w-80"
+    >
+      <div className="space-y-1 text-sm text-muted-foreground">
+        <p>订单号：20240101001</p>
+        <p>状态：已发货</p>
+        <p>金额：￥299.00</p>
+      </div>
+    </Collapsible>
+  )
+}
+```
+
+### 自定义展开图标
+
+通过 `expandIcon` 或 `icon` 自定义箭头。
+
+```tsx
+import { Collapsible } from "@/components/core/collapsible"
+
+export default function Demo() {
+  return (
+    <div className="space-y-2">
+      <Collapsible
+        title="自定义图标 +"
+        icon={<span className="text-xs font-bold">+</span>}
+        className="w-80"
+      >
+        <p className="text-sm text-muted-foreground">使用 icon prop 自定义图标。</p>
+      </Collapsible>
+      <Collapsible
+        title="函数式图标"
+        expandIcon={({ isActive }) => (
+          <span className="text-xs font-bold">{isActive ? "−" : "+"}</span>
+        )}
+        className="w-80"
+      >
+        <p className="text-sm text-muted-foreground">使用 expandIcon 函数，根据展开状态动态渲染。</p>
+      </Collapsible>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Collapsible
+
+基于 Radix Collapsible 的封装，通过 `React.forwardRef` 支持 ref 转发。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 面板标题（传入后自动渲染标题栏+箭头+内容区） | `React.ReactNode` | - |
+| extra | 标题右侧附加内容 | `React.ReactNode` | - |
+| icon | 自定义展开图标 | `React.ReactNode` | `ChevronRight` |
+| expandIcon | 自定义展开图标渲染函数 | `CollapsibleExpandIcon` | - |
+| collapsible | 触发模式 | `"header"` \| `"icon"` \| `"disabled"` | - |
+| showArrow | 是否显示箭头 | `boolean` | `true` |
+| open | 受控展开状态 | `boolean` | - |
+| onOpenChange | 展开状态变化回调 | `(open: boolean) => void` | - |
+| defaultOpen | 默认展开状态（非受控） | `boolean` | - |
+| disabled | 禁用折叠 | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+
+### CollapsibleTrigger
+
+折叠触发的交互元素，继承 Radix CollapsibleTrigger。支持 `asChild` 将子元素作为触发器。
+
+### CollapsibleContent
+
+折叠内容区域，继承 Radix CollapsibleContent，展开/收起带高度动画。
+
+### 导出类型
+
+- `CollapsibleExpandIcon` = `(props: { disabled?: boolean; isActive: boolean }) => React.ReactNode`
+- `CollapsibleTriggerMode` = `"header" | "icon" | "disabled"`
+
+<h2 id="faq">常见问题</h2>
+
+### Collapsible 和 Accordion 的区别？
+
+- **Collapsible**：单个独立折叠区域，适用于详情展开/收起、高级选项等场景。
+- **Accordion**：多面板手风琴，适用于 FAQ、设置分组等需要多个折叠面板协同的场景。
+
+### 如何实现默认展开？
+
+使用 `defaultOpen`：
+
+```tsx
+<Collapsible title="标题" defaultOpen>
+  默认展开的内容。
+</Collapsible>
+```
+
+### 如何自定义箭头图标？
+
+通过 `icon` 传入静态图标，或 `expandIcon` 传入渲染函数：
+
+```tsx
+<Collapsible title="标题" icon={<span>+</span>} />
+<Collapsible title="标题" expandIcon={({ isActive }) => isActive ? "−" : "+"} />
+```
+
+### 如何完全禁用折叠？
+
+设置 `disabled` 或 `collapsible="disabled"`，头部和箭头均不可交互。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/collapsible` 导入 `Collapsible`、`CollapsibleTrigger`、`CollapsibleContent`。
+2. 简单折叠面板优先使用 `title` 模式，一行代码即可。
+3. 自定义触发器使用基础模式：`Collapsible` + `CollapsibleTrigger` + `CollapsibleContent`。
+4. 受控场景使用 `open` + `onOpenChange`。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="collapsible" />

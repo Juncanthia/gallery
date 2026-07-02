@@ -1,0 +1,89 @@
+[扇形扩散 / FanCircles]
+导入: import { FanCircles } from "@/components/charts/chart-kit/fan-circles"
+包来源: @/components/charts/chart-kit
+组件类型: 图表 / BKLit Charts
+依赖: motion (framer-motion), react
+
+## 何时使用
+悬停时圆形元素扇形展开的动画效果，支持自定义数量和颜色。
+
+## Props 速查
+
+FanCircles 为纯装饰性动画组件，无需传入任何 Props。直接渲染即可使用。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| （无） | 组件不接收外部 Props | - | - |
+
+内部实现参数（不可配置）：
+
+- 圆形数量：5 个（CIRCLE_COUNT = 5）
+- 扩散半径：60px（FAN_RADIUS = 60）
+- 扇形角度：180 度（FAN_ANGLE = 180）
+- 动画类型：Spring 弹簧动画（stiffness: 400, damping: 20）
+- 颜色分配：HSL 色相环均匀分布（hue = index * 72）
+- 延迟：每个圆形依次延迟 50ms 展开
+
+## 示例代码
+
+### 基础用法
+
+直接导入并使用，无需任何配置：
+
+```tsx
+import { FanCircles } from "@/components/charts/chart-kit/fan-circles"
+
+export default function Demo() {
+  return <FanCircles />
+}
+```
+
+### 嵌入自定义容器
+
+如需控制组件的外层尺寸和布局，可包裹在自定义容器中：
+
+```tsx
+import { FanCircles } from "@/components/charts/chart-kit/fan-circles"
+
+export default function CustomLayout() {
+  return (
+    <div className="flex h-64 items-center justify-center rounded-lg border">
+      <FanCircles />
+    </div>
+  )
+}
+```
+
+### 与文本组合使用
+
+将 FanCircles 与文字内容组合，增强视觉表现力：
+
+```tsx
+import { FanCircles } from "@/components/charts/chart-kit/fan-circles"
+
+export default function HeroSection() {
+  return (
+    <div className="relative flex min-h-96 items-center justify-center overflow-hidden bg-background">
+      <div className="absolute inset-0 flex items-center justify-center opacity-30">
+        <FanCircles />
+      </div>
+      <h1 className="relative z-10 text-4xl font-bold">欢迎使用</h1>
+    </div>
+  )
+}
+```
+
+## 约束
+- 依赖 `motion`（framer-motion）库，项目中需安装 `motion` 包
+- 组件为纯前端装饰性动画，不接收外部数据，不可用于数据可视化
+- hover 交互依赖鼠标事件，移动端触摸设备上无交互反馈
+- 生成的圆形元素不包含语义信息，不应承载可访问性关键内容
+- 内部使用 `min-h-screen`，在局部容器中使用时建议包裹自定义容器控制高度
+- 圆形数量和颜色通过内部常量硬编码，如需自定义请直接修改组件源码
+
+## 最佳实践
+- 优先作为背景装饰层使用，降低透明度以避免干扰主要内容
+- 在深色背景下使用可配合半透明或浅色圆形，增强对比度
+- 避免与其它动画组件堆叠使用，防止性能问题和视觉混乱
+- 在需要无障碍支持的关键路径上，使用 `aria-hidden="true"` 标记装饰性元素
+- 如需数据驱动的扇形图，应使用 PieChart 或 RingChart 组件替代

@@ -1,5 +1,5 @@
 [编辑器展示 / PlateEditorsShowcase]
-导入: import { PlateEditorsShowcase } from "@/components/ui/editors-showcase"
+导入: import { PlateEditorsShowcase } from "@/components/editor/editors-showcase"
 包来源: @/components/plate
 依赖: platejs, @platejs/basic-nodes
 
@@ -8,7 +8,7 @@
 
 ## 示例
 ```tsx
-import { PlateEditorsShowcase } from "@/components/ui/editors-showcase"
+import { PlateEditorsShowcase } from "@/components/editor/editors-showcase"
 
 export default function Demo() {
   return <PlateEditorsShowcase />

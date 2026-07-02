@@ -23,7 +23,7 @@ import {
 } from "react"
 import { Link, Outlet, useRouterState } from "@tanstack/react-router"
 
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/core/toaster"
 import { cn } from "@/lib/utils"
 import {
   galleryItemCount,

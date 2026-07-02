@@ -1,0 +1,93 @@
+LightRays 基于 WebGL 的动态光束背景，支持从指定方向发射光线，可配置颜色、速度、鼠标跟随等效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要为页面添加具有方向感的动态光束背景时使用。
+常见场景：
+- Hero 区域的光效背景
+- 品牌页面的视觉氛围增强
+- 配合暗色主题页面的光线点缀
+不推荐：
+- 多实例同时渲染（WebGL 资源开销较大）
+- 需要精确像素对齐的场景
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/light-rays" path="rb/light-rays/basic" />
+
+```tsx
+import { LightRays } from "@/components/core/light-rays"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <LightRays />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { LightRays } from "@/components/core/light-rays"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded">
+      <LightRays
+        raysOrigin="bottom-center"
+        raysColor="#ff6b6b"
+        raysSpeed={1.5}
+        lightSpread={1.2}
+        pulsating
+        followMouse
+        mouseInfluence={0.15}
+        noiseAmount={0.02}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LightRays
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| raysOrigin | 光线发射原点位置 | `"top-center" \| "top-left" \| "top-right" \| "left" \| "right" \| "bottom-left" \| "bottom-center" \| "bottom-right"` | `"top-center"` |
+| raysColor | 光线颜色（HEX） | `string` | `"#ffffff"` |
+| raysSpeed | 光线动画速度 | `number` | `1` |
+| lightSpread | 光线扩散度，越小越集中 | `number` | `1` |
+| rayLength | 光线长度倍率 | `number` | `2` |
+| pulsating | 是否启用脉冲波动 | `boolean` | `false` |
+| fadeDistance | 光线衰减距离 | `number` | `1.0` |
+| saturation | 颜色饱和度 | `number` | `1.0` |
+| followMouse | 是否跟随鼠标 | `boolean` | `true` |
+| mouseInfluence | 鼠标影响强度 | `number` | `0.1` |
+| noiseAmount | 噪点数量 | `number` | `0.0` |
+| distortion | 光线扭曲强度 | `number` | `0.0` |
+| className | 附加容器 CSS 类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何改变光线发射方向？
+通过 `raysOrigin` 属性设置，支持 8 个预设方向（top-center, bottom-left 等）。
+
+### 光线不跟随鼠标？
+确保 `followMouse={true}` 且 `mouseInfluence > 0`。当 `mouseInfluence` 为 0 时鼠标不起作用。
+
+### 性能优化建议？
+组件使用 IntersectionObserver 自动暂停不可见区域的渲染。减少同时使用的实例数量，或在移动端禁用 pulsating。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/light-rays` 导入。
+2. 组件需要放在有明确宽高的容器中（如 `w-full h-64`）。
+3. 依赖 `ogl` 库，确保项目中已安装。
+4. 颜色使用 HEX 字符串格式。
+5. 使用 IntersectionObserver 自动管理可见性渲染，减少性能开销。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-light-rays" />

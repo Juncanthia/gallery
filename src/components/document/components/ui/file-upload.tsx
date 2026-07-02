@@ -10,18 +10,18 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { BorderBeam } from "border-beam"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Card } from "@/components/ui/card"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Card } from "@/components/core/card"
 import { FileThumbnail } from "@/components/document/components/ui/file-thumbnail"
 import {
   FileUpload as FileUploadPrimitive,
   FileUploadDropzone,
   useFileUpload,
-} from "@/components/ui/file-upload"
+} from "@/components/blocks/file-upload"
 
 /**
  * This is a fully-styled preset built on top of the headless `FileUpload`
- * primitive (`@/components/ui/file-upload`). It reuses the primitive's
+ * primitive (`@/components/blocks/file-upload`). It reuses the primitive's
  * drag/drop state machine, click-to-browse wiring, keyboard support, and
  * validation pipeline, while keeping its own business-specific visuals
  * (icon cluster, `BorderBeam`, thumbnail file list) and "replace on each

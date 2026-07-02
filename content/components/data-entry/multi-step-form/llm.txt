@@ -1,0 +1,124 @@
+---
+category: Components
+title: MultiStepForm
+subtitle: 多步表单
+description: 多步表单是一个分步操作的交互组件，通过步骤条引导用户逐步完成复杂表单的填写。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 18
+source:
+  component: src/components/data-entry/multi-step-form.tsx
+  examples:
+    - content/components/data-entry/multi-step-form/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# MultiStepForm 多步表单
+
+多步表单是一个分步操作的交互组件，通过步骤条引导用户逐步完成复杂表单的填写，每步聚焦少量输入项以降低认知负担。
+
+本组件是 UseLayouts 集合中的表单布局组件，提供完整的多步表单交互体验。
+
+## 何时使用 {#when-to-use}
+
+当单个表单过于复杂、需要分步引导用户填写时使用。通过将长表单拆分为多个步骤，减少用户的填写焦虑，提高完成率。
+
+常见场景：
+
+- 项目创建向导、用户注册流程、配置向导、多页调查问卷。
+
+不推荐：
+
+- 简单表单（字段少于 3 个），分步反而增加操作成本。
+- 需要跨步骤校验且步骤间强依赖的场景。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import MultiStepFormDemo from "@/components/data-entry/multi-step-form"
+
+export default function Demo() {
+  return <MultiStepFormDemo />
+}
+```
+
+## 核心导出 {#exports}
+
+- `MultiStepFormDemo` (default)
+
+## API 摘要 {#api}
+
+组件为自包含的分步表单组件，无需传递任何 props。
+
+```ts
+type MultiStepFormDemoProps = Record<string, never>
+```
+
+所有表单状态（`useForm` + `zodResolver`）、步骤切换（`currentStep` state）、滑动动画（`AnimatePresence` + `motion`）、容器高度自适应（`useMeasure`）均由组件内部管理。
+
+三个步骤：
+
+1. 项目信息 — 项目名称、截至日期、项目描述。
+2. 团队配置 — 团队规模（Select）、优先级（Select）、标签（Enter 键添加）。
+3. 项目启动心情 — emoji 单选按钮组 + 留言评论。
+
+最后一步点击 "Finish" 按钮触发 `form.handleSubmit(onSubmit)()`，数据以 toast 形式展示。
+
+## Semantic DOM {#semantic-dom}
+
+源码中未声明 `data-slot`，使用根元素语义和组件名定位。表单控件通过 `id` 属性关联 `FieldLabel`（如 `htmlFor="project-name"`）。
+
+## 样式模型 {#styling-model}
+
+- 样式完全通过 Tailwind CSS className 表达。
+- Card 使用 `shadow-none border overflow-hidden bg-background`，最大宽度 `max-w-xl`。
+- 步骤指示器使用圆点组件，当前步骤宽度为 `w-8 bg-primary`，非当前步骤为 `w-2 bg-primary/20`，带 `transition-all duration-300`。
+- 步骤切换使用 `AnimatePresence mode="popLayout"` + `motion.div` 实现带方向的滑动动画（`x: 110% * direction`）。
+- 容器高度通过 `useMeasure` + `motion.div animate={{ height }}` 实现自适应。
+- 主题颜色使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground`、`bg-muted` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/data-entry/multi-step-form.tsx`
+
+依赖：
+
+- `react-hook-form` — 表单状态管理
+- `zod` + `@hookform/resolvers` — 表单 schema 校验
+- `motion/react` — 步骤切换动画、容器高度动画
+- `react-use-measure` — 容器高度测量
+- `date-fns` — 日期格式化 (`format`)
+- `sonner` — toast 通知
+- `lucide-react` — 图标 (`Check`, `ChevronRight`, `ChevronLeft`, `CalendarIcon`)
+
+## 可访问性 {#accessibility}
+
+- 步骤按钮使用语义化的 `<button>` 元素，Back 按钮在第一步时设置 `disabled`。
+- 表单控件通过 `<FieldLabel htmlFor>` 与对应输入控件关联。
+- 错误信息通过 `<FieldError>` 展示。
+- 当前未实现键盘快捷键（如 Enter 提交步骤），如需增强可访问性建议补充。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 MultiStepForm 代码时，应遵守：
+
+1. 从 `@/components/data-entry/multi-step-form` 导入 `MultiStepFormDemo`（default export）。
+2. 组件无需 props，直接渲染即可。
+3. 如需自定义表单字段和步骤，修改 `src/components/data-entry/multi-step-form.tsx` 中的 `formSchema`、`stepTitles` 和 `content` 逻辑。
+4. 组件依赖 `react-hook-form`、`zod`、`@hookform/resolvers`、`motion/react`、`react-use-measure`、`date-fns`、`sonner`，使用前确保已安装。
+5. 不要引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。

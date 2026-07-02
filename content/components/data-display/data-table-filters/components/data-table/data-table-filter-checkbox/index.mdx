@@ -1,0 +1,239 @@
+DataTableFilterCheckbox 是 DataTable 筛选体系内的多选筛选组件，以复选框列表形式展示可选项，支持搜索过滤、faceted 计数和「only」快捷单选。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对表格中某一列进行多选筛选时使用。组件展示所有可选项的复选框列表，支持搜索过滤和计数显示。
+
+常见场景：
+
+- 对状态列（active、inactive、pending）进行多选筛选。
+- 对分类列（admin、user、editor）进行多选筛选。
+- 需要查看每个选项的数据行数（faceted counts）时。
+- 选项较多时（超过 4 个）自动展示搜索框，方便快速定位。
+
+不推荐：
+
+- 用于单选筛选，可使用 Select 或 RadioGroup。
+- 用于数值范围筛选，应使用 DataTableFilterSlider。
+- 脱离 DataTableProvider 上下文使用，组件依赖 `useDataTable()` 获取表格和筛选状态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件必须在 `DataTableProvider` 内部使用。传入 `value`（对应 column id）、`options`（可选项列表）和 `label`。组件自动从上下文获取该列的筛选状态和 faceted 计数。选项超过 4 个时，顶部自动显示搜索框。
+
+<ComponentShowcase
+  id="dt/blocks/data-table-filter-checkbox"
+  path="dt/blocks/data-table-filter-checkbox/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { DataTableProvider } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider"
+import { DataTableFilterCheckbox } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-checkbox"
+import {
+  useReactTable,
+  getCoreRowModel,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider"
+
+type Person = {
+  id: string
+  name: string
+  blocks/status: string
+  role: string
+}
+
+const data: Person[] = [
+  { id: "1", name: "Alice", blocks/status: "active", role: "admin" },
+  { id: "2", name: "Bob", blocks/status: "inactive", role: "user" },
+  { id: "3", name: "Charlie", blocks/status: "active", role: "editor" },
+  { id: "4", name: "Diana", blocks/status: "pending", role: "user" },
+  { id: "5", name: "Eve", blocks/status: "active", role: "admin" },
+]
+
+const columns: ColumnDef&lt;Person&gt;[] = [
+  { accessorKey: "name", header: "Name" },
+  { accessorKey: "blocks/status", header: "Status" },
+  { accessorKey: "role", header: "Role" },
+]
+
+const filterFields: DataTableFilterField&lt;Person&gt;[] = [
+  {
+    label: "Status",
+    value: "blocks/status",
+    type: "checkbox",
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Inactive", value: "inactive" },
+      { label: "Pending", value: "pending" },
+    ],
+  },
+]
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState&lt;ColumnFiltersState&gt;([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  const getFacetedUniqueValues = (
+    table: ReturnType&lt;typeof useReactTable&lt;Person&gt;&gt;,
+    columnId: string,
+  ): Map&lt;string, number&gt; => {
+    const map = new Map&lt;string, number&gt;()
+    table.getPreFilteredRowModel().rows.forEach((row) => {
+      const value = row.getValue(columnId) as string
+      map.set(value, (map.get(value) || 0) + 1)
+    })
+    return map
+  }
+
+  return (
+    &lt;DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+      getFacetedUniqueValues={getFacetedUniqueValues}
+    &gt;
+      &lt;div className="w-full max-w-xs"&gt;
+        &lt;DataTableFilterCheckbox&lt;Person&gt;
+          label="Status"
+          value="blocks/status"
+          type="checkbox"
+          options={[
+            { label: "Active", value: "active" },
+            { label: "Inactive", value: "inactive" },
+            { label: "Pending", value: "pending" },
+          ]}
+        /&gt;
+      &lt;/div&gt;
+    &lt;/DataTableProvider&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DataTableFilterCheckbox
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 目标列对应的 column id | `keyof TData` | - |
+| label | 列的显示名称 | `string` | - |
+| type | 筛选控件类型，固定为 `"checkbox"` | `"checkbox"` | - |
+| options | 可选项列表；超过 4 个时自动展示搜索框 | `Option[]` | - |
+| component | 自定义选项渲染组件，接收 `Option` 作为 props | `(props: Option) => JSX.Element \| null` | - |
+| defaultOpen | 筛选面板默认展开（在 FilterControls 中使用） | `boolean` | `false` |
+| commandDisabled | 禁用命令搜索（在 FilterControls 中使用） | `boolean` | `false` |
+
+```ts
+type Option = {
+  label: string
+  value: string | boolean | number | undefined
+}
+```
+
+### DataTableCheckboxFilterField
+
+组件的完整 props 类型：
+
+```ts
+type DataTableCheckboxFilterField<TData> = {
+  label: string
+  value: keyof TData
+  type: "checkbox"
+  options?: Option[]
+  component?: (props: Option) => JSX.Element | null
+  defaultOpen?: boolean
+  commandDisabled?: boolean
+}
+```
+
+### DataTableFilterField
+
+在 `DataTableProvider` 的 `filterFields` 中配置时使用的联合类型：
+
+```ts
+type DataTableFilterField<TData> =
+  | { label: string; value: keyof TData; type: "input"; options?: Option[] }
+  | { label: string; value: keyof TData; type: "checkbox"; options?: Option[]; component?: (props: Option) => JSX.Element | null }
+  | { label: string; value: keyof TData; type: "slider"; min: number; max: number; options?: Option[]; unit?: string }
+  | { label: string; value: keyof TData; type: "timerange"; options?: Option[]; presets?: DatePreset[] }
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 如何在表格筛选中使用？
+
+在 `DataTableProvider` 的 `filterFields` 中配置 `type: "checkbox"`，`DataTableFilterControls` 会自动渲染本组件。通常不需要手动调用。
+
+```tsx
+const filterFields: DataTableFilterField&lt;Person&gt;[] = [
+  {
+    label: "Status",
+    value: "blocks/status",
+    type: "checkbox",
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Inactive", value: "inactive" },
+    ],
+  },
+]
+```
+
+### 如何自定义选项的渲染？
+
+通过 `component` 属性传入自定义组件，接收 `Option` 作为 props：
+
+```tsx
+&lt;DataTableFilterCheckbox&lt;Person&gt;
+  value="blocks/status"
+  label="Status"
+  type="checkbox"
+  options={[...]}
+  component={({ label, value }) =&gt; (
+    &lt;div className="flex items-center gap-2"&gt;
+      &lt;span className="font-medium"&gt;{label}&lt;/span&gt;
+      &lt;span className="text-muted-foreground text-xs"&gt;({String(value)})&lt;/span&gt;
+    &lt;/div&gt;
+  )}
+/&gt;
+```
+
+### 「only」按钮是什么？
+
+当鼠标悬停在某个选项行上时，右侧会显示「only」按钮。点击后，仅保留该选项的筛选值，方便快速切换到单选模式。
+
+### faceted 计数如何提供？
+
+通过 `DataTableProvider` 的 `getFacetedUniqueValues` 属性传入一个函数，返回 `Map<string, number>`。组件根据该 Map 展示每个选项的数据行数。如果不提供此函数，选项右侧不会显示计数。
+
+### 搜索框何时显示？
+
+当 `options` 数量超过 4 个时，组件顶部自动显示搜索框。输入文字后，组件按 `label` 进行大小写不敏感的前缀/包含匹配过滤。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DataTableFilterCheckbox 代码时：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-checkbox` 导入。
+2. 组件必须在 `DataTableProvider` 内部使用，否则会抛出 `useDataTable` 错误。
+3. 在 `filterFields` 中配置 `type: "checkbox"` 后，由 `DataTableFilterControls` 自动管理，通常不需要手动引入。
+4. 传入的 `value` 必须对应 table 中已定义的 column id。
+5. `options` 为 `Option[]` 类型，每个选项包含 `label` 和 `value`。
+6. 需要展示 faceted 计数时，通过 `DataTableProvider` 的 `getFacetedUniqueValues` 提供。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="blocks/data-table-filter-checkbox" />

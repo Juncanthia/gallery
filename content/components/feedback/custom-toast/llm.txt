@@ -1,0 +1,97 @@
+---
+category: Components
+title: CustomToast
+subtitle: 增强通知
+description: 带类型图标、进度条和关闭按钮的增强通知提示，基于 sonner custom API。
+group:
+  title: UI
+  order: 1
+library: gooseui
+source:
+  component: src/components/gooseui/components/ui/custom-toast.tsx
+  lib: src/components/gooseui/lib/toast.ts
+  reexport: src/components/core/gooseui-custom-toast.tsx
+  docs: content/components/feedback/custom-toast/index.mdx
+  examples:
+    - content/components/feedback/custom-toast/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  sonner: true
+  lucideReact: true
+---
+
+# CustomToast
+
+带类型图标、进度条和手动关闭按钮的增强通知提示。基于 sonner 的 `toast.custom` API 构建，通过 `customToast` 辅助对象提供四种提示方法。
+
+## 何时使用
+
+- 操作成功确认。
+- 操作失败提示。
+- 警告提醒。
+- 信息通知。
+
+## 导入
+
+```tsx
+// 辅助方法（推荐）
+import { customToast } from "@/components/_internal/gooseui/lib/toast"
+
+// Toaster 容器
+import { Toaster } from "sonner"
+
+// 组件本身（仅在需要直接使用时导入）
+import { CustomToast } from "@/components/feedback/custom-toast"
+```
+
+## 用法
+
+```tsx
+import { Toaster } from "sonner"
+import { customToast } from "@/components/_internal/gooseui/lib/toast"
+
+function App() {
+  return (
+    &lt;&gt;
+      &lt;Toaster />
+      {/* 触发提示 */}
+      &lt;button onClick={() => customToast.success("保存成功")}>保存&lt;/button&gt;
+    &lt;/&gt;
+  )
+}
+```
+
+### 四种提示类型
+
+```tsx
+// 成功 — 绿色
+customToast.success("操作成功", { description: "数据已保存。" })
+
+// 错误 — 红色
+customToast.error("操作失败", { description: "请重试。" })
+
+// 警告 — 琥珀色
+customToast.warning("请注意", { description: "即将超时。" })
+
+// 信息 — 蓝色
+customToast.info("提示信息", { description: "新版本已发布。" })
+```
+
+### 配置选项
+
+```tsx
+customToast.success("标题", {
+  description: "补充描述，支持\n换行。",
+  duration: 6000, // 毫秒，默认 4000
+})
+```
+
+## 约束
+
+- 必须在应用根组件中渲染 `&lt;Toaster />`。
+- 使用 `customToast` 辅助方法，不要直接使用 sonner 的 `toast()` 创建带类型的提示。
+- `message` 为必填参数。
+- `duration` 单位为毫秒。
+- 依赖 sonner 和 lucide-react。
+- 不要引入 Ant Design 的 message 或 references/notification 组件。

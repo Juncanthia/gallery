@@ -1,0 +1,67 @@
+Crosshair 全屏十字准线光标追踪组件，带有 SVG 噪波滤镜效果，悬停链接时触发失真动画。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要自定义十字准线光标为页面增添科技感或赛博朋克风格时使用。
+常见场景：
+- 创意展示或作品集页面的光标增强
+- 科技感、黑客风格的主题页面
+- 需要独特光标交互的品牌着陆页
+不推荐：
+- 需要精确鼠标操作的表单或数据表格页面
+- 移动端（十字准线无触摸对应行为）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/crosshair" path="rb/crosshair/basic" />
+
+```tsx
+import { Crosshair } from "@/components/core/crosshair"
+export default function Demo() { return <div className="relative h-[400px] w-full rounded-lg bg-neutral-900"><Crosshair color="white" /></div> }
+```
+
+### 限制在容器内
+
+```tsx
+import { Crosshair } from "@/components/core/crosshair"
+import { useRef } from "react"
+
+export default function Demo() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  return (
+    <div ref={containerRef} className="relative h-[400px] w-full rounded-lg bg-neutral-900 overflow-hidden">
+      <a href="#" className="text-blue-400 p-4 block">链接一</a>
+      <a href="#" className="text-green-400 p-4 block">链接二</a>
+      <Crosshair color="#00ff88" containerRef={containerRef} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Crosshair
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 十字准线颜色 | `string` | `"white"` |
+| containerRef | 限制准线在指定容器内显示的 Ref，传入后准线使用 absolute 定位跟随容器 | `React.RefObject<HTMLElement \| null>` | `null` |
+
+<h2 id="faq">常见问题</h2>
+
+### containerRef 不传时的行为？
+默认 `containerRef=null`，准线使用 `fixed` 定位覆盖整个视口，准线在浏览器窗口任意位置都会显示。传入 `containerRef` 后，准线仅在容器内可见，鼠标移出容器时准线自动隐藏。
+
+### SVG 滤镜的原理是什么？
+组件使用两个 `<feTurbulence>` + `<feDisplacementMap>` 滤镜组合，光标经过链接时触发 `fractalNoise` 的 `baseFrequency` 动画，使准线产生短暂的波形扭曲效果，模拟信号干扰。
+
+### 性能开销如何？
+使用 `requestAnimationFrame` 持续渲染准线位置，光标线条通过 CSS `transform` 移动，无 Canvas 重绘开销。滤镜动画仅在悬停链接的 500ms 内激活，平时不消耗 GPU 资源。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/crosshair` 导入。
+2. 放在页面根层级实现全局光标；放在某个容器内并传入 `containerRef` 实现局部光标。
+3. 组件自动 `querySelectorAll('a')` 绑定链接悬停滤镜动画。
+4. 准线通过 `pointer-events-none` 透传鼠标事件，不会阻断下方元素的交互。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-crosshair" />

@@ -4,7 +4,7 @@ import { DotsThreeVerticalIcon } from "@phosphor-icons/react"
 import { AnimatePresence, motion } from "motion/react"
 import * as React from "react"
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/core/toggle-group"
 import { Button } from "@/components/media/blocks/audio-player/components/button"
 import {
   DislikeIcon,

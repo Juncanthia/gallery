@@ -1,0 +1,10 @@
+---
+category: chamaac
+title: StatsCards
+subtitle: 统计卡片
+description: 带悬停动效的数据统计卡片组，4 张卡片交替展示收入、互动量和曝光等关键指标，悬停时卡片旋转归正并放大。
+demo: { cols: 1 }
+group: { title: 数据展示, order: 1 }
+source: { component: src/components/data-display/stats-cards/stats-cards.tsx, docs: content/components/data-display/stats-cards/index.mdx, examples: [content/components/data-display/stats-cards/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, motion: true, nextImage: true }
+---

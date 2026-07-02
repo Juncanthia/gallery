@@ -1,0 +1,315 @@
+---
+category: Components
+title: BillingHistory
+subtitle: 账单历史
+description: 以表格形式展示用户的账单和支付记录，包含账单编号、日期、金额和支付状态，支持筛选和日期范围过滤。
+demo:
+  cols: 1
+group:
+  title: 页面模板
+  order: 10
+source:
+  component: src/components/core/billing-history.tsx
+  docs: content/components/templates/payment/billing-history/index.mdx
+  examples:
+    - content/components/templates/payment/billing-history/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# BillingHistory 账单历史
+
+BillingHistory 是一个账单历史页面模板组件，适用于用户中心或账户设置页面的账单记录展示，支持账单列表、支付状态标识、日期筛选和操作入口。
+
+本组件是页面模板级别的复合组件，内部组合了 Table、Badge、Input 等基础组件，提供开箱即用的账单历史体验。
+
+## 何时使用 {#when-to-use}
+
+用于向用户展示其历史账单和支付记录。适合以下场景：
+
+- 用户中心或账户设置的账单历史页面，提供账单记录列表。
+- SaaS 产品的订阅计费记录展示，展示每期扣款明细。
+- 电商平台的订单支付历史，追踪每笔订单的支付状态。
+- 发票管理页面，提供账单列表、状态查看和下载功能。
+
+BillingHistory 以结构化表格展示账单信息，每行包含账单编号、日期、描述、金额和支付状态。支付状态以彩色 Badge 标识，支持日期范围过滤和状态筛选。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认展示内置的 Demo 账单数据，包含多条不同状态的账单记录。
+
+```tsx
+import { BillingHistory } from "@/components/templates/payment/billing-history"
+
+export default function BillingHistoryDemo() {
+  return (
+    <div className="w-full max-w-4xl">
+      <BillingHistory />
+    </div>
+  )
+}
+```
+
+### 自定义数据和操作
+
+通过 `data`、`actions`、`appearance` 和 `control` prop 配置组件。
+
+```tsx
+import { BillingHistory } from "@/components/templates/payment/billing-history"
+
+const billingData = {
+  invoices: [
+    {
+      id: "INV-2024-001",
+      date: "2024-06-15",
+      description: "Pro Plan — Monthly",
+      amount: 29.99,
+      blocks/status: "paid",
+    },
+    {
+      id: "INV-2024-002",
+      date: "2024-07-15",
+      description: "Pro Plan — Monthly",
+      amount: 29.99,
+      blocks/status: "paid",
+    },
+    {
+      id: "INV-2024-003",
+      date: "2024-08-15",
+      description: "Pro Plan — Monthly",
+      amount: 29.99,
+      blocks/status: "pending",
+    },
+    {
+      id: "INV-2024-004",
+      date: "2024-08-20",
+      description: "Enterprise Add-on",
+      amount: 99.00,
+      blocks/status: "refunded",
+    },
+  ],
+}
+
+export default function BillingHistoryCustomDemo() {
+  return (
+    <div className="w-full max-w-4xl">
+      <BillingHistory
+        data={billingData}
+        appearance={{ currency: "USD" }}
+        actions={{
+          onViewInvoice: (invoiceId) => console.log("View invoice:", invoiceId),
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 加载与错误状态
+
+通过 `control` prop 控制加载和错误状态的展示。
+
+```tsx
+import { useState, useEffect } from "react"
+import { BillingHistory } from "@/components/templates/payment/billing-history"
+
+export default function BillingHistoryLoadingDemo() {
+  const [invoices, setInvoices] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch("/api/billing/history")
+      .then((res) => res.json())
+      .then((data) => setInvoices(data.invoices))
+      .finally(() => setLoading(false))
+  }, [])
+
+  return (
+    <div className="w-full max-w-4xl">
+      <BillingHistory
+        data={{ invoices }}
+        control={{ isLoading: loading }}
+        appearance={{ currency: "USD" }}
+      />
+    </div>
+  )
+}
+```
+
+## API {#api}
+
+### BillingHistory
+
+通过 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件行为。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 账单数据配置 | `object` | 内置 Demo 数据 |
+| data.invoices | 账单记录列表 | `Invoice[]` | — |
+| actions | 操作回调配置 | `object` | — |
+| actions.onViewInvoice | 点击查看账单详情回调，接收账单 ID | `(invoiceId: string) => void` | — |
+| actions.onDownload | 点击下载账单回调，接收账单 ID | `(invoiceId: string) => void` | — |
+| appearance | 外观配置 | `object` | — |
+| appearance.currency | 货币代码，用于 `Intl.NumberFormat` 格式化 | `string` | `"USD"` |
+| appearance.showFilters | 是否显示日期范围和状态筛选器 | `boolean` | `true` |
+| control | 控制配置 | `object` | — |
+| control.isLoading | 为 `true` 时显示骨架屏 | `boolean` | `false` |
+| control.errorMessage | 加载失败时的错误信息，展示错误提示并隐藏表格 | `string` | — |
+
+### Invoice
+
+表单数据中每条账单记录的结构。
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 账单唯一标识 | `string` | 是 |
+| date | 账单日期（ISO 日期字符串，如 `"2024-06-15"`） | `string` | 是 |
+| description | 账单描述或项目名称 | `string` | 否 |
+| amount | 账单金额 | `number` | 是 |
+| blocks/status | 支付状态 | `"paid"` \| `"pending"` \| `"refunded"` \| `"overdue"` | 否 |
+
+### 支付状态映射
+
+| blocks/status 值 | 中文标签 | Badge 颜色 |
+| --- | --- | --- |
+| `paid` | 已支付 | 绿色 |
+| `pending` | 待处理 | 黄色 |
+| `refunded` | 已退款 | 蓝色 |
+| `overdue` | 已逾期 | 红色 |
+
+## Semantic DOM {#semantic-dom}
+
+BillingHistory 通过 `data-slot` 属性暴露稳定的语义结构：
+
+| data-slot | 说明 |
+| --- | --- |
+| `billing-history` | 组件根容器 |
+| `billing-history-filters` | 日期范围和状态筛选器区域 |
+| `billing-history-table` | 账单表格 |
+| `billing-history-empty` | 空状态提示 |
+| `billing-history-loading` | 加载骨架屏 |
+| `billing-history-error` | 错误提示 |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/core/billing-history.tsx`：组件导出入口，re-export。
+- `src/components/manifest/billing/billing-history.tsx`：账单历史组件实现（待创建）。
+
+关键行为：
+
+1. 组件内部管理筛选状态（日期范围、支付状态），调用侧只需关心 `data`、`actions` 和 `control`。
+2. `invoices` 为空数组时自动展示空状态插图和引导文案。
+3. 支付状态通过彩色 Badge 渲染，中文标签由组件内置。
+4. 金额通过 `Intl.NumberFormat` 格式化，根据 `appearance.currency` 自动切换。
+5. 加载状态（`control.isLoading`）展示骨架屏，错误状态（`control.errorMessage`）展示错误提示。
+6. 移动端自动切换为卡片列表布局，每张卡片展示一条账单记录。
+
+## FAQ {#faq}
+
+### 如何获取账单详情？
+
+通过 `actions.onViewInvoice` 回调接收账单 ID 后执行导航或打开详情弹窗。
+
+```tsx
+<BillingHistory
+  data={billingData}
+  actions={{
+    onViewInvoice: (invoiceId) => {
+      router.push(`/invoices/${invoiceId}`)
+    },
+  }}
+/>
+```
+
+### 如何支持账单下载？
+
+通过 `actions.onDownload` 回调处理：
+
+```tsx
+<BillingHistory
+  data={billingData}
+  actions={{
+    onDownload: (invoiceId) => {
+      window.open(`/api/invoices/${invoiceId}/pdf`, "_blank")
+    },
+  }}
+/>
+```
+
+### 如何处理加载状态？
+
+通过 `control.isLoading` 控制，`true` 时组件内部显示骨架屏。
+
+```tsx
+const [loading, setLoading] = useState(true)
+const [invoices, setInvoices] = useState([])
+
+useEffect(() => {
+  fetchInvoices().then((data) => {
+    setInvoices(data)
+    setLoading(false)
+  })
+}, [])
+
+<BillingHistory
+  data={{ invoices }}
+  control={{ isLoading: loading }}
+/>
+```
+
+### 如何展示错误信息？
+
+通过 `control.errorMessage` 传入错误文案：
+
+```tsx
+const [error, setError] = useState(null)
+
+useEffect(() => {
+  fetchInvoices()
+    .catch((err) => setError(err.message))
+}, [])
+
+<BillingHistory
+  data={{ invoices: [] }}
+  control={{ errorMessage: error }}
+/>
+```
+
+### 如何隐藏筛选器？
+
+设置 `appearance.showFilters` 为 `false`：
+
+```tsx
+<BillingHistory
+  data={billingData}
+  appearance={{ showFilters: false }}
+/>
+```
+
+### 空状态如何展示？
+
+当 `data.invoices` 为空数组时组件自动展示空状态，包含图标和引导文案。无需调用侧额外处理。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 BillingHistory 代码时，应遵守：
+
+1. 从 `@/components/templates/payment/billing-history` 导入 `BillingHistory`。
+2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop，不要直接传入子组件。
+3. 每条账单记录必须包含 `id`、`date`、`amount`，建议同时传入 `description` 和 `blocks/status`。
+4. 支付状态使用 `"paid"`、`"pending"`、`"refunded"`、`"overdue"` 四个枚举值，组件内部自动映射中文标签和颜色。
+5. 查看和下载操作分别通过 `actions.onViewInvoice` 和 `actions.onDownload` 处理。
+6. 加载状态仅通过 `control.isLoading` 控制，组件内部已处理骨架屏的渲染逻辑。
+7. 错误状态通过 `control.errorMessage` 展示，组件内部已处理错误提示的渲染逻辑。
+8. 不要引入 Ant Design、ConfigProvider 或 css-in-js 相关依赖。
+9. 不要复刻或重新实现 BillingHistory 的内部逻辑；它是一个页面模板组件，应直接使用。

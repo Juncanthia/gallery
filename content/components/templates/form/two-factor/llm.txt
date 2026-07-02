@@ -1,0 +1,284 @@
+---
+category: Components
+title: TwoFactor
+subtitle: 双因素认证
+description: 双因素认证组件，提供验证码输入、重新发送与倒计时功能，用于登录流程中的二次身份验证。
+demo:
+  cols: 1
+group:
+  title: 页面模板
+  order: 8
+source:
+  component: src/components/core/two-factor.tsx
+  source: src/components/templates/form/two-factor.tsx
+  demo: src/components/manifest/form/demo/two-factor.ts
+  docs: content/components/templates/form/two-factor/index.mdx
+  examples:
+    - content/components/templates/form/two-factor/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# TwoFactor 双因素认证
+
+TwoFactor 是一个双因素认证（2FA）验证码输入组件，用于登录流程中的二次身份验证。用户输入通过短信、邮件或认证器应用收到的验证码，完成身份校验。
+
+本组件是页面模板级别的复合组件，内部组合了 Input、Button、Label 等基础组件，提供开箱即用的两步验证体验。
+
+## 何时使用 {#when-to-use}
+
+在登录流程中，当用户通过用户名和密码完成首次认证后，需要进行第二步身份验证时使用。适合以下场景：
+
+- 登录后的二次验证保护，防止账号被盗用。
+- 敏感操作（支付、修改密码、修改绑定信息等）的身份确认。
+- 新设备登录时的安全校验。
+- 密码重置后的身份确认。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认展示标题、描述和 6 位验证码输入框。输入完整验证码后点击验证按钮触发 `onVerify` 回调。
+
+```tsx
+import { TwoFactor } from "@/components/templates/form/two-factor"
+
+export default function TwoFactorDemo() {
+  return (
+    <div className="w-full max-w-md">
+      <TwoFactor
+        actions={{
+          onVerify: (code) => console.log("Verification code:", code),
+          onResend: () => console.log("Resending code..."),
+          onBack: () => console.log("Go back"),
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 自定义文案
+
+通过 `data` prop 自定义标题、副标题和按钮文字，适配中文场景。
+
+```tsx
+import { TwoFactor } from "@/components/templates/form/two-factor"
+
+export default function TwoFactorCustomDemo() {
+  return (
+    <div className="w-full max-w-md">
+      <TwoFactor
+        data={{
+          title: "双重验证",
+          subtitle: "请输入发送至您设备的 6 位验证码",
+          verifyLabel: "确认",
+          resendLabel: "重新获取",
+          backLabel: "返回",
+          codeLength: 6,
+          resendCooldown: 30,
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 按需加载与错误处理
+
+处理异步验证过程，展示加载和错误状态。
+
+```tsx
+import { useState } from "react"
+import { TwoFactor } from "@/components/templates/form/two-factor"
+
+export default function TwoFactorAsyncDemo() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string>()
+
+  async function handleVerify(code: string) {
+    setLoading(true)
+    setError(undefined)
+    // 模拟 API 请求
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+    if (code !== "123456") {
+      setError("验证码错误，请重试")
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div className="w-full max-w-md">
+      <TwoFactor
+        actions={{
+          onVerify: handleVerify,
+          onResend: () => console.log("Resending..."),
+        }}
+        control={{ isLoading: loading, error }}
+      />
+    </div>
+  )
+}
+```
+
+## API {#api}
+
+### TwoFactor
+
+通过 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件行为。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 数据配置 | `object` | — |
+| data.title | 标题文字 | `string` | `"Two-Factor Authentication"` |
+| data.subtitle | 标题下方描述文字 | `string` | `"Enter the verification code sent to your device."` |
+| data.verifyLabel | 验证按钮文字 | `string` | `"Verify"` |
+| data.resendLabel | 重新发送按钮文字 | `string` | `"Resend Code"` |
+| data.backLabel | 返回按钮文字 | `string` | `"Back"` |
+| data.codeLength | 验证码位数 | `4 \| 5 \| 6 \| 7 \| 8` | `6` |
+| data.resendCooldown | 重新发送冷却时间，单位秒 | `number` | `60` |
+| actions | 回调配置 | `object` | — |
+| actions.onVerify | 验证回调，接收完整验证码字符串 | `(code: string) => void` | — |
+| actions.onResend | 重新发送回调，触发后启动倒计时 | `() => void` | — |
+| actions.onBack | 返回上一步回调 | `() => void` | — |
+| appearance | 外观配置 | `object` | — |
+| appearance.showHeader | 是否显示标题和描述区域 | `boolean` | `true` |
+| appearance.showBack | 是否显示返回按钮 | `boolean` | `true` |
+| control | 控制配置 | `object` | — |
+| control.isLoading | 验证按钮加载状态；为 `true` 时按钮显示加载动画并禁用 | `boolean` | `false` |
+| control.error | 验证失败提示文字，传入非空字符串时在验证码输入框下方展示红色错误信息 | `string` | — |
+
+## Semantic DOM {#semantic-dom}
+
+TwoFactor 通过 `data-slot` 属性暴露稳定的语义结构：
+
+| data-slot | 说明 |
+| --- | --- |
+| `two-factor` | 组件容器 |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/templates/form/two-factor.tsx`：双因素认证组件实现。
+- `src/components/manifest/form/demo/two-factor.ts`：演示用的默认配置数据。
+- `src/components/core/two-factor.tsx`：组件导出入口，re-export。
+
+关键行为：
+
+1. 验证码输入框自动处理焦点跳转：输入一个字符后自动聚焦下一个输入框。
+2. 支持 Backspace 删除并自动回退到上一个输入框。
+3. 支持粘贴完整验证码字符串，自动分配到各个输入框。
+4. 只有所有输入位都填写后，验证按钮才可点击。
+5. 重新发送倒计时由组件内部管理，`onResend` 调用后自动开始倒计时并以秒递减显示。
+6. 倒计时期间重新发送按钮禁用，倒计时结束后恢复。
+7. `error` 字符串非空时，在输入框下方显示红色错误提示，清空后自动隐藏。
+
+## FAQ {#faq}
+
+### 如何获取用户输入的验证码？
+
+通过 `actions.onVerify` 回调接收完整的验证码字符串。组件会在用户填写满所有输入位并点击验证按钮后触发此回调。
+
+```tsx
+<TwoFactor
+  actions={{
+    onVerify: (code) => {
+      console.log("Verification code:", code)
+      // code 为完整字符串，如 "123456"
+    }
+  }}
+/>
+```
+
+### 如何设置重新发送的冷却时间？
+
+通过 `data.resendCooldown` 设置（单位秒）。默认 60 秒。组件内部管理倒计时显示和按钮禁用状态。
+
+```tsx
+<TwoFactor
+  data={{ resendCooldown: 30 }}
+  actions={{
+    onResend: () => sendNewCode()
+  }}
+/>
+```
+
+### 如何处理验证失败？
+
+通过 `control.error` 显示错误提示文字。典型用法是配合异步 `onVerify`：
+
+```tsx
+const [error, setError] = useState<string>()
+
+<TwoFactor
+  actions={{
+    onVerify: async (code) => {
+      const result = await verifyAPI(code)
+      if (!result.ok) {
+        setError("验证码错误，请重试")
+      }
+    }
+  }}
+  control={{ error }}
+/>
+```
+
+### 如何调整验证码位数？
+
+通过 `data.codeLength` 设置，支持 4、5、6、7、8 位。组件会根据指定位数渲染对应数量的输入框。
+
+```tsx
+<TwoFactor data={{ codeLength: 4 }} />
+```
+
+### 如何自定义文案？
+
+通过 `data.title`、`data.subtitle`、`data.verifyLabel`、`data.resendLabel`、`data.backLabel` 分别自定义标题、描述和各按钮文字。
+
+```tsx
+<TwoFactor
+  data={{
+    title: "双重验证",
+    subtitle: "请输入发送至您设备的 6 位验证码",
+    verifyLabel: "确认",
+    resendLabel: "重新获取",
+    backLabel: "返回",
+  }}
+/>
+```
+
+### 如何隐藏返回按钮？
+
+设置 `appearance.showBack` 为 `false`：
+
+```tsx
+<TwoFactor appearance={{ showBack: false }} />
+```
+
+### 如何隐藏标题区域？
+
+设置 `appearance.showHeader` 为 `false`：
+
+```tsx
+<TwoFactor appearance={{ showHeader: false }} />
+```
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 TwoFactor 代码时，应遵守：
+
+1. 从 `@/components/templates/form/two-factor` 导入 `TwoFactor`。
+2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop，不要直接管理组件内部的输入状态。
+3. 验证码通过 `actions.onVerify` 回调获取，组件内部已处理输入框的焦点跳转和粘贴分配。
+4. 加载状态仅通过 `control.isLoading` 控制，组件内部已处理按钮禁用和加载动画。
+5. 错误提示通过 `control.error` 传入字符串，组件内部自动展示和清除。
+6. 重新发送逻辑通过 `actions.onResend` 触发，组件内部自动管理倒计时和按钮状态。
+7. 不要引入 Ant Design、ConfigProvider 或 css-in-js 相关依赖。
+8. 不要复刻或重新实现 TwoFactor 的内部逻辑；它是一个页面模板组件，应直接使用。

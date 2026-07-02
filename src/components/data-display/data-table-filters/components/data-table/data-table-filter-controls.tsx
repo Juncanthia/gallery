@@ -6,7 +6,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/core/accordion";
 import * as React from "react";
 import { DataTableFilterCheckbox } from "./data-table-filter-checkbox";
 import { DataTableFilterInput } from "./data-table-filter-input";

@@ -1,0 +1,185 @@
+---
+category: Components
+title: SchemaBuilderPanel
+subtitle: JSON Schema 构建器
+description: 可视化 JSON Schema 编辑器，支持拖拽排序、类型切换和实时 JSON 预览。
+demo:
+  cols: 1
+group:
+  title: Extend
+groupEn: Extend
+source:
+  component: src/components/extend/components/ui/schema-builder.tsx
+  reexport: src/components/core/extend-schema-builder.tsx
+  docs: content/components/extend/schema-builder/index.mdx
+  examples:
+    - content/components/extend/schema-builder/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  hugeicons: true
+  dndKit: true
+  pierreDiffs: true
+---
+
+# SchemaBuilderPanel JSON Schema 构建器
+
+SchemaBuilderPanel 是一个可视化的 JSON Schema 编辑器，内置 Form（表格拖拽编辑）和 JSON（实时语法高亮预览）两个 Tab，支持嵌套对象、数组项和枚举值的完整编辑。
+
+## 何时使用 {#when-to-use}
+
+需要在可视化界面中构建、编辑或预览 JSON Schema 时使用。
+
+常见场景：
+
+- 通过拖拽快速搭建 JSON Schema 的结构定义。
+- 为 API 或数据提取配置目标 Schema，实时预览 JSON 输出。
+- 定义嵌套对象、数组项类型和枚举约束。
+- 在非受控模式（内置示例 Schema）或受控模式（外部 state 驱动）下使用。
+- 搭配 `serializeSchema` 导出标准 JSON Schema 供下游消费。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认内置银行对账单示例 Schema，无需任何 props 即可体验完整的拖拽编辑和 JSON 预览。
+
+```tsx
+import { SchemaBuilderPanel } from "@/components/core/schema-builder"
+
+export default function Demo() {
+  return (
+    <SchemaBuilderPanel />
+  )
+}
+```
+
+> 说明：完整演示请参考 `content/components/extend/schema-builder/index.mdx`。
+
+## 核心导出 {#exports}
+
+- `SchemaBuilderPanel` — 主组件
+- `serializeSchema` — 将 `SchemaBuilderSchema` 序列化为标准 JSON Schema
+- `SAMPLE_SCHEMA` — 内置示例 Schema（银行对账单）
+- 类型：`SchemaBuilderSchema`, `SchemaBuilderProperty`, `SchemaBuilderEnumValue`, `SchemaBuilderFieldType`, `SchemaBuilderArrayItemType`, `SchemaBuilderTheme`, `SerializedSchema`, `SerializedSchemaProperty`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+type SchemaBuilderFieldType =
+  | "string"
+  | "number"
+  | "integer"
+  | "boolean"
+  | "null"
+  | "object"
+  | "array"
+  | "enum"
+```
+
+```ts
+type SchemaBuilderEnumValue = {
+  id: string
+  value: string
+  description: string
+}
+```
+
+```ts
+type SchemaBuilderProperty = {
+  id: string
+  key: string
+  type: SchemaBuilderFieldType
+  description: string
+  enumValues?: SchemaBuilderEnumValue[]
+  properties?: SchemaBuilderProperty[]
+  items?: {
+    type: "string" | "number" | "integer" | "boolean" | "object" | "enum"
+    properties?: SchemaBuilderProperty[]
+    enumValues?: SchemaBuilderEnumValue[]
+  }
+}
+```
+
+```ts
+type SchemaBuilderSchema = {
+  properties: SchemaBuilderProperty[]
+}
+```
+
+```ts
+type SchemaBuilderPanelProps = {
+  className?: string
+  defaultSchema?: SchemaBuilderSchema
+  schema?: SchemaBuilderSchema
+  onSchemaChange?: (schema: SchemaBuilderSchema) => void
+  theme?: "light" | "dark"
+}
+```
+
+```ts
+function serializeSchema(schema: SchemaBuilderSchema): {
+  type: "object"
+  properties: Record<string, SerializedSchemaProperty>
+}
+```
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 类型 Badge 使用预定义的颜色方案：string=蓝色、number/integer=绿色、boolean=琥珀色、null=灰色、object=紫色、array=青色、enum=玫瑰色。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground` 等项目级语义变量。
+- 拖拽手柄在 hover 时显示，拖拽中保持可见。
+- 嵌套编辑器使用 Collapsible 可折叠面板，带缩进层级。
+- JSON 预览使用 `@pierre/diffs` 的虚拟化渲染，自动适配亮色/暗色主题。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/extend/components/ui/schema-builder.tsx` — 组件完整实现，约 2500 行，包含拖拽编辑、类型切换、嵌套编辑器、JSON 预览等全部功能。
+- `src/components/core/extend-schema-builder.tsx` — 重导出入口。
+
+直接依赖摘要：
+
+- `@dnd-kit/core` / `@dnd-kit/sortable` / `@dnd-kit/utilities` — 拖拽排序
+- `@hugeicons/core-free-icons` / `@hugeicons/react` — 类型图标
+- `@pierre/diffs` — JSON 预览的虚拟化代码渲染
+- `next-themes` — 暗色模式主题检测
+- `@hyper/extend-ui/components/ui/button` — 按钮
+- `@hyper/extend-ui/components/ui/collapsible` — 可折叠面板
+- `@hyper/extend-ui/components/ui/dropdown-menu` — 下拉菜单（类型选择）
+- `@hyper/extend-ui/components/ui/scroll-area` — 滚动区域
+- `@hyper/extend-ui/components/ui/tabs` — Tab 切换
+
+实现注意：
+
+1. 组件支持受控和非受控两种模式。传入 `schema` prop 进入受控模式。
+2. 拖拽支持同容器内排序和跨容器移动（根层级、嵌套对象、数组对象之间）。
+3. 切换属性类型时自动清理不兼容的子数据（如从 enum 切换到 string 会清除 enumValues）。
+4. JSON Tab 保持挂载（keepMounted），但在隐藏时冻结 Schema 快照，避免每次表单 keystroke 都重新序列化和高亮。
+5. 拖拽碰撞检测使用自定义算法，根据指针位置判断插入目标（容器 vs 具体属性位置）。
+6. 枚举值也支持拖拽排序。
+7. `serializeSchema` 导出标准 JSON Schema，自动过滤空 key 的属性。
+
+## 可访问性 {#accessibility}
+
+- 拖拽手柄有 `aria-label`，描述被拖拽的属性。
+- 类型下拉菜单使用 Radix DropdownMenu，支持键盘导航。
+- Collapsible 触发器支持键盘焦点和展开/折叠。
+- Tab 切换支持键盘操作。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 SchemaBuilderPanel 代码时，应遵守：
+
+1. 从 `@/components/core/schema-builder` 导入 `SchemaBuilderPanel`。
+2. 默认用法无需 props，组件内置示例 Schema。
+3. 使用 `schema` + `onSchemaChange` 进入受控模式。
+4. 通过 `defaultSchema` 自定义初始 Schema，结构须符合 `SchemaBuilderSchema` 类型。
+5. 使用 `serializeSchema` 导出标准 JSON Schema 格式。
+6. 不要自行实现 Schema 编辑器或拖拽排序，使用 SchemaBuilderPanel 组件。
+7. 不要引入额外的 Schema 编辑库（如 @rjsf/core、react-jsonschema-form），SchemaBuilderPanel 已内置完整能力。
+8. 如需自定义类型 Badge 颜色，修改 `TYPE_STYLES` 映射表，不要在外层覆盖样式。

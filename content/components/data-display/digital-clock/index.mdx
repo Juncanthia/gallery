@@ -1,0 +1,150 @@
+DigitalClock 是一个 7 段数码管风格的数字时钟组件。实时显示当前时间，支持 12/24 小时制切换、秒数显示、颜色和缩放自定义，冒号自动闪烁。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以复古数码管风格展示实时时间时使用，适用于仪表盘、控制台、科技感页面等场景。
+
+常见场景：
+
+- 仪表盘或监控面板中的实时时钟。
+- 赛博朋克、复古科技风格页面的时间展示。
+- 比赛计时器或活动倒计时页面的当前时间显示。
+- 锁屏界面或全屏时钟应用。
+
+不推荐：
+
+- 需要展示日期而非时间的场景。
+- 需要用户选择或输入时间的场景，DigitalClock 仅展示当前时间。
+- 高精度计时需求，组件以秒为最小单位。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+DigitalClock 默认显示 24 小时制并展示秒数，冒号每 500ms 闪烁一次。
+
+&lt;ComponentShowcase
+  id="data-display/digital-clock"
+  path="data-display/digital-clock/basic"
+/&gt;
+
+```tsx
+import { DigitalClock } from "@/components/data-display/digital-clock"
+
+export default function Demo() {
+  return (
+    &lt;DigitalClock showSeconds /&gt;
+  )
+}
+```
+
+### 自定义颜色
+
+通过 `color` 属性传入 CSS 颜色值更改数码管显示颜色。
+
+```tsx
+import { DigitalClock } from "@/components/data-display/digital-clock"
+
+&lt;DigitalClock color="#ff6b6b" /&gt;
+&lt;DigitalClock color="#4ecdc4" /&gt;
+&lt;DigitalClock color="#ffe66d" /&gt;
+```
+
+### 12 小时制
+
+设置 `use24Hour={false}` 切换为 12 小时制显示。
+
+```tsx
+import { DigitalClock } from "@/components/data-display/digital-clock"
+
+&lt;DigitalClock use24Hour={false} showSeconds /&gt;
+```
+
+### 调整尺寸
+
+通过 `scale` 属性缩放时钟整体大小，默认值为 `1`。
+
+```tsx
+import { DigitalClock } from "@/components/data-display/digital-clock"
+
+&lt;DigitalClock scale={0.6} /&gt;
+&lt;DigitalClock scale={1.5} /&gt;
+```
+
+### 隐藏秒数
+
+设置 `showSeconds={false}` 仅显示时和分。
+
+```tsx
+import { DigitalClock } from "@/components/data-display/digital-clock"
+
+&lt;DigitalClock showSeconds={false} /&gt;
+```
+
+<h2 id="api">API</h2>
+
+### DigitalClock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showSeconds | 是否显示秒数 | `boolean` | `true` |
+| use24Hour | 是否使用 24 小时制 | `boolean` | `true` |
+| color | 数码管点亮时的颜色（CSS 颜色值） | `string` | `"#82FA58"` |
+| scale | 时钟整体缩放比例 | `number` | `1` |
+| className | 附加 CSS 类名 | `string` | - |
+
+DigitalClock 使用 7 段数码管图案渲染数字，每个数字由 CSS linear-gradient 构建。冒号分隔符由两个圆点组成，通过 `setInterval` 每 500ms 切换可见性实现闪烁效果。组件通过 `useTheme()` 获取当前主题，在暗色/亮色模式下使用不同的未点亮段颜色（暗色 `#333`，亮色 `#ddd`）。为防止 hydration 不匹配，组件在客户端挂载前统一使用默认暗色偏置渲染占位内容，挂载后切换为实时时间。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何在暗色模式下显示？
+
+DigitalClock 通过 `next-themes` 的 `useTheme()` 自动检测当前主题，未点亮的数码段在暗色模式下显示为 `#333`、亮色模式下显示为 `#ddd`，无需额外配置。
+
+### 如何更改数码管颜色？
+
+通过 `color` 属性传入任意 CSS 颜色值（hex、rgb、hsl 等），该颜色用于点亮状态的数码段。
+
+```tsx
+&lt;DigitalClock color="#ff0000" /&gt;
+&lt;DigitalClock color="rgb(100, 200, 255)" /&gt;
+```
+
+### 组件会出现 hydration 不匹配吗？
+
+不会。组件在首次渲染时统一使用 `0` 数字占位，待客户端挂载后再切换为真实时间，确保服务端和客户端初始 HTML 一致。
+
+### 如何调整时钟大小？
+
+通过 `scale` 属性按比例缩放，`1` 为默认尺寸。传入大于 `1` 的值放大，小于 `1` 的值缩小。所有内部尺寸（数字宽度、高度、间距、冒号大小）均按此比例统一缩放。
+
+```tsx
+&lt;DigitalClock scale={1.5} /&gt;
+&lt;DigitalClock scale={0.7} /&gt;
+```
+
+### 如何切换 12 小时制和 24 小时制？
+
+设置 `use24Hour={false}` 切换为 12 小时制，`use24Hour={true}`（默认）为 24 小时制。
+
+```tsx
+&lt;DigitalClock use24Hour={false} /&gt;
+```
+
+### 是否支持倒计时或计时器功能？
+
+不支持。DigitalClock 仅展示系统当前时间。如需倒计时或秒表功能，请使用专门的计时组件。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/data-display/digital-clock` 导入 `DigitalClock`。
+2. `color` 传入 CSS 颜色字符串（如 `"#82FA58"`），非 Tailwind class。
+3. `scale` 传入数字，控制整体大小缩放比例，所有内部元素等比例调整。
+4. `use24Hour` 和 `showSeconds` 为布尔值，无需传入字符串。
+5. DigitalClock 仅展示当前系统时间，不接收时间输入，不提供选择或编辑功能。
+6. 不要为需要用户交互的时间选择场景使用 DigitalClock。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui-digital-clock" />

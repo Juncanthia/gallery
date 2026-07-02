@@ -1,0 +1,51 @@
+---
+category: Components
+title: AnimatedCollection
+subtitle: 动画集合
+description: 支持列表、卡片和堆叠三种视图模式的动画集合组件。
+demo:
+  cols: 1
+group:
+  title: 布局
+  order: 1
+source:
+  component: src/components/effects/interactions/animated-collection.tsx
+  ui: src/components/core/uselayouts-animated-collection.tsx
+  docs: content/components/effects/interactions/animated-collection/index.mdx
+  examples:
+    - content/components/effects/interactions/animated-collection/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+  hugeicons: true
+---
+
+# AnimatedCollection 动画集合
+
+支持在列表、卡片和堆叠三种视图模式之间以流畅 spring 动画切换的集合展示组件。
+
+## 导入路径
+
+```tsx
+import { LayoutSwitcher } from "@/components/effects/interactions/animated-collection"
+```
+
+## 使用方式
+
+```tsx
+export default function Demo() {
+  return <LayoutSwitcher />
+}
+```
+
+组件自包含内部状态，无需外部 props。通过底部 Tab 在三种视图间切换。
+
+## 约束
+
+- 组件内部使用 motion/react 的 `LayoutGroup` 和 `AnimatePresence`，不要在外层重复包裹。
+- 修改集合内容时编辑 `ITEMS` 数组，保持 `CollectionItem` 接口一致。
+- 图标使用 `@hugeicons/core-free-icons` + `@hugeicons/react`，不要替换为其他图标库。
+- 动画参数通过 `snappySpring` 和 `fastFade` 配置，不要删除或绕过动画逻辑。
+- 组件为单文件实现，不拆分子组件或提取 hooks 到外部文件。
+- 不依赖 Ant Design、rc-component 或 ConfigProvider。

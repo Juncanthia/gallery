@@ -1,0 +1,112 @@
+IridescentWindows 彩虹窗口。基于 Three.js 和 GLSL 着色器实现，通过复数运算和分形映射生成流动的彩虹色（iridescent）窗口纹理效果。适合用作页面背景或氛围装饰。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为页面或区块添加彩虹色动态纹理、液体金属光泽等氛围型视觉效果时使用。
+
+常见场景：
+- 全屏背景装饰，如 Hero 区域、品牌展示页。
+- 深色主题页面的动态背景层。
+- 科技、艺术、前卫风格页面的氛围组件。
+
+不推荐：
+- 性能敏感的低端设备页面，WebGL 着色器开销较高。
+- 需要精确视觉一致性的场景，着色器效果受 GPU 差异影响。
+- 纯信息展示的文本密集型页面，动态背景会分散注意力。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="effects/backgrounds/iridescent-windows" path="effects/backgrounds/iridescent-windows/basic" />
+
+### 基础用法
+
+IridescentWindows 默认拥有 `min-h-[400px]` 和 `bg-black`，直接使用即可渲染完整效果。
+
+```tsx
+import { IridescentWindows } from "@/components/effects/backgrounds/iridescent-windows"
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full rounded overflow-hidden"&gt;
+      &lt;IridescentWindows /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义配色
+
+通过 `color` 单独调整基色，或通过 `themeColors` 精确控制三层颜色。themeColors 为一个三元组 `[深色, 中间色, 亮色]`。
+
+```tsx
+import { IridescentWindows } from "@/components/effects/backgrounds/iridescent-windows"
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full rounded overflow-hidden"&gt;
+      &lt;IridescentWindows
+        themeColors={["#2a1a3a", "#6b3fa0", "#c4a0e0"]}
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整动画速度与缩放
+
+通过 `speed` 控制动画速度（默认 1.5），通过 `scale` 控制纹理缩放（默认 15.0）。
+
+```tsx
+import { IridescentWindows } from "@/components/effects/backgrounds/iridescent-windows"
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full rounded overflow-hidden"&gt;
+      &lt;IridescentWindows speed={0.5} scale={25.0} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### IridescentWindows
+
+彩虹窗口背景组件。基于 WebGL 着色器实现，默认高度 400px，背景为黑色。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| speed | 动画速度倍率 | `number` | `1.5` |
+| scale | 纹理缩放系数 | `number` | `15.0` |
+| color | 基色，当未设置 themeColors 时用于派生三层配色 | `string` | `"#8d9db3"` |
+| themeColors | 三层主题色，格式为 `[深色, 中间色, 亮色]` | `[string, string, string]` | `["#4c6663", "#6f8f8a", "#b8cbc8"]` |
+
+<h2 id="faq">常见问题</h2>
+
+### IridescentWindows 为什么没有显示？
+
+组件自带 `bg-black` 和 `min-h-[400px]`。如果外层容器没有宽度，Canvas 不会渲染。确保父容器具有明确的宽度（如 `w-full`）。
+
+### 如何减少性能开销？
+
+默认 DPR 为 `[1, 2]`，帧率通过 `speed` 间接影响。如需进一步优化，可以：
+- 仅在用户可见时渲染（通过条件渲染或 IntersectionObserver）。
+- 减小父容器尺寸，降低 GPU 填充率。
+- 在低端设备上降级为静态背景色。
+
+### 颜色格式支持什么？
+
+color 和 themeColors 数组项接受 CSS 颜色字符串（如 hex `"#6b3fa0"`、rgb `"rgb(107,63,160)"`、命名颜色 `"purple"` 等），内部通过 `new THREE.Color()` 解析。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/effects/backgrounds/iridescent-windows` 导入 IridescentWindows（命名导出），不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 组件自带 `bg-black` 和 `min-h-[400px]`，确保父容器具有明确宽度。
+3. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+4. 不要引入 Ant Design 相关依赖。
+5. 动画效果由着色器内部驱动，不需要传递 `animate` 或 `autoPlay` 等 props。
+6. 如果不确定某个 API 是否存在，先检查 `src/components/effects/backgrounds/iridescent-windows/iridescent-windows.tsx`，不要凭记忆生成。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="effects/backgrounds/iridescent-windows" />

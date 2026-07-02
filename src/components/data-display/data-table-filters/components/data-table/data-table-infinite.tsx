@@ -16,7 +16,7 @@ import { DataTableProvider } from "@/components/data-display/data-table-filters/
 import { DataTableResetButton } from "@/components/data-display/data-table-filters/components/data-table/data-table-reset-button";
 import { DataTableToolbar } from "@/components/data-display/data-table-filters/components/data-table/data-table-toolbar"; // TODO: check where to put this
 import type { DataTableFilterField } from "@/components/data-display/data-table-filters/components/data-table/types";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
 import { useLocalStorage } from "@/components/data-display/data-table-filters/hooks/use-local-storage";
 import {

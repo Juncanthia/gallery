@@ -1,0 +1,307 @@
+---
+category: Components
+title: DataTableInfinite
+subtitle: 无限滚动表格
+description: 基于 TanStack Table 和 React Query 的无限滚动数据表格，集成分页加载、筛选、排序、列管理、行选择与快捷操作栏。
+demo:
+  cols: 1
+group:
+  title: 数据表格
+  order: 1
+source:
+  component: src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-infinite.tsx
+  wrapper: src/components/core/dt-blocks/data-table-infinite.tsx
+  docs: content/components/dt/blocks/data-table-infinite/index.mdx
+  examples:
+    - content/components/dt/blocks/data-table-infinite/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  tanstackTable: true
+  tanstackQuery: true
+  lucideReact: true
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTableInfinite 无限滚动表格
+
+DataTableInfinite 是 DataTable 筛选体系的顶层入口组件，封装了完整的无限滚动数据表格体验。组件内部集成 TanStack Table（列管理、排序、筛选）、DataTableProvider（筛选状态上下文）和无限滚动加载逻辑（触底自动加载 + Load More 按钮）。
+
+组件通过 `filterFields` 配置筛选字段，在宽屏通过左侧固定侧栏展示筛选面板，移动端可通过 `DataTableFilterControlsDrawer` 以抽屉形式展示。加载更多时在表格底部展示 Load More 按钮，滚动触底时自动触发加载。
+
+## 何时使用 {#when-to-use}
+
+当需要展示大量服务器端数据并希望以无限滚动方式增量加载时使用。
+
+常见场景：
+
+- 日志、监控、数据库记录等海量数据的浏览与筛选。
+- 需要服务端分页 + 客户端平滑追加的表格场景。
+- 需要内置筛选面板（checkbox、slider、input、timerange）的表格。
+- 需要行选择 + 详情侧边栏或浮动操作栏的交互。
+- 需要列排序、列大小调整、列显隐切换等表格功能。
+
+不推荐：
+
+- 数据量小（< 100 行）且不需要服务端分页的场景。
+- 不需要筛选、排序、选择等附加功能的静态展示场景。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+DataTableInfinite 封装了无限滚动的完整数据表格，提供筛选面板、分页加载按钮和滚动触底自动加载。
+
+```tsx
+import { DataTableInfinite } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-infinite"
+import { DataTableStoreProvider } from "@hyper/blocks/data-table-filters/lib/store/provider/DataTableStoreProvider"
+import { useMemoryAdapter } from "@hyper/blocks/data-table-filters/lib/store/adapters/memory"
+import { createSchema } from "@hyper/blocks/data-table-filters/lib/store/schema"
+
+const schema = createSchema({})
+
+export default function Demo() {
+  const adapter = useMemoryAdapter(schema, { id: "my-table" })
+
+  return (
+    <DataTableStoreProvider adapter={adapter}>
+      <DataTableInfinite
+        columns={columns}
+        data={data}
+        totalRows={totalRows}
+        filterRows={filterRows}
+        totalRowsFetched={totalRowsFetched}
+        isFetching={isFetching}
+        isLoading={isLoading}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
+        refetch={refetch}
+        tableId="my-table"
+      />
+    </DataTableStoreProvider>
+  )
+}
+```
+
+## API {#api}
+
+### DataTableInfinite&lt;TData, TValue&gt;
+
+核心 props（完整列表以 `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-infinite.tsx` 中的 `DataTableInfiniteProps` 为准）：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| columns | 列定义 | `ColumnDef<TData, TValue>[]` | 必填 |
+| data | 当前页数据 | `TData[]` | 必填 |
+| fetchNextPage | 加载下一页 | `(options?: FetchNextPageOptions) => Promise<unknown>` | 必填 |
+| refetch | 重新获取数据 | `(options?: RefetchOptions) => void` | 必填 |
+| hasNextPage | 是否有下一页 | `boolean` | - |
+| isFetching | 是否正在获取数据 | `boolean` | - |
+| isLoading | 是否初次加载 | `boolean` | - |
+| totalRows | 总行数 | `number` | - |
+| filterRows | 筛选后行数 | `number` | - |
+| totalRowsFetched | 已获取的总行数 | `number` | `0` |
+| filterFields | 筛选字段配置 | `DataTableFilterField<TData>[]` | `[]` |
+| defaultColumnFilters | 默认列筛选状态 | `ColumnFiltersState` | `[]` |
+| defaultColumnSorting | 默认排序状态 | `SortingState` | `[]` |
+| defaultRowSelection | 默认行选择状态 | `RowSelectionState` | `{}` |
+| defaultColumnVisibility | 默认列显隐状态 | `VisibilityState` | `{}` |
+| tableId | 表格唯一标识 | `string` | `"infinite"` |
+| getRowId | 自定义行 ID 提取函数 | `TableOptions<TData>["getRowId"]` | - |
+| getRowClassName | 自定义行 className | `(row: Row<TData>) => string` | - |
+| renderLiveRow | 自定义动态行渲染 | `(props?: { row: Row<TData> }) => ReactNode` | - |
+| commandSlot | 命令面板插槽 | `ReactNode` | - |
+| sheetSlot | 详情侧边栏插槽 | `ReactNode` | - |
+| toolbarActions | 工具栏操作区域 | `ReactNode` | - |
+| chartSlot | 图表区域插槽 | `ReactNode` | - |
+| footerSlot | 筛选侧栏底部插槽 | `ReactNode` | - |
+| floatingBarSlot | 浮动操作栏插槽 | `ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+### 组件依赖
+
+| 依赖 | 说明 |
+| --- | --- |
+| `DataTableStoreProvider` | BYOS store adapter 提供者 |
+| `@tanstack/react-query` | `fetchNextPage` / `refetch` 的类型来源 |
+| `@tanstack/react-table` | columns、sorting、filtering 核心逻辑 |
+
+### 快捷键
+
+| 按键 | 说明 |
+| --- | --- |
+| `u` | 重置列排序和列显隐到默认值 |
+
+## 无限滚动逻辑 {#infinite-scroll}
+
+DataTableInfinite 的加载机制：
+
+1. **滚动加载**：`onScroll` 检测触底（`scrollTop + clientHeight >= scrollHeight`），在 `!isFetching` 且 `totalRowsFetched < filterRows` 时自动调用 `fetchNextPage`。
+2. **按钮加载**：表格底部始终渲染一行，包含 Load More 按钮或"无更多数据"提示。
+3. **加载状态**：Load More 按钮在 `isFetching` 或 `isLoading` 时 disabled，并展示旋转图标。
+
+底部行渲染逻辑：
+
+```tsx
+{hasNextPage || isFetching || isLoading ? (
+  <Button disabled={isFetching || isLoading} onClick={() => fetchNextPage()}>
+    {isFetching ? <LoaderCircle className="animate-spin" /> : null}
+    Load More
+  </Button>
+) : (
+  <p>No more data to load ({filterRows} of {totalRows} rows)</p>
+)}
+```
+
+## 布局结构 {#layout}
+
+DataTableInfinite 的默认布局：
+
+```
+<div class="flex h-full w-full flex-col sm:flex-row">
+  <!-- 左侧筛选面板 (sm+ 可见) -->
+  <div class="sm:sticky sm:top-0 sm:max-w-52 ...">
+    <div>Filters 标题 + DataTableResetButton</div>
+    <DataTableFilterControls />
+    {footerSlot}
+  </div>
+
+  <!-- 右侧表格区域 -->
+  <div class="flex-1 flex-col sm:border-l">
+    <!-- 顶部工具栏 (sticky) -->
+    <div ref={topBarRef} class="sticky top-0 z-10">
+      {commandSlot}
+      <DataTableToolbar />
+      {chartSlot}
+    </div>
+
+    <!-- 表格容器 -->
+    <Table containerClassName="max-h-[calc(100vh-var(--top-bar-height))]">
+      <TableHeader />
+      <TableBody>
+        {rows}
+        <!-- 底部加载行 -->
+        <TableRow>
+          <TableCell>
+            <Button>Load More</Button> 或 无更多数据提示
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </div>
+</div>
+{sheetSlot}
+{floatingBarSlot}
+```
+
+## 性能优化 {#performance}
+
+- **列宽计算**：通过 `columnSizeVars` 一次性计算所有列宽并作为 CSS 变量传递，避免每行调用 `column.getSize()`。
+- **行 memo**：`MemoizedRow` 使用 `React.memo` 比较 `row.id`、`selected`、`detailRowId`、列 ID 和列排序状态，减少不必要的行重渲染。
+- **状态细粒度**：Row 组件通过 `useFilterState((s) => s.live)` 订阅最低限度的状态变化。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-infinite.tsx`：无限滚动表格主组件。
+- `src/components/core/dt-blocks/data-table-infinite.tsx`：UI 层 re-export wrapper。
+- `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider.tsx`：筛选状态上下文提供者。
+- `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-controls.tsx`：筛选控件容器。
+
+直接依赖：
+
+- `@tanstack/react-table`（`useReactTable`、`flexRender`、各种 row models）
+- `@hyper/blocks/data-table-filters/components/custom/table`（`Table`、`TableHeader`、`TableBody`、`TableRow`、`TableCell`、`TableHead`）
+- `@hyper/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider`（`DataTableProvider`）
+- `@hyper/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-controls`
+- `@hyper/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-toolbar`
+- `@hyper/blocks/data-table-filters/hooks/use-hot-key`（快捷键 `u` 重置列状态）
+- `@hyper/blocks/data-table-filters/hooks/use-local-storage`（列顺序和显隐持久化）
+- `@hyper/blocks/data-table-filters/lib/store/hooks/useFilterState` / `useFilterActions`（BYOS 筛选状态）
+- `@hyper/blocks/data-table-filters/lib/format`（`formatCompactNumber` 格式化行数）
+- `lucide-react`（`LoaderCircle` 加载图标）
+- `@tanstack/react-query`（`FetchNextPageOptions`、`FetchPreviousPageOptions`、`RefetchOptions` 类型）
+
+关键行为：
+
+1. 内部创建 `useReactTable` 实例，管理 sorting、filtering、column order、column visibility、row selection 状态。
+2. 列顺序和显隐通过 `useLocalStorage` 持久化到 localStorage，key 由 `tableId` 派生。
+3. `topBarHeight` 通过 `ResizeObserver` 检测工具栏高度，作为 CSS 变量 `--top-bar-height` 用于表格容器的高度计算。
+4. `onScroll` 事件监听表格容器滚动，触底且未加载且还有数据时自动调用 `fetchNextPage`。
+5. 快捷键 `u` 重置列排序和显隐到默认值。
+6. Row 组件通过 `React.memo` 优化重渲染，比较项包括 `row.id`、`selected`、`detailRowId`、列 ID 和列排序。
+7. 选中列（`meta.kind === "select"`）启用多行选择模式，与 single-select 模式在 `data-state` 属性上区分。
+8. 筛选变化时自动清空多选状态。
+
+## 可访问性 {#accessibility}
+
+- 表格体 `<TableBody>` 设置了 `tabIndex={-1}` 和 `scrollMarginTop`，支持跳转到内容锚点。
+- 表头通过 `aria-sort` 属性暴露列排序状态。
+- 行支持键盘交互：`Enter` 键触发点击，`Tab` 导航。
+- 行选中状态通过 `data-state="selected"` 属性暴露。
+- 加载中状态通过 `aria-busy` 设定在 Load More 按钮上。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+DataTableInfinite 是 DataTable 筛选体系的最顶层封装，Ant Design 中无直接对应组件。它借鉴了 Ant Design Table 的筛选、排序、分页交互心智，但使用 TanStack Table + React Query 实现无限滚动，而非 AntD 的传统分页表格。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-infinite.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 shadcn/ui 风格的 Table 组件 + Tailwind CSS |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 分页方式 | 无限滚动（触底加载 + Load More 按钮），非传统分页器 |
+| 筛选体系 | 自行实现 checkbox/slider/input/timerange 筛选控件，不依赖 AntD Table 内置筛选 |
+
+## FAQ {#faq}
+
+### DataTableInfinite 与普通 DataTable 的区别？
+
+DataTableInfinite 内置了无限滚动逻辑（`onScroll` 触底加载 + Load More 按钮），专为服务端分页场景设计。普通 DataTable 适用于一次性加载全部数据。DataTableInfinite 还集成了完整的筛选面板和工具栏。
+
+### 如何配合服务端真实分页？
+
+将 `fetchNextPage` 连接到 `@tanstack/react-query` 的 `useInfiniteQuery`：
+
+```tsx
+const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
+  useInfiniteQuery({ queryKey, queryFn, getNextPageParam, initialPageParam })
+
+const flatData = useMemo(() => data?.pages.flat() ?? [], [data])
+```
+
+### 筛选状态如何持久化到 URL？
+
+使用 `useNuqsAdapter` 替代 `useMemoryAdapter`：
+
+```tsx
+const adapter = useNuqsAdapter(schema.definition, { id: "my-table" })
+```
+
+### 如何自定义行样式？
+
+通过 `getRowClassName` 属返回自定义的 className 字符串，或通过列定义的 `meta.cellClassName` / `meta.headerClassName` 调整单元格和表头样式。
+
+### 如何在移动端展示筛选控件？
+
+传入 `sheetSlot` 插槽放置 `DataTableFilterControlsDrawer` 组件，可在移动端以底部弹窗形式展示筛选控件。宽屏左侧筛选面板在 `sm` 断点以下自动隐藏。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTableInfinite 代码时，应遵守：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-infinite` 导入 DataTableInfinite。
+2. 必须在 `DataTableStoreProvider` 包裹内使用，传入 adapter。
+3. Demo/展示场景使用 `useMemoryAdapter`，生产环境使用 `useNuqsAdapter`。
+4. 必须提供 `columns`、`data`、`fetchNextPage`、`refetch` 四个必填 prop。
+5. `filterFields` 定义筛选字段，每项 `type` 为 `checkbox` / `slider` / `input` / `timerange`。
+6. 服务端分页使用 `@tanstack/react-query` 的 `useInfiniteQuery` 管理分页状态。
+7. 列定义使用 TanStack Table 的 `ColumnDef` 类型。
+8. 不要重复包裹 `DataTableProvider`——组件内部已包含。
+9. 不要绕开 DataTableInfinite 直接使用内部子组件组合。
+10. 不要引入 Ant Design 相关依赖。
+11. 如果不确定某个 API 是否存在，先检查源码 `blocks/data-table-infinite.tsx`，不要凭猜测生成。

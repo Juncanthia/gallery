@@ -1,0 +1,102 @@
+---
+category: Components
+title: Presence
+subtitle: 在线状态
+description: 根据 present 属性控制子元素的挂载与卸载，支持 CSS 动画进出过渡。
+demo:
+  cols: 1
+group:
+  title: 辅助功能
+  order: 55
+source:
+  component: src/components/core/dice-presence.tsx
+  implementation: src/components/dice/components/presence.tsx
+  docs: content/components/general/headless/presence/index.mdx
+  examples:
+    - content/components/general/headless/presence/examples/basic.tsx
+stack:
+  react: true
+  radixSlot: false
+---
+
+# Presence 在线状态
+
+Presence 用于根据 `present` 属性控制子元素的挂载与卸载。与普通条件渲染不同，Presence 会检测子元素的 CSS 动画，在退出动画播放完成后才移除 DOM，确保动画完整展示。
+
+本组件直接包装 Radix UI `Presence.Root`，提供挂载 / 卸载生命周期管理，不添加额外样式或交互逻辑。
+
+## 何时使用 {#when-to-use}
+
+当需要条件性挂载 DOM 节点，并且需要在卸载前播放退出动画时使用。
+
+常见场景：
+
+- 对话框、抽屉的开关动画。
+- Tooltip、Popover 的延迟显隐。
+- 通知、消息的淡入淡出。
+- 列表项的添加 / 删除过渡。
+
+Presence 与条件渲染的本质区别：`{show && <Comp />}` 会在状态变为 `false` 时立即移除 DOM，导致退出动画无法执行。Presence 会等待动画完成后才卸载。
+
+## 代码演示 {#examples}
+
+```tsx
+import { Presence } from "@/components/general/headless/presence"
+
+export default function Demo() {
+  const [present, setPresent] = useState(true)
+
+  return (
+    <div>
+      <button onClick={() => setPresent(p => !p)}>
+        {present ? "卸载" : "挂载"}
+      </button>
+      <Presence present={present}>
+        <div>内容区域</div>
+      </Presence>
+    </div>
+  )
+}
+```
+
+### 配合动画使用
+
+```tsx
+<Presence present={open}>
+  <div className="data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0">
+    带动画的内容
+  </div>
+</Presence>
+```
+
+### render props 模式
+
+```tsx
+<Presence present={show}>
+  {({ present }) =>
+    present ? <DialogContent /> : <Spinner />
+  }
+</Presence>
+```
+
+## API {#api}
+
+### Presence
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| present | 是否挂载子元素 | `boolean` | - |
+| children | 子元素或 render props | `React.ReactElement \| (props: { present: boolean }) => React.ReactElement` | - |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Presence 代码时，应遵守：
+
+1. 从 `@/components/general/headless/presence` 导入 Presence。
+2. `present` 为必需属性，传入 `boolean` 控制挂载 / 卸载。
+3. 需要退出动画的场景必须使用 Presence，不要用 `{show && <Comp />}` 条件渲染替代。
+4. 子元素的动画通过 CSS `animation-name` 定义，Presence 自动检测。
+5. 使用 `data-[state=open]` 和 `data-[state=closed]` 属性选择器定义进出动画样式。
+6. 不要在 Presence 外部嵌套条件渲染。
+7. 不要从 `radix-ui` 直接导入，统一使用本地封装。
+8. 不要引入 Ant Design 相关依赖。

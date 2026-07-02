@@ -1,0 +1,208 @@
+ColorPicker 颜色选择器，基于 Context 的复合组件模式。`ColorPicker` 为根容器，内部组合 `ColorPickerSelection`、`ColorPickerHue`、`ColorPickerAlpha`、`ColorPickerInput`、`ColorPickerOutput`、`ColorPickerPresets` 等子组件构成完整取色面板。也可以直接使用 `ColorPickerPanel` 或 `ColorPickerTriggerButton` 快速接入弹出式取色。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要让用户从色板中选择颜色、通过滑杆精确调整颜色值、或在编辑器工具栏中选择文字/填充/边框颜色时使用。
+
+常见场景：
+
+- 主题色设置：品牌色、强调色配置。
+- 设计工具：元素颜色选择与调整。
+- 数据可视化：图表颜色配置。
+- 文档/表格编辑器：文字色、填充色、边框色。
+- 需要获取多种颜色格式输出（HEX / RGB / CSS / HSL / HSB）时。
+
+不推荐：
+
+- 仅需要展示颜色值时，应使用 ColorSwatch 或普通色块。
+- 直接在业务侧绕过 Context 操作子组件内部状态。
+- 为了兼容 AntD 或外部库而引入额外全局运行时。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="color-picker" path="color-picker/basic" />
+
+```tsx
+import {
+  ColorPicker,
+  ColorPickerSelection,
+  ColorPickerHue,
+  ColorPickerAlpha,
+  ColorPickerOutput,
+  ColorPickerFormat,
+} from "@/components/core/color-picker"
+
+export default function Demo() {
+  return (
+    <ColorPicker defaultValue="#3b82f6" className="w-60 gap-3">
+      <ColorPickerSelection className="h-32 rounded" />
+      <ColorPickerHue />
+      <ColorPickerAlpha />
+      <div className="flex items-center gap-2">
+        <ColorPickerFormat className="flex-1" />
+        <ColorPickerOutput />
+      </div>
+    </ColorPicker>
+  )
+}
+```
+
+### 弹出面板
+
+```tsx
+import { useState } from "react"
+import { TextColorIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ColorPickerTriggerButton } from "@/components/core/color-picker"
+
+export default function Demo() {
+  const [color, setColor] = useState("#111827")
+
+  return (
+    <ColorPickerTriggerButton
+      label="Text color"
+      color={color}
+      icon={<HugeiconsIcon icon={TextColorIcon} className="size-4" />}
+      onChange={setColor}
+    />
+  )
+}
+```
+
+### 内嵌面板
+
+```tsx
+import { ColorPickerPanel } from "@/components/core/color-picker"
+
+export default function Demo() {
+  return (
+    <ColorPickerPanel
+      color="#2563eb"
+      label="Border color"
+      onChange={(color) => console.log(color)}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ColorPicker（根容器）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控颜色值，支持 hex/rgb/hsl/css 字符串、RGB 数组或 Color 对象 | `Parameters<typeof Color>[0]` | - |
+| defaultValue | 默认颜色值（非受控） | `Parameters<typeof Color>[0]` | `"#000000"` |
+| format | 受控输出格式 | `"hex" \| "rgb" \| "css" \| "hsl" \| "hsb"` | - |
+| defaultFormat | 默认输出格式 | 同上 | `"hex"` |
+| onChange | 颜色变化回调，返回 RGBA 数组，alpha 为 0-1 小数 | `(value: [number, number, number, number]) => void` | - |
+| onValueChange | 颜色变化回调，返回当前格式字符串 | `(value: string) => void` | - |
+| onFormatChange | 格式变化回调 | `(format: ColorPickerFormatMode) => void` | - |
+| disabled | 禁用交互 | `boolean` | `false` |
+| readOnly | 只读展示 | `boolean` | `false` |
+| name | 隐藏表单字段名称 | `string` | - |
+| className | 容器 CSS 类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。提供 Context 给所有子组件。
+
+### ColorPickerSelection / ColorPickerArea
+
+二维色板区域，通过 pointer 拖拽选择饱和度和亮度。`ColorPickerArea` 是兼容别名。
+
+### ColorPickerHue / ColorPickerHueSlider
+
+色相滑杆（0-360 度）。继承 Radix `Slider.Root` 的所有 props。`ColorPickerHueSlider` 是兼容别名。
+
+### ColorPickerAlpha / ColorPickerAlphaSlider
+
+透明度滑杆（0-100）。继承 Radix `Slider.Root` 的所有 props。内部 alpha 状态为 0-1，滑杆展示为百分比。`ColorPickerAlphaSlider` 是兼容别名。
+
+### ColorPickerOutput / ColorPickerFormatSelect
+
+格式切换下拉（HEX / RGB / CSS / HSL / HSB）。`ColorPickerFormatSelect` 是兼容别名。
+
+### ColorPickerInput
+
+可编辑颜色输入框，会根据当前格式显示并解析输入值。支持 hex、rgb/rgba、hsl/hsla、hsb/hsba。
+
+### ColorPickerFormat
+
+根据当前格式展示只读颜色值。适合需要多栏数字展示的场景。
+
+### ColorPickerSwatch
+
+展示当前颜色或指定 `value` 的色块，透明颜色使用棋盘格背景。
+
+### ColorPickerPresets
+
+预设色板。通过 `presets` 传入 hex 字符串数组。
+
+### ColorPickerPanel
+
+开箱即用的内嵌面板，组合格式切换、色板、色相滑杆、输入框和预设色。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color / value | 当前颜色值 | `Parameters<typeof Color>[0]` | - |
+| onChange | 颜色变化回调，返回当前格式字符串 | `(color: string) => void` | - |
+| showAlpha | 显示透明度滑杆 | `boolean` | `false` |
+| showEyeDropper | 显示吸管按钮 | `boolean` | `false` |
+| showFormatSelect | 显示格式切换 | `boolean` | `true` |
+| showPresets | 显示预设色 | `boolean` | `true` |
+| presets | 预设色数组 | `readonly string[]` | 内置常用色 |
+
+### ColorPickerTriggerButton
+
+工具栏和表单常用的弹出式取色按钮，内部使用 Popover + `ColorPickerPanel`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 按钮可访问名称和 tooltip 文案 | `string` | - |
+| color | 当前颜色 | `string` | - |
+| icon | 按钮图标 | `ReactNode` | - |
+| onChange | 颜色变化回调 | `(color: string) => void` | - |
+| align / side | Popover 位置 | `PopoverContent` 对应类型 | `align="start"` |
+
+### useColorPicker()
+
+必须在 `ColorPicker` 内部使用的 hook，返回 Context 中的颜色状态和操作：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| hue | 色相（0-360） | `number` |
+| saturation | 饱和度（0-100） | `number` |
+| lightness | 亮度（0-100） | `number` |
+| alpha | 透明度（0-1） | `number` |
+| mode | 当前格式 | `ColorPickerFormatMode` |
+| setColor | 设置完整 HSL/A 状态 | `(color: HslaColor) => void` |
+| setColorFromString | 从字符串解析并设置颜色 | `(color: string) => void` |
+| setHue / setSaturation / setLightness / setAlpha | 设置单个通道 | `function` |
+| setMode | 设置格式 | `(mode: ColorPickerFormatMode) => void` |
+
+<h2 id="faq">常见问题</h2>
+
+### ColorPicker 如何布局？
+
+`ColorPicker` 是 `flex flex-col gap-4` 的容器，布局由使用方控制。需要快速面板时直接用 `ColorPickerPanel`，需要工具栏弹出按钮时用 `ColorPickerTriggerButton`。
+
+### 如何获取颜色值？
+
+需要结构化 RGBA 数组时使用 `onChange`。需要 hex/rgb/hsl/css/hsb 字符串时使用 `onValueChange` 或 `ColorPickerPanel` / `ColorPickerTriggerButton` 的 `onChange`。
+
+### EyeDropper 为什么可能不显示？
+
+EyeDropper 依赖浏览器实验性 API。浏览器不支持时 `ColorPickerEyeDropper` 会返回 `null`，其他取色能力不受影响。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/color-picker` 导入，不要从 `dice`、`extend` 或 `antd` 导入。
+2. 复合用法中，所有子组件必须放在 `<ColorPicker>` 容器内部。
+3. 工具栏按钮优先使用 `ColorPickerTriggerButton`，不要在业务侧重复拼 Popover + 色板。
+4. Dropdown/Submenu 内嵌取色优先使用 `ColorPickerPanel`。
+5. `onChange` 返回 RGBA 数组且 alpha 是 0-1；字符串输出使用 `onValueChange` 或面板组件。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="color-picker" />

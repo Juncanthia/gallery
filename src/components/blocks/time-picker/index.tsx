@@ -5,14 +5,14 @@ import { Clock, X } from "lucide-react"
 import { useControllableState } from "@radix-ui/react-use-controllable-state"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/core/popover"
+import { ScrollArea } from "@/components/core/scroll-area"
+import { Separator } from "@/components/core/separator"
 
 export type TimePickerFormat = "HH:mm:ss" | "HH:mm"
 export type TimePickerPeriod = "AM" | "PM"

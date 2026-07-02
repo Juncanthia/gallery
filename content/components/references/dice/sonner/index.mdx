@@ -1,0 +1,193 @@
+Sonner 吐司通知。基于 sonner 库实现的轻量级 Toast 通知系统，通过 Toaster 容器和 toast 指令式 API 在页面展示通知消息。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要向用户反馈操作结果、状态变更等非阻断式信息时使用。Toast 通知从屏幕边缘弹出，短暂停留后自动消失。
+
+常见场景：
+- 操作成功/失败反馈：保存成功、删除完成、提交失败
+- 系统状态提示：网络断开、服务重启、版本更新
+- 表单提交结果的即时反馈
+- 异步操作的状态通知
+
+不推荐：
+- 需要用户确认的阻断式提示（使用 AlertDialog 或 Popconfirm）
+- 长期展示的静态信息（使用 Alert 或 Banner）
+- 需要交互操作的复杂通知（使用 Notification）
+
+Sonner 通过 `toast` 函数触发通知，通过 `Toaster` 组件控制全局样式和行为。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+在应用根组件中放置 `Toaster` 容器，通过 `toast()` 创建通知。支持多种变体：`toast()`（默认）、`toast.success()`、`toast.error()`、`toast.info()`、`toast.warning()`。
+
+<ComponentShowcase id="dice/sonner" path="dice/sonner/basic" />
+
+```tsx
+import { toast } from "sonner"
+import { Toaster } from "@/components/core/toaster"
+
+export default function Demo() {
+  return (
+    &lt;div&gt;
+      &lt;Toaster /&gt;
+      &lt;button onClick={() =&gt; toast("操作完成")}&gt;发送通知&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Toaster
+
+Toaster 是通知容器组件，需放置在应用根组件中。基于 sonner 的 Toaster 组件，支持其全部属性。本地封装自动处理主题适配和样式变量。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| theme | 主题 | `"light"` \| `"dark"` \| `"system"` | 跟随系统 |
+| position | 通知弹出位置 | `"top-left"` \| `"top-right"` \| `"bottom-left"` \| `"bottom-right"` \| `"top-center"` \| `"bottom-center"` | `"bottom-right"` |
+| richColors | 启用富色彩模式 | `boolean` | `false` |
+| closeButton | 显示关闭按钮 | `boolean` | `false` |
+| duration | 自动消失时长（毫秒） | `number` | `4000` |
+| visibleToasts | 同时可见的通知数量 | `number` | `3` |
+| expand | 是否展开显示多条通知 | `boolean` | `false` |
+| offset | 视口边缘偏移量 | `string` \| `number` | - |
+| gap | 通知之间的间距 | `number` | - |
+| invert | 反转富色彩效果 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+| toastOptions | 全局默认 toast 选项 | `ToastOptions` | - |
+
+### toast()
+
+指令式 API，在任何位置调用即可弹出通知。返回 `string | number` 作为 toast id，可用于后续更新或关闭。
+
+```ts
+toast(message, options?)
+toast.success(message, options?)
+toast.error(message, options?)
+toast.info(message, options?)
+toast.warning(message, options?)
+toast.loading(message, options?)
+toast.dismiss(id?)
+toast.promise(promise, options)
+```
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| description | 通知内描述文本 | `React.ReactNode` | - |
+| duration | 自动消失时长（毫秒） | `number` | `4000` |
+| action | 操作按钮 | `{ label: string; onClick: () => void }` | - |
+| actionButtonStyle | 操作按钮样式 | `React.CSSProperties` | - |
+| cancel | 取消按钮 | `{ label: string; onClick: () => void }` | - |
+| cancelButtonStyle | 取消按钮样式 | `React.CSSProperties` | - |
+| onDismiss | 通知消失时的回调 | `(toast) => void` | - |
+| onAutoClose | 通知自动关闭时的回调 | `(toast) => void` | - |
+| important | 是否标记为重要（不受 visibleToasts 限制） | `boolean` | `false` |
+| invert | 反转富色彩 | `boolean` | `false` |
+| position | 覆盖全局位置设置 | `Position` | - |
+| id | 自定义 toast id | `string \| number` | - |
+| dismissible | 是否可手动关闭 | `boolean` | `true` |
+| icon | 自定义图饰 | `React.ReactNode` | - |
+| richColors | 启用富色彩模式 | `boolean` | `false` |
+| classNames | toast 各部分的类名 | `ToastClassnames` | - |
+| styles | toast 各部分的内联样式 | `ToastStyles` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何在任意位置触发通知？
+
+`toast` 是一个全局函数，无需通过 props 传递即可在任意组件或工具函数中调用，只要应用根组件中已存在 `Toaster` 容器。
+
+```tsx
+import { toast } from "sonner"
+
+function handleSave() {
+  const id = toast.loading("保存中...")
+  // 异步操作完成后更新
+  toast.success("保存成功", { id })
+}
+```
+
+### 如何设置通知位置？
+
+通过 `Toaster` 的 `position` 属性设置全局默认位置：
+
+```tsx
+&lt;Toaster position="top-center" /&gt;
+```
+
+单个 toast 可通过 options 覆盖：
+
+```tsx
+toast("通知", { position: "top-left" })
+```
+
+### 如何自定义通知内容？
+
+使用 JSX 作为 message 和 description：
+
+```tsx
+toast(
+  &lt;div className="font-bold"&gt;自定义标题&lt;/div&gt;,
+  { description: &lt;span className="text-muted-foreground"&gt;详细描述&lt;/span&gt; }
+)
+```
+
+### 如何做异步操作通知？
+
+使用 `toast.promise`：
+
+```tsx
+const promise = fetch("/api/submit", { method: "POST" })
+
+toast.promise(promise, {
+  loading: "提交中...",
+  success: "提交成功",
+  error: "提交失败",
+})
+```
+
+### 如何手动关闭通知？
+
+调用 `toast.dismiss()`：
+
+```tsx
+const id = toast("通知")
+// 关闭指定通知
+toast.dismiss(id)
+// 关闭全部通知
+toast.dismiss()
+```
+
+### Toaster 应该放在哪里？
+
+放在应用的根布局组件（Layout）中，确保在整个应用生命周期内只渲染一次。通常放在 `&lt;body&gt;` 的直接子级位置。
+
+```tsx
+export default function RootLayout({ children }) {
+  return (
+    &lt;html&gt;
+      &lt;body&gt;
+        {children}
+        &lt;Toaster /&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/toaster` 导入 `Toaster`，从 `sonner` 导入 `toast`。
+2. `Toaster` 放在根布局组件中，只渲染一次；不要在页面/组件中重复放置。
+3. 使用 `toast()` 创建默认通知，`toast.success()` / `toast.error()` / `toast.info()` / `toast.warning()` 创建语义化通知。
+4. 异步操作使用 `toast.promise()`，传入 loading/success/error 三个状态描述。
+5. 需要自定义内容时，使用 JSX 作为 message/description。
+6. 不需要在每个使用 toast 的组件中都放置 `Toaster`，它只需在根布局中存在。
+7. 不要引入 Ant Design 的 `message` 或 `references/notification` 作为替代。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="dice/sonner" />

@@ -1,0 +1,271 @@
+OrderSummary 订单摘要。用于展示订单明细与价格汇总，支持 summary（预览摘要）和 receipt（确认回执）两种展示形态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在 AI 对话或工具调用结果中展示订单明细、价格明细和确认回执时使用。
+
+常见场景：
+- 电商场景中的购物车结算预览，展示商品清单与价格拆分。
+- AI 助手生成的订单确认回执，展示下单成功后的订单号、下单时间和商品明细。
+- 支付流程中的订单核验卡片，供用户确认后再提交。
+
+不推荐：
+- 订单项过多（如超过 20 项），建议在外部通过列表组件分页或截断后再传入。
+- 需要复杂交互（如内嵌编辑数量、删除商品）的场景，OrderSummary 为只读展示。
+- 需要跨设备同步实时状态的订单追踪，应使用专门的状态管理方案。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 id、items、pricing 等必填属性，展示一个完整的订单摘要。
+
+<ComponentShowcase id="agent-tools/order-summary/order-summary" path="agent-tools/order-summary/order-summary/basic" />
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary
+      id="basic-demo"
+      items={[
+        { id: "1", name: "商品 A", quantity: 1, unitPrice: 99.99 },
+        { id: "2", name: "商品 B", quantity: 2, unitPrice: 49.99 },
+      ]}
+      pricing={{
+        subtotal: 199.97,
+        shipping: 15.0,
+        tax: 16.0,
+        total: 230.97,
+        currency: "CNY",
+      }}
+    />
+  )
+}
+```
+
+### Receipt 确认回执
+
+设置 `variant="receipt"` 并提供 `choice` 属性，展示订单确认回执，包含绿色勾选图标和订单编号。
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary
+      id="receipt-demo"
+      variant="receipt"
+      title="Order Confirmed"
+      items={[
+        { id: "1", name: "订单商品 A", quantity: 1, unitPrice: 128.0 },
+        { id: "2", name: "订单商品 B", quantity: 1, unitPrice: 72.0 },
+      ]}
+      pricing={{
+        subtotal: 200.0,
+        discount: 20.0,
+        discountLabel: "新用户优惠",
+        shipping: 0,
+        tax: 14.4,
+        total: 194.4,
+        currency: "CNY",
+      }}
+      choice={{
+        action: "confirm",
+        orderId: "ORD-20240630-001",
+        confirmedAt: "2026-06-30T14:30:00Z",
+      }}
+    />
+  )
+}
+```
+
+### 使用 OrderSummary.Receipt 快捷变体
+
+当确认了 `choice` 对象必传时，可直接使用 `OrderSummary.Receipt` 子组件，它自动强制 `variant="receipt"`。
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary.Receipt
+      id="quick-receipt"
+      title="Payment Successful"
+      items={[
+        { id: "a", name: "订阅服务", quantity: 1, unitPrice: 29.99 },
+      ]}
+      pricing={{
+        subtotal: 29.99,
+        total: 29.99,
+        currency: "USD",
+      }}
+      choice={{
+        action: "confirm",
+        orderId: "SUB-8821",
+        confirmedAt: "2026-06-30T09:15:00Z",
+      }}
+    />
+  )
+}
+```
+
+### 带折扣和免运费
+
+通过 `pricing.discount` 和 `pricing.shipping=0` 展示促销信息。`discountLabel` 可自定义折扣名称。
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary.Display
+      id="promo-demo"
+      title="购物车结算"
+      items={[
+        { id: "p1", name: "防晒霜 SPF50", quantity: 2, unitPrice: 89.0 },
+        { id: "p2", name: "保湿面膜", quantity: 1, unitPrice: 128.0 },
+      ]}
+      pricing={{
+        subtotal: 306.0,
+        discount: 61.2,
+        discountLabel: "满300减61.2",
+        shipping: 0,
+        tax: 19.58,
+        total: 264.38,
+        currency: "CNY",
+      }}
+    />
+  )
+}
+```
+
+### 带商品图片
+
+通过 `imageUrl` 为订单项展示缩略图，不传则使用默认的 Package 图标占位。
+
+```tsx
+import { OrderSummary } from "@/components/agent-tools/order-summary/order-summary"
+
+export default function Demo() {
+  return (
+    <OrderSummary.Display
+      id="image-demo"
+      items={[
+        {
+          id: "img-1",
+          name: "iPhone 16 Pro",
+          description: "Desert Titanium, 256GB",
+          quantity: 1,
+          unitPrice: 999.0,
+          imageUrl: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=96&h=96&fit=crop",
+        },
+        {
+          id: "img-2",
+          name: "AirPods Pro 2",
+          quantity: 1,
+          unitPrice: 249.0,
+          imageUrl: "https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=96&h=96&fit=crop",
+        },
+      ]}
+      pricing={{
+        subtotal: 1248.0,
+        shipping: 0,
+        tax: 99.84,
+        total: 1347.84,
+        currency: "USD",
+      }}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### OrderSummary
+
+订单摘要组件，支持 summary 和 receipt 两种变体。提供 `OrderSummary`（根组件）、`OrderSummary.Display` 和 `OrderSummary.Receipt` 三种调用方式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识 | `string` | - |
+| title | 组件标题 | `string` | `"Order Summary"` |
+| variant | 展示形态，不传则根据 `choice` 是否存在自动推断 | `"summary"` \| `"receipt"` | 自动推断 |
+| items | 订单商品列表，至少 1 项，id 不可重复 | `OrderItem[]` | - |
+| pricing | 价格明细对象 | `Pricing` | - |
+| choice | 订单确认决策，receipt 形态必传 | `OrderDecision` | - |
+| className | 附加样式类名 | `string` | - |
+
+### OrderItem
+
+订单商品项类型。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 商品唯一标识 | `string` | - |
+| name | 商品名称 | `string` | - |
+| description | 商品描述，与数量组合显示 | `string` | - |
+| imageUrl | 商品缩略图 URL，不传则展示默认图标 | `string` | - |
+| quantity | 商品数量，为 1 时不显示数量文本 | `number` | `1` |
+| unitPrice | 商品单价 | `number` | - |
+
+### Pricing
+
+价格明细类型。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| subtotal | 商品小计 | `number` | - |
+| discount | 折扣金额（正数），为 0 或 undefined 时不显示 | `number` | - |
+| discountLabel | 折扣说明文案 | `string` | `"Discount"` |
+| shipping | 运费，为 0 时显示 "Free" | `number` | - |
+| tax | 税费金额 | `number` | - |
+| taxLabel | 税费说明文案 | `string` | `"Tax"` |
+| total | 订单总计 | `number` | - |
+| currency | 货币代码（ISO 4217），用于格式化金额 | `string` | `"USD"` |
+
+### OrderDecision
+
+订单确认决策类型，仅用于 receipt 形态。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| action | 决策动作，固定为 `"confirm"` | `"confirm"` | - |
+| orderId | 订单编号，展示格式为 `#${orderId}` | `string` | - |
+| confirmedAt | 确认时间（ISO 8601 格式），自动格式化为日期 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### OrderSummary、OrderSummary.Display、OrderSummary.Receipt 三种调用方式的区别？
+
+- `OrderSummary`：根组件，根据 `variant` 属性或 `choice` 是否存在自动推断展示形态。最灵活，适用于形态不确定的场景。
+- `OrderSummary.Display`：等同于 `variant="summary"`，TypeScript 层面排除 `choice` 属性，适用于明确不需要确认回执的预览场景。
+- `OrderSummary.Receipt`：等同于 `variant="receipt"`，TypeScript 层面强制 `choice` 属性，适用于确认订单回执的场景。
+
+### 如何自定义货币格式？
+
+通过 `pricing.currency` 传入 ISO 4217 货币代码（如 `"USD"`、`"CNY"`、`"EUR"`），组件内部使用 `Intl.NumberFormat` 自动格式化。不需要手动拼接货币符号。
+
+### 折扣金额如何展示？
+
+设置 `pricing.discount` 为正数即可展示折扣行，组件会以绿色文本显示折扣金额（带减号前缀）。如需自定义折扣名称，通过 `pricing.discountLabel` 设置（如 "新用户优惠"、"满减"）。
+
+### 商品图片加载失败怎么办？
+
+如果 `imageUrl` 传入但图片加载失败，浏览器会展示 alt 文本。不传 `imageUrl` 则默认展示 Package 图标的占位块。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/agent-tools/order-summary/order-summary` 导入 `OrderSummary`，不要从其他路径导入。
+2. `id`、`items`、`pricing` 为必填属性。`items` 至少包含 1 项，且每项的 `id` 不可重复。
+3. `pricing.total` 应等于 `subtotal - discount + shipping + tax`，LLM 需自行保证数学正确性。
+4. receipt 形态必须提供 `choice`，其中 `action` 固定为 `"confirm"`。
+5. 不要在外部通过 className 重新实现 variant 切换逻辑。
+6. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 等配置。
+7. 不要引入 Ant Design 相关依赖。
+8. 订单项数量较多时（>10），建议在传给组件前自行截断或分页。
+9. 所有金额字段使用原始数字类型，不要传格式化后的字符串。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="agent-tools/order-summary/order-summary" />

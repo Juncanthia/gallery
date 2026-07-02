@@ -1,0 +1,68 @@
+热力图以颜色强度矩阵展示数据密度与分布，支持单元格悬停高亮、图例联动以及加载骨架屏。基于 BKLit Charts 库（底层 @visx/heatmap），采用 GitHub 贡献图风格的单元格渲染，内置流畅的入场动画与交互反馈。
+
+<h2 id="when-to-use">何时使用</h2>
+
+热力图适合展示**二维交叉数据的密度与分布**，通过颜色深浅直观表达数据强度，让分布模式和聚集区域一目了然。组件以周列（`HeatmapColumn`）为横向单位、日内时段（`HeatmapBin`）为纵向单位组合成矩阵网格，支持自定义色阶、图例联动、悬停提示和加载骨架。
+
+常见场景：
+
+- 贡献日历：按周×日展示代码提交、活动参与、任务完成等周期性数据密度，呈现"哪些时段更活跃"的直观视图。
+- 时间分布矩阵：分析用户活跃时段、系统负载热区、传感器读数时段分布等二维时序数据。
+- 多维交叉分析：展示两个维度交叉点的数值强度，如产品×地区的销售热度、功能×用户类型的使用频率。
+- 加载过渡态：通过 `blocks/status="loading"` 渲染骨架屏，配合 `HeatmapChartLoading` 预设组件实现无跳动的内容过渡。
+
+不适用场景：
+
+- 简单趋势展示：仅需单一维度的时序变化时，使用折线图（`LineChart`）或面积图（`AreaChart`）更合适。
+- 精确数值对比：需要读取确切数值时，表格或柱状图比颜色编码更直观高效。
+- 单维度数据：数据仅有一维类别（如仅按天、无周聚合），矩形树图（Treemap）或柱状图更为直接。
+- 稀疏数据：数据点过少（< 10 个单元格）时矩阵显得空洞，考虑使用列表或指标卡展示。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+GitHub 风格贡献热力图，展示多周×每日的数据密度分布。
+
+<ComponentShowcase id="bklit/heatmap-chart" path="bklit/heatmap-chart/basic" />
+
+```tsx
+import { HeatmapChart } from "@/components/core/heatmap-chart"
+
+const data = [
+  { day: "Mon", hour: 0, value: 10 },
+  { day: "Mon", hour: 6, value: 25 },
+  // ...
+]
+
+export default function Demo() {
+  return (
+    <HeatmapChart columns={data} xDataKey="hour" yDataKey="day" valueKey="value" />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### HeatmapChart Props
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| columns | 热力图数据列 | `HeatmapColumn[]` | — |
+| xDataKey | X 轴 data key | `string` | — |
+| yDataKey | Y 轴 data key | `string` | — |
+| valueKey | 值 data key | `string` | — |
+| blocks/status | 加载状态 | `ChartStatus` | `"ready"` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义样式？
+通过 CSS 变量（如 `var(--chart-line-primary)`）或组件属性进行样式设置。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+- 导入: `import { HeatmapChart } from "@/components/core/heatmap-chart"`
+- 来自 BKLit Charts 库（基于 @visx）
+
+<h2 id="source">源码</h2>
+
+- [HeatmapChart](/source/bklit/charts/heatmap-chart)

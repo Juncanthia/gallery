@@ -1,0 +1,234 @@
+ScrollToTop 返回页面顶部组件，在用户向下滚动超过阈值后显示浮动按钮，点击可平滑回到页面顶部。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当页面内容较长，用户需要快速返回顶部时使用。常见于长文章、产品列表、搜索结果等页面。
+
+- 长文章或文档页面。
+- 产品列表或瀑布流页面。
+- 大量内容的仪表盘页面。
+- 搜索结果页面。
+
+ScrollToTop 使用固定定位浮于页面右下角，默认在滚动超过 300px 后出现，点击后以 `smooth` 方式平滑返回顶部。提供多种视觉变体以适应不同设计风格。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase
+  id="navigation/scroll-to-top"
+  path="navigation/scroll-to-top/basic"
+/>
+
+```tsx
+import { ScrollToTop } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return <ScrollToTop />
+}
+```
+
+### 不同尺寸
+
+通过 `size` 属性提供 `sm`、`md`、`lg` 三种尺寸。
+
+```tsx
+import { ScrollToTop } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return (
+    <div>
+      <ScrollToTop size="sm" />
+      <p className="text-sm text-muted-foreground pt-8">
+        小尺寸按钮，适合紧凑布局
+      </p>
+    </div>
+  )
+}
+```
+
+### 自定义阈值
+
+通过 `threshold` 属性调整按钮出现的滚动距离。
+
+```tsx
+import { ScrollToTop } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return <ScrollToTop threshold={500} />
+}
+```
+
+### 即时定位
+
+`behavior` 设为 `instant` 可取消平滑动画。
+
+```tsx
+import { ScrollToTop } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return <ScrollToTop behavior="instant" />
+}
+```
+
+### Pill 文字变体
+
+带文字标签的胶囊形按钮。
+
+```tsx
+import { ScrollToTopPill } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return <ScrollToTopPill label="回到顶部" />
+}
+```
+
+### 简洁变体
+
+无背景的纯图标按钮。
+
+```tsx
+import { ScrollToTopMinimal } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return <ScrollToTopMinimal />
+}
+```
+
+### 进度环变体
+
+圆形按钮附带 SVG 滚动进度指示环。
+
+```tsx
+import { ScrollToTopProgress } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return <ScrollToTopProgress progressColor="#3b82f6" />
+}
+```
+
+### 文字 + 微型进度环
+
+文字标签配合微型 SVG 进度环。
+
+```tsx
+import { ScrollToTopText } from "@/components/navigation/scroll-to-top"
+
+export default function Demo() {
+  return <ScrollToTopText label="返回顶部" />
+}
+```
+
+<h2 id="api">API</h2>
+
+### ScrollToTop
+
+默认圆形按钮变体。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| threshold | 显示按钮的滚动距离阈值（px） | `number` | `300` |
+| behavior | 滚动行为 | `smooth` \| `instant` \| `auto` | `smooth` |
+| size | 按钮尺寸 | `sm` \| `md` \| `lg` | `md` |
+| className | 附加样式类名 | `string` | - |
+
+### ScrollToTopPill
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| threshold | 显示按钮的滚动距离阈值（px） | `number` | `300` |
+| behavior | 滚动行为 | `smooth` \| `instant` \| `auto` | `smooth` |
+| label | 按钮文字标签 | `string` | `Scroll to top` |
+| className | 附加样式类名 | `string` | - |
+
+### ScrollToTopMinimal
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| threshold | 显示按钮的滚动距离阈值（px） | `number` | `300` |
+| behavior | 滚动行为 | `smooth` \| `instant` \| `auto` | `smooth` |
+| className | 附加样式类名 | `string` | - |
+
+### ScrollToTopProgress
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| threshold | 显示按钮的滚动距离阈值（px） | `number` | `300` |
+| behavior | 滚动行为 | `smooth` \| `instant` \| `auto` | `smooth` |
+| progressColor | 进度环颜色 | `string` | `currentColor`（映射至 `text-primary`） |
+| progressBgColor | 进度环背景颜色 | `string` | `currentColor`（映射至 `text-muted`） |
+| strokeWidth | 进度环线条宽度 | `number` | `3` |
+| className | 附加样式类名 | `string` | - |
+
+### ScrollToTopText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| threshold | 显示按钮的滚动距离阈值（px） | `number` | `300` |
+| behavior | 滚动行为 | `smooth` \| `instant` \| `auto` | `smooth` |
+| label | 按钮文字标签 | `string` | `Scroll to top` |
+| className | 附加样式类名 | `string` | - |
+
+### useScrollToTop
+
+内部使用的 hook，也可在自定义场景中调用。
+
+```tsx
+import { useScrollToTop } from "@/components/navigation/scroll-to-top"
+
+const { isVisible, scrollProgress, scrollToTop } = useScrollToTop(threshold)
+```
+
+| 返回值 | 类型 | 说明 |
+| --- | --- | --- |
+| isVisible | `boolean` | 是否超过阈值 |
+| scrollProgress | `number` | 滚动进度百分比（0-100） |
+| scrollToTop | `(behavior?: ScrollBehavior) => void` | 调用即滚动到顶部 |
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么采用 JavaScript 而非纯 CSS 方案？
+
+ScrollToTop 需要在按钮上绑定点击事件以触发 `window.scrollTo()`，因此必须使用 JavaScript。滚动监听通过 `passive` 事件优化性能，不会阻塞主线程。
+
+### 如何仅导入某个变体？
+
+默认变体 `ScrollToTop` 从 `@/components/navigation/scroll-to-top` 导入。其他变体（Pill、Minimal、Progress、Text）需从源码路径 `@/components/navigation/scroll-to-top` 导入。
+
+### 按钮遮挡了页面关键内容怎么办？
+
+通过 `className` 属性传入自定义类名调整位置。
+
+```tsx
+<ScrollToTop className="bottom-20 right-4" />
+```
+
+### 如何让按钮只在特定页面显示？
+
+在父组件中按条件渲染即可。
+
+```tsx
+{showScrollButton && <ScrollToTop />}
+```
+
+### 点击动画异常怎么办？
+
+按钮点击时有内置的涟漪和弹跳动画，持续时间 500-600ms。如需禁用，可通过 `className` 覆盖动画相关样式。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ScrollToTop 代码时：
+
+1. 默认变体从 `@/components/navigation/scroll-to-top` 导入 `ScrollToTop`。
+2. 默认无需任何属性，直接 `<ScrollToTop />` 即可在页面右下角显示圆形返回顶部按钮。
+3. `size` 属性支持 `sm`（40px）、`md`（48px）、`lg`（56px）三种尺寸，默认 `md`。
+4. `threshold` 调整按钮出现阈值，单位像素，默认 300。
+5. `behavior` 控制滚动动画：`smooth`（默认）、`instant`、`auto`。
+6. Pill、Minimal、Progress、Text 变体从 `@/components/navigation/scroll-to-top` 导入。
+7. `ScrollToTopPill` 的 `label` 属性用于自定义文字，默认值为 `Scroll to top`，建议中文页面改为 `回到顶部`。
+8. `ScrollToTopProgress` 的 `progressColor` 和 `progressBgColor` 接收 CSS 颜色值（HEX、RGB 等），不接收 Tailwind 类名。
+9. 组件使用 `fixed` 定位 + `z-50`，如果页面有其他固定元素需注意层级冲突。
+10. 不要用 `window.scrollTo` + `requestAnimationFrame` 自己实现，组件内部已处理。
+11. 不要引入任何第三方"返回顶部"库。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="navigation/scroll-to-top" />

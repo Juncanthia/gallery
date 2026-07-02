@@ -1,19 +1,30 @@
 #!/usr/bin/env tsx
 /**
- * Fixes files[].path and internalImportPath in generated registry entries.
+ * Syncs files[].path and internalImportPath in registry domain files
+ * to match flattened src/components/ layout via docsSlug resolution.
+ *
+ * Run: pnpm exec tsx scripts/fix-registry-paths.ts
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
-const GENERATED = path.join(ROOT, "src/gallery/registry/domains/generated.ts")
+const TARGETS = [
+  path.join(ROOT, "src/gallery/registry/domains/generated.ts"),
+  path.join(ROOT, "src/gallery/registry/domains/pilot.ts"),
+]
 
 function resolveRepoPath(alias: string): string | null {
-  const base = `src/${alias.replace(/^@\//, "")}`
-  const candidates = [`${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`]
+  const base = path.join(ROOT, "src", alias.replace(/^@\//, ""))
+  const candidates = [
+    `${base}.tsx`,
+    `${base}.ts`,
+    path.join(base, "index.tsx"),
+    path.join(base, "index.ts"),
+  ]
   for (const candidate of candidates) {
-    if (existsSync(path.join(ROOT, candidate))) {
-      return candidate
+    if (existsSync(candidate)) {
+      return path.relative(ROOT, candidate)
     }
   }
   return null
@@ -24,40 +35,64 @@ function aliasFromRepo(repoPath: string): string {
   return `@/${withoutExt.replace(/^src\//, "")}`
 }
 
-function main() {
-  let content = readFileSync(GENERATED, "utf8")
-  const importRegex = /internalImportPath:\s*"(@\/components\/[^"]+)"/g
-  let match: RegExpExecArray | null
+function patchRegistryFile(filePath: string): { fixed: number; skipped: string[] } {
+  const content = readFileSync(filePath, "utf8")
+  const skipped: string[] = []
   let fixed = 0
 
-  while ((match = importRegex.exec(content)) !== null) {
-    const alias = match[1]
-    const repoPath = resolveRepoPath(alias)
+  const updated = content.replace(/item\(\{([\s\S]*?)\}\),/g, (fullBlock, body) => {
+    const docsSlugMatch = body.match(/docsSlug:\s*"([^"]+)"/)
+    if (!docsSlugMatch) {
+      return fullBlock
+    }
+
+    const repoPath = resolveRepoPath(`@/components/${docsSlugMatch[1]}`)
     if (!repoPath) {
-      continue
+      const idMatch = body.match(/id:\s*"([^"]+)"/)
+      skipped.push(idMatch?.[1] ?? docsSlugMatch[1])
+      return fullBlock
     }
-    const correctAlias = aliasFromRepo(repoPath)
-    const oldPathPattern = new RegExp(
-      `(id:[\\s\\S]*?internalImportPath:\\s*"${alias.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[\\s\\S]*?files:\\s*\\[{\\s*path:\\s*")[^"]+(")`
-    )
-    const blockStart = content.lastIndexOf("item({", match.index)
-    const blockEnd = content.indexOf("}),", match.index)
-    if (blockStart < 0 || blockEnd < 0) {
-      continue
+
+    const alias = aliasFromRepo(repoPath)
+    const currentImport = body.match(/internalImportPath:\s*"([^"]+)"/)?.[1]
+    const currentFile = body.match(/files:\s*\[\{\s*path:\s*"([^"]+)"/)?.[1]
+
+    if (currentImport === alias && currentFile === repoPath) {
+      return fullBlock
     }
-    const block = content.slice(blockStart, blockEnd)
-    const updatedBlock = block
+
+    fixed++
+    const nextBody = body
       .replace(/files:\s*\[\{\s*path:\s*"[^"]+"/, `files: [{ path: "${repoPath}"`)
-      .replace(/internalImportPath:\s*"@\/components\/[^"]+"/, `internalImportPath: "${correctAlias}"`)
-    if (updatedBlock !== block) {
-      content = content.slice(0, blockStart) + updatedBlock + content.slice(blockEnd)
-      fixed++
-      importRegex.lastIndex = blockStart + updatedBlock.length
+      .replace(/internalImportPath:\s*"@\/components\/[^"]+"/, `internalImportPath: "${alias}"`)
+
+    return `item({${nextBody}}),`
+  })
+
+  writeFileSync(filePath, updated)
+  return { fixed, skipped }
+}
+
+function main() {
+  let totalFixed = 0
+  const allSkipped = new Set<string>()
+
+  for (const target of TARGETS) {
+    const { fixed, skipped } = patchRegistryFile(target)
+    totalFixed += fixed
+    for (const id of skipped) {
+      allSkipped.add(id)
+    }
+    console.log(`Fixed ${fixed} entries in ${path.relative(ROOT, target)}`)
+    if (skipped.length > 0) {
+      console.log(`  Skipped (unresolved docsSlug): ${skipped.join(", ")}`)
     }
   }
 
-  writeFileSync(GENERATED, content)
-  console.log(`Fixed ${fixed} registry entry paths`)
+  console.log(`Total fixed: ${totalFixed}`)
+  if (allSkipped.size > 0) {
+    console.log(`Unresolved ids: ${[...allSkipped].join(", ")}`)
+  }
 }
 
 main()

@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: FluidGlass
+subtitle: 流体玻璃
+description: 基于 Three.js 的流体玻璃效果组件，支持透镜、立方体和条形三种模式。
+demo: { cols: 1 }
+group: { title: Components, order: 16 }
+source: { component: src/components/react-bits/fluid-glass.tsx, docs: content/components/marketing-blocks/fluid-glass/index.mdx, examples: [content/components/marketing-blocks/fluid-glass/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, r3f: true, drei: true, three: true, maath: true }
+---

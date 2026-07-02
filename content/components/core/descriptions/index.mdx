@@ -1,0 +1,208 @@
+描述列表 Descriptions。以成组的形式展示多个只读字段，支持带边框样式、响应式列数、水平/垂直布局和声明式数据配置。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要成组展示多对标签-内容的只读信息时使用。
+
+常见场景：
+
+- 用户详情页的个人信息展示。
+- 订单详情页的订单信息汇总。
+- 设备详情的规格参数。
+- 审批流的申请信息。
+
+不推荐：
+
+- 数据需要编辑的场景，应使用 Form 组件。
+- 仅有单一字段时，直接用文本展示更简洁。
+- 大量数据需要滚动展示，考虑使用 Table。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 `items` 配置数组声明式构建。
+
+<ComponentShowcase id="descriptions" path="descriptions/basic" />
+
+```tsx
+import { Descriptions } from "@/components/core/descriptions"
+
+export default function Demo() {
+  return (
+    <Descriptions
+      title="用户信息"
+      className="w-96"
+      items={[
+        { label: "姓名", children: "张三" },
+        { label: "部门", children: "技术部" },
+        { label: "邮箱", children: "zhangsan@example.com" },
+        { label: "入职日期", children: "2024-03-15" }
+      ]}
+    />
+  )
+}
+```
+
+### 带边框模式
+
+`bordered` 启用表格边框样式和斑马底色。
+
+```tsx
+import { Descriptions } from "@/components/core/descriptions"
+
+export default function Demo() {
+  return (
+    <Descriptions
+      bordered
+      className="w-96"
+      items={[
+        { label: "姓名", children: "张三" },
+        { label: "年龄", children: 28 },
+        { label: "部门", children: "技术部" },
+        { label: "职位", children: "高级工程师" }
+      ]}
+    />
+  )
+}
+```
+
+### 垂直布局
+
+`layout="vertical"` 标签在上内容在下。
+
+```tsx
+import { Descriptions } from "@/components/core/descriptions"
+
+export default function Demo() {
+  return (
+    <Descriptions
+      layout="vertical"
+      className="w-80"
+      items={[
+        { label: "姓名", children: "张三" },
+        { label: "描述", children: "负责前端架构设计和核心组件开发。" }
+      ]}
+    />
+  )
+}
+```
+
+### 响应式列数
+
+`column` 支持断点配置，不同屏幕宽度自动调整。
+
+```tsx
+import { Descriptions } from "@/components/core/descriptions"
+
+export default function Demo() {
+  return (
+    <Descriptions
+      title="订单信息"
+      column={{ xs: 1, sm: 2, md: 3 }}
+      items={[
+        { label: "订单号", children: "202406010001" },
+        { label: "状态", children: "已完成" },
+        { label: "金额", children: "¥1,280.00" },
+        { label: "下单时间", children: "2024-06-01 10:30" },
+        { label: "收货地址", children: "北京市海淀区中关村" }
+      ]}
+    />
+  )
+}
+```
+
+### 使用子组件
+
+不使用 `items`，手动声明 `DescriptionsItem` 子组件。
+
+```tsx
+import { Descriptions, DescriptionsItem } from "@/components/core/descriptions"
+
+export default function Demo() {
+  return (
+    <Descriptions bordered className="w-80">
+      <DescriptionsItem label="姓名">张三</DescriptionsItem>
+      <DescriptionsItem label="部门">技术部</DescriptionsItem>
+      <DescriptionsItem label="邮箱">zhangsan@example.com</DescriptionsItem>
+    </Descriptions>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Descriptions
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 标题 | `React.ReactNode` | - |
+| extra | 标题右侧额外内容 | `React.ReactNode` | - |
+| column | 列数，支持响应式断点配置 | `number \| Partial<Record<Breakpoint, number>>` | `3` |
+| bordered | 是否显示边框 | `boolean` | `false` |
+| colon | 标签后是否显示冒号 | `boolean` | `true` |
+| layout | 布局方向 | `"horizontal" \| "vertical"` | `"horizontal"` |
+| size | 尺寸 | `"sm" \| "small" \| "default" \| "middle" \| "lg" \| "large"` | `"default"` |
+| items | 声明式配置数组 | `DescriptionsItemConfig[]` | - |
+| children | 子组件（`DescriptionsItem`） | `React.ReactNode` | - |
+| labelStyle | 统一标签内联样式 | `React.CSSProperties` | - |
+| contentStyle | 统一内容内联样式 | `React.CSSProperties` | - |
+| labelClassName | 统一标签附加 className | `string` | - |
+| contentClassName | 统一内容附加 className | `string` | - |
+| className | 根容器附加样式 | `string` | - |
+| style | 根容器内联样式 | `React.CSSProperties` | - |
+
+### DescriptionsItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 标签文本 | `React.ReactNode` | - |
+| children | 内容（与 content 等效，优先级低于 content） | `React.ReactNode` | - |
+| content | 内容（优先级高于 children） | `React.ReactNode` | - |
+| span | 占据列数，支持 `"filled"` 填充剩余或响应式断点 | `number \| "filled" \| Partial<Record<Breakpoint, number>>` | `1` |
+| labelStyle | 标签内联样式 | `React.CSSProperties` | - |
+| contentStyle | 内容内联样式 | `React.CSSProperties` | - |
+| labelClassName | 标签附加 className | `string` | - |
+| contentClassName | 内容附加 className | `string` | - |
+| className | 项容器附加 className | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何让某一项占据整行？
+
+使用 `span: "filled"` 自动填充当前行剩余列数，或明确指定 `span` 数字。
+
+```tsx
+{ label: "备注", children: "...", span: "filled" }
+```
+
+### 如何调整列数？
+
+`column` 支持数字和响应式断点配置：
+
+```tsx
+<Descriptions column={2} />
+<Descriptions column={{ xs: 1, md: 2, lg: 3 }} />
+```
+
+断点定义：xs(0), sm(576), md(768), lg(992), xl(1200), xxl(1600)。
+
+### items 和 children 可以混用吗？
+
+当 `items` 数组存在时，组件优先使用 `items` 渲染。`children` 仅在 `items` 未传入时生效，两者不混用。
+
+### bordered 模式和默认模式外观有何区别？
+
+`bordered` 模式使用 `<table>` 渲染，有完整单元格边框和斑马底色（`bg-muted/40`），适合密集数据展示。默认模式使用 CSS Grid 布局，无边框、更轻量，适合卡片内嵌场景。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/descriptions` 导入 `Descriptions` 和 `DescriptionsItem`。
+2. 简单列表优先使用 `items` 声明式配置，减少样板代码。
+3. 需要自定义单个项样式时使用 `DescriptionsItem` 子组件和其 `labelStyle`/`contentStyle`。
+4. 详情页密集信息展示使用 `bordered`，卡片内嵌轻量展示使用默认模式。
+5. 响应式设计使用断点 `column` 配置，避免手动写媒体查询。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="descriptions" />

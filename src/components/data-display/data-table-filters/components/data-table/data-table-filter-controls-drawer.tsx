@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import {
   Drawer,
   DrawerClose,
@@ -8,14 +8,14 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Kbd } from "@/components/ui/kbd";
+} from "@/components/core/drawer";
+import { Kbd } from "@/components/core/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/core/tooltip";
 import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
 import { useMediaQuery } from "@/components/data-display/data-table-filters/hooks/use-media-query";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";

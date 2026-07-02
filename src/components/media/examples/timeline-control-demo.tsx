@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import * as TimelineControlPrimitive from "@/components/media/ui/timeline-control"
 import {
   Duration,

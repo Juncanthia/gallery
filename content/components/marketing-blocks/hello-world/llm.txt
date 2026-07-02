@@ -1,0 +1,110 @@
+---
+category: Components
+title: HelloWorld
+subtitle: 你好世界
+description: 最简单的展示组件，渲染一个醒目的标题文本。
+demo:
+  cols: 1
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/core/gooseui-hello-world.tsx
+  examples:
+    - content/components/marketing-blocks/hello-world/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# HelloWorld 你好世界
+
+最简单的展示组件，渲染一个醒目的 `Hello World` 标题文本。
+
+本组件借鉴 GooseUI 的基础展示使用心智，但不是第三方的兼容层。实现以本地源码为准，不引入外部运行时依赖或 CSS-in-JS。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要一个最简化的占位展示组件时使用，常用于：
+
+- 新项目的快速起步验证，确认组件渲染链路正常。
+- 教学演示和示例中的最小可运行组件。
+- 作为更复杂组件的开发起点和模板参考。
+
+不推荐：
+
+- 生产环境中的实际业务展示，此组件无任何可配置项。
+- 需要动态内容或交互的场景，组件仅渲染静态文本。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+HelloWorld 无需任何 props，直接渲染 `Hello World` 标题。
+
+<ComponentShowcase
+  id="marketing-blocks/hello-world"
+  path="marketing-blocks/hello-world/basic"
+/>
+
+```tsx
+import { HelloWorld } from "@/components/marketing-blocks/hello-world"
+
+export default function Demo() {
+  return <HelloWorld />
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。组件无 props，开箱即用。
+
+<h2 id="api">API</h2>
+
+### HelloWorld
+
+HelloWorld 组件不接收任何 props，仅渲染一个带 Tailwind CSS 样式的 `h1` 标题。
+
+渲染输出：
+
+```html
+<h1 class="text-2xl font-bold">Hello World</h1>
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义文本内容？
+
+HelloWorld 组件渲染的是硬编码的 "Hello World" 文本，不可更改。如需自定义文本，请使用 `h1` 元素配合 Tailwind class，或基于此组件创建新的变体。
+
+```tsx
+<h1 className="text-2xl font-bold">自定义内容</h1>
+```
+
+### 如何调整样式？
+
+样式通过 Tailwind CSS class（`text-2xl font-bold`）硬编码在组件内。如需不同样式，直接在业务侧用 Tailwind class 覆盖，或使用封装组件。
+
+```tsx
+<div className="text-blue-500">
+  <HelloWorld />
+</div>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+当 AI 生成本项目 HelloWorld 代码时，应遵守：
+
+1. 从 `@/components/marketing-blocks/hello-world` 导入 `HelloWorld`。
+2. 组件无需任何 props，直接使用 `<HelloWorld />` 即可。
+3. 不要为 HelloWorld 传递任何 props，组件不接受任何参数。
+4. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="gooseui-hello-world" />

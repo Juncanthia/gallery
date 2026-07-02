@@ -1,0 +1,150 @@
+[柱状图 / BarChart]
+导入: import { BarChart } from "@/components/charts/chart-kit"
+子组件导入: import { Bar } from "@/components/charts/chart-kit"
+包来源: @/components/charts/chart-kit (bar-chart.tsx, bar.tsx)
+组件类型: 图表 / BKLit Charts
+依赖: @visx/scale, @visx/responsive, @visx/event, motion (framer-motion)
+
+## 何时使用
+比较分类数据的数值大小，支持分组、堆叠、横向布局和 3D 深度效果。适用于业绩对比、排名展示、多系列分组分析以及部分与整体关系的堆叠拆解。
+
+不应用于：数据趋势追踪（用 LineChart）、占比分布展示（用 PieChart/RingChart）、双变量相关性分析（用 ScatterChart）。
+
+## BarChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 图表数据数组，每个对象须含 xDataKey 定义的分类字段和至少一个数值字段 | `Record<string, unknown>[]` | 必填 |
+| xDataKey | 分类轴字段名 | `string` | `"name"` |
+| margin | 图表四周边距 | `Partial<{ top: number; right: number; bottom: number; left: number }>` | `{ top: 40, right: 40, bottom: 40, left: 40 }` |
+| animationDuration | 动画持续时间（毫秒） | `number` | `1100` |
+| animationEasing | 动画 CSS 缓动函数 | `string` | `"cubic-bezier(0.4,0,0.2,1)"` |
+| enterTransition | motion 入场过渡配置（spring 或 cubic-bezier tween） | `Transition` | — |
+| revealSignature | 签名变化时触发动画重播，用于 OG 截图/状态切换 | `string` | — |
+| aspectRatio | 容器宽高比 | `string` | `"2 / 1"` |
+| className | 容器附加 CSS 类名 | `string` | — |
+| barGap | 柱组间距（占波段宽度的比例，0-1） | `number` | `0.2` |
+| barWidth | 固定柱宽 (px)；不传则自动填充波段宽度 | `number` | — |
+| orientation | `"vertical"`—垂直柱状图（类别在 X 轴），`"horizontal"`—横向条形图（类别在 Y 轴） | `"vertical" \| "horizontal"` | `"vertical"` |
+| stacked | 是否堆叠模式，`true` 时多系列堆叠而非并排分组 | `boolean` | `false` |
+| stackGap | 堆叠柱子间视觉间隙 (px) | `number` | `0` |
+| blocks/status | 加载状态控制：`"ready"` 正常渲染，`"loading"` 自动显示闪烁骨架（无需 data） | `"ready" \| "loading" \| "errored"` | `"ready"` |
+| onPhaseChange | 揭示生命周期回调（`"revealing"` / `"ready"`），用于 OG 截图和加载编排 | `(phase: ChartPhase) => void` | — |
+| children | Bar、Grid、ChartTooltip、BarXAxis、BarYAxis 等子组件 | `ReactNode` | — |
+
+## Bar Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| dataKey | 数据对象中的数值字段名 | `string` | 必填 |
+| fill | 填充色；支持 CSS 颜色值、CSS 变量、`url(#gradientId)` 渐变、`url(#patternId)` 图案 | `string` | `var(--chart-line-primary)` |
+| stroke | 提示点色；fill 为渐变/图案时用作实色圆点 | `string` | 取 fill 值 |
+| yAxisId | Y 轴分组标识（兼容 Recharts 多 Y 轴场景） | `string \| number` | `"left"` |
+| lineCap | 柱端样式：`"round"` 圆角、`"butt"` 直角、`number` 自定义半径 | `"round" \| "butt" \| number` | `"round"` |
+| animate | 是否开启动画 | `boolean` | `true` |
+| animationType | 动画模式：`"grow"` 高度增长，`"fade"` 透明度+模糊淡入 | `"grow" \| "fade"` | `"grow"` |
+| fadedOpacity | 其他柱 hover 时本系列的透明度 | `number` | `0.3` |
+| staggerDelay | 柱子间交错延迟（秒）；不传则根据 data.length 和 animationDuration 自动计算 | `number` | 自动 |
+| stackGap | 本系列堆叠柱间隙 (px) | `number` | `0` |
+| groupGap | 本系列分组柱间隙 (px) | `number` | `4` |
+| perspective | 配合 BarDepthBack/Front 3D 面使用，裁剪柱顶对齐顶盖 | `boolean` | `false` |
+| minBarHeight | 最小可见柱高 (px)，垂直方向零值柱子至少显示此高度 | `number` | `0` |
+
+## 示例代码
+
+### 基础柱状图
+```tsx
+import { BarChart } from "@/components/charts/chart-kit"
+import { Bar } from "@/components/charts/chart-kit"
+
+const data = [
+  { name: "一月", value: 400 },
+  { name: "二月", value: 300 },
+  { name: "三月", value: 600 },
+  { name: "四月", value: 200 },
+  { name: "五月", value: 500 },
+]
+
+export default function Demo() {
+  return (
+    <BarChart data={data} xDataKey="name">
+      <Bar dataKey="value" fill="var(--chart-line-primary)" />
+    </BarChart>
+  )
+}
+```
+
+### 多系列分组对比（分组柱状图）
+```tsx
+import { BarChart } from "@/components/charts/chart-kit"
+import { Bar } from "@/components/charts/chart-kit"
+
+const data = [
+  { month: "1月", budget: 400, actual: 380 },
+  { month: "2月", budget: 300, actual: 350 },
+  { month: "3月", budget: 600, actual: 550 },
+  { month: "4月", budget: 200, actual: 250 },
+  { month: "5月", budget: 500, actual: 520 },
+]
+
+export default function Demo() {
+  return (
+    <BarChart data={data} xDataKey="month" barGap={0.2}>
+      <Bar dataKey="budget" fill="var(--chart-line-secondary)" />
+      <Bar dataKey="actual" fill="var(--chart-line-primary)" />
+    </BarChart>
+  )
+}
+```
+
+### 堆叠柱状图 + 横向布局
+```tsx
+import { BarChart } from "@/components/charts/chart-kit"
+import { Bar } from "@/components/charts/chart-kit"
+
+const data = [
+  { name: "产品A", 直销: 320, 渠道: 180, 线上: 150 },
+  { name: "产品B", 直销: 280, 渠道: 220, 线上: 100 },
+  { name: "产品C", 直销: 200, 渠道: 160, 线上: 90 },
+]
+
+export default function Demo() {
+  return (
+    <BarChart data={data} xDataKey="name" stacked orientation="horizontal" stackGap={2}>
+      <Bar dataKey="直销" fill="var(--chart-line-primary)" />
+      <Bar dataKey="渠道" fill="var(--chart-line-secondary)" />
+      <Bar dataKey="线上" fill="var(--chart-line-tertiary)" />
+    </BarChart>
+  )
+}
+```
+
+### 加载骨架状态
+```tsx
+import { BarChart } from "@/components/charts/chart-kit"
+
+export default function LoadingDemo() {
+  return <BarChart data={[]} blocks/status="loading" />
+}
+```
+
+## 架构说明
+- BarChart 组件内部通过 `ParentSize`（@visx/responsive）自适应容器尺寸
+- 使用 `scaleBand` + `scaleLinear`（@visx/scale）计算柱位和数值映射
+- 动画基于 `motion/react`，支持 `grow`（高度）和 `fade`（透明度+模糊）两种 enter 模式
+- Bar 组件通过 ChartProvider context 获取父级 scale 和布局参数，支持与 ChartTooltip、ChartLegend、BarXAxis、BarYAxis 等子组件组合使用
+- 支持 gradient/pattern defs（@visx/gradient, @visx/pattern）作为柱体填充
+- 堆叠模式自动计算累计偏移量
+
+## 约束与最佳实践
+1. 导入路径：主组件 `@/components/charts/chart-kit`，子组件 `@/components/charts/chart-kit`
+2. 数据须为对象数组，每个对象必须包含 xDataKey 字段和一个或多个数值字段
+3. 父容器须有明确尺寸（`aspectRatio` 或固定宽高），否则 SVG 尺寸为零不可见
+4. 至少传入一个 Bar 子组件，否则图表只有空坐标系
+5. 分类数 ≤ 20 避免拥挤；超过时使用 `orientation="horizontal"` 横向条形图
+6. 多系列时通过 `fill` 区分颜色，推荐使用 `var(--chart-line-*)` CSS 变量保持主题一致
+7. 加载态使用 `blocks/status="loading"`，组件自动渲染骨架，无需手动传入 data
+8. Bar `fill` 为渐变/图案时须同时设置 `stroke` 作为提示点色，否则提示点颜色不正确
+9. 禁止同时使用 `orientation:"vertical"`+`perspective` 并传入 `minBarHeight:0` 时零值柱消失 — 设置 `minBarHeight>0` 保底
+10. 依赖 @visx/* 系列和 motion，使用前确保 `package.json` 已安装
+11. 禁止在 BarChart 外部使用 Bar；Bar 依赖 BarChart 的 ChartProvider 上下文

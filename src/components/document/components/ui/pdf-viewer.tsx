@@ -73,8 +73,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { flushSync } from "react-dom"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
 import {
   DocumentViewerSidebarSkeleton,
   DocumentViewerThumbnailSidebar,
@@ -86,29 +86,29 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/core/dropdown-menu"
+import { Input } from "@/components/core/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/core/popover"
+import { ScrollArea } from "@/components/core/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/core/select"
+import { Separator } from "@/components/core/separator"
+import { Spinner } from "@/components/blocks/spinner"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/core/tooltip"
 import { loadSharedPdfEngine } from "@/components/document/components/pdf-thumbnail-utils"
 
 export type PDFViewerPageOverlayProps = {

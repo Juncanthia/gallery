@@ -1,0 +1,105 @@
+HeaderSimple 简洁的粘性顶部导航栏，支持桌面端横向导航和移动端折叠菜单。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要固定在页面顶部的简洁导航栏。
+
+常见场景：
+
+- 官网、Landing Page 的顶部导航。
+- SaaS 产品的全局导航栏。
+- 内容型网站（博客、文档站）的粘性头部。
+- 单页应用的顶部固定导航。
+
+不推荐：
+
+- 需要多级下拉菜单的复杂导航场景。
+- 需要动态渲染导航项的场景（导航项内置在组件中）。
+- 需要用户登录/头像等信息的导航栏（请使用 HeaderAuth）。
+
+HeaderSimple 使用 React useState 管理移动端菜单的展开/折叠状态，通过 CSS transition 实现菜单高度的平滑过渡。移动端使用 lucide-react 的 Menu / X 图标切换。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+HeaderSimple 为无 props 组件，直接渲染即可获得完整的粘性顶部导航栏，包含 Logo、桌面导航和移动端折叠菜单。
+
+<ComponentShowcase
+  id="marketing-blocks/header-simple"
+  path="marketing-blocks/header-simple/basic"
+/>
+
+```tsx
+import { HeaderSimple } from "@/components/marketing-blocks/header-simple"
+
+export default function Demo() {
+  return <HeaderSimple />
+}
+```
+
+<h2 id="api">API</h2>
+
+### HeaderSimple
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名，作用于 `<header>` 元素 | `string` | - |
+
+HeaderSimple 内部维护移动端菜单的 `isOpen` 状态，无需外部管理。桌面端断点为 `md`（768px），小于该宽度时显示汉堡菜单按钮，导航项折叠为垂直排列的下拉面板。
+
+导航项定义在组件内部的 `navItems` 数组中，当前包含 Features、Pricing、About、Contact 四个条目。如需自定义导航内容，请直接修改组件源码中的 `navItems` 数组。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义导航项？
+
+导航项定义在组件内部的 `navItems` 数组中。复制组件到本地后，修改 `navItems` 数组中的 `label` 和 `href` 即可：
+
+```tsx
+const navItems = [
+  { label: "首页", href: "/" },
+  { label: "产品", href: "/products" },
+  { label: "关于", href: "/about" },
+]
+```
+
+### 如何修改 Logo 文字和图标？
+
+组件内部 Logo 区域由一个 `G` 图标的圆角方块和 `Brand` 文字组成。直接修改对应的 `<span>` 标签内容即可：
+
+- 图标：修改 `<div className="...">G</div>` 中的文字
+- 品牌名：修改 `<span className="font-bold">Brand</span>` 中的文字
+- 如需使用图片 Logo，替换 `<Link>` 内的内容为 `<img>` 标签
+
+### 如何在移动端调整菜单样式？
+
+移动端菜单断点为 `md`（768px），通过 `cn` 工具函数控制展开/折叠的 `max-h` 过渡。调整断点可修改 `md:hidden` 和 `hidden md:flex` 为其他 Tailwind 响应式前缀（如 `lg:hidden` / `hidden lg:flex`）。
+
+### 如何添加更多功能按钮（如登录、注册）？
+
+HeaderSimple 设计为最简导航栏。如需 CTA 按钮（登录/注册），请使用 `HeaderWithCta`。如需用户头像和认证状态，请使用 `HeaderAuth`。
+
+### 如何固定到顶部或修改 z-index？
+
+组件默认使用 `sticky top-0 z-50` 实现粘性定位。可通过 `className` 传入覆盖样式，如固定定位：
+
+```tsx
+<HeaderSimple className="fixed top-0" />
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 HeaderSimple 代码时：
+
+1. 从 `@/components/marketing-blocks/header-simple` 导入 HeaderSimple。
+2. 组件为无 props 组件，直接使用 `<HeaderSimple />` 渲染。
+3. 导航项定义在 `navItems` 数组中，需要自定义时直接在组件源码中修改。
+4. 移动端菜单依赖 lucide-react 的 Menu 和 X 图标，不要引入其他图标库替代。
+5. 不要引入 framer-motion、@react-spring 等第三方动画库。
+6. 不要引入 Ant Design 相关依赖。
+7. 如需更复杂的 Header（如 CTA 按钮），使用 HeaderWithCta 或 HeaderAuth 替代。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="marketing-blocks/header-simple" />

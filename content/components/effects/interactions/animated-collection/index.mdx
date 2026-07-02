@@ -1,0 +1,110 @@
+动画集合，UseLayouts 布局组件，支持列表、卡片和堆叠三种视图模式的流畅动画切换。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要在有限空间内以不同布局视图展示集合内容，并通过动画过渡增强用户体验时使用。
+
+常见场景：
+
+- 内容集合的多视图切换展示。
+- 列表视图、卡片视图与堆叠视图之间的 spring 动画过渡。
+- 需要布局动画来引导用户注意力的信息展示页面。
+
+内置三种视图模式：
+
+- **列表视图**：纵向排列，适合快速浏览和对比信息。
+- **卡片视图**：网格排列，适合视觉化的内容预览。
+- **堆叠视图**：层叠排列，适合展示集合整体数量或打包感。
+
+所有切换均使用 motion/react 的 LayoutGroup + AnimatePresence 实现，过渡动画为 snappy spring。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件自包含内部状态，无需外部 props。通过底部 Tab 即可在列表、卡片和堆叠三种视图间切换。
+
+<ComponentShowcase
+  id="effects/interactions/animated-collection"
+  path="effects/interactions/animated-collection/basic"
+/>
+
+```tsx
+import { LayoutSwitcher } from "@/components/effects/interactions/animated-collection"
+
+export default function Demo() {
+  return <LayoutSwitcher />
+}
+```
+
+<h2 id="api">API</h2>
+
+### LayoutSwitcher
+
+LayoutSwitcher 是一个自包含组件，所有视图状态由组件内部管理，无需外部 props。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 无需外部 props | - | - |
+
+组件内部使用的数据通过 `ITEMS` 常量配置，视图模式通过 `view` state 在 `"list"`、`"card"`、`"pack"` 之间切换。
+
+### 动画参数
+
+| 参数 | 说明 | 值 |
+| --- | --- | --- |
+| snappySpring | 布局切换动画 | `spring`，stiffness: 350, damping: 30, mass: 1 |
+| fastFade | 元素显示/隐藏动画 | duration: 0.1s, ease: linear |
+
+### 内部结构
+
+| 标识 | 说明 |
+| --- | --- |
+| `LayoutGroup` | 包裹所有动画元素，确保 layoutId 在同一上下文中 |
+| `AnimatePresence` | 管理信息区（标题、副标题、编号）的进入/退出动画 |
+| `Tab` | 底部视图切换按钮，带 layoutId 滑动指示器 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义集合内容？
+
+修改组件内部 `ITEMS` 数组。每个 item 包含：
+
+```tsx
+interface CollectionItem {
+  id: string        // 唯一标识
+  title: string     // 标题
+  subtitle: string  // 副标题
+  idNumber: string  // 编号
+  image: string     // 图片 URL
+  icon: any         // Hugeicons 图标组件
+}
+```
+
+### 如何调整动画参数？
+
+修改组件内的 `snappySpring` 和 `fastFade` 对象。`snappySpring` 控制布局切换的弹性动画，`fastFade` 控制元素的淡入淡出。
+
+### 如何添加更多视图模式？
+
+扩展 `ViewMode` 类型联合，在 `Tab` 区域添加新的切换按钮，并在 `motion.div` 的 `className` 和 `animate` 中添加对应布局样式。
+
+### 视图模式之间如何切换？
+
+通过底部 Tab 按钮切换。Tab 使用 `layoutId="active-tab"` 实现滑动指示器效果，点击后更新 `view` state 触发全局布局动画。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LayoutSwitcher 代码时：
+
+1. 从 `@/components/effects/interactions/animated-collection` 导入 `LayoutSwitcher`
+2. 组件自包含，无需传入任何 props
+3. 不要移除或修改组件内部的 motion 动画逻辑
+4. 修改内容数据时，保持 `ITEMS` 数组的 `CollectionItem` 接口一致
+5. 添加新视图模式时确保在 `LayoutGroup` 上下文中实现
+6. 不要引入 Ant Design 或 rc-component 相关依赖
+7. 图标使用 `@hugeicons/core-free-icons` + `@hugeicons/react` 的 `HugeiconsIcon`
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="effects/interactions/animated-collection" />

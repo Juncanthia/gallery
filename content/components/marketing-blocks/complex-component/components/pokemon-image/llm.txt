@@ -1,0 +1,135 @@
+---
+category: Components
+title: PokemonImage
+subtitle: 宝可梦精灵图
+description: 通过宝可梦编号渲染对应的精灵图片，数据来自 PokeAPI 官方精灵图资源。
+demo:
+  cols: 2
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/core/gooseui-pokemon-image.tsx
+  examples:
+    - content/components/marketing-blocks/complex-component/components/pokemon-image/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# PokemonImage 宝可梦精灵图
+
+通过宝可梦全国图鉴编号渲染对应的精灵图片，数据来自 PokeAPI 官方精灵图资源。
+
+本组件是 GooseUI 的宝可梦图片展示组件，实现以本地源码为准，不引入外部运行时依赖或 CSS-in-JS。
+
+## 何时使用 {#when-to-use}
+
+适合在需要展示宝可梦精灵图时使用。通过 `name` 和 `number` props 控制展示内容。
+
+常见场景：
+
+- 宝可梦图鉴或收藏展示页面。
+- 游戏化 UI 中的角色展示。
+- 数据可视化中的图标点缀。
+
+不推荐：
+
+- 需要离线可用或自托管精灵资源的场景（当前依赖 PokeAPI CDN）。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { PokemonImage } from "@/components/marketing-blocks/complex-component/components/pokemon-image"
+
+export default function Demo() {
+  return (
+    <PokemonImage name="Bulbasaur" number={1} />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。更多配置项参见下方 API 摘要。
+
+## 核心导出 {#exports}
+
+- `PokemonImage`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface PokemonImageProps {
+  /** 宝可梦名称，用作 img alt 属性 */
+  name: string;
+  /** 宝可梦全国图鉴编号 */
+  number: number;
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+PokemonImage 渲染原生 `<img>` 元素：
+
+- 图片 src 由内部 `usePokemonImage` hook 根据 `number` 拼接 PokeAPI URL。
+- `alt` 属性设置为 `name` 值，确保屏幕阅读器可访问。
+- 当 URL 不可用时返回 `null`，不渲染任何 DOM 节点。
+
+## 样式模型 {#styling-model}
+
+- PokemonImage 不施加任何样式，渲染原生 `<img>` 标签。
+- 尺寸、间距、边框等样式由父容器或 Tailwind CSS class 控制。
+- 不引入任何 CSS-in-JS 或运行时样式方案。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/core/gooseui-pokemon-image.tsx`（re-export）
+- `src/components/gooseui/components/blocks/complex-component/components/pokemon-image.tsx`（实现）
+- `src/components/gooseui/components/blocks/complex-component/hooks/use-pokemon.ts`（hook）
+
+直接依赖摘要：
+
+- React
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. `usePokemonImage` hook 根据 `number` 拼接 PokeAPI 精灵图 URL。
+3. URL 不可用时返回 `null`，避免显示破损图片。
+4. 使用原生 `<img>` 标签，`alt` 属性设置为 `name`。
+
+## 可访问性 {#accessibility}
+
+- `alt` 属性设置为 `name` 值，屏幕阅读器可获取图片描述。
+- 当 URL 不可用时返回 `null`，不向 DOM 暴露无意义的空元素。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/gooseui/components/blocks/complex-component/components/pokemon-image.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 无内置样式，完全由调用侧控制 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 非 AntD 组件，无兼容需求 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 PokemonImage 代码时，应遵守：
+
+1. 从 `@/components/marketing-blocks/complex-component/components/pokemon-image` 导入 `PokemonImage`。
+2. 必须传入 `name`（string）和 `number`（number）两个属性。
+3. `number` 为宝可梦全国图鉴编号，数字类型。
+4. 不要引入 Ant Design 相关依赖。

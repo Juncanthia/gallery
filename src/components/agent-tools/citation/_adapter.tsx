@@ -11,6 +11,6 @@
 "use client";
 
 export { cn } from "@/lib/utils";
-export { Popover } from "@/components/ui/popover"
-export { PopoverContent } from "@/components/ui/popover"
-export { PopoverTrigger } from "@/components/ui/popover"
+export { Popover } from "@/components/core/popover"
+export { PopoverContent } from "@/components/core/popover"
+export { PopoverTrigger } from "@/components/core/popover"

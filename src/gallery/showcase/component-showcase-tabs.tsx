@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/core/tabs"
 import { useState, type ReactNode } from "react"
 import { Code2, FileCode2 } from "lucide-react"
 import { cn } from "@/lib/utils"

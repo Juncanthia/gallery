@@ -1,0 +1,112 @@
+ModelViewer 3D 模型查看器组件，支持 GLB/GLTF/FBX/OBJ 格式，提供旋转、缩放、环境光照、截图等交互功能。
+
+注意：当前简化版本仅展示占位 UI，完整功能需安装 `@react-three/fiber`、`@react-three/drei` 和 `three`。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要在页面上展示 3D 模型时使用。
+常见场景：
+- 电商产品 3D 展示
+- 作品集 3D 模型预览
+- 游戏角色/道具展示
+- 产品配置器
+不推荐：
+- 低性能设备（3D 渲染需求高）
+- 不需要 3D 交互的静态图片场景
+- 未安装 R3F 依赖的项目
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="marketing-blocks/model-viewer" path="marketing-blocks/model-viewer/basic" />
+
+```tsx
+import { ModelViewer } from "@/components/marketing-blocks/model-viewer"
+
+export default function Demo() {
+  return (
+    <ModelViewer url="https://example.com/model.glb" />
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { ModelViewer } from "@/components/marketing-blocks/model-viewer"
+
+export default function Demo() {
+  return (
+    <ModelViewer
+      url="/models/product.glb"
+      width={600}
+      height={500}
+      enableManualRotation
+      enableManualZoom
+      enableMouseParallax
+      autoRotate
+      autoRotateSpeed={0.5}
+      defaultZoom={0.6}
+      ambientIntensity={0.4}
+      keyLightIntensity={1.2}
+      environmentPreset="city"
+      fadeIn
+      showScreenshotButton
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ModelViewer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| url | 模型文件 URL（.glb/.gltf/.fbx/.obj） | `string` | 必填 |
+| width | 查看器宽度（px） | `number` | `400` |
+| height | 查看器高度（px） | `number` | `400` |
+| modelXOffset | 模型 X 轴偏移 | `number` | `0` |
+| modelYOffset | 模型 Y 轴偏移 | `number` | `0` |
+| defaultRotationX | 默认 X 轴旋转角度 | `number` | `-50` |
+| defaultRotationY | 默认 Y 轴旋转角度 | `number` | `20` |
+| defaultZoom | 默认缩放距离 | `number` | `0.5` |
+| minZoomDistance | 最小缩放距离 | `number` | `0.5` |
+| maxZoomDistance | 最大缩放距离 | `number` | `10` |
+| enableMouseParallax | 启用鼠标视差效果 | `boolean` | `true` |
+| enableManualRotation | 启用鼠标拖拽旋转 | `boolean` | `true` |
+| enableHoverRotation | 启用 hover 自动旋转 | `boolean` | `true` |
+| enableManualZoom | 启用滚轮缩放 | `boolean` | `true` |
+| ambientIntensity | 环境光强度 | `number` | `0.3` |
+| keyLightIntensity | 主光源强度 | `number` | `1` |
+| fillLightIntensity | 辅助光源强度 | `number` | `0.5` |
+| rimLightIntensity | 边缘光强度 | `number` | `0.8` |
+| environmentPreset | 环境贴图预设名 | `string` | `"forest"` |
+| autoFrame | 自动适配模型到视口 | `boolean` | `false` |
+| placeholderSrc | 加载前的占位图 | `string` | - |
+| showScreenshotButton | 显示截图按钮 | `boolean` | `true` |
+| fadeIn | 加载后淡入动画 | `boolean` | `false` |
+| autoRotate | 自动旋转 | `boolean` | `false` |
+| autoRotateSpeed | 自动旋转速度 | `number` | `0.35` |
+| onModelLoaded | 模型加载完成回调 | `() => void` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么只显示占位提示？
+当前项目中的组件为简化版本。要使用完整功能，需安装 `@react-three/fiber`、`@react-three/drei` 和 `three`，并参考 React Bits 原始实现完成 R3F 集成。
+
+### 支持哪些 3D 格式？
+完整版支持 GLB、GLTF、FBX 和 OBJ 格式。通过 `useGLTF` 和 `useFBX` 等 drei hooks 进行加载。
+
+### 如何显示加载进度？
+完整实现中包含 `useProgress` hook 显示加载进度条。当前占位版本不包含此功能。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/marketing-blocks/model-viewer` 导入。
+2. 完整功能需要安装 `@react-three/fiber`、`@react-three/drei` 和 `three`。
+3. `url` 为必填属性，指向模型文件地址。
+4. 当前版本为占位实现，仅显示提示信息。
+5. 要启用完整功能，请参考 React Bits 源项目的完整实现（约 470 行）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-model-viewer" />

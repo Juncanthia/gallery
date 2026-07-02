@@ -11,7 +11,7 @@ import type {
 
 import { cn } from "@/components/media/lib/utils"
 
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/core/separator"
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 
 interface ContentOverviewOverlayProps {

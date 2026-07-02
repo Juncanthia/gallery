@@ -9,7 +9,7 @@ import { COMPONENT_REGISTRY } from "../src/gallery/registry/index"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CONTENT_DIR = path.join(ROOT, "content/components")
-const UI_DIR = path.join(ROOT, "src/components/ui")
+const CORE_DIR = path.join(ROOT, "src/components/core")
 
 const errors: string[] = []
 
@@ -69,11 +69,11 @@ function checkInternalImportPath() {
 
 function parseShellTargets(): Map<string, string> {
   const map = new Map<string, string>()
-  for (const file of readdirSync(UI_DIR).filter((f) => f.endsWith(".tsx"))) {
-    const content = readFileSync(path.join(UI_DIR, file), "utf8")
+  for (const file of readdirSync(CORE_DIR).filter((f) => f.endsWith(".tsx"))) {
+    const content = readFileSync(path.join(CORE_DIR, file), "utf8")
     const match = content.match(/^export\s+(?:type\s+)?\{[^}]+\}\s+from\s+["'](@\/components\/[^"']+)["']/m)
     if (match) {
-      map.set(`@/components/ui/${file.replace(/\.tsx$/, "")}`, match[1])
+      map.set(`@/components/core/${file.replace(/\.tsx$/, "")}`, match[1])
     }
   }
   return map
@@ -92,11 +92,49 @@ function checkRegisteredShells() {
   }
 }
 
+function checkStaleVendorPaths() {
+  const stalePatterns = [
+    "@/components/ui/",
+    "@/components/_shared/",
+    "@/components/_primitives/",
+    "/gooseui/",
+    "/chamaac/",
+    "/react-bits/",
+    "/uselayouts/",
+    "/bklit/",
+    "/manifest/",
+    "/dice/",
+    "/sabraman/",
+    "/extend/",
+    "/limeplay/",
+    "/tool/",
+  ]
+
+  for (const item of COMPONENT_REGISTRY) {
+    for (const pattern of stalePatterns) {
+      if (item.internalImportPath.includes(pattern)) {
+        errors.push(`Stale vendor segment in internalImportPath for ${item.id}: ${item.internalImportPath}`)
+        break
+      }
+    }
+    for (const file of item.files) {
+      if (
+        file.path.includes("/src/components/ui/") ||
+        file.path.includes("/src/components/_shared/") ||
+        file.path.includes("/src/components/_primitives/")
+      ) {
+        errors.push(`Stale legacy path in files[].path for ${item.id}: ${file.path}`)
+      }
+    }
+  }
+}
+
 function main() {
   checkUniqueIds()
   checkDocsSlugExists()
   checkFilesExist()
   checkInternalImportPath()
+  checkStaleVendorPaths()
   checkRegisteredShells()
 
   if (errors.length > 0) {

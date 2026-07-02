@@ -1,0 +1,90 @@
+GhostCursor 带拖尾光晕效果的 Canvas 光标特效，支持渐隐动画、自定义颜色、辉光和自适应像素比。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要替代默认光标并添加拖尾光晕装饰效果时使用。
+常见场景：
+- 创意型页面的自定义光标装饰
+- 品牌色彩的光标定制
+- 需要柔和视觉反馈的交互页面
+不推荐：
+- 需要精确点击操作的界面（光晕可能干扰视觉）
+- 移动端（自动检测 touch 设备并使用较低像素预算）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/ghost-cursor" path="rb/ghost-cursor/basic" />
+
+```tsx
+import { GhostCursor } from "@/components/core/ghost-cursor"
+export default function Demo() {
+  return (
+    <div className="relative h-[400px] w-full rounded-lg bg-neutral-900">
+      <GhostCursor />
+    </div>
+  )
+}
+```
+
+### 自定义颜色与拖尾
+
+```tsx
+import { GhostCursor } from "@/components/core/ghost-cursor"
+
+export default function Demo() {
+  return (
+    <div className="relative h-[400px] w-full rounded-lg bg-neutral-950">
+      <GhostCursor
+        color="#FF6F37"
+        trailLength={80}
+        bloomStrength={0.2}
+        bloomRadius={1.5}
+        mixBlendMode="screen"
+        fadeDelayMs={2000}
+        fadeDurationMs={2000}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### GhostCursor
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 容器自定义类名 | `string` | - |
+| style | 容器内联样式 | `React.CSSProperties` | - |
+| trailLength | 拖尾历史的帧数（越大拖尾越长） | `number` | `50` |
+| inertia | 惯性系数（当前未实际使用，保留参数） | `number` | `0.5` |
+| grainIntensity | 噪点强度（当前未实际使用，保留参数） | `number` | `0.05` |
+| bloomStrength | 辉光强度 | `number` | `0.1` |
+| bloomRadius | 辉光半径 | `number` | `1.0` |
+| bloomThreshold | 辉光阈值（当前未实际使用，保留参数） | `number` | `0.025` |
+| brightness | 亮度系数 | `number` | `1` |
+| color | 光晕颜色（hex） | `string` | `"#B497CF"` |
+| mixBlendMode | CSS 混合模式 | `string` | `"screen"` |
+| edgeIntensity | 边缘淡化强度（当前未实际使用，保留参数） | `number` | `0` |
+| maxDevicePixelRatio | 最大设备像素比（上限约束） | `number` | `0.5` |
+| targetPixels | Canvas 目标像素预算 | `number` | touch 设备 0.9M / 桌面 1.3M |
+| fadeDelayMs | 光标停止后开始渐隐的延迟（ms） | `number` | touch 500 / 桌面 1000 |
+| fadeDurationMs | 渐隐动画持续时间（ms） | `number` | touch 1000 / 桌面 1500 |
+| zIndex | CSS z-index 层级 | `number` | `10` |
+
+<h2 id="faq">常见问题</h2>
+### 桌面端和移动端有什么区别？
+组件通过 `ontouchstart` 检测是否为触屏设备，自动调整 `targetPixels`（移动端更小）、`fadeDelay` 和 `fadeDuration`（移动端更短），以优化移动端性能和体验。
+
+### 为什么实际 Canvas 分辨率比容器小？
+组件使用 `maxDevicePixelRatio` 限制像素比上限（默认 0.5），并通过 `pixelBudget` 进一步约束，确保 Canvas 总像素不超过预算。这在低端设备上可显著提高帧率。
+
+### 光标停止后多久会消失？
+默认桌面端停止移动 1000ms 后开始渐隐，再经过 1500ms 完全消失。可通过 `fadeDelayMs` 和 `fadeDurationMs` 自定义。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/ghost-cursor` 导入。
+2. 纯 Canvas 2D 实现，无额外第三方依赖。
+3. 组件自动将父元素设置为 `position: relative`（如未设置），并将 Canvas 绝对定位铺满父元素。
+4. `color` 使用 hex 格式，组件内部转换为 rgba 用于径向渐变绘制。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-ghost-cursor" />

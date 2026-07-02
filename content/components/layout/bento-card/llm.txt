@@ -1,0 +1,162 @@
+---
+category: Components
+title: BentoCard
+subtitle: 便当卡片
+description: 仪表盘风格的便当卡片布局组件，内置侧边导航和动画内容切换。
+demo:
+  cols: 1
+group:
+  title: 布局
+  order: 1
+source:
+  component: src/components/layout/bento-card.tsx
+  ui: src/components/core/uselayouts-bento-card.tsx
+  docs: content/components/layout/bento-card/index.mdx
+  examples:
+    - content/components/layout/bento-card/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+  cva: false
+  radixSlot: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# BentoCard 便当卡片
+
+BentoCard 是一个仪表盘风格的便当卡片布局组件，内置侧边导航和动画内容切换。它是一个无 props 的自包含组件，渲染一个完整的多标签仪表盘面板。
+
+本组件来自 UseLayouts 集合，使用 motion/react 驱动交互动效，@hugeicons 提供图标，风格现代且富有活力。
+
+## 何时使用 {#when-to-use}
+
+当需要一个自包含的仪表盘展示面板时使用，尤其适合：
+
+- 团队项目概览、管理面板首页。
+- 多标签页内容切换，每页展示不同维度的数据或操作。
+- 需要交互动效的展示型卡片，提升页面活力。
+- 快速搭建后台管理面板的顶部仪表盘区域。
+
+BentoCard 包含四个内建标签页：
+
+- **Dashboard**：项目总览，展示团队性能分数、关键词数、积分余额。
+- **Management**：团队成员管理，展示用户列表及审批状态。
+- **Threads**：快捷操作卡片，创建 Page / Task，支持置顶项。
+- **Resources**：档案文件列表，展示文件名称、大小和类型。
+
+不推荐：
+
+- 需要高度自定义标签页或数据源的场景（当前不支持外部 props 注入）。
+- 纯数据展示表格为主的仪表盘（考虑使用 Table 或 Statistic 组件）。
+- 移动端首屏核心区域（组件设计偏向桌面和小屏平板）。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+BentoCard 无需传入任何 props，直接渲染即可获得完整的仪表盘面板。
+
+```tsx
+import { BentoCard } from "@/components/layout/bento-card"
+
+export default function Demo() {
+  return <BentoCard />
+}
+```
+
+## API {#api}
+
+BentoCard 为自包含组件，不接受外部 props。所有内部状态（activeTab 等）由组件自行管理。
+
+如需扩展，在 `src/components/layout/bento-card.tsx` 中修改以下内部定义：
+
+- `TABS`：标签页配置数组，定义标签 id、label、icon、header、description、badge。
+- `OverviewDashboard`：Dashboard 标签页的面板内容组件。
+- `ManagementDashboard`：Management 标签页的面板内容组件。
+- `ThreadsDashboard`：Threads 标签页的面板内容组件。
+- `ResourcesDashboard`：Resources 标签页的面板内容组件。
+
+## Semantic DOM {#semantic-dom}
+
+BentoCard 未使用 `data-slot` 语义属性暴露结构。组件由一系列 `div`、`button`、motion 动画元素组合而成。标签导航按钮和内容面板通过 React state 和 motion 的 `layoutId` 实现联动，不依赖语义标记。
+
+## 样式模型 {#styling-model}
+
+BentoCard 的所有样式直接通过 Tailwind CSS class 在组件内部定义，不依赖 CVA 或外部变体文件。
+
+核心样式策略：
+
+- 容器：`max-w-xl rounded-3xl border bg-card shadow-2xl`，hover 时有上浮和阴影增强效果。
+- 侧边栏：`w-36 border-r border-border/30`，包含标签按钮列表。
+- 内容区：`flex-1 bg-background`，包含 header 描述和面板内容。
+- 标签切换：motion LayoutGroup + layoutId 驱动背景指示器（`backgroundIndicator`）和侧边条（`sidebar-blocks/pill`）的动画过渡。
+- 内容切换：AnimatePresence + motion.div 驱动面板的淡入淡出和模糊过渡。
+
+## 主题变量 {#design-token}
+
+BentoCard 消费 Tailwind 主题变量和语义色 class。所有颜色通过 Tailwind class 引用，不依赖 css-in-js 或 ConfigProvider。
+
+常用变量来源：
+
+| 语义 | Tailwind / CSS token |
+| --- | --- |
+| 卡片背景 | `bg-card` |
+| 页面背景 | `bg-background` |
+| 前景文本 | `text-foreground` |
+| 弱化文本 | `text-muted-foreground` |
+| 主色强调 | `bg-primary` / `text-primary` |
+| 次级背景 | `bg-muted` / `bg-secondary` |
+| 边框 | `border-border` |
+
+## 可访问性 {#accessibility}
+
+- 标签按钮使用原生 `<button>` 元素，支持键盘导航。
+- 标签按钮有明确的 hover 和 active 视觉状态（`hover:text-foreground`）。
+- 文件列表项使用 `cursor-pointer` 提示可交互性。
+- 当前版本未提供 ARIA 标签（如 `aria-label`、`role="tablist"`），如需生产环境使用建议补充相应无障碍标注。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/layout/bento-card.tsx`：组件主体，包含 BentoCard、四个 Dashboard 子组件、TABS 配置。
+- `src/components/core/uselayouts-bento-card.tsx`：re-export 桥接文件，将 default export 转为命名 export `BentoCard`。
+
+关键行为：
+
+1. BentoCard 不接受外部 props，初始状态由内部 TABS 数组决定。
+2. 标签切换通过 `useState` 管理 activeTab，使用 `useMemo` 计算对应的面板内容。
+3. 动画依赖 motion/react：LayoutGroup 管理标签背景动画，AnimatePresence 管理面板内容过渡。
+4. 图标使用 @hugeicons/core-free-icons，通过 HugeiconsIcon 组件渲染。
+5. 面板内容组件均为函数组件，无额外 props 或 state。
+
+## FAQ {#faq}
+
+### BentoCard 可以自定义标签页吗？
+
+当前版本 BentoCard 的标签页和内容面板均为内建实现。如需自定义标签页或面板内容，在 `src/components/layout/bento-card.tsx` 中修改 `TABS` 配置和对应的 Dashboard 子组件。
+
+### BentoCard 适合移动端吗？
+
+BentoCard 内置响应式布局（`sm:` 断点），在移动端会调整间距和卡片高度。但由于包含多层内容嵌套，推荐在 `>=640px` 宽度下使用以获得最佳体验。
+
+### 如何修改 BentoCard 的样式？
+
+BentoCard 使用 Tailwind CSS 和 motion 实现样式与动画。通过修改 `src/components/layout/bento-card.tsx` 中的 class 和动画参数即可调整外观。如需全局调整，优先修改 Tailwind 主题变量而不是在调用处堆叠 className。
+
+### 为什么 BentoCard 没有 props？
+
+BentoCard 设计为一个开箱即用的演示型组件，所有内容均为内建。这是一种展示用设计模式，而非可配置的通用组件。如需可配置版本，建议以 BentoCard 源码为蓝本扩展。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 BentoCard 相关代码时，应遵守：
+
+1. 从 `@/components/layout/bento-card` 导入 `BentoCard`（named export）。
+2. 不要给 BentoCard 传递任何 props，组件自身管理全部状态。
+3. 如需引入其他依赖（motion、@hugeicons），从组件源码处参考正确的导入路径。
+4. BentoCard 依赖 motion/react 的 LayoutGroup 和 AnimatePresence，不要移除这些动画逻辑。
+5. 样式使用 Tailwind CSS class 内联定义，不引入 CVA 或其他样式管理方案。
+6. 不要引入 Ant Design 相关依赖（ConfigProvider、antd-style、@ant-design/icons 等）。

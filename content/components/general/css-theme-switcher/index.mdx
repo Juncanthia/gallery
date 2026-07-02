@@ -1,0 +1,121 @@
+CSSThemeSwitcher 基于 CSS `light-dark()` 函数和 `:has()` 选择器实现的纯 CSS 主题切换组件，无需 JavaScript 状态管理即可在 light / dark / system 三种模式间切换。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为页面或应用提供主题切换功能（亮色/暗色/跟随系统）时使用。该组件利用浏览器原生 CSS `light-dark()` 函数驱动主题颜色变化，通过 `:has()` 选择器响应 radio 按钮状态，无需 JavaScript 事件处理或全局状态管理。
+
+常见场景：
+
+- 网站导航栏或设置面板中的主题切换入口。
+- 文档站点、博客等需要亮暗色主题的场景。
+- 展示 CSS `light-dark()` 和 `:has()` 选择器现代特性的 demo 页面。
+
+不推荐：
+
+- 需要跨页面持久化主题偏好的场景（组件不保存用户选择）。
+- 需要复杂主题配置（多色主题、自定义 CSS 变量集合）的场景。
+- 需要兼容旧版浏览器的场景（`light-dark()` 和 `:has()` 仅在现代浏览器中可用）。
+
+CSSThemeSwitcher 通过 radio 按钮组实现 light / dark / system 三态切换。选中状态由 CSS `:checked` 伪类控制样式高亮，实际主题效果由 CSS `light-dark()` 函数计算颜色值。组件同时导出 `CSSThemeSwitcherStyles` 用于注入示例样式。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+CSSThemeSwitcher 渲染三个 radio 选项（Light / Dark / System），分别对应 Sun、Moon、Monitor 图标。默认选中 Light。
+
+<ComponentShowcase
+  id="general/theme-switcher"
+  path="general/theme-switcher/basic"
+/>
+
+```tsx
+import { CSSThemeSwitcher } from "@/components/general/theme-switcher"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center py-8"&gt;
+      &lt;CSSThemeSwitcher /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 配合 CSS light-dark() 样式
+
+在页面根元素使用 `CSSThemeSwitcherStyles` 注入 `light-dark()` 示例样式，配合 `:has()` 选择器根据 radio 选中状态切换主题。
+
+```tsx
+import { CSSThemeSwitcher, CSSThemeSwitcherStyles } from "@/components/general/theme-switcher"
+
+export default function Page() {
+  return (
+    &lt;div className="relative min-h-screen"&gt;
+      &lt;CSSThemeSwitcherStyles /&gt;
+      &lt;div className="flex items-center justify-center py-8"&gt;
+        &lt;CSSThemeSwitcher /&gt;
+      &lt;/div&gt;
+      &lt;div className="light-dark-demo p-8"&gt;
+        这段文字的样式由 CSS light-dark() 函数驱动
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CSSThemeSwitcher
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 容器附加 CSS 类名 | `string` | - |
+
+CSSThemeSwitcher 使用 radio 按钮组实现主题选择，通过 `name="theme"` 保证互斥。内部图标（SunIcon、MoonIcon、MonitorIcon）为私有组件，不对外暴露。
+
+### CSSThemeSwitcherStyles
+
+无属性。渲染为 `null`，通过 `useGlobalStyles` 将 `light-dark()` 示例 CSS 注入文档，配合 `CSSThemeSwitcher` 的 `:has()` 选择器实现主题切换视觉效果。注入的样式 ID 为 `theme-switcher-styles`。
+
+CSSThemeSwitcher 基于 CSS `light-dark()` 函数和 `:has()` 选择器实现纯 CSS 主题切换，无需 `useState`、Context 或 `next-themes` 等状态管理方案。
+
+<h2 id="faq">常见问题</h2>
+
+### 和常规主题切换组件有什么区别？
+
+CSSThemeSwitcher 完全不使用 JavaScript 状态管理（如 `useState`、React Context、`next-themes`）。主题颜色变化由 CSS `light-dark()` 函数计算，选中状态通过 `:has()` 选择器传递到祖先元素。这是一种实验性方案，用于演示现代 CSS 能力，不建议在生产环境中替代完善的主题系统。
+
+### 如何持久化用户主题选择？
+
+本组件不保存任何状态。如需持久化主题偏好，需在外部配合 `localStorage` 或 Cookie 方案，但这样会失去纯 CSS 驱动的特性。实际上生产环境建议直接使用成熟的方案如 `next-themes`。
+
+### 浏览器兼容性如何？
+
+CSS `light-dark()` 函数和 `:has()` 选择器需要较新版本的浏览器：
+- `light-dark()`：Chrome 123+、Firefox 120+、Safari 17.5+
+- `:has()`：Chrome 105+、Safari 15.4+、Firefox 121+
+
+在不支持的浏览器中，`light-dark()` 会回退到第一个颜色值（即 light 模式颜色），`:has()` 选择器将完全不起作用。
+
+### 如何自定义选项图标？
+
+图标（SunIcon、MoonIcon、MonitorIcon）为组件内部实现，不对外暴露替换接口。如需自定义图标，建议 fork 组件源码并替换对应的 SVG 图标实现。
+
+### CSSThemeSwitcherStyles 的作用是什么？
+
+`CSSThemeSwitcherStyles` 通过 `useGlobalStyles` hook 将 `light-dark()` 示例样式注入到文档的 `<head>` 中。它定义了 `.light-dark-demo` 类的颜色规则，演示 `light-dark()` 函数如何根据主题自动切换颜色。在真实项目中使用时，应将这些样式整合到项目的 CSS 变量体系中。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 CSSThemeSwitcher 代码时：
+
+1. 从 `@/components/general/theme-switcher` 导入 `CSSThemeSwitcher`。
+2. 可选传入 `className` 属性调整容器样式。
+3. 如需配合 `light-dark()` 样式效果，同时导入并使用 `CSSThemeSwitcherStyles` 注入样式。
+4. 不要在调用侧自行实现 radio 按钮组或图标逻辑。
+5. 不要使用 `useState`、`useContext` 或 `next-themes` 替代本组件的纯 CSS 方案。
+6. 注意 `light-dark()` 和 `:has()` 仅在较新版本的浏览器中可用，生成代码时应考虑兼容性说明。
+
+<h2 id="source">源码</h2>
+
+&lt;SourceViewer componentId="general/theme-switcher" /&gt;

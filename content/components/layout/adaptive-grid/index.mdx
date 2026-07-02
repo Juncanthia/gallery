@@ -1,0 +1,116 @@
+AdaptiveGrid 是一个基于 CSS Container Queries 的自适应网格布局组件。通过 `@container` 和 `:has()` 选择器实现容器级响应，网格列数随容器宽度自动调整，无需手动配置断点。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示卡片网格列表，且希望布局随父容器（而非视口）自适应调整时使用。适用于卡片墙、商品列表、图库等需要灵活网格排布的场景。
+
+常见场景：
+
+- 仪表盘或 CMS 面板中的卡片网格布局。
+- 商品列表或图库的响应式展示。
+- 仪表盘统计卡片的自适应排布。
+- 需要嵌套在可调整大小的面板中的网格布局。
+
+不推荐：
+
+- 需要服务端渲染精确列数的场景（Container Queries 依赖客户端布局）。
+- 对 CSS `:has()` 不兼容的旧浏览器环境。
+- 需要严格等宽等高的固定网格场景。
+
+AdaptiveGrid 通过 `minCardWidth` 控制自适应列宽，`AdaptiveCard` 通过 `image` 属性控制是否存在图片从而切换布局模式。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+AdaptiveGrid 包裹多个 `AdaptiveCard`，每张卡片可包含图片、标题和内容。无图片的卡片自动切换为纯文本纵向布局。
+
+<ComponentShowcase
+  id="layout/adaptive-grid"
+  path="layout/adaptive-grid/basic"
+/>
+
+```tsx
+import { AdaptiveGrid, AdaptiveCard } from "@/components/layout/adaptive-grid"
+
+export default function Demo() {
+  return (
+    <AdaptiveGrid>
+      <AdaptiveCard
+        image="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
+        title="Mountain Sunrise"
+      >
+        Golden light breaks over snow-capped peaks.
+      </AdaptiveCard>
+      <AdaptiveCard title="Text-Only Card">
+        This card renders as a flex column layout.
+      </AdaptiveCard>
+    </AdaptiveGrid>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### AdaptiveGrid
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 子节点，通常为 `AdaptiveCard` | `React.ReactNode` | - |
+| className | 附加 CSS 类名 | `string` | - |
+| minCardWidth | 最小卡片宽度（像素） | `number` | `280` |
+
+AdaptiveGrid 使用 `@container` 查询响应容器宽度变化。默认断点：`@sm`（2 列）、`@lg`（3 列）、`@2xl`（4 列）。`minCardWidth` 通过 CSS 自定义属性 `--min-card-width` 注入，可用于子卡片的 `min-width` 控制。
+
+### AdaptiveCard
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片内容区域 | `React.ReactNode` | - |
+| className | 附加 CSS 类名 | `string` | - |
+| image | 卡片配图 URL | `string` | - |
+| title | 卡片标题 | `string` | - |
+
+AdaptiveCard 通过 `:has(img)` 选择器自动切换布局模式。有图片时使用 CSS Grid（`@sm` 下 `140px` 侧图、`@md` 下 `200px` 侧图），无图片时使用 flex 纵向布局。图片区域在 `@sm` 以上占满高度（`aspect-auto` + `h-full`），窄屏时使用 `aspect-video` 比例。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何控制网格列数？
+
+列数由容器宽度自动决定，通过 CSS 断点控制：`@sm`（2 列）、`@lg`（3 列）、`@2xl`（4 列）。如需自定义，通过 `className` 覆盖断点样式。
+
+```tsx
+<AdaptiveGrid className="@sm:grid-cols-1 @lg:grid-cols-2 @2xl:grid-cols-3">
+```
+
+### 卡片如何切换横排/纵排布局？
+
+`AdaptiveCard` 内部使用 CSS `:has(img)` 选择器：有 `<img>` 时自动使用 Grid 横排布局，无 `<img>` 时使用 flex 纵排布局。无需手动传参。
+
+### 与视口媒体查询的区别？
+
+传统媒体查询（`@media`）响应浏览器视口宽度，`@container` 响应父容器宽度。当网格被放置在侧边栏或可调整面板中时，Container Queries 能正确响应父容器变化，而视口媒体查询不会。
+
+### 如何自定义卡片最小宽度？
+
+通过 `AdaptiveGrid` 的 `minCardWidth` 属性设置，以像素为单位。该值会注入为 CSS 自定义属性 `--min-card-width`。
+
+```tsx
+<AdaptiveGrid minCardWidth={320}>
+```
+
+### 浏览器兼容性如何？
+
+依赖 CSS Container Queries 和 `:has()` 选择器，需要现代浏览器支持（Chrome 105+、Safari 15.4+、Firefox 121+）。旧浏览器中退化为单列布局。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/layout/adaptive-grid` 导入 `AdaptiveGrid` 和 `AdaptiveCard`。
+2. 使用 `AdaptiveCard` 的 `image` 和 `title` 属性控制卡片内容，不要自行拼装卡片布局。
+3. 布局切换由 CSS `:has()` 自动完成，不要在业务层手动判断有无图片来切换 className。
+4. 不要手动设置网格列数 className（如 `grid-cols-3`），由 Container Queries 自动响应。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="layout/adaptive-grid" />

@@ -47,13 +47,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/components/core/card";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+} from "@/components/core/context-menu";
 import { cn } from "@/lib/utils";
 
 const draggingAtom = atom(false);

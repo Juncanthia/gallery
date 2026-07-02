@@ -1,0 +1,229 @@
+BillingHistory 账单历史。以表格形式展示用户的账单和支付记录，包含账单编号、日期、金额、支付状态等信息，支持按状态筛选和日期范围过滤。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要向用户展示其历史账单和支付记录时使用。适用于：
+
+- 用户中心或账户设置的账单历史页面。
+- SaaS 产品的订阅计费记录展示。
+- 电商平台的订单支付历史。
+- 发票管理页面，提供账单列表和状态追踪。
+
+BillingHistory 以结构化表格展示账单信息：
+
+- 每行记录包含账单编号、日期、描述、金额和支付状态。
+- 支付状态以彩色 Badge 标识（已支付、待处理、已退款、逾期等）。
+- 支持日期范围过滤和支付状态筛选。
+- 响应式布局，移动端自动切换为卡片列表。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础账单历史
+
+展示默认的账单历史列表，包含多条账单记录的完整表格。
+
+<ComponentShowcase
+  id="templates/payment/billing-history"
+  path="templates/payment/billing-history/basic"
+/>
+
+```tsx
+import { BillingHistory } from "@/components/templates/payment/billing-history"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-4xl">
+      <BillingHistory />
+    </div>
+  )
+}
+```
+
+### 自定义数据
+
+通过 `data` prop 传入自定义账单记录。
+
+```tsx
+import { BillingHistory } from "@/components/templates/payment/billing-history"
+
+const sampleData = {
+  invoices: [
+    {
+      id: "INV-2024-001",
+      date: "2024-06-15",
+      description: "Pro Plan — Monthly",
+      amount: 29.99,
+      blocks/status: "paid",
+    },
+    {
+      id: "INV-2024-002",
+      date: "2024-07-15",
+      description: "Pro Plan — Monthly",
+      amount: 29.99,
+      blocks/status: "paid",
+    },
+    {
+      id: "INV-2024-003",
+      date: "2024-08-15",
+      description: "Pro Plan — Monthly",
+      amount: 29.99,
+      blocks/status: "pending",
+    },
+    {
+      id: "INV-2024-004",
+      date: "2024-08-20",
+      description: "Enterprise Add-on",
+      amount: 99.00,
+      blocks/status: "refunded",
+    },
+  ],
+}
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-4xl">
+      <BillingHistory
+        data={sampleData}
+        appearance={{ currency: "USD" }}
+        actions={{
+          onViewInvoice: (invoiceId) => console.log("View invoice:", invoiceId),
+        }}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BillingHistory
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 账单数据配置 | `object` | 内置 Demo 数据 |
+| data.invoices | 账单记录列表 | `Invoice[]` | — |
+| actions | 操作回调配置 | `object` | — |
+| actions.onViewInvoice | 点击查看账单详情回调，接收账单 ID | `(invoiceId: string) =&gt; void` | — |
+| actions.onDownload | 点击下载账单回调，接收账单 ID | `(invoiceId: string) =&gt; void` | — |
+| appearance | 外观配置 | `object` | — |
+| appearance.currency | 货币代码，用于金额格式化 | `string` | `"USD"` |
+| appearance.showFilters | 是否显示日期范围和状态筛选器 | `boolean` | `true` |
+| control | 控制配置 | `object` | — |
+| control.isLoading | 表格加载状态，显示骨架屏 | `boolean` | `false` |
+| control.errorMessage | 加载失败时展示的错误信息 | `string` | — |
+
+### Invoice
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 账单唯一标识 | `string` | 是 |
+| date | 账单日期（ISO 日期字符串） | `string` | 是 |
+| description | 账单描述或项目名称 | `string` | 否 |
+| amount | 账单金额 | `number` | 是 |
+| blocks/status | 支付状态：`"paid"` \| `"pending"` \| `"refunded"` \| `"overdue"` | `string` | 否 |
+
+### 支付状态映射
+
+| 状态值 | 中文标签 | Badge 颜色 |
+| --- | --- | --- |
+| `paid` | 已支付 | 绿色 |
+| `pending` | 待处理 | 黄色 |
+| `refunded` | 已退款 | 蓝色 |
+| `overdue` | 已逾期 | 红色 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何监听查看账单的操作？
+
+通过 `actions.onViewInvoice` 回调处理：
+
+```tsx
+&lt;BillingHistory
+  data={billingData}
+  actions={{
+    onViewInvoice: (invoiceId) => {
+      router.push(`/invoices/${invoiceId}`)
+    },
+  }}
+/&gt;
+```
+
+### 如何处理账单下载？
+
+通过 `actions.onDownload` 回调：
+
+```tsx
+&lt;BillingHistory
+  data={billingData}
+  actions={{
+    onDownload: (invoiceId) => {
+      window.open(`/api/invoices/${invoiceId}/pdf`, "_blank")
+    },
+  }}
+/&gt;
+```
+
+### 如何显示加载状态？
+
+通过 `control.isLoading` 控制：
+
+```tsx
+const [loading, setLoading] = useState(true)
+
+useEffect(() => {
+  fetchInvoices().then((data) => {
+    setInvoices(data)
+    setLoading(false)
+  })
+}, [])
+
+&lt;BillingHistory
+  data={{ invoices }}
+  control={{ isLoading: loading }}
+/&gt;
+```
+
+### 如何自定义货币格式？
+
+通过 `appearance.currency` 指定 ISO 4217 货币代码：
+
+```tsx
+&lt;BillingHistory
+  data={billingData}
+  appearance={{ currency: "EUR" }}
+/&gt;
+```
+
+组件内部使用 `Intl.NumberFormat` 进行格式化。
+
+### 如何隐藏筛选器？
+
+设置 `appearance.showFilters` 为 `false`：
+
+```tsx
+&lt;BillingHistory
+  data={billingData}
+  appearance={{ showFilters: false }}
+/&gt;
+```
+
+### 如何处理空状态？
+
+当 `data.invoices` 为空数组时，组件自动展示空状态插图和引导文案，提示用户暂无账单记录。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 BillingHistory 代码时：
+
+1. 从 `@/components/templates/payment/billing-history` 导入 `BillingHistory`。
+2. 通过 `data.invoices` 传入账单记录数组，每条记录必须包含 `id`、`date`、`amount`。
+3. 支付状态使用 `"paid"`、`"pending"`、`"refunded"`、`"overdue"` 四个枚举值。
+4. 查看和下载操作通过 `actions.onViewInvoice` 和 `actions.onDownload` 处理。
+5. 加载状态通过 `control.isLoading` 控制，`true` 时显示骨架屏。
+6. 错误状态通过 `control.errorMessage` 展示。
+7. 不要引入 Ant Design、ConfigProvider 或 css-in-js 相关依赖。
+8. 不要复刻或重新实现 BillingHistory 的内部逻辑；它是一个页面模板组件，应直接使用。
+
+<h2 id="source">源码</h2>
+
+&lt;SourceViewer componentId="templates/payment/billing-history" /&gt;

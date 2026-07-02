@@ -1,0 +1,159 @@
+Space 间距。控制子元素之间的统一间距，支持水平和垂直排列、自定义间距值、分隔符以及换行。子元素被自动包裹以避免 margin 冲突。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在多个元素之间保持统一间距时使用，避免逐个设置 margin 或 gap。Space 自动将每个子元素包裹在独立的容器中，确保间距一致且最后一个元素不会有多余间距。
+
+常见场景：
+- 按钮组之间的间距
+- 表单字段之间的排列
+- 带分隔符的标签列表（如面包屑导航）
+- 操作栏中按钮 + 下拉菜单的排列
+- 内联图标或徽标的排列
+
+不推荐：
+- 手动给每个子元素添加 `margin-right` 或 `gap`，会导致最后一个元素多余间距或不一致
+- 在需要完整 Flexbox 布局控制的场景使用 Space（如需要 `justify-between`），应使用 Flex 组件
+- 将 Space 用于列表项的容器（应使用 `<ul>` + CSS）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+支持水平和垂直排列，内置 `small`、`default`、`large` 三种预设间距，以及自定义像素值和分隔符。
+
+<ComponentShowcase
+  id="space"
+  path="space/basic"
+/>
+
+```tsx
+import { Space } from "@/components/core/space"
+import { Button } from "@/components/core/button"
+import { Badge } from "@/components/core/badge"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">水平排列</p>
+        <Space>
+          <Button size="small">按钮一</Button>
+          <Button size="small">按钮二</Button>
+          <Badge>徽标</Badge>
+        </Space>
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">垂直 + 分隔符</p>
+        <Space direction="vertical" size="small" separator="|">
+          <span className="text-sm">项目 A</span>
+          <span className="text-sm">项目 B</span>
+          <span className="text-sm">项目 C</span>
+        </Space>
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">大间距</p>
+        <Space size="large">
+          <Button size="small">确认</Button>
+          <Button size="small" variant="outlined">取消</Button>
+        </Space>
+      </div>
+    </div>
+  )
+}
+```
+
+### 自定义间距与换行
+
+传入数字自定义间距（px），或使用数组分别设置水平和垂直间距。`wrap` 允许水平排列时自动换行。
+
+```tsx
+import { Space } from "@/components/core/space"
+import { Badge } from "@/components/core/badge"
+
+export default function Demo() {
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">自定义 px 间距</p>
+        <Space size={16}>
+          <Badge>标签 A</Badge>
+          <Badge variant="secondary">标签 B</Badge>
+          <Badge variant="outline">标签 C</Badge>
+        </Space>
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">数组分别控制水平和垂直间距</p>
+        <Space size={[24, 8]} wrap>
+          <Badge>元素 1</Badge>
+          <Badge variant="secondary">元素 2</Badge>
+          <Badge variant="outline">元素 3</Badge>
+          <Badge>元素 4</Badge>
+          <Badge variant="secondary">元素 5</Badge>
+        </Space>
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Space
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| direction | 排列方向，也可用 `orientation` 或 `vertical` 简写 | `"horizontal"` \| `"vertical"` | `"horizontal"` |
+| orientation | `direction` 的别名 | `"horizontal"` \| `"vertical"` | - |
+| vertical | 纵向排列简写，等于 `direction="vertical"` | `boolean` | `false` |
+| size | 间距大小。预设值或数字 px。数组格式 `[colGap, rowGap]` 分别设置水平和垂直间距 | `"sm"` \| `"small"` \| `"default"` \| `"middle"` \| `"lg"` \| `"large"` \| `number` \| `[SpaceSize, SpaceSize]` | `"default"` |
+| align | 交叉轴对齐方式 | `"start"` \| `"center"` \| `"end"` \| `"baseline"` | 水平时 `center`，垂直时 `start` |
+| separator | 子元素之间的分隔符 | `React.ReactNode` | - |
+| split | `separator` 的别名（完全等效） | `React.ReactNode` | - |
+| block | 是否占满父容器宽度（`flex` 而非 `inline-flex`） | `boolean` | `false` |
+| wrap | 是否允许换行（仅水平排列时生效） | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+
+预设间距映射：
+- `"sm"` / `"small"`：`0.375rem`（6px）
+- `"default"` / `"middle"`：`0.625rem`（10px）
+- `"lg"` / `"large"`：`1rem`（16px）
+- 传入数字时直接作为 CSS gap 的 px 值
+
+子元素被自动包裹在 `data-slot="space-item"` 的 `<div>` 中，`null`/`undefined`/`false` 的子元素会被自动过滤。
+
+<h2 id="faq">常见问题</h2>
+
+### Space 与 Flex 有什么区别？
+
+- **Space**：专注间距管理，子元素自动包裹避免 margin 冲突，内置 separator 分隔符。适合已有顺序的元素排列。
+- **Flex**：通用弹性布局，覆盖完整的 Flexbox 属性（justify、wrap、align 等）。适合组件内部的结构布局。
+
+### 如何使用自定义间距值？
+
+传入数字即可（单位 px），或使用数组分别设置水平和垂直间距：
+
+```tsx
+<Space size={24}>水平间距 24px</Space>
+<Space size={[16, 8]}>水平间距 16px，垂直间距 8px</Space>
+```
+
+### separator 和 split 的区别？
+
+两个属性完全等效，内部合并为同一逻辑。推荐使用 `separator`，命名更直观。
+
+### 空的 children 元素会怎样？
+
+Space 会自动过滤掉 `null`/`undefined`/`false` 的子元素，避免产生额外的间距或分隔符。如果所有子元素都被过滤，Space 返回 `null` 不渲染任何内容。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/space` 导入，不要从 `antd` 导入。
+2. 间距通过 `size` 属性统一管理，不要手动给子元素加 margin。
+3. 带分隔符的列表使用 `separator` 属性，不要手动在元素间插入分隔符。
+4. 纵向排列使用 `direction="vertical"` 或 `vertical` 简写。
+5. 只使用本地源码中存在的 props，不生成 Ant Design 专属配置。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="space" />

@@ -1,0 +1,163 @@
+RevealOnScroll 滚动揭示组件，使用 CSS scroll-driven animation（`animation-timeline: view()`）在元素进入视口时自动触发进入动画，零 JavaScript 开销。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在元素滚动进入视口时展示揭示动画效果时使用，常见于 Landing Page、营销页面、作品集展示等场景。
+
+- 首页模块逐块揭示，增强视觉层次感。
+- 列表项滚动加载时的入场动画。
+- 图文内容的分步展示。
+- 营销页面的动效增强。
+
+RevealOnScroll 是纯 CSS 实现，使用 `animation-timeline: view()` 在合成器线程运行，无 JavaScript 计算开销。支持五种动画方向（up / down / left / right / fade），通过 `delay` 和 `duration` 控制动画时序。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+在滚动容器内包裹子元素，元素进入视口时自动触发动画。支持五种方向：up、down、left、right、fade。
+
+<ComponentShowcase
+  id="effects/interactions/reveal-on-scroll"
+  path="effects/interactions/reveal-on-scroll/basic"
+/>
+
+```tsx
+import { RevealOnScroll } from "@/components/effects/interactions/reveal-on-scroll"
+
+export default function Demo() {
+  return (
+    <div className="h-96 overflow-y-auto rounded border p-4 space-y-6">
+      <RevealOnScroll direction="up">
+        <div className="rounded bg-blue-500 p-6 text-white text-center">
+          从下方滑入
+        </div>
+      </RevealOnScroll>
+    </div>
+  )
+}
+```
+
+### 自定义延时与时长
+
+通过 `delay` 设置动画延迟（ms），`duration` 设置动画时长（ms）。
+
+```tsx
+import { RevealOnScroll } from "@/components/effects/interactions/reveal-on-scroll"
+
+export default function Demo() {
+  return (
+    <div className="h-80 overflow-y-auto rounded border p-4 space-y-6">
+      <div className="h-16" />
+      <RevealOnScroll direction="up" delay={200} duration={800}>
+        <div className="rounded bg-blue-500 p-6 text-white text-center">
+          延迟 200ms，持续 800ms
+        </div>
+      </RevealOnScroll>
+      <RevealOnScroll direction="up" delay={500} duration={400}>
+        <div className="rounded bg-green-500 p-6 text-white text-center">
+          延迟 500ms，持续 400ms
+        </div>
+      </RevealOnScroll>
+      <div className="h-16" />
+    </div>
+  )
+}
+```
+
+### 附加 className
+
+通过 `className` 附加 Tailwind 类名，自定义包裹容器的样式。
+
+```tsx
+import { RevealOnScroll } from "@/components/effects/interactions/reveal-on-scroll"
+
+export default function Demo() {
+  return (
+    <div className="h-80 overflow-y-auto rounded border p-4 space-y-6">
+      <div className="h-16" />
+      <RevealOnScroll direction="fade" className="p-4 border rounded-lg bg-muted">
+        <p className="text-sm">通过 className 为包裹容器添加样式</p>
+      </RevealOnScroll>
+      <div className="h-16" />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### RevealOnScroll
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 子元素内容 | `React.ReactNode` | - |
+| direction | 动画方向 | `"up"` \| `"down"` \| `"left"` \| `"right"` \| `"fade"` | `"up"` |
+| delay | 动画延迟（ms） | `number` | `0` |
+| duration | 动画持续时间（ms） | `number` | `600` |
+| className | 附加样式类名 | `string` | - |
+
+组件使用 CSS `animation-timeline: view()` 自动检测元素与视口的交叉状态。`animationRange: "entry 0% cover 40%"` 表示元素从刚进入视口到覆盖 40% 的区间内完成动画。
+
+### RevealOnScrollStyles
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| （无属性） | 注入全局 CSS 关键帧样式 | - | - |
+
+RevealOnScrollStyles 必须在应用根组件中渲染一次，用于注入动画关键帧（`@keyframes reveal-up` 等）。仅在从 gooseui 内部路径直接导入时可用。
+
+<h2 id="faq">常见问题</h2>
+
+### 哪些浏览器支持 CSS scroll-driven animation？
+
+`animation-timeline: view()` 在 Chrome 115+、Edge 115+、Opera 101+ 中原生支持。Firefox 和 Safari 目前尚未支持。在不支持的浏览器中元素会直接显示，无动画效果，属渐进增强。
+
+### 为什么使用 CSS scroll-driven animation 而非 Intersection Observer？
+
+CSS scroll-driven animation 完全运行在浏览器合成器线程中，不会触发 JavaScript 主线程重排重绘，性能远优于 `IntersectionObserver` + `useState` + CSS transition 的传统方案。零帧丢失风险。
+
+### 动画位移距离是多少？
+
+每种方向的位移固定为 40px：
+- up：`translateY(40px)` → `translateY(0)`
+- down：`translateY(-40px)` → `translateY(0)`
+- left：`translateX(40px)` → `translateX(0)`
+- right：`translateX(-40px)` → `translateX(0)`
+- fade：仅透明度变化，无位移
+
+位移距离不可通过 props 自定义。如需自定义距离，可通过 `className` 覆盖关键帧样式。
+
+### delay 和 duration 对 scroll-driven animation 有何影响？
+
+在 `animation-timeline: view()` 模式下，`animationDelay` 和 `animationDuration` 仍然生效：`delay` 控制动画在滚动进度中的起始偏移，`duration` 控制动画完成的滚动距离。这是 CSS scroll-driven animation 规范定义的行为，与传统时间轴动画有所不同。
+
+### 揭示动画是否会重复触发？
+
+当元素离开视口后再重新进入时，动画会重新触发。这是因为 `animation-timeline: view()` 绑定的是视口交叉状态，元素每次进出视口都会重新计算动画进度。
+
+### 是否需要手动引入 RevealOnScrollStyles？
+
+通过 `@/components/effects/interactions/reveal-on-scroll` 导入时，仅导出 `RevealOnScroll` 组件。动画关键帧需通过 `RevealOnScrollStyles` 注入，该组件需从 gooseui 内部路径直接导入并在应用根组件中渲染一次。若未注入样式，元素将直接显示无动画。
+
+### 容器内滚动如何实现？
+
+`animation-timeline: view()` 自动跟踪最近的滚动祖先容器（scroll container）。无需额外配置即可在任意滚动容器内工作，包括 `overflow-y: auto` 的 div。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 RevealOnScroll 代码时：
+
+1. 从 `@/components/effects/interactions/reveal-on-scroll` 导入 `RevealOnScroll`。
+2. 默认方向为 `up`，无需任何属性即可使用：`&lt;RevealOnScroll&gt;{children}&lt;/RevealOnScroll&gt;`。
+3. 支持五种方向：`up` / `down` / `left` / `right` / `fade`，通过 `direction` 属性选择。
+4. 这是纯 CSS 实现（`animation-timeline: view()`），零 JavaScript 性能开销。不要用 `IntersectionObserver` + `useState` + CSS transition 方案替代。
+5. 不要引入 AOS、ScrollReveal、sal.js 或任何第三方滚动揭示库。
+6. `delay` 和 `duration` 单位为毫秒，在 scroll-driven animation 中代表滚动进度偏移和滚动距离范围。
+7. 位移距离固定为 40px，不可通过 props 自定义。如需自定义距离，使用 `className` 覆盖关键帧。
+8. 应用根组件中需渲染一次 `RevealOnScrollStyles`（从 gooseui 内部路径导入）以注入动画关键帧。
+9. 组件不限制子元素类型，可以是任意 React 节点。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="effects/interactions/reveal-on-scroll" />

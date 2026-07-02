@@ -1,0 +1,114 @@
+BalancedHeading 基于 CSS `text-wrap: balance` 实现自动均衡的多行标题排版，避免传统标题换行时最后一行文字过少的问题。同时提供 PrettyParagraph（`text-wrap: pretty`）和 BalancedText（通用 `text-wrap` 模式）组件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要让多行标题文字在视觉上均衡分布，而非出现"第一行满、最后一行空"的断行效果时使用。
+
+常见场景：
+
+- 页面主标题或区块标题，文本恰好跨两到三行。
+- Hero 区域的大标题，需要在不同屏幕宽度下保持均衡断行。
+- 段落文本需要避免孤行（orphan），使用 PrettyParagraph 组件。
+- 任意行内文本需要细粒度控制 `text-wrap` 模式（`balance` / `pretty` / `stable`），使用 BalancedText 组件。
+
+BalancedHeading 使用浏览器原生的 `text-wrap: balance` CSS 属性，无需 JavaScript 计算。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+BalancedHeading 支持 h1 到 h6 六种标题级别，默认为 h2。传入 `as` 属性切换级别，`children` 为标题文本。
+
+<ComponentShowcase
+  id="effects/text/balanced-text"
+  path="effects/text/balanced-text/basic"
+/>
+
+```tsx
+import { BalancedHeading } from "@/components/effects/text/balanced-text"
+
+export default function Demo() {
+  return (
+    <div className="space-y-6 max-w-lg">
+      <BalancedHeading as="h1">
+        BalancedHeading 使用 CSS text-wrap: balance 自动均衡多行标题排版
+      </BalancedHeading>
+      <BalancedHeading as="h2">
+        当标题文本跨多行时，text-wrap: balance 让每行宽度尽量接近
+      </BalancedHeading>
+      <BalancedHeading as="h3">
+        告别最后一行只剩两个字的尴尬断行，提升排版质感
+      </BalancedHeading>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BalancedHeading
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 标题文本内容 | `React.ReactNode` | - |
+| as | 标题级别 | `h1` \| `h2` \| `h3` \| `h4` \| `h5` \| `h6` | `h2` |
+| className | 附加样式类名 | `string` | - |
+
+不同级别有对应的默认字体大小（Tailwind CSS）：h1 为 `text-4xl md:text-5xl lg:text-6xl`，h2 为 `text-3xl md:text-4xl`，依次递减至 h6 为 `text-base md:text-lg`。所有级别默认 `font-bold tracking-tight`。
+
+### PrettyParagraph
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 段落文本内容 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+
+PrettyParagraph 应用 `text-wrap: pretty` 和 `leading-relaxed`，适合正文排版，防止段落末尾出现孤行。
+
+### BalancedText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 行内文本内容 | `React.ReactNode` | - |
+| mode | text-wrap 模式 | `balance` \| `pretty` \| `stable` | `balance` |
+| className | 附加样式类名 | `string` | - |
+
+BalancedText 渲染为 `&lt;span&gt;` 元素，适用于非标题的行内文本，需要细粒度控制 `text-wrap` 行为时使用。
+
+<h2 id="faq">常见问题</h2>
+
+### text-wrap: balance 和 text-wrap: pretty 有什么区别？
+
+`balance` 针对标题文本，将多行文字均衡分布，使得每行宽度大致相等。`pretty` 针对正文段落，防止段落最后一行出现孤行（orphan），即最后一行只有一个或两个单词。`stable` 保持浏览器默认的换行行为。
+
+### 哪些浏览器支持？
+
+`text-wrap: balance` 在 Chrome 114+、Edge 114+、Firefox 121+、Safari 17.5+ 中可用。`text-wrap: pretty` 在 Chrome 117+、Edge 117+、Safari 17.5+ 中可用。在不支持的浏览器中，文本会以默认换行方式显示，不会影响可读性。
+
+### 如何自定义标题样式？
+
+通过 `className` 传入自定义样式类名，会与组件默认样式合并。如需全局调整，建议修改 `src/components/gooseui/components/ui/balanced-text.tsx` 中的默认样式。
+
+### BalancedHeading 和 BalacendText 有什么不同？
+
+BalancedHeading 渲染为语义化的标题元素（h1-h6），自带 `font-bold tracking-tight` 和按级别的字体大小，适用场景明确。BalancedText 渲染为 `&lt;span&gt;`，仅应用指定的 `text-wrap` 模式，不做任何字体或字号假设，适用于任意行内文本。
+
+### PrettyParagraph 和普通 &lt;p&gt; 有什么区别？
+
+PrettyParagraph 渲染为 `&lt;p&gt;` 元素，自动应用 `text-wrap: pretty` 和 `leading-relaxed`，防止段落最后一行出现孤行。如果不需要 `text-wrap: pretty`，直接使用原生 `&lt;p&gt;` 标签并自行设置样式即可。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 BalancedText 系列组件代码时：
+
+1. BalancedHeading 从 `@/components/effects/text/balanced-text` 导入。
+2. PrettyParagraph 和 BalancedText 从 `@/components/effects/text/balanced-text` 导入。
+3. 使用 `as` 属性指定 BalancedHeading 的标题级别，默认为 h2。
+4. 标题文本长度不宜过短（少于一行不会触发 balance 效果），也不宜过长（超过五六行 balance 效果不明显）。
+5. 不要为标题单独设置 `white-space` 或 `word-break` 属性，这会干扰 `text-wrap: balance` 的预期行为。
+6. 需要段落排版时使用 PrettyParagraph，不要手动在 `&lt;p&gt;` 上添加 `text-wrap: pretty`。
+7. 不要引入第三方排版库或 JavaScript 换行计算库。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="effects/text/balanced-text" />

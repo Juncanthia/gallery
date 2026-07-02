@@ -1,0 +1,184 @@
+DataTableFilterResetButton 是 DataTable 筛选体系内的重置按钮组件，用于清除某一列的当前筛选值，显示已激活的筛选数量和一键清除入口。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当 DataTable 中某列存在已激活的筛选条件时，在筛选控件内展示重置按钮，提示用户当前筛选数量并支持一键清除。
+
+常见场景：
+
+- 表格筛选栏中，某一列的筛选值被激活后，在触发按钮上显示已选数量和清除图标。
+- 需要快速清除某列筛选条件，而不是打开筛选面板手动取消。
+
+不推荐：
+
+- 用于重置整个表格的所有筛选条件，应使用 DataTableResetButton。
+- 脱离 DataTableProvider 上下文使用，组件依赖 `useDataTable()` 获取表格和筛选状态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件必须在 `DataTableProvider` 内部使用。传入目标列的 `value`（对应 column id），组件自动从上下文获取该列的筛选状态。有筛选值时显示 `[数量 ×]` 按钮，无筛选值时返回 `null`。
+
+<ComponentShowcase
+  id="dt/blocks/data-table-filter-reset-button"
+  path="dt/blocks/data-table-filter-reset-button/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { DataTableProvider } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider"
+import { DataTableFilterResetButton } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-reset-button"
+import {
+  useReactTable,
+  getCoreRowModel,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/types"
+
+type Person = {
+  id: string
+  name: string
+  blocks/status: string
+}
+
+const data: Person[] = [
+  { id: "1", name: "Alice", blocks/status: "active" },
+  { id: "2", name: "Bob", blocks/status: "inactive" },
+  { id: "3", name: "Charlie", blocks/status: "active" },
+]
+
+const columns: ColumnDef&lt;Person&gt;[] = [
+  { accessorKey: "name", header: "Name" },
+  { accessorKey: "blocks/status", header: "Status" },
+]
+
+const filterFields: DataTableFilterField&lt;Person&gt;[] = [
+  {
+    label: "Status",
+    value: "blocks/status",
+    type: "checkbox",
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Inactive", value: "inactive" },
+    ],
+  },
+]
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState&lt;ColumnFiltersState&gt;([
+    { id: "blocks/status", value: ["active"] },
+  ])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  return (
+    &lt;DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+    &gt;
+      &lt;div className="flex items-center gap-2"&gt;
+        &lt;span className="text-sm text-muted-foreground"&gt;Status 筛选：&lt;/span&gt;
+        &lt;DataTableFilterResetButton&lt;Person&gt;
+          value="blocks/status"
+          label="Status"
+          type="checkbox"
+          options={[
+            { label: "Active", value: "active" },
+            { label: "Inactive", value: "inactive" },
+          ]}
+        /&gt;
+        &lt;span className="text-sm text-muted-foreground"&gt;（点击 X 可清除筛选）&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/DataTableProvider&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DataTableFilterResetButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 目标列对应的 column id | `keyof TData` | - |
+| label | 列的显示名称 | `string` | - |
+| type | 筛选控件类型 | `"input"` \| `"checkbox"` \| `"slider"` \| `"timerange"` | - |
+| options | 可选项列表 | `Option[]` | - |
+| defaultOpen | 筛选面板默认展开 | `boolean` | `false` |
+| commandDisabled | 禁用命令搜索 | `boolean` | `false` |
+
+```ts
+type Option = {
+  label: string
+  value: string | boolean | number | undefined
+}
+```
+
+### DataTableFilterField
+
+组件接受整个 `DataTableFilterField<TData>` 联合类型，但仅使用 `value` 属性（获取 column id）。其余属性为联合类型所需，但不会被组件内部消费。
+
+```ts
+type DataTableFilterField<TData> =
+  | { label: string; value: keyof TData; type: "input"; options?: Option[] }
+  | { label: string; value: keyof TData; type: "checkbox"; options?: Option[] }
+  | { label: string; value: keyof TData; type: "slider"; min: number; max: number; options?: Option[]; unit?: string }
+  | { label: string; value: keyof TData; type: "timerange"; options?: Option[]; presets?: DatePreset[] }
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么组件返回 null？
+
+当目标列没有激活的筛选条件时（`columnFilters` 中找不到对应 id 的 filter 或 value 为空），组件返回 `null`，不渲染任何 DOM。这是正常行为。
+
+### 如何配合 DataTable 筛选体系使用？
+
+在 `DataTableProvider` 的 `filterFields` 中配置筛选字段后，`DataTableFilterControls` 会自动为每个筛选列渲染重置按钮。通常不需要手动调用此组件。
+
+手动使用的场景：在自定义的筛选触发器中嵌入重置按钮。
+
+```tsx
+&lt;DataTableProvider table={table} columns={columns} filterFields={filterFields}&gt;
+  &lt;DataTableFilterResetButton
+    value="blocks/status"
+    label="Status"
+    type="checkbox"
+    options={[...]}
+  /&gt;
+&lt;/DataTableProvider&gt;
+```
+
+### 如何区分单个筛选重置和全局重置？
+
+- `DataTableFilterResetButton`：清除**单列**的筛选条件。
+- `DataTableResetButton`：清除**整个表格**的筛选条件和排序状态。
+
+### 如何自定义重置按钮样式？
+
+组件使用 `Button variant="outline"`，可以传入 `className` 覆盖默认样式。注意 `className` 会通过 `cn` 合并到 Button 上。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DataTableFilterResetButton 代码时：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-reset-button` 导入。
+2. 组件必须在 `DataTableProvider` 内部使用，否则会抛出错误。
+3. 传入的 `value` 必须对应 table 中已定义的 column id。
+4. 不需要手动控制显示/隐藏，组件自动根据当前筛选状态决定是否渲染。
+5. 在 `filterFields` 配置中定义筛选字段后，通常由 `DataTableFilterControls` 自动管理重置按钮，不需要手动引入。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="blocks/data-table-filter-reset-button" />

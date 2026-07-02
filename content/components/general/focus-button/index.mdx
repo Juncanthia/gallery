@@ -1,0 +1,142 @@
+FocusButton 是一个带角落虚线动画的按钮组件，hover 时角落的短边框会向外扩展形成完整边框，支持自定义虚线颜色和标准按钮属性。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要一个简洁但有视觉反馈的按钮时使用。FocusButton 通过角落边框动画提供微妙的 hover 交互效果，适合用作：
+
+- 卡片或区块中的操作按钮。
+- 登录、注册等表单中的提交按钮。
+- 需要低调但精致的交互反馈的 CTA 按钮。
+- 产品页面的功能入口按钮。
+
+按钮默认带有边框和角落短线装饰，hover 时角落短线扩展为完整边框，过渡动画流畅自然。
+
+不推荐在需要强视觉冲击力的场景中使用，FocusButton 强调克制和精致感，而非醒目的色彩或阴影效果。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<div className="not-prose">
+
+<ComponentShowcase
+  id="general/focus-button"
+  path="general/focus-button/basic"
+/>
+
+</div>
+
+```tsx
+import { FocusButton } from "@/components/general/focus-button"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-6 p-8">
+      <FocusButton>Focus Button</FocusButton>
+    </div>
+  )
+}
+```
+
+### 自定义颜色
+
+通过 `dashColor` 属性设置角落虚线的颜色，hover 时完整边框也会使用该颜色。
+
+<div className="not-prose">
+
+<ComponentShowcase
+  id="general/focus-button-color"
+  path="general/focus-button/basic"
+/>
+
+</div>
+
+```tsx
+<FocusButton dashColor="#3b82f6">Custom Color</FocusButton>
+```
+
+### 调整尺寸
+
+通过 `className` 传入自定义样式来调整按钮尺寸。
+
+<div className="not-prose">
+
+<ComponentShowcase
+  id="general/focus-button-size"
+  path="general/focus-button/basic"
+/>
+
+</div>
+
+```tsx
+<FocusButton className="px-8 py-4 text-lg">Large</FocusButton>
+```
+
+<h2 id="api">API</h2>
+
+### FocusButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 按钮内容 | `ReactNode` | - |
+| dashColor | 角落虚线和 hover 边框颜色，不传时跟随主题（light 模式黑色，dark 模式白色） | `string` | - |
+| className | 附加样式类名，合并到按钮容器 | `string` | - |
+
+同时支持标准 `ButtonHTMLAttributes` 的所有属性（`onClick`、`disabled`、`type` 等）。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何修改按钮颜色？
+
+通过 `dashColor` 属性传入 CSS 颜色值即可，角落虚线和 hover 时的完整边框都会使用该颜色。
+
+```tsx
+<FocusButton dashColor="#ef4444">删除</FocusButton>
+<FocusButton dashColor="#22c55e">确认</FocusButton>
+```
+
+### 如何禁用按钮？
+
+传入标准的 `disabled` 属性即可，与原生 button 行为一致。
+
+```tsx
+<FocusButton disabled>已禁用</FocusButton>
+```
+
+### 暗色模式下边框颜色如何适配？
+
+不传 `dashColor` 时，组件自动适配主题：light 模式下边框为黑色，dark 模式下边框为白色。如果传了 `dashColor`，则以传入的颜色为准，两种模式下均使用该颜色。
+
+```tsx
+{/* 自动适配主题 */}
+<FocusButton>自适应</FocusButton>
+
+{/* 手动指定，不受主题影响 */}
+<FocusButton dashColor="#3b82f6">固定蓝色</FocusButton>
+```
+
+### 如何处理 onClick 事件？
+
+FocusButton 支持所有标准按钮属性，直接传入 `onClick` 即可。
+
+```tsx
+<FocusButton onClick={() => console.log("clicked")}>
+  点击我
+</FocusButton>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FocusButton 代码时：
+
+1. 从 `@/components/general/focus-button` 导入 `FocusButton`。
+2. FocusButton 是默认导出的单组件，无需解构其他子组件。
+3. `dashColor` 接受 CSS 颜色值字符串（如 `"#3b82f6"`、`"rgb(59,130,246)"`、`"red"`）。
+4. 通过 `className` 自定义样式，组件内部使用 `clsx` 合并类名。
+5. 支持所有原生 button 属性（`onClick`、`disabled`、`type`、`aria-*` 等）。
+6. 组件依赖 `clsx`，确保项目中已安装此依赖。
+7. 组件内置 dark mode 支持，通过 Tailwind `dark:` 前缀切换颜色。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="general/focus-button" />

@@ -1,0 +1,103 @@
+MetallicPaint 基于 WebGL2 的金属质感绘制组件，可将任意图片转化为具有流光金属液态铬材质的效果，支持丰富的参数调节。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要将图片（特别是 Logo 或图形）赋予金属液态铬材质的视觉特效时使用。
+常见场景：
+- Logo 或品牌标识的金属质感展示
+- 创意视觉特效展示
+- 产品展示页面的材质效果
+- 交互式艺术装置
+不推荐：
+- 照片级真实图片（金属效果会破坏原始色彩）
+- 不支持 WebGL2 的浏览器
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/metallic-paint" path="rb/metallic-paint/basic" />
+
+```tsx
+import { MetallicPaint } from "@/components/core/metallic-paint"
+
+export default function Demo() {
+  return (
+    <MetallicPaint imageSrc="https://example.com/logo.png" />
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { MetallicPaint } from "@/components/core/metallic-paint"
+
+export default function Demo() {
+  return (
+    <div className="w-64 h-64">
+      <MetallicPaint
+        imageSrc="/logo.svg"
+        lightColor="#ffd700"
+        darkColor="#1a1a2e"
+        tintColor="#ff6b6b"
+        speed={0.5}
+        brightness={2.5}
+        contrast={0.6}
+        liquid={0.8}
+        refraction={0.015}
+        chromaticSpread={3}
+        mouseAnimation
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### MetallicPaint
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| imageSrc | 图片源地址 | `string` | - |
+| seed | 随机种子，影响噪点分布 | `number` | `42` |
+| scale | 缩放比例 | `number` | `4` |
+| refraction | 折射/色散强度 | `number` | `0.01` |
+| blur | 边缘模糊程度 | `number` | `0.015` |
+| liquid | 液态流动程度 | `number` | `0.75` |
+| speed | 动画速度 | `number` | `0.3` |
+| brightness | 亮度 | `number` | `2` |
+| contrast | 对比度 | `number` | `0.5` |
+| angle | 旋转角度（度） | `number` | `0` |
+| fresnel | 菲涅尔效果强度 | `number` | `1` |
+| lightColor | 亮部/高光颜色（HEX） | `string` | `"#ffffff"` |
+| darkColor | 暗部/阴影颜色（HEX） | `string` | `"#000000"` |
+| patternSharpness | 纹路锐度 | `number` | `1` |
+| waveAmplitude | 波纹振幅 | `number` | `1` |
+| noiseScale | 噪点缩放级别 | `number` | `0.5` |
+| chromaticSpread | 色散/色差扩散强度 | `number` | `2` |
+| mouseAnimation | 启用鼠标驱动动画（替代自动动画） | `boolean` | `false` |
+| distortion | 扭曲强度 | `number` | `1` |
+| conblocks/tour | 轮廓强度 | `number` | `0.2` |
+| tintColor | 色调/染色（HEX） | `string` | `"#feb3ff"` |
+
+<h2 id="faq">常见问题</h2>
+
+### 图片不显示效果？
+确保 `imageSrc` 指向一个有效的跨域图片（组件内部设置 `crossOrigin="anonymous"`）。图片背景最好为纯色（白色或透明），金属效果作用于非背景区域。
+
+### 如何让金属流动由鼠标控制？
+设置 `mouseAnimation={true}`，金属流动方向和时间将由鼠标在 canvas 上的位置驱动。
+
+### 如何调整金属的明暗对比？
+通过 `lightColor` 和 `darkColor` 设置亮暗部颜色，配合 `brightness` 和 `contrast` 调整整体亮度和对比度。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/metallic-paint` 导入。
+2. `imageSrc` 为必填属性，提供纹理输入图片。
+3. 组件需要 WebGL2 支持，使用原生 WebGL2 API 无额外依赖。
+4. `lightColor`、`darkColor` 和 `tintColor` 使用 HEX 字符串格式。
+5. 组件内部会对图片进行预处理（Poisson 重建深度场），较大图片会自动缩放。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-metallic-paint" />

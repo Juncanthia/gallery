@@ -3,7 +3,7 @@ import {
   CaretCircleDoubleRightIcon,
 } from "@phosphor-icons/react/dist/ssr"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import { SeekControl } from "@/components/media/ui/seek-controls"
 
 export function SeekControlDemo() {

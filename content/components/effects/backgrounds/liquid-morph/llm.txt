@@ -1,0 +1,144 @@
+---
+category: Components
+title: LiquidMorph
+subtitle: 液态变形
+description: 基于 WebGL 着色器的程序化液态变形动态背景组件。
+demo:
+  cols: 1
+group:
+  title: Chamaac UI
+  order: 9
+source:
+  component: src/components/effects/backgrounds/liquid-morph/liquid-morph.tsx
+  examples:
+    - content/components/effects/backgrounds/liquid-morph/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+  threejs: true
+---
+
+# LiquidMorph 液态变形
+
+基于 Three.js 和 GLSL 着色器的程序化液态变形动态背景。通过经典 Perlin 3D 噪声算法和 smoothstep 颜色混合生成流动的液态变形效果。
+
+本组件来自 chamaac UI 库，以源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合需要液态流动、色彩渐变氛围的场景。
+
+常见场景：
+
+- 品牌展示页 Hero 区域背景。
+- 深色主题页面的动态装饰层。
+- 创意、艺术类页面的氛围组件。
+
+不推荐：
+
+- 低端移动设备的性能敏感页面。
+- 文本密集型的信息展示页。
+- 需要精确视觉一致性的设计系统组件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { LiquidMorph } from "@/components/effects/backgrounds/liquid-morph"
+
+export default function Demo() {
+  return (
+    <div className="relative w-full h-64 rounded overflow-hidden">
+      <LiquidMorph />
+    </div>
+  )
+}
+```
+
+> 说明：LiquidMorph 铺满父容器，使用 `absolute inset-0` 定位。确保父容器 `relative` 且有尺寸。
+
+## 核心导出 {#exports}
+
+- `LiquidMorph`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface LiquidMorphProps {
+  className?: string
+  speed?: number      // 默认 0.5
+  color1?: string     // 第一层颜色，默认 "#4338ca"
+  color2?: string     // 第二层颜色，默认 "#db2777"
+  color3?: string     // 第三层颜色，默认 "#f59e0b"
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+
+额外状态属性：
+
+- 无额外 `data-*` 状态属性。
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 组件根元素使用 `cn` 合并 `className`，默认类为 `w-full h-full absolute inset-0 bg-black cursor-crosshair overflow-hidden pointer-events-none`。
+- 内部渲染 Three.js Canvas，视觉完全由 GLSL 着色器控制。
+- 着色器使用经典 Perlin 3D 噪声 + 三层 smoothstep 颜色混合。
+- 不依赖 CVA 变体系统。
+- 不包装 Radix/Base UI primitive。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/effects/backgrounds/liquid-morph/liquid-morph.tsx`
+- `src/components/core/chamaac-liquid-morph.tsx`（barrel 导出）
+
+直接依赖摘要：
+
+- `@react-three/fiber`
+- `three`
+- `clsx`
+- `tailwind-merge`
+
+实现注意：
+
+1. 着色器采用经典 Perlin 3D 噪声（Stefan Gustavson 实现）+ 三层 smoothstep 颜色混合。
+2. Canvas 关闭抗锯齿（`antialias: false`），DPR 限制为 `[1, 2]` 以优化性能。
+3. 组件完全覆盖父容器（`absolute inset-0`），需父容器提供定位上下文。
+4. `pointer-events-none` 确保不阻挡前景交互。
+5. `bg-black` 作为底色。
+6. 内置鼠标交互，通过 `state.pointer` 驱动噪声采样偏移。
+
+## 可访问性 {#accessibility}
+
+- 纯装饰性组件，不参与交互。
+- 不需要 ARIA 标签或键盘焦点。
+- 对于 prefers-reduced-motion 用户，建议在业务层禁用或替换为静态背景。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 LiquidMorph 代码时，应遵守：
+
+1. 从 `@/components/effects/backgrounds/liquid-morph` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 确保父容器具有 `position: relative` 和明确的宽高尺寸。
+3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
+4. 不要引入 Ant Design 相关依赖。
+5. 动画效果由着色器内部驱动，不需要传递 `animate` 或 `autoPlay` 等 props。
+6. 如果不确定某个 API 是否存在，先检查 `src/components/effects/backgrounds/liquid-morph/liquid-morph.tsx`，不要凭记忆生成。

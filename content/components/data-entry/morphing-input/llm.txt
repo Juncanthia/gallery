@@ -1,0 +1,156 @@
+---
+category: Components
+title: MorphingInput
+subtitle: 变形输入框
+description: MorphingInput 是一个带动画变形的搜索输入框，点击左侧图标可在多种搜索类型之间切换，placeholder 文字带有逐字动画效果。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 1
+source:
+  component: src/components/data-entry/morphing-input.tsx
+  entry: src/components/core/uselayouts-morphing-input.tsx
+  docs: content/components/data-entry/morphing-input/index.mdx
+  examples:
+    - content/components/data-entry/morphing-input/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# MorphingInput 变形输入框
+
+MorphingInput 是 UseLayouts 系列布局组件，提供一个带动画变形效果的搜索输入框。
+
+本组件是自定义设计实现，不基于 Ant Design。使用 motion/react 驱动图标和 placeholder 切换动画，hugeicons 提供图标。
+
+## 何时使用 {#when-to-use}
+
+适合需要多功能搜索入口的界面。点击左侧图标可在搜索引擎、图片生成等模式间切换，placeholder 文字以逐字动画呈现。
+
+常见场景：
+
+- 多功能搜索栏。
+- AI 产品输入框。
+- 需要强调视觉吸引力的搜索入口。
+
+不推荐：
+
+- 搜索类型超过 3 种。
+- 需要键盘切换搜索类型的场景。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { MorphingInput } from "@/components/data-entry/morphing-input"
+
+export default function Demo() {
+  return <MorphingInput />
+}
+```
+
+## 核心导出 {#exports}
+
+- `MorphingInput`
+
+## API 摘要 {#api}
+
+MorphingInput 为零 props 组件，内部管理所有状态和搜索类型配置。
+
+内部状态：
+
+- `activeIndex: number` — 当前激活的搜索类型索引（默认 0）。
+- `inputValue: string` — 输入框文本内容（默认 ""）。
+
+搜索类型通过 `placeholderOptions` 常量定义，修改时直接编辑源码：
+
+```ts
+interface PlaceholderConfig {
+  id: number
+  placeholder: string
+  icon: any
+}
+```
+
+默认搜索类型：
+- `id: 1, placeholder: "Search anything...", icon: SparklesIcon`
+- `id: 2, placeholder: "Generate Image", icon: Album02Icon`
+
+## Semantic DOM {#semantic-dom}
+
+源码中未声明 `data-slot`，使用组件 DOM 结构和 Tailwind class 定位。
+
+- 外层容器：`bg-muted w-full max-w-sm py-1 flex justify-center items-center rounded-full px-1`
+- 切换按钮：`bg-background p-2.5 px-2.5 rounded-full shadow-sm`
+- 输入框：`!border-0 outline-none border-none bg-transparent! text-sm focus-visible:ring-0`
+- 提交按钮：`bg-background py-2.5 px-3 rounded-full shadow-sm`
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 直接控制，不使用 CVA。
+- 动画由 motion/react 的 `AnimatePresence` 和 `motion.span` / `motion.div` / `motion.button` 驱动。
+- 图标切换使用 `AnimatePresence mode="popLayout"` 实现模糊淡入淡出（duration: 0.35s, easeInOut）。
+- Placeholder 文字逐字动画使用 `motion.span`，初始状态 `opacity: 0, rotateX: "80deg", y: 8, filter: "blur(3px)"`，spring 动画（damping: 16, stiffness: 240, mass: 1.2），延时 `0.015 * index`。
+- 主题颜色使用 `bg-background`、`text-foreground`、`text-muted-foreground`、`bg-muted` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/data-entry/morphing-input.tsx`
+- `src/components/core/uselayouts-morphing-input.tsx`
+
+直接依赖：
+
+- `motion/react` — 图标切换和 placeholder 文字动画。
+- `@hugeicons/core-free-icons` — 图标库（SparklesIcon, Album02Icon, ArrowRight02Icon, UnfoldMoreIcon）。
+- `@hugeicons/react` — React 图标组件 HugeiconsIcon。
+- `./input` — 本地 Input 组件（`src/components/data-entry/input.tsx`）。
+
+实现注意：
+
+1. 组件为零 props 设计，搜索类型通过修改 `placeholderOptions` 数组完成。
+2. `AnimatePresence mode="popLayout"` 确保退出和进入动画同时进行，避免布局跳变。
+3. Placeholder 文字使用字母级动画，空格替换为 ` ` 不间断空格以保持布局。
+4. `willChange: "transform"` 应用于动画 span 以优化 GPU 合成。
+5. 输入框有焦点时 placeholder 隐藏，避免与用户输入重叠。
+6. `initial={false}` 在 `AnimatePresence` 上设置，避免首次渲染时播放入场动画。
+
+## 可访问性 {#accessibility}
+
+- 切换按钮为原生 `<motion.button>`，具备键盘焦点和点击语义。
+- 提交按钮使用 `cursor-pointer`，提供视觉交互提示。
+- 输入框使用原生 `<Input>` 组件，保留标准键盘和屏幕阅读器行为。
+- 当前未提供 `aria-label` 或 `aria-expanded` 等 ARIA 属性，建议扩展时补充。
+- 切换按钮未指示当前搜索类型的文本标签，建议添加 `aria-label`。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 自定义设计，AntD 无对应组件 |
+| 视觉系统 | Tailwind CSS + motion/react 动画 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 css-in-js |
+| 图标系统 | 使用 hugeicons，不使用 @ant-design/icons |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 MorphingInput 代码时，应遵守：
+
+1. 从 `@/components/data-entry/morphing-input` 导入 `MorphingInput`（named export）。
+2. MorphingInput 为零 props 组件，直接渲染即可。
+3. 如需定制搜索类型，修改 `src/components/data-entry/morphing-input.tsx` 中的 `placeholderOptions` 数组。
+4. 图标使用 `@hugeicons/core-free-icons`，不要使用 `@ant-design/icons` 或 `lucide-react`。
+5. 动画依赖 `motion/react`，不要删除或绕开 AnimatePresence 和 motion 组件。
+6. 不要引入 `antd`、`antd-style` 或 rc-component。

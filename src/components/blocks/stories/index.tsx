@@ -6,12 +6,12 @@ import type {
   VideoHTMLAttributes,
 } from "react";
 import { useEffect, useRef } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/core/avatar";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
+} from "@/components/core/carousel";
 import { cn } from "@/lib/utils";
 
 export type StoriesProps = ComponentProps<typeof Carousel>;

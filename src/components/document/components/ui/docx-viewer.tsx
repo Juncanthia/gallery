@@ -25,8 +25,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
 import {
   DocumentViewerThumbnailSidebar,
   useElementWidth,
@@ -43,25 +43,25 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/core/dropdown-menu"
 import { FileThumbnail } from "@/components/document/components/ui/file-thumbnail"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Input } from "@/components/core/input"
+import { ScrollArea } from "@/components/core/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/core/select"
+import { Separator } from "@/components/core/separator"
+import { Spinner } from "@/components/blocks/spinner"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/core/tooltip"
 
 const DOCX_MIME_TYPE =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"

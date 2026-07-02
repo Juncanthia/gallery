@@ -28,8 +28,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { createPortal } from "react-dom"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -39,30 +39,30 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/core/dropdown-menu"
+import { Input } from "@/components/core/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/core/popover"
+import { ScrollArea } from "@/components/core/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Spinner } from "@/components/ui/spinner"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/core/select"
+import { Separator } from "@/components/core/separator"
+import { Spinner } from "@/components/blocks/spinner"
+import { Tabs, TabsList, TabsTrigger } from "@/components/core/tabs"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/core/tooltip"
 
 const XLSX_LOADING_INDICATOR_DELAY_MS = 300
 const XLSX_DROPDOWN_Z_INDEX_CLASS = "z-40"

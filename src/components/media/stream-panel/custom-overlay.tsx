@@ -4,9 +4,9 @@ import { AnimatePresence, m } from "motion/react"
 import React, { useState } from "react"
 
 import { useStreamPanelStore } from "@/components/media/stream-panel/use-stream-panel"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/core/button"
+import { Input } from "@/components/core/input"
+import { Textarea } from "@/components/core/textarea"
 import { cn } from "@/components/media/lib/utils"
 
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"

@@ -1,0 +1,92 @@
+PDF 拖放区 PdfDropzoneBlock。提供一个全屏拖放区域，用户可将 PDF 文件拖入或点击上传进行预览，上传后自动切换为内嵌 PDF 查看器。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中内嵌一个 PDF 上传入口，用户拖放或点击上传 PDF 文件后，在同一区域内直接预览 PDF 内容。
+
+常见场景：
+
+- 文档处理工具中内嵌 PDF 文件上传与预览。
+- 合同签署、简历查看等需要上传并即时预览 PDF 的流程。
+- 替代独立的文件上传控件与 PDF 查看器的分离布局，提供一体化体验。
+
+不推荐：
+
+- 需要上传非 PDF 文件时，应使用 `FileUpload` 组件。
+- 仅需要展示 PDF 而不需要上传入口时，应直接使用 `PDFViewer` 组件。
+- 上传后需要复杂处理流程（如 OCR、翻译等）时，应在业务层编排，而非依赖组件内部逻辑。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase
+  id="extend/pdf-blocks/dropzone"
+  path="extend/pdf-blocks/dropzone/basic"
+/>
+
+```tsx
+import { PdfDropzoneBlock } from "@/components/document/components/blocks/pdf-blocks/dropzone"
+
+export default function Demo() {
+  return (
+    <div className="w-full">
+      <PdfDropzoneBlock />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### PdfDropzoneBlock
+
+PdfDropzoneBlock 是一个自包含组件，内部管理 PDF 文件的拖放上传与查看状态，无需外部 props。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素样式类名 | `string` | - |
+
+组件内部行为：
+
+- 初始化时展示一个全屏拖放区域，包含 `FileUpload` 控件，仅接受 PDF 文件。
+- 用户拖入或点击上传 PDF 文件后，通过 `URL.createObjectURL` 生成临时 URL，自动切换到 `PDFViewer` 预览模式。
+- `PDFViewer` 显示工具栏（缩略图、页码、缩放、搜索、旋转、下载、上传等），文件名显示在工具栏中。
+- 组件卸载时自动通过 `URL.revokeObjectURL` 释放临时对象 URL。
+- 内部拖放区域标记为 `data-pdf-upload-blocks/dropzone`，用于防止嵌套拖放冲突。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何限制上传文件？
+
+组件内部已限制仅接受 PDF 文件类型（`application/pdf,.pdf`），无需额外配置。上传非 PDF 文件时组件不会响应。
+
+### 如何在上传后执行自定义操作？
+
+当前组件不支持 onFileAccepted 等回调。如需在上传后执行自定义逻辑（如保存到服务器、触发分析流程），需要扩展源码或在外层编排 `FileUpload` + `PDFViewer` 两个独立组件。
+
+### 与 PDFViewer 和 FileUpload 的关系？
+
+PdfDropzoneBlock 内部组合了 `FileUpload`（上传态）和 `PDFViewer`（预览态），提供一站式的 PDF 上传+预览体验。如果只需要其中之一的功能，应直接使用 `FileUpload` 或 `PDFViewer`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 PdfDropzoneBlock 代码时：
+
+1. 从 `@/components/document/components/blocks/pdf-blocks/dropzone` 导入。
+2. 组件为自包含组件，无需传入任何必需 props。
+3. 如需自定义上传后的行为（如保存文件），应扩展源码而非在外层 hack。
+4. 不要引入 Ant Design 相关依赖。
+5. 不要手动组合 FileUpload + PDFViewer 来模拟本组件行为，直接使用 PdfDropzoneBlock。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 和 `data-` 属性暴露稳定的语义结构：
+
+| data 属性 | 说明 |
+| --- | --- |
+| `data-pdf-upload-blocks/dropzone` | 内部 FileUpload 拖放区标记，用于区分嵌套拖放区域 |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="extend/pdf-blocks/dropzone" />

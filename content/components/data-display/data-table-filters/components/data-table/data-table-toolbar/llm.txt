@@ -1,0 +1,175 @@
+---
+category: Components
+title: DataTableToolbar
+subtitle: 表格工具栏
+description: 筛选面板切换、行数统计、重置筛选、视图选项等功能集成栏，DataTable 筛选体验的核心操作入口。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 1
+source:
+  component: src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-toolbar.tsx
+  examples:
+    - content/components/dt/blocks/data-table-toolbar/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTableToolbar 表格工具栏
+
+DataTableToolbar 是 DataTable 筛选体验的核心操作入口，集成筛选面板切换、行数统计、筛选重置、自定义操作区和视图列选项等功能。通过 `renderActions` 属性支持注入自定义操作按钮。
+
+本组件必须配合 DataTableProvider 使用，通过 `useDataTable()` 获取表格上下文。API 和行为以源码为准。
+
+## 何时使用 {#when-to-use}
+
+当需要在 DataTable 筛选场景中为用户提供统一的筛选操作入口时使用。
+
+常见场景：
+
+- 数据表格顶部的筛选操作工具栏。
+- 需要显示当前筛选结果的行数统计。
+- 需要一键重置所有筛选条件。
+- 需要自定义操作按钮，通过 `renderActions` 注入。
+- 需要切换可见列、调整列顺序。
+- 移动端通过抽屉式筛选面板。
+
+不推荐：
+
+- 在 DataTableProvider 外部使用。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+DataTableToolbar 在 DataTableProvider 内部使用，自动集成筛选面板切换、行数统计、重置按钮和视图选项。
+
+```tsx
+import { DataTableToolbar } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-toolbar"
+import { DataTableProvider } from "@hyper/blocks/data-table-filters"
+
+function Demo() {
+  return (
+    <DataTableProvider table={table} columns={columns} filterFields={filterFields}>
+      <DataTableToolbar />
+    </DataTableProvider>
+  )
+}
+```
+
+## 核心导出 {#exports}
+
+- `DataTableToolbar`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码：
+
+```ts
+interface DataTableToolbarProps {
+  renderActions?: () => React.ReactNode;
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+DataTableToolbar 渲染的 DOM 结构：
+
+```html
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <div class="flex flex-wrap items-center gap-2">
+    <!-- 筛选面板切换按钮（非移动端） -->
+    <button class="hidden gap-2 sm:flex">...</button>
+    <!-- 移动端抽屉式筛选面板 -->
+    <DataTableFilterControlsDrawer />
+    <!-- 行数统计 -->
+    <p>FilteredRowCount of TotalRowCount row(s) filtered</p>
+  </div>
+  <div class="ml-auto flex items-center gap-2">
+    <!-- 重置按钮（有筛选条件时显示） -->
+    <DataTableResetButton />
+    <!-- 自定义操作区 -->
+    {renderActions?.()}
+    <!-- 视图选项 -->
+    <DataTableViewOptions />
+  </div>
+</div>
+```
+
+- 工具栏分为左右两个区域：左侧为筛选面板控制和行数统计，右侧为操作按钮。
+- 使用 `justify-between` 和 `ml-auto` 实现两端对齐。
+
+## 样式模型 {#styling-model}
+
+- 根元素使用 `flex flex-wrap items-center justify-between gap-4` 实现响应式布局。
+- 筛选面板切换按钮使用 `hidden sm:flex` 在移动端隐藏。
+- 抽屉式筛选面板使用 `block sm:hidden` 仅在移动端显示。
+- 行数统计文字使用 `text-muted-foreground text-sm`，数字使用 `font-mono font-medium`。
+- 不引入额外的 CSS 模块或 css-in-js。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-toolbar.tsx`
+
+直接依赖：
+
+- `@hyper/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider`（`useDataTable`）
+- `@hyper/shadcn/components/ui/button`（`Button`）
+- `@hyper/shadcn/components/ui/kbd`（`Kbd`）
+- `@hyper/shadcn/components/ui/tooltip`（`Tooltip`、`TooltipContent`、`TooltipProvider`、`TooltipTrigger`）
+- `@hyper/blocks/data-table-filters/hooks/use-hot-key`（`useHotKey`）
+- `@hyper/blocks/data-table-filters/lib/format`（`formatCompactNumber`）
+- `@hyper/blocks/data-table-filters/components/controls`（`useControls`）
+- `lucide-react`（`PanelLeftClose`、`PanelLeftOpen`）
+- 内部组件：`DataTableFilterControlsDrawer`、`DataTableResetButton`、`DataTableViewOptions`
+
+实现注意：
+
+1. `DataTableToolbar` 通过 `useDataTable()` 获取 `table`、`isLoading`、`columnFilters`、`totalRows`、`filterRows`。
+2. 行数统计优先使用 `totalRows` / `filterRows`（服务端分页），fallback 到 TanStack Table 的 `getCoreRowModel().rows.length` / `getFilteredRowModel().rows.length`（客户端筛选）。
+3. 筛选面板切换按钮通过 `useControls()` 获取 `open`/`setOpen` 状态。
+4. 快捷键 `⌘B` 切换筛选面板，`Esc` 重置筛选（通过 `useHotKey`）。
+5. 重置按钮仅在 `columnFilters.length > 0` 时渲染。
+6. 移动端通过 `DataTableFilterControlsDrawer` 替代面板切换按钮。
+
+## 可访问性 {#accessibility}
+
+- 筛选面板切换按钮带有 Tooltip 提示快捷键。
+- 重置按钮带有 Tooltip 提示快捷键。
+- 视图选项按钮设置 `role="combobox"` 和 `aria-expanded` 属性。
+- 工具栏为纯 `<div>` 布局，无特殊 ARIA 角色。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+DataTableToolbar 在 Ant Design 中无直接对应组件，它整合了 AntD Table 的筛选行、工具栏区域和多选操作栏功能，但实现上更加灵活：通过 `renderActions` 注入自定义操作，通过 Tailwind 实现响应式布局，不依赖 AntD 的 Toolbar 或 Space 组件。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-toolbar.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | Tailwind CSS，颜色通过语义化 token 表达 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 配合 DataTable 筛选体系使用，不承诺 AntD API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTableToolbar 代码时，应遵守：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-toolbar` 导入 DataTableToolbar。
+2. 必须在 DataTableProvider 内部使用，不要在外层独立渲染。
+3. 如需自定义操作按钮，通过 `renderActions` 属性传递渲染函数。
+4. DataTableToolbar 本身不渲染表格内容，表格需另外渲染。
+5. 不要引入 Ant Design 相关依赖。
+6. 不要手动包裹 ControlsProvider，DataTableProvider 内部已自动包裹。
+7. 如果不确定某个 API 是否存在，先检查源码，不要凭猜测生成。

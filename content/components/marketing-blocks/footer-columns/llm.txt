@@ -1,0 +1,38 @@
+---
+category: Components
+title: FooterColumns
+subtitle: 页脚区块
+description: 自包含的页脚区块，包含品牌标识、多列链接、社交媒体图标和版权信息。
+demo:
+  cols: 1
+group:
+  title: 区块
+  order: 1
+source:
+  component: src/components/gooseui/components/blocks/footers/footer-columns.tsx
+  docs: content/components/marketing-blocks/footer-columns/index.mdx
+  examples:
+    - content/components/marketing-blocks/footer-columns/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  reactIcons: true
+  next: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# FooterColumns 页脚区块
+
+FooterColumns 是一个自包含的页脚区块组件，无需传入任何 props，直接渲染完整的页脚 UI。
+
+- **导入路径**：`import { FooterColumns } from "@/components/marketing-blocks/footer-columns"`
+- **用法**：`<FooterColumns />`
+- **约束**：
+  - 不接收任何 props，所有内容在组件内部定义。
+  - 使用 `<footer className="border-t bg-background">` 语义标签。
+  - 响应式网格布局：移动端 2 列 → md 4 列 → lg 5 列（品牌列占 1 列 + 4 个链接列）。
+  - 不适用场景：需要动态传递链接数据的页脚；需求复杂时，基于源文件提取带 props 的版本。
+  - 社交图标依赖 `react-icons/fa`（FaTwitter、FaGithub、FaLinkedin）。
+  - 链接使用 `next/link`，适用于 Next.js 项目。
+  - 版权年份在文件顶层计算为常量，避免 hydration 不匹配。

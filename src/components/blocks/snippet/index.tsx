@@ -4,8 +4,8 @@ import {
   type ComponentProps,
   type HTMLAttributes,
 } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CopyButton } from "@/components/ui/copy-button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/core/tabs";
+import { CopyButton } from "@/components/core/copy-button";
 import { cn } from "@/lib/utils";
 
 export type SnippetProps = ComponentProps<typeof Tabs>;

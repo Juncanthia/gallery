@@ -60,12 +60,12 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
 import {
   ColorPickerPanel,
   ColorPickerTriggerButton,
-} from "@/components/ui/color-picker"
+} from "@/components/core/color-picker"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,25 +76,25 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/core/dropdown-menu"
 import { Group, GroupSeparator, GroupText } from "@/components/document/components/ui/group"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/core/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Spinner } from "@/components/ui/spinner"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/core/select"
+import { Separator } from "@/components/core/separator"
+import { Spinner } from "@/components/blocks/spinner"
+import { ToggleGroup, ToggleGroupItem } from "@/components/core/toggle-group"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/core/tooltip"
 import {
   renderXlsxScroller,
   WorkbookSheetTabs,

@@ -47,7 +47,7 @@ export const LIBRARIES: Library[] = [
     hasBlocks: false,
   },
   {
-    id: "data-table-filters",
+    id: "blocks/data-table-filters",
     label: "Table Filters",
     labelEn: "Table Filters",
     routePrefix: "/components/dt",

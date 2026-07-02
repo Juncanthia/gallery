@@ -1,0 +1,237 @@
+[折线图 / LineChart]
+导入: import { LineChart } from "@/components/charts/chart-kit"
+子组件: import { Line, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent, XAxis, YAxis } from "@/components/charts/chart-kit"
+包来源: @/components/charts/chart-kit (line-chart.tsx, line.tsx)
+组件类型: 图表 / BKLit Charts
+底层依赖: @visx/responsive、@visx/shape、@visx/curve、@visx/scale、@visx/grid、motion
+
+## 何时使用
+
+折线图适合展示**时序数据的趋势变化与对比**。支持多条折线叠加、平滑曲线插值、盈亏分段着色、边缘渐隐、hover 高亮、散点标记、投影区间、加载骨架屏及动画入场效果。
+
+常见场景：时序指标监控、多系列趋势对比、财务盈亏可视化、实时流式数据、历史+预测投影。
+
+不适用场景：离散类别对比（用 BarChart）、占比展示（用 PieChart）、维度超过 5 条（拆分为多图或限制展示）、离散点分布（用 ScatterChart）、极少数数据点（<3 个）。
+
+## LineChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 时间序列数据，每项需含日期字段和数值字段 | `Record<string, unknown>[]` | — |
+| xDataKey | x 轴（时间）data 字段名 | `string` | `"date"` |
+| margin | 图表边距，可部分覆盖 | `Partial<Margin>` | `{ top: 40, right: 40, bottom: 40, left: 40 }` |
+| aspectRatio | 容器宽高比，不传则填充已设尺寸的父容器 | `string` | `"2 / 1"` |
+| className | 容器附加样式类名 | `string` | `""` |
+| style | 容器内联样式（如固定高度配合 brush strip） | `CSSProperties` | — |
+| blocks/status | `"loading"` 渲染骨架屏，`"ready"` 正常渲染 | `"loading" \| "ready" \| "errored"` | `"ready"` |
+| loadingLabel | 加载时居中 shimmer 标签文字 | `string` | — |
+| animationDuration | 入场动画时长（ms） | `number` | `1100` |
+| animationEasing | CSS 缓动函数 | `string` | `cubic-bezier(0.85, 0, 0.15, 1)` |
+| enterTransition | Motion 入场过渡配置 | `Transition` | — |
+| revealSignature | Motion URL 签名，变化时重播 reveal 动画 | `string` | — |
+| yDomainTween | 状态或目标域变化时过渡 y-domain | `boolean` | `true` |
+| yDomainTweenDuration | y-domain 过渡时长（ms） | `number` | `500` |
+| xDomain | 可见 x 轴范围（配合 ChartBrush 缩放） | `[Date, Date]` | — |
+| xDomainSlotCount | xDomain 模式下完整数据集长度，用于 x-scale padding | `number` | — |
+| tweenYDomainOnXDomainChange | brush 改变可见范围时过渡 y-domain | `boolean` | `false` |
+| onPhaseChange | 图表阶段变化回调（用于 OG 截图等） | `(phase: ChartPhase) => void` | — |
+| children | Line、Grid、ChartTooltip、XAxis、YAxis 等子组件 | `ReactNode` | — |
+
+## Line Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| dataKey | y 轴数据字段名 | `string` | — |
+| yAxisId | y 轴分组 ID（兼容 Recharts 多 Y 轴） | `string \| number` | `"left"` |
+| stroke | 线条颜色，支持 CSS 变量和渐变 URL | `string` | `var(--chart-line-primary)` |
+| strokeWidth | 线条宽度 | `number` | `2.5` |
+| curve | 曲线插值函数 | `CurveFactory` | `curveNatural` |
+| animate | 是否开启动画 | `boolean` | `true` |
+| fadeEdges | 边缘渐隐: `true`/`false`/`"left"`/`"right"` | `true \| false \| "left" \| "right"` | `true` |
+| showHighlight | hover 时显示高亮分段 | `boolean` | `true` |
+| showMarkers | 数据点散点圆形标记 | `boolean` | `false` |
+| markers | 标记样式（fill、stroke、radius 等） | `SeriesPointMarkerStyle` | — |
+| dashFromIndex | 虚线起始索引（预测期标记，从该索引起 stroke 变为虚线） | `number` | — |
+| dashArray | 虚线 dash 模式 | `string` | `"6,4"` |
+| loading | 加载脉冲覆盖层；`false` 禁用，`true` 强制显示 | `boolean` | 跟随 chart phase |
+| loadingStroke | 加载脉冲描边颜色 | `string` | `var(--foreground)` |
+| loadingStrokeOpacity | 加载脉冲描边不透明度 | `number` | `0.5` |
+| loadingPulseMode | 脉冲动画模式: `"loop"`/`"exit"`/`"enter"` | `LineLoadingPulseMode` | — |
+| onLoadingPulseCycleComplete | loop 模式脉冲周期完成回调 | `() => void` | — |
+| loadingStyle | 加载动画风格: `"pulse"` 游走脉冲 / `"sweep"` 斜扫光 | `"pulse" \| "sweep"` | `"pulse"` |
+
+## Grid Props (可选子组件)
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| horizontal | 水平网格线 | `boolean` | `true` |
+| vertical | 垂直网格线 | `boolean` | `false` |
+| numTicksRows | 水平刻度数量 | `number` | `5` |
+| stroke | 网格线颜色 | `string` | `var(--chart-grid)` |
+| strokeDasharray | dash 模式 | `string` | `"4,4"` |
+| fadeHorizontal | 网格线左右边缘渐隐 | `boolean` | `true` |
+| shimmer | shimmer 扫光效果 | `boolean` | `false` |
+
+## 示例代码
+
+### 基础折线图
+
+```tsx
+import { LineChart } from "@/components/charts/chart-kit"
+import { Line, Grid } from "@/components/charts/chart-kit"
+
+const data = [
+  { date: new Date(2024, 0, 1), value: 100 },
+  { date: new Date(2024, 0, 2), value: 200 },
+  { date: new Date(2024, 0, 3), value: 150 },
+  { date: new Date(2024, 0, 4), value: 300 },
+  { date: new Date(2024, 0, 5), value: 250 },
+  { date: new Date(2024, 0, 6), value: 350 },
+  { date: new Date(2024, 0, 7), value: 280 },
+]
+
+export default function Demo() {
+  return (
+    <LineChart data={data}>
+      <Grid />
+      <Line dataKey="value" stroke="var(--chart-line-primary)" />
+    </LineChart>
+  )
+}
+```
+
+### 多系列折线对比
+
+```tsx
+import { LineChart } from "@/components/charts/chart-kit"
+import { Line, Grid } from "@/components/charts/chart-kit"
+
+const data = [
+  { date: new Date(2024, 0, 1), revenue: 100, cost: 60 },
+  { date: new Date(2024, 0, 2), revenue: 200, cost: 110 },
+  { date: new Date(2024, 0, 3), revenue: 150, cost: 80 },
+  { date: new Date(2024, 0, 4), revenue: 300, cost: 180 },
+  { date: new Date(2024, 0, 5), revenue: 250, cost: 140 },
+  { date: new Date(2024, 0, 6), revenue: 350, cost: 210 },
+  { date: new Date(2024, 0, 7), revenue: 280, cost: 160 },
+]
+
+export default function Demo() {
+  return (
+    <LineChart data={data}>
+      <Grid />
+      <Line dataKey="revenue" stroke="var(--chart-line-primary)" strokeWidth={2.5} />
+      <Line dataKey="cost" stroke="var(--chart-line-secondary)" strokeWidth={2.5} />
+    </LineChart>
+  )
+}
+```
+
+### 带 Tooltip 的折线图
+
+```tsx
+import { LineChart } from "@/components/charts/chart-kit"
+import { Line, Grid, ChartTooltip, TooltipIndicator, TooltipBox, TooltipContent } from "@/components/charts/chart-kit"
+
+export default function Demo() {
+  return (
+    <LineChart data={data}>
+      <Grid />
+      <Line dataKey="value" stroke="var(--chart-line-primary)" />
+      <ChartTooltip>
+        <TooltipIndicator />
+        <TooltipBox>
+          <TooltipContent />
+        </TooltipBox>
+      </ChartTooltip>
+    </LineChart>
+  )
+}
+```
+
+### 加载骨架屏
+
+```tsx
+import { LineChart } from "@/components/charts/chart-kit"
+import { Line, Grid, generateChartSkeletonData } from "@/components/charts/chart-kit"
+
+const skeletonData = generateChartSkeletonData({ dataKey: "value", pointCount: 8 })
+
+export default function LoadingDemo() {
+  return (
+    <LineChart data={skeletonData} blocks/status="loading" loadingLabel="数据加载中...">
+      <Grid />
+      <Line dataKey="value" stroke="var(--chart-line-primary)" />
+    </LineChart>
+  )
+}
+```
+
+### 投影区间（历史+预测虚线）
+
+```tsx
+import { LineChart } from "@/components/charts/chart-kit"
+import { Line, Grid, ProjectionLine } from "@/components/charts/chart-kit"
+
+const historicalData = [
+  { date: new Date(2024, 0, 1), value: 100 },
+  { date: new Date(2024, 0, 2), value: 200 },
+  { date: new Date(2024, 0, 3), value: 150 },
+  { date: new Date(2024, 0, 4), value: 300 },
+  { date: new Date(2024, 0, 5), value: 250 },
+]
+const projectionData = [
+  { date: new Date(2024, 0, 6), value: 350 },
+  { date: new Date(2024, 0, 7), value: 380 },
+]
+
+const allData = [...historicalData, ...projectionData]
+
+export default function Demo() {
+  return (
+    <LineChart data={allData}>
+      <Grid />
+      <Line
+        dataKey="value"
+        dashFromIndex={historicalData.length}
+        dashArray="6,4"
+        stroke="var(--chart-line-primary)"
+      />
+    </LineChart>
+  )
+}
+```
+
+## 架构说明
+
+- LineChart 内部通过 `ParentSize`（@visx/responsive）自适应容器尺寸
+- 使用 `scaleTime` + `scaleLinear`（@visx/scale）计算时间轴映射和数值映射
+- 线条渲染基于 `LinePath`（@visx/shape），支持任意 d3 curve 插值函数
+- 动画基于 `motion/react`，reveal clipPath 控制线条按时间方向逐步显现
+- y-domain 自动从所有 Line 子组件的 dataKey 聚合计算，支持多系列共享或独立 Y 轴
+- 加载骨架屏通过 `blocks/status="loading"` 触发，自动渲染 shimmer 标签和脉冲动画
+- Line 组件通过 `ChartProvider` context 获取父级 scale 和布局参数
+- 配合 `ChartBrush` / `ChartBrushLayout` 实现时间区间缩放联动
+
+## 约束与最佳实践
+
+1. 导入路径：主组件 `@/components/charts/chart-kit`，子组件 `@/components/charts/chart-kit`
+2. 支持从 `@/components/charts/chart-kit` 导入的常用子组件：`Line`、`Grid`、`ChartTooltip`、`TooltipIndicator`、`TooltipBox`、`TooltipContent`、`XAxis`、`YAxis`、`ChartBrush`、`ChartBrushLayout`、`ChartLegend`、`ReferenceArea`、`ProfitLossLine`、`ProjectionLine`、`ProjectionLineEndMarker`、`SeriesPointMarker`、`generateChartSkeletonData`
+3. data 中日期字段必须为 Date 对象，不能是字符串或时间戳
+4. 每个 data 项的数值字段值必须为 number 类型
+5. 多系列时每个 Line 必须指定唯一的 dataKey
+6. 颜色推荐使用 CSS 变量：`var(--chart-line-primary)`、`var(--chart-1)`～`var(--chart-5)`、`var(--chart-grid)`、`var(--foreground)`
+7. 数据点建议 5-100 个；超过 500 个数据点默认开启 decimation（降采样）
+8. 始终搭配 Grid 渲染网格线，增强数值可读性
+9. 无数据时使用 `blocks/status="loading"` + `loadingLabel` 展示骨架屏，而非空白或 "No Data" 文本
+10. 需要预测区间时使用 `dashFromIndex` 从实际数据末尾起将折线转为虚线
+11. 需要边缘渐隐效果时使用 `fadeEdges` 属性，而非手动控制 opacity
+12. 多系列对比时使用不同的 CSS 颜色变量区分
+13. 配合 `ChartBrush`/`ChartBrushLayout` 实现缩放时，通过 `xDomain` 和 `tweenYDomainOnXDomainChange` 控制
+14. 盈亏可视化使用 `ProfitLossLine` 替代 `Line`，自动按正负值分段着色
+15. 加载状态使用 `blocks/status="loading"`，不要自行实现骨架屏逻辑
+16. 动画通过 `animationDuration`、`animationEasing`、`enterTransition` 控制，不要写自定义动画覆盖
+17. 不要引入 Recharts、Ant Design Charts、ECharts 等第三方图表库
+18. LineChart 内部使用 ParentSize 自适应容器尺寸，无需手动传 width/height
+19. 所有子组件（Line、Grid、ChartTooltip 等）必须通过 children 传入，不要在外层包裹
+20. 折线条数建议控制在 5 条以内，超出时考虑拆分多图或使用图例交互

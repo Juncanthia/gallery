@@ -1,0 +1,91 @@
+DecayCard 基于 SVG feTurbulence + feDisplacementMap 的衰减形变卡片，鼠标移动时产生流体置换扭曲和 3D 视角倾斜。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要展示带有流体形变和 3D 倾斜效果的图片卡片时使用。
+常见场景：
+- 作品集或产品图展示卡片
+- 创意页面的视觉焦点元素
+- 画廊或卡片列表的悬停增强效果
+不推荐：
+- 需要清晰辨认图片细节的场景（置换滤镜会产生模糊）
+- 列表中有大量卡片的场景（每个卡片独立运行 rAF 循环）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="marketing-blocks/decay-card" path="marketing-blocks/decay-card/basic" />
+
+```tsx
+import { DecayCard } from "@/components/marketing-blocks/decay-card"
+export default function Demo() { return <DecayCard>Decay</DecayCard> }
+```
+
+### 自定义配置
+
+```tsx
+import { DecayCard } from "@/components/marketing-blocks/decay-card"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-8 items-center justify-center">
+      <DecayCard
+        width={260}
+        height={360}
+        image="https://picsum.photos/seed/mountain/400/500?grayscale"
+        baseFrequency={0.02}
+        numOctaves={3}
+        seed={7}
+        maxDisplacement={300}
+        movementBound={40}
+      >
+        Mountain
+      </DecayCard>
+      <DecayCard
+        width={260}
+        height={360}
+        image="https://picsum.photos/seed/ocean/400/500?grayscale"
+        baseFrequency={0.01}
+        numOctaves={6}
+        maxDisplacement={500}
+      >
+        Ocean
+      </DecayCard>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DecayCard
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 卡片上的文字内容 | `React.ReactNode` | - |
+| width | 卡片宽度（像素） | `number` | `300` |
+| height | 卡片高度（像素） | `number` | `400` |
+| image | 卡片图片 URL | `string` | picsum 灰度占位图 |
+| baseFrequency | SVG feTurbulence 的基础频率，值越大纹理越细密 | `number` | `0.015` |
+| numOctaves | feTurbulence 的噪声层数，影响纹理复杂度 | `number` | `5` |
+| seed | feTurbulence 的随机种子 | `number` | `4` |
+| maxDisplacement | 最大置换偏移量（像素），鼠标移动越快偏移越大 | `number` | `400` |
+| movementBound | 卡片 3D 倾斜的最大位移边界 | `number` | `50` |
+
+<h2 id="faq">常见问题</h2>
+
+### 置换效果如何触发？
+组件通过 GSAP 实现连续渲染循环。`displacementScale` 根据鼠标移动速度动态计算——鼠标移动越快，纹理置换越剧烈；鼠标静止时置换逐渐归零。
+
+### baseFrequency 和 numOctaves 如何影响效果？
+`baseFrequency` 控制噪声纹理的频率，值越高纹理越细碎。`numOctaves` 控制分形层级数，值越高纹理越复杂但性能开销也越大。建议 `baseFrequency` 在 0.01~0.03 之间，`numOctaves` 在 3~6 之间。
+
+### movementBound 的作用？
+限制卡片 3D 倾斜的最大幅度。鼠标移动到边缘时，卡片 x/y 偏移和 rotationZ 被钳制在 `[-movementBound, movementBound]` 范围内。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/marketing-blocks/decay-card` 导入。
+2. 组件依赖 GSAP（`gsap` 包），需确保项目已安装。
+3. 卡片倾斜通过 `gsap.set` 直接操作 DOM 元素的 x、y、rotateZ 属性。
+4. feDisplacementMap 的 scale 属性通过 GSAP 动态更新，xChannelSelector 为 R，yChannelSelector 为 B。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-decay-card" />

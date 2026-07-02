@@ -1,0 +1,223 @@
+Video 视频展示组件。用于在对话中嵌入视频播放器，支持悬浮操作层、缩略图、时长显示、来源标注和自适应宽高比。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当 AI 需要在对话中展示视频内容时使用。Video 提供统一的视频播放体验，支持封面图、标题浮层、播放控制和外部链接跳转。
+
+常见场景：
+
+- AI 助手根据搜索结果展示相关视频。
+- AI 助手分享教程、演示或录制内容。
+- 对话中嵌入来自第三方平台的视频（YouTube、Vimeo 等）。
+- 需要统一的播放器样式和交互行为（播放、静音、跳转来源）。
+
+Video 基于原生 `<video>` 元素构建，通过 React Context 管理播放状态：
+
+- 自动播放（`autoPlay`，默认启用），支持静音默认（`defaultMuted`，默认 `true`）。
+- 悬浮层显示标题和外链跳转按钮（需要提供 `title` 或 `href`）。
+- 元数据区域展示描述、来源标签、域名、时长和创建时间。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+展示一个带封面图、标题、描述和来源信息的视频卡片。
+
+<ComponentShowcase
+  id="tool/video"
+  path="tool/video/basic"
+/>
+
+```tsx
+import { Video } from "@/components/core/video"
+
+export default function Demo() {
+  return (
+    &lt;Video
+      id="demo-video"
+      assetId="demo-video-asset"
+      src="https://www.w3schools.com/html/mov_bbb.mp4"
+      poster="https://www.w3schools.com/html/pic_trulli.jpg"
+      title="Big Buck Bunny"
+      description="A short animated film featuring a giant rabbit."
+      domain="example.com"
+      durationMs={596000}
+      ratio="16:9"
+      fit="cover"
+      source={{ label: "Sample Source", url: "https://example.com/video/bbb" }}
+    /&gt;
+  )
+}
+```
+
+### 纯视频播放（无元数据）
+
+仅展示视频播放器，不包含标题浮层和元数据区域。
+
+```tsx
+import { Video } from "@/components/core/video"
+
+export default function Demo() {
+  return (
+    &lt;Video
+      id="video-minimal"
+      assetId="video-minimal-asset"
+      src="https://www.w3schools.com/html/mov_bbb.mp4"
+    /&gt;
+  )
+}
+```
+
+### 带外链跳转
+
+通过 `href` 提供跳转链接，悬浮层中显示 Open 按钮。
+
+```tsx
+import { Video } from "@/components/core/video"
+
+export default function Demo() {
+  return (
+    &lt;Video
+      id="video-with-link"
+      assetId="video-link-asset"
+      src="https://www.w3schools.com/html/mov_bbb.mp4"
+      title="Watch on external platform"
+      href="https://example.com/video/full"
+      description="Click Open to view on external site."
+    /&gt;
+  )
+}
+```
+
+### 自定义比例和填充模式
+
+通过 `ratio` 控制宽高比，`fit` 控制视频填充模式。
+
+```tsx
+import { Video } from "@/components/core/video"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-col gap-4"&gt;
+      &lt;Video
+        id="video-16-9"
+        assetId="v-16-9"
+        src="https://www.w3schools.com/html/mov_bbb.mp4"
+        ratio="16:9"
+        fit="cover"
+        description="16:9 cover 模式"
+      /&gt;
+      &lt;Video
+        id="video-4-3"
+        assetId="v-4-3"
+        src="https://www.w3schools.com/html/mov_bbb.mp4"
+        ratio="4:3"
+        fit="contain"
+        description="4:3 contain 模式"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Video
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识，挂载到 `data-tool-ui-id` | `string` | 必填 |
+| assetId | 资源标识 | `string` | 必填 |
+| src | 视频源地址 | `string`（URL） | 必填 |
+| poster | 视频封面图地址 | `string`（URL） | - |
+| title | 视频标题，在悬浮层中展示 | `string` | - |
+| description | 视频描述，在元数据区域展示 | `string` | - |
+| href | 视频外链地址，悬浮层显示 Open 按钮 | `string`（URL） | - |
+| domain | 来源域名 | `string` | - |
+| durationMs | 视频时长（毫秒） | `number` | - |
+| ratio | 视频宽高比 | `"16:9"` &vert; `"4:3"` &vert; `"1:1"` &vert; `"auto"` | `"16:9"` |
+| fit | 视频填充模式 | `"cover"` &vert; `"contain"` &vert; `"fill"` &vert; `"scale-down"` &vert; `"none"` | `"cover"` |
+| createdAt | 视频创建时间，ISO 8601 格式 | `string`（datetime） | - |
+| locale | 时间格式化 locale | `string` | `"en-US"` |
+| source | 视频来源信息 | `{ label: string; iconUrl?: string; url?: string; }` | - |
+| className | 附加样式类名 | `string` | - |
+| autoPlay | 是否自动播放 | `boolean` | `true` |
+| defaultMuted | 默认是否静音 | `boolean` | `true` |
+| onNavigate | 点击外链时的回调，接收 href 和视频数据 | `(href: string, video: SerializableVideo) => void` | - |
+| onMediaEvent | 播放事件回调 | `(type: "play"` &vert; `"pause"` &vert; `"mute"` &vert; `"unmute") => void` | - |
+
+### Source
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 来源名称，在元数据区域展示 | `string` | - |
+| iconUrl | 来源图标地址 | `string` | - |
+| url | 来源链接地址 | `string` | - |
+
+## Semantic DOM
+
+Video 通过 `data-*` 属性暴露稳定的语义结构：
+
+| data-slot | 说明 |
+| --- | --- |
+| `video` | 根容器 |
+
+附加属性：
+
+| data 属性 | 说明 |
+| --- | --- |
+| `data-tool-ui-id` | 组件 id |
+
+## FAQ
+
+### 如何禁用自动播放？
+
+设置 `autoPlay={false}` 即可。注意：现代浏览器通常阻止带声音的自动播放，因此组件默认静音（`defaultMuted=true`）。
+
+```tsx
+&lt;Video autoPlay={false} ... /&gt;
+```
+
+### 如何自定义外链跳转行为？
+
+通过 `onNavigate` 回调接管跳转逻辑，否则组件使用内置的 `openSafeNavigationHref` 进行安全导航。
+
+```tsx
+&lt;Video
+  href="https://example.com/video"
+  onNavigate={(href, video) => { console.log("Navigate to", href, video) }}
+  ...
+/&gt;
+```
+
+### 如何监听播放事件？
+
+通过 `onMediaEvent` 回调监听 play、pause、mute、unmute 四种事件。
+
+```tsx
+&lt;Video
+  onMediaEvent={(type) => { console.log("Media event:", type) }}
+  ...
+/&gt;
+```
+
+### 宽高比 `auto` 模式何时使用？
+
+当视频没有固定宽高比（如用户上传的原始视频）时使用 `ratio="auto"`，组件会使用 `aspect-video` 作为后备，并由视频自身内容决定实际比例。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Video 代码时：
+
+1. 从 `@/components/core/video` 导入 `Video`
+2. `id`、`assetId`、`src` 为必填属性
+3. `src` 和 `href` 必须使用完整的 https URL
+4. `durationMs` 单位为毫秒，传入正整数
+5. `createdAt` 使用 ISO 8601 datetime 格式（如 `"2026-06-30T12:00:00.000Z"`）
+6. `source` 对象中的 `url` 和 `iconUrl` 需为合法 URL 字符串
+7. 不引入 Ant Design 或任何第三方视频播放器依赖
+8. 不要绕过 Video 组件直接使用原生 `<video>` 标签
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="tool/video" />

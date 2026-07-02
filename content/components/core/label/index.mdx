@@ -1,0 +1,96 @@
+Label 标签。为表单控件提供可访问的文本标签，基于 Radix Label 实现。点击 Label 自动聚焦关联控件，内置禁用状态样式联动。
+
+<h2 id="when-to-use">何时使用</h2>
+
+为输入框、选择器、复选框等表单控件添加文本标注，同时提供无障碍支持。
+
+常见场景：
+- 表单输入框前的字段名称标注。
+- 复选框/单选框的可点击文本区域。
+- 结合 `peer` 和 `group-data-[disabled=true]` 自动响应控件的禁用状态。
+
+不推荐：
+- 用 `<span>` 或 `<p>` 代替 Label，会丢失 `htmlFor` 关联和自动聚焦能力。
+- 在 Label 内部放置过多复杂交互元素，破坏点击聚焦行为。
+- 为已有关联文本的控件再包一层 Label（如 Select 已有内置 label prop）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 `htmlFor` 关联表单控件的 `id`，或直接包裹控件。
+
+<ComponentShowcase
+  id="label"
+  path="label/basic"
+/>
+
+```tsx
+import { Label } from "@/components/core/label"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Label htmlFor="name">用户名</Label>
+      <Label>纯文本标签</Label>
+      <Label className="text-destructive">错误状态</Label>
+      <Label className="cursor-pointer">
+        <input type="checkbox" className="size-3.5" />
+        <span>同意条款</span>
+      </Label>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Label
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| htmlFor | 关联表单控件的 id | `string` | - |
+| className | 附加样式类名 | `string` | - |
+| children | 标签内容 | `React.ReactNode` | - |
+
+接受 Radix Label `LabelPrimitive.Root` 的所有属性。内置样式行为：
+- `peer-disabled:cursor-not-allowed peer-disabled:opacity-50`：关联的 peer 控件禁用时自动灰化。
+- `group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50`：所在 group 禁用时自动灰化。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何使 Label 响应禁用状态？
+
+Label 内置了 `peer-disabled` 和 `group-data-[disabled=true]` 样式，当关联的控件被禁用时自动变灰、取消点击。无需额外处理。
+
+### 如何在 Label 中嵌入交互元素？
+
+直接将 `<input>`、`<select>` 等元素作为 `children` 即可：
+
+```tsx
+<Label className="cursor-pointer">
+  <input type="checkbox" />
+  <span>记住我</span>
+</Label>
+```
+
+注意添加 `cursor-pointer` 提升可点击区域的视觉暗示。
+
+### `htmlFor` 失效时如何确保关联？
+
+确保目标控件的 `id` 值与 `htmlFor` 完全一致。如果无法使用 `id` 关联（如动态生成的控件），可将控件直接作为 Label 的 children 包裹。
+
+### Label 可以和哪些组件配合使用？
+
+Label 主要与 Input、Select、Textarea、Checkbox、Switch 等表单控件配合。使用 `htmlFor` 匹配控件的 `id` 即可实现点击聚焦。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/label` 导入，不要从 `antd` 导入。
+2. 与表单控件配合时优先设置 `htmlFor` 匹配控件的 `id`。
+3. 包裹交互元素时添加 `className="cursor-pointer"` 提供视觉暗示。
+4. Label 基于 Radix Label，支持其所有 API，但不要从 radix-ui 直接导入。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="label" />

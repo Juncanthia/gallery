@@ -1,0 +1,141 @@
+Switch 开关用于在两种互斥状态之间切换。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要表示开关状态 / 两种状态之间的切换时使用。
+
+常见场景：
+
+- 表示某个功能的启用 / 禁用，例如通知开关、Wi-Fi 开关。
+- 表单中表示布尔值的输入，例如 &lt;同意条款&gt;。
+- 列表或表格中的行内状态切换。
+
+LegacySwitch 是复古 iOS 风格的开关组件，基于 Radix UI Switch 构建，继承其完整的可访问性支持和受控 / 非受控模式。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase
+  id="references/sabraman/switch"
+  path="references/sabraman/switch/basic"
+/>
+
+```tsx
+import { useState } from "react"
+import { LegacySwitch } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  const [checked, setChecked] = useState(false)
+
+  return (
+    &lt;div className="flex flex-col gap-4"&gt;
+      &lt;div className="flex items-center gap-3"&gt;
+        &lt;LegacySwitch checked={checked} onCheckedChange={setChecked} /&gt;
+        &lt;span&gt;{checked ? "已开启" : "已关闭"}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div className="flex items-center gap-3"&gt;
+        &lt;LegacySwitch defaultChecked /&gt;
+        &lt;span&gt;默认开启&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div className="flex items-center gap-3"&gt;
+        &lt;LegacySwitch offLabel="关" onLabel="开" /&gt;
+        &lt;span&gt;自定义标签&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div className="flex items-center gap-3"&gt;
+        &lt;LegacySwitch disabled /&gt;
+        &lt;span&gt;禁用状态&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LegacySwitch
+
+LegacySwitch 继承 Radix UI Switch.Root 的全部属性，并额外提供 `offLabel` 和 `onLabel` 用于自定义标签文字。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| offLabel | 关闭状态的标签文字 | `string` | `OFF` |
+| onLabel | 开启状态的标签文字 | `string` | `ON` |
+| checked | 受控模式下的选中状态 | `boolean` | - |
+| defaultChecked | 非受控模式下的默认选中状态 | `boolean` | - |
+| onCheckedChange | 选中状态变化时的回调 | `(checked: boolean) =&gt; void` | - |
+| disabled | 禁用交互 | `boolean` | - |
+| required | 表单必填 | `boolean` | - |
+| name | 表单字段名 | `string` | - |
+| value | 表单值 | `string` | - |
+| className | 附加样式类名 | `string` | - |
+
+其余属性见 [Radix UI Switch 文档](https://www.radix-ui.com/primitives/docs/components/switch)。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何获取开关状态？
+
+受控模式下使用 `checked` + `onCheckedChange`：
+
+```tsx
+const [checked, setChecked] = useState(false)
+&lt;LegacySwitch checked={checked} onCheckedChange={setChecked} /&gt;
+```
+
+非受控模式下使用 `defaultChecked`，通过 `onCheckedChange` 或表单提交获取值。
+
+### 如何自定义开关文字？
+
+使用 `offLabel` 和 `onLabel`：
+
+```tsx
+&lt;LegacySwitch offLabel="关" onLabel="开" /&gt;
+```
+
+### 如何在表单中使用？
+
+设置 `name` 属性，LegacySwitch 内部渲染的 `&lt;button role="switch"&gt;` 会携带对应的表单值：
+
+```tsx
+&lt;form&gt;
+  &lt;LegacySwitch name="references/notification" defaultChecked /&gt;
+&lt;/form&gt;
+```
+
+### 如何禁用开关？
+
+设置 `disabled` 属性：
+
+```tsx
+&lt;LegacySwitch disabled /&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LegacySwitch 代码时：
+
+1. 从 `@/components/_internal/sabraman` 导入
+2. 使用 `checked` + `onCheckedChange` 实现受控模式
+3. 使用 `defaultChecked` 实现非受控模式
+4. 使用 `offLabel` 和 `onLabel` 自定义标签文字
+5. 配合 `&lt;label&gt;` 使用以提升可访问性
+6. 不要引入 Radix UI Switch 原始组件，使用 LegacySwitch 封装
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-slot` 属性暴露稳定的语义结构：
+
+| data-slot | 说明 |
+| --- | --- |
+| `legacy-switch` | 开关根元素 |
+| `legacy-switch-thumb` | 开关滑块 |
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/sabraman/components/legacy-switch.tsx` — 渲染逻辑与样式
+- `src/components/core/sabraman-switch.tsx` — 统一导出入口
+
+<SourceViewer componentId="references/sabraman/switch" />

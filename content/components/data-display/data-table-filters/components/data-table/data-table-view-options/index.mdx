@@ -1,0 +1,207 @@
+DataTableViewOptions 是 DataTable 工具栏内的视图选项按钮，用于切换列的可见性和拖拽调整列顺序。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当 DataTable 列数较多，需要让用户按需显示/隐藏列或调整列顺序时，在工具栏中放置视图选项按钮。
+
+常见场景：
+
+- 数据表格列数超过 5 列，用户需要隐藏部分列以聚焦关键信息。
+- 不同用户关注不同字段，需要个性化列可见性配置。
+- 支持拖拽调整列顺序，使表格布局匹配用户心智模型。
+
+不推荐：
+
+- 列数很少（3 列以内）时使用，按钮占用空间且价值有限。
+- 脱离 DataTableProvider 上下文使用，组件依赖 `useDataTable()` 获取表格状态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件必须在 `DataTableProvider` 内部使用。点击设置图标打开弹出面板，面板内列出所有可隐藏的列，勾选切换可见性。传入 `enableColumnOrdering` 后，支持拖拽调整列顺序。
+
+<ComponentShowcase
+  id="dt/blocks/data-table-view-options"
+  path="dt/blocks/data-table-view-options/basic"
+/>
+
+```tsx
+import { useMemo, useState } from "react"
+import { DataTableProvider } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider"
+import { DataTableViewOptions } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-view-options"
+import {
+  useReactTable,
+  getCoreRowModel,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider"
+
+type Person = {
+  id: string
+  name: string
+  email: string
+  blocks/status: string
+  role: string
+  department: string
+}
+
+const data: Person[] = [
+  { id: "1", name: "Alice", email: "alice@example.com", blocks/status: "active", role: "admin", department: "Engineering" },
+  { id: "2", name: "Bob", email: "bob@example.com", blocks/status: "inactive", role: "user", department: "Design" },
+  { id: "3", name: "Charlie", email: "charlie@example.com", blocks/status: "active", role: "editor", department: "Product" },
+]
+
+const columns: ColumnDef&lt;Person&gt;[] = [
+  { accessorKey: "name", header: "Name", meta: { label: "姓名" } },
+  { accessorKey: "email", header: "Email", meta: { label: "邮箱" }, enableHiding: true },
+  { accessorKey: "blocks/status", header: "Status", meta: { label: "状态" }, enableHiding: true },
+  { accessorKey: "role", header: "Role", meta: { label: "角色" }, enableHiding: true },
+  { accessorKey: "department", header: "Department", meta: { label: "部门" }, enableHiding: true },
+]
+
+const filterFields: DataTableFilterField&lt;Person&gt;[] = []
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState&lt;ColumnFiltersState&gt;([])
+  const [columnVisibility, setColumnVisibility] = useState({})
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters, columnVisibility },
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  const visibleHeaders = useMemo(
+    () =&gt; table.getVisibleLeafColumns().map((col) =&gt; col.id),
+    [table.getState().columnVisibility],
+  )
+
+  return (
+    &lt;DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+      enableColumnOrdering
+    &gt;
+      &lt;div className="w-full space-y-4"&gt;
+        &lt;div className="flex items-center justify-between"&gt;
+          &lt;span className="text-sm text-muted-foreground"&gt;
+            当前可见列：{visibleHeaders.length}/{columns.length} —{" "}
+            {visibleHeaders.join("、") || "无"}
+          &lt;/span&gt;
+          &lt;DataTableViewOptions /&gt;
+        &lt;/div&gt;
+        &lt;div className="overflow-hidden rounded-md border"&gt;
+          &lt;table className="w-full text-sm"&gt;
+            &lt;thead&gt;
+              &lt;tr className="bg-muted/50"&gt;
+                {table.getVisibleLeafColumns().map((column) =&gt; (
+                  &lt;th key={column.id} className="px-3 py-2 text-left font-medium"&gt;
+                    {column.columnDef.header as string}
+                  &lt;/th&gt;
+                ))}
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+              {table.getRowModel().rows.map((row) =&gt; (
+                &lt;tr key={row.id} className="border-t"&gt;
+                  {row.getVisibleCells().map((cell) =&gt; (
+                    &lt;td key={cell.id} className="px-3 py-2"&gt;
+                      {cell.getValue() as string}
+                    &lt;/td&gt;
+                  ))}
+                &lt;/tr&gt;
+              ))}
+            &lt;/tbody&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/DataTableProvider&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DataTableViewOptions
+
+组件无 Props，所有状态通过 `useDataTable()` 从上下文获取。
+
+| 上下文属性 | 说明 | 来源 |
+| --- | --- | --- |
+| table | TanStack Table 实例 | DataTableProvider |
+| enableColumnOrdering | 是否启用拖拽排序 | DataTableProvider |
+| columnOrder | 列顺序数组 | table.getState().columnOrder |
+| columnVisibility | 列可见性状态 | table.getState().columnVisibility |
+
+### 依赖的列定义属性
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| accessorFn | 列必须有 accessorFn（非分组/显示列） | `AccessorFn<TData>` |
+| getCanHide() | 列是否可隐藏 | `boolean` |
+| meta.label | 面板中显示的列名，不配置则显示 column.id | `string` |
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么某些列没有出现在面板中？
+
+面板仅列出同时满足以下条件的列：`typeof column.accessorFn !== "undefined"` 且 `column.getCanHide()` 返回 `true`。分组列、显示列或被标记为不可隐藏的列不会出现。
+
+```tsx
+// 列定义中显式禁用隐藏
+{ accessorKey: "id", header: "ID", enableHiding: false }
+```
+
+### 如何启用列拖拽排序？
+
+在 `DataTableProvider` 上设置 `enableColumnOrdering` 为 `true`。面板中的每个列项右侧会出现拖拽手柄。
+
+```tsx
+&lt;DataTableProvider
+  table={table}
+  columns={columns}
+  filterFields={filterFields}
+  enableColumnOrdering
+&gt;
+```
+
+### 如何自定义列在面板中的显示名称？
+
+通过 `meta.label` 设置：
+
+```tsx
+{ accessorKey: "created_at", header: "Created", meta: { label: "创建时间" } }
+```
+
+不设置 `meta.label` 时，面板显示 `column.id`。
+
+### 如何在工具栏中使用？
+
+在 DataTableToolbar 中已内置 `&lt;DataTableViewOptions /&gt;`。如需自定义工具栏布局，直接从 `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-view-options` 导入并放置在 `DataTableProvider` 内部即可。
+
+### 如何持久化列可见性配置？
+
+组件通过 `table.setColumnOrder()` 和 `column.toggleVisibility()` 直接操作 TanStack Table 状态。需在 `DataTableProvider` 上层自行将状态持久化到 localStorage 或后端。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DataTableViewOptions 代码时：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-view-options` 导入。
+2. 组件必须在 `DataTableProvider` 内部使用，否则 `useDataTable()` 会抛出错误。
+3. 组件无 Props，所有配置通过 `DataTableProvider` 上下文传递。
+4. 需要拖拽排序时在 Provider 上传入 `enableColumnOrdering`。
+5. 列的隐藏/显示由 TanStack Table 的 `getCanHide()` 和 `toggleVisibility()` 控制。
+6. 列显示名称通过 `meta.label` 配置，优先级高于 `column.id`。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="blocks/data-table-view-options" />

@@ -1,0 +1,78 @@
+FooterColumns 页脚区块，以品牌信息、多列链接、社交媒体图标和版权栏组成完整的页脚。
+
+<h2 id="when-to-use">何时使用</h2>
+
+页面底部需要展示品牌标识、导航链接和版权信息时使用。
+
+常见场景：
+
+- 官网或产品页的全局页脚。
+- 需要多列链接分类的导航型页脚。
+- 需要展示社交媒体入口的品牌页脚。
+
+FooterColumns 是一个自包含的静态区块组件，不接收外部 props，直接渲染完整的页脚 UI。内部包含四个链接分区（Product、Company、Resources、Legal）和一个品牌信息栏，底部附带版权声明和隐私/条款链接。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+FooterColumns 作为页脚区块直接使用，无需传入任何 props。
+
+<ComponentShowcase
+  id="marketing-blocks/footer-columns"
+  path="marketing-blocks/footer-columns/basic"
+/>
+
+```tsx
+import { FooterColumns } from "@/components/marketing-blocks/footer-columns"
+
+export default function Demo() {
+  return <FooterColumns />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FooterColumns
+
+FooterColumns 是一个无 props 的自包含区块组件。所有内容均在组件内部定义，包括：
+
+- **品牌列**：品牌 Logo（占位块 + "Brand" 文字）、副标题描述、三个社媒图标链接（Twitter、GitHub、LinkedIn）。
+- **链接列**：四列导航链接，分别为 Product、Company、Resources、Legal，每列 4 个链接。
+- **底部栏**：版权声明 `&copy; 2026 Brand, Inc.`，以及 Privacy Policy、Terms of Service 链接。
+
+组件使用 Tailwind CSS 响应式布局：移动端 2 列网格，`md` 断点以上为 4 列，`lg` 断点以上品牌列占 1 列 + 4 个链接列组成 5 列。
+
+如需定制链接文案、href 或品牌信息，直接修改 `src/components/gooseui/components/blocks/footers/footer-columns.tsx` 中的 `footerLinks`、`socialLinks` 和品牌区块内容。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何修改页脚链接？
+
+FooterColumns 的链接数据定义在源文件中的 `footerLinks` 对象和 `socialLinks` 数组。直接修改这些数据结构即可。修改后无需在调用处传参。
+
+### 如何修改品牌名称？
+
+源文件中的品牌标识位于 Brand Column 区域内，包括 Logo 占位块（字母 "B"）和 `<span>Brand</span>` 文字。按需替换为你自己的品牌名和 Logo。
+
+### 如何在页脚中添加更多列？
+
+在 `footerLinks` 对象中添加新的分区定义（`title` + `links` 数组）。同时你可能需要调整尾部 grid 列数（当前为 `grid-cols-2 md:grid-cols-4 lg:grid-cols-5`），在 `FooterColumns` 组件内修改对应的 Tailwind class。
+
+### 为何不提供 props 接口？
+
+FooterColumns 是专区展示级组件（block），而非通用组件。它侧重即开即用的页面区块体验，数据在组件源文件中维护，免去了在调用处重复传入长链表数据的麻烦。如果需要高度参数化的页脚，建议基于本组件抽取出带 props 的版本。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FooterColumns 代码时：
+
+1. 从 `@/components/marketing-blocks/footer-columns` 导入 FooterColumns。
+2. 直接渲染 `<FooterColumns />`，无需传递任何 props。
+3. 不要在调用处传入 `footerLinks`、`socialLinks` 等数据；这些数据在组件内部维护。
+4. FooterColumns 渲染完整 `<footer>` 元素，包含网格布局和响应式断点，不要在外层额外包裹影响布局。
+5. 如需定制内容，修改源文件而非在调用处覆盖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="marketing-blocks/footer-columns" />

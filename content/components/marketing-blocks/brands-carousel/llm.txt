@@ -1,0 +1,143 @@
+---
+category: Components
+title: BrandsCarousel
+subtitle: 品牌轮播
+description: 基于 CSS animation 的品牌 logo 无限滚动轮播组件，支持速度控制和反向滚动。
+demo:
+  cols: 2
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/core/gooseui-brands-carousel.tsx
+  examples:
+    - content/components/marketing-blocks/brands-carousel/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# BrandsCarousel 品牌轮播
+
+基于 CSS `animate-blocks/marquee` 的品牌 logo 无限滚动轮播组件。通过双份列表无缝循环，支持速度切换和反向滚动。
+
+本组件借鉴 GooseUI 的 blocks/marquee 心智模型，但不是第三方的兼容层。实现以本地源码为准，不引入外部运行时依赖或 CSS-in-JS。
+
+## 何时使用 {#when-to-use}
+
+适合在落地页、合作伙伴展示区、产品首页等场景展示品牌 logo 或合作伙伴列表。优先通过组件自身 props 表达配置，避免在业务侧重复拼接 className。
+
+常见场景：
+
+- 首页底部展示合作品牌或客户 logo。
+- SaaS 产品落地页的 "Trusted by" 区域。
+- 赞助商或合作伙伴的 logo 墙。
+
+不推荐：
+
+- 需要用户手动控制滚动的场景（应使用 Carousel 组件）。
+- logo 数量极少（&lt; 4 个）无法形成连续滚动视觉效果的场景。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { BrandsCarousel } from "@/components/marketing-blocks/brands-carousel"
+
+export default function Demo() {
+  return <BrandsCarousel />
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。更多配置项参见下方 API 摘要。
+
+## 核心导出 {#exports}
+
+- `BrandsCarousel`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface BrandsCarouselProps {
+  className?: string;
+  /** 是否反向滚动 */
+  reverse?: boolean;
+  /** 滚动速度 */
+  speed?: "slow" | "normal" | "fast";
+}
+```
+
+默认值：`reverse=false`, `speed="normal"`。速度映射：`slow=40s`, `normal=25s`, `fast=15s`。
+
+## Semantic DOM {#semantic-dom}
+
+BrandsCarousel 渲染为 `<section>` 根容器：
+
+- 标题区域：居中 `text-center`，显示 "Trusted by industry leaders" 等提示文案。
+- 滚动容器：`relative overflow-hidden`，左右两侧各有一个渐变遮罩（`pointer-events-none absolute`，`from-background to-transparent` 渐变），防止 logo 硬裁切。
+- 滚动轨道：`flex gap-8`，应用 `animate-blocks/marquee` 动画。`reverse` 为 `true` 时使用 `[animation-direction:reverse]`。速度通过 CSS 自定义属性 `--duration` 注入。
+- 每条 logo：`flex items-center gap-3 px-6 py-4 rounded-lg border bg-card/50 hover:bg-card transition-colors`，内含 logo 图标（`h-10 w-10 rounded-md bg-muted`）和品牌名称（`text-lg font-semibold text-muted-foreground`）。
+
+内置品牌列表为本地硬编码数据（Vercel、Stripe、GitHub、Notion、Linear、Figma、Slack、Discord），双份渲染以实现无缝循环。
+
+所有样式使用 Tailwind CSS，不依赖 CSS-in-JS 或运行时 token。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/core/gooseui-brands-carousel.tsx`（re-export）
+- `src/components/gooseui/components/blocks/brands/brands-carousel.tsx`（实现）
+
+直接依赖摘要：
+
+- React
+- `cn` 工具函数（`@hyper/gooseui/lib/utils`）
+- Tailwind CSS `animate-blocks/marquee` 动画 keyframe
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 无限滚动通过双份品牌列表 + CSS animation 实现，无需 JavaScript 定时器。
+3. 渐变遮罩使用 CSS `pointer-events-none` + `from-background to-transparent`，不阻挡鼠标事件。
+4. 滚动速度由 `--duration` CSS 自定义属性控制，通过 `style` 注入。
+5. 品牌数据硬编码在组件内部，不依赖外部数据源。
+
+## 可访问性 {#accessibility}
+
+- 文字内容使用 `<span>` 包裹，语义明确。
+- 渐变遮罩设置 `pointer-events-none`，不干扰鼠标操作。
+- 动画为纯 CSS 实现，不触发 layout/paint 重排。
+- 无闪烁或高频动画。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/gooseui/components/blocks/brands/brands-carousel.tsx` 的 TypeScript 类型为准 |
+| 动画方案 | CSS `animate-blocks/marquee`，不依赖 JS 动画库 |
+| 速度控制 | 通过 `slow/normal/fast` 枚举 + `--duration` 自定义属性 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 非 AntD 组件，无兼容需求 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 BrandsCarousel 代码时，应遵守：
+
+1. 从 `@/components/marketing-blocks/brands-carousel` 导入 `BrandsCarousel`。
+2. 使用 `speed` 属性控制滚动速度，可选值 `"slow"` / `"normal"` / `"fast"`。
+3. 使用 `reverse` 属性控制滚动方向，不要自行覆写 `animation-direction`。
+4. 不要自行拼装品牌 logo 布局或 DOM 结构，使用组件内置渲染。
+5. 不要引入 Ant Design 相关依赖。
+6. 自定义样式通过 `className` 传入，不要覆写核心 blocks/marquee 动画 keyframe。

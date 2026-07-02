@@ -1,0 +1,115 @@
+文档分割 DocumentSplitsBlock。提供一个可调节左右分栏的 PDF 文档切分工具，左侧展示 PDF 预览，右侧面板将文档页面自由分配到不同的分割组中，支持拖拽排序和跨组移动。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对 PDF 文档进行页面级别的分割重组时，例如将一篇几十页的研究论文按章节拆分，或将多页扫描件按业务类型分组。
+
+常见场景：
+
+- 学术论文、研究报告按章节（摘要、方法论、结果等）自动或手动拆分。
+- 合同文档按条款、附件等业务单元分拆。
+- 扫描件批量处理前的页面分类与预览。
+
+不推荐：
+
+- 仅需查看 PDF 内容而不需要拆分功能时，直接使用 `PDFViewer` 组件。
+- 仅需上传 PDF 并预览时，使用 `PdfDropzoneBlock` 组件。
+- 需要程序化自动拆分（无需人工交互）时，应在业务层调用 PDF 处理库，而非使用本组件。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase
+  id="extend/document-splits-block"
+  path="extend/document-splits-block/basic"
+/>
+
+```tsx
+import { DocumentSplitsBlock } from "@/components/core/document-splits-block"
+
+export default function Demo() {
+  return (
+    <div className="w-full">
+      <DocumentSplitsBlock />
+    </div>
+  )
+}
+```
+
+> 说明：DocumentSplitsBlock 为自包含组件，内部管理 PDF 上传、页面切分与拖拽状态。用户可通过左侧 PDF 查看器上传或直接使用默认示例文件，右侧面板管理分割组。
+
+<h2 id="api">API</h2>
+
+### DocumentSplitsBlock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| file | 要加载的 PDF 文件 URL，传入后自动在左侧 PDF 查看器中展示 | `string` | - |
+| heightClassName | 组件容器的 CSS 高度类名 | `string` | `"h-[720px]"` |
+| thumbnailImages | 页面缩略图映射，key 为 `page-${number}` 格式 | `Record<\`page-${number}\`, string>` | - |
+
+组件内部行为：
+
+- 使用 `PdfBlockResizableShell` 提供左右可调节分栏布局，左栏为 `PDFViewer`，右栏为 `DocumentSplits`。
+- 左侧 PDF 查看器支持上传 PDF 文件（通过 `handlePdfUpload` 回调），上传后生成临时对象 URL 并在组件卸载时通过 `URL.revokeObjectURL` 释放。
+- 右侧 `DocumentSplits` 面板显示分割组，每个组包含若干页面缩略图，支持：
+  - 拖拽页面在组间移动或组内排序。
+  - 拖拽分割组重新排序。
+  - 添加/删除分割组（至少保留一个组）。
+  - 点击页面缩略图在左侧 PDF 查看器中跳转到对应页。
+- 分割组通过 `localStorage`（`autoSaveId="pdf-block-document-splits"`）持久化布局状态。
+
+### DocumentSplits
+
+`DocumentSplits` 是右侧分割面板的核心子组件，暴露以下 props：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 根元素样式类名 | `string` | - |
+| splits | 当前分割组数据 | `DocumentSplit[]` | `INITIAL_SPLITS` |
+| thumbnailImages | 页面缩略图映射 | `Record<DocumentSplitPageId, string>` | `{}` |
+| withFrameDivider | 是否显示边框分隔线 | `boolean` | `true` |
+| onSelectPage | 选中页面回调 | `(pageNumber: number) => void` | 必填 |
+| onSplitsChange | 分割组变更回调 | `(splits: DocumentSplit[]) => void` | 必填 |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何预加载特定 PDF 文件？
+
+传入 `file` 属性指定 PDF 文件 URL，组件加载后会在左侧 PDF 查看器中自动展示。
+
+### 如何获取分割结果？
+
+当前组件不直接暴露分割结果输出接口。如需获取用户的最终分割方案，需要扩展源码，在 `DocumentSplitsBlock` 中新增 `onSplitsChange` 回调 prop，或通过 `React.useRef` / `React.useImperativeHandle` 暴露方法。
+
+### 与 PDFViewer 和 DocumentSplits 的关系？
+
+`DocumentSplitsBlock` 内部组合了 `PdfBlockResizableShell`（布局）、`PDFViewer`（PDF 阅读）和 `DocumentSplits`（分割面板）三个组件，提供一站式的 PDF 文档切分体验。如果只需要其中之一的功能，应直接使用对应的独立组件。
+
+### 分割组如何持久化？
+
+组件通过 `PdfBlockResizableShell` 的 `autoSaveId` 机制将分栏宽度保存到 `localStorage`。页面分割方案当前不持久化，每次 PDF 加载时根据页数自动生成初始分割组。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DocumentSplitsBlock 代码时：
+
+1. 从 `@/components/core/document-splits-block` 导入。
+2. 组件为自包含组件，可选传入 `file` 指定预加载的 PDF URL。
+3. 不要从内部路径 `@hyper/extend-ui/` 导入，使用项目别名 `@/components/core/`。
+4. 不要引入 Ant Design 相关依赖。
+5. 不要手动组合 `PdfBlockResizableShell` + `PDFViewer` + `DocumentSplits` 来模拟本组件行为，直接使用 `DocumentSplitsBlock`。
+6. 如需获取用户的分割结果，应扩展组件源码添加回调，而非在外层 hack 内部 DOM。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `data-` 属性暴露稳定的语义结构：
+
+| data 属性 | 说明 |
+| --- | --- |
+| `data-auto-save="pdf-block-document-splits"` | `PdfBlockResizableShell` 持久化标识 |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="extend/document-splits-block" />

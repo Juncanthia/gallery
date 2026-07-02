@@ -1,0 +1,243 @@
+FileSystemBlock 是一个完整的文件系统浏览组件，支持图标、列表、分栏、画廊四种视图模式，内置搜索、排序、筛选和文件预览功能。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当你需要在界面中嵌入一个类似访达的文件浏览器时，使用 FileSystemBlock。
+
+常见场景：
+
+- 云端文件管理：在后台管理系统中浏览、查看云存储中的文件。
+- 文档中心：为用户提供结构化的文档浏览和预览体验。
+- 附件管理：在表单或详情页中展示和预览已上传的附件。
+- 知识库导航：按目录结构展示 Markdown、PDF 等文档资源。
+
+FileSystemBlock 是对 `@pierre/trees` 的 FileSystem 组件的封装，额外提供了内置的 PDF、DOCX、XLSX 和图片查看器对话框。
+
+推荐使用方式：
+
+- 传入 `items` 作为文件清单（至少包含 `kind` 和 `path`）。
+- 通过 `defaultView` 或 `view` + `onViewChange` 控制默认视图和视图切换。
+- 使用 `getFileUrl` 为没有 `url` 的文件解析访问地址（如预签名 URL）。
+- 使用 `loadChildren` 实现文件夹的懒加载。
+- 使用 `onFileOpen` 自定义文件打开行为（默认自动打开支持的预览类型）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 `items` 作为文件清单，组件自动构建目录树和文件索引。
+
+<ComponentShowcase
+  id="extend/file-system-block"
+  path="extend/file-system-block/basic"
+/>
+
+```tsx
+import { FileSystemBlock } from "@/components/core/file-system-block"
+
+const items = [
+  { kind: "folder", path: "documents/", name: "documents" },
+  { kind: "folder", path: "images/", name: "images" },
+  {
+    kind: "file",
+    path: "documents/report.pdf",
+    name: "report.pdf",
+    contentType: "application/pdf",
+    size: 245000,
+    updatedAt: "2026-06-15T10:30:00Z",
+  },
+  {
+    kind: "file",
+    path: "images/screenshot.png",
+    name: "screenshot.png",
+    contentType: "image/png",
+    size: 512000,
+    updatedAt: "2026-06-25T16:45:00Z",
+  },
+  {
+    kind: "file",
+    path: "readme.md",
+    name: "readme.md",
+    contentType: "text/markdown",
+    size: 4500,
+    updatedAt: "2026-06-30T12:00:00Z",
+  },
+]
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full">
+      &lt;FileSystemBlock items={items} title="My Files" />
+    &lt;/div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### FileSystemBlock
+
+FileSystemBlock 的 Props 直接继承自 FileSystem，类型为 `FileSystemProps`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 文件清单，至少包含 `kind` 和 `path` | `FileSystemItem[]` | （必填） |
+| title | 根目录标签 | `string` | `"Files"` |
+| defaultView | 默认视图模式 | `"icons"` \| `"list"` \| `"columns"` \| `"gallery"` | `"icons"` |
+| view | 受控视图模式 | `"icons"` \| `"list"` \| `"columns"` \| `"gallery"` | - |
+| onViewChange | 视图切换回调 | `(view: FileSystemView) => void` | - |
+| defaultPath | 初始打开的目录路径 | `string` | `""` |
+| onSelectionChange | 选中项变化回调 | `(item: FileSystemItem \| null) => void` | - |
+| onFileOpen | 自定义文件打开行为，覆盖内置预览 | `(file: FileSystemFileItem, url: string \| null) => void` | - |
+| getFileUrl | 为无 `url` 的文件解析访问地址 | `(file: FileSystemFileItem) => string \| Promise&lt;string&gt;` | - |
+| loadChildren | 懒加载文件夹子内容 | `(args: { path: string; cursor: string \| null }) => Promise&lt;{ items: FileSystemItem[]; nextCursor?: string \| null }&gt;` | - |
+| renderFilePreview | 自定义无缩略图文件的预览内容 | `(file: FileSystemFileItem) => React.ReactNode` | - |
+| loadPreviewImageUrl | 按需加载多页文件的单页缩略图 | `(file: FileSystemFileItem, pageIndex: number) => Promise&lt;string \| null&gt;` | - |
+| className | 附加样式类名 | `string` | - |
+
+### FileSystemItem
+
+`items` 数组中的每个元素可以是文件夹或文件。
+
+#### FileSystemFolderItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| kind | 固定为 `"folder"` | `"folder"` | - |
+| path | 文件夹路径，末尾加 `/` | `string` | - |
+| name | 文件夹名称 | `string` | 从 path 推导 |
+| parentPath | 父级文件夹路径 | `string` | 从 path 推导 |
+| hasChildren | 标记存在子内容但未加载，启用 `loadChildren` | `boolean` | - |
+| createdAt | 创建时间（ISO 时间戳） | `string` | - |
+| updatedAt | 修改时间（ISO 时间戳） | `string` | - |
+
+#### FileSystemFileItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| kind | 固定为 `"file"` | `"file"` | - |
+| path | 文件路径，用作显示路径和默认 key | `string` | - |
+| key | 对象存储原始 key（S3/R2） | `string` | 等于 `path` |
+| name | 文件名称 | `string` | 从 path 推导 |
+| parentPath | 父级文件夹路径 | `string` | 从 path 推导 |
+| contentType | MIME 类型 | `string` | - |
+| size | 文件大小（字节） | `number` | - |
+| createdAt | 创建时间（ISO 时间戳） | `string` | - |
+| updatedAt | 修改时间（ISO 时间戳） | `string` | - |
+| etag | ETag，用于展示 | `string` | - |
+| url | 文件访问地址，若为空则通过 `getFileUrl` 解析 | `string` | - |
+| previewImageUrl | 外部生成的缩略图 URL | `string \| null` | - |
+| previewImageUrls | 多页缩略图列表（第一页为封面） | `string[] \| null` | - |
+| previewPageCount | 总页数（超过 `previewImageUrls` 时显示懒加载分页器） | `number` | - |
+| previewAspectRatio | 缩略图宽高比（宽/高） | `number` | 纵向页面默认值 |
+| metadata | 自定义元数据键值对 | `Record&lt;string, string&gt;` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何接入云存储文件？
+
+通过 `getFileUrl` 为文件动态生成访问 URL（如预签名 URL）：
+
+```tsx
+<FileSystemBlock
+  items={manifest}
+  getFileUrl={async (file) => {
+    const response = await fetch(`/api/presign?key=${file.key ?? file.path}`)
+    const { url } = await response.json()
+    return url
+  }}
+/>
+```
+
+### 如何实现文件夹懒加载？
+
+为文件夹设置 `hasChildren: true` 并提供 `loadChildren`：
+
+```tsx
+<FileSystemBlock
+  items={rootItems}
+  loadChildren={async ({ path, cursor }) => {
+    const response = await fetch(`/api/files?prefix=${path}&cursor=${cursor ?? ""}`)
+    const data = await response.json()
+    return { items: data.items, nextCursor: data.nextCursor }
+  }}
+/>
+```
+
+### 支持哪些文件类型的预览？
+
+内置预览支持：
+
+- PDF（`application/pdf` 或 `.pdf`）
+- DOCX（`.docx`）
+- XLSX（`.xlsx`）
+- 图片（`image/*` 或 `.png`、`.jpg`、`.gif`、`.svg`、`.webp`、`.avif`）
+
+其他文件类型会使用图标和扩展名作为默认预览，可通过 `renderFilePreview` 自定义。
+
+### 如何自定义文件打开行为？
+
+使用 `onFileOpen` 覆盖默认行为：
+
+```tsx
+<FileSystemBlock
+  items={items}
+  onFileOpen={(file, url) => {
+    if (url) window.open(url, "_blank")
+  }}
+/>
+```
+
+### 如何控制默认打开的目录？
+
+使用 `defaultPath` 指定初始路径：
+
+```tsx
+<FileSystemBlock items={items} defaultPath="documents/" />
+```
+
+### 如何与其他组件联动？
+
+通过 `onSelectionChange` 获取当前选中项，驱动外部状态：
+
+```tsx
+const [selected, setSelected] = useState<FileSystemItem | null>(null)
+
+return (
+  <>
+    <FileSystemBlock items={items} onSelectionChange={setSelected} />
+    {selected?.kind === "file" && <FilePreviewPanel file={selected} />}
+  </>
+)
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FileSystemBlock 代码时：
+
+1. 从 `@/components/core/file-system-block` 导入
+2. `items` 是必填属性，至少需要 `kind` 和 `path`
+3. 文件夹 `path` 以 `/` 结尾，文件 `path` 不以 `/` 结尾
+4. 视图使用 `defaultView`（非受控）或 `view` + `onViewChange`（受控）
+5. 远程文件使用 `getFileUrl` 提供访问 URL
+6. 大目录使用 `loadChildren` 实现懒加载
+7. 自定义文件打开使用 `onFileOpen`
+8. 不引入 Ant Design 相关依赖
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `file-system` | 组件根节点 |
+
+## 实现参考
+
+核心文件：
+
+- `src/components/core/extend-file-system-block.tsx` — 入口组件（Thin Block Wrapper）
+- `src/components/extend/components/blocks/file-system-block.tsx` — FileSystemBlock 实现
+- `src/components/extend/components/ui/file-system.tsx` — FileSystem 完整实现
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="extend/file-system-block" />

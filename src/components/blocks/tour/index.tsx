@@ -14,7 +14,7 @@ import {
 import { AnimatePresence, motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 
 export type TourPlacement =
   | "top"

@@ -6,10 +6,10 @@ import { useTheme } from 'next-themes';
 import {
   CodeBlock as CodeBlockPrimitive,
   type CodeBlockProps as CodeBlockPropsPrimitive,
-} from '@/components/_primitives/animate/code-block';
+} from '@/components/_internal/animate/code-block';
 import { cn } from '@/lib/utils';
-import { CopyButton } from '@/components/ui/copy-button';
-import { getStrictContext } from '@/components/_shared/lib/get-strict-context';
+import { CopyButton } from '@/components/core/copy-button';
+import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
 
 type CodeContextType = {
   code: string;

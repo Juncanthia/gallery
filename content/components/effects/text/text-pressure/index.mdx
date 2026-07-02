@@ -1,0 +1,90 @@
+TextPressure 压力感文字组件，基于鼠标距离动态调整可变字体（Variable Font）的 wght/wdth/ital 轴参数，产生文字被按压变形的交互效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要...时使用。
+常见场景：
+- Hero 标题的交互式字体效果，鼠标靠近时文字膨胀变重
+- 品牌页面展示可变字体的动态特性
+- 创意型大标题的视觉焦点
+不推荐：
+- 浏览器不支持可变字体的环境（需要 WOFF2 Variable Font）
+- 段落文本（仅适合大字标题展示）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/text-pressure" path="rb/text-pressure/basic" />
+
+```tsx
+import { TextPressure } from "@/components/core/text-pressure"
+
+export default function Demo() {
+  return (
+    <div className="flex justify-center p-8">
+      <TextPressure />
+    </div>
+  )
+}
+```
+
+### 自定义配置
+```tsx
+import { TextPressure } from "@/components/core/text-pressure"
+
+export default function Demo() {
+  return (
+    <div className="h-64 w-full overflow-hidden">
+      <TextPressure
+        text="Hello World"
+        fontFamily="Roboto Flex"
+        fontUrl="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+        weight
+        width
+        italic={false}
+        stroke
+        textColor="#ffffff"
+        strokeColor="#ff0066"
+        scale={false}
+        minFontSize={32}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### TextPressure
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 显示的文本内容 | `string` | `"Compressa"` |
+| fontFamily | 可变字体 CSS `font-family` 名称 | `string` | `"Roboto Flex"` |
+| fontUrl | 可变字体加载 URL（Google Fonts 格式） | `string` | Roboto Flex CDN URL |
+| width | 是否根据距离变化字体宽度 (`wdth` 轴) | `boolean` | `true` |
+| weight | 是否根据距离变化字重 (`wght` 轴) | `boolean` | `true` |
+| italic | 是否根据距离变化斜体 (`ital` 轴) | `boolean` | `true` |
+| alpha | 是否根据距离变化透明度 | `boolean` | `false` |
+| flex | 是否使用弹性布局等宽分布字符 | `boolean` | `true` |
+| stroke | 是否显示描边效果（通过 `::after` 伪元素） | `boolean` | `false` |
+| scale | 是否缩放文字以填充容器高度 | `boolean` | `false` |
+| textColor | 文字颜色 | `string` | `"#FFFFFF"` |
+| strokeColor | 描边颜色（仅 stroke=true 时生效） | `string` | `"#FF0000"` |
+| minFontSize | 最小字体大小（像素） | `number` | `24` |
+| className | 自定义类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+### 可变字体是什么？需要额外引入吗？
+可变字体（Variable Font）是一种单一字体文件包含多个可变轴的字体格式。组件通过 `fontUrl` 自动加载 Google Fonts 的 Roboto Flex 字体，也可替换为其他支持 `wght`/`wdth`/`ital` 轴的可变字体。
+
+### stroke 模式为什么在个别浏览器上不显示？
+描边效果通过 CSS `-webkit-text-stroke` 实现，Firefox 等非 WebKit 浏览器可能不完全支持。建议在非关键路径上使用。
+
+### 如何让文字自适应容器大小？
+设置 `scale={true}`，组件会自动计算文字尺寸并缩放 Y 轴以填充父容器高度。同时 `minFontSize` 确保文字不会过小。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/text-pressure` 导入。
+2. 父容器需要有明确的宽高，组件通过 `width: 100%; height: 100%` 自适应填充。
+3. 依赖 `fontVariationSettings` CSS 属性，无需额外 JS 依赖。
+4. 字符级别的 `data-char` 属性用于 `::after` 伪元素的描边效果。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-text-pressure" />

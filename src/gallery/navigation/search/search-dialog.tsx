@@ -8,8 +8,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+} from "@/components/core/dialog"
+import { Input } from "@/components/core/input"
 import { cn } from "@/lib/utils"
 import { gallerySearchEntries } from "../../registry/catalog"
 import { readRecentVisits, rememberRecentVisit } from "../../runtime/recent-visits"

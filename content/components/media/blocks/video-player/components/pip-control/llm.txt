@@ -1,0 +1,95 @@
+---
+category: Components
+title: PictureInPictureControl
+subtitle: 画中画控制
+description: 响应用户点击切换画中画模式，自动根据画中画状态更新无障碍标签。
+demo:
+  cols: 2
+group:
+  title: Limeplay
+  order: 7
+source:
+  component: src/components/limeplay/ui/picture-in-picture-control.tsx
+  wrapper: src/components/core/limeplay-pip-control.tsx
+  examples:
+    - content/components/limeplay/pip-control/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# PictureInPictureControl 画中画控制
+
+画中画控制按钮，用于切换画中画（Picture-in-Picture）模式。
+
+## 导入路径
+
+```tsx
+import { PictureInPictureControl } from "@/components/core/pip-control"
+```
+
+## 核心导出
+
+- `PictureInPictureControl`
+- `PictureInPictureControlProps`
+- `PictureInPictureControlPropsDocs`
+
+## API 摘要
+
+```ts
+interface PictureInPictureControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean           // 使用 Radix Slot 合并到子元素，默认 false
+  render?: React.ReactElement // 渲染自定义子元素
+  shortcut?: string           // 键盘快捷键提示，例 "P"
+}
+```
+
+## 最小示例
+
+```tsx
+import { PictureInPictureIcon } from "@phosphor-icons/react"
+import { Button } from "@/components/core/button"
+import { PictureInPictureControl } from "@/components/core/pip-control"
+import { usePictureInPictureStore } from "@/components/media/hooks/use-picture-in-picture"
+
+export default function Demo() {
+  const isPictureInPictureActive = usePictureInPictureStore(
+    (state) => state.active
+  )
+
+  return (
+    <PictureInPictureControl asChild shortcut="P">
+      <Button size="icon" variant="ghost">
+        <PictureInPictureIcon
+          weight={isPictureInPictureActive ? "fill" : "regular"}
+        />
+      </Button>
+    </PictureInPictureControl>
+  )
+}
+```
+
+## 关键行为
+
+1. 点击时调用 `usePictureInPictureStore` 的 `toggle()` 方法切换画中画。
+2. 自动根据 `active` 状态生成 `aria-label`（"Enter Picture-in-Picture" / "Exit Picture-in-Picture"）。
+3. 传入 `shortcut` 时自动写入 `aria-keyshortcuts` 并在 `aria-label` 中追加提示。
+4. 当 `readyState < HAVE_METADATA` 时自动 `disabled`。
+5. 当浏览器不支持画中画时自动 `disabled`。
+6. `asChild` 模式下通过 Radix Slot 将行为合并到子元素。
+7. `render` 模式下通过 `React.cloneElement` 注入 props。
+8. 默认渲染（无 asChild 和 render）时使用内部 Button 组件。
+
+## 约束
+
+- 必须在 `MediaProvider` 上下文中使用。
+- 不要引入 `antd` 或 `@ant-design/icons`。
+- 推荐 `asChild` 模式包裹 Button，而非直接使用原生 button。
+- 图标推荐使用 `@phosphor-icons/react` 的 `PictureInPictureIcon`，根据 `active` 状态切换 `weight`。

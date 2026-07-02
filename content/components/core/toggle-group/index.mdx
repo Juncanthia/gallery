@@ -1,0 +1,141 @@
+分段控制器 ToggleGroup。用于展示多个选项并允许用户选择其中单个或多个选项，基于 Radix ToggleGroup 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在有限空间内展示一组互斥或多选的选项时使用，例如文本格式工具栏、视图切换器等。
+
+常见场景：
+- 文本编辑器中的格式切换（加粗、斜体、下划线等），单选模式下互斥切换。
+- 数据面板中的视图模式切换（列表/网格/日历等）。
+- 筛选器中的条件组，允许用户在多选模式下同时激活多个过滤条件。
+
+不推荐：
+- 选项数量较多（超过 5-6 个）——使用 Select 或 Radio.Group 替代，避免横向空间不足。
+- 选项文本过长——ToggleGroup 适用于简短标签，长文本应使用 Radio 或 Checkbox。
+- 需要嵌套层级结构的选项——使用 TreeSelect 或 Cascader。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="toggle-group" path="toggle-group/basic" />
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@/components/core/toggle-group"
+import { Bold, Italic, Underline } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <ToggleGroup type="multiple">
+      <ToggleGroupItem value="bold" aria-label="加粗">
+        <Bold className="size-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="italic" aria-label="斜体">
+        <Italic className="size-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="underline" aria-label="下划线">
+        <Underline className="size-4" />
+      </ToggleGroupItem>
+    </ToggleGroup>
+  )
+}
+```
+
+### 使用 options 声明式配置
+
+当选项结构简单时，可通过 `options` 属性声明式配置，无需手动组合多个 `ToggleGroupItem`。
+
+```tsx
+import { ToggleGroup } from "@/components/core/toggle-group"
+
+export default function Demo() {
+  return (
+    <ToggleGroup
+      type="single"
+      defaultValue="week"
+      options={[
+        { label: "日", value: "day" },
+        { label: "周", value: "week" },
+        { label: "月", value: "month" },
+      ]}
+    />
+  )
+}
+```
+
+### 纵向排列
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@/components/core/toggle-group"
+
+export default function Demo() {
+  return (
+    <ToggleGroup type="single" direction="vertical">
+      <ToggleGroupItem value="left">左对齐</ToggleGroupItem>
+      <ToggleGroupItem value="center">居中</ToggleGroupItem>
+      <ToggleGroupItem value="right">右对齐</ToggleGroupItem>
+    </ToggleGroup>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ToggleGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 选择模式，单选或多选 | `'single' \| 'multiple'` | `'single'` |
+| value | 受控选中值 | `string \| string[]` | - |
+| defaultValue | 非受控默认选中值 | `string \| string[]` | - |
+| onValueChange | 选中值变化回调 | `(value: string \| string[]) => void` | - |
+| variant | 视觉变体 | `'default' \| 'outline'` | `'default'` |
+| size | 尺寸 | `'default' \| 'sm' \| 'lg' \| 'icon'` | `'default'` |
+| options | 声明式选项配置，传入后自动渲染 ToggleGroupItem | `ToggleGroupOption[]` | - |
+| direction | 排列方向 | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| disabled | 是否禁用整个组件 | `boolean` | `false` |
+| className | 自定义样式类名 | `string` | - |
+
+### ToggleGroupOption
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 选项显示内容 | `ReactNode` | - |
+| value | 选项唯一标识 | `string` | - |
+| disabled | 是否禁用该选项 | `boolean` | `false` |
+| className | 选项自定义样式 | `string` | - |
+| title | 原生 title 属性 | `string` | - |
+| aria-label | 无障碍标签 | `string` | - |
+
+### ToggleGroupItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 选项唯一标识 | `string` | - |
+| variant | 视觉变体，可覆盖 ToggleGroup 的 variant | `'default' \| 'outline'` | 继承自 ToggleGroup |
+| size | 尺寸，可覆盖 ToggleGroup 的 size | `'default' \| 'sm' \| 'lg' \| 'icon'` | 继承自 ToggleGroup |
+| disabled | 是否禁用该项 | `boolean` | `false` |
+| className | 自定义样式 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### ToggleGroup 和 Toggle 的区别？
+Toggle 是单个开关按钮，用于独立的开/关状态。ToggleGroup 是一组互斥或多选的按钮组，内部基于 Radix ToggleGroup primitive 实现，共享同一个选中状态管理。
+
+### 如何在单选模式下取消选中？
+在 `type="single"` 模式下，点击已选中的项会取消选中（值变为 `undefined`）。这与 Radix ToggleGroup 的默认行为一致。如需防止取消选中，可在 `onValueChange` 中手动处理空值情况。
+
+### options 和 children 能否同时使用？
+可以，但不推荐。`options` 传入后会自动渲染对应的 `ToggleGroupItem`，如果同时传入 `children`，两者都会渲染。建议二选一：声明式场景用 `options`，需要自定义渲染时用 `children`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/toggle-group` 导入 `ToggleGroup` 和 `ToggleGroupItem`。
+2. `type` 必传，明确选择模式是 `'single'` 还是 `'multiple'`。
+3. 纯图标的 ToggleGroupItem 必须提供 `aria-label`。
+4. 声明式场景优先使用 `options` 属性，减少模板代码。
+5. 需要自定义样式时，优先使用 `variant` 和 `size` props，最后才使用 `className`。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="toggle-group" />

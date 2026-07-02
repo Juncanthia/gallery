@@ -1,0 +1,186 @@
+时间轴 Timeline。垂直或水平展示时间流信息，按时间顺序排列事件节点，支持多种颜色、布局模式、进度状态和入场动画。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要按时间顺序展示一系列事件或步骤时使用。
+
+常见场景：
+- 项目进度、版本发布记录的时间线展示
+- 订单状态流转、物流跟踪信息
+- 操作日志、活动记录的时间序列展示
+- 流程步骤的可视化呈现
+
+不推荐：
+- 需交互操作的步骤条——使用 Steps/Stepper 组件
+- 纯文本列表——使用 List 组件
+- 需要拖拽排序的时间条目——Timeline 为只读展示
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="timeline" path="timeline/basic" />
+
+```tsx
+import { Timeline } from "@/components/core/timeline"
+
+export default function Demo() {
+  return (
+    <Timeline
+      items={[
+        { label: "2024-01-01", children: "项目启动" },
+        { label: "2024-02-15", children: "第一阶段上线" },
+        { label: "2024-03-30", color: "gray", children: "等待第二阶段" },
+      ]}
+      className="max-w-sm"
+    />
+  )
+}
+```
+
+### 交替布局与自定义节点
+
+```tsx
+import { Timeline } from "@/components/core/timeline"
+import { CheckCircle, Clock, AlertCircle } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Timeline
+      mode="alternate"
+      items={[
+        {
+          label: "2024-06-01",
+          title: "需求评审",
+          content: "完成 PRD 评审，确认技术方案",
+          icon: <CheckCircle className="size-3" />,
+          color: "success",
+        },
+        {
+          label: "2024-06-15",
+          title: "开发中",
+          content: "前后端联调进行中",
+          icon: <Clock className="size-3" />,
+          color: "blue",
+        },
+        {
+          label: "2024-07-01",
+          title: "提测",
+          content: "提交 QA 测试",
+          icon: <AlertCircle className="size-3" />,
+          color: "warning",
+        },
+      ]}
+    />
+  )
+}
+```
+
+### 水平布局
+
+```tsx
+import { Timeline } from "@/components/core/timeline"
+
+export default function Demo() {
+  return (
+    <Timeline
+      orientation="horizontal"
+      items={[
+        { title: "Step 1", content: "分析需求" },
+        { title: "Step 2", content: "设计方案" },
+        { title: "Step 3", content: "开发实现" },
+        { title: "Step 4", content: "测试上线" },
+      ]}
+    />
+  )
+}
+```
+
+### 进度状态
+
+```tsx
+import { Timeline } from "@/components/core/timeline"
+
+export default function Demo() {
+  return (
+    <Timeline
+      activeIndex={1}
+      items={[
+        { title: "已提交", content: "表单已进入审批流程" },
+        { title: "审批中", content: "等待主管确认" },
+        { title: "待归档", content: "完成后自动归档" },
+      ]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Timeline
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 时间线项配置数组 | `TimelineItemConfig[]` | - |
+| mode | 布局模式 | `"left"` \| `"right"` \| `"start"` \| `"end"` \| `"alternate"` | `"left"` |
+| orientation | 排列方向 | `"vertical"` \| `"horizontal"` | `"vertical"` |
+| pending | 最后一个待处理节点的内容 | `React.ReactNode` | - |
+| pendingDot | 待处理节点的自定义圆点 | `React.ReactNode` | - |
+| reverse | 是否倒序排列 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+| activeIndex | 当前进度索引，小于该索引的节点为 completed，等于该索引的节点为 active | `number` | - |
+| animated | 是否启用入场动画 | `boolean` | `true` |
+
+### TimelineItem（也可用作独立组件）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dot | 自定义圆点 | `React.ReactNode` | - |
+| icon | 自定义图标（替代圆点） | `React.ReactNode` | - |
+| color | 圆点颜色 | `"default"` \| `"success"` \| `"warning"` \| `"error"` \| `"blue"` \| `"red"` \| `"green"` \| `"gray"` \| `string` | `"default"` |
+| label | 时间标签 | `React.ReactNode` | - |
+| time | 时间语义标签，渲染为 `<time>` | `React.ReactNode` | - |
+| title | 标题 | `React.ReactNode` | - |
+| content | 内容（与 children 二选一） | `React.ReactNode` | - |
+| children | 子内容（与 content 二选一） | `React.ReactNode` | - |
+| blocks/status | 显式节点状态 | `"completed"` \| `"active"` \| `"pending"` | - |
+| pending | 是否为待处理状态（脉冲动画） | `boolean` | `false` |
+| loading | 是否为加载状态（脉冲动画） | `boolean` | `false` |
+| placement | 节点位置 | `"start"` \| `"end"` | - |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+
+预设颜色映射：`default` → 主题色、`success` → 绿色、`warning` → 黄色、`error` → 红色、`blue` → 蓝色、`red` → 红色、`green` → 绿色、`gray` → 灰色。也可传入自定义 CSS 颜色字符串。
+
+### TimelineItemConfig
+
+继承 `TimelineItemProps`，额外字段：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| key | React key | `React.Key` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### items 和 children 可以同时使用吗？
+可以。`items` 中的条目先渲染，`children` 追在最后。但推荐仅使用其中一种方式。
+
+### 如何实现加载更多的"待处理"状态？
+在 `Timeline` 上设置 `pending` 属性，它会作为最后一个节点追加到列表末尾，同时可通过 `pendingDot` 自定义其圆点样式。
+
+### horizontal 和 vertical 模式有何区别？
+`vertical`（默认）垂直排列，每个条目独立成行，支持 `mode` 控制左右位置。`horizontal` 水平排列，适用于步骤流程展示，条目横向展开。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/timeline` 导入，不要从 `antd` 导入。
+2. 优先使用 `items` 属性声明式配置时间线条目，每个条目至少提供 `content` 或 `children`。
+3. `color` 支持预设色值（`"default"` 等）和自定义 CSS 颜色字符串。
+4. 使用 `activeIndex` 表示流程进度；需要覆盖单项状态时使用 item 的 `blocks/status`。
+5. 使用 `pending` 属性添加加载/待处理状态节点，无需手动构造 TimelineItem。
+6. 需要语义化时间文本时优先使用 `time`，否则使用 `label`。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="timeline" />

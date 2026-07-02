@@ -1,0 +1,180 @@
+PDFViewer 用于在浏览器中预览 PDF 文档，基于 @embedpdf 引擎，提供缩放、旋转、搜索、缩略图导航与文本选择。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要在界面内直接预览、浏览或操作 PDF 文件时使用。
+
+常见场景：
+
+- 文档预览：查看合同、报告、发票等 PDF 文件。
+- 内容审查：在审核流程中逐页翻阅 PDF。
+- 文本搜索：在大体量 PDF 中按关键词搜索并定位。
+- 页面旋转：对扫描方向异常的页面进行旋转校正。
+- 文件上传：允许用户上传本地 PDF 进行预览。
+- 自定义标注：通过 `renderPageOverlay` 在页面上叠加自定义内容。
+
+不推荐：
+
+- 用于 PDF 编辑或表单填写，组件仅提供只读预览能力。
+- 在无固定高度的容器中使用，组件需要父容器提供明确的高度。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 `src` 属性指定 PDF 文件地址即可渲染完整的 PDF 查看器。组件内置工具栏（缩放、搜索、旋转、下载、上传）、缩略图侧栏和文本选择。
+
+<ComponentShowcase
+  id="extend/pdf-viewer"
+  path="extend/pdf-viewer/basic"
+/>
+
+```tsx
+import { PDFViewer } from "@/components/document/components/ui/pdf-viewer"
+
+export default function Demo() {
+  return (
+    &lt;div className="h-[600px] w-full"&gt;
+      &lt;PDFViewer src="/sample.pdf" /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### PDFViewer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | PDF 文件地址 | `string` | - |
+| className | 附加样式类名 | `string` | - |
+| defaultZoom | 默认缩放级别 | `number` | `1` |
+| fileName | 下载时使用的文件名 | `string` | - |
+| showDownload | 是否显示下载按钮 | `boolean` | `true` |
+| showToolbar | 是否显示工具栏 | `boolean` | `true` |
+| showRotateControls | 是否显示旋转控制 | `boolean` | `true` |
+| showUpload | 是否显示上传按钮 | `boolean` | `true` |
+| toolbarActions | 工具栏自定义操作 | `React.ReactNode` | - |
+| pageClassName | 页面自定义样式类名 | `(pageNumber: number) => string \| undefined` | - |
+| renderPageOverlay | 页面覆盖层渲染 | `(props: PDFViewerPageOverlayProps) => React.ReactNode` | - |
+| onActivePageChange | 当前页变化回调 | `(pageNumber: number) => void` | - |
+| onDocumentLoadSuccess | 文档加载成功回调 | `(numPages: number) => void` | - |
+| onPdfUpload | 上传 PDF 回调 | `(file: File) => void` | - |
+| onPagePointerDown | 页面指针按下回调 | `(event, pageNumber) => void` | - |
+| onPagePointerMove | 页面指针移动回调 | `(event, pageNumber) => void` | - |
+| onPagePointerUp | 页面指针抬起回调 | `(event, pageNumber) => void` | - |
+| onPagePointerCancel | 页面指针取消回调 | `(event, pageNumber) => void` | - |
+
+### PDFViewerPageOverlayProps
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| pageNumber | 当前页码 | `number` |
+| pageWidth | 页面原始宽度 | `number` |
+| pageHeight | 页面原始高度 | `number` |
+| scale | 当前缩放比例 | `number` |
+| rotation | 当前旋转角度（度） | `number` |
+
+### PDFViewerHandle（ref）
+
+| 方法 | 说明 | 签名 |
+| --- | --- | --- |
+| scrollToPage | 滚动到指定页 | `(pageNumber, options?) => void` |
+| scrollToPageArea | 滚动到页面指定区域 | `(pageNumber, area, options?) => void` |
+| getViewportElement | 获取视口 DOM 元素 | `() => HTMLDivElement \| null` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何加载远程 PDF？
+
+通过 `src` 属性传入 PDF 文件 URL：
+
+```tsx
+<PDFViewer src="https://example.com/document.pdf" />
+```
+
+### 如何自定义工具栏？
+
+保留默认工具栏时，通过 `toolbarActions` 注入额外操作；也可通过 `showToolbar={false}` 隐藏后完全自定义：
+
+```tsx
+<PDFViewer
+  src="/doc.pdf"
+  toolbarActions={<Button>导出</Button>}
+/>
+```
+
+### 如何在 PDF 页面上叠加标注？
+
+使用 `renderPageOverlay` 属性，根据 `pageWidth`、`pageHeight` 和 `scale` 计算覆盖层定位：
+
+```tsx
+<PDFViewer
+  src="/doc.pdf"
+  renderPageOverlay={({ pageNumber, scale, pageWidth, pageHeight }) => (
+    <div
+      style={{
+        position: "absolute",
+        left: 100 * scale,
+        top: 200 * scale,
+        width: 80 * scale,
+        height: 20 * scale,
+        border: "2px solid red",
+      }}
+    />
+  )}
+/>
+```
+
+### 如何编程式导航？
+
+通过 `ref` 获取 `PDFViewerHandle`，调用 `scrollToPage` 或 `scrollToPageArea`：
+
+```tsx
+const ref = useRef<PDFViewerHandle>(null)
+
+<PDFViewer ref={ref} src="/doc.pdf" />
+<Button onClick={() => ref.current?.scrollToPage(5)}>第 5 页</Button>
+```
+
+### 需要什么容器环境？
+
+组件使用 `h-full` 填充父容器。父容器必须有明确的高度（固定像素或 flex 分配）：
+
+```tsx
+<div className="h-[600px] w-full">
+  <PDFViewer src="/doc.pdf" />
+</div>
+```
+
+### 如何隐藏部分工具栏？
+
+通过 `showToolbar={false}` 完全隐藏，或单独控制：
+
+| 属性 | 控制项 |
+| --- | --- |
+| `showRotateControls={false}` | 隐藏旋转按钮 |
+| `showDownload={false}` | 隐藏下载按钮 |
+| `showUpload={false}` | 隐藏上传按钮 |
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 PDFViewer 代码时：
+
+1. 从 `@/components/document/components/ui/pdf-viewer` 导入 `PDFViewer`。
+2. 必须提供 `src` 属性指定 PDF 文件地址。
+3. 父容器必须有固定高度，组件依赖 `h-full` 填充。
+4. 按需使用 `showToolbar`、`showDownload`、`showRotateControls`、`showUpload` 控制 UI。
+5. 通过 `ref` 获取 `PDFViewerHandle` 实现编程式页面导航。
+6. 使用 `renderPageOverlay` 在页面上叠加自定义内容。
+7. 不要引入其他 PDF 渲染库（react-pdf、pdfjs-dist 等）。
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/extend/components/ui/pdf-viewer.tsx` — 完整实现，含工具栏、缩略图、搜索、旋转、缩放
+- `src/components/core/extend-pdf-viewer.tsx` — 重导出入口
+
+<SourceViewer componentId="extend/pdf-viewer" />

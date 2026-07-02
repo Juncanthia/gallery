@@ -15,25 +15,25 @@ import {
   useRef,
   useState,
 } from "react";
-import { Button, type ButtonProps } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button, type ButtonProps } from "@/components/core/button";
+import { Input } from "@/components/core/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/core/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/core/select";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/core/tooltip";
 import { cn } from "@/lib/utils";
 
 export type ColorPickerFormatMode = "hex" | "rgb" | "css" | "hsl" | "hsb";

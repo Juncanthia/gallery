@@ -19,7 +19,7 @@ import {
   SuggestionLeaf,
   SuggestionLineBreak,
   VoidRemoveSuggestionOverlay,
-} from '@/components/ui/suggestion-node';
+} from '@/components/editor/nodes/suggestion-node';
 import {
   discussionPlugin,
   getDiscussionBlockClickTarget,

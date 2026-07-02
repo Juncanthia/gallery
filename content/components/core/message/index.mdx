@@ -1,0 +1,181 @@
+消息气泡 Message。用于聊天界面中展示单条消息，支持左右对齐、头像、内容区和底部附加信息。属于复合子组件，需配合 MessageGroup 使用。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要构建聊天或消息流界面时使用，每条消息由气泡本体、头像、内容和可选的头尾部标注组成。
+
+常见场景：
+- 即时通讯聊天界面
+- AI 对话界面的消息展示
+- 客服系统中的对话记录
+- 评论回复链中的消息卡片
+
+不推荐：
+- 全局操作反馈提示——使用 Sonner/Toast 组件
+- 页面顶部的通知横幅——使用 Banner 组件
+- 列表中的简单文本项——使用普通 div 即可
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="message" path="message/basic" />
+
+```tsx
+import {
+  MessageGroup,
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageHeader,
+  MessageFooter,
+} from "@/components/core/message"
+
+export default function Demo() {
+  return (
+    <MessageGroup>
+      <Message>
+        <MessageAvatar>
+          <div className="size-8 rounded-full bg-blue-500" />
+        </MessageAvatar>
+        <MessageContent>
+          <MessageHeader>张三</MessageHeader>
+          <div className="bg-muted rounded-lg px-3 py-2">
+            你好，今天天气不错！
+          </div>
+          <MessageFooter>10:30</MessageFooter>
+        </MessageContent>
+      </Message>
+    </MessageGroup>
+  )
+}
+```
+
+### 对话场景
+
+```tsx
+import {
+  MessageGroup,
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageHeader,
+} from "@/components/core/message"
+
+export default function Demo() {
+  return (
+    <MessageGroup>
+      <Message>
+        <MessageAvatar>
+          <div className="size-8 rounded-full bg-blue-500" />
+        </MessageAvatar>
+        <MessageContent>
+          <MessageHeader>张三</MessageHeader>
+          <div className="bg-muted rounded-lg px-3 py-2">你好！</div>
+        </MessageContent>
+      </Message>
+
+      <Message align="end">
+        <MessageAvatar>
+          <div className="size-8 rounded-full bg-green-500" />
+        </MessageAvatar>
+        <MessageContent>
+          <MessageHeader>我</MessageHeader>
+          <div className="bg-primary text-primary-foreground rounded-lg px-3 py-2">
+            你好，有什么可以帮你的？
+          </div>
+        </MessageContent>
+      </Message>
+    </MessageGroup>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### MessageGroup
+
+消息组容器，提供垂直排列和间距。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### Message
+
+单条消息的气泡容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| align | 消息对齐方向，`"end"` 时内容右对齐并反转排列 | `"start"` \| `"end"` | `"start"` |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。`align="end"` 时自动应用 `flex-row-reverse`，子组件的样式也会响应式调整。
+
+### MessageAvatar
+
+消息头像区域。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。当 Message 存在 Footer 时，Avatar 会自动上移 32px 对齐。
+
+### MessageContent
+
+消息内容区域。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。当 Message 的 `align="end"` 时，内容自动右对齐。
+
+### MessageHeader
+
+消息头部标注，通常用于显示发送者名称。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。
+
+### MessageFooter
+
+消息底部标注，通常用于显示时间戳。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+同时支持 `React.ComponentProps<"div">` 的所有原生属性。当 Message 的 `align="end"` 时，内容自动右对齐。
+
+<h2 id="faq">常见问题</h2>
+
+### Message 和 AntD 的 message 全局提示有什么区别？
+
+这是两个完全不同的组件。本项目的 Message 是聊天消息气泡组件，用于构建对话界面；AntD 的 message 是全局 toast 通知组件。如需全局提示，请使用 Sonner 或 Toast 组件。
+
+### 如何实现消息左右对齐？
+
+通过 `Message` 的 `align` 属性控制：`"start"` 表示对方消息（左对齐），`"end"` 表示自己的消息（右对齐）。`align="end"` 会自动应用 `flex-row-reverse` 并使子组件内容右对齐。
+
+### 消息气泡的样式如何自定义？
+
+在 `MessageContent` 内部放置自定义内容即可，组件本身不预设气泡样式。气泡的背景色、圆角、内边距等均由内部元素自行控制。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/message` 导入所需的子组件。
+2. 使用 `MessageGroup` 作为最外层容器包裹多条消息。
+3. 每条消息用 `Message` 包裹，通过 `align` 区分自己和对方。
+4. `MessageAvatar`、`MessageContent`、`MessageHeader`、`MessageFooter` 为可选子组件。
+5. 气泡样式（背景色、圆角等）由 `MessageContent` 内的子元素自行控制。
+6. 不要引入 Ant Design 的 message API（`message.success` 等静态方法不存在于此组件）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="message" />

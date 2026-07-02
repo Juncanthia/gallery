@@ -1,14 +1,14 @@
 "use client";
 
 import { useDataTable } from "@/components/data-display/data-table-filters/components/data-table/data-table-provider";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/core/checkbox";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group";
-import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/components/core/input-group";
+import { Label } from "@/components/core/label";
+import { Skeleton } from "@/components/core/skeleton";
 import { formatCompactNumber } from "@/components/data-display/data-table-filters/lib/format";
 import { cn } from "@/components/data-display/data-table-filters/lib/utils";
 import { Search } from "lucide-react";

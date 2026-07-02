@@ -1,0 +1,55 @@
+{
+  "before": {
+    "structure": "vendor-first (bklit/chamaac/gooseui/rb/manifest/tool/uselayouts/dice/...)",
+    "topLevelDirs": 153,
+    "vendorSubfolders": 353,
+    "samplePaths": [
+      "content/components/chamaac/ai-input/",
+      "content/components/bklit/area-chart/",
+      "content/components/manifest/form/",
+      "content/components/button/"
+    ]
+  },
+  "after": {
+    "structure": "usage-first (mirrors src/components/)",
+    "topLevelDirs": 17,
+    "categories": [
+      "agent-tools",
+      "blocks",
+      "charts",
+      "core",
+      "data-display",
+      "data-entry",
+      "document",
+      "effects",
+      "feedback",
+      "general",
+      "layout",
+      "marketing-blocks",
+      "media",
+      "navigation",
+      "plate",
+      "references",
+      "templates"
+    ],
+    "totalSlugs": 484,
+    "vendorPathRemaining": 0,
+    "orphansInReferences": 15,
+    "samplePaths": [
+      "content/components/data-entry/ai-input/",
+      "content/components/charts/chart-kit/area-chart/",
+      "content/components/templates/form/sign-in/",
+      "content/components/core/button/"
+    ]
+  },
+  "migratedSlugCount": 491,
+  "registryDocsSlugUpdates": 225,
+  "duplicateResolutions": 12,
+  "typecheck": "pass",
+  "notes": [
+    "Vendor metadata retained in registry id field (e.g. bklit/area-chart) and llm.txt group/registry fields",
+    "catalog.ts seed routes still use vendor helpers; applyRegistryNavPatch merges docsSlug from registry",
+    "registry internalImportPath still has legacy vendor paths — A9 deep integration",
+    "15 orphan docs under content/components/references/ (sabraman, evilcharts/brush, manifest/notifications, etc.)"
+  ]
+}

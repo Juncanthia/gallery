@@ -1,7 +1,7 @@
 "use client";
 
 import { useDataTable } from "@/components/data-display/data-table-filters/components/data-table/data-table-provider";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import { X } from "lucide-react";
 import type { DataTableFilterField } from "./types";
 

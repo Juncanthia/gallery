@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import { Crop as CropIcon, RotateCcw as RotateCcwIcon } from "lucide-react";
 import { Slot } from "radix-ui";
 import {

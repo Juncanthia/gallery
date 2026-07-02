@@ -7,12 +7,12 @@ import {
   type LayoutStorage,
 } from "react-resizable-panels"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable"
+} from "@/components/core/resizable"
 
 type PdfBlockResizableShellProps = {
   autoSaveId: string

@@ -1,0 +1,142 @@
+LegacyClock 是一个时钟组件，用于展示当前时间或指定时间，支持日间/夜间两种主题变体。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要展示一个精致的模拟时钟时。
+
+常见场景：
+
+- 仪表盘或监控页面中显示当前时间。
+- 与时间相关的工具面板或状态指示。
+- 页面装饰性元素，增强视觉氛围。
+- 需展示指定时刻的时间（如历史记录时间戳）。
+- 日间/夜间主题切换场景。
+
+LegacyClock 通过 `variant` 切换视觉主题：
+
+- `day`：浅色渐变背景，适合亮色界面。
+- `night`：纯黑背景，适合暗色界面。
+
+推荐使用方式：
+
+- 默认尺寸（76px）适合内嵌展示。
+- 通过 `size` 按需放大缩小。
+- 实时时钟使用 `live`（默认启用）。
+- 展示固定时间使用 `date` 属性。
+- 若不需要秒针动画可关闭 `showSeconds`。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认展示日间主题、76px、含秒针、实时走时的时钟。
+
+<ComponentShowcase
+  id="sabraman/clock"
+  path="sabraman/clock/basic"
+/>
+
+```tsx
+import { LegacyClock } from "@/components/core/clock"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <LegacyClock />
+      <LegacyClock variant="night" />
+      <LegacyClock size={120} />
+      <LegacyClock showSeconds={false} />
+      <LegacyClock withShadow={false} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LegacyClock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 时钟主题变体 | `day` \| `night` | `day` |
+| size | 时钟尺寸（像素） | `number` | `76` |
+| live | 是否实时走时 | `boolean` | `true` |
+| date | 指定展示的日期时间；传入后覆盖实时走时 | `Date` | - |
+| showSeconds | 是否显示秒针 | `boolean` | `true` |
+| withShadow | 是否显示投影 | `boolean` | `true` |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+| ref | 容器 DOM 引用 | `React.Ref&lt;HTMLDivElement&gt;` | - |
+
+组件同时接受 `React.HTMLAttributes&lt;HTMLDivElement&gt;` 的其他属性。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何展示指定时间？
+
+传入 `date` 属性即可；此时 `live` 自动失效，时钟不会自动走时。
+
+```tsx
+<LegacyClock date={new Date("2024-01-01T12:00:00")} />
+```
+
+### 如何切换日间/夜间主题？
+
+通过 `variant` 切换：
+
+```tsx
+<LegacyClock variant="day" />
+<LegacyClock variant="night" />
+```
+
+### 如何调整时钟大小？
+
+使用 `size` 属性，传入像素值：
+
+```tsx
+<LegacyClock size={48} />
+<LegacyClock size={120} />
+```
+
+### 如何关闭实时走时？
+
+设置 `live={false}`，结合 `date` 展示固定时间：
+
+```tsx
+<LegacyClock live={false} date={new Date("2024-06-01T15:30:00")} />
+```
+
+### 如何隐藏秒针？
+
+设置 `showSeconds={false}`：
+
+```tsx
+<LegacyClock showSeconds={false} />
+```
+
+### 如何去除投影？
+
+设置 `withShadow={false}`：
+
+```tsx
+<LegacyClock withShadow={false} />
+```
+
+### 时钟资源文件如何管理？
+
+组件内部使用 SVG 图片资源，默认从 `/figma/legacy-clock/` 加载。日间和夜间主题使用不同的资源文件集（表盘、指针、高光等），由 `variant` 自动切换。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LegacyClock 代码时：
+
+1. 从 `@/components/core/clock` 导入
+2. 使用 `variant` 切换主题，不要尝试通过 className 覆写视觉样式
+3. 固定时间使用 `date`，实时展示使用默认 `live={true}`
+4. 尺寸调整使用 `size`，不要通过 style/className 设置 width/height
+5. 组件自带动效（秒针转动），不要在外部额外添加动画
+6. 不要引入 Ant Design 相关依赖
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="sabraman/clock" />

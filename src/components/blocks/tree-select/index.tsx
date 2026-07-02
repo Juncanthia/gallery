@@ -1,10 +1,10 @@
 import { useState, useMemo, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Command, CommandInput, CommandList, CommandEmpty } from "@/components/ui/command";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/core/button";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/core/popover";
+import { Command, CommandInput, CommandList, CommandEmpty } from "@/components/core/command";
+import { Checkbox } from "@/components/core/checkbox";
+import { Badge } from "@/components/core/badge";
 import { ChevronRight as ChevronRightIcon, ChevronsUpDown as ChevronsUpDownIcon, Bone as XIcon } from "lucide-react";
 
 export type TreeSelectOption = {

@@ -1,0 +1,97 @@
+---
+category: Components
+title: VideoPlayer
+subtitle: 视频播放器
+description: 基于 Shaka Player 的功能完整的视频播放器组件，支持 HLS/DASH 流媒体播放。
+demo:
+  cols: 1
+group:
+  title: 媒体播放
+  order: 2
+source:
+  component: src/components/limeplay/blocks/video-player/components/media-player.tsx
+  wrapper: src/components/core/limeplay-blocks/video-player.tsx
+  docs: content/components/media/blocks/video-player/components/media-player/index.mdx
+  examples:
+    - content/components/media/blocks/video-player/components/media-player/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  shakaPlayer: true
+  mediaChrome: false
+  radixSlot: false
+  motion: false
+---
+
+# VideoPlayer 视频播放器
+
+VideoPlayer 是一个基于 Shaka Player 的功能完整的视频播放器组件，支持 HLS/DASH 流媒体播放、播放列表、字幕、画中画、播放速率控制等功能。
+
+组件内部已封装 `MediaProvider` 上下文，通过 `source` prop 传入视频 URL 或 Asset 列表即可使用。
+
+## 何时使用 {#when-to-use}
+
+当需要在页面中嵌入视频播放功能时使用。VideoPlayer 封装了 Shaka Player + 完整的播放控制 UI，提供开箱即用的视频播放体验。
+
+## 导入路径
+
+```tsx
+import { VideoPlayer } from "@/components/media/blocks/video-player/components/media-player"
+```
+
+## 核心 Props
+
+| 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| source | `string \| Asset \| Asset[]` | 播放源，支持 URL 字符串、Asset 对象或 Asset 数组 |
+| sourceKey | `string` | source 变更时的重新加载标识 |
+| autoLoad | `boolean` | source 变更时自动加载 |
+| initialIndex | `number` | 播放列表初始索引 |
+| debug | `boolean` | 调试模式 |
+| className | `string` | 根容器 className |
+| children | `React.ReactNode` | 自定义叠加内容 |
+| mediaProps | `object` | 底层 video 元素属性 |
+
+## 示例代码
+
+```tsx
+import { VideoPlayer } from "@/components/media/blocks/video-player/components/media-player"
+
+export default function Demo() {
+  return (
+    <VideoPlayer
+      className="aspect-video"
+      source="https://example.com/video.m3u8"
+    />
+  )
+}
+```
+
+```tsx
+// 播放列表模式
+import { VideoPlayer } from "@/components/media/blocks/video-player/components/media-player"
+
+const playlist = [
+  { src: "https://example.com/video1.m3u8", title: "视频一" },
+  { src: "https://example.com/video2.m3u8", title: "视频二" },
+]
+
+export default function Demo() {
+  return (
+    <VideoPlayer
+      className="aspect-video"
+      source={playlist}
+      initialIndex={0}
+    />
+  )
+}
+```
+
+## 约束
+
+1. 从 `@/components/media/blocks/video-player/components/media-player` 导入 VideoPlayer。
+2. `source` 支持 `string`（直接 URL）、`Asset` 对象或 `Asset[]`（播放列表）。
+3. 组件已内置 `MediaProvider`，无需额外包裹。
+4. 通过 `className` 控制尺寸和布局，推荐设置 `aspect-video`。
+5. 不要引入 Ant Design 相关依赖。
+6. VideoPlayer 是 limeplay 生态的核心播放组件，配套的控制子组件（PlaybackControl、VolumeControl、TimelineControl 等）需在 `MediaProvider` 上下文中使用。

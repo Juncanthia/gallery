@@ -1,0 +1,148 @@
+---
+category: Components
+title: PdfBlockResizableShell
+subtitle: PDF 可调面板
+description: 可拖拽调整的左右分栏布局容器，专为 PDF 文档相关组件设计，支持水平/垂直自适应布局切换与面板尺寸持久化。
+demo:
+  cols: 1
+group:
+  title: 布局
+  order: 1
+source:
+  component: src/components/extend/components/pdf-block-resizable-shell.tsx
+  reexport: src/components/core/extend-pdf-block-resizable-shell.tsx
+  docs: content/components/extend/pdf-block-resizable-shell/index.mdx
+  examples:
+    - content/components/extend/pdf-block-resizable-shell/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  react-resizable-panels: true
+---
+
+# PdfBlockResizableShell PDF 可调面板
+
+PdfBlockResizableShell 是一个可拖拽调整的左右分栏布局容器，专为 PDF 文档相关组件设计。它基于 `react-resizable-panels` 实现面板拖拽，支持水平/垂直布局自适应切换，并通过 `localStorage` 自动记忆用户调整的面板尺寸。
+
+## 何时使用 {#when-to-use}
+
+需要在 PDF 文档查看场景中提供可调大小的分栏布局时使用。
+
+常见场景：
+
+- 文档预览 + 信息面板：左侧展示 PDF 文档，右侧展示元数据、字段信息或操作面板。
+- 文档审查 + 审计面板：左侧展示文档内容，右侧展示审查意见或标注列表。
+- 文档对比：左右两侧展示不同文档或同一文档的不同视图。
+
+不推荐：
+
+- 用于非 PDF 文档场景的通用分栏布局，可使用 resizable 基础组件。
+- 在不需要面板尺寸持久化的场景中，可设置 `autoSaveId` 为静态值或使用基础 resizable 组件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+传入 `left` 和 `right` 内容即可渲染可拖拽调整的左右分栏。组件自动适配容器宽度，宽度超过 900px 时采用水平布局，否则切换为垂直布局。
+
+```tsx
+import { PdfBlockResizableShell } from "@/components/document/components/pdf-block-resizable-shell"
+
+export default function Demo() {
+  return (
+    &lt;PdfBlockResizableShell
+      autoSaveId="pdf-block-resizable-shell-demo"
+      left={&lt;div&gt;文档预览区&lt;/div&gt;}
+      right={&lt;div&gt;信息面板&lt;/div&gt;}
+    /&gt;
+  )
+}
+```
+
+## API {#api}
+
+### PdfBlockResizableShell
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| autoSaveId | 布局记忆唯一标识，用于 localStorage 持久化 | `string` | - |
+| left | 左侧面板内容 | `React.ReactNode` | - |
+| right | 右侧面板内容 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+| heightClassName | 容器高度样式类名 | `string` | `"h-[680px]"` |
+| initialOrientation | 初始布局方向，容器宽度低于 900px 时自动切换为 vertical | `"horizontal"` \| `"vertical"` | `"horizontal"` |
+| leftDefaultSize | 左侧面板默认宽度百分比 | `number` | `66` (horizontal) / `62` (vertical) |
+| leftMinSize | 左侧面板最小宽度百分比 | `number` | `34` |
+| rightDefaultSize | 右侧面板默认宽度百分比 | `number` | `34` (horizontal) / `38` (vertical) |
+| rightMaxSize | 右侧面板最大宽度百分比 | `number` | `52` (horizontal) / `66` (vertical) |
+| rightMinSize | 右侧面板最小宽度百分比 | `number` | `24` |
+
+## 实现参考 {#implementation-notes}
+
+核心文件：
+
+- `src/components/extend/components/pdf-block-resizable-shell.tsx`：完整的可调面板布局实现，包含布局自适应、尺寸记忆、水平/垂直切换。
+- `src/components/core/extend-pdf-block-resizable-shell.tsx`：公共导出入口。
+
+关键行为：
+
+1. 基于 `react-resizable-panels` 的 `ResizablePanelGroup` / `ResizablePanel` / `ResizableHandle` 实现拖拽分栏。
+2. 通过 `ResizeObserver` 监听容器宽度，>= 900px 自动使用水平布局，< 900px 自动切换为垂直布局。
+3. 通过 `useDefaultLayout` hook 实现布局尺寸的 localStorage 持久化与恢复。
+4. `useHydrationSafeLayoutStorage` 确保 SSR 环境下不访问 localStorage，避免水合不匹配。
+5. 容器最小高度 420px，默认高度 680px。
+6. 拖拽手柄带有视觉指示器（`withHandle`），z-index 为 10 确保可交互。
+
+## FAQ {#faq}
+
+### 如何配合 PDFViewer 使用？
+
+将 `PDFViewer` 放入 `left` 属性，面板内容放入 `right` 属性：
+
+```tsx
+&lt;PdfBlockResizableShell
+  autoSaveId="my-layout"
+  left={&lt;PDFViewer src="/doc.pdf" /&gt;}
+  right={&lt;MyPanel /&gt;}
+/&gt;
+```
+
+### 如何调整面板默认尺寸？
+
+通过 `leftDefaultSize`、`rightDefaultSize` 设置面板默认占比，通过 `leftMinSize`、`rightMinSize`、`rightMaxSize` 限制拖拽范围：
+
+```tsx
+&lt;PdfBlockResizableShell
+  autoSaveId="my-layout"
+  rightDefaultSize={40}
+  rightMinSize={30}
+  rightMaxSize={50}
+  left={&lt;PDFViewer src="/doc.pdf" /&gt;}
+  right={&lt;MyPanel /&gt;}
+/&gt;
+```
+
+### 布局尺寸如何持久化？
+
+组件通过 `autoSaveId` 作为 key 将布局信息保存在 `localStorage` 中。每个 `autoSaveId` 对应独立的布局记忆，按需使用不同的 ID 区分不同场景。
+
+### 如何控制容器高度？
+
+通过 `heightClassName` 属性设置高度，默认 `h-[680px]`，最小 420px。
+
+### 布局方向如何切换？
+
+组件根据容器宽度自动切换：>= 900px 水平，< 900px 垂直。可通过 `initialOrientation` 设置初始方向。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 PdfBlockResizableShell 代码时，应遵守：
+
+1. 从 `@/components/document/components/pdf-block-resizable-shell` 导入 `PdfBlockResizableShell`。
+2. 必须提供 `autoSaveId` 作为布局持久化的唯一标识，建议使用有意义的命名如 `"pdf-block-xxx"`。
+3. `left` 和 `right` 属性为必填，分别传入文档区和面板区内容。
+4. 通过 `heightClassName` 控制容器高度，默认 `h-[680px]`。
+5. 按需使用 `rightDefaultSize`、`rightMinSize`、`rightMaxSize` 控制面板尺寸。
+6. 组件自动处理方向切换（阈值 900px），无需手动干预。
+7. 该组件为 Client Component，依赖浏览器 API（ResizeObserver、localStorage）。
+8. `left` 和 `right` 内容需自行处理 `overflow`，面板已内置 `overflow-hidden`。

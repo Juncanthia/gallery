@@ -1,0 +1,211 @@
+---
+category: Blocks
+title: Deck
+subtitle: 卡片堆叠
+description: 卡片堆叠组件，支持拖拽滑动、受控索引、堆叠视觉效果。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 1
+source:
+  component: src/components/blocks/deck/index.tsx
+  docs: content/components/blocks/deck/index.mdx
+  examples:
+    - content/components/blocks/deck/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# Deck 卡片堆叠
+
+Deck 是一组卡片堆叠交互组件，模拟 Tinder 风格的卡片滑动体验。卡片从堆顶逐张展示，用户可通过拖拽向左或向右滑走顶层卡片，下方的卡片以缩放和偏移形成堆叠视觉深度。基于 `motion/react` 实现拖拽手势和退出动画，同时支持通过 `currentIndex` 从外部受控切换卡片。
+
+## 何时使用 {#when-to-use}
+
+适用于需要卡片式浏览、选择、筛选的场景，例如：
+
+- 推荐流浏览（候选人评价、内容推荐）。
+- 浏览式决策界面（Tinder 式左右滑动抉择）。
+- 受控步进的卡片展示向导。
+
+常见场景：
+
+- 用户通过拖拽表达"接受/拒绝"意图。
+- 走马灯 / 轮播的卡片变体，需要视觉堆叠深度。
+- 卡片内容为自定义 ReactElement 的任意布局。
+
+不推荐使用：
+
+- 简单的图片轮播，Deck 的堆叠视觉和拖拽复杂性属于过度设计。
+- 内容为大量不可交互数据的纯展示列表——用分页或虚拟滚动更高效。
+- 需要同时展示多张卡片全内容的场景，Deck 只展示顶层可交互卡片。
+
+## 代码演示 {#examples}
+
+### 基础卡片堆叠
+
+```tsx
+import { Deck, DeckCards, DeckItem, DeckEmpty } from "@/components/blocks/deck"
+
+export default function Demo() {
+  return (
+    <Deck className="w-full max-w-sm h-[400px]">
+      <DeckCards>
+        <DeckItem>Card 1</DeckItem>
+        <DeckItem>Card 2</DeckItem>
+        <DeckItem>Card 3</DeckItem>
+        <DeckItem>Card 4</DeckItem>
+      </DeckCards>
+      <DeckEmpty />
+    </Deck>
+  )
+}
+```
+
+### 受控索引切换
+
+```tsx
+import { useState } from "react"
+import { Deck, DeckCards, DeckItem } from "@/components/blocks/deck"
+import { Button } from "@/components/core/button"
+
+export default function Demo() {
+  const [index, setIndex] = useState(0)
+
+  return (
+    <div className="space-y-4">
+      <Deck className="w-full max-w-sm h-[400px]">
+        <DeckCards currentIndex={index} onCurrentIndexChange={setIndex}>
+          <DeckItem>Card 1</DeckItem>
+          <DeckItem>Card 2</DeckItem>
+          <DeckItem>Card 3</DeckItem>
+        </DeckCards>
+      </Deck>
+      <div className="flex gap-2">
+        <Button disabled={index <= 0} onClick={() => setIndex(index - 1)}>
+          上一张
+        </Button>
+        <Button onClick={() => setIndex(index + 1)}>下一张</Button>
+      </div>
+    </div>
+  )
+}
+```
+
+## API {#api}
+
+### Deck
+
+顶层容器，提供相对定位和层级隔离。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DeckCards
+
+卡片堆叠区域，管理卡片滑动逻辑和视觉堆叠。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| currentIndex | 当前展示卡片的受控索引 | `number` | - |
+| defaultCurrentIndex | 当前展示卡片的非受控索引 | `number` | `0` |
+| onCurrentIndexChange | 索引变化回调 | `(index: number) => void` | - |
+| onSwipe | 滑动开始回调 | `(index: number, direction: "left" \| "right") => void` | - |
+| onSwipeEnd | 滑动结束回调 | `(index: number, direction: "left" \| "right") => void` | - |
+| threshold | 滑动触发阈值（px） | `number` | `150` |
+| stackSize | 可见卡片数量 | `number` | `3` |
+| perspective | CSS 3D 透视距离 | `number` | `1000` |
+| scale | 每层卡片的递减缩放比例 | `number` | `0.05` |
+| animateOnIndexChange | 外部索引变化时是否播放入场动画 | `boolean` | `true` |
+| indexChangeDirection | 外部索引变化时的动画方向 | `"left" \| "right"` | `"left"` |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DeckItem
+
+单张卡片容器，提供统一的圆角、边框、阴影样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### DeckEmpty
+
+所有卡片滑走后显示的占位状态。默认显示 "No more cards"。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 自定义空状态内容 | `ReactNode` | "No more cards" |
+| className | 附加 className | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+## 样式模型 {#styling-model}
+
+全部使用 Tailwind CSS 实现，无 CVA、无 CSS-in-JS。
+
+- Deck 容器：`relative isolate`。
+- DeckCards 容器：`relative z-10 size-full` + CSS `perspective` 属性。
+- 顶层卡片（Draggable）：`absolute inset-0`，通过 `motion/react` 的 `useMotionValue` 和 `useTransform` 驱动 x 位移、旋转、透明度。
+- 底层卡片（Stacked）：`motion.div animate` 驱动 scale 和 y 位移过渡动画。
+- DeckItem：`rounded-lg border bg-card text-card-foreground shadow-lg`。
+- DeckEmpty：`rounded-lg border border-dashed text-muted-foreground`。
+- 拖拽态放大：`whileDrag={{ scale: 1.05 }}`。
+- 卡片退场动画：左滑 `x: -500, opacity: 0`，右滑 `x: 500, opacity: 0`。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/deck/index.tsx`：全部实现。
+
+关键依赖：
+
+- `motion/react`：拖拽手势、位移/旋转/透明度运动值、动画过渡。
+- `@radix-ui/react-use-controllable-state`：`currentIndex` 的受控/非受控状态管理。
+- React `Children` / `cloneElement`：卡片克隆及 className 合并。
+
+关键行为：
+
+1. 顶层卡片支持水平拖拽，手势阈值触发左/右滑动事件。
+2. 滑动后自动推进到下一张卡片，播放底部卡片缩放过渡动画。
+3. `currentIndex` 可受控或非受控，外部变化可通过 `animateOnIndexChange` 控制动画播放。
+4. 所有卡片消耗后组件返回 `null`，调用侧应配合 `DeckEmpty` 展示空状态。
+5. `stackSize` 控制同时渲染的可见卡片数量，超出范围的不渲染。
+
+## 可访问性 {#accessibility}
+
+- 拖拽手柄设置 `cursor-grab` 和 `active:cursor-grabbing`。
+- 卡片使用 `select-none` 防止拖拽时文字选中。
+- 不提供键盘操作支持，本组件设计为触摸/鼠标拖拽交互。
+- 如有无障碍需求，建议配合 Deck 外部的受控索引（`currentIndex` + `onCurrentIndexChange`）和方向按钮实现键盘替代方案。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Ant Design 不提供等价组件，Deck 为项目特有的复合块组件。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| 无对应组件 | 全新实现 | AntD 无卡片堆叠/滑动组件 |
+
+## LLM 使用规则 {#llm-rules}
+
+1. 从 `@/components/blocks/deck` 导入 `Deck`、`DeckCards`、`DeckItem`、`DeckEmpty`。
+2. 卡片子元素必须作为 `DeckCards` 的直接子节点传入，内容使用 `DeckItem` 包裹。
+3. 如需受控索引，使用 `currentIndex` + `onCurrentIndexChange`，不要自行管理 state 后传递给不受控 API。
+4. `DeckEmpty` 放在 `Deck` 内部、`DeckCards` 之后，所有卡片消耗后自动显示。
+5. 不要将 Deck 用于简单的图片轮播场景，考虑使用 Carousel 替代。
+6. Deck 的拖拽阈值（`threshold`）、堆叠层数（`stackSize`）和缩放比例（`scale`）有合理默认值，仅在需要调整交互灵敏度时显式传入。

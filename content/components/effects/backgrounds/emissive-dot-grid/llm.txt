@@ -1,0 +1,143 @@
+---
+category: Components
+title: EmissiveDotGrid
+subtitle: 发光点阵
+description: 基于 Three.js 和 GLSL 着色器的程序化发光点阵背景组件。
+demo:
+  cols: 1
+group:
+  title: Chamaac UI
+  order: 7
+source:
+  component: src/components/effects/backgrounds/emissive-dot-grid/emissive-dot-grid.tsx
+  examples:
+    - content/components/effects/backgrounds/emissive-dot-grid/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+  threejs: true
+---
+
+# EmissiveDotGrid 发光点阵
+
+基于 Three.js 和 GLSL 着色器的程序化发光点阵背景。通过 Perlin 噪声驱动点阵动画，结合 Bloom 后处理产生辉光效果。
+
+本组件来自 chamaac UI 库，以源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合需要动态点阵、发光粒子效果的场景。
+
+常见场景：
+
+- 品牌展示页 Hero 区域背景。
+- 深色主题页面的动态装饰层。
+- 科技、数据主题页面的氛围组件。
+
+不推荐：
+
+- 低端移动设备的性能敏感页面。
+- 文本密集型的信息展示页。
+- 需要精确视觉一致性的设计系统组件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { BurntOrangeDotGrid } from "@/components/effects/backgrounds/emissive-dot-grid"
+
+export default function Demo() {
+  return (
+    <div className="relative w-full h-96 rounded overflow-hidden bg-[#010101]">
+      <BurntOrangeDotGrid />
+    </div>
+  )
+}
+```
+
+> 说明：EmissiveDotGrid 默认覆盖全视口（`fixed inset-0 w-screen h-screen`），作为全局背景层使用。在局部预览中需包裹在 `relative` 容器内。
+
+## 核心导出 {#exports}
+
+- `BurntOrangeDotGrid`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface EmissiveDotGridProps {
+  className?: string
+}
+```
+
+组件无外部配置参数，视觉和动画参数由内部着色器硬编码控制。
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+
+额外状态属性：
+
+- 无额外 `data-*` 状态属性。
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 组件根元素使用 `fixed inset-0 w-screen h-screen bg-[#010101] z-0` 覆盖全视口。
+- 内部渲染 Three.js Canvas（orthographic 相机），视觉完全由 GLSL 着色器控制。
+- 着色器实现 Perlin 噪声驱动点阵缩放动画，颜色为橙色调（#df5000）。
+- 使用 EffectComposer + Bloom 后处理产生辉光效果。
+- 点阵使用 InstancedMesh，网格尺寸 140x160，AdditiveBlending 混合。
+- 不依赖 CVA 变体系统。
+- 不包装 Radix/Base UI primitive。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/effects/backgrounds/emissive-dot-grid/emissive-dot-grid.tsx`
+- `src/components/core/chamaac-emissive-dot-grid.tsx`（barrel 导出）
+
+直接依赖摘要：
+
+- `@react-three/fiber`
+- `@react-three/drei`
+- `@react-three/postprocessing`
+- `three`
+- `clsx`
+
+实现注意：
+
+1. 使用 InstancedMesh 渲染 140x160 个平面点，避免逐个实例的性能开销。
+2. Perlin 噪声标准实现（snoise），驱动每颗点的缩放动画。
+3. Canvas DPR 使用默认值，antialias/stencil/depth 均关闭以降低 GPU 开销。
+4. 组件完全覆盖视口（`fixed inset-0`），z-index 为 `0`，前景内容需更高层级。
+5. Bloom post-processing 产生橙色辉光效果，intensity=1.8, radius=0.4。
+
+## 可访问性 {#accessibility}
+
+- 纯装饰性组件，不参与交互。
+- 不需要 ARIA 标签或键盘焦点。
+- 对于 prefers-reduced-motion 用户，建议在业务层禁用或替换为静态背景。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 EmissiveDotGrid 代码时，应遵守：
+
+1. 从 `@/components/effects/backgrounds/emissive-dot-grid` 导入，不要从 `@react-three/fiber` 或 `three` 直接引用。
+2. 组件作为全局背景层使用，注意 z-index 层级规划。
+3. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
+4. 不要引入 Ant Design 相关依赖。
+5. 如果不确定某个 API 是否存在，先检查 `src/components/effects/backgrounds/emissive-dot-grid/emissive-dot-grid.tsx`，不要凭记忆生成。

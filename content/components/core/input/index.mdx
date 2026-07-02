@@ -1,0 +1,319 @@
+输入框 通过鼠标或键盘输入内容，是最基础的表单控件。复合组件，`Input` 为主入口，附带 `Input.TextArea`、`Input.Password`、`Input.Search`、`Input.Number`、`Input.OTP` 子组件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要用户输入文本、数字、密码等内容的场景。不同子组件覆盖不同的输入形态。
+
+常见场景：
+- 文本输入：用户名、邮箱、地址等单行文本。
+- 密码输入：带显隐切换的安全输入。
+- 搜索框：带搜索按钮和回车触发搜索。
+- 数字输入：带 +/- 步进控件的数值输入。
+- 多行输入：评论、备注、描述等长文本。
+- 验证码输入：OTP 一次性验证码。
+
+不推荐：
+- 选项固定且数量少（小于5个）时——使用 Select 或 RadioGroup 更合适。
+- 需要复杂格式化（如日期、电话号码）——使用 DatePicker 或自定义 MaskInput。
+- 仅展示只读数据——使用纯文本展示而非禁用态的 Input。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+支持前后缀、清除按钮、校验状态和禁用态。
+
+<ComponentShowcase id="input" path="input/basic" />
+
+```tsx
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-start gap-4">
+      <Input placeholder="请输入内容" className="w-48" />
+      <Input placeholder="搜索..." prefix={<span>Search</span>} className="w-48" />
+      <Input placeholder="URL..." suffix={<span>.com</span>} allowClear className="w-48" />
+      <Input blocks/status="error" placeholder="错误状态" className="w-48" />
+      <Input disabled defaultValue="禁用内容" className="w-48" />
+    </div>
+  )
+}
+```
+
+### 尺寸与变体
+
+<ComponentShowcase id="sizes" path="input/sizes" />
+
+```tsx
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-end gap-4">
+      <Input size="small" placeholder="小尺寸" className="w-36" />
+      <Input placeholder="中尺寸（默认）" className="w-44" />
+      <Input size="large" placeholder="大尺寸" className="w-52" />
+      <Input variant="filled" placeholder="filled 变体" className="w-44" />
+    </div>
+  )
+}
+```
+
+### 密码框
+
+<ComponentShowcase id="password" path="input/password" />
+
+```tsx
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-start gap-4">
+      <Input.Password placeholder="请输入密码" className="w-48" />
+      <Input.Password placeholder="禁用" disabled className="w-48" />
+    </div>
+  )
+}
+```
+
+### 数字输入
+
+<ComponentShowcase id="number" path="input/number" />
+
+```tsx
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-start gap-4">
+      <Input.Number defaultValue={0} min={0} max={100} className="w-36" />
+      <Input.Number defaultValue={50} controls={false} className="w-36" />
+      <Input.Number prefix="$" suffix="%" defaultValue={0} className="w-36" />
+    </div>
+  )
+}
+```
+
+### 搜索框
+
+```tsx
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Input.Search
+        placeholder="输入关键词搜索"
+        onSearch={(value) => console.log("搜索:", value)}
+        className="w-64"
+      />
+      <Input.Search
+        placeholder="带搜索按钮"
+        enterButton
+        loading={false}
+        onSearch={(value) => console.log("搜索:", value)}
+        className="w-64"
+      />
+    </div>
+  )
+}
+```
+
+### 多行文本
+
+```tsx
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Input.TextArea
+        placeholder="请输入描述"
+        rows={4}
+        className="w-80"
+      />
+      <Input.TextArea
+        placeholder="自适应高度"
+        autoSize={{ minRows: 2, maxRows: 6 }}
+        showCount
+        maxLength={200}
+        className="w-80"
+      />
+    </div>
+  )
+}
+```
+
+### 验证码
+
+```tsx
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Input.OTP length={6} />
+      <Input.OTP length={6} mask separator={3} />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Input（主组件）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 视觉变体 | `"outlined"` \| `"filled"` \| `"borderless"` \| `"underlined"` | `"outlined"` |
+| size | 尺寸 | `"small"` \| `"middle"` \| `"large"` | `"middle"` |
+| blocks/status | 校验状态 | `"error"` \| `"warning"` | - |
+| prefix | 前置内容 | `React.ReactNode` | - |
+| suffix | 后置内容 | `React.ReactNode` | - |
+| allowClear | 是否显示清除按钮 | `boolean` \| `{ clearIcon?: React.ReactNode }` | `false` |
+| onClear | 清除回调 | `() => void` | - |
+| addonBefore | 前置附加内容 | `React.ReactNode` | - |
+| addonAfter | 后置附加内容 | `React.ReactNode` | - |
+| showCount | 是否显示字数统计 | `boolean` \| `{ formatter? }` | `false` |
+| count | 字数统计详细配置 | `{ show?, max?, strategy?, exceedFormatter?, formatter? }` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| className | CSS 类名 | `string` | - |
+
+继承 `Omit<React.ComponentPropsWithoutRef<"input">, "prefix" \| "size">` 的全部 HTML 属性。通过 ref 暴露 `InputRef`：`focus(options?)`、`blur()`、`select()`、`input`（原生 HTMLInputElement）、`nativeElement`。
+
+### Input.TextArea
+
+多行文本输入。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| autoSize | 自适应内容高度 | `boolean` \| `{ minRows?: number, maxRows?: number }` | `false` |
+| allowClear | 清除按钮 | `boolean` \| `{ clearIcon?: React.ReactNode }` | `false` |
+| onClear | 清除回调 | `() => void` | - |
+| showCount | 字数统计 | `boolean` \| `{ formatter? }` | `false` |
+| count | 字数统计配置 | `InputCountConfig` | - |
+| variant | 视觉变体 | `InputVariant` | `"outlined"` |
+| size | 尺寸 | `InputSize` | `"middle"` |
+| blocks/status | 校验状态 | `InputStatus` | - |
+| rows | 默认行数（autoSize 时忽略） | `number` | - |
+
+继承 `React.ComponentPropsWithoutRef<"textarea">` 的全部 HTML 属性。通过 ref 暴露 `TextAreaRef`：`focus(options?)`、`blur()`、`select()`、`textarea`、`nativeElement`。
+
+### Input.Password
+
+密码输入，带显隐切换。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| visibilityToggle | 是否显示显隐切换按钮 | `boolean` \| `{ visible?, onVisibleChange?, tabIndex? }` | `true` |
+| iconRender | 自定义显隐图标 | `(visible: boolean) => React.ReactNode` | - |
+
+继承 `InputProps` 全部属性。
+
+### Input.Search
+
+搜索输入框。按回车键或点击搜索图标触发 `onSearch`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| enterButton | 是否显示搜索按钮（true 显示图标按钮，传入元素则替换） | `boolean` \| `React.ReactNode` | `false` |
+| loading | 搜索加载中状态 | `boolean` | `false` |
+| searchIcon | 自定义搜索图标 | `React.ReactNode` | `<SearchIcon />` |
+| onSearch | 搜索回调（回车或点击按钮触发），info.source 区分触发来源 | `(value: string, event?, info?: { source?: "clear" \| "input" }) => void` | - |
+| onPressEnter | 按下回车回调 | `React.KeyboardEventHandler<HTMLInputElement>` | - |
+
+继承 `Omit<InputProps, "type" \| "suffix">`。
+
+### Input.Number
+
+数字输入，带 +/- 步进按钮和键盘方向键支持。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控值 | `number` | - |
+| defaultValue | 默认值 | `number` | `0` |
+| onChange | 值变化回调，返回 `number \| null`（空输入为 null） | `(value: number \| null) => void` | - |
+| min | 最小值 | `number` | `-Infinity` |
+| max | 最大值 | `number` | `Infinity` |
+| step | 步长 | `number` | `1` |
+| precision | 小数精度（自动 toFixed） | `number` | - |
+| prefix | 前置内容 | `React.ReactNode` | - |
+| suffix | 后置内容 | `React.ReactNode` | - |
+| controls | 是否显示 +/- 步进按钮 | `boolean` | `true` |
+| formatter | 展示值格式化函数 | `(value: number \| undefined) => string` | - |
+| parser | 输入值解析函数 | `(displayValue: string) => number` | - |
+| disabled | 是否禁用 | `boolean` | - |
+| variant | 视觉变体 | `InputVariant` | `"outlined"` |
+| size | 尺寸 | `InputSize` | `"middle"` |
+| blocks/status | 校验状态 | `InputStatus` | - |
+
+### Input.OTP
+
+一次性验证码输入，基于 `input-otp` 库。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| length | 位数 | `number` | `6` |
+| separator | 分隔符配置（数字=第几位后分隔，数组=多处分隔，ReactNode=固定分隔符，函数=按索引返回分隔符） | `number` \| `number[]` \| `React.ReactNode` \| `((index: number) => React.ReactNode)` | - |
+| mask | 是否遮罩显示（true 显示"•"，传入字符串替换遮罩字符） | `boolean` \| `string` | - |
+| formatter | 值格式化函数 | `(value: string) => string` | - |
+| size | 尺寸 | `InputSize` | `"middle"` |
+| blocks/status | 校验状态 | `InputStatus` | - |
+| containerClassName | 外层容器 CSS 类名 | `string` | - |
+
+### 导出类型
+
+- `InputSize` = `"small" | "middle" | "large"`
+- `InputVariant` = `"outlined" | "filled" | "borderless" | "underlined"`
+- `InputStatus` = `"error" | "warning"`
+- `InputRef` — Input 命令式方法引用
+- `TextAreaRef` — TextArea 命令式方法引用
+- `InputProps`、`TextAreaProps`、`InputPasswordProps`、`InputSearchProps`、`InputNumberProps`、`InputOTPProps`
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现密码显隐切换？
+
+使用 `Input.Password` 组件，默认自带显隐切换按钮。可通过 `visibilityToggle` 控制显隐按钮的行为。
+
+```tsx
+<Input.Password placeholder="请输入密码" />
+```
+
+### 如何获取 Input 的 DOM 引用？
+
+通过 ref 获取命令式方法和原生 DOM 元素。
+
+```tsx
+const ref = useRef<InputRef>(null)
+// ref.current?.focus()  聚焦
+// ref.current?.blur()   失焦
+// ref.current?.input    原生 HTMLInputElement
+```
+
+### 如何配合表单校验展示错误状态？
+
+使用 `blocks/status="error"` + `FormItem` 展示校验错误信息。
+
+```tsx
+<FormItem validateStatus="error" errors={[{ message: "邮箱格式不正确" }]}>
+  <FieldLabel>邮箱</FieldLabel>
+  <Field>
+    <Input blocks/status="error" placeholder="请输入邮箱" />
+  </Field>
+</FormItem>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/input` 导入 `Input`。
+2. 使用 `prefix` / `suffix` 添加图标和装饰内容，不要在外层额外包裹。
+3. 密码输入使用 `Input.Password`，搜索使用 `Input.Search`，数字使用 `Input.Number`，多行文本使用 `Input.TextArea`，验证码使用 `Input.OTP`。
+4. 校验状态使用 `blocks/status` 属性，配合 FormItem 展示错误信息。
+5. 多行输入使用 TextArea 并设置 `autoSize` 自适应内容高度。
+6. 数字输入通过 `min`/`max`/`step` 控制范围，`precision` 控制小数精度。
+7. 不要引入 Ant Design 的 `Input` 或相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="input" />

@@ -1,0 +1,303 @@
+CodeBlock 代码块，基于 Shiki 实现语法高亮，支持多文件切换、行号、diff/高亮/聚焦标注、文件图标自动匹配和复制功能。使用组合式子组件 API 构建完整的代码展示区域。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中展示带语法高亮的代码块时使用，特别是需要多文件 Tab 切换、行号显示和代码标注的文档或教程场景。
+
+常见场景：
+
+- 文档站点中的代码示例展示。
+- 组件文档中的用法代码。
+- 技术博客中的代码片段。
+- 多文件代码对比展示（通过文件切换）。
+
+推荐使用方式：
+- CodeBlock 作为最外层容器，传入 `data` 数组定义多个代码文件。
+- 在 CodeBlock 内组合 CodeBlockHeader（含 CodeBlockFiles + CodeBlockCopyButton）、CodeBlockBody（含 CodeBlockItem + CodeBlockContent）。
+
+不推荐：
+
+- 单行内联代码使用 CodeBlock——请使用 `<code>` 标签或 Snippet 组件。
+- 在 CodeBlockContent 中传入非代码文本——CodeBlock 专为代码展示设计。
+- 不传入 `data` 或传递空数组——CodeBlock 必须至少有一个文件。
+- 引入 antd 或 Prism 等外部高亮库替代 Shiki。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="blocks/code-block" path="blocks/code-block/basic" />
+
+```tsx
+import {
+  CodeBlock,
+  CodeBlockHeader,
+  CodeBlockBody,
+  CodeBlockItem,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockFilename,
+} from "@/components/blocks/code-block"
+
+const code = `import { useState } from "react"
+
+export function Counter() {
+  const [count, setCount] = useState(0)
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  )
+}`
+
+export default function Demo() {
+  return (
+    <CodeBlock data={[{ language: "tsx", filename: "counter.tsx", code }]}>
+      <CodeBlockHeader>
+        <CodeBlockFilename>counter.tsx</CodeBlockFilename>
+        <CodeBlockCopyButton />
+      </CodeBlockHeader>
+      <CodeBlockBody>
+        {(item) => (
+          <CodeBlockItem value={item.language}>
+            <CodeBlockContent language="tsx">{item.code}</CodeBlockContent>
+          </CodeBlockItem>
+        )}
+      </CodeBlockBody>
+    </CodeBlock>
+  )
+}
+```
+
+### 多文件切换
+
+通过 data 数组定义多个文件，配合 CodeBlockFiles 和 CodeBlockSelect 实现 Tab 切换。
+
+```tsx
+import {
+  CodeBlock,
+  CodeBlockHeader,
+  CodeBlockFiles,
+  CodeBlockFilename,
+  CodeBlockSelect,
+  CodeBlockSelectTrigger,
+  CodeBlockSelectValue,
+  CodeBlockSelectContent,
+  CodeBlockSelectItem,
+  CodeBlockBody,
+  CodeBlockItem,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+} from "@/components/blocks/code-block"
+
+const files = [
+  { language: "tsx", filename: "app.tsx", code: `export default function App() {\n  return <div>Hello</div>\n}` },
+  { language: "css", filename: "styles.css", code: `body {\n  margin: 0;\n  padding: 0;\n}` },
+]
+
+export default function Demo() {
+  return (
+    <CodeBlock data={files} defaultValue="tsx">
+      <CodeBlockHeader>
+        <CodeBlockFiles>
+          {(item) => (
+            <CodeBlockFilename key={item.language} value={item.language}>
+              {item.filename}
+            </CodeBlockFilename>
+          )}
+        </CodeBlockFiles>
+        <CodeBlockSelect>
+          <CodeBlockSelectTrigger>
+            <CodeBlockSelectValue />
+          </CodeBlockSelectTrigger>
+          <CodeBlockSelectContent>
+            {(item) => (
+              <CodeBlockSelectItem key={item.language} value={item.language}>
+                {item.filename}
+              </CodeBlockSelectItem>
+            )}
+          </CodeBlockSelectContent>
+        </CodeBlockSelect>
+        <CodeBlockCopyButton />
+      </CodeBlockHeader>
+      <CodeBlockBody>
+        {(item) => (
+          <CodeBlockItem key={item.language} value={item.language}>
+            <CodeBlockContent language={item.language as BundledLanguage}>
+              {item.code}
+            </CodeBlockContent>
+          </CodeBlockItem>
+        )}
+      </CodeBlockBody>
+    </CodeBlock>
+  )
+}
+```
+
+### 代码标注
+
+通过 Shiki transformer 注释语法实现 diff、高亮、聚焦等标注效果。
+
+```tsx
+import {
+  CodeBlock,
+  CodeBlockHeader,
+  CodeBlockBody,
+  CodeBlockItem,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockFilename,
+} from "@/components/blocks/code-block"
+
+const code = `export function greet(name: string) {
+  console.log("Hello, " + name) // [!code highlight]
+  return \`Hello, \${name}!\` // [!code ++]
+  return "Goodbye, " + name // [!code --]
+}`
+
+export default function Demo() {
+  return (
+    <CodeBlock data={[{ language: "tsx", filename: "greet.ts", code }]}>
+      <CodeBlockHeader>
+        <CodeBlockFilename>greet.ts</CodeBlockFilename>
+        <CodeBlockCopyButton />
+      </CodeBlockHeader>
+      <CodeBlockBody>
+        {(item) => (
+          <CodeBlockItem value={item.language}>
+            <CodeBlockContent language="tsx">{item.code}</CodeBlockContent>
+          </CodeBlockItem>
+        )}
+      </CodeBlockBody>
+    </CodeBlock>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CodeBlock
+
+顶层容器，通过 React Context 向下传递 `value`、`onValueChange` 和 `data`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 代码数据数组，每项包含 language、filename、code | `CodeBlockData[]` | 必填 |
+| defaultValue | 非受控模式下的默认激活 language | `string` | `""` |
+| value | 受控模式下的激活 language | `string` | - |
+| onValueChange | 激活 language 变化的回调 | `(value: string) => void` | - |
+| className | 附加样式类 | `string` | - |
+
+### CodeBlockData
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| language | 代码语言标识（对应 Shiki BundledLanguage） | `string` |
+| filename | 文件名，用于文件图标匹配和展示 | `string` |
+| code | 源代码文本 | `string` |
+
+### CodeBlockHeader
+
+顶部工具栏容器，默认 `flex h-9 items-center justify-between border-b bg-muted/20` 布局。继承 `HTMLAttributes<HTMLDivElement>`。
+
+### CodeBlockFiles
+
+文件标签列表容器，使用 render props 模式渲染每个文件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 渲染函数，接收每项 CodeBlockData 返回 ReactNode | `(item: CodeBlockData) => ReactNode` | 必填 |
+| className | 附加样式类 | `string` | - |
+
+### CodeBlockFilename
+
+文件标签，自动根据文件名匹配 80+ 种文件类型图标（如 `*.tsx` -> SiReact, `*.css` -> SiCss）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| icon | 自定义文件图标组件 | `IconType` | 自动匹配 |
+| value | 仅在当前激活语言匹配时显示 | `string` | - |
+| children | 文件名文本 | `React.ReactNode` | - |
+| className | 附加样式类 | `string` | - |
+
+### CodeBlockSelect / CodeBlockSelectTrigger / CodeBlockSelectValue / CodeBlockSelectItem
+
+分别对应 Select 系列组件的封装，自动从 CodeBlockContext 获取 value 和 onValueChange。
+
+### CodeBlockSelectContent
+
+下拉选项内容，使用 render props 模式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 渲染函数，接收每项 CodeBlockData | `(item: CodeBlockData) => ReactNode` | 必填 |
+
+### CodeBlockCopyButton
+
+复制按钮，自动获取当前激活文件的代码内容。继承 CopyButton 组件属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| onCopy | 复制成功回调 | `() => void` | - |
+| timeout | 复制后状态保持时长（ms） | `number` | `2000` |
+| className | 附加样式类 | `string` | - |
+
+### CodeBlockBody
+
+代码内容区域容器，使用 render props 模式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 渲染函数，接收每项 CodeBlockData | `(item: CodeBlockData) => ReactNode` | 必填 |
+
+### CodeBlockItem
+
+单个代码文件容器，仅在 `value` 匹配当前激活值时渲染。包含行号、diff、高亮等样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 文件标识（language），匹配当前激活值时渲染 | `string` | 必填 |
+| lineNumbers | 是否显示行号 | `boolean` | `true` |
+| className | 附加样式类 | `string` | - |
+
+### CodeBlockContent
+
+代码语法高亮渲染，通过 Shiki 异步高亮后以 `dangerouslySetInnerHTML` 注入。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 源代码文本 | `string` | 必填 |
+| language | Shiki 语言标识 | `BundledLanguage` | `"typescript"` |
+| syntaxHighlighting | 是否启用语法高亮 | `boolean` | `true` |
+| className | 附加样式类 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### CodeBlock 和 CodePanel / CodeTabs 的区别？
+
+- **CodeBlock**：功能最完整的代码展示组件，支持多文件切换、行号、diff/高亮/聚焦标注、文件图标和下拉选择器。适合复杂的文档代码展示。
+- **CodePanel**：简化版代码展示，单文件、带标题栏和复制按钮，支持打字光标效果。适合终端风格或简单代码片段。
+- **CodeTabs**：多段代码命令切换，无需行号等高级标注。适合安装指南中切换包管理器命令。
+
+### 如何禁用语法高亮？
+
+在 CodeBlockContent 上设置 `syntaxHighlighting={false}`，代码将以纯文本 `<pre><code>` 结构回退渲染。
+
+### 子组件必须全部使用吗？
+
+不是。最小用法只需 CodeBlock + CodeBlockBody + CodeBlockItem + CodeBlockContent。CodeBlockHeader、CodeBlockFiles、CodeBlockFilename、CodeBlockCopyButton、CodeBlockSelect 系列均为可选，根据需要组合。
+
+### CodeBlockFiles 和 CodeBlockBody 的 children 为什么是函数？
+
+这是 render props 模式，回调函数接收每项 `CodeBlockData`，你需要为每项返回对应的 React 元素。注意在回调中为每项设置唯一的 `key`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/code-block` 导入所需的全部子组件。
+2. CodeBlock 的 `data` 属性为必填，每项必须包含 `language`、`filename`、`code`。
+3. CodeBlockFiles 和 CodeBlockBody 使用 render props 模式，回调中需为每项生成 key。
+4. CodeBlockItem 的 `value` 必须与 data 中的 `language` 字段匹配。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/code-block" />

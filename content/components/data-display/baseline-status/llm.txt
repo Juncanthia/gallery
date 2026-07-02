@@ -1,0 +1,207 @@
+---
+category: Components
+title: BaselineStatus
+subtitle: 基线状态
+description: 展示 Web 特性的浏览器兼容状态，基于 W3C WebDX Baseline 规范。
+demo:
+  cols: 2
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/gooseui/components/ui/status.tsx
+  docs: content/components/data-display/status/index.mdx
+  examples:
+    - content/components/data-display/status/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# BaselineStatus 基线状态
+
+展示 Web 特性的浏览器兼容状态，基于 W3C WebDX Baseline 规范。支持通过 `featureId` 获取 Web 特性数据，也可直接传入 `blocks/status` + `year` 静态展示。
+
+本组件是 GooseUI 生态的一部分，使用 W3C WebDX Community Group 官方 Baseline 图标，不依赖 Ant Design 生态。
+
+## 何时使用 {#when-to-use}
+
+在页面中展示 Web 平台特性的浏览器兼容性状态。
+
+常见场景：
+
+- 技术文档中标注 Web 特性的浏览器支持状态。
+- 组件或框架文档说明所依赖的 Web 平台能力。
+- 实时检测当前浏览器是否支持某个 Web 特性。
+- 博客或教程中的新 Web API 兼容性说明。
+
+Baseline 层级：
+
+| 状态 | 含义 |
+| --- | --- |
+| `widely` | 广泛可用，主流浏览器均已支持 |
+| `newly` | 新可用，近期各浏览器互通 |
+| `limited` | 有限支持，部分浏览器尚不支持 |
+| `no_data` | 暂无数据 |
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { BaselineStatus } from "@/components/data-display/status"
+
+export default function Demo() {
+  return <BaselineStatus featureId="container-queries" />
+}
+```
+
+### 静态数据
+
+```tsx
+import { BaselineStatus } from "@/components/data-display/status"
+
+export default function Demo() {
+  return <BaselineStatus blocks/status="widely" year={2022} />
+}
+```
+
+### 浏览器实时检测
+
+```tsx
+import { BaselineStatus } from "@/components/data-display/status"
+
+export default function Demo() {
+  return (
+    <BaselineStatus
+      featureId="container-queries"
+      browserCheck="container-queries"
+    />
+  )
+}
+```
+
+### 纯图标
+
+```tsx
+import { BaselineStatus } from "@/components/data-display/status"
+
+export default function Demo() {
+  return <BaselineStatus blocks/status="widely" year={2022} iconOnly />
+}
+```
+
+### 服务端渲染
+
+```tsx
+import { BaselineStatusStatic } from "@/components/data-display/status"
+
+export default function Demo() {
+  return <BaselineStatusStatic blocks/status="widely" year={2022} />
+}
+```
+
+## 核心导出 {#exports}
+
+- `BaselineStatus`
+- `BaselineStatusStatic`
+- `BaselineStatusProps`
+- `BrowserFeature`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码：
+
+```ts
+type BaselineStatusType = "widely" | "newly" | "limited" | "no_data"
+```
+
+```ts
+type BrowserFeature =
+  | "view-transitions"
+  | "popover"
+  | "anchor-positioning"
+  | "container-queries"
+  | "has"
+  | "scroll-driven-animations"
+  | "text-wrap-balance"
+  | "text-wrap-pretty"
+  | "corner-shape"
+```
+
+```ts
+interface BaselineStatusProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Feature ID from web-features (e.g., "scroll-snap", "container-queries") */
+  featureId?: string
+  /** Direct blocks/status override (use instead of featureId for static data) */
+  blocks/status?: BaselineStatusType
+  /** Year when the feature became available */
+  year?: number
+  /** Size variant */
+  size?: "sm" | "md" | "lg"
+  /** Show year in the label */
+  showYear?: boolean
+  /** Show only the icon without text */
+  iconOnly?: boolean
+  /** Browser feature to check support for */
+  browserCheck?: BrowserFeature
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+- `role="blocks/status"` — 容器语义角色。
+- `aria-label` — 基于状态文本的可访问名称。
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 尺寸类：`text-xs gap-1.5` (sm)、`text-sm gap-2` (md)、`text-base gap-2.5` (lg)。
+- 图标尺寸类：`[&_svg]:h-4` (sm)、`[&_svg]:h-5` (md)、`[&_svg]:h-6` (lg)。
+- 浏览器检测容器：`rounded-lg border border-border/50 bg-muted/30 px-3 py-2`。
+- 主题颜色优先使用 `text-muted-foreground`、`text-green-600`、`text-red-600` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/gooseui/components/ui/status.tsx`
+
+直接依赖摘要：
+
+- `@hyper/gooseui/lib/baseline` — `getBaselineStatus`、`getBaselineStatusText`、`BaselineFeature`、`BaselineStatus` 类型
+- `@hyper/gooseui/lib/utils` — `cn` 合并函数
+- `lucide-react` — `CheckCircle2`、`XCircle` 图标
+
+实现注意：
+
+1. `featureId` 在客户端通过 `useEffect` 异步调用 `getBaselineStatus()` 获取数据。
+2. `blocks/status` 优先级高于 `featureId`，传入后不会发起异步请求。
+3. `browserCheck` 通过 `CSS.supports()` 或 DOM 原型检测浏览器特性支持。
+4. `BaselineStatusStatic` 是同构的服务端渲染版本，`blocks/status` 为必填。
+5. 加载态显示 `animate-pulse` 骨架屏占位。
+
+## 可访问性 {#accessibility}
+
+- 容器设置 `role="blocks/status"` 表示状态区域。
+- 通过 `aria-label` 暴露状态文本作为可访问名称。
+- 浏览器检测结果通过图标颜色（绿色 / 红色）和文本双重表达。
+- 仅图标模式（`iconOnly`）仍保留 `aria-label`。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 BaselineStatus 代码时，应遵守：
+
+1. 从 `@/components/data-display/status` 导入。
+2. 优先使用 `featureId` 自动获取数据；服务端组件使用 `BaselineStatusStatic` + `blocks/status` + `year`。
+3. 浏览器特性检测使用组件内置 `browserCheck`，不要手写 `CSS.supports()` 逻辑。
+4. 不要自行绘制 Baseline 图标；使用组件内置的官方图标。
+5. 需要自定义样式时优先使用 `size` 等 props，最后才用 `className`。
+6. 如果不确定某个 API 是否存在，先检查 `src/components/gooseui/components/ui/status.tsx`，不要凭记忆生成。

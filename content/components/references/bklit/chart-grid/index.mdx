@@ -1,0 +1,129 @@
+图表网格（Grid）用于在图表中绘制横纵辅助线，帮助用户快速追踪数值，是柱状图、折线图和面积图中最基础的图表元素之一。
+
+<h2 id="when-to-use">何时使用</h2>
+
+在图表中添加横向或纵向网格线，帮助读者快速追踪数据点对应的数值。网格线作为图表的参考背景，能显著提升数据可读性，尤其适用于数据密集的柱状图、折线图和面积图。横向网格线默认配合 fadeHorizontal 渐变边缘效果，可避免线条与轴线刻度标签产生视觉冲突。
+
+适用场景：
+
+- 柱状图、折线图、面积图中需要辅助读数时。
+- 数据值域跨度较大，读者需要精确对比不同数据点的高度或位置。
+- 横向柱状图中，通过纵向网格线辅助对照数值轴。
+- 加载态下启用 shimmer 动画，在数据渲染前提供视觉反馈。
+- 需要突出特定数值线（如零基线）时，使用 highlightRowValues 高亮关键行。
+
+不适用场景：
+
+- 饼图、环形图等极坐标图表，网格线无参考意义。
+- 仪表盘、数字翻牌器等非笛卡尔坐标系的展示组件。
+- 信息密度极低的图表，网格线反而增加视觉噪音。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认展示横向虚线网格，可控制横纵方向、网格线数量、颜色及渐变边缘。
+
+<ComponentShowcase id="bklit/chart-grid" path="bklit/chart-grid/basic" />
+
+```tsx
+import { BarChart } from "@/components/charts/chart-kit"
+import { Bar } from "@/components/charts/chart-kit"
+import { Grid } from "@/components/core/chart-grid"
+
+export default function Demo() {
+  return (
+    <BarChart data={data} xDataKey="name">
+      <Grid horizontal />
+      <Bar dataKey="value" />
+    </BarChart>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Grid Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| horizontal | 显示横向网格线 | `boolean` | `true` |
+| vertical | 显示纵向网格线 | `boolean` | `false` |
+| numTicksRows | 横向网格线数量 | `number` | `5` |
+| numTicksColumns | 纵向网格线数量 | `number` | `10` |
+| rowTickValues | 横向网格线的显式刻度值，覆盖 numTicksRows | `number[]` | - |
+| stroke | 网格线颜色 | `string` | `var(--chart-grid)` |
+| loadingStroke | 加载态 chrome 阶段的网格线颜色，回退至 stroke | `string` | - |
+| strokeOpacity | 网格线透明度 | `number` | `1` |
+| strokeWidth | 网格线宽度 | `number` | `1` |
+| strokeDasharray | 虚线样式 | `string` | `"4,4"` |
+| highlightRowValues | 需要高亮的行刻度值（如零基线） | `number[]` | - |
+| highlightRowStroke | 高亮行颜色 | `string` | `var(--chart-foreground-muted)` |
+| highlightRowStrokeOpacity | 高亮行透明度 | `number` | `1` |
+| highlightRowStrokeWidth | 高亮行宽度 | `number` | `1` |
+| highlightRowStrokeDasharray | 高亮行虚线样式，默认实线 | `string` | `"0"` |
+| fadeHorizontal | 横向网格线渐变边缘（左右淡出） | `boolean` | `true` |
+| fadeVertical | 纵向网格线渐变边缘（上下淡出） | `boolean` | `false` |
+| hideHorizontalEdgeLines | 隐藏首尾横向网格线 | `boolean` | `false` |
+| hideVerticalEdgeLines | 隐藏首尾纵向网格线 | `boolean` | `false` |
+| yAxisId | Y 轴 ID，默认使用主 Y 轴（`"left"`） | `string \| number` | - |
+| shimmer | 启用加载态闪烁动画 | `boolean` | `false` |
+| shimmerStroke | 闪烁带颜色 | `string` | `color-mix(in oklch, var(--foreground) 68%, transparent)` |
+| shimmerLength | 闪烁带宽度（像素） | `number` | `140` |
+| shimmerSpeed | 闪烁速度倍率（越大越快） | `number` | `1` |
+| shimmerSync | 与 line loading pulse 同步循环计时 | `boolean` | `false` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义网格线样式？
+
+通过 CSS 变量（如 `--chart-grid`、`--chart-foreground-muted`）或组件属性进行样式设置。常用属性包括 `stroke`（颜色）、`strokeDasharray`（虚线）、`strokeWidth`（粗细）和 `strokeOpacity`（透明度）。
+
+### 如何在横向柱状图中显示纵向网格？
+
+设置 `vertical={true}`，并可选 `fadeVertical` 启用纵向渐变边缘：
+
+```tsx
+<BarChart data={data} xDataKey="name" yDataKey="value">
+  <Grid vertical fadeVertical />
+  <Bar dataKey="value" />
+</BarChart>
+```
+
+### 如何高亮零基线？
+
+使用 `highlightRowValues` 指定需要高亮的刻度值：
+
+```tsx
+<Grid
+  highlightRowValues={[0]}
+  highlightRowStroke="var(--chart-grid-highlight)"
+  highlightRowStrokeWidth={2}
+/>
+```
+
+### 如何在加载态添加闪烁效果？
+
+设置 `shimmer` 并配合图表 `blocks/status="loading"`：
+
+```tsx
+<BarChart data={data} xDataKey="name" blocks/status="loading">
+  <Grid shimmer shimmerLength={200} shimmerSpeed={1.2} />
+  <Bar dataKey="value" />
+</BarChart>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+- 导入 Grid: `import { Grid } from "@/components/core/chart-grid"`
+- Grid 来自 BKLit Charts 库（基于 @visx/grid），作为 BarChart / LineChart / AreaChart 等的子组件使用
+- 内部自动从 ChartContext 获取 scale 信息，无需手动传入
+- 使用 `horizontal` / `vertical` 控制方向，不要使用不存在的 `showRows` / `showColumns`
+- 加载态配合 chart `blocks/status="loading"` 和 `shimmer` 属性使用
+- 高亮基线使用 `highlightRowValues`，不要手写 line 元素
+- 横向网格线默认带渐变边缘（`fadeHorizontal=true`），可关闭以减少 SVG 节点
+- 不要将 Grid 用于饼图、环形图、雷达图等非笛卡尔坐标系图表
+
+<h2 id="source">源码</h2>
+
+- [ChartGrid](/source/bklit/charts/chart-grid)

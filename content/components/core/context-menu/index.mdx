@@ -1,0 +1,241 @@
+ContextMenu 右键菜单。在目标元素上点击右键弹出的上下文菜单，基于 Radix ContextMenu 实现。支持子组件手动组合和 items 数组声明式配置两种模式，提供 item、checkbox、radio、submenu、separator、label 等丰富的菜单项类型。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为特定区域或元素提供右键快捷操作菜单时使用。
+
+常见场景：
+
+- 文件列表中的右键操作（打开、重命名、删除、下载）。
+- 表格行的右键上下文操作（编辑、复制、导出、删除行）。
+- 画布或编辑器的右键工具菜单。
+- 树节点或列表项的上下文命令。
+
+不推荐：
+
+- 主要操作入口，应使用 DropdownMenu 或直接放置按钮，右键菜单作为辅助快捷方式。
+- 移动端，右键菜单依赖鼠标右键事件，移动端应使用长按菜单或其他替代方案。
+- 在右键菜单中放置过多项目（超过 10 项），应使用分组或子菜单合理组织。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法（子组件模式）
+
+<ComponentShowcase id="context-menu" path="context-menu/basic" />
+
+```tsx
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/core/context-menu"
+
+export default function Demo() {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger className="flex h-32 w-64 items-center justify-center rounded border border-dashed text-sm text-muted-foreground">
+        右键点击此处
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>复制</ContextMenuItem>
+        <ContextMenuItem>粘贴</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem variant="destructive">删除</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+```
+
+### items 声明式模式
+
+```tsx
+import { ContextMenu, type ContextMenuItemOption } from "@/components/core/context-menu"
+
+const items: ContextMenuItemOption[] = [
+  { type: "label", label: "操作" },
+  { label: "复制", shortcut: "Ctrl+C", onSelect: () => console.log("复制") },
+  { label: "粘贴", onSelect: () => console.log("粘贴") },
+  { type: "separator" },
+  { type: "checkbox", label: "自动保存", checked: true, onCheckedChange: (v) => console.log(v) },
+  { type: "separator" },
+  {
+    type: "submenu",
+    label: "更多",
+    children: [
+      { label: "导出" },
+      { label: "分享", shortcut: "Ctrl+S" },
+    ],
+  },
+  { type: "separator" },
+  { label: "删除", danger: true, onSelect: () => console.log("删除") },
+]
+
+export default function Demo() {
+  return (
+    <ContextMenu
+      trigger={<div className="flex h-32 w-64 items-center justify-center rounded border border-dashed text-sm text-muted-foreground">右键点击此处</div>}
+      items={items}
+    />
+  )
+}
+```
+
+### 含子菜单和复选框
+
+```tsx
+import {
+  ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger,
+  ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent,
+  ContextMenuCheckboxItem, ContextMenuSeparator, ContextMenuLabel,
+} from "@/components/core/context-menu"
+
+export default function Demo() {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger className="flex h-32 w-64 items-center justify-center rounded border border-dashed text-sm text-muted-foreground">
+        右键点击此处
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-48">
+        <ContextMenuLabel>编辑</ContextMenuLabel>
+        <ContextMenuItem>剪切</ContextMenuItem>
+        <ContextMenuItem>复制</ContextMenuItem>
+        <ContextMenuItem>粘贴</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuSub>
+          <ContextMenuSubTrigger>排列方式</ContextMenuSubTrigger>
+          <ContextMenuSubContent>
+            <ContextMenuItem>按名称</ContextMenuItem>
+            <ContextMenuItem>按日期</ContextMenuItem>
+            <ContextMenuItem>按大小</ContextMenuItem>
+          </ContextMenuSubContent>
+        </ContextMenuSub>
+        <ContextMenuSeparator />
+        <ContextMenuCheckboxItem checked>显示隐藏文件</ContextMenuCheckboxItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem variant="destructive">删除</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ContextMenu
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| trigger | 触发器元素（items 模式） | `React.ReactNode` | - |
+| items | 菜单项配置数组（items 模式） | `ContextMenuItemOption[]` | - |
+| contentProps | ContextMenuContent 的额外属性 | `ComponentProps<typeof Content>` | - |
+
+顶层组件。当 `trigger` 和 `items` 均未提供时进入子组件手动组合模式，`children` 作为内部内容自由组合。
+
+### ContextMenuTrigger
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+
+继承 Radix `ContextMenuPrimitive.Trigger` 的所有 props。
+
+### ContextMenuContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 样式类名 | `string` | - |
+| side | 弹出方向 | `"top"` \| `"right"` \| `"bottom"` \| `"left"` | - |
+
+继承 Radix `ContextMenuPrimitive.Content` 的所有 props。自动通过 Portal 渲染。
+
+### ContextMenuItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 变体样式 | `"default"` \| `"destructive"` | `"default"` |
+| inset | 是否左侧缩进 | `boolean` | - |
+| disabled | 是否禁用 | `boolean` | - |
+| onSelect | 选中回调 | `(event: Event) => void` | - |
+| className | 样式类名 | `string` | - |
+
+继承 Radix `ContextMenuPrimitive.Item` 的所有 props。`variant="destructive"` 时文字和图标显示红色。
+
+### ContextMenuCheckboxItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| checked | 是否选中 | `boolean` | - |
+| onCheckedChange | 选中状态变化回调 | `(checked: boolean) => void` | - |
+| inset | 是否左侧缩进 | `boolean` | - |
+| disabled | 是否禁用 | `boolean` | - |
+| className | 样式类名 | `string` | - |
+
+继承 Radix `ContextMenuPrimitive.CheckboxItem` 的所有 props。选中时右侧显示 CheckIcon。
+
+### ContextMenuRadioItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 选项值 | `string` | - |
+| inset | 是否左侧缩进 | `boolean` | - |
+| disabled | 是否禁用 | `boolean` | - |
+| className | 样式类名 | `string` | - |
+
+继承 Radix `ContextMenuPrimitive.RadioItem` 的所有 props。需配合 `ContextMenuRadioGroup` 使用。
+
+### ContextMenuSub / ContextMenuSubTrigger / ContextMenuSubContent
+
+子菜单组件组合：
+- **ContextMenuSub**：子菜单容器。
+- **ContextMenuSubTrigger**：子菜单触发器，右侧显示 ChevronRight 指示图标，支持 `inset`。
+- **ContextMenuSubContent**：子菜单弹出内容，带边框和阴影。
+
+### ContextMenuLabel / ContextMenuSeparator / ContextMenuShortcut / ContextMenuGroup / ContextMenuRadioGroup
+
+辅助组件：
+- **ContextMenuLabel**：分组标签，支持 `inset` 缩进。
+- **ContextMenuSeparator**：水平分隔线。
+- **ContextMenuShortcut**：快捷键提示文本，右对齐，`tracking-widest`。
+- **ContextMenuGroup**：选项分组容器。
+- **ContextMenuRadioGroup**：单选组容器。
+
+### ContextMenuItemOption (items 模式)
+
+声明式 items 数组元素类型：
+
+| 类型 | 关键字段 | 说明 |
+| --- | --- | --- |
+| `"item"` (默认) | `label`, `icon?`, `extra?`, `shortcut?`, `disabled?`, `danger?`, `onSelect?` | 普通菜单项 |
+| `"label"` | `label`, `inset?` | 分组标题标签 |
+| `"separator"` | 无 | 分隔线 |
+| `"checkbox"` | `label`, `checked?`, `disabled?`, `onCheckedChange?` | 复选框项 |
+| `"submenu"` | `label`, `icon?`, `extra?`, `disabled?`, `children` | 子菜单，children 为嵌套的 `ContextMenuItemOption[]` |
+
+<h2 id="faq">常见问题</h2>
+
+### 组合模式 vs items 模式如何选择？
+
+- **组合模式**：需要完全自定义每个菜单项的内容时使用，如嵌入自定义图标、文本、额外组件。MenuContent 和下层组件完全自由组合。
+- **items 模式**：标准菜单场景，通过声明式数据快速构建，支持所有菜单项类型（item、checkbox、submenu 等）。传入 `trigger` 和 `items`，组件自动渲染。
+
+### 如何标记危险操作？
+
+组合模式中给 `ContextMenuItem` 设置 `variant="destructive"`；items 模式中设置 `danger: true`。危险项会渲染为红色文字和图标。
+
+### 如何处理嵌套子菜单？
+
+组合模式中使用 `ContextMenuSub` + `ContextMenuSubTrigger` + `ContextMenuSubContent` 三层嵌套；items 模式中使用 `{ type: "submenu", children: [...] }`，children 内可继续嵌套任意支持的 item 类型。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/context-menu` 导入，不要从 `@/components/_internal/radix` 直接导入。
+2. 简单菜单优先使用 items 模式，复杂自定义使用组合模式。
+3. 危险操作使用 `variant="destructive"`（组合模式）或 `danger: true`（items 模式）。
+4. 基于 Radix ContextMenu，保留所有键盘和 ARIA 语义。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="context-menu" />

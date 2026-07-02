@@ -3,7 +3,7 @@
 import {
   RadioGroup,
   RadioGroupItem,
-} from "@/components/ui/radio-group";
+} from "@/components/core/radio-group";
 import { cn } from "@/lib/utils";
 import {
   type ComponentProps,
@@ -17,7 +17,7 @@ import {
   FieldDescription,
   FieldLabel,
   FieldTitle,
-} from "@/components/ui/form-field";
+} from "@/components/core/form-field";
 
 export type ChoiceboxProps = ComponentProps<typeof RadioGroup>;
 

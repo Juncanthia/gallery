@@ -1,0 +1,117 @@
+---
+category: Components
+title: 状态按钮
+subtitle: Status Button
+description: 状态按钮是一个带有加载反馈和成功指示的交互组件，点击后依次经历 Saving 和 Saved 状态。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 22
+source:
+  component: src/components/general/blocks/status-button.tsx
+  examples:
+    - content/components/general/blocks/status-button/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Status Button 状态按钮
+
+状态按钮是一个带有加载反馈和成功指示的交互组件。点击后依次经历 Saving 加载态和 Saved 完成态，使用 motion/react 实现字符级动画和状态指示器过渡。
+
+本组件是 UseLayouts 集合中的交互组件，展示异步操作的视觉反馈与动效方案。
+
+## 何时使用 {#when-to-use}
+
+适合需要为异步操作（保存、提交）提供视觉反馈的场景。组件通过 AnimatePresence 实现文字逐字动画和状态指示器切换。
+
+常见场景：
+
+- 保存操作的视觉反馈：点击"Save"显示"Saving" → "Saved"。
+- 异步操作的流畅过渡：替代传统 loading/disabled 单调交互。
+- 需要状态指示器（blocks/spinner / check）的按钮交互。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { SaveButton } from "@/components/general/blocks/status-button"
+
+export default function Demo() {
+  return <SaveButton />
+}
+```
+
+## 核心导出 {#exports}
+
+- `SaveButton` (named)
+
+## API 摘要 {#api}
+
+组件为自包含交互组件，无需传递任何 props。所有内部状态（idle、loading、success）由组件内部管理。
+
+```ts
+type SaveButtonProps = Record<string, never>
+```
+
+| 内部状态 | 类型 | 说明 |
+| --- | --- | --- |
+| `blocks/status` | `"idle" \| "loading" \| "success"` | 当前按钮状态 |
+| text | `"Save" \| "Saving" \| "Saved"` | useMemo 计算结果 |
+
+## Semantic DOM {#semantic-dom}
+
+源码中未声明 `data-slot`，使用 AnimatePresence 的 `mode="popLayout"` 管理按钮文字和状态指示器的进出动画，key 为 `${char}-${i}`（文字）和 `"loader"` / `"check"`（指示器）。
+
+## 样式模型 {#styling-model}
+
+- 样式通过 Tailwind CSS className 表达。
+- 初始态使用 Button `variant="default"`。
+- 加载/成功态按钮切换为 `bg-muted text-muted-foreground` 并 `disabled`。
+- 状态指示器固定在按钮右上角 `-top-1 -right-1`。
+- 字符逐字动画通过 `motion.span` 的 `opacity`、`scale`、`filter: blur` 实现 spring 出入场。
+- SVG blocks/spinner 使用 `animateTransform` 实现旋转动画。
+- AnimatePresence `mode="popLayout"` 确保退出元素立即脱离布局流。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/general/blocks/status-button.tsx`
+
+关键行为：
+
+1. 初始渲染"Save"按钮，字符逐个动画入场。
+2. 点击后 `setStatus("loading")`，按钮 disabled，文字切换为"Saving"，右上角出现 loading blocks/spinner。
+3. 2500ms 后 `setStatus("success")`，文字切换为"Saved"，blocks/spinner 替换为 check 图标。
+4. 2000ms 后 `setStatus("idle")`，自动回到初始状态。
+5. `useMemo` 根据 blocks/status 计算显示文字。
+6. 按钮 disabled 时 `disabled:opacity-100` 保持视觉一致性。
+
+## 可访问性 {#accessibility}
+
+- 按钮使用原生 `<button>` 语义。
+- 加载/成功态通过 `disabled` 属性阻止重复点击。
+- 如需生产环境使用，建议通过 `aria-live` 区域或 `aria-label` 描述当前状态变化。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Status Button 代码时，应遵守：
+
+1. 从 `@/components/general/blocks/status-button` 导入 `SaveButton`（named export）。
+2. 组件自包含，无需 props，直接渲染即可。
+3. 不要移除 motion/react 动画逻辑，包括 AnimatePresence、motion.span、transition 曲线。
+4. 修改文案时更新 `useMemo` 中三个状态的返回文字。
+5. 调整时间参数时修改 `handleClick` 中的两个 setTimeout 值。
+6. 图标使用 Tick02Icon + HugeiconsIcon。
+7. 不要引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component。

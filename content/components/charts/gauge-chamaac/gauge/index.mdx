@@ -1,0 +1,70 @@
+Gauge 仪表盘。基于 motion/react 动画实现，通过半圆形排布的条形图直观展示百分比进度。使用 `useMotionValue` 驱动数值动画，内置响应式尺寸适配。
+
+&lt;h2 id="when-to-use"&gt;何时使用&lt;/h2&gt;
+
+当需要以仪表盘形式直观展示进度、完成率、评分等百分比型数据时使用。
+
+常见场景：
+- 仪表盘、数据看板中的关键指标可视化。
+- 性能评分、完成度展示。
+- 需要动画效果的百分比数值呈现。
+
+不推荐：
+- 精确数值读取场景，仪表盘的视觉精度不如数字直接展示。
+- 多个指标并排对比时，仪表盘占地面积大，建议改用进度条或迷你图表。
+- 移动端密集信息展示区，仪表盘在小尺寸下辨识度降低。
+
+&lt;h2 id="examples"&gt;代码演示&lt;/h2&gt;
+
+&lt;ComponentShowcase id="charts/gauge-chamaac/gauge" path="charts/gauge-chamaac/gauge/basic" /&gt;
+
+&lt;h2 id="api"&gt;API&lt;/h2&gt;
+
+### Gauge
+
+仪表盘组件。通过半圆条形图展示百分比进度，支持数值动画和响应式尺寸。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 当前值 | `number` | `70` |
+| min | 最小值 | `number` | `0` |
+| max | 最大值 | `number` | `100` |
+| size | 仪表盘直径（px） | `number` | `400` |
+| gap | 条之间的间距（度） | `number` | `4` |
+| thickness | 条的粗细（px） | `number` | `10` |
+| activeColor | 活跃条的颜色（Tailwind class） | `string` | `"bg-blue-600"` |
+| inactiveColor | 非活跃条的颜色（Tailwind class） | `string` | `"bg-blue-100"` |
+| showValue | 是否显示数值 | `boolean` | `true` |
+| label | 底部标签文字 | `string` | `"Performance"` |
+| className | 附加样式类名 | `string` | - |
+| delay | 每条动画延迟（ms） | `number` | `25` |
+
+&lt;h2 id="faq"&gt;常见问题&lt;/h2&gt;
+
+### Gauge 在移动端显示过大怎么办？
+
+组件内置响应式逻辑：当 `window.innerWidth &lt; 640` 时，自动缩小尺寸至 `280px` 直径、`6px` 粗细。如果自动适配不满足需求，可通过 `size` 和 `thickness` props 手动控制。
+
+### 如何自定义颜色？
+
+通过 `activeColor` 和 `inactiveColor` 传入 Tailwind CSS 类名，如 `"bg-green-500"`、`"bg-red-400"` 等。组件内部使用模板字符串拼接类名，确保传入的是有效的 Tailwind 背景色类。
+
+### 动画不播放怎么办？
+
+组件使用 `LazyMotion` + `domAnimation` 懒加载动画功能。如果动画未触发，请检查 `motion/react` 是否正确安装。动画在组件挂载 100ms 后启动，若页面有重渲染逻辑，确保 Gauge 未被重复挂载。
+
+### 如何调整动画速度？
+
+通过 `delay` 属性控制每条条形图的动画延迟（毫秒）。值越小动画越快。总动画时长 = `(totalBars * delay) / 1000` 秒。
+
+&lt;h2 id="llm-rules"&gt;LLM 使用规则&lt;/h2&gt;
+
+1. 从 `@/components/charts/gauge-charts/gauge-chamaac/gauge` 导入 Gauge，不要从 `motion/react` 直接引用。
+2. 颜色属性（activeColor / inactiveColor）传入的是 Tailwind CSS 类名，不是 CSS 颜色值。
+3. 组件内置响应式逻辑，小屏自动缩小，不需要手动添加响应式 wrapper。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+5. 不要引入 Ant Design 相关依赖。
+6. 如果不确定某个 API 是否存在，先检查 `src/components/charts/gauge-charts/gauge-chamaac/gauge/gauge.tsx`，不要凭记忆生成。
+
+&lt;h2 id="source"&gt;源码&lt;/h2&gt;
+&lt;SourceViewer componentId="charts/gauge-chamaac/gauge" /&gt;

@@ -1,0 +1,87 @@
+CountUp 基于 Motion Spring 动画的数字递增/递减组件，支持自定义方向、小数位数和千位分隔符。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要数字动态滚动过渡动画时使用。
+常见场景：
+- 统计数据看板的数值展示
+- 倒计时或计数器效果
+- 价格、指标等数字的强调展示
+不推荐：
+- 静态纯数字显示，无动画需求
+- 需要实时高频更新的数值（如实时股票价格），动画延迟不适合
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/count-up" path="rb/count-up/basic" />
+
+```tsx
+import { CountUp } from "@/components/core/count-up"
+export default function Demo() { return <CountUp from={0} to={100} className="text-4xl font-bold" /> }
+```
+
+### 自定义配置
+
+```tsx
+import { CountUp } from "@/components/core/count-up"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <CountUp
+        from={0}
+        to={99999.99}
+        duration={3}
+        separator=","
+        className="text-5xl font-bold text-green-500"
+        onEnd={() => console.log("计数完成")}
+      />
+      <CountUp
+        from={50}
+        to={0}
+        direction="down"
+        delay={1}
+        className="text-3xl text-red-400"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CountUp
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| to | 动画结束的目标数值 | `number` | (必填) |
+| from | 动画起始数值 | `number` | `0` |
+| direction | 递增或递减方向 | `"up"` \| `"down"` | `"up"` |
+| delay | 动画开始前的延迟秒数 | `number` | `0` |
+| duration | 动画持续秒数 | `number` | `2` |
+| className | 附加 CSS 类名 | `string` | `""` |
+| startWhen | 是否进入视口即自动启动 | `boolean` | `true` |
+| separator | 千位分隔符，如 `","` 或 `" "` | `string` | `""` |
+| onStart | 动画开始时的回调 | `() => void` | - |
+| onEnd | 动画结束时的回调 | `() => void` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何处理小数？
+组件自动检测 `from` 和 `to` 中小数位数最多的值，动画期间保留对应的小数位。例如 `from={0}` 和 `to={3.14}` 会显示 2 位小数。
+
+### startWhen 为 false 时如何手动触发？
+当 `startWhen=false` 时，组件不会在视口可见时自动启动。可通过外部状态切换 `startWhen` 为 `true` 来触发动画。`delay` 在自动启动后才开始计时。
+
+### separator 和 Intl.NumberFormat 的关系？
+设置 `separator` 后会启用 `useGrouping`，将默认的逗号千位分隔符替换为你指定的字符。例如 `separator=" "` 会将 "1,000" 变为 "1 000"。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/count-up` 导入。
+2. `to` 为必填属性。
+3. 组件依赖 `motion/react` 的 `useInView`、`useMotionValue` 和 `useSpring`。
+4. `springValue` 的阻尼和刚度由 `duration` 自动计算——duration 越短弹性越强。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-count-up" />

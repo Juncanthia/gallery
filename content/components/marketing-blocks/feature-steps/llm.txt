@@ -1,0 +1,10 @@
+---
+category: chamaac
+title: FeatureSteps
+subtitle: 特性步骤展示
+description: 特性介绍展示组件，左侧特性列表与右侧配图联动，自动轮播切换，支持点击跳转和进度条指示，内置流畅的进出场动画。
+demo: { cols: 1 }
+group: { title: 展示, order: 1 }
+source: { component: src/components/marketing-blocks/feature-steps/feature-steps.tsx, docs: content/components/marketing-blocks/feature-steps/index.mdx, examples: [content/components/marketing-blocks/feature-steps/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, motion: true, next: true, clsx: true }
+---

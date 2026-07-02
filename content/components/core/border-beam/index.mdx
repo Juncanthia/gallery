@@ -1,0 +1,121 @@
+边框流光 BorderBeam。为容器添加沿边框持续流动的装饰性高亮光束效果，基于 Motion 动画库实现，适用于突出展示内容或表示活跃状态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为卡片、面板等容器添加吸引注意力的流光边框装饰时使用，常用于突出展示内容或表示加载状态。
+
+常见场景：
+- 卡片悬停时的高亮边框效果。
+- 特色内容或推荐区块的视觉突出。
+- 加载骨架屏的装饰动画。
+- 付费功能或高级内容的视觉提示。
+
+不推荐：
+- 功能性边框（如表单验证状态边框），应使用普通 border 样式。
+- 性能敏感的大量列表项，动画元素过多可能影响渲染性能。
+- 需要精确控制动画帧的场景，BorderBeam 使用预设的循环动画。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+将 BorderBeam 放置在 `relative` 且 `overflow-hidden` 的容器内，光束沿容器边框循环流动。
+
+<ComponentShowcase
+  id="border-beam"
+  path="border-beam/basic"
+/>
+
+```tsx
+import { BorderBeam } from "@/components/core/border-beam"
+
+export default function Demo() {
+  return (
+    <div className="relative h-24 w-64 overflow-hidden rounded border">
+      <BorderBeam />
+      <div className="flex h-full items-center justify-center text-sm">
+        流光边框
+      </div>
+    </div>
+  )
+}
+```
+
+### 自定义颜色和速度
+
+通过 `colorFrom`、`colorTo`、`duration` 和 `size` 自定义光束效果。
+
+```tsx
+import { BorderBeam } from "@/components/core/border-beam"
+
+export default function Demo() {
+  return (
+    <div className="relative h-32 w-80 overflow-hidden rounded border bg-background">
+      <BorderBeam
+        colorFrom="#ff0080"
+        colorTo="#7928ca"
+        duration={4}
+        size={300}
+      />
+      <div className="flex h-full items-center justify-center text-sm font-medium">
+        自定义流光
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BorderBeam
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| duration | 光束沿边框移动一圈的时长（秒），数值越小越快 | `number` | `8` |
+| size | 光束光斑大小（px） | `number` | `200` |
+| colorFrom | 光束渐变起始颜色（CSS 颜色值） | `string` | `"#ffaa40"` |
+| colorTo | 光束渐变结束颜色（CSS 颜色值） | `string` | `"#9c40ff"` |
+| borderWidth | 边框宽度（预留属性，当前由容器自身控制） | `number` | - |
+| className | 附加 CSS 类名 | `string` | - |
+
+BorderBeam 使用 conic-gradient 在 `colorFrom` 到 `colorTo` 之间过渡，配合 `motion.div` 的四段往返路径实现沿边框循环流动效果。光束带 `blur(4px)` 滤镜和 `opacity: 0.8` 产生柔和光晕。
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么看不到流光效果？
+
+确保父容器设置了 `relative` 和 `overflow-hidden`，且容器本身有可见的边框（`border`）或背景色。BorderBeam 本身透明且覆盖整个容器，需要容器提供视觉基底。
+
+### 如何调整流光颜色？
+
+通过 `colorFrom` 和 `colorTo` 传入任意 CSS 颜色值（hex、rgb、hsl 等），流光使用 `conic-gradient` 在两个颜色之间渐变过渡。
+
+```tsx
+<BorderBeam colorFrom="#00ff88" colorTo="#0066ff" />
+```
+
+### 如何在暗色模式下调整效果？
+
+通过 Tailwind 暗色变体控制父容器背景，颜色通过 props 动态传入：
+
+```tsx
+<div className="relative rounded border bg-white dark:bg-gray-900">
+  <BorderBeam colorFrom="#ffaa40" colorTo="#9c40ff" />
+</div>
+```
+
+### 如何批量使用时不卡顿？
+
+BorderBeam 使用 Motion 的硬件加速动画，单个实例性能开销低。但避免在列表中渲染大量实例（建议同时可见不超过 20 个）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/border-beam` 导入。
+2. 父容器必须设置 `relative overflow-hidden`，且 `rounded` 应与 BorderBeam 配合使用保持视觉一致。
+3. `colorFrom` 和 `colorTo` 传入 CSS 颜色字符串（如 `"#ffaa40"`），非 Tailwind class。
+4. `duration` 单位为秒，数值越小光束运动越快。
+5. BorderBeam 为纯装饰元素，无交互功能，不要在其上添加事件处理器。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="border-beam" />

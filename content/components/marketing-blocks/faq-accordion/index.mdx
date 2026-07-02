@@ -1,0 +1,102 @@
+FAQAccordion 手风琴式 FAQ 组件，以序号编号 + 展开/收起动画的方式展示问答列表。点击问题项展开或收起对应的答案，每次最多展开一项。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要在页面上以紧凑、可浏览的方式呈现常见问题解答列表时使用。
+
+常见场景：
+
+- 产品首页的 FAQ 板块，让用户快速了解产品。
+- 文档站点的问答区，便于查阅常见配置问题。
+- 定价页面的常见疑问解答。
+- 帮助中心或支持页面中的问题列表。
+
+FAQAccordion 通过受控的 `openIndex` 状态实现手风琴行为，每次仅一项展开。使用 CSS Grid `grid-rows-[1fr]` / `grid-rows-[0fr]` 技巧实现平滑的高度展开/收起动画，Plus 图标旋转 45 度表示展开状态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认内置一组 GooseUI 相关问题示例。点击任意问题展开答案，再次点击收起。打开第一项时再次点击同一项可收起。
+
+<ComponentShowcase
+  id="marketing-blocks/faq-accordion"
+  path="marketing-blocks/faq-accordion/basic"
+/>
+
+```tsx
+import { FAQAccordion } from "@/components/marketing-blocks/faq-accordion"
+
+export default function Demo() {
+  return <FAQAccordion />
+}
+```
+
+### 自定义问答数据
+
+通过 `items` 属性传入自定义 FAQItem 数组来替代默认数据。
+
+```tsx
+import { FAQAccordion } from "@/components/marketing-blocks/faq-accordion"
+
+export default function Demo() {
+  const customFaqs = [
+    { question: "支持哪些支付方式？", answer: "支持微信支付、支付宝和银行卡。" },
+    { question: "如何退款？", answer: "在订单详情页面点击申请退款即可。" },
+    { question: "多久到账？", answer: "退款通常在 3-5 个工作日内到账。" },
+  ]
+
+  return <FAQAccordion items={customFaqs} />
+}
+```
+
+<h2 id="api">API</h2>
+
+### FAQAccordion
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 问答数据列表 | `FAQItem[]` | 内置默认 FAQ 数据 |
+| className | 附加样式类名 | `string` | - |
+
+### FAQItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| question | 问题文本 | `string` | - |
+| answer | 答案文本 | `string` | - |
+
+FAQAccordion 内部通过 React `useState` 管理当前展开项的索引，`openIndex` 初始为 `0`（第一项默认展开）。点击已展开项时设为 `null`（全部收起）。Plus 图标通过 CSS `rotate-45` 旋转表示展开状态，序号数字在展开时从 `text-muted-foreground/30` 过渡到 `text-primary/70`。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义样式？
+
+通过 `className` 属性附加样式。FAQAccordion 根容器默认 `max-w-4xl`。如需修改内部项的样式（如边框、圆角），应在组件源码中扩展，而非在调用处复制内部 className。
+
+### 能否同时展开多项？
+
+当前实现为单展开手风琴模式，每次仅一项展开。如需同时展开多项，需修改组件内部状态管理逻辑（将 `openIndex: number | null` 改为 `Set<number>` 或多选数组）。
+
+### 如何修改默认展开项？
+
+组件内部 `useState<number | null>(0)` 初始值为 0（第一项默认展开）。如需默认全部收起，可将初始值改为 `null`；如需展开其他项，改为对应索引。此修改需在组件源码中完成。
+
+### 图标可以替换吗？
+
+当前使用 `lucide-react` 的 `Plus` 图标。替换图标需修改组件源码中的 `<Plus>` 引用。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FAQAccordion 代码时：
+
+1. 从 `@/components/marketing-blocks/faq-accordion` 导入 `FAQAccordion`。
+2. 无自定义数据时直接使用 `<FAQAccordion />`，带默认数据展示。
+3. 需要自定义问答内容时，通过 `items` 传入 `{ question, answer }[]` 数组。
+4. 不要从 gooseui 内部路径（如 `@/components/marketing-blocks/faq-accordion`）导入。
+5. 不要引入 `@radix-ui/react-accordion` 或其他第三方手风琴库。
+6. 如需扩展（如同时展开多项、替换图标），在组件源码中修改，不要在调用处覆盖内部结构。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="marketing-blocks/faq-accordion" />

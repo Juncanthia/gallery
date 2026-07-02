@@ -1,0 +1,92 @@
+LaserFlow 激光光束动画效果，基于 Canvas 2D 实现光束、粒子流和体积雾气效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要科技感激光光束背景效果时使用。
+常见场景：
+- 科技/未来感页面的动态背景
+- 音乐可视化风格的视觉元素
+- 需要光束特效的创意展示
+- 科幻主题页面的氛围渲染
+不推荐：
+- 传统/保守风格的企业页面
+- 需要印刷效果的静态页面
+- 对 Canvas 渲染性能敏感的旧设备
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/laser-flow" path="rb/laser-flow/basic" />
+```tsx
+import { LaserFlow } from "@/components/core/laser-flow"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <LaserFlow />
+    </div>
+  )
+}
+```
+
+### 自定义光束参数
+```tsx
+import { LaserFlow } from "@/components/core/laser-flow"
+
+export default function Demo() {
+  return (
+    <LaserFlow
+      color="#00FF41"
+      flowSpeed={0.5}
+      wispIntensity={8}
+      wispSpeed={20}
+      fogIntensity={0.6}
+      fogScale={0.5}
+      horizontalBeamOffset={0.2}
+      verticalSizing={1.5}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### LaserFlow
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+| color | 光束颜色（hex字符串） | `string` | `"#FF79C6"` |
+| wispDensity | 光束密度 | `number` | `1` |
+| dpr | 设备像素比 | `number` | - |
+| mouseSmoothTime | 鼠标平滑时间 | `number` | `0.0` |
+| mouseTiltStrength | 鼠标倾斜强度 | `number` | `0.01` |
+| horizontalBeamOffset | 水平光束偏移 | `number` | `0.1` |
+| verticalBeamOffset | 垂直光束偏移 | `number` | `0.0` |
+| flowSpeed | 流动速度 | `number` | `0.35` |
+| verticalSizing | 垂直尺寸系数 | `number` | `2.0` |
+| horizontalSizing | 水平尺寸系数 | `number` | `0.5` |
+| fogIntensity | 雾气强度 | `number` | `0.45` |
+| fogScale | 雾气缩放 | `number` | `0.3` |
+| wispSpeed | 粒子游动速度 | `number` | `15.0` |
+| wispIntensity | 粒子数量强度 | `number` | `5.0` |
+| flowStrength | 流动强度（保留） | `number` | `0.25` |
+| decay | 衰减系数 | `number` | `1.1` |
+| falloffStart | 衰减起始距离 | `number` | `1.2` |
+| fogFallSpeed | 雾气流动速度 | `number` | `0.6` |
+
+<h2 id="faq">常见问题</h2>
+### 如何让光束更亮/更明显？
+调整 `wispIntensity`（增加粒子数量）、`fogIntensity`（增加雾气浓度）和选择更亮的 `color` 值。光束渲染使用 Canvas 2D 全局透明度，支持半透明叠加。
+
+### 能同时显示多个激光束吗？
+当前为单光束设计。如需多个光束，可以渲染多个 `<LaserFlow>` 实例并分别设置不同的 `horizontalBeamOffset` 偏移位置。
+
+### 性能表现如何？
+使用 Canvas 2D API，渲染循环在 `requestAnimationFrame` 中运行。在一般设备上性能良好，但粒子数量（`wispIntensity * 5`）过大会影响帧率。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/laser-flow` 导入。
+2. 纯 Canvas 2D 实现，无需额外 3D 库依赖。
+3. 组件默认高度 400px，可通过 `className` 覆盖。
+4. `color` 接受 CSS hex 颜色字符串（如 `"#FF79C6"`）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-laser-flow" />

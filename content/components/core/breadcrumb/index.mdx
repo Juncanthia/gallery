@@ -1,0 +1,229 @@
+面包屑 Breadcrumb。显示当前页面在系统层级结构中的位置，支持子组件手动组合和 items/routes 数组自动生成两种模式，并能通过路径参数、下拉菜单和自定义渲染增强导航能力。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当系统层级较深，需要让用户知道当前位置并能向上返回时使用。
+
+常见场景：
+- 管理后台中从首页到当前页面的路径导航。
+- 文件系统或目录树的层级展示。
+- 多级路由的动态面包屑自动生成。
+- 需要在下拉菜单中展示同级页面的场景。
+
+Breadcrumb 支持两种使用方式：
+- **子组件模式**：手动组合 `BreadcrumbList`、`BreadcrumbItem`、`BreadcrumbLink`/`BreadcrumbPage`、`BreadcrumbSeparator`，灵活度最高。
+- **items/routes 模式**：传入路由数组自动生成，支持路径参数替换和 menu 下拉菜单。
+
+不推荐：
+- 顶级页面或层级较少（1-2 层）的页面，面包屑意义不大。
+- 将面包屑用于非层级导航（如标签页），应使用 Tabs。
+- 在面包屑中放置非导航类的操作按钮。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法（子组件模式）
+
+手动组合各子组件构建面包屑。
+
+<ComponentShowcase
+  id="breadcrumb"
+  path="breadcrumb/basic"
+/>
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/core/breadcrumb"
+
+export default function Demo() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">首页</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/components">组件</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  )
+}
+```
+
+### items 路由生成
+
+传入 `items` 数组，支持 `path` 自动拼接路径和 `menu` 下拉菜单。
+
+<ComponentShowcase
+  id="routes"
+  path="breadcrumb/routes"
+/>
+
+```tsx
+import { Breadcrumb } from "@/components/core/breadcrumb"
+
+export default function Demo() {
+  return (
+    <div className="space-y-6">
+      <Breadcrumb
+        items={[
+          { title: "首页", path: "/" },
+          { title: "组件", path: "components" },
+          { title: "Breadcrumb" },
+        ]}
+      />
+      <Breadcrumb
+        items={[
+          { title: "首页", path: "/" },
+          {
+            title: "订单管理",
+            path: "orders",
+            menu: {
+              items: [
+                { label: "全部订单", path: "all" },
+                { label: "待处理", path: "pending" },
+                { label: "已完成", path: "completed" },
+              ],
+            },
+          },
+          { title: "订单详情" },
+        ]}
+      />
+    </div>
+  )
+}
+```
+
+### 路由参数替换
+
+使用 `params` 替换路径中的 `:param` 占位符。
+
+```tsx
+import { Breadcrumb } from "@/components/core/breadcrumb"
+
+export default function Demo() {
+  return (
+    <Breadcrumb
+      params={{ id: "123" }}
+      items={[
+        { title: "首页", path: "/" },
+        { title: "用户详情", path: "users/:id" },
+      ]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Breadcrumb
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 自动生成面包屑的路由数据 | `BreadcrumbItemOption[]` | - |
+| routes | items 的别名 | `BreadcrumbItemOption[]` | - |
+| params | 路由参数占位替换（如 `:id`） | `Record<string, string \| number>` | `{}` |
+| separator | 自定义分隔符 | `React.ReactNode` | `<ChevronRight />` |
+| dropdownIcon | 下拉菜单自定义图标 | `React.ReactNode` | `<ChevronDown />` |
+| itemRender | 自定义渲染每个面包屑项 | `(item, params, items, paths) => ReactNode` | - |
+| className | 根元素 CSS 类名 | `string` | - |
+| children | 手动组合的子组件 | `React.ReactNode` | - |
+
+### BreadcrumbItemOption
+
+支持两种类型的数组元素：
+
+**路由项**（`BreadcrumbRouteItem`）：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| key | 唯一标识 | `React.Key` |
+| title | 显示标题 | `React.ReactNode` |
+| breadcrumbName | 标题别名（优先级低于 title） | `string` |
+| href | 链接地址 | `string` |
+| path | 路径片段，自动拼接 | `string` |
+| menu | 下拉菜单配置 | `{ items: Array<{ key?, title?, label?, href?, path?, onClick? }> }` |
+| onClick | 点击回调 | `MouseEventHandler` |
+| className | 附加类名 | `string` |
+| style | 内联样式 | `React.CSSProperties` |
+
+**分隔项**（`BreadcrumbSeparatorItem`）：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| key | 唯一标识 | `React.Key` |
+| type | 固定为 `"separator"` | `"separator"` |
+| separator | 自定义分隔内容 | `React.ReactNode` |
+
+### 子组件
+
+| 组件 | 说明 | HTML 标签 | data-slot |
+| --- | --- | --- | --- |
+| `BreadcrumbList` | 面包屑列表容器 | `<ol>` | `breadcrumb-list` |
+| `BreadcrumbItem` | 单个面包屑项 | `<li>` | `breadcrumb-item` |
+| `BreadcrumbLink` | 可点击链接，支持 `asChild` 配合路由库 | `<a>` | `breadcrumb-link` |
+| `BreadcrumbPage` | 当前页面项，不可点击，`aria-current="page"` | `<span>` | `breadcrumb-page` |
+| `BreadcrumbSeparator` | 分隔符，默认 `<ChevronRight />` | `<li>` | `breadcrumb-separator` |
+| `BreadcrumbEllipsis` | 折叠省略号 | `<span>` | `breadcrumb-ellipsis` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何配合 TanStack Router / React Router 使用？
+
+`BreadcrumbLink` 支持 `asChild` 属性，将样式合并到路由库的 Link 组件：
+
+```tsx
+<BreadcrumbLink asChild>
+  <Link to="/components">组件</Link>
+</BreadcrumbLink>
+```
+
+### 当前页和链接项的区别？
+
+- 最后一项应使用 `BreadcrumbPage`（不可点击，`aria-current="page"`）。
+- 非最后一项使用 `BreadcrumbLink`（可点击跳转）。
+- items 模式下，最后一项如果无 `href` 或 `path` 会自动渲染为 `BreadcrumbPage`。
+
+### items 模式下如何添加下拉菜单？
+
+在路由项的 `menu.items` 中定义下拉选项，点击选项后通过 window.location.href 跳转：
+
+```tsx
+{
+  title: "订单管理",
+  path: "orders",
+  menu: {
+    items: [
+      { label: "全部订单", path: "all" },
+      { label: "待处理", path: "pending" },
+    ],
+  },
+}
+```
+
+### 如何在 items 模式中插入自定义分隔符？
+
+传入 `{ type: "separator", separator: <自定义内容> }` 作为 items 数组元素。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/breadcrumb` 导入所有子组件。
+2. 简单场景用手动子组件组合；动态路由场景用 `items` 数组。
+3. 最后一项必须是 `BreadcrumbPage`，不可用 `BreadcrumbLink`。
+4. 配合路由库时使用 `BreadcrumbLink` 的 `asChild` 属性。
+5. 路径参数使用 `params` 替换，如 `"users/:id"` 配合 `params={{ id: "123" }}`。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="breadcrumb" />

@@ -1,0 +1,147 @@
+基于 Radix Slider primitive 构建的音量控制组件。提供水平或垂直方向的音量滑块，内置媒体状态感知、静音切换和音量百分比显示，支持与媒体播放器 Store 深度集成。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当用户需要调整音频/视频播放音量时使用。
+
+常见场景：
+- 音频播放器、视频播放器的音量调节面板
+- 需要静音/取消静音、音量百分比反馈的场景
+- 作为 LimePlay 播放器生态的一部分与其他控件（播放、时间轴等）组合使用
+
+不推荐：
+- 泛型滑块需求（数值范围选择等）——使用 Slider 组件
+- 非媒体相关的滑动控制——本组件依赖媒体 Store
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="limeplay/volume-control" path="limeplay/volume-control/basic" />
+
+```tsx
+import * as VolumeControl from "@/components/media/ui/volume-control"
+
+export default function Demo() {
+  return (
+    &lt;VolumeControl.Root className=&quot;relative flex h-5 w-full max-w-xs touch-none items-center select-none&quot;&gt;
+      &lt;VolumeControl.Track className=&quot;relative h-1.5 w-full overflow-hidden rounded-full bg-secondary&quot;&gt;
+        &lt;VolumeControl.Progress className=&quot;absolute h-full bg-primary&quot; /&gt;
+      &lt;/VolumeControl.Track&gt;
+      &lt;VolumeControl.Thumb /&gt;
+    &lt;/VolumeControl.Root&gt;
+  )
+}
+```
+
+```tsx
+import { Root } from "@/components/core/volume-control"
+import { Track, Progress, Thumb } from "@/components/media/ui/volume-control"
+
+export default function Demo() {
+  return (
+    &lt;Root className=&quot;relative flex h-5 w-full max-w-xs touch-none items-center select-none&quot;&gt;
+      &lt;Track className=&quot;relative h-1.5 w-full overflow-hidden rounded-full bg-secondary&quot;&gt;
+        &lt;Progress className=&quot;absolute h-full bg-primary&quot; /&gt;
+      &lt;/Track&gt;
+      &lt;Thumb /&gt;
+    &lt;/Root&gt;
+  )
+}
+```
+
+### 垂直方向
+
+```tsx
+import * as VolumeControl from "@/components/media/ui/volume-control"
+
+export default function Demo() {
+  return (
+    &lt;VolumeControl.Root
+      orientation="vertical"
+      className="relative flex h-32 w-5 touch-none items-center justify-center select-none"
+    &gt;
+      &lt;VolumeControl.Track className="relative h-full w-1.5 overflow-hidden rounded-full bg-secondary"&gt;
+        &lt;VolumeControl.Progress className="absolute bottom-0 w-full bg-primary" /&gt;
+      &lt;/VolumeControl.Track&gt;
+      &lt;VolumeControl.Thumb /&gt;
+    &lt;/VolumeControl.Root&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Root
+
+音量滑块的根容器，管理所有音量交互逻辑。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 滑块方向 | `"horizontal"` \| `"vertical"` | `"horizontal"` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| className | 附加样式类名 | `string` | - |
+
+Root 继承所有 `@radix-ui/react-slider` 的 SliderPrimitive.Root 属性（`max`、`min`、`step` 等），其中 `max` 固定为 `1`，`min` 固定为 `0`，`step` 固定为 `0.01`。
+
+当媒体未就绪（readyState &lt; HAVE_METADATA）或无音频轨道时，组件自动禁用。
+
+### Track
+
+滑块轨道，音量条的背景区域。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+### Progress
+
+已填充的音量进度指示器，宽度/高度根据当前音量值动态变化。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+静音时进度指示器收缩为 0；未静音且值为 0 时显示 5%（VOLUME_RESET_BASE）的视觉提示。
+
+### Thumb
+
+可拖拽的滑块手柄。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| showVolumeText | 是否在 ARIA 文本中显示音量百分比 | `boolean` | `true` |
+| className | 附加样式类名 | `string` | - |
+
+### 数据流说明
+
+组件通过 `useVolumeStore` 读取当前音量和静音状态，通过 `usePlaybackStore` 读取媒体就绪状态。这些 Store 由 LimePlay 的 MediaProvider 上下文提供，Root 组件内通过 `setVolume` 同步媒体元素音量。
+
+<h2 id="faq">常见问题</h2>
+
+### 组件需要放在什么上下文里？
+
+Root 组件依赖 `useVolumeStore` 和 `usePlaybackStore`，需要处于 LimePlay MediaProvider 提供的 Zustand Store 上下文中。在独立的音频/视频播放器 Blocks 中（如 audio-player、blocks/video-player），此上下文已自动提供。
+
+### 如何搭配静音按钮使用？
+
+可结合 `@/components/media/ui/mute-control` 的 MuteControl 组件，或直接使用 `useVolumeStore` 的 `muted`、`toggleMute` 方法实现静音切换。
+
+### orientation="vertical" 有什么注意点？
+
+垂直模式下，Track 和 Progress 需要自行调整 CSS 尺寸：Track 设置 `h-full w-1.5`（高度撑满、宽度固定），Progress 使用 `bottom-0 w-full`（从底部向上填充）。CSS 变量 `--lp-volume-value` 会自动适配方向。
+
+### 为什么值为 0 时还显示一小段填充？
+
+当音量值为 0 但未静音时，组件显示 5%（VOLUME_RESET_BASE）的视觉填充，帮助用户定位滑块位置。这是有意为之的 UX 设计，与静音（值为 0 且无填充）区分开。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/volume-control` 导入 Root，或使用命名空间导入 `import * as VolumeControl from "@/components/media/ui/volume-control"`。
+2. 必须将 Track、Progress、Thumb 组合在 Root 内部使用，形成完整的滑块结构。
+3. 垂直模式下注意为 Root 设置固定高度（如 `h-32`），为 Track 设置 `h-full`。
+4. 不要从 `antd` 或 `@ant-design/icons` 导入音量相关组件。
+5. 组件依赖媒体 Store 上下文，不可脱离 LimePlay 播放器环境独立使用。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="limeplay/volume-control" />

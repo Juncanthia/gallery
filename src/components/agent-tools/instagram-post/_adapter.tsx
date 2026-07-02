@@ -10,8 +10,8 @@
  */
 
 export { cn } from "@/lib/utils";
-export { Button } from "@/components/ui/button";
-export { Tooltip } from "@/components/ui/tooltip"
-export { TooltipContent } from "@/components/ui/tooltip"
-export { TooltipProvider } from "@/components/ui/tooltip"
-export { TooltipTrigger } from "@/components/ui/tooltip"
+export { Button } from "@/components/core/button";
+export { Tooltip } from "@/components/core/tooltip"
+export { TooltipContent } from "@/components/core/tooltip"
+export { TooltipProvider } from "@/components/core/tooltip"
+export { TooltipTrigger } from "@/components/core/tooltip"

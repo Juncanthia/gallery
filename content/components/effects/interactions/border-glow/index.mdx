@@ -1,0 +1,100 @@
+BorderGlow 带边框跟随鼠标发光效果的容器组件，支持多色渐变和自动扫光动画。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为卡片或容器添加跟随鼠标的渐变发光边框效果时使用。
+
+常见场景：
+- 产品卡片、特性卡片的视觉突出
+- 价格表、订阅计划的差异化展示
+- 需要吸引用户注意的高亮区域
+
+不推荐：
+- 嵌套过多层级（发光效果通过 CSS 伪元素和渐变实现，深层嵌套可能影响性能）
+- 纯信息型列表项（边框发光会分散注意力）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/border-glow" path="rb/border-glow/basic" />
+
+```tsx
+import { BorderGlow } from "@/components/core/border-glow"
+
+export default function Demo() {
+  return (
+    <BorderGlow>
+      <div className="p-8 text-white">
+        <h3>Card Title</h3>
+        <p>Hover or move mouse near edges to see the glow effect.</p>
+      </div>
+    </BorderGlow>
+  )
+}
+```
+
+### 自动扫光动画与自定义颜色
+
+```tsx
+import { BorderGlow } from "@/components/core/border-glow"
+
+export default function CustomDemo() {
+  return (
+    <BorderGlow
+      animated
+      glowColor="200 80 50"
+      glowIntensity={1.2}
+      glowRadius={50}
+      colors={["#ff0080", "#7928ca", "#00d4ff"]}
+      backgroundColor="#0a0a0a"
+    >
+      <div className="p-8 text-white">
+        <h3>Premium Plan</h3>
+        <p>Automatic sweep animation with custom colors.</p>
+      </div>
+    </BorderGlow>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BorderGlow
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 包裹的内容 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+| edgeSensitivity | 边缘检测灵敏度（值越小越容易触发） | `number` | `30` |
+| glowColor | HSL 发光颜色（空格分隔："H S L"） | `string` | `"40 80 80"` |
+| backgroundColor | 卡片背景色 | `string` | `"#120F17"` |
+| borderRadius | 圆角大小（px） | `number` | `28` |
+| glowRadius | 发光半径（px） | `number` | `40` |
+| glowIntensity | 发光强度倍率 | `number` | `1.0` |
+| coneSpread | 锥形光束扩散角度 | `number` | `25` |
+| animated | 是否启用自动扫光动画 | `boolean` | `false` |
+| colors | 背景渐变三色数组 | `string[]` | `["#c084fc", "#f472b6", "#38bdf8"]` |
+| fillOpacity | 渐变填充透明度 | `number` | `0.5` |
+
+<h2 id="faq">常见问题</h2>
+
+### glowColor 为什么用 HSL 空格格式而非 CSS 颜色？
+
+组件内部通过 `parseHSL` 解析该字段来生成多层发光色彩变量（`--glow-color` 到 `--glow-color--10`），每层递减透明度并乘以 `glowIntensity`。传入格式为 `"色相 饱和度 亮度"`。
+
+### animated 模式是如何工作的？
+
+启用后，组件在挂载时自动执行一次扫光动画：边缘 proximity 从 0 渐变到 100，同时光标角度从 110deg 旋转到 465deg（约一圈），最后 proximity 降回 0。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/border-glow` 导入。
+2. 附带样式表 `border-glow.css`，需确保导入。
+3. `glowColor` 格式为 `"H S L"` 空格分隔（如 `"40 80 80"`），非标准 CSS 颜色。
+4. `colors` 数组传入 3 个 CSS 颜色字符串用于背景渐变。
+5. 发光效果依赖 CSS 自定义属性（`--cursor-angle`、`--edge-proximity`），通过 JS 动态设置。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="rb-border-glow" />

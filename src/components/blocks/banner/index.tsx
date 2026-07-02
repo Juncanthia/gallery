@@ -17,7 +17,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { createPortal } from "react-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import { cn } from "@/lib/utils";
 
 const BANNER_ANIMATION_DURATION = 400;

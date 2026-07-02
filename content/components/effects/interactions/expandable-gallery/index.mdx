@@ -1,0 +1,149 @@
+ExpandableGallery 是一个可展开的图片画廊组件。默认以层叠卡片形式展示三张主图，点击任意卡片或按钮后展开为完整响应式网格，所有切换由 spring 物理动画驱动。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在有限空间内展示图片集合，同时希望保持视觉冲击力时使用。组件通过两个关键状态——层叠态（stack）和展开态（grid）——平衡了空间效率和信息密度。
+
+常见场景：
+
+- 作品集展示页面，以层叠卡片吸引用户点击探索完整作品集。
+- 产品图片集合，折叠时紧凑优雅，展开后完整呈现所有图片。
+- 创意着陆页，通过卡片的空间分布（旋转、偏移、层级）制造视觉层次感。
+- 摄影作品、设计案例等需要"预览 + 全览"双态的展示场景。
+
+组件设计要点：
+
+- **LayoutGroup 共享布局动画**：使用 `LayoutGroup` 包裹所有卡片，展开/收起时通过 `layoutId` 实现跨状态的平滑过渡，卡片在层叠态和网格态间无缝切换。
+- **Spring 物理动画**：所有卡片位移、旋转、缩放由 spring 动画驱动（stiffness=160, damping=18, mass=1），呈现自然的弹性手感。
+- **外部点击收起**：展开态下点击画布外部区域自动退回层叠态，通过 `useOutsideClick` hook 实现。
+- **分层视觉**：前三张卡片的 `rotation`、`x`、`y`、`zIndex` 制造错落层叠感，hover 时卡片上浮并降低旋转角度。
+
+不推荐：
+
+- 在需要精确图片导航的场景（如产品详情轮播）中使用——应使用 Carousel 或 Lightbox。
+- 将本组件用于超过 20 张图片的集合——网格态的性能和布局会受到影响。
+- 在业务侧自行管理展开状态——组件已自包含，不需要外部 props 控制。
+- 将图片替换为非 `next/image` 的渲染方式——组件布局和 `sizes` 属性已与 next/image 对齐。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件无需任何 props 即可使用。默认显示三张层叠卡片和标题文案，点击任意卡片或"Explore more components"按钮展开为完整网格。
+
+<ComponentShowcase
+  id="effects/interactions/expandable-gallery"
+  path="effects/interactions/expandable-gallery/basic"
+/>
+
+```tsx
+import ExpandableGallery from "@/components/effects/interactions/expandable-gallery"
+
+export default function Demo() {
+  return <ExpandableGallery />
+}
+```
+
+<h2 id="api">API</h2>
+
+### ExpandableGallery
+
+ExpandableGallery 为自包含组件，不接受外部 props。所有内部状态由组件自行管理。
+
+如需自定义图片内容，在 `src/components/effects/interactions/expandable-gallery.tsx` 中修改 `PHOTOS` 数组：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| id | `string` | 图片唯一标识，用作 `layoutId` 的 key |
+| src | `string` | 图片 URL，传入 `next/image` 的 `src` |
+| alt | `string` | 图片替代文本 |
+| rotation | `number`（可选） | 层叠态旋转角度（deg），展开态自动重置为 0 |
+| x | `number`（可选） | 层叠态水平偏移（px） |
+| y | `number`（可选） | 层叠态垂直偏移（px） |
+| zIndex | `number`（可选） | 层叠态 z 轴层级 |
+
+前三张图片的 `rotation`/`x`/`y`/`zIndex` 控制层叠态的空间分布；后续图片仅在展开态（grid）中显示，无需设置这些属性。
+
+### 动画参数
+
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| stiffness | `number` | Spring 刚度，默认 `160` |
+| damping | `number` | Spring 阻尼，默认 `18` |
+| mass | `number` | Spring 质量，默认 `1` |
+
+### 视觉结构
+
+- 容器：`section`，`min-h-[850px]`，flex column 居中对齐。
+- 层叠态：三张卡片通过 `absolute` 定位叠加，`w-44 h-44 md:w-60 md:h-60`，`rounded-[2.5rem] md:rounded-[3rem]`，带阴影。
+- 展开态：`grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8`，每张卡片 `aspect-square rounded-[2rem] md:rounded-[3rem]`。
+- "Go back" 按钮：展开态左上角出现，带动画入场（`initial={{ opacity: 0, x: -10 }}`）。
+- 标题文案：层叠态底部显示，展开态隐藏（通过 `AnimatePresence` 控制）。
+- 卡片 hover：层叠态 hover 上浮 15px 并降低旋转角度；展开态 hover 轻微放大 `scale: 1.02`。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何替换图片？
+
+修改源码中 `PHOTOS` 数组的 `src` 和 `alt` 字段。每张图片需要提供唯一的 `id`。
+
+```tsx
+const PHOTOS = [
+  {
+    id: "my-photo-1",
+    src: "https://example.com/photo1.jpg",
+    alt: "描述文本",
+    rotation: -15,
+    x: -90,
+    y: 10,
+    zIndex: 10,
+  },
+  // ...
+]
+```
+
+### 如何调整层叠态卡片的布局？
+
+修改前三张图片的 `rotation`、`x`、`y`、`zIndex` 属性。`rotation` 控制旋转角度（度），`x`/`y` 控制从中心点的偏移（像素），`zIndex` 控制层级顺序。
+
+### 如何更改动画速度？
+
+修改源码中 `transition` 常量的 `stiffness`、`damping`、`mass` 值。增大 `stiffness` 加快动画，增大 `damping` 减少回弹。
+
+```tsx
+const transition = {
+  type: "spring",
+  stiffness: 200, // 更快
+  damping: 20,
+  mass: 1,
+} as const;
+```
+
+### 如何在移动端使用？
+
+组件已内置响应式设计：层叠态卡片 `w-44 h-44 md:w-60 md:h-60`，展开态网格 `grid-cols-2 lg:grid-cols-3`。在移动端，层叠卡片较小，展开后两列布局。
+
+### 如何禁用外部点击收起？
+
+修改 `useOutsideClick` 的回调逻辑，或移除该 hook 的调用。展开态将仅能通过"Go back"按钮收起。
+
+### 展开后如何滚动回到顶部？
+
+组件布局为 `min-h-[850px]`，展开后的网格内容可能超出视口。如需自动滚动到顶部，可在 `setIsExpanded(true)` 后添加 `window.scrollTo(0, 0)`。
+
+### 组件的图片需要预加载吗？
+
+前三张图片（层叠态可见图片）已设置 `priority`，会自动预加载。展开后的图片使用默认的懒加载策略，由 next/image 的 `sizes` 属性控制。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/effects/interactions/expandable-gallery` 导入 `ExpandableGallery`（default export）。
+2. 组件无需外部 props，直接渲染即可获得完整的展开/收起交互。
+3. 如需自定义图片，修改源码中的 `PHOTOS` 数组，不要在外部覆盖。
+4. 每张图片需提供 `id`、`src`、`alt`；前三张可额外设置 `rotation`/`x`/`y`/`zIndex`。
+5. 不要将组件包裹在额外的滚动容器中——组件自己管理 overflow。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="effects/interactions/expandable-gallery" />

@@ -1,0 +1,176 @@
+LiquidChrome 是一个基于 WebGL 的动态金属质感背景组件。使用 Simplex 噪声域扭曲（Domain Warping）算法实时生成流动的液态金属纹理，带有高光反射和菲涅尔边缘光效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在卡片、Hero 区域或装饰性容器背后展示流动金属质感背景时使用。适合用于高端视觉呈现、品牌展示或科技感界面。
+
+常见场景：
+
+- 卡片或区块的动态金属背景。
+- Hero 区域的视觉氛围增强。
+- 品牌页面的背景装饰。
+- 科技或金融类产品的质感背景。
+
+不推荐：
+
+- 需要精确定制纹理的场景（噪声算法产生的是随机流动图案，每次渲染结果不同）。
+- 不支持 WebGL 的环境（Canvas 为空但不抛错）。
+- 大量实例同时渲染（每个实例创建独立 WebGL 上下文，超过 5 个可能影响性能）。
+- 移动端低功耗设备上作为持续动画背景（WebGL Canvas 持续重绘消耗电量）。
+
+LiquidChrome 内部使用 React Three Fiber 渲染一个全屏 ShaderMaterial。通过两层 Simplex 噪声的域扭曲叠加，产生类似液态金属的流动纹理。光照模型包含漫反射、高光反射和菲涅尔边缘光，使表面呈现金属光泽。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+LiquidChrome 使用 `absolute inset-0` 铺满父容器。父容器需设置 `position: relative` 和明确高度。内容层通过 `z-index` 叠加在 Canvas 上方。
+
+<ComponentShowcase
+  id="effects/backgrounds/liquid-chrome-three"
+  path="effects/backgrounds/liquid-chrome-three/basic"
+/>
+
+```tsx
+import LiquidChrome from "@/components/effects/backgrounds/liquid-chrome-three"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-64 rounded-xl overflow-hidden border bg-slate-950"&gt;
+      &lt;div className="absolute inset-0 flex items-center justify-center z-10"&gt;
+        &lt;div className="text-center"&gt;
+          &lt;h3 className="text-xl font-bold text-white drop-shadow-lg"&gt;
+            Liquid Chrome
+          &lt;/h3&gt;
+          &lt;p className="mt-1 text-sm text-white/70 drop-shadow-md"&gt;
+            流动金属质感背景
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;LiquidChrome
+        speed={0.35}
+        timeScale={0.225}
+        color="#C0C0C0"
+        color2="#4A4A4A"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义颜色
+
+通过 `color` 和 `color2` 控制金属基色和高光色。
+
+```tsx
+import LiquidChrome from "@/components/effects/backgrounds/liquid-chrome-three"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-48 rounded-xl overflow-hidden border"&gt;
+      &lt;div className="absolute inset-0 flex items-center justify-center z-10"&gt;
+        &lt;span className="text-lg font-bold text-white drop-shadow-lg"&gt;
+          玫瑰金
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;LiquidChrome
+        color="#E8A87C"
+        color2="#D4A574"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 调整动画速度
+
+通过 `speed` 控制动画整体速度，`timeScale` 控制噪声运动的缩放。
+
+```tsx
+import LiquidChrome from "@/components/effects/backgrounds/liquid-chrome-three"
+
+export default function Demo() {
+  return (
+    &lt;div className="relative w-full h-48 rounded-xl overflow-hidden border"&gt;
+      &lt;div className="absolute inset-0 flex items-center justify-center z-10"&gt;
+        &lt;span className="text-lg font-bold text-white drop-shadow-lg"&gt;
+          快速流动
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;LiquidChrome speed={0.8} timeScale={0.4} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LiquidChrome
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+| speed | 动画整体速度 | `number` | `0.35` |
+| timeScale | 时基噪声运动的缩放值；较大值产生更快速的空间扭曲 | `number` | `0.225` |
+| color | 金属基色（主颜色） | `string` | `"#C0C0C0"` |
+| color2 | 辅助颜色，控制高光和边缘光的主色调 | `string` | `"#4A4A4A"` |
+
+LiquidChrome 内部使用 React Three Fiber 的 `Canvas` 组件渲染全屏四边形。Shader 使用两层 Simplex 2D 噪声进行域扭曲（Domain Warping），通过 `smoothstep` 混合 `color` 和 `color2` 产生双色流动效果。光照模型包含漫反射（基于噪声梯度计算的伪法线）、高光反射（Blinn-Phong 风格，指数 64）和菲涅尔边缘光（使用 `color2` 着色）。最终通过简单色调映射 `col = col / (1.0 + col * 0.2)` 防止高光区域过曝。
+
+<h2 id="faq">常见问题</h2>
+
+### LiquidChrome 需要放在什么容器中？
+
+父容器必须设置 `position: relative` 和明确的高度（如 `h-64`）。LiquidChrome 内部使用 `absolute inset-0` 铺满父容器，如果不设高度 Canvas 将无渲染区域。建议同时设置 `overflow: hidden` 和合适的 `border-radius` 来裁剪边缘。
+
+```tsx
+&lt;div className="relative h-64 w-full overflow-hidden rounded-xl"&gt;
+  &lt;LiquidChrome /&gt;
+&lt;/div&gt;
+```
+
+### 如何在上方叠加文字或其他内容？
+
+LiquidChrome 默认设置 `pointer-events-none`，上方内容层需显式设置 `z-index` 和 `pointer-events-auto`（如需交互）。
+
+```tsx
+&lt;div className="relative h-64 w-full overflow-hidden rounded-xl"&gt;
+  &lt;div className="absolute inset-0 z-10 flex items-center justify-center"&gt;
+    &lt;h2 className="text-white drop-shadow-lg"&gt;标题文字&lt;/h2&gt;
+  &lt;/div&gt;
+  &lt;LiquidChrome /&gt;
+&lt;/div&gt;
+```
+
+### 颜色在运行时能动态修改吗？
+
+可以。Shader 的 `uniform` 值在每一帧通过 `useFrame` 更新，因此 `color` 和 `color2` 的动态变化会实时反映在渲染结果中，产生平滑的颜色过渡效果。
+
+### 动画性能如何？
+
+动画由 WebGL Shader 驱动，每个实例创建独立的 Canvas 和 WebGL 上下文。单个实例性能开销较低（GPU 计算的片段着色器），但每个 Canvas 会持续重绘（即使是静态参数），消耗 GPU 资源。大量实例（>5）可能导致明显的性能下降。对于移动端低功耗设备，建议在不需要动画时条件渲染或使用静态背景替代。
+
+### 浏览器兼容性？
+
+依赖 WebGL 1.0 支持（几乎所有现代浏览器均支持）。React Three Fiber 需要 React 18+。不支持 WebGL 的环境中 Canvas 为空，内容不受影响。建议在不支持的环境中使用纯色 fallback 背景。
+
+### 可以自定义 Shader 效果吗？
+
+当前版本不暴露 Shader 代码替换接口。如需不同的金属纹理或光照效果，需直接修改 `src/components/effects/backgrounds/liquid-chrome-three/liquid-chrome.tsx` 中的 GLSL 片段着色器代码。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LiquidChrome 代码时：
+
+1. 从 `@/components/effects/backgrounds/liquid-chrome-three` 导入 `LiquidChrome`（默认导出）。
+2. LiquidChrome **必须**放在 `position: relative` 的父容器中，父容器需要明确的高度。
+3. 上方内容层需设置 `z-index`（如 `z-10`），因为 Canvas 层默认占据 `absolute inset-0`。
+4. LiquidChrome 默认 `pointer-events-none`；如需上方元素可交互，显式设置 `pointer-events-auto`。
+5. `speed` 和 `timeScale` 均为精细参数，推荐范围 `0.1-1.0`，过大的值会使流动不可辨认。
+6. `color` 和 `color2` 建议使用低饱和度的金属色调（如银、金、玫瑰金），高饱和度颜色会产生非金属感的视觉效果。
+7. 不要在移动端放置过多实例（建议不超过 2 个），考虑使用条件渲染或 `prefers-reduced-motion`。
+8. 不要引入 Ant Design 或 `antd` 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="effects/backgrounds/liquid-chrome-three" />

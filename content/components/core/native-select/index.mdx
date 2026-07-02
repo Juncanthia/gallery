@@ -1,0 +1,180 @@
+NativeSelect 原生下拉选择器。基于原生 `<select>` 元素进行样式化封装，保留完整的原生键盘和触屏交互，适合移动端或简单选择场景。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要一个行为完全符合原生 `<select>` 语义、无需自定义弹出层、且选项数量不多（小于 20 项）的下拉选择器时使用。
+
+常见场景：
+
+- 移动端表单中的下拉选择（原生控件体验更佳）。
+- 简单表单中的选择字段（选项少，无复杂分组）。
+- 需要原生 form 提交支持的场景。
+
+不推荐：
+
+- 需要搜索、多选、自定义渲染的复杂场景——使用 Select。
+- 选项数量大的场景（无虚拟滚动支持）。
+- 需要自定义下拉面板样式——原生控件样式不可控。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="native-select" path="native-select/basic" />
+
+```tsx
+import {
+  NativeSelect,
+  NativeSelectOption,
+  NativeSelectOptGroup,
+} from "@/components/core/native-select"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-start gap-4">
+      <NativeSelect className="w-44">
+        <NativeSelectOption value="">请选择</NativeSelectOption>
+        <NativeSelectOption value="1">选项一</NativeSelectOption>
+        <NativeSelectOption value="2">选项二</NativeSelectOption>
+        <NativeSelectOption value="3" disabled>
+          选项三（禁用）
+        </NativeSelectOption>
+      </NativeSelect>
+
+      <NativeSelect size="sm" className="w-36">
+        <NativeSelectOption value="a">小尺寸</NativeSelectOption>
+        <NativeSelectOption value="b">选项 B</NativeSelectOption>
+      </NativeSelect>
+
+      <NativeSelect disabled className="w-44">
+        <NativeSelectOption>禁用</NativeSelectOption>
+      </NativeSelect>
+    </div>
+  )
+}
+```
+
+### 分组
+
+<ComponentShowcase id="native-select-group" path="native-select/group" />
+
+```tsx
+import {
+  NativeSelect,
+  NativeSelectOption,
+  NativeSelectOptGroup,
+} from "@/components/core/native-select"
+
+export default function Demo() {
+  return (
+    <NativeSelect className="w-44">
+      <NativeSelectOptGroup label="水果">
+        <NativeSelectOption value="apple">苹果</NativeSelectOption>
+        <NativeSelectOption value="banana">香蕉</NativeSelectOption>
+      </NativeSelectOptGroup>
+      <NativeSelectOptGroup label="蔬菜">
+        <NativeSelectOption value="cabbage">白菜</NativeSelectOption>
+        <NativeSelectOption value="radish">萝卜</NativeSelectOption>
+      </NativeSelectOptGroup>
+    </NativeSelect>
+  )
+}
+```
+
+### 受控模式
+
+```tsx
+import { useState } from "react"
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/core/native-select"
+
+export default function Demo() {
+  const [value, setValue] = useState("")
+
+  return (
+    <div className="flex items-center gap-4">
+      <NativeSelect
+        className="w-44"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      >
+        <NativeSelectOption value="">请选择</NativeSelectOption>
+        <NativeSelectOption value="react">React</NativeSelectOption>
+        <NativeSelectOption value="vue">Vue</NativeSelectOption>
+        <NativeSelectOption value="angular">Angular</NativeSelectOption>
+      </NativeSelect>
+      <span className="text-sm text-muted-foreground">
+        已选：{value || "无"}
+      </span>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### NativeSelect
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| size | 尺寸 | `"sm"` \| `"default"` | `"default"` |
+| className | CSS 类名 | `string` | - |
+
+继承原生 `<select>` 所有 HTML 属性（`value`、`onChange`、`disabled`、`required`、`name` 等）。会自动渲染一个向下的 Chevron 图标。
+
+### NativeSelectOption
+
+继承原生 `<option>` 所有 HTML 属性（`value`、`disabled`、`selected` 等）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+### NativeSelectOptGroup
+
+继承原生 `<optgroup>` 所有 HTML 属性。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 分组标题 | `string` | 必填 |
+| className | CSS 类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### NativeSelect 和 Select 如何选择？
+
+- **NativeSelect**：行为完全原生，无 JS 弹出层。适合移动端、简单场景、选项小于 20 个。无法自定义下拉样式。
+- **Select**：自定义弹出层，支持搜索、多选、自定义渲染、虚拟滚动。适合桌面端、复杂场景。
+
+### 如何获取选中值？
+
+使用原生 `<select>` 的 `value` + `onChange`：
+
+```tsx
+const [value, setValue] = useState("")
+<NativeSelect value={value} onChange={(e) => setValue(e.target.value)}>
+```
+
+### 如何在 form 中配合使用？
+
+`NativeSelect` 继承原生 `<select>` 属性，支持 `name`、`required` 等 form 属性，可直接配合原生 `<form>` 或 React Hook Form：
+
+```tsx
+<NativeSelect name="category" required>
+  <NativeSelectOption value="">请选择分类</NativeSelectOption>
+  <NativeSelectOption value="tech">技术</NativeSelectOption>
+</NativeSelect>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/native-select` 导入 `NativeSelect`、`NativeSelectOption`、`NativeSelectOptGroup`。
+2. `onChange` 使用原生事件 `e.target.value` 获取值。
+3. 需要样式化分组时使用 `NativeSelectOptGroup`。
+4. 简单选择场景优先考虑 NativeSelect，复杂需求使用 Select。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="native-select" />

@@ -1,0 +1,185 @@
+---
+category: Components
+title: Combobox
+subtitle: Combobox
+description: Combobox 是基于 cmdk 与 Radix Popover 的搜索选择组件。
+demo:
+  cols: 2
+group:
+  title: 通用
+  order: 1
+source:
+  component: src/components/core/combobox.tsx
+  examples:
+    - content/components/combobox/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Combobox
+
+Combobox 是本地搜索选择组件，使用高层 `options` API。它基于 `cmdk` 提供搜索、过滤和键盘导航，基于 Radix Popover 提供弹层定位。
+
+## 何时使用 {#when-to-use}
+
+适合选项数量较多、需要输入关键词过滤并选择单个值的表单场景。
+
+不适合：
+
+- 少量固定选项：优先使用 Select。
+- 多选标签输入：使用 Tags 或 MultiSelect。
+- 全局命令面板：直接使用 Command。
+
+## 代码演示 {#examples}
+
+```tsx
+import { Combobox, type ComboboxOption } from "@/components/core/combobox"
+
+const options: ComboboxOption[] = [
+  { label: "Apple", value: "apple" },
+  { label: "Banana", value: "banana" },
+]
+
+export default function Demo() {
+  return <Combobox className="w-48" options={options} placeholder="选择水果" />
+}
+```
+
+## 核心导出 {#exports}
+
+- `Combobox`
+- `ComboboxOption`
+- `ComboboxOptionGroup`
+- `ComboboxOptionItem`
+- `ComboboxProps`
+
+## API {#api}
+
+### Combobox
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 选项数组，支持扁平选项和分组选项 | `ComboboxOptionItem[]` | `[]` |
+| value | 受控选中值 | `string` | - |
+| defaultValue | 默认选中值 | `string` | - |
+| onValueChange | 选中值变化回调 | `(value: string \| undefined) => void` | - |
+| onChange | `onValueChange` 的别名 | `(value: string \| undefined) => void` | - |
+| onSelect | 选择选项时触发 | `(value: string, option: ComboboxOption) => void` | - |
+| inputValue | 受控搜索输入值 | `string` | - |
+| defaultInputValue | 默认搜索输入值 | `string` | `""` |
+| onInputValueChange | 搜索输入值变化回调 | `(value: string) => void` | - |
+| placeholder | 未选择时的占位文本 | `string` | `"请选择"` |
+| searchPlaceholder | 搜索输入框占位文本 | `string` | `"搜索..."` |
+| emptyContent | 无匹配结果内容 | `React.ReactNode` | `"无匹配结果"` |
+| loading | 是否显示加载状态 | `boolean` | `false` |
+| loadingContent | 加载状态内容 | `React.ReactNode` | `"加载中..."` |
+| allowClear | 是否允许清除当前选中值 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| readOnly | 是否只读，只读时保留展示但禁止打开和选择 | `boolean` | `false` |
+| name | 原生表单字段名，会渲染隐藏 input | `string` | - |
+| required | 是否标记为必填字段 | `boolean` | `false` |
+| open | 受控弹层状态 | `boolean` | - |
+| defaultOpen | 默认弹层状态 | `boolean` | `false` |
+| onOpenChange | 弹层开关变化回调 | `(open: boolean) => void` | - |
+| openOnFocus | 聚焦触发器时打开弹层 | `boolean` | `false` |
+| onSearch | 搜索输入变化回调 | `(value: string) => void` | - |
+| filterOption | 本地过滤逻辑，设为 `false` 可交给外部异步过滤 | `boolean \| ((input, option) => boolean)` | `true` |
+| autoHighlight | 无选中值时默认高亮第一个可用项 | `boolean` | `false` |
+| loop | 键盘导航是否循环 | `boolean` | `true` |
+| optionRender | 自定义选项渲染 | `(option: ComboboxOption) => React.ReactNode` | - |
+| popupRender | 自定义弹层列表包裹 | `(originNode: React.ReactNode) => React.ReactNode` | - |
+| className | 触发器样式 | `string` | - |
+| contentClassName | 弹层样式 | `string` | - |
+| listClassName | 列表样式 | `string` | - |
+
+### ComboboxOption
+
+```ts
+type ComboboxOption = {
+  label: string
+  value: string
+  disabled?: boolean
+  description?: React.ReactNode
+  keywords?: string[]
+  group?: string
+}
+```
+
+### ComboboxOptionGroup
+
+```ts
+type ComboboxOptionGroup = {
+  label: string
+  options: ComboboxOption[]
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+稳定语义槽位：
+
+- `combobox`
+- `popover-content`
+- `command`
+- `command-input`
+- `command-list`
+- `command-empty`
+- `command-group`
+- `command-item`
+- `combobox-loading`
+
+选项选中状态使用 `data-checked=true`。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 触发器复用 `Button`，弹层复用 `PopoverContent`，列表复用 `Command`。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground`、`ring-ring` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/core/combobox.tsx`
+
+直接依赖摘要：
+
+- `cmdk`
+- `radix-ui`
+- `@radix-ui/react-use-controllable-state`
+- `@/components/core/button`
+- `@/components/core/command`
+- `@/components/core/popover`
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 异步搜索时设置 `filterOption={false}`，通过 `onSearch` 更新外部 `options`。
+3. 需要控制搜索框文本时使用 `inputValue` + `onInputValueChange`。
+4. 加载中使用 `loading` 和 `loadingContent`，不要用 `popupRender` 手写整套加载结构。
+5. 多选标签输入不属于 Combobox 职责，应使用 Tags 或 MultiSelect。
+6. 不要把第三方文档中的全量 API 视为本地已支持能力。
+
+## 可访问性 {#accessibility}
+
+- 触发器使用 `role="combobox"` 与 `aria-expanded`。
+- 搜索和列表键盘行为由 cmdk 提供。
+- 禁用、展开、选中等状态优先使用组件 props 表达。
+
+## LLM 使用规则 {#llm-rules}
+
+1. 从 `@/components/core/combobox` 导入 `Combobox` 和类型。
+2. 使用 `options` 配置，不要生成旧的 primitive 子组件 API。
+3. 异步搜索时设置 `filterOption={false}` 并配合 `loading`。
+4. 需要原生表单提交时使用 `name`，不要手写重复 hidden input。
+5. 不要引入 Ant Design 相关依赖。
+6. 多选标签输入使用 Tags/MultiSelect。
+7. 不确定 API 时检查 `src/components/core/combobox.tsx`。

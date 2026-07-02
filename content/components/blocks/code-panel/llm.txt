@@ -1,0 +1,175 @@
+---
+category: Blocks
+title: CodePanel
+subtitle: 代码面板
+description: 带标题栏和语法高亮的代码展示面板复合组件，支持图标、复制按钮和打字光标效果。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 8
+source:
+  component: src/components/blocks/code-panel/index.tsx
+  docs: content/components/blocks/code-panel/index.mdx
+  examples:
+    - content/components/blocks/code-panel/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# CodePanel 代码面板
+
+CodePanel 是一个结构化的代码展示复合组件，由 Code 容器、CodeHeader 标题栏和 CodeBlock 代码块三部分组成。标题栏支持自定义图标、任意子内容和内置复制按钮；代码块基于 CodeBlock primitive 提供语法高亮，并支持打字光标动画效果。
+
+本组件为项目本地复合组件，无 Ant Design 直接对应。实现以本地源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合在文档、组件库展示、教程页面等场景中渲染带标题区（如文件名、语言标识）和语法高亮的代码片段，尤其是需要复制功能或光标效果的终端风格展示。
+
+常见场景：
+
+- 组件文档中的代码示例，带文件图标和复制按钮。
+- 终端命令展示，启用打字光标效果模拟命令行输出。
+- 嵌入卡片的代码面板，标题栏用于标识代码来源或类型。
+
+不推荐：
+
+- 多文件/多语言切换场景 —— 应使用 CodeTabs 或 CodeBlock 复合组件。
+- 纯文本代码（无语法高亮需求）—— 使用 `<pre><code>` 即可。
+- 实时编辑代码 —— CodePanel 仅供展示。
+- 引入 `antd` 或外部代码高亮库替代 Shiki。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Code, CodeHeader, CodeBlock } from "@/components/blocks/code-panel"
+import { Terminal } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Code code={`const greeting = "Hello World";\nconsole.log(greeting);`}>
+      <CodeHeader icon={Terminal} copyButton>
+        app.tsx
+      </CodeHeader>
+      <CodeBlock cursor />
+    </Code>
+  )
+}
+```
+
+> 说明：`Code` 必须作为最外层容器，通过 `code` prop 传递代码字符串并注入 Context。`CodeHeader` 的 `copyButton` 启用后自动从 Context 获取代码内容并复制。`CodeBlock` 从 Context 自动获取 `code`，通过 `next-themes` 自动获取 `theme`。
+
+## API {#api}
+
+以下类型来自 `src/components/blocks/code-panel/index.tsx` 源码，是生成代码时的主要依据。
+
+### Code
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| code | 要展示的代码字符串，通过 Context 传递给子组件 | `string` | 必填 |
+| className | 附加样式类，与默认 `not-prose relative flex flex-col overflow-hidden rounded border` 合并 | `string` | - |
+
+`Code` 继承 `React.ComponentProps<'div'>`，支持所有标准 div 属性。内部通过 `getStrictContext` 创建 `CodeContext` 向子组件提供 `code`。
+
+### CodeHeader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| icon | 标题栏图标组件（传入组件类型，非 React 元素） | `React.ElementType` | - |
+| copyButton | 是否显示复制按钮，点击后复制 Context 中的代码内容 | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+| children | 标题栏内容（如文件名、语言标签） | `React.ReactNode` | - |
+
+`CodeHeader` 继承 `React.ComponentProps<'div'>`。复制按钮在启用时渲染在标题栏右侧，使用 `CopyButton`（`size="small" variant="text"`）。
+
+### CodeBlock
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| cursor | 是否显示打字光标动画（最后一行末尾闪烁竖线） | `boolean` | - |
+| className | 附加样式类，与默认代码区样式合并 | `string` | - |
+
+`CodeBlock` 继承 `Omit<CodeBlockPropsPrimitive, 'code'>`，即 CodeBlock primitive 除 `code` 外的所有属性。`code` 从 Context 自动获取，`theme` 由 `useTheme().resolvedTheme` 自动推断（`'dark'` 或 `'light'`）。代码高亮和打字动画由底层 `CodeBlockPrimitive`（`@/components/_internal/animate/blocks/code-block`）处理。
+
+## 样式模型 {#styling-model}
+
+- 样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 容器使用 `not-prose` 确保在 MDX 环境中不受 prose 样式影响。
+- 边框和背景色通过 CSS 变量 `--code-border-color` 和 `--code-bg-color` 控制，支持暗色模式自动适配。
+- 标题栏高度固定 `h-10`，背景使用 `bg-muted/20`，底部有分隔边框（`border-b border-[var(--code-border-color)]`）。
+- CodeBlock 内容区使用 `text-[13px]` 字号，通过 `[&>pre,_&_code]:!bg-transparent` 强制透明背景以透出容器背景色。
+- 光标效果通过 `data-[done=false]` 属性控制，使用 CSS `::after` 伪元素 `content: '|'` 实现闪烁竖线。
+- 主题颜色优先使用 `text-muted-foreground`、`bg-muted` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/code-panel/index.tsx`（复合组件定义）
+- `src/components/core/blocks/code-panel.tsx`（re-export barrel）
+- `src/primitives/animate/blocks/code-block.tsx`（底层 CodeBlock primitive，负责语法高亮和打字动画）
+
+直接依赖摘要：
+
+- React（`useRef`、Context）
+- `next-themes`（`useTheme`，用于暗色模式主题切换）
+- `@/components/_internal/animate/blocks/code-block`（`CodeBlock` primitive 及类型）
+- `@/components/core/copy-button`（复制按钮）
+- `@/lib/get-strict-context`（强类型 Context 工具）
+- `@/lib/utils`（`cn` 样式合并）
+- Tailwind CSS
+
+实现注意：
+
+1. `Code` 通过 `getStrictContext` 创建 `CodeContext`，子组件 `CodeHeader` 和 `CodeBlock` 通过 `useCode()` 获取代码内容。
+2. `CodeBlock` 的 `code` 和 `theme` 均由组件内部自动处理，无需外部传入；前者来自 Context，后者来自 `next-themes`。
+3. 光标动画基于 `data-done` 属性，需 CodeBlock primitive 内部支持 `writing` 动画配合 `done` 状态。
+4. 如需新增能力，应先修改该组件源码，再更新本 llm 文档。
+5. 不要把 CodeBlockPrimitive 文档中未在本组件暴露的功能视为已支持。
+
+## 可访问性 {#accessibility}
+
+- 代码内容通过 CodeBlock primitive 渲染，语义由 primitive 内部控制。
+- CopyButton 继承 `@/components/core/copy-button` 的 ARIA 语义和复制状态反馈。
+- 标题栏图标为装饰性元素（`Icon` 组件实例），语义信息应由 `children`（如文件名文本）提供。
+- 纯图标 CodeHeader（仅设 `icon` 无 `children`）建议同时提供可见文本或 `aria-label`。
+- 光标动画为纯视觉增强，不影响屏幕阅读器。
+- 容器标记 `data-canthia-ignore=""`，排除自动化扫描。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，无 Ant Design 直接对应。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/code-panel/index.tsx` 的 TypeScript 类型为准 |
+| 语法高亮 | 通过 CodeBlock primitive 提供，非 AntD 方案 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 组合模式 | 基于 React Context 的复合组件模式 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 CodePanel 代码时，应遵守：
+
+1. 从 `@/components/blocks/code-panel` 导入，不要从 `antd` 导入。
+2. `Code` 必须作为最外层容器，且 `code` prop 为必填。
+3. `CodeHeader` 和 `CodeBlock` 必须在 `Code` 内部使用，它们依赖 Context 获取代码内容。
+4. 复制功能通过 `CodeHeader` 的 `copyButton` 属性启用；不要单独引入 CopyButton。
+5. 光标效果通过 `CodeBlock` 的 `cursor` 属性启用。
+6. 标题栏图标使用 `icon` prop 传入组件类型（如 `lucide-react` 的 `Terminal`），不是 React 元素实例。
+7. 只使用本文件 API 摘要和源码中存在的 props，不要凭记忆生成不存在的属性。
+8. 不要引入 AntD ConfigProvider、AntD 图标库或 rc-component。
+9. 需要自定义样式时，优先使用组件暴露的 `className` props。
+10. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/code-panel/index.tsx`。

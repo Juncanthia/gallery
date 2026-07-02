@@ -1,13 +1,13 @@
 #!/usr/bin/env tsx
 /**
- * Scans `src/components/ui/*.tsx` forwarding shells and generates registry entries.
+ * Scans `src/components/core/*.tsx` forwarding shells and generates registry entries.
  * Run: pnpm exec tsx scripts/sync-registry-from-shells.ts
  */
 import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs"
 import path from "node:path"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
-const UI_DIR = path.join(ROOT, "src/components/ui")
+const CORE_DIR = path.join(ROOT, "src/components/core")
 const CONTENT_DIR = path.join(ROOT, "content/components")
 const OUT_FILE = path.join(ROOT, "src/gallery/registry/domains/generated.ts")
 
@@ -42,7 +42,7 @@ function aliasFromRepo(repoPath: string): string {
 function parseShell(filePath: string): ParsedShell | null {
   const content = readFileSync(filePath, "utf8")
   const shellName = path.basename(filePath, ".tsx")
-  const shellImportPath = `@/components/ui/${shellName}`
+  const shellImportPath = `@/components/core/${shellName}`
 
   const exportFrom = content.match(/export\s+(?:type\s+)?\{[^}]+\}\s+from\s+["'](@\/components\/[^"']+)["']/g)
   if (!exportFrom || exportFrom.length === 0) {
@@ -132,12 +132,12 @@ function inferTitle(id: string): { title: string; titleEn: string; catalogId: st
 }
 
 function main() {
-  const files = readdirSync(UI_DIR).filter((f) => f.endsWith(".tsx"))
+  const files = readdirSync(CORE_DIR).filter((f) => f.endsWith(".tsx"))
   const entries: string[] = []
   let skipped = 0
 
   for (const file of files.sort()) {
-    const parsed = parseShell(path.join(UI_DIR, file))
+    const parsed = parseShell(path.join(CORE_DIR, file))
     if (!parsed || !parsed.isPureReexport) {
       skipped++
       continue

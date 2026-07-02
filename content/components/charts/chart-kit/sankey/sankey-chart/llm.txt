@@ -1,0 +1,207 @@
+[桑基图 / SankeyChart]
+导入: import { SankeyChart, SankeyNode, SankeyLink, SankeyTooltip } from "@/components/charts/chart-kit"
+包来源: @/components/charts/chart-kit
+组件类型: 图表 / BKLit Charts
+
+## 何时使用
+展示数据在不同节点之间的流向和转移关系。通过节点（nodes）和连接线（links）的宽度编码数值大小，直观呈现流量、转化、资源分配等数据关系。适用于用户行为流分析、流量路径追踪、资金流转可视化等场景。
+
+不适用于节点过多（超过20个）的密集网络、单一层次结构数据、或需要精确数值对比的场景。
+
+## Props
+
+### SankeyChart (主组件)
+
+| 参数 | 说明 | 类型 | 默认值 | 必填 |
+|------|------|------|--------|------|
+| data | 桑基图数据 | `{ nodes: SankeyNodeDatum[], links: SankeyLinkDatum[] }` | — | 是 |
+| children | 子组件，必须包含 SankeyLink + SankeyNode + SankeyTooltip | `ReactNode` | — | 是 |
+| margin | 图表边距 | `Partial<{ top, right, bottom, left }>` | `{ top: 40, right: 180, bottom: 40, left: 180 }` | 否 |
+| animationDuration | 进入动画时长 (ms) | `number` | `1100` | 否 |
+| enterTransition | motion 进入过渡动画配置 | `Transition` | — | 否 |
+| revealSignature | 动画重播标识，值变化时触发重新进入动画 | `string` | — | 否 |
+| aspectRatio | 宽高比 ("宽 / 高") | `string` | `"2 / 1"` | 否 |
+| nodeWidth | 节点宽度 (px) | `number` | `16` | 否 |
+| nodePadding | 节点间垂直间距 (px) | `number` | `24` | 否 |
+| className | 容器附加样式类名 | `string` | — | 否 |
+| hoveredNodeIndex | 受控的悬停节点索引 | `number \| null` | — | 否 |
+| onNodeHoverChange | 节点悬停变化回调 | `(index: number \| null) => void` | — | 否 |
+
+### SankeyNode（节点）
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| fill | 节点填充颜色，设置后所有节点统一颜色 | `string` | —（主题色循环） |
+| lineCap | 节点矩形的圆角半径 | `number` | `4` |
+| fadedOpacity | 悬停时非关联节点的透明度 | `number` | `0.4` |
+| showLabels | 是否显示节点名称标签 | `boolean` | `true` |
+| showValueLabels | 是否显示数值标签（在名称下方） | `boolean` | `true` |
+| getNodeColor | 自定义节点颜色函数 | `(node, index: number) => string` | — |
+
+### SankeyLink（连接线）
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| stroke | 链接描边颜色，设置后覆盖渐变，所有链接统一颜色 | `string` | — |
+| strokeOpacity | 链接描边透明度 | `number` | `0.5` |
+| fadedOpacity | 悬停时非关联链接的透明度 | `number` | `0.1` |
+| useGradient | 是否使用源节点到目标节点的颜色渐变 | `boolean` | `true` |
+| getNodeColor | 自定义节点颜色（用于生成渐变） | `(node, index: number) => string` | — |
+| getLinkColor | 自定义链接颜色，覆盖渐变逻辑 | `(link, index: number) => string` | — |
+| patterns | Pattern 定义（使用 @visx/pattern 的 PatternLines、PatternCircles 等） | `ReactNode` | — |
+| getLinkPattern | 为链接返回 pattern ID | `(link, index: number) => string \| null \| undefined` | — |
+
+### SankeyTooltip（悬浮提示）
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| nodeContent | 自定义节点提示内容渲染函数 | `(props: { node, index }) => ReactNode` | — |
+| linkContent | 自定义链接提示内容渲染函数 | `(props: { link, index }) => ReactNode` | — |
+| formatValue | 数值格式化函数 | `(value: number) => string` | `intFmt` |
+| className | 附加样式类名 | `string` | — |
+
+### 数据类型
+
+```ts
+// 节点数据
+interface SankeyNodeDatum {
+  name: string
+  category?: "source" | "landing" | "outcome"  // 节点类型
+}
+
+// 链接数据：source 和 target 为 nodes 数组的索引
+interface SankeyLinkDatum {
+  source: number
+  target: number
+  value: number
+}
+```
+
+## 示例代码
+
+### 基础用法
+
+```tsx
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/chart-kit"
+
+const data = {
+  nodes: [
+    { name: "首页" },
+    { name: "搜索页" },
+    { name: "商品页" },
+    { name: "购物车" },
+    { name: "下单成功" },
+  ],
+  links: [
+    { source: 0, target: 2, value: 80 },
+    { source: 0, target: 3, value: 20 },
+    { source: 1, target: 2, value: 50 },
+    { source: 1, target: 3, value: 30 },
+    { source: 2, target: 4, value: 60 },
+    { source: 3, target: 4, value: 40 },
+  ],
+}
+
+export default function Demo() {
+  return (
+    <SankeyChart data={data}>
+      <SankeyLink />
+      <SankeyNode />
+      <SankeyTooltip />
+    </SankeyChart>
+  )
+}
+```
+
+### 自定义节点颜色
+
+```tsx
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/chart-kit"
+
+export default function Demo() {
+  return (
+    <SankeyChart aspectRatio="16 / 9" data={data}>
+      <SankeyLink useGradient={false} stroke="hsl(210, 60%, 70%)" />
+      <SankeyNode
+        getNodeColor={(node) => {
+          if (node.category === "source") return "hsl(120, 50%, 50%)"
+          if (node.category === "outcome") return "hsl(0, 60%, 50%)"
+          return "hsl(210, 50%, 50%)"
+        }}
+      />
+      <SankeyTooltip />
+    </SankeyChart>
+  )
+}
+```
+
+### 隐藏数值标签
+
+```tsx
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/chart-kit"
+
+export default function Demo() {
+  return (
+    <SankeyChart data={data}>
+      <SankeyLink />
+      <SankeyNode showLabels={true} showValueLabels={false} />
+      <SankeyTooltip />
+    </SankeyChart>
+  )
+}
+```
+
+### 自定义 Tooltip
+
+```tsx
+import { SankeyChart, SankeyLink, SankeyNode, SankeyTooltip } from "@/components/charts/chart-kit"
+
+export default function Demo() {
+  return (
+    <SankeyChart data={data}>
+      <SankeyLink />
+      <SankeyNode />
+      <SankeyTooltip
+        formatValue={(v) => `${(v / 1000).toFixed(1)}k`}
+        nodeContent={({ node, index }) => (
+          <div className="text-sm">
+            <strong>{node.name}</strong>
+            <p>节点 #{index}</p>
+          </div>
+        )}
+      />
+    </SankeyChart>
+  )
+}
+```
+
+## 约束与最佳实践
+
+### 依赖要求
+- 需要 `@visx/sankey`、`@visx/responsive`、`@visx/event` 系列依赖
+- 需要 `motion` (framer-motion) 用于动画
+- 需要 `d3-sankey` 类型定义
+- 图表使用 CSS 变量 `--chart-1` 至 `--chart-5`、`--chart-line-primary`、`--chart-foreground` 等实现主题化
+
+### 数据约束
+- `links` 中 `source` 和 `target` 必须为 `nodes` 数组的有效索引（从 0 开始）
+- 每个链接必须有 `value` 属性（数值），决定链接的视觉宽度
+- 节点必须有唯一的 `name` 属性，用于标签和 Tooltip 展示
+- `category` 可选字段支持 `"source"`、`"landing"`、`"outcome"` 三种类型
+
+### 布局约束
+- 建议在容器中设置 `aspectRatio` 保证渲染比例，默认 `"2 / 1"`
+- 节点过多时（超过 20 个）建议拆分或改用其他图表类型
+- 链接线的 `value` 值域差异过大时，细小链接可能几乎不可见
+
+### 渲染约束
+- `children` 是必填项，必须包含 `SankeyLink` + `SankeyNode` + `SankeyTooltip`，缺一不可
+- 子组件顺序不影响渲染，但推荐按 `<SankeyLink />`、`<SankeyNode />`、`<SankeyTooltip />` 排列以保证可读性
+- SVG 容器宽度小于 10px 或高度小于 10px 时组件返回 null（不渲染）
+
+### 最佳实践
+- 节点名称控制在 8 个字以内，过长的标签会在桑基图中溢出或被截断
+- 合理设置 `margin`，为左右两侧的节点标签预留足够空间（默认 180px）
+- 使用 `getNodeColor` 为不同 category 的节点设置区分颜色，增强可读性
+- 对链接数量少的图表，关闭渐变 (`useGradient={false}`) 可提升渲染性能
+- 受控场景中使用 `hoveredNodeIndex` + `onNodeHoverChange` 配合外部 Legend 实现联动高亮

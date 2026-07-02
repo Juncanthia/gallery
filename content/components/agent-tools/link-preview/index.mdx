@@ -1,0 +1,148 @@
+PreviewLinkCard 链接预览。基于 Radix HoverCard 原语实现，在 hover 或聚焦时展示链接内容的摘要卡片。由 PreviewLinkCard（根容器）、PreviewLinkCardTrigger（触发器）、PreviewLinkCardContent（预览内容）、PreviewLinkCardImage（预览图片）四个子组件组成。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在用户悬停链接时展示目标内容的预览摘要时使用。
+
+常见场景：
+- 文章列表中 hover 链接时展示文章摘要和缩略图。
+- 用户 @提及 hover 时展示用户信息卡片。
+- 商品名称 hover 时展示商品详情预览。
+
+不推荐：
+- 预览内容过于复杂（大量图片、视频等），会影响性能和体验。
+- 移动端使用 hover 预览，触摸设备无法触发 hover 事件。
+- 用自定义 popover 拼接预览逻辑，PreviewLinkCard 已封装完整的延迟、定位和无障碍行为。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+触发器和预览内容通过 PreviewLinkCardTrigger 和 PreviewLinkCardContent 组合。
+
+<ComponentShowcase id="link-preview" path="link-preview/basic" />
+
+```tsx
+import { PreviewLinkCard, PreviewLinkCardTrigger, PreviewLinkCardContent } from "@/components/core/link-preview"
+
+export default function Demo() {
+  return (
+    <PreviewLinkCard>
+      <PreviewLinkCardTrigger href="https://example.com" className="text-sm underline">
+        悬停查看预览
+      </PreviewLinkCardTrigger>
+      <PreviewLinkCardContent>
+        <div className="p-3 text-sm">
+          <h4 className="font-medium">示例页面</h4>
+          <p className="text-muted-foreground">这是链接预览卡片的描述内容。</p>
+        </div>
+      </PreviewLinkCardContent>
+    </PreviewLinkCard>
+  )
+}
+```
+
+### 带图片预览
+
+使用 PreviewLinkCardImage 在预览卡片中展示缩略图。
+
+```tsx
+import { PreviewLinkCard, PreviewLinkCardTrigger, PreviewLinkCardContent, PreviewLinkCardImage } from "@/components/core/link-preview"
+
+export default function Demo() {
+  return (
+    <PreviewLinkCard>
+      <PreviewLinkCardTrigger href="https://example.com" className="text-sm underline">
+        带图片的预览链接
+      </PreviewLinkCardTrigger>
+      <PreviewLinkCardContent className="w-72">
+        <PreviewLinkCardImage>
+          <img src="/placeholder.jpg" alt="预览图" />
+        </PreviewLinkCardImage>
+        <div className="p-3 text-sm">
+          <p>图片预览描述内容</p>
+        </div>
+      </PreviewLinkCardContent>
+    </PreviewLinkCard>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### PreviewLinkCard
+
+根容器组件，管理预览卡片的打开/关闭状态。包裹 Trigger 和 Content。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | Trigger 和 Content 子组件 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+
+接受 Radix HoverCard Root 的所有属性（如 `openDelay`、`closeDelay` 等）。
+
+### PreviewLinkCardTrigger
+
+触发器组件，用户 hover 此元素时弹出预览卡片。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 触发器内容，通常为链接文本 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+
+接受 Radix HoverCard Trigger 的所有属性。
+
+### PreviewLinkCardContent
+
+预览内容的弹出层。默认对齐方式为 `center`，偏移 `4px`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| align | 弹出对齐方式 | `"start"` \| `"center"` \| `"end"` | `"center"` |
+| sideOffset | 距触发器偏移量 | `number` | `4` |
+| className | 附加样式类名 | `string` | - |
+| children | 预览卡片内容 | `React.ReactNode` | - |
+
+接受 Radix HoverCard Content 的所有属性。默认带圆角、边框和阴影。
+
+### PreviewLinkCardImage
+
+预览卡片中的图片容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 图片元素 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+
+接受 Radix HoverCard Image 的所有属性。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何控制预览卡片的打开和关闭延迟？
+
+PreviewLinkCard 基于 Radix HoverCard，支持 `openDelay` 和 `closeDelay` 属性：
+
+```tsx
+<PreviewLinkCard openDelay={500} closeDelay={200}>
+  ...
+</PreviewLinkCard>
+```
+
+### 预览内容如何对齐触发器？
+
+通过 PreviewLinkCardContent 的 `align` 属性控制，支持 `"start"`、`"center"`、`"end"`，默认 `"center"`。可通过 `sideOffset` 调整垂直间距。
+
+### 如何在预览卡片中展示丰富内容？
+
+Content 内部可以自由组合任意 React 组件，包括文本、图片、按钮等。Content 默认设置了 `overflow-hidden`，超出内容会被裁剪。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/link-preview` 导入 PreviewLinkCard、PreviewLinkCardTrigger、PreviewLinkCardContent、PreviewLinkCardImage。
+2. 必须使用 PreviewLinkCard 包裹 Trigger 和 Content，不要单独使用子组件。
+3. 预览内容使用 PreviewLinkCardContent 承载，支持自定义宽度和样式。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="link-preview" />

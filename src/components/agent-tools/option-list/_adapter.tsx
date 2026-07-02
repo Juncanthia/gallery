@@ -10,5 +10,5 @@
  */
 
 export { cn } from "@/lib/utils";
-export { Button } from "@/components/ui/button";
-export { Separator } from "@/components/ui/separator";
+export { Button } from "@/components/core/button";
+export { Separator } from "@/components/core/separator";

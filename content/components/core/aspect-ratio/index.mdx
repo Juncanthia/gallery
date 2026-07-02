@@ -1,0 +1,130 @@
+固定比例容器 AspectRatio。将子元素约束为指定的宽高比，基于 Radix AspectRatio 实现。容器宽度变化时，高度自动按比例缩放。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要让图片、视频、卡片封面等内容保持固定宽高比，且容器宽度可能响应式变化时使用。
+
+常见场景：
+- 图片列表缩略图（16:9、4:3、1:1）。
+- 视频播放器占位区域。
+- 卡片封面图确保比例一致。
+- 头像裁剪预览框。
+- iframe 嵌入内容保持宽高比。
+
+不推荐：
+- 用 `padding-top` 百分比技巧手动实现宽高比，hack 方式应改用 AspectRatio。
+- 将 AspectRatio 用于非媒体内容（如纯文本区域），它仅用于约束宽高比。
+- 在 AspectRatio 内部放置非绝对定位的内容导致布局异常。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+通过 `ratio` 属性指定宽高比，子元素自动撑满容器。
+
+<ComponentShowcase
+  id="aspect-ratio"
+  path="aspect-ratio/basic"
+/>
+
+```tsx
+import { AspectRatio } from "@/components/core/aspect-ratio"
+
+export default function Demo() {
+  return (
+    <div className="grid w-full max-w-sm grid-cols-2 gap-4">
+      <AspectRatio ratio={16 / 9} className="rounded bg-muted">
+        <div className="flex size-full items-center justify-center text-sm text-muted-foreground">
+          16:9
+        </div>
+      </AspectRatio>
+      <AspectRatio ratio={4 / 3} className="rounded bg-muted">
+        <div className="flex size-full items-center justify-center text-sm text-muted-foreground">
+          4:3
+        </div>
+      </AspectRatio>
+      <AspectRatio ratio={1} className="rounded bg-muted">
+        <div className="flex size-full items-center justify-center text-sm text-muted-foreground">
+          1:1
+        </div>
+      </AspectRatio>
+      <AspectRatio ratio={3 / 4} className="rounded bg-muted">
+        <div className="flex size-full items-center justify-center text-sm text-muted-foreground">
+          3:4
+        </div>
+      </AspectRatio>
+    </div>
+  )
+}
+```
+
+### 配合图片使用
+
+子元素通过 `absolute inset-0` 和 `object-cover` 填满容器。
+
+```tsx
+import { AspectRatio } from "@/components/core/aspect-ratio"
+
+export default function Demo() {
+  return (
+    <AspectRatio ratio={16 / 9} className="rounded bg-muted">
+      <img
+        src="https://images.unsplash.com/photo-..."
+        alt="示例图片"
+        className="absolute inset-0 size-full rounded object-cover"
+      />
+    </AspectRatio>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### AspectRatio
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| ratio | 宽高比（宽度 / 高度），如 `16 / 9`、`4 / 3`、`1` | `number` | `1` |
+| className | 附加样式类名 | `string` | - |
+| children | 内容，建议使用 `absolute inset-0` 或 `size-full` 填满容器 | `React.ReactNode` | - |
+
+> 本组件直接包装 Radix UI `AspectRatio.Root`，接受其所有 props（包括标准 HTML div 属性）。Radix 提供的 `asChild` 等 prop 同样可用。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何配合图片使用？
+
+子元素使用 `absolute inset-0` 和 `object-cover` 填满容器：
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <img
+    src="image.jpg"
+    alt=""
+    className="absolute inset-0 size-full rounded object-cover"
+  />
+</AspectRatio>
+```
+
+### ratio 属性的计算公式？
+
+`ratio = 宽度 / 高度`。例如 16:9 传入 `ratio={16 / 9}`，1:1 传入 `ratio={1}`，4:3 传入 `ratio={4 / 3}`。**必须传数值，不能传字符串如 `"16/9"`**。
+
+### AspectRatio 的子元素没有填满容器？
+
+AspectRatio 只控制容器高度，子元素需要自行声明填满方式。使用 `absolute inset-0 size-full` 或 `className="size-full"` 确保子元素填满。
+
+### AspectRatio 如何处理响应式？
+
+宽度由父容器决定，高度根据 `ratio` 自动计算。当父容器宽度响应式变化时，高度自动跟随调整，无需额外处理。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/aspect-ratio` 导入，不要从 `radix-ui` 直接导入。
+2. `ratio` 传入数值（如 `16 / 9`），非字符串，不能写成 `"16/9"`。
+3. 子元素需要填满容器时，使用 `absolute inset-0 size-full` 布局。
+4. 基于 Radix AspectRatio，接受其所有 API，但不要从 radix-ui 直接导入 AspectRatio 组件。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="aspect-ratio" />

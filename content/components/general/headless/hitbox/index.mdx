@@ -1,0 +1,214 @@
+Hitbox 点击区域扩展器。通过 `::after` 伪元素扩大交互元素的可点击区域，在小尺寸图标按钮、窄间距操作区等场景下改善触控可用性。基于 Radix Slot 和 Tailwind CSS 实现。
+
+&lt;h2 id="when-to-use"&gt;何时使用&lt;/h2&gt;
+
+当交互元素的视觉尺寸过小但需要保证可点击区域时使用。Hitbox 在元素外围透明地扩展点击区域，不改变外观布局。
+
+常见场景：
+- 小尺寸图标按钮（如关闭按钮、更多操作按钮）需要扩大触控目标
+- 窄间距操作区中的交互元素（如表格行操作、工具栏按钮）
+- 移动端适配时，确保触摸目标不小于推荐尺寸
+- 无障碍优化：为精细操作提供更宽容的点击面
+
+不推荐：
+- 元素本身尺寸已满足点击/触摸要求
+- 需要改变元素视觉尺寸的场景（应调整元素自身样式）
+- 与 `overflow: hidden` 容器组合时可能裁剪扩展区域
+
+&lt;h2 id="examples"&gt;代码演示&lt;/h2&gt;
+
+### 基础用法
+
+默认 size 为 `"default"`，在各方向上扩展 12px。开启 `debug` 可显示红色虚线边框查看点击区域。
+
+&lt;ComponentShowcase id="general/headless/hitbox" path="general/headless/hitbox/basic" /&gt;
+
+```tsx
+import { Target } from "lucide-react"
+import { Hitbox } from "@/components/general/headless/hitbox"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-wrap items-end gap-6"&gt;
+      &lt;Hitbox debug&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 不同尺寸
+
+`size` 支持 `"sm"`（8px）、`"default"`（12px）、`"lg"`（16px）和自定义 CSS 值。自定义值通过 CSS 自定义属性 `--size` 注入。
+
+```tsx
+import { Target } from "lucide-react"
+import { Hitbox } from "@/components/general/headless/hitbox"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-wrap items-end gap-6"&gt;
+      &lt;Hitbox debug size="sm"&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+      &lt;Hitbox debug size="default"&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+      &lt;Hitbox debug size="lg"&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 方向控制
+
+`position` 控制扩展区域的方向：`"all"`（默认，四周）、`"top"`、`"bottom"`、`"left"`、`"right"`、`"vertical"`（上下）、`"horizontal"`（左右）。
+
+```tsx
+import { Target } from "lucide-react"
+import { Hitbox } from "@/components/general/headless/hitbox"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-wrap items-end gap-6"&gt;
+      &lt;Hitbox debug position="top"&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+      &lt;Hitbox debug position="horizontal"&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 圆角控制
+
+`radius` 控制扩展区域的圆角，使点击区域形状与元素视觉匹配。支持 `"none"`、`"sm"`、`"md"`、`"lg"`、`"full"`。
+
+```tsx
+import { Target } from "lucide-react"
+import { Hitbox } from "@/components/general/headless/hitbox"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-wrap items-end gap-6"&gt;
+      &lt;Hitbox debug radius="full"&gt;
+        &lt;button className="flex size-8 items-center justify-center rounded-full border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义尺寸
+
+`size` 接收任意 CSS 长度值，通过 CSS 自定义属性注入，适合需要精确控制扩展距离的场景。
+
+```tsx
+import { Target } from "lucide-react"
+import { Hitbox } from "@/components/general/headless/hitbox"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex flex-wrap items-end gap-6"&gt;
+      &lt;Hitbox debug size="20px"&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+      &lt;Hitbox debug size="24px"&gt;
+        &lt;button className="size-8 rounded border bg-background hover:bg-muted"&gt;
+          &lt;Target className="size-3.5" /&gt;
+        &lt;/button&gt;
+      &lt;/Hitbox&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+&lt;h2 id="api"&gt;API&lt;/h2&gt;
+
+### Hitbox
+
+基于 Radix Slot，支持所有 Slot 属性。扩展区域通过 `::after` 伪元素实现，不影响子元素的盒模型和定位。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| size | 扩展距离。预设值或自定义 CSS 长度 | `"default"` \| `"sm"` \| `"lg"` \| `string` | `"default"` |
+| position | 扩展方向 | `"all"` \| `"top"` \| `"bottom"` \| `"left"` \| `"right"` \| `"vertical"` \| `"horizontal"` | `"all"` |
+| radius | 扩展区域圆角 | `"none"` \| `"sm"` \| `"md"` \| `"lg"` \| `"full"` | `"none"` |
+| debug | 显示扩展区域（红色虚线边框 + 半透明红色背景） | `boolean` | `false` |
+| className | 附加样式类 | `string` | - |
+| children | 需要扩展点击区域的子元素（单个） | `React.ReactNode` | - |
+
+### 预设尺寸对应值
+
+| size | CSS 值 |
+| --- | --- |
+| `"sm"` | 8px |
+| `"default"` | 12px |
+| `"lg"` | 16px |
+
+### 语义槽位
+
+| data-slot | 说明 |
+| --- | --- |
+| — | Hitbox 使用 Radix Slot，不暴露 `data-slot`，而是将属性合并到子元素 |
+
+&lt;h2 id="faq"&gt;常见问题&lt;/h2&gt;
+
+### Hitbox 和直接增大 padding 有何区别？
+
+直接增大 padding 会改变元素的盒模型尺寸，影响布局。Hitbox 通过 `::after` 伪元素在盒模型外围扩展点击区域，不改变元素的视觉尺寸和布局位置。
+
+### 与 `overflow: hidden` 容器组合会怎样？
+
+扩展区域在 `overflow: hidden` 容器边界处会被裁剪。需要扩展点击区域时，确保父容器不裁剪溢出内容，或将 Hitbox 放在足够大的容器内。
+
+### 如何验证点击区域生效？
+
+开发阶段设置 `debug` 属性，会以红色虚线边框和半透明红色背景显示扩展区域，方便调试。生产环境应移除 `debug`。
+
+### 自定义尺寸如何使用？
+
+传入任意 CSS 长度值（如 `"20px"`、`"1.5rem"`），组件会将值注入 CSS 自定义属性 `--size`：
+
+```tsx
+&lt;Hitbox size="20px"&gt;...&lt;/Hitbox&gt;
+```
+
+### 为什么使用 Radix Slot？
+
+Hitbox 用作包裹组件，通过 Slot 将自身合并到子元素上，避免引入额外 DOM 层级。这确保事件冒泡、样式继承和 ARIA 属性不受中间层影响。
+
+&lt;h2 id="llm-rules"&gt;LLM 使用规则&lt;/h2&gt;
+
+1. 从 `@/components/general/headless/hitbox` 导入 Hitbox。
+2. Hitbox 包裹单个可交互子元素（button、a、自定义交互组件），通过 Slot 合并。
+3. `size` 可接收预设值（`"sm"` | `"default"` | `"lg"`）或自定义 CSS 长度值。
+4. `position` 控制扩展方向，在窄间距区域使用定向扩展而非 `"all"` 可避免相邻元素点击冲突。
+5. 开发调试时使用 `debug` 可视化点击区域，提交前移除。
+6. `radius` 应匹配子元素的视觉圆角，使点击区域的触控反馈与视觉一致。
+7. 不要为同一元素嵌套多层 Hitbox。
+8. 不要引入 Ant Design 相关依赖。
+
+&lt;h2 id="source"&gt;源码&lt;/h2&gt;
+&lt;SourceViewer componentId="general/headless/hitbox" /&gt;

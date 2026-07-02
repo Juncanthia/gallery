@@ -1,14 +1,14 @@
 "use client";
 
 import { useDataTable } from "@/components/data-display/data-table-filters/components/data-table/data-table-provider";
-import { Button } from "@/components/ui/button";
-import { Kbd } from "@/components/ui/kbd";
+import { Button } from "@/components/core/button";
+import { Kbd } from "@/components/core/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/core/tooltip";
 import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
 import { formatCompactNumber } from "@/components/data-display/data-table-filters/lib/format";
 import { useControls } from "@/components/data-display/data-table-filters/components/controls";

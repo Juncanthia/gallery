@@ -1,0 +1,87 @@
+Particles 三维粒子系统动态背景，支持自定义颜色、悬停交互和旋转效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要科技感/未来感的粒子动态背景时使用。
+常见场景：
+- 科技产品 Hero 区域背景
+- 太空/星空主题页面装饰
+- 数据可视化页面的氛围背景
+不推荐：
+- 需要静态、简洁背景的正式页面
+- 低性能移动设备的全屏背景
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/particles" path="rb/particles/basic" />
+
+```tsx
+import { Particles } from "@/components/core/particles"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <Particles />
+    </div>
+  )
+}
+```
+
+### 自定义颜色和悬停交互
+
+```tsx
+import { Particles } from "@/components/core/particles"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded bg-black">
+      <Particles
+        particleColors={["#ff0080", "#7928ca", "#00d4ff"]}
+        moveParticlesOnHover={true}
+        particleHoverFactor={2}
+        particleCount={300}
+        speed={0.2}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Particles
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| particleCount | 粒子数量 | number | 200 |
+| particleSpread | 粒子扩散范围 | number | 10 |
+| speed | 动画速度 | number | 0.1 |
+| particleColors | 粒子颜色数组（hex） | string[] | ["#ffffff","#ffffff","#ffffff"] |
+| moveParticlesOnHover | 悬停时粒子跟随鼠标 | boolean | false |
+| particleHoverFactor | 鼠标影响力度的倍率 | number | 1 |
+| alphaParticles | 使用圆形 alpha 粒子 | boolean | false |
+| particleBaseSize | 粒子基础大小 | number | 100 |
+| sizeRandomness | 粒子大小随机性（0-1） | number | 1 |
+| cameraDistance | 相机距离 | number | 20 |
+| disableRotation | 禁用粒子旋转 | boolean | false |
+| pixelRatio | 设备像素比（默认为1） | number | 1 |
+| className | 额外的 CSS 类名 | string | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何让粒子跟随鼠标移动？
+设置 `moveParticlesOnHover={true}`，并通过 `particleHoverFactor` 调节跟随幅度。
+
+### 粒子看起来性能不佳怎么办？
+减少 `particleCount` 至 100 以下，或将 `sizeRandomness` 降到 0.5 以下。移动端建议粒子数不超过 150。
+
+### 如何设置特定颜色的粒子？
+传入 `particleColors` 颜色数组，粒子会随机从数组中选取颜色。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/particles` 导入。
+2. 组件需要放在有明确宽高的容器中。
+3. 依赖 `ogl` 库进行 WebGL 渲染，请确保项目已安装。
+4. 默认参数即可正常渲染，需要个性化时从 `particleColors` 和 `particleCount` 入手。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-particles" />

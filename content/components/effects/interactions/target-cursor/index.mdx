@@ -1,0 +1,82 @@
+TargetCursor 目标光标组件，替换浏览器默认光标为自定义十字准星光标，悬停目标元素时四角吸附并高亮，支持自旋转和视差效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要...时使用。
+常见场景：
+- 交互式作品集页面，强调可点击的展示项目
+- 创意型网站，替换默认光标提升品牌感
+- 需要突出特定可交互区域的沉浸式页面
+不推荐：
+- 内容密集型后台系统（自定义光标会降低操作效率）
+- 移动端（组件自动返回 null，不做渲染）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase
+  id="rb/target-cursor"
+  path="rb/target-cursor/basic"
+/>
+
+```tsx
+import { TargetCursor } from "@/components/core/target-cursor"
+
+export default function Demo() {
+  return <>
+    <TargetCursor />
+    <div className="cursor-target p-8 bg-neutral-800 rounded">Hover me</div>
+  </>
+}
+```
+
+### 自定义配置
+```tsx
+import { TargetCursor } from "@/components/core/target-cursor"
+
+export default function Demo() {
+  return (
+    <>
+      <TargetCursor
+        targetSelector=".interactive-card"
+        spinDuration={3}
+        hoverDuration={0.3}
+        parallaxOn={false}
+        cursorColor="#00ff88"
+        cursorColorOnTarget="#ff4444"
+      />
+      <div className="interactive-card p-8 bg-neutral-900 rounded-lg">Card 1</div>
+      <div className="interactive-card p-8 bg-neutral-900 rounded-lg">Card 2</div>
+    </>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### TargetCursor
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| targetSelector | 目标元素的 CSS 选择器 | `string` | `".cursor-target"` |
+| spinDuration | 光标自旋转一圈时长（秒） | `number` | `2` |
+| hideDefaultCursor | 是否隐藏浏览器默认光标 | `boolean` | `true` |
+| hoverDuration | 悬停到目标时四角吸附的过渡时长 | `number` | `0.2` |
+| parallaxOn | 是否启用视差（角跟随鼠标有延迟） | `boolean` | `true` |
+| cursorColor | 光标默认颜色 | `string` | `"#ffffff"` |
+| cursorColorOnTarget | 悬停目标时光标颜色 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+### 如何指定哪些元素触发光标吸附？
+通过 `targetSelector` 属性传入 CSS 选择器（如 `".my-card"` 或 `"[data-cursor]"`），所有匹配该选择器的元素都会触发四角吸附效果。
+
+### 移动端会怎样？
+组件内部检测移动端（触摸屏 + 小屏幕），若判定为移动端则返回 `null`，不做任何渲染。
+
+### 如何自定义光标的颜色切换行为？
+设置 `cursorColorOnTarget` 后，光标移入目标元素时四角和中心点会切换到该颜色；移出后恢复为 `cursorColor`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/target-cursor` 导入。
+2. 全局只需渲染一次，用 `targetSelector` 指定触发目标。
+3. 依赖 `gsap`，确保项目中已安装。
+4. 通过 `mix-blend-difference` 实现颜色反转，确保在各种背景下可见。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-target-cursor" />

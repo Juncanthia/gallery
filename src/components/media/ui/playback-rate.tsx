@@ -6,7 +6,7 @@ import {
   SelectGroup as SelectGroupPrimitive,
   SelectItem,
   Select as SelectPrimitive,
-} from "@/components/ui/select"
+} from "@/components/core/select"
 import { usePlaybackRateStore } from "@/components/media/hooks/use-playback-rate"
 
 export function SelectRoot(

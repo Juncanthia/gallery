@@ -1,0 +1,175 @@
+---
+category: Tool
+title: MessageDraft
+subtitle: 消息草稿
+description: 用于展示 AI 生成的消息草稿，支持邮件和 Slack 两种渠道，在发送前提供审查、撤销、取消等交互。
+demo:
+  cols: 1
+group:
+  title: Tool UI
+  order: 1
+source:
+  component: src/components/tool/message-draft/message-draft.tsx
+  schema: src/components/tool/message-draft/schema.ts
+  docs: content/components/tool/message-draft/index.mdx
+  examples:
+    - content/components/tool/message-draft/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  radix: false
+  tanstack: false
+  zod: true
+  lucide: true
+---
+
+# MessageDraft 消息草稿
+
+MessageDraft 用于展示 AI 生成的消息草稿。支持 `email` 和 `slack` 两种渠道，提供审查、发送、撤销和取消等交互。
+
+## 导入路径
+
+```tsx
+import { MessageDraft } from "@/components/core/message-draft"
+```
+
+## 组件属性
+
+### 通用属性（两种模式共用）
+
+| 属性 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| id | `string` | 是 | - | 组件唯一标识 |
+| channel | `"email"` \| `"slack"` | 是 | - | 消息渠道 |
+| body | `string` | 是 | - | 消息正文 |
+| outcome | `"sent"` \| `"cancelled"` | 否 | - | 外部控制发送结果 |
+| className | `string` | 否 | - | 附加样式类名 |
+| undoGracePeriod | `number` | 否 | `5000` | 发送倒计时（毫秒） |
+| onSend | `() => void \| Promise<void>` | 否 | - | 发送回调 |
+| onUndo | `() => void` | 否 | - | 撤销回调 |
+| onCancel | `() => void` | 否 | - | 取消回调 |
+
+### email 模式专属属性
+
+| 属性 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| subject | `string` | 是 | 邮件主题 |
+| from | `string` | 否 | 发件人 |
+| to | `string[]` | 是 | 收件人列表（至少 1 项） |
+| cc | `string[]` | 否 | 抄送列表 |
+| bcc | `string[]` | 否 | 密送列表 |
+
+### slack 模式专属属性
+
+| 属性 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| target | `SlackTarget` | 是 | 消息目标 |
+
+### SlackTarget
+
+```ts
+// 频道消息
+type SlackTarget = { type: "channel"; name: string; memberCount?: number }
+// 私信
+type SlackTarget = { type: "dm"; name: string }
+```
+
+## 代码示例
+
+### 邮件草稿
+
+```tsx
+import { MessageDraft } from "@/components/core/message-draft"
+
+export default function Demo() {
+  return (
+    <MessageDraft
+      id="email-1"
+      channel="email"
+      subject="Weekly Update"
+      from="alice@company.com"
+      to={["bob@company.com"]}
+      body="Here is the weekly summary."
+      onSend={() => sendEmail()}
+      onCancel={() => closeDraft()}
+    />
+  )
+}
+```
+
+### Slack 频道草稿
+
+```tsx
+import { MessageDraft } from "@/components/core/message-draft"
+
+export default function Demo() {
+  return (
+    <MessageDraft
+      id="slack-1"
+      channel="slack"
+      target={{ type: "channel", name: "general", memberCount: 42 }}
+      body="Deployment complete."
+      onSend={() => sendSlackMessage()}
+      onCancel={() => closeDraft()}
+    />
+  )
+}
+```
+
+### Slack DM 草稿
+
+```tsx
+import { MessageDraft } from "@/components/core/message-draft"
+
+export default function Demo() {
+  return (
+    <MessageDraft
+      id="slack-dm-1"
+      channel="slack"
+      target={{ type: "dm", name: "jane" }}
+      body="Can you review the PR?"
+      onSend={() => sendSlackDM()}
+      onCancel={() => closeDraft()}
+    />
+  )
+}
+```
+
+### 自定义撤销期
+
+```tsx
+<MessageDraft
+  id="custom-grace"
+  channel="email"
+  subject="Urgent notice"
+  to={["team@company.com"]}
+  body="Please respond ASAP."
+  undoGracePeriod={3000}
+  onSend={() => sendEmail()}
+  onUndo={() => revert()}
+  onCancel={() => closeDraft()}
+/>
+```
+
+## 状态流转
+
+组件内部维护 4 种状态：
+
+1. `review` — 初始审查状态，显示 Send 和 Cancel 按钮
+2. `sending` — 发送中，显示倒计时和 Undo 按钮
+3. `sent` — 已发送，显示发送时间确认
+4. `cancelled` — 已取消，组件卸载返回 null
+
+状态可通过内部按钮切换，也可通过 `outcome` 属性从外部控制。
+
+## LLM 生成约束
+
+生成 MessageDraft 时必须遵守：
+
+1. 导入路径 `@/components/core/message-draft`
+2. `id` 和 `channel` 为必填
+3. email 模式必须传 `subject` 和 `to`
+4. slack 模式必须传 `target`（含 `type` 和 `name`）
+5. 回调函数为可选，但不传时组件无外部副作用
+6. 撤销倒计时默认 5000ms，可通过 `undoGracePeriod` 调整
+7. 不引入无关渠道的专属属性（email 不用 target，slack 不用 subject/to）

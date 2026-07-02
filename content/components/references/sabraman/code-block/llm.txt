@@ -1,0 +1,77 @@
+---
+component: LegacyCodeBlockCommand
+import: "@/components/_internal/sabraman"
+utility-import: "@/components/_internal/sabraman"
+exports: LegacyCodeBlockCommand, LegacyCodeBlockCommandProps (from ui/sabraman-blocks/code-block); convertNpmCommand, PackageManagerIcon, usePreferredPackageManager, PackageManager, ConvertNpmCommandResult (from @/components/_internal/sabraman)
+base: standalone (no base component)
+style: macOS 10.15 legacy terminal-style code block with package manager switcher
+---
+
+## Props
+
+### LegacyCodeBlockCommand
+- bun?: string — bun package manager command
+- npm?: string — npm package manager command
+- pnpm?: string — pnpm package manager command
+- yarn?: string — yarn package manager command
+- initialPackageManager?: "bun" | "npm" | "pnpm" | "yarn" — initial package manager (first render only; user preference stored in localStorage overrides this)
+- onCopySuccess?: (data: { command: string; packageManager: PackageManager }) => void — copy success callback
+- onCopyError?: (error: Error) => void — copy error callback
+- headerActions?: React.ReactNode — extra actions in the header bar
+- className?: string
+- style?: React.CSSProperties
+- extends React.HTMLAttributes<HTMLDivElement>
+
+### usePreferredPackageManager
+- (initialPackageManager?: PackageManager) => readonly [PackageManager, (pm: PackageManager) => void]
+- User preference persisted to localStorage, cross-tab synced
+
+### convertNpmCommand
+- (npmCommand: string) => Record<PackageManager, string>
+- Converts npm command to bun/npm/pnpm/yarn equivalents
+- Supported patterns: npm install, npx create-*, npm create, npx, npm run
+- Unrecognized commands are returned as-is for all 4 package managers
+
+### PackageManagerIcon
+- packageManager: PackageManager
+
+## Code Example
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+
+function InstallInstructions() {
+  return (
+    <LegacyCodeBlockCommand
+      bun="bun add react react-dom"
+      npm="npm install react react-dom"
+      pnpm="pnpm add react react-dom"
+      yarn="yarn add react react-dom"
+    />
+  )
+}
+```
+
+Using convertNpmCommand:
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+import { convertNpmCommand } from "@/components/_internal/sabraman"
+
+function InstallInstructions() {
+  const commands = convertNpmCommand("npm install @hyper/sabraman")
+
+  return <LegacyCodeBlockCommand {...commands} />
+}
+```
+
+## Constraints
+- Import LegacyCodeBlockCommand from "@/components/_internal/sabraman" (NOT from @/components/_internal/sabraman directly).
+- Always provide at least one of bun/npm/pnpm/yarn; if none are provided the component returns null.
+- Use convertNpmCommand (imported from "@/components/_internal/sabraman") to generate commands from a single npm command.
+- Use spread syntax ({...commands}) when passing convertNpmCommand result to LegacyCodeBlockCommand.
+- The initialPackageManager prop is only used on first render; subsequent renders respect the user's localStorage preference.
+- Use onCopySuccess/onCopyError for toast/analytics integration on copy.
+- The component has a fixed macOS 10.15 legacy visual style (gradient borders, dark terminal, Helvetica Neue font). Do not attempt to restyle it.
+- Package manager selections sync across tabs via localStorage + custom events.
+- NEVER import from antd or use Ant Design patterns.

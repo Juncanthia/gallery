@@ -29,8 +29,8 @@ import {
 import { FileTree as PierreFileTree, useFileTree } from "@pierre/trees/react"
 import { createPortal } from "react-dom"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
 import {
   Command,
   CommandEmpty,
@@ -38,7 +38,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/core/command"
 import {
   Dialog,
   DialogClose,
@@ -47,7 +47,7 @@ import {
   DialogPanel,
   DialogPopup as DialogContent,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/core/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,24 +56,24 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/core/dropdown-menu"
 import { FileThumbnail } from "@/components/document/components/ui/file-thumbnail"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/core/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/core/popover"
+import { ScrollArea } from "@/components/core/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Spinner } from "@/components/ui/spinner"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/core/select"
+import { Spinner } from "@/components/blocks/spinner"
+import { Tabs, TabsList, TabsTrigger } from "@/components/core/tabs"
 
 const LazyPDFViewer = React.lazy(() =>
   import("@/components/document/components/ui/pdf-viewer").then((mod) => ({

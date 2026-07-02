@@ -6,7 +6,7 @@ import {
   SpeakerXIcon,
 } from "@phosphor-icons/react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import { useVolumeStore } from "@/components/media/hooks/use-volume"
 import { MuteControl } from "@/components/media/ui/mute-control"
 

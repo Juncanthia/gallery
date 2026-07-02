@@ -6,7 +6,7 @@ import {
   SortableItem,
 } from "@/components/data-display/data-table-filters/components/custom/sortable";
 import { useDataTable } from "@/components/data-display/data-table-filters/components/data-table/data-table-provider";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import {
   Command,
   CommandEmpty,
@@ -14,12 +14,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@/components/core/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/core/popover";
 import { cn } from "@/components/data-display/data-table-filters/lib/utils";
 import { Check, GripVertical, Settings2 } from "lucide-react";
 import { useMemo, useState } from "react";

@@ -1,0 +1,61 @@
+---
+category: Components
+title: Slider
+subtitle: 滑块
+description: 滑块组件，用于在给定的范围内选择一个数值。
+source:
+  component: src/components/core/slider.tsx
+  docs: content/components/gooseui/slider/index.mdx
+  examples:
+    - content/components/gooseui/slider/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---
+
+# Slider 滑块
+
+Slider 是纯 CSS 实现的 range 滑块组件，无外部依赖。通过 `showValue` 显示当前值，通过 `animateValue` 启用滑块数字动画效果。
+
+## 使用示例
+
+```tsx
+import { Slider } from "@/components/core/slider"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-6">
+      <Slider defaultValue={30} />
+      <Slider defaultValue={50} showValue />
+      <Slider defaultValue={70} showValue animateValue size="lg" />
+    </div>
+  )
+}
+```
+
+## API 速览
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| value | `number` | - | 当前值（受控） |
+| defaultValue | `number` | `50` | 默认值 |
+| min | `number` | `0` | 最小值 |
+| max | `number` | `100` | 最大值 |
+| step | `number` | `1` | 步长 |
+| onValueChange | `(v: number) => void` | - | 值变化回调 |
+| disabled | `boolean` | `false` | 禁用状态 |
+| showValue | `boolean` | `false` | 显示数值标签 |
+| animateValue | `boolean` | `false` | 滑块数字动画 |
+| formatValue | `(v: number) => string` | `String` | 数值格式化 |
+| size | `sm` \| `md` \| `lg` | `md` | 尺寸变体 |
+| label | `string` | - | 无障碍标签 |
+
+## 约束
+
+1. 从 `@/components/core/slider` 导入，不要从 gooseui 内部路径导入。
+2. 纯 CSS 实现，无外部依赖。不要引入 `rc-slider` 或 Ant Design Slider。
+3. 非受控使用 `defaultValue`，受控使用 `value` + `onValueChange`。
+4. `animateValue` 仅在 `showValue` 为 true 时生效。
+5. `formatValue` 解析数值位置，仅数值部分应用滚动动画，前缀后缀静态。
+6. 尺寸通过 `size` 控制，不要通过 className 覆盖滑块尺寸。
+7. 组件通过 `React.forwardRef` 暴露原生 `HTMLInputElement` ref。

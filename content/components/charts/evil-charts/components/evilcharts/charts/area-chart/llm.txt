@@ -1,0 +1,257 @@
+# EvilAreaChart — 可组合面积图
+
+## Import Paths
+
+```tsx
+// Primary wrapper (shorter alias)
+import { EvilAreaChart } from "@/components/charts/evil-charts"
+
+// Composible sub-components
+import {
+  Area,
+  XAxis,
+  YAxis,
+  Grid,
+  Tooltip,
+  Legend,
+  Dot,
+  ActiveDot,
+} from "@/components/core/evilcharts/components/area-chart"
+
+// Config type
+import type { ChartConfig } from "@/components/core/evilcharts/components/chart"
+
+// Brush range type (when using showBrush + onBrushChange)
+import type { EvilBrushRange } from "@/components/core/evilcharts/components/evil-brush"
+```
+
+## Architecture
+
+Compound/composition pattern. EvilAreaChart is the root container holding data, config, selection state, loading state, and brush state. All visual elements (Area, XAxis, Grid, Tooltip, Legend, Dot, ActiveDot) are composed as children. The root provides a shared React context that all children consume.
+
+## EvilAreaChart Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| config | ChartConfig | required | Series colors + labels. Each key needs `{ label, colors: { light: string[], dark: string[] } }` |
+| data | TData[] | required | Data rows for the chart |
+| children | ReactNode | required | Composed parts |
+| className | string | - | Extra classes for the container |
+| chartProps | ComponentProps<RechartsAreaChart> | - | Escape hatch for raw Recharts chart |
+| curveType | CurveType | "linear" | Default curve interpolation: linear, bump, monotone, step, natural, basis, ... |
+| animationType | AreaAnimationType | "left-to-right" | Default reveal animation: none, left-to-right, right-to-left, center-out, edges-in |
+| stackType | StackType | "default" | How multiple areas stack: default, expanded (normalized to 100%), stacked |
+| defaultSelectedDataKey | string | null | null | Initially selected series dataKey |
+| onSelectionChange | (key: string | null) => void | - | Fires when selection changes |
+| isLoading | boolean | false | Whether to show the loading skeleton |
+| loadingPoints | number | 14 | Number of data points in the loading skeleton |
+| showBrush | boolean | false | Whether to render the zoom brush below the chart |
+| xDataKey | string | - | x-axis key, required for the brush footer |
+| brushHeight | number | - | Brush preview height in pixels |
+| brushFormatLabel | (value: unknown, index: number) => string | - | Formats brush axis labels |
+| onBrushChange | (range: EvilBrushRange) => void | - | Fires when brush range changes |
+
+## Area Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| dataKey | string | required | Series key — must exist on both data and config |
+| variant | AreaVariant | "gradient" | Fill style: gradient, gradient-reverse, solid, dotted, lines, hatched |
+| strokeVariant | StrokeVariant | "dashed" | Stroke style: solid, dashed, animated-dashed |
+| curveType | CurveType | - | Overrides chart-level curveType |
+| animationType | AreaAnimationType | - | Overrides chart-level animationType |
+| connectNulls | boolean | false | Join segments across null/missing values |
+| isClickable | boolean | false | Makes this area selectable on click |
+| children | ReactNode | - | Compose <Dot /> and <ActiveDot /> inside |
+| areaProps | ComponentProps<RechartsArea> | - | Escape hatch for raw Recharts Area props |
+
+## Dot / ActiveDot Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | DotVariant | "default" | Visual style: default (solid colored dot), border (large dot with bg-halo), colored-border (small dot with gradient stroke) |
+
+Dot and ActiveDot render nothing themselves — they are configuration slots read by the parent Area.
+
+## XAxis Props (extends Recharts XAxis)
+
+Defaults: tickLine=false, axisLine=false, tickMargin=8, minTickGap=8. Hidden during loading.
+
+## YAxis Props (extends Recharts YAxis)
+
+Defaults: tickLine=false, axisLine=false, tickMargin=8, width="auto". When stackType="expanded", tickFormatter auto-formats to percentages.
+
+## Grid Props (extends Recharts CartesianGrid)
+
+Defaults: vertical=false, strokeDasharray="3 3".
+
+## Tooltip Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | TooltipVariant | "default" | Visual style: default, frosted-glass |
+| roundness | TooltipRoundness | "lg" | Border radius: sm, md, lg, xl |
+| defaultIndex | number | - | Data index shown with no hover |
+| cursor | boolean | true | Whether the vertical cursor line follows the pointer |
+
+Hidden during loading. Reads selection state from context — dims unselected series.
+
+## Legend Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | ChartLegendVariant | "rounded-square" | Indicator style: square, circle, circle-outline, rounded-square, rounded-square-outline, vertical-bar, horizontal-bar |
+| align | left | center | right | "right" | Horizontal placement |
+| verticalAlign | top | middle | bottom | "top" | Vertical placement |
+| isClickable | boolean | false | Whether legend entries toggle selection |
+
+## ChartConfig Type
+
+```ts
+type ChartConfig = Record<
+  string,
+  {
+    label?: React.ReactNode
+    icon?: React.ComponentType
+    colors?: {
+      light: string[]
+      dark: string[]
+    }
+  }
+>
+```
+
+Must use `satisfies ChartConfig` for type safety. colors arrays support multiple colors for horizontal gradients. Colors auto-distribute across required CSS variable slots.
+
+## Curve Types
+
+Available curveType values (from Recharts): "linear", "bump", "monotone", "step", "stepBefore", "stepAfter", "natural", "basis", "basisClosed", "basisOpen", "monotoneX", "monotoneY", "linearClosed".
+
+## Code Examples
+
+### Example 1: Basic Stacked Area Chart with Brush
+
+```tsx
+import { EvilAreaChart } from "@/components/charts/evil-charts"
+import {
+  Area, XAxis, Grid, Tooltip, Legend, Dot, ActiveDot,
+} from "@/components/core/evilcharts/components/area-chart"
+import type { ChartConfig } from "@/components/core/evilcharts/components/chart"
+
+const data = [
+  { month: "1月", desktop: 342, mobile: 245 },
+  { month: "2月", desktop: 876, mobile: 654 },
+  // ...
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: { light: ["#047857"], dark: ["#10b981"] },
+  },
+  mobile: {
+    label: "Mobile",
+    colors: { light: ["#be123c"], dark: ["#f43f5e"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    <EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="stacked"
+      showBrush
+      xDataKey="month"
+      brushFormatLabel={(value) => String(value).substring(0, 2)}
+    >
+      <Grid />
+      <XAxis dataKey="month" tickFormatter={(value) => value} />
+      <Legend isClickable />
+      <Tooltip />
+      <Area dataKey="desktop" variant="gradient" isClickable>
+        <Dot variant="border" />
+        <ActiveDot variant="colored-border" />
+      </Area>
+      <Area dataKey="mobile" variant="gradient" isClickable>
+        <Dot variant="border" />
+        <ActiveDot variant="colored-border" />
+      </Area>
+    </EvilAreaChart>
+  )
+}
+```
+
+### Example 2: Expanded Percentage Chart
+
+```tsx
+export default function Demo() {
+  return (
+    <EvilAreaChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      stackType="expanded"
+    >
+      <Grid />
+      <XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} />
+      <YAxis />
+      <Legend isClickable />
+      <Tooltip />
+      <Area dataKey="desktop" variant="gradient" isClickable>
+        <ActiveDot variant="default" />
+      </Area>
+      <Area dataKey="mobile" variant="gradient" isClickable>
+        <ActiveDot variant="default" />
+      </Area>
+    </EvilAreaChart>
+  )
+}
+```
+
+### Example 3: Loading State
+
+```tsx
+export default function Demo() {
+  const [loading, setLoading] = useState(true)
+
+  return (
+    <EvilAreaChart
+      data={loading ? [] : data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      isLoading={loading}
+      stackType="stacked"
+      curveType="bump"
+    >
+      <Grid />
+      <XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} />
+      <YAxis />
+      <Legend isClickable />
+      <Tooltip />
+      <Area dataKey="desktop" variant="gradient" isClickable>
+        <ActiveDot variant="default" />
+      </Area>
+      <Area dataKey="mobile" variant="gradient" isClickable>
+        <ActiveDot variant="default" />
+      </Area>
+    </EvilAreaChart>
+  )
+}
+```
+
+## Constraints
+
+1. Every `dataKey` used in `Area` must exist as a key in both `data` rows and `config`.
+2. `config` must use `satisfies ChartConfig` — runtime validation rejects empty/invalid colors objects.
+3. Every `config` entry must have `colors` with at least one of `light`/`dark` defined.
+4. Do NOT import Recharts primitives directly — use the composible parts from `@/components/core/evilcharts/components/area-chart`.
+5. Do NOT set `isAnimationActive` on Area — the component disables Recharts animation internally and drives reveals via motion.dev SVG masks.
+6. `animationType` defaults to `"left-to-right"`. Devices with `prefers-reduced-motion` auto-fallback to `"none"`.
+7. When `showBrush` is true, `xDataKey` is required and must match an x-axis key on the data.
+8. Stacked areas share a single `stackId` internally — do not set it manually.
+9. `Dot` and `ActiveDot` must be composed as children of `Area` — they are not standalone renderable components.
+10. Loading state: pass `isLoading={true}` and optionally `data={[]}`. Axes, tooltip, and legend auto-hide during loading.
+11. Expanded mode (`stackType="expanded"`): YAxis auto-formats ticks as percentages; the gradient uses `userSpaceOnUse` for correct horizontal distribution.
+12. Clickable Area + Clickable Legend: both must be set for full selection interaction. Unselected areas dim and switch to diagonal-line fill.

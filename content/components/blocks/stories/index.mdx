@@ -1,0 +1,309 @@
+Stories 快拍轮播，基于 Carousel primitive 构建的社交快拍展示组件，支持视频预览、图片封面、作者信息和渐变遮罩。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在界面中展示社交快拍（Stories）轮播时使用，适合类似社交平台中的用户状态流展示。
+
+常见场景：
+- 首页或个人主页的快拍入口列表。
+- 社交动态中的用户故事集合展示。
+- 需要视频预览能力（hover 自动播放、离开复位）的内容轮播。
+- 需要圆角卡片、作者信息叠加和渐变遮罩视觉风格的场景。
+
+不推荐：
+- 通用图片轮播——使用 `src/components/core/carousel` 基础组件。
+- 需要复杂动画切换效果——Stories 仅封装布局，不包含转场动效。
+- 单张图片展示——使用 `<img>` 或 `Avatar` 即可。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="blocks/stories" path="blocks/stories/basic" />
+
+```tsx
+import {
+  Stories,
+  StoriesContent,
+  Story,
+  StoryVideo,
+  StoryAuthor,
+  StoryAuthorImage,
+  StoryAuthorName,
+  StoryTitle,
+  StoryOverlay,
+} from "@/components/blocks/stories"
+
+export default function Demo() {
+  return (
+    <Stories className="w-full max-w-sm">
+      <StoriesContent>
+        <Story>
+          <StoryVideo src="https://example.com/video.mp4#t=2" />
+          <StoryOverlay />
+          <StoryTitle>精彩瞬间</StoryTitle>
+          <StoryAuthor>
+            <StoryAuthorImage name="User" src="https://example.com/avatar.jpg" />
+            <StoryAuthorName>用户昵称</StoryAuthorName>
+          </StoryAuthor>
+        </Story>
+      </StoriesContent>
+    </Stories>
+  )
+}
+```
+
+### 多个快拍项
+
+通过多个 Story 组成快拍列表。
+
+```tsx
+import {
+  Stories,
+  StoriesContent,
+  Story,
+  StoryImage,
+  StoryAuthor,
+  StoryAuthorImage,
+  StoryAuthorName,
+  StoryTitle,
+  StoryOverlay,
+} from "@/components/blocks/stories"
+
+export default function Demo() {
+  return (
+    <Stories className="w-full max-w-md">
+      <StoriesContent>
+        {[
+          { name: "Alice", avatar: "/alice.jpg", cover: "/cover1.jpg", title: "旅行日记" },
+          { name: "Bob", avatar: "/bob.jpg", cover: "/cover2.jpg", title: "今日午餐" },
+          { name: "Charlie", avatar: "/charlie.jpg", cover: "/cover3.jpg", title: "晨跑打卡" },
+          { name: "Diana", avatar: "/diana.jpg", cover: "/cover4.jpg", title: "新书推荐" },
+        ].map((user) => (
+          <Story key={user.name}>
+            <StoryImage alt={user.title} src={user.cover} />
+            <StoryOverlay />
+            <StoryTitle>{user.title}</StoryTitle>
+            <StoryAuthor>
+              <StoryAuthorImage name={user.name} src={user.avatar} />
+              <StoryAuthorName>{user.name}</StoryAuthorName>
+            </StoryAuthor>
+          </Story>
+        ))}
+      </StoriesContent>
+    </Stories>
+  )
+}
+```
+
+### 图片快拍
+
+使用 `StoryImage` 替代 `StoryVideo`，`alt` 为必填属性。
+
+```tsx
+import {
+  Stories,
+  StoriesContent,
+  Story,
+  StoryImage,
+  StoryAuthor,
+  StoryAuthorImage,
+  StoryAuthorName,
+  StoryOverlay,
+} from "@/components/blocks/stories"
+
+export default function Demo() {
+  return (
+    <Stories className="w-full max-w-xs">
+      <StoriesContent>
+        <Story>
+          <StoryImage alt="晨间风景" src="https://example.com/morning.jpg" />
+          <StoryOverlay side="top" />
+          <StoryAuthor>
+            <StoryAuthorImage name="Emily" src="https://example.com/emily.jpg" />
+            <StoryAuthorName>Emily</StoryAuthorName>
+          </StoryAuthor>
+        </Story>
+      </StoriesContent>
+    </Stories>
+  )
+}
+```
+
+### 视频带起始时间
+
+`StoryVideo` 的 `src` 支持 `#t=秒数` 指定初始播放位置，hover 时从该位置开始播放。
+
+```tsx
+import {
+  Stories,
+  StoriesContent,
+  Story,
+  StoryVideo,
+  StoryAuthor,
+  StoryAuthorImage,
+  StoryAuthorName,
+  StoryOverlay,
+} from "@/components/blocks/stories"
+
+export default function Demo() {
+  return (
+    <Stories className="w-full max-w-sm">
+      <StoriesContent>
+        {[
+          { name: "Frank", src: "https://example.com/v1.mp4#t=5", start: "5s" },
+          { name: "Grace", src: "https://example.com/v2.mp4#t=12", start: "12s" },
+        ].map((item) => (
+          <Story key={item.name}>
+            <StoryVideo src={item.src} />
+            <StoryOverlay />
+            <StoryAuthor>
+              <StoryAuthorImage name={item.name} />
+              <StoryAuthorName>{item.name}</StoryAuthorName>
+            </StoryAuthor>
+          </Story>
+        ))}
+      </StoriesContent>
+    </Stories>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Stories
+
+Stories 是 Carousel 的语义封装，默认 `align="start"`、`loop={false}`、`dragFree={true}`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| opts | Carousel 配置选项，与默认值合并 | `CarouselOptions` | `{ align: "start", loop: false, dragFree: true }` |
+| className | 附加样式类名 | `string` | - |
+
+继承 `ComponentProps<typeof Carousel>` 的所有属性。
+
+### StoriesContent
+
+轮播内容容器，基于 `CarouselContent`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+继承 `ComponentProps<typeof CarouselContent>` 的所有属性。
+
+### Story
+
+单个快拍项，可聚焦的圆角卡片（`role="button"` + `tabIndex={0}`）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### StoryVideo
+
+视频元素，hover/focus 自动播放，离开/blur 暂停并复位。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | 视频 URL，支持 `#t=秒数` 指定起始时间 | `string` | - |
+| className | 附加样式类名 | `string` | - |
+
+继承 `VideoHTMLAttributes<HTMLVideoElement>`，默认 `loop`、`muted`、`preload="metadata"`。
+
+### StoryImage
+
+图片元素，`alt` 为必填。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| alt | 替代文本（必填） | `string` | 必填 |
+| className | 附加样式类名 | `string` | - |
+
+继承 `ComponentProps<"img">`。
+
+### StoryAuthor
+
+作者信息容器，固定在卡片底部，白色文字。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### StoryAuthorImage
+
+作者头像，基于 `Avatar` 组件，默认 `size-6` 带白色半透明边框。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | 头像图片 URL | `string` | - |
+| name | 用户名，用于 fallback 首字符 | `string` | - |
+| fallback | 回退文本，未提供时取 name 首字符大写 | `string` | - |
+| className | 附加样式类名 | `string` | - |
+
+继承 `ComponentProps<typeof Avatar>`。
+
+### StoryAuthorName
+
+作者名称文本，`truncate` 样式。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLSpanElement>`。
+
+### StoryTitle
+
+标题容器，固定在卡片顶部，白色文字。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+### StoryOverlay
+
+渐变遮罩层，高 40px，从黑半透到透明。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 渐变方向，`"top"` 时从上到下 | `"top"` \| `"bottom"` | `"bottom"` |
+| className | 附加样式类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。
+
+<h2 id="faq">常见问题</h2>
+
+### Stories 和 Carousel 有什么区别？
+
+Stories 是 Carousel 的上层语义封装。Carousel 是通用轮播基础组件，Stories 预设了快拍场景的默认配置（`align="start"`、非循环、自由拖拽）并提供 StoryVideo、StoryOverlay、StoryAuthor 等快拍专属子组件。通用轮播直接用 Carousel，快拍场景用 Stories。
+
+### `StoryVideo` 的 `#t=` 如何工作？
+
+`StoryVideo` 在挂载时解析 `src` URL 的 hash 部分，通过正则 `/t=(\d+(?:\.\d+)?)/` 提取起始秒数。hover 时从该位置开始播放，离开时暂停并复位到起始时间。例如 `"video.mp4#t=5.2"` 表示从 5.2 秒处开始播放。
+
+### 如何自定义快拍卡片的宽高？
+
+通过 `Story` 的 `className` 设置宽度（如 `className="w-20"`），高度会自动根据内容撑开。注意 `StoryVideo` 和 `StoryImage` 使用 `absolute inset-0` 填充，因此卡片的宽高由外层 Story 决定，内容自适应填充。
+
+### `StoryOverlay` 的 side 属性如何影响视觉效果？
+
+`side="bottom"`（默认）时遮罩在底部，渐变从下到上（`bg-gradient-to-t`），适合配合底部作者信息使用。`side="top"` 时遮罩在顶部，渐变从上到下（`bg-gradient-to-b`），适合配合顶部标题使用。两者的 `from-black/20 to-transparent` 渐变参数相同，仅方向不同。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/stories` 导入（barrel 导出），按需引入所需子组件。
+2. `StoryImage` 必须提供 `alt` 属性。
+3. `StoryOverlay` 使用 `side` 控制渐变方向，默认 `"bottom"`。
+4. `StoryVideo` 通过 `src` 的 `#t=秒数` 指定起始播放位置。
+5. 完整结构为：`Stories` > `StoriesContent` > `Story` > (视频/图片 + StoryOverlay + StoryAuthor/StoryTitle)。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/stories" />

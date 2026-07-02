@@ -1,0 +1,182 @@
+# EvilRadarChart — Radar Chart Component
+
+## Import Paths
+
+```tsx
+import {
+  EvilRadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Tooltip,
+  Legend,
+  Dot,
+  ActiveDot,
+} from "@/components/core/charts/evilcharts"
+import { type ChartConfig } from "@/components/core/charts/evilcharts"
+```
+
+## Props Documentation
+
+### EvilRadarChart
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| config | ChartConfig | required | Series colors + labels for every dataKey |
+| data | TData[] | required | Data rows rendered by the chart |
+| children | ReactNode | required | Composed sub-components |
+| className | string | - | Extra container classes |
+| chartProps | ComponentProps<typeof RechartsRadarChart> | - | Escape hatch for raw Recharts RadarChart |
+| backgroundVariant | "dots" \| "grid" \| "cross-hatch" \| "diagonal-lines" \| "plus" \| "falling-triangles" \| "4-pointed-star" \| "tiny-checkers" \| "overlapping-circles" \| "wiggle-lines" \| "bubbles" | - | Background pattern |
+| defaultSelectedDataKey | string \| null | null | Initially selected series |
+| onSelectionChange | (key: string \| null) => void | - | Fires when selection changes |
+| isLoading | boolean | false | Shows animated loading skeleton |
+| loadingPoints | number | 6 | Number of points in loading skeleton |
+
+### Radar
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| dataKey | string | required | Series key (must exist in data + config) |
+| variant | "filled" \| "lines" | "filled" | Fill style |
+| fillOpacity | number | 0.3 | Fill area opacity (filled variant only) |
+| isGlowing | boolean | false | Adds soft outer glow |
+| isClickable | boolean | false | Allows click-to-select |
+| children | ReactNode | - | Compose <Dot> and <ActiveDot> |
+| radarProps | Omit<RadarProps, "dataKey"> | - | Escape hatch for Recharts Radar |
+
+### Dot / ActiveDot
+
+Configuration slots — do not render themselves. Parent <Radar> reads their variant.
+
+| Prop | Type | Default |
+|---|---|---|
+| variant | "default" \| "border" \| "colored-border" | - |
+
+### PolarGrid
+
+| Prop | Type | Default |
+|---|---|---|
+| gridType | "polygon" \| "circle" | "polygon" |
+| stroke | string | "currentColor" |
+| strokeOpacity | number | 0.2 |
+| strokeDasharray | string | "3 4" |
+
+### Tooltip
+
+| Prop | Type | Default |
+|---|---|---|
+| variant | "default" \| "frosted-glass" | - |
+| roundness | "sm" \| "md" \| "lg" \| "xl" | - |
+| defaultIndex | number | - |
+
+### Legend
+
+| Prop | Type | Default |
+|---|---|---|
+| variant | "square" \| "circle" \| "circle-outline" \| "rounded-square" \| "rounded-square-outline" \| "vertical-bar" \| "horizontal-bar" | - |
+| align | "left" \| "center" \| "right" | "center" |
+| verticalAlign | "top" \| "middle" \| "bottom" | "bottom" |
+| isClickable | boolean | false |
+
+## ChartConfig Format
+
+```tsx
+type ChartConfig = Record<string, {
+  label: string
+  colors: {
+    light: string[]
+    dark: string[]
+  }
+}>
+```
+
+At least one theme key (light/dark) is required. Multi-element arrays produce gradients.
+
+## Code Examples
+
+### Example 1: Basic Multi-Series Radar
+
+```tsx
+import {
+  EvilRadarChart, Radar, PolarGrid, PolarAngleAxis,
+  Tooltip, Legend, Dot, ActiveDot,
+} from "@/components/core/charts/evilcharts"
+
+const data = [
+  { skill: "JavaScript", desktop: 186, mobile: 80 },
+  { skill: "TypeScript", desktop: 305, mobile: 200 },
+  { skill: "React", desktop: 237, mobile: 120 },
+]
+
+const chartConfig = {
+  desktop: { label: "Desktop", colors: { light: ["#3b82f6"], dark: ["#60a5fa"] } },
+  mobile: { label: "Mobile", colors: { light: ["#10b981"], dark: ["#34d399"] } },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    <EvilRadarChart data={data} config={chartConfig} className="h-full w-full p-4">
+      <PolarGrid />
+      <PolarAngleAxis dataKey="skill" />
+      <Legend isClickable />
+      <Tooltip />
+      <Radar dataKey="desktop" variant="filled" isClickable>
+        <Dot variant="colored-border" />
+        <ActiveDot variant="default" />
+      </Radar>
+      <Radar dataKey="mobile" variant="filled" isClickable>
+        <Dot variant="colored-border" />
+        <ActiveDot variant="default" />
+      </Radar>
+    </EvilRadarChart>
+  )
+}
+```
+
+### Example 2: Lines Variant with Circle Grid
+
+```tsx
+<EvilRadarChart data={data} config={chartConfig} className="h-full w-full p-4">
+  <PolarGrid gridType="circle" />
+  <PolarAngleAxis dataKey="skill" />
+  <Legend />
+  <Tooltip />
+  <Radar dataKey="desktop" variant="lines">
+    <Dot variant="colored-border" />
+    <ActiveDot variant="default" />
+  </Radar>
+  <Radar dataKey="mobile" variant="lines">
+    <Dot variant="colored-border" />
+    <ActiveDot variant="default" />
+  </Radar>
+</EvilRadarChart>
+```
+
+### Example 3: Loading Skeleton
+
+```tsx
+<EvilRadarChart
+  data={isLoading ? [] : data}
+  config={chartConfig}
+  isLoading={isLoading}
+  className="h-full w-full p-4"
+>
+  <PolarGrid />
+  <PolarAngleAxis dataKey="skill" />
+  <Legend />
+  <Tooltip />
+  <Radar dataKey="desktop" variant="filled" />
+  <Radar dataKey="mobile" variant="filled" />
+</EvilRadarChart>
+```
+
+## Constraints
+
+1. All sub-components (<Radar>, <PolarGrid>, <Tooltip>, etc.) MUST be rendered inside <EvilRadarChart>. Using them outside throws an error.
+2. Each <Radar> dataKey MUST exist in both the data array rows AND the config object.
+3. config MUST define at least one theme key (light/dark) per series with an array of colors.
+4. When isLoading is true, data should be an empty array [] to avoid stale data during skeleton animation.
+5. Do NOT import Recharts RadarChart/PolarGrid/etc. directly — use EvilCharts wrappers.
+6. The component is client-side only ("use client" directive required).

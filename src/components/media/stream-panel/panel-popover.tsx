@@ -7,10 +7,10 @@ import type { StreamPanelContentKind } from "@/components/media/stream-panel/use
 
 import { getPlaylistPresetsForType } from "@/components/media/stream-panel/content-catalog"
 import { useStreamPanelStore } from "@/components/media/stream-panel/use-stream-panel"
-import { Field, FieldLabel } from "@/components/ui/form-field"
-import { Popover, PopoverContent } from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { Field, FieldLabel } from "@/components/core/form-field"
+import { Popover, PopoverContent } from "@/components/core/popover"
+import { Separator } from "@/components/core/separator"
+import { ToggleGroup, ToggleGroupItem } from "@/components/core/toggle-group"
 import { getPresetsForType, type StreamPreset } from "@/components/media/lib/stream-presets"
 import { cn } from "@/components/media/lib/utils"
 

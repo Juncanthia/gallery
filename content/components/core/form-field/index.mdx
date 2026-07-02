@@ -1,0 +1,177 @@
+Form 表单字段系统，为表单控件提供统一的标签、校验状态和帮助文本包装。包含 `Form`（表单容器）、`FormItem`（表单项）、`Field`（字段容器）、`FieldLabel`（标签）、`FieldDescription`（帮助文本）、`FieldError`（错误信息）等子组件。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对表单输入控件进行统一的标签布局、校验反馈和错误展示时使用。
+
+常见场景：
+- 所有包含表单控件的页面布局。
+- 需要水平/垂直/响应式布局的表单。
+- 需要统一展示校验错误信息的场景。
+- 需要分组、分隔的表单（`FieldGroup`、`FieldSet`、`FieldSeparator`）。
+
+不推荐：
+- 仅需一个输入框的单字段场景，直接用 `Input` + `Label` 更轻量。
+- 需要使用 AntD Form 实例方法（`form.validateFields()`、`form.setFieldsValue()` 等）的场景——本组件仅提供布局和展示层，不包含表单数据管理。
+- 将 Form 的 `items` 声明式模式和手动 `children` 嵌套混合使用在同一 Form 内——二选一。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="form-field" path="form-field/basic" />
+
+```tsx
+import {
+  FormItem,
+  Field,
+  FieldLabel,
+  FieldDescription,
+} from "@/components/core/form-field"
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-4">
+      <FormItem>
+        <FieldLabel required>用户名</FieldLabel>
+        <Field>
+          <Input placeholder="请输入用户名" />
+        </Field>
+      </FormItem>
+      <FormItem>
+        <FieldLabel>邮箱</FieldLabel>
+        <Field>
+          <Input placeholder="请输入邮箱" />
+        </Field>
+        <FieldDescription>请输入有效的邮箱地址</FieldDescription>
+      </FormItem>
+      <FormItem validateStatus="error" errors={[{ message: "密码长度不能少于 6 位" }]}>
+        <FieldLabel>密码</FieldLabel>
+        <Field>
+          <Input blocks/status="error" placeholder="请输入密码" />
+        </Field>
+      </FormItem>
+    </div>
+  )
+}
+```
+
+### Form 容器 + 声明式布局
+
+<ComponentShowcase id="form-layout" path="form-field/layout" />
+
+```tsx
+import { Form } from "@/components/core/form-field"
+import { Input } from "@/components/core/input"
+
+export default function Demo() {
+  return (
+    <Form
+      layout="vertical"
+      className="w-full max-w-sm"
+      items={[
+        { label: "用户名", required: true, control: <Input placeholder="请输入" /> },
+        { label: "邮箱", control: <Input placeholder="请输入邮箱" />, help: "请输入有效邮箱" },
+      ]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Form
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| layout | 排列方式 | `"vertical"` \| `"horizontal"` \| `"inline"` | `"vertical"` |
+| items | 声明式表单项配置数组 | `FormItemConfig[]` | - |
+| children | 手动组合的子元素（与 items 互斥） | `React.ReactNode` | - |
+| className | CSS 类名 | `string` | - |
+
+继承原生 `<form>` 的所有 HTML 属性。
+
+### FormItemConfig
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| key | React key | `React.Key` | - |
+| control | 表单控件 | `React.ReactNode` | - |
+| label | 标签文本 | `React.ReactNode` | - |
+| required | 是否必填 | `boolean` | `false` |
+| help | 帮助文本 | `React.ReactNode` | - |
+| extra | 额外信息 | `React.ReactNode` | - |
+| errors | 错误信息列表 | `{ message?: string }[]` | - |
+| validateStatus | 校验状态 | `"success"` \| `"warning"` \| `"error"` | - |
+| htmlFor | 关联控件 id | `string` | - |
+| orientation | 标签与控件的排列方式（覆盖 Form 级默认值） | `"vertical"` \| `"horizontal"` \| `"responsive"` | - |
+
+### FormItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 标签文本 | `React.ReactNode` | - |
+| required | 是否在标签后显示红色必填星号 `*` | `boolean` | `false` |
+| help | 帮助文本（显示在控件下方） | `React.ReactNode` | - |
+| extra | 额外信息 | `React.ReactNode` | - |
+| errors | 校验错误信息列表 | `{ message?: string }[]` | - |
+| validateStatus | 校验状态，控制状态颜色 | `"success"` \| `"warning"` \| `"error"` | - |
+| htmlFor | 关联表单控件 id | `string` | - |
+| orientation | 标签与控件的排列方向 | `"vertical"` \| `"horizontal"` \| `"responsive"` | `"vertical"` |
+| className | CSS 类名 | `string` | - |
+| children | 表单控件内容 | `React.ReactNode` | - |
+
+### 子组件一览
+
+| 组件 | 说明 |
+| --- | --- |
+| `Field` | 字段容器（`role="group"`），控制 label 与 control 的排列方向 |
+| `FieldContent` | 控件内容区域（flex-col 容器，包含 control + help + extra + error） |
+| `FieldLabel` | 基于 Label 组件封装的字段标签 |
+| `FieldTitle` | 字段标题（不含 `<label>` 语义，纯展示文本） |
+| `FieldDescription` | 帮助/额外文本（`text-muted-foreground`） |
+| `FieldError` | 错误信息列表（`text-destructive`），需传 `errors` 数组 |
+| `FieldSeparator` | 分组分隔线，可带文字内容 |
+| `FieldGroup` | 字段分组容器，支持 `@container` 查询 |
+| `FieldSet` | 字段集（原生 `<fieldset>`），有统一的 gap 间距 |
+| `FieldLegend` | 字段集标题（原生 `<legend>`），支持 `variant="label"` 或 `"legend"` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现水平表单布局？
+
+在 `Form` 容器上设置 `layout="horizontal"`，或每个 `FormItem` 设置 `orientation="horizontal"`。标签和控件会自动水平排列，标签区域（`FieldLabel`）自适应宽度，控件区（`FieldContent`）占据剩余空间。
+
+### 如何展示多个校验错误？
+
+`errors` 数组中的每条 `{ message: "..." }` 会自动去重。如果有多个不同的错误，会以 `<ul>` 列表形式展示；如果只有一条，直接显示文本。
+
+```tsx
+<FormItem
+  errors={[
+    { message: "邮箱格式不正确" },
+    { message: "邮箱已存在" },
+  ]}
+>
+```
+
+### FormItem 和 Field / FieldLabel 的关系？
+
+`FormItem` 是高层封装，自动组合 `Field` + `FieldLabel` + `FieldContent` + `FieldDescription` + `FieldError`。也可以不使用 `FormItem`，手动组合这些低层组件来实现更灵活的布局。`Form` 容器的 `items` 模式本质是遍历数组生成 `FormItem`。
+
+### 如何设置响应式布局？
+
+使用 `orientation="responsive"`，在小屏（低于 `@md` container query 断点）自动切换为垂直布局，大屏保持水平。需配合 `FieldGroup` 的 `@container` 查询使用。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/form-field` 导入所需组件。
+2. 每个输入控件用 `FormItem` 包裹，遵循 Label -> Control -> Description/Error 的标准结构。
+3. 必填字段使用 `required` 属性标记星号，不要在外部手动添加红色星号。
+4. 校验状态使用 `validateStatus="error"` 配合 `errors` 数组，不要手动写红色边框样式。
+5. `Form` 容器的 `items` 模式适合声明式快速构建，手动组合适合复杂布局——二选一。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="form-field" />

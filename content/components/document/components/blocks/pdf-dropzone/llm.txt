@@ -1,0 +1,137 @@
+---
+category: Components
+title: PdfDropzoneBlock
+subtitle: PDF 拖放区
+description: 提供 PDF 文件上传与内嵌预览的一体化组件。
+demo:
+  cols: 1
+group:
+  title: 文档
+  order: 6
+source:
+  component: src/components/extend/components/blocks/pdf-blocks/dropzone.tsx
+  wrapper: src/components/core/extend-pdf-blocks/dropzone.tsx
+  examples:
+    - content/components/extend/pdf-blocks/dropzone/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# PdfDropzoneBlock PDF 拖放区
+
+提供 PDF 文件上传与内嵌预览的一体化组件。初始化时展示拖放上传区域，用户上传 PDF 后自动切换为内嵌 PDF 查看器。
+
+本组件内部组合 FileUpload 和 PDFViewer，提供一站式的 PDF 上传+预览体验。不是 Ant Design 兼容层，实现以本地源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合需要在同一区域完成 PDF 上传和预览的场景。组件自管理状态，无需外部控制。
+
+常见场景：
+
+- 文档处理工具的 PDF 上传入口。
+- 合同签署、简历查看等流程中的 PDF 预览。
+- 需要嵌入式 PDF 预览的仪表板或管理后台。
+
+不推荐：
+
+- 需要上传非 PDF 文件时，使用 FileUpload。
+- 仅需展示 PDF 时，使用 PDFViewer。
+- 上传后需要复杂业务编排时，应在业务层组合，而非依赖组件内部逻辑。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { PdfDropzoneBlock } from "@/components/document/components/blocks/pdf-blocks/dropzone"
+
+export default function Demo() {
+  return (
+    <div className="w-full">
+      <PdfDropzoneBlock />
+    </div>
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。PdfDropzoneBlock 为自包含组件，无需传入任何 props。
+
+## 核心导出 {#exports}
+
+- `PdfDropzoneBlock`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+// PdfDropzoneBlock 为自包含组件，内部管理所有状态，无需外部 props
+export function PdfDropzoneBlock(): React.ReactElement
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `pdf-upload-blocks/dropzone`
+
+额外状态属性：
+
+- `data-pdf-upload-blocks/dropzone`
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 控制。
+- 使用 `h-full min-h-[680px]` 确保最小高度，内部元素使用 `bg-background` 适配主题。
+- 上传态为居中网格布局，预览态为自适应全高布局。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/extend/components/blocks/pdf-blocks/dropzone.tsx`
+
+包装导出：
+
+- `src/components/core/extend-pdf-blocks/dropzone.tsx`
+
+直接依赖摘要：
+
+- 依赖 `FileUpload`（上传交互）和 `PDFViewer`（PDF 渲染）。
+- 使用 `URL.createObjectURL` / `URL.revokeObjectURL` 处理上传文件的临时 URL。
+
+实现注意：
+
+1. 组件内部通过 `React.useState` 管理 PDF 文件状态（{ name, url }）。
+2. 通过 `useRef` 跟踪临时对象 URL，组件卸载时在 effect cleanup 中释放。
+3. 拖放时通过 `closest(PDF_UPLOAD_DROPZONE_SELECTOR)` 避免内部 FileUpload 与外层拖放冲突。
+4. PDFViewer 通过 `key={pdfFile.url}` 确保文件切换时重新挂载。
+5. 如需扩展上传后行为，应在源码中新增回调 prop，而非在外层 hack 内部 DOM 结构。
+
+## 可访问性 {#accessibility}
+
+- FileUpload 提供拖放提示文本（title、description、draggingLabel）。
+- PDFViewer 提供完整的键盘导航和 ARIA 属性。
+- 纯图标按钮通过 `aria-label` 提供可访问名称。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 PdfDropzoneBlock 代码时，应遵守：
+
+1. 从 `@/components/document/components/blocks/pdf-blocks/dropzone` 导入，不要从内部路径导入。
+2. 组件为自包含组件，无需传入任何 props。
+3. 不要手动组合 FileUpload + PDFViewer 来模拟本组件行为。
+4. 不要引入 Ant Design 相关依赖。
+5. 如需自定义样式，使用外层容器的 className。
+6. 如果不确定某个行为是否存在，先检查 `src/components/extend/components/blocks/pdf-blocks/dropzone.tsx`，不要凭猜测生成。

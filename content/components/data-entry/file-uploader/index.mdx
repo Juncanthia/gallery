@@ -1,0 +1,165 @@
+文件上传组件，支持拖拽和点击选择，提供带图标的上传区域和已选文件列表展示。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要用户上传文件（文档、图片、表格等）时使用。上传区域提供明确的视觉引导，支持拖拽操作。
+
+常见场景：
+
+- 表单附件上传。
+- 文档提交入口。
+- 图片批量上传。
+- 简历或资料文件收集。
+
+推荐用法：
+
+- 设置清晰的上传区标题和描述，告知用户支持的格式。
+- 通过 `onFilesChange` 回调获取文件列表，进行后续处理。
+- 单文件上传场景设置 `multiple={false}`。
+
+不推荐：
+
+- 需要上传进度条展示——本组件为前端文件选择组件，不包含实际上传逻辑。
+- 需要预览文件内容——本组件只展示文件名和大小。
+- 极简场景仅需一个 `&lt;input type="file" /&gt;` 时——本组件提供完整的拖拽区风格。
+
+<h3 id="basic">基础用法</h3>
+
+默认展示拖拽上传区域，支持点击或拖拽选择文件。选择后下方显示文件列表。
+
+<ComponentShowcase
+  id="data-entry/blocks/file-uploader"
+  path="data-entry/blocks/file-uploader/basic"
+/>
+
+```tsx
+import { FileUploader } from "@/components/data-entry/blocks/file-uploader"
+
+export default function Demo() {
+  return (
+    &lt;div className="w-full max-w-xl"&gt;
+      &lt;FileUploader /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### FileUploader
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| accept | 接受的文件类型（MIME 或扩展名），逗号分隔 | `string` | 常见文档和图片格式 |
+| acceptedFileTypes | 可接受文件类型图标配置 | `AcceptedFileType[]` | `DEFAULT_ACCEPTED_FILE_TYPES` |
+| browseLabel | 浏览按钮文字 | `string` | `"Browse files"` |
+| className | 自定义样式类名 | `string` | — |
+| description | 上传区描述文字 | `string` | `"PDF, DOC/DOCX, XLSX, CSV, PNG, JPG files are supported"` |
+| draggingLabel | 拖拽时提示文字 | `string` | `"Drop to add"` |
+| multiple | 是否允许多文件上传 | `boolean` | `true` |
+| showFileList | 是否显示文件列表 | `boolean` | `true` |
+| title | 上传区标题 | `string` | `"Click to upload or drop files"` |
+| onFilesAccepted | 文件接受后的回调，接收原始 File 数组 | `(files: File[]) => void` | — |
+| onFilesChange | 文件变更回调，接收含 id/name/type/size/url 的条目 | `(files: FileUploaderItem[]) => void` | — |
+
+### FileUploaderItem
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| id | 文件唯一标识 | `string` |
+| name | 文件名 | `string` |
+| type | MIME 类型 | `string` |
+| size | 文件大小（字节） | `number` |
+| url | 文件 Blob URL，用于预览 | `string` |
+
+### AcceptedFileType
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| label | 类型标签 | `string` |
+| icon | 对应图标组件 | `typeof FileImage` |
+| extensions | 扩展名列表 | `string[]` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何获取用户选择的文件？
+
+通过 `onFilesChange` 回调获取文件列表，每个文件包含 `id`、`name`、`type`、`size`、`url`：
+
+```tsx
+&lt;FileUploader
+  onFilesChange={(files) =&gt; {
+    console.log("Selected files:", files)
+    // files[0].name, files[0].size, files[0].type ...
+  }}
+/&gt;
+```
+
+### 如何限制文件类型？
+
+通过 `accept` 属性指定允许的文件类型：
+
+```tsx
+&lt;FileUploader
+  accept=".pdf,.docx,image/*"
+  description="Only PDF, DOCX and image files"
+/&gt;
+```
+
+### 如何限制单文件上传？
+
+设置 `multiple={false}`：
+
+```tsx
+&lt;FileUploader multiple={false} /&gt;
+```
+
+### 如何自定义上传区的图标？
+
+通过 `acceptedFileTypes` 属性传入自定义类型配置：
+
+```tsx
+import { FileImage, FileText } from "lucide-react"
+
+&lt;FileUploader
+  acceptedFileTypes={[
+    { label: "Image", icon: FileImage, extensions: [".png", ".jpg"] },
+  ]}
+/&gt;
+```
+
+### 如何自定义文案？
+
+通过 `title`、`description`、`browseLabel`、`draggingLabel` 属性：
+
+```tsx
+&lt;FileUploader
+  title="上传简历"
+  description="支持 PDF、Word 格式"
+  browseLabel="选择文件"
+  draggingLabel="松开以添加"
+/&gt;
+```
+
+### 如何隐藏文件列表？
+
+设置 `showFileList={false}`，只保留上传区域：
+
+```tsx
+&lt;FileUploader showFileList={false} /&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FileUploader 代码时：
+
+1. 从 `@/components/data-entry/blocks/file-uploader` 导入 `FileUploader`。
+2. 通过 `onFilesChange` 回调获取用户选择的文件列表。
+3. 文件类型限制使用 `accept` 属性（MIME 或扩展名字符串）。
+4. 单文件上传设置 `multiple={false}`。
+5. 不要引入 Ant Design 相关依赖，不要使用 `antd` 的 `Upload` 组件。
+6. 本组件为前端文件选择组件，上传逻辑由使用者自行实现。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="data-entry/blocks/file-uploader" />

@@ -12,7 +12,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/core/accordion"
 import { SiReact } from "react-icons/si"
 
 import { transformImportPaths } from "./asset/code-transform"

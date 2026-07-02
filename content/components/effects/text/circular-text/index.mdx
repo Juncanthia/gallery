@@ -1,0 +1,72 @@
+CircularText 基于 Motion 的环形旋转文字，每个字符沿圆周排列并持续旋转，支持悬停时变速交互。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要圆形排列文字的旋转展示效果，增强视觉动感和品牌标识时使用。
+常见场景：
+- Logo 周围的标语或品牌文字
+- 加载状态或装饰性旋转文字
+- 创意页面的动态文字元素
+不推荐：
+- 长文本展示，环形文字难以阅读
+- 需要 SEO 索引的关键文字，环形旋转文字不利于抓取
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/circular-text" path="rb/circular-text/basic" />
+
+```tsx
+import { CircularText } from "@/components/core/circular-text"
+export default function Demo() { return <div className="w-full h-48 relative flex items-center justify-center"><CircularText text="REACT BITS • " /></div> }
+```
+
+### 自定义配置
+
+```tsx
+import { CircularText } from "@/components/core/circular-text"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 relative flex items-center justify-center">
+      <CircularText
+        text="HELLO WORLD • "
+        spinDuration={10}
+        onHover="slowDown"
+        className="text-blue-500"
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CircularText
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 要围绕圆周排列的文字 | `string` | (必填) |
+| spinDuration | 完整旋转一圈所需秒数 | `number` | `20` |
+| onHover | 鼠标悬停时的旋转行为 | `"slowDown"` \| `"speedUp"` \| `"pause"` \| `"goBonkers"` | `"speedUp"` |
+| className | 附加到容器上的 CSS 类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+
+### onHover 各模式有什么区别？
+- `slowDown`：悬停时旋转速度减半
+- `speedUp`：悬停时旋转速度变为 4 倍
+- `pause`：悬停时以弹性动画暂停旋转
+- `goBonkers`：悬停时极速旋转并缩小
+
+### 文字之间如何添加间距？
+在 `text` 中手动添加空格或间隔符，如 `"REACT • BITS • "`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/circular-text` 导入。
+2. `text` 为必填属性，长度决定圆周上的字符数量。
+3. 组件依赖 `motion/react` 的 `useAnimation` 和 `useMotionValue`。
+4. 每个字符通过 CSS `transform: rotateZ(...) translate3d(...)` 独立定位，确保在支持 3D 变换的容器中正确渲染。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-circular-text" />

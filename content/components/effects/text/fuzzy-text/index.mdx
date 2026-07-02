@@ -1,0 +1,97 @@
+FuzzyText 基于 Canvas 的文字毛刺/抖动效果组件，支持悬停增强、点击爆发、自动故障模式和渐变色。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要文字毛刺、故障或抖动视觉特效时使用。
+常见场景：
+- 创意标题的故障风格文字效果
+- 悬停交互的文字动态反馈
+- 赛博朋克/故障艺术风格的排版
+不推荐：
+- 需要文本选择和复制的场景（Canvas 渲染，不可选中）
+- SEO 关键文字（Canvas 内容对搜索引擎不可见）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/fuzzy-text" path="rb/fuzzy-text/basic" />
+
+```tsx
+import { FuzzyText } from "@/components/core/fuzzy-text"
+export default function Demo() {
+  return (
+    <div className="bg-black p-8">
+      <FuzzyText baseIntensity={0.2} hoverIntensity={0.5}>Fuzzy Text</FuzzyText>
+    </div>
+  )
+}
+```
+
+### 故障模式 + 渐变色
+
+```tsx
+import { FuzzyText } from "@/components/core/fuzzy-text"
+
+export default function Demo() {
+  return (
+    <div className="bg-black p-8">
+      <FuzzyText
+        fontSize={80}
+        color="#FF6F37"
+        glitchMode
+        glitchInterval={3000}
+        glitchDuration={150}
+        gradient={["#FF6F37", "#FF3D00", "#FFD93D"]}
+        clickEffect
+        direction="both"
+        baseIntensity={0.15}
+        hoverIntensity={0.6}
+      >
+        GLITCH
+      </FuzzyText>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### FuzzyText
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 要渲染的文字内容（必填） | `React.ReactNode` | - |
+| fontSize | 字体大小（CSS 值或像素数值） | `string \| number` | `"clamp(2rem, 10vw, 10rem)"` |
+| fontWeight | 字体粗细（CSS font-weight 数值） | `number` | `900` |
+| fontFamily | 字体族 | `string` | `"inherit"` |
+| color | 文字颜色（无渐变色时生效） | `string` | `"#fff"` |
+| enableHover | 启用悬停时抖动增强 | `boolean` | `true` |
+| baseIntensity | 基础抖动强度（0-1） | `number` | `0.18` |
+| hoverIntensity | 悬停时的抖动强度（0-1） | `number` | `0.5` |
+| fuzzRange | 单次抖动最大偏移像素 | `number` | `30` |
+| fps | 渲染帧率 | `number` | `60` |
+| direction | 抖动方向 | `"horizontal"` \| `"vertical"` \| `"both"` | `"horizontal"` |
+| transitionDuration | 强度变化的过渡时间（ms, 0=无过渡） | `number` | `0` |
+| clickEffect | 点击时抖动强度瞬间提升到 1 | `boolean` | `false` |
+| glitchMode | 启用自动故障模式 | `boolean` | `false` |
+| glitchInterval | 故障模式触发间隔（ms） | `number` | `2000` |
+| glitchDuration | 故障模式持续时间（ms） | `number` | `200` |
+| gradient | 文字渐变色数组（至少 2 个颜色） | `string[] \| null` | `null` |
+| letterSpacing | 字符之间的额外间距（px） | `number` | `0` |
+| className | Canvas 元素的自定义类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+### 文字为什么不可选中？
+FuzzyText 通过 Canvas 渲染文字而非 DOM 文本节点，因此无法被选中和复制。如需 SEO 优化，建议在 Canvas 旁边放置隐藏的语义化文本。
+
+### gradient 和 color 可以同时使用吗？
+当 `gradient` 为有效数组（长度 >= 2）时，color 被忽略，文字使用水平线性渐变渲染；否则使用 `color` 纯色。
+
+### glitchMode 的时间是如何计算的？
+`glitchInterval` 是两次故障之间的间隔，`glitchDuration` 是每次故障持续的时长。组件在 `glitchInterval` 后触发故障，持续 `glitchDuration` 后恢复正常，然后重新计时。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/fuzzy-text` 导入。
+2. 纯 Canvas 2D 实现，无额外第三方依赖。
+3. `children` 为必填属性，传入的文字通过 Canvas `fillText` 渲染。
+4. `fontSize` 支持 CSS 字符串（如 `"2rem"`）或纯数字（当作 px），注意组件会动态测量实际渲染尺寸。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-fuzzy-text" />

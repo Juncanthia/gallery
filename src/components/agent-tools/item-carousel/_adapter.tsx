@@ -7,7 +7,7 @@
  */
 export { cn } from "@/lib/utils";
 
-export { Button } from "@/components/ui/button";
-export type { ButtonColor, ButtonVariant } from "@/components/ui/button";
-export { Card } from "@/components/ui/card";
+export { Button } from "@/components/core/button";
+export type { ButtonColor, ButtonVariant } from "@/components/core/button";
+export { Card } from "@/components/core/card";
 export { ChevronLeft, ChevronRight } from "lucide-react";

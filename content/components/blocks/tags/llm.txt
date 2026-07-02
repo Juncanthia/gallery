@@ -1,0 +1,278 @@
+---
+category: Blocks
+title: Tags
+subtitle: 标签组
+description: 多选标签组件，基于 Command + Popover 构建，支持搜索过滤、创建新标签、Badge 展示已选值和移除操作。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 40
+source:
+  component: src/components/blocks/tags/index.tsx
+  docs: content/components/blocks/tags/index.mdx
+  examples:
+    - content/components/blocks/tags/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Tags 标签组
+
+多选标签组件，基于 Command + Popover 构建。实现位于 `src/components/blocks/combobox/index.tsx`（该文件历史上曾同时容纳一个通用 Combobox primitive；该 primitive 与 `@/components/core/combobox` 完全重复，已删除，现在这个文件只包含 Tags 实现），`@/components/blocks/tags` 作为对外的 barrel 重导出。
+
+本组件为项目本地复合组件，无 Ant Design Select（mode="multiple"）直接对应。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
+
+## 何时使用 {#when-to-use}
+
+当需要在表单或筛选区域中选择多个标签值时使用。
+
+常见场景：
+
+- 内容标签选择，如文章分类、用户标签。
+- 多选下拉筛选器。
+- 需要搜索过滤选项的标签选择。
+- 需要创建新标签的内联新增场景。
+- 需要 Badge 样式展示已选值并可逐个移除。
+
+不推荐：
+
+- 单选场景——使用 `@/components/core/select` 或 `@/components/core/combobox`。
+- 标签仅用于展示（不可选）——使用 `@/components/core/badge`。
+- 大量选项（>1000）且无搜索——考虑虚拟列表或其他方案。
+- 引入 `antd`、`@ant-design/icons`、`antd-style` 或 rc-component 作为使用该组件的前置条件。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import {
+  Tags,
+  TagsTrigger,
+  TagsValue,
+  TagsContent,
+  TagsInput,
+  TagsList,
+  TagsEmpty,
+  TagsGroup,
+  TagsItem,
+} from "@/components/blocks/tags"
+
+export default function Demo() {
+  return (
+    <Tags className="w-full max-w-sm">
+      <TagsTrigger>
+        <TagsValue onRemove={() => {}}>标签A</TagsValue>
+      </TagsTrigger>
+      <TagsContent>
+        <TagsInput placeholder="搜索标签..." />
+        <TagsList>
+          <TagsEmpty>未找到标签</TagsEmpty>
+          <TagsGroup heading="常用标签">
+            <TagsItem value="tag-a">标签A</TagsItem>
+            <TagsItem value="tag-b">标签B</TagsItem>
+          </TagsGroup>
+        </TagsList>
+      </TagsContent>
+    </Tags>
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。实际使用需要管理已选标签状态和 `onRemove` 回调。完整用法参考下方 API。
+
+## 核心导出 {#exports}
+
+- `Tags`、`TagsProps`
+- `TagsTrigger`、`TagsTriggerProps`
+- `TagsValue`、`TagsValueProps`
+- `TagsContent`、`TagsContentProps`
+- `TagsInput`、`TagsInputProps`
+- `TagsList`、`TagsListProps`
+- `TagsEmpty`、`TagsEmptyProps`
+- `TagsGroup`、`TagsGroupProps`
+- `TagsItem`、`TagsItemProps`
+
+> 注意：以上组件全部重导出自 `@/components/blocks/combobox`，实际实现位于 `src/components/blocks/combobox/index.tsx`。
+
+## API 摘要 {#api}
+
+以下类型来自 `src/components/blocks/combobox/index.tsx` 中的 Tags 部分，是生成代码时的主要依据：
+
+### Tags
+
+```ts
+type TagsProps = {
+  /** 当前已选标签值（以逗号或分隔符连接的字符串） */
+  value?: string;
+  /** 设置已选标签值 */
+  setValue?: (value: string) => void;
+  /** 受控打开状态 */
+  open?: boolean;
+  /** 打开状态变更回调 */
+  onOpenChange?: (open: boolean) => void;
+  children?: ReactNode;
+  className?: string;
+}
+```
+
+`Tags` 内部包裹 `Popover`，通过 ResizeObserver 跟踪触发器宽度以同步下拉宽度。
+
+### TagsTrigger
+
+```ts
+type TagsTriggerProps = ComponentProps<typeof Button>;
+```
+
+`TagsTrigger` 渲染为 `PopoverTrigger asChild` 的按钮，带有 `role="combobox"`。默认包含 "Select a tag..." 占位文本。已选标签作为 Badge 显示在按钮内。
+
+### TagsValue
+
+```ts
+type TagsValueProps = ComponentProps<typeof Badge> & {
+  /** 移除标签的回调 */
+  onRemove?: () => void;
+}
+```
+
+`TagsValue` 渲染为 Badge 组件，表示单个已选标签值。当提供 `onRemove` 时会显示 X 关闭图标。
+
+### TagsContent
+
+```ts
+type TagsContentProps = ComponentProps<typeof PopoverContent>;
+```
+
+`TagsContent` 是下拉面板容器，内部包裹 `Command` 组件，宽度与触发器保持一致。
+
+### TagsInput
+
+```ts
+type TagsInputProps = ComponentProps<typeof CommandInput>;
+```
+
+`TagsInput` 是搜索输入框，用于过滤标签列表。
+
+### TagsList
+
+```ts
+type TagsListProps = ComponentProps<typeof CommandList>;
+```
+
+`TagsList` 是选项列表容器，默认最大高度 `max-h-[200px]`。
+
+### TagsEmpty
+
+```ts
+type TagsEmptyProps = ComponentProps<typeof CommandEmpty>;
+```
+
+`TagsEmpty` 在无匹配结果时显示，默认文本为 "No blocks/tags found."。
+
+### TagsGroup
+
+```ts
+type TagsGroupProps = ComponentProps<typeof CommandGroup>;
+```
+
+`TagsGroup` 是选项分组，等同于 `CommandGroup`。
+
+### TagsItem
+
+```ts
+type TagsItemProps = ComponentProps<typeof CommandItem>;
+```
+
+`TagsItem` 是单个可选项，选中后关闭下拉。
+
+## Semantic DOM {#semantic-dom}
+
+源码中使用的稳定语义槽位：
+
+- `role="combobox"` — TagsTrigger 按钮
+- `data-slot="blocks/tags-trigger"` — 触发器
+- `data-slot="blocks/tags-content"` — 下拉面板
+- `data-slot="blocks/tags-input"` — 搜索输入
+- `data-slot="blocks/tags-list"` — 选项列表
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 组件基于 Popover + Command 组合，交互和视觉由这些 primitive 提供。
+- `TagsTrigger` 按钮使用 `h-auto w-full justify-between p-2`，支持内容换行。
+- `TagsValue` 基于 Badge 组件，带 `flex items-center gap-2` 布局。
+- `TagsContent` 下拉宽度通过 ResizeObserver 与触发器同步。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`text-muted-foreground`、`border-border` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/tags/index.tsx`（barrel 重导出）
+- `src/components/blocks/combobox/index.tsx`（实际实现，Tags 部分位于文件后半部）
+- `src/components/core/blocks/tags.tsx`（UI 层 barrel 导出）
+
+直接依赖摘要：
+
+- `@/components/core/button` — 触发器按钮
+- `@/components/core/badge` — 已选标签 Badge
+- `@/components/core/command` — 搜索和列表
+- `@/components/core/popover` — 下拉面板
+- `@/components/blocks/combobox` — Tags 底层实现
+- `lucide-react` — 图标
+- `@/lib/utils` — `cn` 样式合并工具
+
+实现注意：
+
+1. 组件 API 以 `src/components/blocks/combobox/index.tsx` 中 Tags 相关的 TypeScript 类型为准。
+2. Tags 的实际实现位于 `src/components/blocks/combobox/index.tsx`（该文件不再包含独立的 Combobox primitive），`@/components/blocks/tags` 仅为重导出，所有修改应在 `combobox/index.tsx` 中进行。
+3. 组件使用内部 context（`TagsContext`）共享状态，子组件通过 `useTagsContext` 访问。
+4. `TagsTrigger` 使用 ResizeObserver 自动同步下拉宽度。
+5. 默认导入路径为 `@/components/blocks/tags`。
+6. 如果需要新增能力，应先修改 `src/components/blocks/combobox/index.tsx` 中的 Tags 部分，再更新本 llm 文档。
+
+## 可访问性 {#accessibility}
+
+- `TagsTrigger` 渲染为 `role="combobox"`，指示这是一个组合框。
+- 底层 Command 组件提供键盘导航（方向键选择、Enter 确认）。
+- `TagsValue` 的 X 图标可交互（onClick），用于移除已选标签，但缺少键盘事件——使用时应考虑补充键盘可访问性。
+- 按钮为原生 `<button>`，保留原生键盘语义。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+该组件为项目本地复合组件，功能类似于 AntD 的 `Select mode="multiple"` 或 `Select mode="blocks/tags"`，但基于本地 Command/Popover 体系构建。
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 组件来源 | 项目本地复合，非 AntD 封装 |
+| API 来源 | 以 `src/components/blocks/combobox/index.tsx` 中 Tags 类型为准 |
+| 选择方案 | 基于 Command + Popover，非 AntD rc-select |
+| 已选值展示 | 使用 Badge 组件，非 AntD Tag |
+| 搜索过滤 | 基于 cmdk（Command），非 AntD 内置搜索 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Tags 代码时，应遵守：
+
+1. 从 `@/components/blocks/tags` 导入，不要从 `antd` 导入。
+2. 使用 `Tags` > `TagsTrigger` + `TagsContent` 的标准结构。
+3. `TagsValue` 需要 `onRemove` 回调才能显示移除按钮。
+4. `TagsContent` 内部放置 `TagsInput`、`TagsList`、`TagsGroup`、`TagsItem`。
+5. 只使用本文件 API 摘要和源码中存在的 props。
+6. 不要生成 AntD 的 `mode="blocks/tags"`、`tokenSeparators`、`maxTagCount`、`classNames`、`styles` 等属性。
+7. 标签的增删逻辑由调用侧管理（`value`/`setValue`/`onRemove`），组件本身不维护已选列表。
+8. 如果不确定某个 API 是否存在，先检查 `src/components/blocks/combobox/index.tsx` 中的 Tags 部分，不要凭 AntD 记忆生成。

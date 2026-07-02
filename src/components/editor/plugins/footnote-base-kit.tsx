@@ -6,7 +6,7 @@ import {
 import {
   FootnoteDefinitionElementStatic,
   FootnoteReferenceElementStatic,
-} from '@/components/ui/footnote-node-static';
+} from '@/components/editor/nodes/footnote-node-static';
 
 export const BaseFootnoteKit = [
   BaseFootnoteReferencePlugin.withComponent(FootnoteReferenceElementStatic),

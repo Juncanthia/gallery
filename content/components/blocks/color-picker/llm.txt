@@ -1,0 +1,144 @@
+---
+category: Components
+title: ColorPicker
+subtitle: 颜色选择器
+description: 用于选择颜色，支持复合组件、内嵌面板和工具栏弹出按钮。
+source:
+  component: src/components/core/color-picker.tsx
+  implementation: src/components/blocks/color-picker/index.tsx
+  examples:
+    - content/components/color-picker/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  radix: true
+  antd: false
+  baseUi: false
+---
+
+# ColorPicker 颜色选择器
+
+本地 ColorPicker 是 `Radix + Tailwind + color` 的 API-first 封装，不是 AntD 兼容层，也不是 dice/extend 旧实现的透传。
+
+## 核心导出
+
+- `ColorPicker`
+- `ColorPickerSelection`
+- `ColorPickerArea`
+- `ColorPickerHue`
+- `ColorPickerHueSlider`
+- `ColorPickerAlpha`
+- `ColorPickerAlphaSlider`
+- `ColorPickerEyeDropper`
+- `ColorPickerOutput`
+- `ColorPickerFormatSelect`
+- `ColorPickerInput`
+- `ColorPickerFormat`
+- `ColorPickerSwatch`
+- `ColorPickerPresets`
+- `ColorPickerPanel`
+- `ColorPickerTriggerButton`
+- `useColorPicker`
+
+## 推荐用法
+
+### 复合组件
+
+```tsx
+import {
+  ColorPicker,
+  ColorPickerSelection,
+  ColorPickerHue,
+  ColorPickerAlpha,
+  ColorPickerOutput,
+  ColorPickerFormat,
+} from "@/components/core/color-picker"
+
+<ColorPicker defaultValue="#3b82f6" className="w-60 gap-3">
+  <ColorPickerSelection className="h-32 rounded" />
+  <ColorPickerHue />
+  <ColorPickerAlpha />
+  <div className="flex items-center gap-2">
+    <ColorPickerFormat className="flex-1" />
+    <ColorPickerOutput />
+  </div>
+</ColorPicker>
+```
+
+### 工具栏弹出按钮
+
+```tsx
+import { ColorPickerTriggerButton } from "@/components/core/color-picker"
+
+<ColorPickerTriggerButton
+  label="Text color"
+  color={color}
+  icon={icon}
+  onChange={setColor}
+/>
+```
+
+### 内嵌面板
+
+```tsx
+import { ColorPickerPanel } from "@/components/core/color-picker"
+
+<ColorPickerPanel
+  color="#2563eb"
+  label="Border color"
+  onChange={(color) => setBorderColor(color)}
+/>
+```
+
+## API 摘要
+
+### ColorPicker
+
+| 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| value | `Parameters<typeof Color>[0]` | 受控颜色值 |
+| defaultValue | `Parameters<typeof Color>[0]` | 默认颜色值，默认 `"#000000"` |
+| format | `"hex" \| "rgb" \| "css" \| "hsl" \| "hsb"` | 受控输出格式 |
+| defaultFormat | 同上 | 默认输出格式，默认 `"hex"` |
+| onChange | `(value: [number, number, number, number]) => void` | 返回 RGBA 数组，alpha 为 0-1 |
+| onValueChange | `(value: string) => void` | 返回当前格式字符串 |
+| onFormatChange | `(format: ColorPickerFormatMode) => void` | 格式变化回调 |
+| disabled | `boolean` | 禁用交互 |
+| readOnly | `boolean` | 只读 |
+| name | `string` | 隐藏表单字段名称 |
+
+### ColorPickerPanel
+
+组合格式切换、色板、色相滑杆、输入框和预设色。适合 Dropdown/Submenu 内嵌。
+
+| 属性 | 类型 | 默认值 |
+| --- | --- | --- |
+| color / value | `Parameters<typeof Color>[0]` | - |
+| onChange | `(color: string) => void` | - |
+| showAlpha | `boolean` | `false` |
+| showEyeDropper | `boolean` | `false` |
+| showFormatSelect | `boolean` | `true` |
+| showPresets | `boolean` | `true` |
+| presets | `readonly string[]` | 内置常用色 |
+
+### ColorPickerTriggerButton
+
+工具栏和表单常用弹出式取色按钮，内部使用 Popover + `ColorPickerPanel`。
+
+| 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| label | `string` | 可访问名称和 tooltip 文案 |
+| color | `string` | 当前颜色 |
+| icon | `ReactNode` | 按钮图标 |
+| onChange | `(color: string) => void` | 颜色变化回调 |
+
+## LLM 规则
+
+1. 必须从 `@/components/core/color-picker` 导入。
+2. 不要从 `src/components/dice/ui/color-picker` 或 `src/components/extend/components/ui/color-picker` 导入。
+3. 工具栏颜色按钮使用 `ColorPickerTriggerButton`。
+4. 下拉菜单内嵌取色面板使用 `ColorPickerPanel`。
+5. 复合子组件必须放在 `ColorPicker` 内部。
+6. `onChange` 的 alpha 是 0-1，不是 0-100。
+7. 字符串颜色值使用 `onValueChange`，或使用 `ColorPickerPanel` / `ColorPickerTriggerButton` 的 `onChange`。
+8. 不要引入 AntD、Base UI 或旧外部库实现。

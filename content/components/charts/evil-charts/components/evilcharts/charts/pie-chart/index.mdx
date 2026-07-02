@@ -1,0 +1,441 @@
+EvilPieChart 是 EvilCharts 中可组合的饼图组件。通过 `<Pie />`、`<Tooltip />`、`<Legend />`、`<Background />` 等子组件自由拼装图表，支持数据选择、发光高亮、环形图、渐变色、加载骨架等能力。底层基于 Recharts，不引入 Ant Design 图表依赖。
+
+<h2 id="when-to-use">何时使用</h2>
+
+使用 EvilPieChart 展示数据的占比分布：
+
+- 浏览器/设备/来源等维度的占比对比。
+- 预算分配、市场份额等百分比场景。
+- 需要点击选择扇区以驱动外部状态或联动过滤的场景。
+- 需要 loading 骨架屏在数据加载期间占位的场景。
+
+不推荐：
+
+- 数据项超过 7 个时优先考虑柱状图，饼图扇区过多会降低可读性。
+- 数值差距过小的对比（肉眼难以区分）。
+- 需要精确数值比较的场景，饼图不适合精确读数。
+
+EvilPieChart 核心概念：
+
+- `config`：定义每个扇区的颜色、标签，通过 `ChartConfig` 类型约束。
+- `data` / `dataKey` / `nameKey`：数据行、数值字段、名称字段。
+- 子组件自由组合：`<Pie />` 渲染扇区，`<Tooltip />` 渲染 hover 提示，`<Legend />` 渲染图例，`<Background />` 渲染背景纹理，`<Label />` 在扇区上绘制标签。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础饼图
+
+`EvilPieChart` 通过 `config` + `data` + `dataKey` + `nameKey` 声明数据和颜色映射，子组件 `<Pie />`、`<Tooltip />`、`<Legend />` 自由组合。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/basic"
+/>
+
+```tsx
+import { EvilPieChart } from "@/components/charts/evil-charts"
+import { Pie, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+import { type ChartConfig } from "@/components/charts/evil-charts/components/chart"
+
+const data = [
+  { browser: "chrome", visitors: 275 },
+  { browser: "safari", visitors: 200 },
+  { browser: "firefox", visitors: 187 },
+  { browser: "edge", visitors: 173 },
+  { browser: "other", visitors: 90 },
+]
+
+const chartConfig = {
+  chrome: {
+    label: "Chrome",
+    colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
+  },
+  safari: {
+    label: "Safari",
+    colors: { light: ["#10b981"], dark: ["#34d399"] },
+  },
+  firefox: {
+    label: "Firefox",
+    colors: { light: ["#f59e0b"], dark: ["#fbbf24"] },
+  },
+  edge: {
+    label: "Edge",
+    colors: { light: ["#8b5cf6"], dark: ["#a78bfa"] },
+  },
+  other: {
+    label: "Other",
+    colors: { light: ["#6b7280"], dark: ["#9ca3af"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    &lt;EvilPieChart
+      className="h-full w-full p-4"
+      data={data}
+      dataKey="visitors"
+      nameKey="browser"
+      config={chartConfig}
+    >
+      &lt;Legend isClickable />
+      &lt;Tooltip />
+      &lt;Pie isClickable />
+    &lt;/EvilPieChart>
+  )
+}
+```
+
+### 环形图
+
+设置 `<Pie />` 的 `innerRadius` 大于 0 即可将饼图转为环形图。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/donut"
+/>
+
+```tsx
+import { Pie, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+
+&lt;EvilPieChart
+  className="h-full w-full p-4"
+  data={data}
+  dataKey="visitors"
+  nameKey="browser"
+  config={chartConfig}
+>
+  &lt;Legend isClickable />
+  &lt;Tooltip />
+  &lt;Pie isClickable innerRadius={60} />
+&lt;/EvilPieChart>
+```
+
+### 扇区发光
+
+通过 `glowingSectors` 指定扇区名称，为选中扇区添加柔和外发光效果，适合强调特定数据项。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/glowing"
+/>
+
+```tsx
+import { Pie, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+
+&lt;EvilPieChart
+  className="h-full w-full p-4"
+  data={data}
+  dataKey="visitors"
+  nameKey="browser"
+  config={chartConfig}
+>
+  &lt;Legend isClickable />
+  &lt;Tooltip />
+  &lt;Pie isClickable glowingSectors={["chrome", "safari"]} />
+&lt;/EvilPieChart>
+```
+
+### 扇区标签
+
+在 `<Pie />` 内组合 `<Label />`，在扇区上显示数值标签。`dataKey` 可指定标签对应的数据字段，默认为饼图的 `dataKey`。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/labels"
+/>
+
+```tsx
+import { Pie, Label, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+
+&lt;EvilPieChart
+  className="h-full w-full p-4"
+  data={data}
+  dataKey="visitors"
+  nameKey="browser"
+  config={chartConfig}
+>
+  &lt;Legend isClickable />
+  &lt;Tooltip />
+  &lt;Pie isClickable innerRadius={30} paddingAngle={4} cornerRadius={8}>
+    &lt;Label />
+  &lt;/Pie>
+&lt;/EvilPieChart>
+```
+
+### 渐变色
+
+`config` 中每个扇区的 `colors` 数组可传入多个色值，组件自动生成径向渐变填充。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/gradient"
+/>
+
+```tsx
+import { Pie, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+
+const gradientConfig = {
+  chrome: {
+    label: "Chrome",
+    colors: {
+      light: ["#93c5fd", "#3b82f6", "#2563eb", "#1d4ed8", "#1e40af"],
+      dark: ["#bfdbfe", "#60a5fa", "#3b82f6", "#2563eb", "#1d4ed8"],
+    },
+  },
+  // ... 其他扇区同样使用多色值数组
+} satisfies ChartConfig
+
+&lt;EvilPieChart
+  className="h-full w-full p-4"
+  data={data}
+  dataKey="visitors"
+  nameKey="browser"
+  config={gradientConfig}
+>
+  &lt;Legend isClickable />
+  &lt;Tooltip />
+  &lt;Pie isClickable />
+&lt;/EvilPieChart>
+```
+
+### 加载状态
+
+`isLoading` 使饼图进入加载状态，显示由 5 个扇区组成的脉冲动画骨架。所有子组件（Tooltip 等）在加载期间自动隐藏。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/loading"
+/>
+
+```tsx
+import { Pie, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+
+&lt;EvilPieChart
+  className="h-full w-full p-4"
+  data={data}
+  dataKey="visitors"
+  nameKey="browser"
+  config={chartConfig}
+  isLoading
+>
+  &lt;Legend isClickable />
+  &lt;Tooltip />
+  &lt;Pie isClickable />
+&lt;/EvilPieChart>
+```
+
+### 带间隙的饼图
+
+`paddingAngle` 在扇区之间添加间隙；设置为负值时扇区重叠。与 `cornerRadius` 配合可实现圆角扇区效果。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/padded"
+/>
+
+```tsx
+import { Pie, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+
+&lt;EvilPieChart
+  className="h-full w-full p-4"
+  data={data}
+  dataKey="visitors"
+  nameKey="browser"
+  config={chartConfig}
+>
+  &lt;Legend isClickable />
+  &lt;Tooltip />
+  &lt;Pie isClickable paddingAngle={4} cornerRadius={8} />
+&lt;/EvilPieChart>
+```
+
+### 选择交互
+
+`isClickable` 使扇区可被选中——点击扇区高亮，再次点击取消选中；选中扇区联动图例高亮，未选中扇区变为半透明。`onSelectionChange` 回调可将选中数据传递给外部状态。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/selection"
+/>
+
+```tsx
+import { useState } from "react"
+import { EvilPieChart } from "@/components/charts/evil-charts"
+import { Pie, Tooltip, Legend } from "@/components/charts/evil-charts/components/pie-chart"
+
+export default function Demo() {
+  const [selection, setSelection] = useState(null)
+
+  return (
+    &lt;div className="space-y-2">
+      &lt;EvilPieChart
+        className="h-full w-full p-4"
+        data={data}
+        dataKey="visitors"
+        nameKey="browser"
+        config={chartConfig}
+        onSelectionChange={setSelection}
+        defaultSelectedSector="chrome"
+      >
+        &lt;Legend isClickable />
+        &lt;Tooltip />
+        &lt;Pie isClickable />
+      &lt;/EvilPieChart>
+      {selection && (
+        &lt;p className="text-sm text-muted-foreground">
+          选中：{selection.dataKey} — {selection.value}
+        &lt;/p>
+      )}
+    &lt;/div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### EvilPieChart
+
+饼图根容器，管理数据、选中状态和加载状态，为子组件提供共享上下文。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| config | 扇区颜色和标签配置 | `ChartConfig` | 必填 |
+| data | 数据行 | `TData[]` | 必填 |
+| dataKey | 数值字段 | `string` | 必填 |
+| nameKey | 名称字段 | `string` | 必填 |
+| children | 子组件组合 | `ReactNode` | 必填 |
+| className | 容器附加样式 | `string` | - |
+| chartProps | Recharts PieChart 透传属性 | `ComponentProps&lt;typeof RechartsPieChart>` | - |
+| defaultSelectedSector | 初始选中扇区名称 | `string \| null` | `null` |
+| onSelectionChange | 选中变化回调 | `(selection: { dataKey: string; value: number } \| null) => void` | - |
+| isLoading | 加载状态，显示脉冲骨架 | `boolean` | `false` |
+
+### Pie
+
+饼图扇区渲染，自动生成径向渐变色和发光滤镜。`isLoading` 时显示动画骨架。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 填充样式 | `gradient` | `gradient` |
+| innerRadius | 内半径，大于 0 时为环形图 | `number \| string` | `0` |
+| outerRadius | 外半径 | `number \| string` | `"80%"` |
+| cornerRadius | 扇区圆角，单位 px | `number` | `0` |
+| paddingAngle | 扇区间隙度数；负数则重叠 | `number` | `0` |
+| startAngle | 起始绘制角度 | `number` | `0` |
+| endAngle | 终止绘制角度 | `number` | `360` |
+| isClickable | 扇区是否可点击选择 | `boolean` | `false` |
+| glowingSectors | 需要发光效果的扇区名称列表 | `string[]` | `[]` |
+| children | 可组合 `<Label />` | `ReactNode` | - |
+| pieProps | Recharts Pie 透传属性 | `Omit<ComponentProps&lt;typeof RechartsPie>, "data" \| "dataKey" \| "nameKey">` | - |
+
+### Label
+
+在 `<Pie />` 内声明扇区标签。自身不渲染 DOM，由父 `<Pie />` 解析并注入 Recharts LabelList。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataKey | 标签对应的数据字段 | `string` | 饼图的 `dataKey` |
+| labelListProps | Recharts LabelList 透传属性 | `Omit<LabelListProps, "dataKey">` | - |
+
+### Tooltip
+
+Hover 悬浮提示。`isLoading` 时自动隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 提示框视觉样式 | `TooltipVariant` | - |
+| roundness | 提示框圆角 | `TooltipRoundness` | - |
+| defaultIndex | 默认显示的扇区索引 | `number` | - |
+
+### Legend
+
+扇区图例。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 图例标识样式 | `ChartLegendVariant` | - |
+| align | 水平对齐 | `left` \| `center` \| `right` | `center` |
+| verticalAlign | 垂直对齐 | `top` \| `middle` \| `bottom` | `bottom` |
+| isClickable | 图例条目是否可点击切换选中 | `boolean` | `false` |
+
+### Background
+
+可选装饰背景，绘制在饼图后方。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 背景纹理样式 | `BackgroundVariant` | `dots` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何做环形图？
+
+设置 `<Pie />` 的 `innerRadius` 大于 0：
+
+```tsx
+&lt;Pie isClickable innerRadius={60} />
+```
+
+### 如何选中扇区并联动外部状态？
+
+在 `<Pie />` 上设置 `isClickable`，在 `<EvilPieChart />` 上使用 `onSelectionChange` 回调：
+
+```tsx
+&lt;EvilPieChart ... onSelectionChange={(s) => setSelection(s)}>
+  &lt;Pie isClickable />
+&lt;/EvilPieChart>
+```
+
+### 如何高亮特定扇区？
+
+使用 `glowingSectors` 指定扇区名称列表：
+
+```tsx
+&lt;Pie isClickable glowingSectors={["chrome"]} />
+```
+
+### 如何在扇区上显示数值？
+
+在 `<Pie />` 内组合 `<Label />`：
+
+```tsx
+&lt;Pie isClickable>
+  &lt;Label />
+&lt;/Pie>
+```
+
+### 如何配置渐变色？
+
+在 `config` 中每个扇区的 `colors.light` 和 `colors.dark` 数组传入多个色值，组件自动生成线性渐变。单色值时渲染为纯色填充。
+
+### 如何自定义样式？
+
+- 容器样式：通过 `className` 附加 Tailwind 类名。
+- Recharts 原生属性：通过 `chartProps`（根容器）和 `pieProps`（扇区）透传。
+- 颜色：通过 `config` 中 `colors.light` / `colors.dark` 控制。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 EvilPieChart 代码时：
+
+1. `EvilPieChart` 从 `@/components/charts/evil-charts` 导入；`Pie`、`Tooltip`、`Legend`、`Background`、`Label` 从 `@/components/charts/evil-charts/components/pie-chart` 导入；`ChartConfig` 类型从 `@/components/charts/evil-charts/components/chart` 导入。
+2. `config` 必须满足 `ChartConfig` 类型——每个键对应数据行中的名称值，包含 `label` 和 `colors: { light: string[], dark: string[] }`。
+3. 至少组合 `<Pie />` + `<Tooltip />` + `<Legend />` 以获得完整的图表交互。
+4. 需要点击选择时使用 `<Pie isClickable />` 和 `<Legend isClickable />`。
+5. `innerRadius` 大于 0 时为环形图；`paddingAngle` 大于 0 时扇区有间隙；`cornerRadius` 大于 0 时扇区有圆角。
+6. 加载状态使用 `isLoading`，不要在外部自行实现加载 UI。
+7. 不要从 `recharts` 直接导入 `PieChart`、`Pie`、`Cell`、`Tooltip`、`Legend` 等——使用 EvilCharts 提供的可组合 API。
+8. 不要引入 Ant Design Charts、BizCharts、ECharts 或其他图表库。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+组件通过 `id` 和 SVG 结构暴露稳定的语义，可用于测试定位和样式覆写：
+
+| 标识 | 说明 |
+| --- | --- |
+| `#evil-charts-pie-chart` | 根 SVG 容器 |
+| `recharts-pie-sector` | 每个扇区路径的 class |
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="charts/evilcharts" />

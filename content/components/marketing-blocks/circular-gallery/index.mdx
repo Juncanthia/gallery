@@ -1,0 +1,84 @@
+CircularGallery 基于 WebGL (OGL) 的环形 3D 图片画廊，支持鼠标拖拽、滚轮滚动和键盘导航。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要立体环形布局展示图片画廊，并希望用户以拖拽或滚轮方式浏览时使用。
+常见场景：
+- 产品展示或作品集画廊
+- 品牌故事页面的视觉焦点
+- 需要沉浸式浏览体验的图片展示
+不推荐：
+- 少量图片（少于 6 张）的展示，环形布局会显得稀疏
+- 需要精确点击每张图片的场景，滚筒滚动不适合精确定位
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="marketing-blocks/circular-gallery" path="marketing-blocks/circular-gallery/basic" />
+
+```tsx
+import { CircularGallery } from "@/components/marketing-blocks/circular-gallery"
+export default function Demo() { return <CircularGallery /> }
+```
+
+### 自定义配置
+
+```tsx
+import { CircularGallery } from "@/components/marketing-blocks/circular-gallery"
+
+const items = [
+  { image: "/img/photo1.jpg", text: "Mountain" },
+  { image: "/img/photo2.jpg", text: "Ocean" },
+  { image: "/img/photo3.jpg", text: "Forest" },
+  { image: "/img/photo4.jpg", text: "City" },
+  { image: "/img/photo5.jpg", text: "Desert" },
+  { image: "/img/photo6.jpg", text: "Space" },
+]
+
+export default function Demo() {
+  return (
+    <CircularGallery
+      items={items}
+      bend={5}
+      textColor="#f0f0f0"
+      borderRadius={0.1}
+      font="bold 25px Inter"
+      scrollSpeed={3}
+      scrollEase={0.08}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CircularGallery
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 画廊项列表，每项包含图片 URL 和文字 | `{ image: string; text: string }[]` | 12 张默认图 |
+| bend | 弯曲弧度，0 为平面排列，正值向外凸、负值向内凹 | `number` | `3` |
+| textColor | 图片下方文字颜色 | `string` | `"#ffffff"` |
+| borderRadius | 图片圆角比例，范围 0~1 | `number` | `0.05` |
+| font | 文字 CSS font 属性 | `string` | `"bold 30px Figtree"` |
+| fontUrl | Figtree 等外部字体的加载 URL，用于确保字体就绪 | `string` | - |
+| scrollSpeed | 滚轮/拖拽的滚动速度因子 | `number` | `2` |
+| scrollEase | 滚动惯性缓动系数，越小越丝滑（无惯性吸附时） | `number` | `0.05` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何控制图库的自动吸附行为？
+当 `scrollEase` 不为 0 时，滚动惯性由 `lerp` 实现，松手后会逐渐减速。组件内部 `onCheck` 方法会将滚动位置吸附到最近图片的中心，确保导航体验。调整 `scrollSpeed` 和 `scrollEase` 可以控制滚动的快慢和惯性。
+
+### bend 为 0 时会怎样？
+所有图片排成一条水平直线，无弯曲弧度。适合更传统的水平滚动画廊效果。
+
+### 是否支持键盘导航？
+支持。左右方向键切换图片，Home 键回到开头。容器带有 `tabIndex={0}` 和 `role="region"` 属性，支持无障碍访问。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/marketing-blocks/circular-gallery` 导入。
+2. `items` 数组逐项必须包含 `image` 和 `text` 字段，缺少会被默认画廊替代。
+3. 组件依赖 OGL，需确保项目支持 WebGL。
+4. 容器会自动添加 `circular-gallery` CSS 类名，可用来自定义样式。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-circular-gallery" />

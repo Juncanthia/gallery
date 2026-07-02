@@ -1,16 +1,16 @@
 "use client";
 
 import type { DatePreset } from "@/components/data-display/data-table-filters/components/data-table/types";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
-import { Kbd } from "@/components/ui/kbd";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/core/button";
+import { Calendar } from "@/components/core/calendar";
+import { Input } from "@/components/core/input";
+import { Kbd } from "@/components/core/kbd";
+import { Label } from "@/components/core/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/core/popover";
 import {
   Select,
   SelectContent,
@@ -19,8 +19,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/core/select";
+import { Separator } from "@/components/core/separator";
 import { useDebounce } from "@/components/data-display/data-table-filters/hooks/use-debounce";
 import { presets as defaultPresets } from "@/components/data-display/data-table-filters/lib/date-preset";
 import { cn } from "@/components/data-display/data-table-filters/lib/utils";

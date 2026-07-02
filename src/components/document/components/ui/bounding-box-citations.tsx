@@ -48,17 +48,17 @@ import {
 } from "@pierre/diffs/react"
 import { flushSync } from "react-dom"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
+import { Input } from "@/components/core/input"
+import { ScrollArea } from "@/components/core/scroll-area"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/core/tabs"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/core/tooltip"
 
 import "@glideapps/glide-data-grid/dist/index.css"
 

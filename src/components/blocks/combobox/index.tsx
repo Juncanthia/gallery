@@ -11,8 +11,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/core/badge";
+import { Button } from "@/components/core/button";
 import {
   Command,
   CommandEmpty,
@@ -20,12 +20,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@/components/core/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/core/popover";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils";
 //
 // The generic Combobox primitive (Combobox/ComboboxTrigger/ComboboxContent/...)
 // that used to live in this file has been removed: it fully duplicated
-// `@/components/ui/combobox` (the mainline, documented Combobox) with zero
+// `@/components/core/combobox` (the mainline, documented Combobox) with zero
 // external callers. Only the Tags implementation below is unique to this
 // file and is kept as the real source of truth for `@/components/blocks/tags`.
 // ---------------------------------------------------------------------------

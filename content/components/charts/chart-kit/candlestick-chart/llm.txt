@@ -1,0 +1,153 @@
+[K线图 / CandlestickChart]
+
+导入:
+import { CandlestickChart } from "@/components/core/candlestick-chart"
+import { Candlestick } from "@/components/charts/chart-kit"
+
+包来源: @/components/charts/chart-kit
+组件类型: 图表 / BKLit Charts
+依赖: @visx/responsive, @visx/scale, d3-array, motion (motion/react)
+
+## 何时使用
+
+展示金融时间序列的开高低收（OHLC）数据，适用于股票、期货、加密货币等行情图表。K 线图通过实体和影线同时表达涨跌方向和波动范围，是金融数据分析的核心可视化形式。
+
+## Props 速查
+
+### CandlestickChart
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | OHLC 数据（必填） | `OHLCDataPoint[]` | — |
+| xDataKey | 时间轴 data key | `string` | `"date"` |
+| margin | 图表边距 | `Partial<Margin>` | `{ top: 40, right: 40, bottom: 40, left: 40 }` |
+| animationDuration | 入场动画时长（ms） | `number` | `1100` |
+| enterTransition | 入场动画 Transition 配置 | `Transition` | spring 弹入 |
+| revealSignature | 签名变更时重放动画 | `string` | — |
+| aspectRatio | 宽高比 | `string` | `"2 / 1"` |
+| className | 容器样式类名 | `string` | — |
+| style | 容器内联样式 | `React.CSSProperties` | — |
+| candleGap | K 线间隙比例（0-1） | `number` | `0.2` |
+| candleWidth | 固定实体宽度（px），覆盖 candleGap | `number` | — |
+| xDomain | 固定 X 轴时间域 | `[Date, Date]` | 数据推导 |
+| xDomainSlotCount | xDomain 模式槽位数 | `number` | — |
+| children | 子组件 | `ReactNode` | — |
+
+### Candlestick
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| animate | 启用入场动画 | `boolean` | `true` |
+| positiveFill | 阳线填充色 | `string` | `"url(#candlestick-positive)"` |
+| negativeFill | 阴线填充色 | `string` | `"url(#candlestick-negative)"` |
+| bodyPatternPositive | 阳线实体图案 URL | `string` | — |
+| bodyPatternNegative | 阴线实体图案 URL | `string` | — |
+| insideStrokeWidth | 内部描边宽度 | `number` | `0` |
+| fadedOpacity | 非悬停 K 线不透明度 | `number` | `0.3` |
+| showHoverFade | hover 时淡化非悬停 K 线 | `boolean` | `true` |
+
+### OHLCDataPoint
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| date | `Date` | 时间戳 |
+| open | `number` | 开盘价 |
+| high | `number` | 最高价 |
+| low | `number` | 最低价 |
+| close | `number` | 收盘价 |
+
+## 示例代码
+
+### 基础用法
+
+```tsx
+import { CandlestickChart } from "@/components/core/candlestick-chart"
+import { Candlestick } from "@/components/charts/chart-kit"
+
+const data = [
+  { date: new Date(2024, 0, 1), open: 100, high: 120, low: 90, close: 110 },
+  { date: new Date(2024, 0, 2), open: 110, high: 130, low: 100, close: 125 },
+  { date: new Date(2024, 0, 3), open: 125, high: 140, low: 115, close: 120 },
+  { date: new Date(2024, 0, 4), open: 120, high: 135, low: 110, close: 130 },
+  { date: new Date(2024, 0, 5), open: 130, high: 150, low: 125, close: 145 },
+]
+
+export default function Demo() {
+  return (
+    <CandlestickChart data={data}>
+      <Candlestick />
+    </CandlestickChart>
+  )
+}
+```
+
+### 自定义颜色
+
+```tsx
+<CandlestickChart data={data}>
+  <Candlestick
+    positiveFill="var(--success)"
+    negativeFill="var(--danger)"
+  />
+</CandlestickChart>
+```
+
+### 带坐标轴和提示框
+
+```tsx
+import { CandlestickChart } from "@/components/core/candlestick-chart"
+import { Candlestick, XAxis, YAxis, Grid, ChartTooltip } from "@/components/charts/chart-kit"
+
+<CandlestickChart data={data}>
+  <Grid />
+  <XAxis />
+  <YAxis />
+  <Candlestick />
+  <ChartTooltip />
+</CandlestickChart>
+```
+
+### 配合 ChartBrush 刷选联动
+
+```tsx
+import { useState } from "react"
+import { ChartBrush } from "@/components/charts/chart-kit"
+
+const [xDomain, setXDomain] = useState<[Date, Date]>()
+
+// 主图 + 缩略图
+<>
+  <CandlestickChart data={data} xDomain={xDomain} xDomainSlotCount={data.length}>
+    <Candlestick />
+  </CandlestickChart>
+  <CandlestickChart
+    data={data}
+    aspectRatio="6 / 1"
+    xDomain={xDomain}
+    xDomainSlotCount={data.length}
+  >
+    <ChartBrush onSelectionChange={(sel) => sel && setXDomain(sel.xDomain)} />
+  </CandlestickChart>
+</>
+```
+
+## 约束
+
+- 必须提供 `data` 属性，每条记录包含 `date`、`open`、`high`、`low`、`close` 五个必填字段
+- `date` 字段必须为 `Date` 类型或可被 `new Date()` 解析的值
+- `CandlestickChart` 必须包含 `<Candlestick />` 子组件才会渲染 K 线实体
+- K 线图依赖 `@visx/*` 系列包（@visx/responsive、@visx/scale）和 `d3-array`、`motion/react`
+- 阳线（close >= open）默认使用 `--chart-1` CSS 变量颜色；阴线默认使用 `--chart-5` CSS 变量
+- 内置渐变通过 SVG `<defs>` 中的 `candlestick-positive` 和 `candlestick-negative` ID 引用
+- 图表通过 `ParentSize` 响应容器尺寸，需要父容器具有确定的宽高或 aspectRatio
+
+## 最佳实践
+
+- 数据量大时（>1000 条），组件内部会自动通过 `decimateOhlcData` 降采样以保持渲染性能
+- 设置 `aspectRatio` 保证图表在不同容器宽度下保持合理比例，推荐 `"2 / 1"` 或 `"3 / 1"`
+- 需要 tooltip 时添加 `<ChartTooltip />` 子组件，提供悬浮 K 线的 OHLC 详情
+- 需要坐标轴时添加 `<XAxis />` 和 `<YAxis />` 子组件
+- 需要网格线时添加 `<Grid />` 子组件
+- 刷选联动场景中，主图和缩略图共用同一个 `xDomain` state 和 `xDomainSlotCount`
+- 自定义颜色推荐使用 CSS 变量（如 `var(--success)`）以保持主题一致性
+- 禁用动画可在静态导出或性能敏感场景使用 `animate={false}`

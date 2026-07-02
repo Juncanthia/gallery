@@ -29,31 +29,31 @@ import {
   FloatingMenu,
   type FloatingMenuProps,
 } from "@tiptap/react/menus";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import {
   Command,
   CommandEmpty,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@/components/core/command";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/core/dropdown-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/core/popover";
+import { Separator } from "@/components/core/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/core/tooltip";
 import { cn } from "@/lib/utils";
 
 export type { Editor, JSONContent } from "@tiptap/react";

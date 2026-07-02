@@ -1,0 +1,145 @@
+状态按钮是一个带有加载反馈和成功指示的交互组件。点击后依次经历 Saving 加载态和 Saved 完成态，使用 motion/react 实现字符级动画和状态指示器过渡。
+
+本组件是 UseLayouts 集合中的交互组件，展示异步操作的视觉反馈与动效方案。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为异步操作（如保存、提交）提供视觉反馈时使用。点击按钮后依次进入加载态和成功态，最后自动回到初始态。
+
+常见场景：
+
+- 保存操作的视觉反馈：点击"Save"后显示"Saving"加载动画，成功显示"Saved"。
+- 提交/发布的流畅过渡：替代传统 loading/disabled 的单调交互。
+- 需要状态指示器（loading blocks/spinner 或 check 图标）的按钮交互。
+
+交互流程：
+
+- **初始态（idle）**：显示"Save"按钮，可点击。
+- **加载态（loading）**：按钮变为 disabled 样式，文字切换为"Saving"并逐个字符动画入场，右上角出现 loading blocks/spinner。
+- **成功态（success）**：文字切换为"Saved"，右上角 blocks/spinner 替换为 check 图标。
+- **自动回归**：成功态 2 秒后自动回到初始态。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件自包含内部状态，无需外部 props。点击按钮触发 idle → loading → success 状态循环。
+
+<ComponentShowcase
+  id="general/blocks/status-button"
+  path="general/blocks/status-button/basic"
+/>
+
+```tsx
+import { SaveButton } from "@/components/general/blocks/status-button"
+
+export default function Demo() {
+  return <SaveButton />
+}
+```
+
+<h2 id="api">API</h2>
+
+### SaveButton
+
+SaveButton 是一个自包含组件，所有交互状态（idle、loading、success）由组件内部管理，无需外部 props。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 无需外部 props | - | - |
+
+### 内部状态
+
+| 状态 | 类型 | 说明 |
+| --- | --- | --- |
+| `blocks/status` | `"idle"` \| `"loading"` \| `"success"` | 当前按钮状态，驱动 UI 和动画 |
+| text | `"Save"` \| `"Saving"` \| `"Saved"` | 通过 useMemo 根据 blocks/status 计算 |
+
+### 动画参数
+
+| 参数 | 说明 | 值 |
+| --- | --- | --- |
+| 字符逐个入场 | 文字切换时每个字符的 spring 动画 | `{ stiffness: 500, damping: 30, mass: 1 }` |
+| 状态指示器入场 | 右上角指示器的 spring 动画 | `{ stiffness: 300, damping: 20 }` |
+| loading → success 切换 | AnimatePresence mode="popLayout" | duration: 0.2s |
+| check 图标入场 | 缩放 + 模糊入场 | `{ stiffness: 500, damping: 25 }` |
+
+### 时间参数
+
+| 参数 | 说明 | 值 |
+| --- | --- | --- |
+| loading 持续 | 从点击到显示 success 的时间 | 2500ms |
+| success 持续 | success 显示后到自动回归 idle 的时间 | 2000ms |
+
+### 视觉结构
+
+| 元素 | 说明 |
+| --- | --- |
+| `AnimatePresence mode="popLayout"` | 管理按钮文字的字符动画，逐字 spring 出入场 |
+| `motion.span` | 每个字符的动画容器，key 为 `${char}-${i}` |
+| 状态指示器 | 固定在按钮右上角 (`-top-1 -right-1`)，loading 时显示旋转 SVG，success 时显示 Tick02Icon |
+| SVG blocks/spinner | 内联 SVG 带 animateTransform 旋转动画，`1s` 周期无限旋转 |
+| `HugeiconsIcon` | success 态显示，图标为 Tick02Icon |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何修改文案？
+
+修改组件内部的 `text` useMemo 返回值：
+
+```tsx
+const text = useMemo(() => {
+  switch (blocks/status) {
+    case "idle": return "保存";
+    case "loading": return "保存中";
+    case "success": return "已保存";
+  }
+}, [blocks/status]);
+```
+
+### 如何调整时间参数？
+
+修改 `handleClick` 中的 setTimeout：
+
+- `setTimeout(() => setStatus("success"), 2500)` — 加载态持续时间
+- 内层 `setTimeout(() => setStatus("idle"), 2000)` — 成功态持续时间
+
+### 如何调整动画速度？
+
+修改对应 motion 组件的 `transition` 属性：
+
+- 字符动画：调整 `stiffness`、`damping`、`mass`
+- 状态指示器入场：调整 `stiffness`、`damping`
+- loading blocks/spinner 旋转速度：修改 SVG `animateTransform` 的 `dur` 属性
+- loading → success 切换：修改 duration
+
+### 如何按需配置不同状态时长？
+
+当前加载态和成功态时长通过 setTimeout 硬编码。如需灵活配置，可抽取为 props：
+
+```tsx
+function SaveButton({ loadingDuration = 2500, successDuration = 2000 }) { ... }
+```
+
+### 如何自定义颜色？
+
+- 初始态：使用 Button 的 `variant="default"`，通过 className 调整
+- 加载态/成功态：修改 `blocks/status !== "idle"` 分支的 className，包含 `bg-muted text-muted-foreground`
+- 状态指示器：loading 时 `bg-muted text-muted-foreground`，success 时 `bg-primary text-primary-foreground`
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 SaveButton 代码时：
+
+1. 从 `@/components/general/blocks/status-button` 导入 `SaveButton`（named export）
+2. 组件自包含，无需传入任何 props
+3. 不要移除或修改组件内部的 `motion/react` 动画逻辑，包括 AnimatePresence、motion.span、transition 曲线
+4. 修改文案时更新 `useMemo` 中三个状态的返回值
+5. 调整时间参数时修改 `handleClick` 中的两个 setTimeout 值
+6. 图标使用 `@hugeicons/core-free-icons` 的 `Tick02Icon` + `@hugeicons/react` 的 `HugeiconsIcon`
+7. 按钮使用主线 `@/components/core/button` 中的 `Button` 组件
+8. 不要引入 Ant Design 或 rc-component 相关依赖
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="general/blocks/status-button" />

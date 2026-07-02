@@ -11,10 +11,10 @@ import { COMPONENT_REGISTRY } from "../src/gallery/registry/index"
 const ROOT = path.resolve(import.meta.dirname, "..")
 
 function shellFileFromImport(shellImportPath: string): string | null {
-  if (!shellImportPath.startsWith("@/components/ui/")) {
+  if (!shellImportPath.startsWith("@/components/core/")) {
     return null
   }
-  return path.join(ROOT, "src/components/ui", `${shellImportPath.replace("@/components/ui/", "")}.tsx`)
+  return path.join(ROOT, "src/components/core", `${shellImportPath.replace("@/components/core/", "")}.tsx`)
 }
 
 function isPureReexport(filePath: string): boolean {
@@ -86,16 +86,16 @@ function main() {
   }
 
   // Always remove known orphan 0.tsx
-  const orphan = path.join(ROOT, "src/components/ui/0.tsx")
+  const orphan = path.join(ROOT, "src/components/core/0.tsx")
   try {
     readFileSync(orphan, "utf8")
-    const refs = hasReferences("@/components/ui/0", orphan)
+    const refs = hasReferences("@/components/core/0", orphan)
     if (refs.length === 0) {
       if (dryRun) {
-        console.log("[dry-run] delete src/components/ui/0.tsx")
+        console.log("[dry-run] delete src/components/core/0.tsx")
       } else {
         unlinkSync(orphan)
-        console.log("deleted src/components/ui/0.tsx")
+        console.log("deleted src/components/core/0.tsx")
       }
       deleted++
     }

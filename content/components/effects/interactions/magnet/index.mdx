@@ -1,0 +1,86 @@
+Magnet 磁吸效果组件，当鼠标靠近包裹的子元素时，子元素会跟随鼠标位置产生平滑偏移。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要为交互元素添加跟随鼠标的磁吸动效时使用，增强用户操作的即时视觉反馈。
+常见场景：
+- 按钮、卡片的 hover 交互增强
+- 图标或 Logo 的跟随动效
+- 任何需要鼠标吸引视觉注意力的可交互元素
+不推荐：
+- 触摸设备（无 hover 状态）
+- 需要精确布局控制的元素（磁吸会导致偏移）
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="rb/magnet" path="rb/magnet/basic" />
+
+```tsx
+import { Magnet } from "@/components/core/magnet"
+
+export default function Demo() {
+  return (
+    <Magnet>
+      <button className="px-6 py-3 bg-blue-500 text-white rounded">
+        Hover me
+      </button>
+    </Magnet>
+  )
+}
+```
+
+### 自定义配置
+
+```tsx
+import { Magnet } from "@/components/core/magnet"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-4">
+      <Magnet padding={200} magnetStrength={1.5}>
+        <div className="p-8 bg-zinc-800 rounded-xl text-white">强磁吸</div>
+      </Magnet>
+      <Magnet padding={50} magnetStrength={4} disabled>
+        <div className="p-8 bg-zinc-800 rounded-xl text-white">已禁用</div>
+      </Magnet>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Magnet
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 需要磁吸效果的子元素 | `React.ReactNode` | - |
+| padding | 磁吸激活区域的外边距（像素），值越大越远触发 | `number` | `100` |
+| disabled | 是否禁用磁吸效果 | `boolean` | `false` |
+| magnetStrength | 磁吸强度，值越大偏移越小（分母） | `number` | `2` |
+| activeTransition | 激活状态（鼠标在区域内）的 CSS transition | `string` | `"transform 0.3s ease-out"` |
+| inactiveTransition | 非激活状态（鼠标离开）的 CSS transition | `string` | `"transform 0.5s ease-in-out"` |
+| wrapperClassName | 外层容器 wrapper 的 CSS 类名 | `string` | `""` |
+| innerClassName | 内层偏移容器的 CSS 类名 | `string` | `""` |
+
+<h2 id="faq">常见问题</h2>
+
+### 磁吸偏移太小/太大？
+通过 `magnetStrength` 控制：值越大偏移越小（如设为 5 几乎不动），值越小偏移越大（如 0.5 会产生较大位移）。
+
+### 如何调整磁吸触发范围？
+`padding` 控制触发区域相对于元素边界的扩展距离，增大可使鼠标在更远处就触发磁吸效果。
+
+### 可以包裹多个子元素吗？
+可以，所有子元素包裹在同一个内层 div 中，作为一个整体进行偏移。如需独立磁吸，请使用多个 Magnet 实例。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/magnet` 导入。
+2. 用 `<Magnet>` 包裹需要磁吸效果的元素。
+3. 通过 `padding` 调整触发区域范围，`magnetStrength` 调整偏移幅度。
+4. 通过 `wrapperClassName` / `innerClassName` 控制外层和内层容器的样式。
+5. 组件使用 `useRef` 和 `mousemove` 事件，无需额外依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-magnet" />

@@ -18,8 +18,8 @@ import rehypeRaw from "rehype-raw"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import remarkGfm from "remark-gfm"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { ScrollArea } from "@/components/core/scroll-area"
 
 export type Point = {
   x: number

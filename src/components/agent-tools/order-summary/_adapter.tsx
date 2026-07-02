@@ -11,6 +11,6 @@
  */
 
 export { cn } from "@/lib/utils";
-export { Button } from "@/components/ui/button";
-export { Separator } from "@/components/ui/separator";
-export { Skeleton } from "@/components/ui/skeleton";
+export { Button } from "@/components/core/button";
+export { Separator } from "@/components/core/separator";
+export { Skeleton } from "@/components/core/skeleton";

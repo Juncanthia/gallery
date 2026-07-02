@@ -1,0 +1,155 @@
+---
+category: Components
+title: ParallaxCards
+subtitle: 视差卡片
+description: 基于 CSS scroll-driven animations 的视差卡片容器，卡片在进入视口时自动执行淡入和位移动画。
+demo:
+  cols: 2
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/core/gooseui-parallax-cards.tsx
+  examples:
+    - content/components/effects/interactions/parallax-cards/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# ParallaxCards 视差卡片
+
+基于 CSS scroll-driven animations 的视差卡片容器，卡片在进入视口时自动执行淡入和位移动画。
+
+本组件借鉴 GooseUI 的视差效果使用心智，但不是第三方的兼容层。实现以本地源码为准，不引入外部运行时依赖或 CSS-in-JS。
+
+## 何时使用 {#when-to-use}
+
+适合在需要为卡片列表添加滚动入场视差效果时使用。优先通过 ParallaxCard 的 intensity 属性控制动画强度，避免在业务侧重复拼接动画样式。
+
+常见场景：
+
+- 产品特性卡片列表的滚动入场动画。
+- 落地页亮点展示的逐条呈现。
+- 博客或文章列表的渐进式加载感。
+- 时间线或步骤引导卡的视觉强化。
+
+不推荐：
+
+- 对性能要求极高的首屏内容，scroll-driven animations 在部分低端设备上可能掉帧。
+- 需要精确控制动画时序的场景，scroll-driven 基于滚动位置而非时间轴。
+- 不支持 `animation-timeline: view()` 的浏览器环境。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { ParallaxCard, ParallaxCards } from "@/components/effects/interactions/parallax-cards"
+
+export default function Demo() {
+  return (
+    <ParallaxCards>
+      <ParallaxCard>内容 1</ParallaxCard>
+      <ParallaxCard>内容 2</ParallaxCard>
+    </ParallaxCards>
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。更多配置项参见下方 API 摘要。
+
+## 核心导出 {#exports}
+
+- `ParallaxCard`
+- `ParallaxCards`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface ParallaxCardProps {
+  children: React.ReactNode;
+  /** 视差强度 (0-1) */
+  intensity?: number;
+  className?: string;
+}
+
+interface ParallaxCardsProps {
+  children: React.ReactNode;
+  className?: string;
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+ParallaxCards 渲染一个 `<div>` 容器，通过 `useGlobalStyles` 注入 CSS keyframes。
+
+ParallaxCard 渲染一个带圆角边框和阴影的 `<div>`，通过内联 `style` 设置 CSS 变量和 scroll-driven animation。
+
+关键 CSS 变量：
+- `--parallax-translate`：由 `intensity × 100` px 计算。
+- `--parallax-scale`：由 `1 - intensity × 0.1` 计算。
+
+动画通过 `animation-timeline: view()` 绑定到滚动位置，动画范围 `entry 0% cover 50%`。
+
+## 样式模型 {#styling-model}
+
+- 动画通过 CSS scroll-driven animations (`animation-timeline: view()`) 实现。
+- 布局使用 Tailwind CSS class（`rounded-xl`、`border`、`bg-card`、`p-6`、`shadow-sm` 等）。
+- CSS 变量控制动画参数：`--parallax-translate`、`--parallax-scale`。
+- 无 javascript 动画库依赖。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/core/gooseui-parallax-cards.tsx`（re-export）
+- `src/components/gooseui/components/effects/parallax-cards.tsx`（实现）
+
+直接依赖摘要：
+
+- React（`useGlobalStyles` 来自 `@hyper/gooseui/hooks/use-global-styles`）
+- Tailwind CSS（`cn` 来自 `@hyper/gooseui/lib/utils`）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 必须用 `ParallaxCards` 包裹 `ParallaxCard`，keyframes 由容器注入。
+3. 依赖 CSS `animation-timeline: view()` 特性，注意浏览器兼容性。
+4. 不支持的浏览器中卡片以最终状态直接显示，静默降级。
+
+## 可访问性 {#accessibility}
+
+- 动画为纯视觉增强，不涉及交互或焦点管理。
+- 内容始终可读，即使动画不执行卡片仍以最终状态显示。
+- 不引入额外的 ARIA 属性，保持 DOM 简洁。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/gooseui/components/effects/parallax-cards.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 CSS scroll-driven animations + Tailwind CSS |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 非 AntD 组件，无兼容需求 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 ParallaxCards 代码时，应遵守：
+
+1. 从 `@/components/effects/interactions/parallax-cards` 导入 `ParallaxCard` 和 `ParallaxCards`。
+2. 必须用 `ParallaxCards` 包裹所有 `ParallaxCard`，否则 keyframes 不会注入。
+3. `intensity` 传入 0 到 1 之间的数字，不要传入字符串。
+4. 不要在调用侧添加动画相关 className，效果由 `intensity` 控制。
+5. 注意浏览器兼容性，`animation-timeline: view()` 是较新的 CSS 特性。
+6. 不要引入 Ant Design 相关依赖。

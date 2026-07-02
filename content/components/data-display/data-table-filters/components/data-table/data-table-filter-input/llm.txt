@@ -1,0 +1,303 @@
+---
+category: Components
+title: DataTableFilterInput
+subtitle: 文本输入筛选
+description: 文本输入筛选组件，用于 DataTable 的字符串列模糊搜索，内置 500ms 防抖。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 3
+source:
+  component: src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-input.tsx
+  types: src/components/blocks/data-table-filters/components/blocks/data-table/types.ts
+  examples:
+    - content/components/dt/blocks/data-table-filter-input/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DataTableFilterInput 文本输入筛选
+
+DataTableFilterInput 是 DataTable 筛选体系中的文本输入筛选组件，用于对字符串列进行模糊搜索。用户在输入框中键入关键词，组件以 500ms 防抖将筛选值同步到 DataTable 的 `columnFilters` 状态。
+
+本组件是 DataTable 筛选体系内的局部组件，API 和行为以源码为准。它依赖 `DataTableProvider` 上下文，通过 `useDataTable` hook 读取和更新筛选状态。
+
+## 何时使用 {#when-to-use}
+
+当需要对表格中的文本列进行输入搜索时使用。组件提供带有搜索图标的输入框，自动防抖 500ms 后更新筛选条件。
+
+常见场景：
+
+- 按名称搜索表格行，如联系人列表中搜索姓名。
+- 按邮箱前缀或 ID 过滤数据。
+- 表格工具栏中作为文本筛选入口，配合其他筛选类型使用。
+
+不推荐：
+
+- 用于需要精确匹配或枚举选项的筛选，应使用 `type: "checkbox"` 或 `type: "slider"`。
+- 独立于 DataTable 体系之外使用，组件通过 `useDataTable()` hook 读取上下文，脱离 Provider 会抛出错误。
+- 在同一个筛选字段上同时使用文本筛选和复选框筛选，应选择一种类型。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+在 `DataTableProvider` 内渲染 `DataTableFilterInput`，配置 `value`（列 key）、`label` 和 `type: "input"`。
+
+```tsx
+import { useState } from "react"
+import { DataTableProvider } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider"
+import { DataTableFilterInput } from "@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-input"
+import {
+  useReactTable,
+  getCoreRowModel,
+  type ColumnDef,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
+import type { DataTableFilterField } from "@/components/data-display/blocks/data-table-filters"
+
+type Person = {
+  id: string
+  name: string
+  email: string
+}
+
+const data: Person[] = [
+  { id: "1", name: "Alice", email: "alice@example.com" },
+  { id: "2", name: "Bob", email: "bob@test.com" },
+  { id: "3", name: "Charlie", email: "charlie@example.com" },
+]
+
+const columns: ColumnDef<Person>[] = [
+  { accessorKey: "name", header: "Name" },
+  { accessorKey: "email", header: "Email" },
+]
+
+const filterFields: DataTableFilterField<Person>[] = [
+  {
+    label: "Name",
+    value: "name",
+    type: "input",
+  },
+]
+
+export default function Demo() {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+  })
+
+  return (
+    <DataTableProvider
+      table={table}
+      columns={columns}
+      filterFields={filterFields}
+      columnFilters={columnFilters}
+    >
+      <div className="w-full max-w-sm">
+        <DataTableFilterInput<Person>
+          label="Name"
+          value="name"
+          type="input"
+        />
+      </div>
+    </DataTableProvider>
+  )
+}
+```
+
+### 配合筛选栏使用
+
+推荐在 `filterFields` 中配置 `type: "input"`，让 DataTable 筛选栏自动渲染组件，而非手动实例化：
+
+```tsx
+const filterFields: DataTableFilterField<TData>[] = [
+  {
+    label: "姓名",
+    value: "name",
+    type: "input",
+  },
+  {
+    label: "邮箱",
+    value: "email",
+    type: "input",
+  },
+]
+```
+
+筛选栏（`DataTableFilterControls`）会自动为每个 `type: "input"` 字段渲染一个 `DataTableFilterInput` 实例。
+
+## 核心导出 {#exports}
+
+- `DataTableFilterInput<TData>`
+
+## API {#api}
+
+### DataTableFilterInput
+
+通过配置筛选字段属性来控制文本输入筛选的行为。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 对应表格列的 key，用于从 table 获取 column 实例 | `keyof TData` | -（必填） |
+| label | 筛选标签，用于 Label `htmlFor` 关联和筛选栏折叠面板标题 | `string` | -（必填） |
+| type | 筛选类型标识，固定为字符串 `"input"` | `"input"` | -（必填） |
+| options | 可选选项列表，Input 类型当前不使用此字段 | `Option[]` | `undefined` |
+| defaultOpen | 筛选折叠面板（accordion）是否默认展开 | `boolean` | `false` |
+| commandDisabled | 是否禁用 Command 面板中的该字段输入 | `boolean` | `false` |
+
+### DataTableInputFilterField
+
+组件 props 的完整 TypeScript 类型：
+
+```ts
+type Option = {
+  label: string;
+  value: string | boolean | number | undefined;
+};
+
+type Base<TData> = {
+  label: string;
+  value: keyof TData;
+  defaultOpen?: boolean;
+  commandDisabled?: boolean;
+};
+
+type Input = {
+  type: "input";
+  options?: Option[];
+};
+
+type DataTableInputFilterField<TData> = Base<TData> & Input;
+```
+
+### DataTableFilterField
+
+联合类型，用于 `filterFields` 数组的类型声明：
+
+```ts
+type DataTableFilterField<TData> =
+  | DataTableCheckboxFilterField<TData>
+  | DataTableSliderFilterField<TData>
+  | DataTableInputFilterField<TData>
+  | DataTableTimerangeFilterField<TData>;
+```
+
+## Semantic DOM {#semantic-dom}
+
+- 源码未声明 `data-slot`，使用组件名和 DOM 结构定位。
+- 根元素为 `<div className="grid w-full gap-1.5">`。
+- 内部包含 `<Label htmlFor={value}>`（screen-reader-only）和 `<InputGroup>` 结构。
+- 搜索图标使用 `lucide-react` 的 `Search`，通过 `InputGroupAddon` 包裹。
+- Input 元素使用 `InputGroupInput`，name 和 id 均为 `value`。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 控制。
+- 输入组使用 `InputGroup` + `InputGroupAddon` + `InputGroupInput` 组合构建。
+- Label 使用 `sr-only` 对视觉隐藏，仅保留屏幕阅读器可访问性。
+- 输入组采用 `h-9 rounded-lg shadow-none` 样式。
+- 主题颜色使用 `text-muted-foreground` 等语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-input.tsx`
+
+直接依赖：
+
+- `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-provider`（`useDataTable` hook）
+- `@/components/core/input-group`（`InputGroup`、`InputGroupAddon`、`InputGroupInput`）
+- `@/components/core/label`
+- `@/components/data-display/blocks/data-table-filters/hooks/use-debounce`
+- `lucide-react`（`Search` 图标）
+
+实现注意：
+
+1. 组件通过 `useDataTable()` hook 从 Provider 上下文读取 `table`、`columnFilters` 和 `filterFields`。
+2. `value` 被用作 column key 从 `table.getColumn(value)` 获取 column 实例。
+3. 输入值通过 `useDebounce(input, 500)` 延迟 500ms 后生效，减少频繁筛选。
+4. 当 debounced 值为空字符串或 null 时，调用 `column.setFilterValue(null)` 清除筛选。
+5. 外部 `columnFilters` 变化时（如通过 Reset Button 清除），组件内部 `input` 状态同步更新。
+6. `getFilter` helper 函数过滤非字符串类型的 filterValue，确保类型安全。
+
+## 可访问性 {#accessibility}
+
+- Label 通过 `htmlFor={value}` 与 Input 的 `id={value}` 关联，确保屏幕阅读器可访问。
+- Label 使用 `sr-only` 对视觉隐藏，避免影响布局。
+- Input 元素使用原生 `name` 和 `id` 属性。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-input.tsx` 的 TypeScript 类型为准 |
+| 筛选机制 | 基于 TanStack Table `columnFilters` 状态，非 AntD Table `filterDropdown` |
+| 视觉系统 | 使用 Tailwind CSS 和项目语义变量 |
+| 防抖策略 | 固定 500ms，非 AntD 的可配置 `filterSearch` |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 兼容目标 | 配合 DataTable 筛选体系使用，不承诺 AntD Table 筛选 API 兼容 |
+
+## FAQ {#faq}
+
+### 如何调整防抖延迟？
+
+防抖固定为 500ms。如需调整，修改 `src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-input.tsx` 中 `useDebounce(input, 500)` 的第二个参数。不建议改为 0（无防抖），会导致每次按键都触发筛选。
+
+```tsx
+// 源码第 29 行
+const debouncedInput = useDebounce(input, 500);
+```
+
+### 输入为空时筛选行为是什么？
+
+输入为空或仅包含空白字符（`trim()` 后为空）时，`column.setFilterValue(null)` 被调用，DataTable 显示所有行。
+
+### 如何自定义 placeholder？
+
+当前组件使用固定 placeholder `"Search"`。如需自定义，修改源码第 53 行的 `placeholder` 属性。
+
+### 筛选是精确匹配还是模糊匹配？
+
+本地 DataTable 默认使用 TanStack Table 的 `includesString` 筛选函数（模糊匹配，不区分大小写）。如需精确匹配，需自定义 `filterFn`。
+
+### 如何配合 DataTable 筛选栏使用？
+
+在 `DataTableStoreProvider` 的 `filterFields` 中配置 `type: "input"`，筛选栏（`DataTableFilterControls`）会自动渲染 `DataTableFilterInput`。推荐使用此方式，而非手动实例化组件。
+
+### 如何在多个列上使用文本筛选？
+
+在 `filterFields` 数组中为每列配置独立的 `type: "input"` 条目：
+
+```tsx
+const filterFields: DataTableFilterField<Person>[] = [
+  { label: "姓名", value: "name", type: "input" },
+  { label: "邮箱", value: "email", type: "input" },
+]
+```
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DataTableFilterInput 代码时，应遵守：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-filter-input` 导入 `DataTableFilterInput`。
+2. 必须在 `DataTableProvider` 上下文中使用，否则会抛出运行时错误。
+3. `value` 使用 DataTable columns 中定义的 `accessorKey`，类型为 `keyof TData`。
+4. 在 `filterFields` 中配置 `type: "input"` 让筛选栏自动渲染，不要手动实例化该组件。
+5. 防抖为 500ms，不要在调用侧额外添加防抖逻辑。
+6. 不要引入 Ant Design 相关依赖（`antd`、`@ant-design/icons`、`rc-component`）。
+7. 输入筛选为模糊匹配（`includesString`），不要在调用侧假设为精确匹配。
+8. 如果不确定某个 API 是否存在，先检查源码，不要凭 AntD 记忆生成。

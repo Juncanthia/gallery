@@ -1,0 +1,225 @@
+InteractiveGridBackground 是一个基于 Canvas 的交互式网点背景组件。当鼠标在组件区域内移动时，附近的网点会放大并变色，产生跟随光标的视觉响应效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要为页面或区块添加具有鼠标交互感的点阵背景效果时使用。InteractiveGridBackground 通过 Canvas 2D 实时绘制网点，鼠标位置附近的点会放大、变亮并切换为高亮色，适合用作：
+
+- Hero 区域或首屏的动态背景层。
+- 科技感页面的装饰性网格背景。
+- 需要鼠标跟随交互的展示区域。
+- 作为容器包裹其他内容，网点渲染在底层，内容层置于上方。
+
+组件通过 `absolute inset-0` 将 Canvas 铺满父容器，children 通过 `relative z-10` 层叠在上方。父容器需要设置 `relative` 和明确的宽高。
+
+不推荐在网点密度极高的配置下长时间运行（如 gridGap 极小），因为每帧遍历所有网点进行距离计算会对性能产生影响。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认配置：gridGap=40, dotSize=1.5, color="#737373", highlightColor="#FFFF00", radius=300。
+
+<ComponentShowcase
+  id="chamaac/interactive-grid"
+  path="chamaac/interactive-grid/basic"
+/>
+
+```tsx
+import { InteractiveGridBackground } from "@/components/core/interactive-grid-background"
+
+export default function Demo() {
+  return (
+    <div className="relative w-full h-[400px] rounded overflow-hidden">
+      <InteractiveGridBackground />
+    </div>
+  )
+}
+```
+
+### 自定义网点间距与大小
+
+`gridGap` 控制网点之间的间距（像素），`dotSize` 控制基础网点半径。减小 gridGap 可增加网格密度，增大 dotSize 使网点更明显。
+
+<ComponentShowcase
+  id="chamaac/interactive-grid-gap"
+  path="chamaac/interactive-grid/gap"
+/>
+
+```tsx
+import { InteractiveGridBackground } from "@/components/core/interactive-grid-background"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="relative w-full h-[200px] rounded overflow-hidden">
+        <InteractiveGridBackground gridGap={20} dotSize={1} />
+      </div>
+      <div className="relative w-full h-[200px] rounded overflow-hidden">
+        <InteractiveGridBackground gridGap={60} dotSize={2.5} />
+      </div>
+    </div>
+  )
+}
+```
+
+### 自定义颜色
+
+`color` 控制网点基础色，`highlightColor` 控制鼠标附近网点的高亮色。支持任意 CSS 颜色值。
+
+<ComponentShowcase
+  id="chamaac/interactive-grid-colors"
+  path="chamaac/interactive-grid/colors"
+/>
+
+```tsx
+import { InteractiveGridBackground } from "@/components/core/interactive-grid-background"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="relative w-full h-[200px] rounded overflow-hidden">
+        <InteractiveGridBackground color="#22c55e" highlightColor="#86efac" />
+      </div>
+      <div className="relative w-full h-[200px] rounded overflow-hidden">
+        <InteractiveGridBackground color="#3b82f6" highlightColor="#93c5fd" />
+      </div>
+    </div>
+  )
+}
+```
+
+### 调整交互半径
+
+`radius` 控制鼠标影响的辐射范围（像素）。增大 radius 让更大范围内的网点响应鼠标，减小则让交互范围更集中。
+
+<ComponentShowcase
+  id="chamaac/interactive-grid-radius"
+  path="chamaac/interactive-grid/radius"
+/>
+
+```tsx
+import { InteractiveGridBackground } from "@/components/core/interactive-grid-background"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="relative w-full h-[200px] rounded overflow-hidden">
+        <InteractiveGridBackground radius={150} highlightColor="#f59e0b" />
+      </div>
+      <div className="relative w-full h-[200px] rounded overflow-hidden">
+        <InteractiveGridBackground radius={500} highlightColor="#f59e0b" />
+      </div>
+    </div>
+  )
+}
+```
+
+### 叠加内容
+
+InteractiveGridBackground 支持 children，内容会通过 `relative z-10` 层叠在网点上方。Canvas 层设置了 `pointer-events-none`（等等 — 源码中 Canvas 为 `absolute inset-0 z-0`，内容层为 `pointer-events-none`），因此网点层不影响上方内容的交互。
+
+<ComponentShowcase
+  id="chamaac/interactive-grid-overlay"
+  path="chamaac/interactive-grid/overlay"
+/>
+
+```tsx
+import { InteractiveGridBackground } from "@/components/core/interactive-grid-background"
+
+export default function Demo() {
+  return (
+    <InteractiveGridBackground className="h-[400px] rounded">
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center space-y-4">
+          <h2 className="text-4xl font-bold text-white drop-shadow-lg">欢迎</h2>
+          <p className="text-zinc-400 text-lg">移动鼠标体验网点交互</p>
+        </div>
+      </div>
+    </InteractiveGridBackground>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### InteractiveGridBackground
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| gridGap | 网点之间的间距（像素） | `number` | `40` |
+| dotSize | 基础网点半径（像素） | `number` | `1.5` |
+| color | 基础网点颜色 | `string`（CSS 颜色值） | `#737373` |
+| highlightColor | 鼠标附近网点的高亮颜色 | `string`（CSS 颜色值） | `#FFFF00` |
+| radius | 鼠标影响的辐射范围（像素） | `number` | `300` |
+| className | 附加样式类名，合并到外层容器 | `string` | - |
+| children | 叠放在网点上方的子内容 | `React.ReactNode` | - |
+
+组件继承 `React.HTMLProps<HTMLDivElement>`，支持 div 的通用属性。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何调整网点密度？
+
+使用 `gridGap` 属性。值越小网点越密集，值越大网点越稀疏。
+
+```tsx
+<InteractiveGridBackground gridGap={20} />
+```
+
+### 如何自定义网点颜色？
+
+传入 `color`（基础色）和 `highlightColor`（高亮色）即可。
+
+```tsx
+<InteractiveGridBackground color="#3b82f6" highlightColor="#93c5fd" />
+```
+
+### 如何控制鼠标交互范围？
+
+使用 `radius` 属性。值越大，鼠标影响的网点范围越广。
+
+```tsx
+<InteractiveGridBackground radius={200} />
+```
+
+### 如何在网点上方叠加内容？
+
+将内容作为 children 传入即可。组件内部 children 渲染在 `relative z-10 pointer-events-none` 的容器中。
+
+```tsx
+<InteractiveGridBackground className="h-[400px] rounded">
+  <h1 className="text-white">Hello World</h1>
+</InteractiveGridBackground>
+```
+
+### 能否作为页面全屏背景？
+
+可以。设置父容器或组件自身为全屏高度即可。
+
+```tsx
+<InteractiveGridBackground className="h-screen w-screen">
+  <div className="flex items-center justify-center h-full">
+    <h1 className="text-white text-4xl font-bold">欢迎</h1>
+  </div>
+</InteractiveGridBackground>
+```
+
+### 性能如何？
+
+组件使用 Canvas 2D API，每帧遍历所有网点进行距离计算和绘制。默认 gridGap=40 时，1920x1080 分辨率下约 1300 个网点，现代设备上性能表现良好。如果使用极小的 gridGap（如 < 10），网点数量会显著增加，建议在低端设备上避免使用过于密集的配置。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 InteractiveGridBackground 代码时：
+
+1. 从 `@/components/core/interactive-grid-background` 导入 `InteractiveGridBackground`（具名导出）。
+2. 将组件放在 `relative` 容器中，容器需有明确宽高。
+3. 自定义网点样式时使用 `gridGap`、`dotSize`、`color`、`highlightColor` 属性。
+4. 调整交互范围使用 `radius` 属性。
+5. 需要叠加内容时，将内容作为 children 传入。
+6. 组件默认背景为黑色 (`bg-black`)，可通过 `className` 覆盖。
+7. 不引入额外的 Canvas 库或动画框架 — 组件使用原生 Canvas 2D API 实现。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="chamaac/interactive-grid" />

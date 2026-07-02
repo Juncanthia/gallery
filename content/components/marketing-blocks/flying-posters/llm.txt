@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: FlyingPosters
+subtitle: 飞行海报
+description: 基于 WebGL (OGL) 的垂直滚动飞行海报组件，带扭曲形变动画。
+demo: { cols: 1 }
+group: { title: Components, order: 17 }
+source: { component: src/components/react-bits/flying-posters.tsx, docs: content/components/marketing-blocks/flying-posters/index.mdx, examples: [content/components/marketing-blocks/flying-posters/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, ogl: true }
+---

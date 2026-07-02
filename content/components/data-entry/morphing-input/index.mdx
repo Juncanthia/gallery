@@ -1,0 +1,104 @@
+MorphingInput 是一个带动画变形的搜索输入框，点击左侧图标可在多种搜索类型之间切换，placeholder 文字带有逐字动画效果。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要提供多功能搜索入口时使用。用户可通过切换图标选择搜索类型（如通用搜索、图片生成），每次切换时 placeholder 文字以逐字动画呈现，提供流畅的视觉反馈。
+
+常见场景：
+
+- 多功能搜索栏，支持在不同搜索类别间切换。
+- AI 产品输入框，如"搜索任意内容"与"生成图片"的上下文切换。
+- 需要强调输入引导与视觉吸引力的搜索入口。
+
+不推荐：
+
+- 搜索类型超过 3 种的场景（切换成本高，建议使用下拉选择器）。
+- 需要键盘导航切换搜索类型的场景（当前仅支持点击图标切换）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+组件包含两个可切换的搜索模式：通用搜索和图片生成。点击左侧图标可在模式间切换，placeholder 逐字动画呈现。
+
+<ComponentShowcase
+  id="data-entry/morphing-input"
+  path="data-entry/morphing-input/basic"
+/>
+
+```tsx
+import { MorphingInput } from "@/components/data-entry/morphing-input"
+
+export default function Demo() {
+  return &lt;MorphingInput /&gt;
+}
+```
+
+<h2 id="api">API</h2>
+
+### MorphingInput
+
+MorphingInput 为零 props 的自包含组件。所有搜索类型配置在组件内部的 `placeholderOptions` 数组中定义。如需修改搜索类型或占位文案，直接编辑 `src/components/data-entry/morphing-input.tsx` 中的 `placeholderOptions`。
+
+| 内部状态 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| activeIndex | 当前激活的搜索类型索引 | `number` | `0` |
+| inputValue | 输入框文本内容 | `string` | `""` |
+
+### 搜索类型配置
+
+| 常量 | 说明 | 类型 |
+| --- | --- | --- |
+| placeholderOptions | 搜索类型选项列表 | `{ id: number, placeholder: string, icon: HugeiconsIcon }[]` |
+
+默认配置：
+
+- `id: 1` — "Search anything..."，图标 `SparklesIcon`。
+- `id: 2` — "Generate Image"，图标 `Album02Icon`。
+
+动画实现：
+
+- **图标切换**：使用 `AnimatePresence mode="popLayout"` 实现模糊淡入淡出过渡（0.35s easeInOut）。
+- **Placeholder 文字**：每个字母独立使用 `motion.span`，从 rotateX 80deg + 模糊状态弹入，延时逐字递增 0.015s，spring 动画（damping: 16, stiffness: 240, mass: 1.2）。
+- **切换按钮**：点击时 `whileTap={{ scale: 0.9 }}` 缩放反馈。
+- **提交按钮**：`active:scale-95` transition 缩放反馈。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何添加更多搜索类型？
+
+直接修改 `src/components/data-entry/morphing-input.tsx` 中的 `placeholderOptions` 数组，添加新的 `{ id, placeholder, icon }` 对象。组件会自动循环切换所有选项。
+
+### 如何自定义 placeholder 动画速度？
+
+修改 `AnimatedPlaceholder` 组件中 `transition.delay` 的乘数（当前为 `0.015 * index`）和 spring 参数（`damping`、`stiffness`、`mass`）。
+
+### 如何获取用户输入内容？
+
+当前 `inputValue` 为组件内部状态。如需对外暴露，请在组件中添加 `onChange` prop 或使用 `ref`。组件当前未提供对外回调。
+
+### 图标切换不生效？
+
+检查 `@hugeicons/core-free-icons` 中是否已导入目标图标。如需使用其他图标集，请在 `placeholderOptions` 中替换 `icon` 字段并相应调整 `HugeiconsIcon` 的渲染。
+
+### 组件在移动端表现如何？
+
+组件使用 `max-w-sm` 限制最大宽度，内部元素使用 `flex` 布局，自适应移动端。`whileTap` 和 `active:scale-95` 在触摸设备上同样触发。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 MorphingInput 代码时：
+
+1. 从 `@/components/data-entry/morphing-input` 导入 `MorphingInput`（named export）。
+2. 组件为零 props 组件，直接渲染即可。
+3. 如需定制搜索类型，修改 `src/components/data-entry/morphing-input.tsx` 中的 `placeholderOptions` 数组。
+4. 图标使用 `@hugeicons/core-free-icons`，不要使用 `@ant-design/icons` 或 `lucide-react`。
+5. 动画依赖 `motion/react`，不要删除或绕开 AnimatePresence 和 motion 组件。
+6. 不要引入 Ant Design 或 rc-component 相关依赖。
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/data-entry/morphing-input.tsx` — MorphingInput 完整实现，包含 placeholder 动画、图标切换、输入框。
+- `src/components/core/uselayouts-morphing-input.tsx` — 统一导入入口。

@@ -1,0 +1,186 @@
+---
+category: Components
+title: DocxEditor
+subtitle: Docx 编辑器
+description: 在线编辑和预览 DOCX 文档。
+demo:
+  cols: 1
+group:
+  title: Extend
+  order: 3
+source:
+  component: src/components/core/extend-docx-editor.tsx
+  extendComponent: src/components/extend/components/ui/docx-editor.tsx
+  viewer: src/components/extend/components/ui/docx-viewer.tsx
+  annotations: src/components/extend/components/ui/docx-annotation-card.tsx
+  block: src/components/extend/components/blocks/docx-editor.tsx
+  docs: content/components/extend/docx-editor/index.mdx
+  examples:
+    - content/components/extend/docx-editor/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  extendAi: true
+  hugeicons: true
+  tanstackVirtual: true
+  baseUi: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# DocxEditor 编辑器
+
+DocxEditor 基于 `@extend-ai/react-docx`，提供完整的在线 DOCX 编辑与预览能力。支持富文本编辑、修订追踪、评论、暗色模式、缩放等功能。设计目标是为文档管理系统提供开箱即用的 Word 文档编辑体验。
+
+## 何时使用 {#when-to-use}
+
+需要在前端直接打开、编辑、预览 Word 文档（.docx），无需依赖桌面 Office 软件或服务端渲染。
+
+常见场景：
+
+- 文档管理系统中的在线编辑与预览。
+- 合同、协议等文书的在线审阅与批注。
+- 支持修订追踪（Track Changes）和评论的协作场景。
+- 需要导入、编辑后导出 DOCX 的工作流。
+- 嵌入式文档阅读器。
+
+DocxEditorPreview 通过以下属性表达行为：
+
+- `src`：DOCX 文件 URL，指定后自动加载。
+- `isDark`：控制暗色文档渲染模式。
+- `onIsDarkChange`：暗色模式切换回调。
+- `defaultZoomScale`：初始缩放比例，默认 100。
+- `fileName`：自定义文档显示名称。
+
+推荐使用方式：
+
+- DOCX 编辑：使用 `DocxEditorPreview`，传入 `src` 指定文档，提供 `isDark` 和 `onIsDarkChange`。
+- 块级嵌入：使用 `DocxEditorBlock`，传入 `file` 属性。
+- 仅预览：使用 `DocxViewerPreview`（从 `@hyper/extend-ui/components/ui/docx-viewer` 导入）。
+
+不推荐：
+
+- 在生产环境中使用跨域未经授权的 DOCX URL。
+- 同时渲染多个编辑器实例导致内存压力过大。
+- 绕过 DocxEditorPreview 直接操作底层 hooks，除非确实需要深度定制。
+
+## 代码演示 {#examples}
+
+### 基础编辑器
+
+传入 `src` 指定 DOCX 文件地址，编辑器自动加载并展示完整的富文本编辑工具栏。
+
+```tsx
+import React from "react"
+import { DocxEditorPreview } from "@/components/document/components/ui/docx-editor"
+
+export default function Demo() {
+  const [isDark, setIsDark] = React.useState(false)
+
+  return (
+    <DocxEditorPreview
+      src="/samples/demo.docx"
+      isDark={isDark}
+      onIsDarkChange={setIsDark}
+    />
+  )
+}
+```
+
+## API {#api}
+
+### DocxEditorPreview
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | DOCX 文件地址；不传时显示上传入口 | `string` | - |
+| isDark | 是否启用暗色文档渲染 | `boolean` | `false` |
+| onIsDarkChange | 暗色模式切换回调 | `(isDark: boolean) => void` | - |
+| fileName | 文档显示名称；不传时从 `src` 提取 | `string` | - |
+| defaultZoomScale | 初始缩放比例 | `number` | `100` |
+| className | 附加样式类名 | `string` | - |
+
+## 与 Ant Design 的差异 {#antd-differences}
+
+Ant Design 不提供 Word 文档编辑组件。本组件直接基于 `@extend-ai/react-docx` 构建，与 AntD 无直接对应关系。
+
+## 可访问性 {#accessibility}
+
+- 工具栏按钮均提供 `aria-label`。
+- 缩放控制使用 `aria-label="Zoom level"` 和键盘可操作的下拉选择。
+- 侧边栏缩略图列表使用 `role="listbox"` + `role="option"` 语义。
+- 文档视口区域使用 `aria-label="DOCX document"`。
+- 页面导航输入支持键盘操作（Enter 确认，Escape 取消）。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心依赖：
+
+- `@extend-ai/react-docx`：底层 DOCX 渲染与编辑引擎。
+- `@hugeicons/core-free-icons` + `@hugeicons/react`：工具栏图标。
+- `@tanstack/react-virtual`：查看器模式下侧边栏缩略图虚拟滚动。
+- `radix-ui` Popover：段落样式预览卡片定位与弹出层。
+- Tailwind CSS：所有样式通过 CVA + Tailwind class 管理。
+
+关键行为：
+
+1. 不传 `src` 时，编辑器显示上传入口。
+2. 编辑模式下提供完整工具栏：字体、段落、列表、表格、图片、边框、修订、评论。
+3. `isDark` 控制文档渲染主题，不影响 UI chrome（工具栏/侧边栏）。
+4. 默认高度 720px，内部使用 flex 布局自适应。
+5. 工具栏包含导入（Upload DOCX）和导出（Download DOCX）按钮。
+6. 支持撤销/重做（undo/redo）。
+7. 缩放范围：50% ~ 200%，通过预设挡位切换。
+
+## FAQ {#faq}
+
+### 和 DocxViewerPreview 有什么区别？
+
+`DocxEditorPreview` 提供完整编辑工具栏，支持文本格式化、段落样式、列表、表格等编辑能力。`DocxViewerPreview` 仅支持预览，工具栏仅包含查看相关控件（缩放、暗色模式、评论/修订显示），适用于只读场景。
+
+```tsx
+// 编辑模式
+import { DocxEditorPreview } from "@/components/document/components/ui/docx-editor"
+
+// 仅预览模式
+import { DocxViewerPreview } from "@/components/document/components/ui/docx-viewer"
+```
+
+### 如何获取编辑后的文档？
+
+编辑器工具栏提供下载按钮。用户编辑完成后点击 Download DOCX 即可下载修改后的文档。底层调用 `editor.exportDocx()` 方法生成 Blob 并触发浏览器下载。
+
+### 支持 .doc 格式吗？
+
+不支持。仅支持 .docx（Office Open XML）。旧版 .doc 文件需要先用 Office 软件转换为 .docx。
+
+### 可以不显示工具栏吗？
+
+`DocxEditorPreview` 总是显示工具栏。如果不需要工具栏，使用 `DocxViewerPreview` 并传入 `showToolbar={false}`。
+
+```tsx
+import { DocxViewerPreview } from "@/components/document/components/ui/docx-viewer"
+
+&lt;DocxViewerPreview
+  src="/samples/demo.docx"
+  isDark={isDark}
+  onIsDarkChange={setIsDark}
+  showToolbar={false}
+/&gt;
+```
+
+### 如何自定义文档加载失败的错误提示？
+
+目前错误提示由组件内部处理，显示在编辑区域内。如需自定义，可以监听 `src` 的有效性，在传入前校验 URL 可访问性。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DocxEditor 代码时，应遵守：
+
+1. 从 `@/components/document/components/ui/docx-editor` 导入 `DocxEditorPreview`。
+2. 必须提供 `isDark` 和 `onIsDarkChange` 属性。
+3. `src` 指向可访问的 .docx 文件 URL，或留空让用户自行上传。
+4. 不要尝试直接操作 `@extend-ai/react-docx` 的底层 hooks（`useDocxEditor` 等），使用封装好的 `DocxEditorPreview`。
+5. 编辑器内部已包含完整工具栏、侧边栏和状态管理，无需额外包装。
+6. 如需仅预览模式，导入 `DocxViewerPreview` 并设置 `showToolbar={false}` 或使用其精简工具栏。
+7. 不要引入 `mammoth.js`、`docx.js` 或其他 DOCX 处理库，本项目统一使用 `@extend-ai/react-docx`。

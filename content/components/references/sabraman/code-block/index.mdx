@@ -1,0 +1,298 @@
+LegacyCodeBlockCommand 是一个复古 macOS 10.15 风格的代码块命令组件，展示安装命令并支持在 bun、npm、pnpm、yarn 四款包管理器之间切换，提供一键复制功能。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在文档或落地页中展示安装命令，并允许用户在不同包管理器之间切换时使用。
+
+常见场景：
+
+- 库的安装说明：展示 `npm install` / `pnpm add` / `yarn add` / `bun add` 等效命令。
+- CLI 工具的创建命令：展示 `npx create-*` / `pnpm create` / `yarn create` 等效命令。
+- 运行脚本命令：展示 `npm run dev` / `pnpm dev` / `yarn dev` / `bun dev` 等效命令。
+
+LegacyCodeBlockCommand 的核心能力：
+
+- 包管理器切换：内置 bun、npm、pnpm、yarn 四个选项的分段控件。
+- 偏好记忆：用户选择的包管理器会持久化到 localStorage，跨页面共享。
+- 一键复制：点击复制按钮将当前命令写入剪贴板，支持成功/失败回调。
+- 自动适配：仅展示提供了对应命令的包管理器，无命令的选项自动隐藏。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+为每个包管理器提供对应的命令字符串，组件自动展示有命令的选项。
+
+<ComponentShowcase
+  id="references/sabraman/blocks/code-block"
+  path="references/sabraman/blocks/code-block/basic"
+/>
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-xl">
+      <LegacyCodeBlockCommand
+        bun="bun add react react-dom"
+        npm="npm install react react-dom"
+        pnpm="pnpm add react react-dom"
+        yarn="yarn add react react-dom"
+      />
+    </div>
+  )
+}
+```
+
+### 部分包管理器
+
+仅提供部分包管理器的命令，未提供的选项会自动隐藏。
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-xl">
+      <LegacyCodeBlockCommand
+        npm="npm install @hyper/sabraman"
+        pnpm="pnpm add @hyper/sabraman"
+      />
+    </div>
+  )
+}
+```
+
+### 默认包管理器
+
+通过 `initialPackageManager` 指定首次渲染时选中的包管理器。若用户曾手动选择过，则优先使用 localStorage 中的偏好。
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-xl">
+      <LegacyCodeBlockCommand
+        bun="bun create vite my-app"
+        initialPackageManager="pnpm"
+        npm="npm create vite@latest my-app"
+        pnpm="pnpm create vite my-app"
+        yarn="yarn create vite my-app"
+      />
+    </div>
+  )
+}
+```
+
+### 自定义操作区
+
+通过 `headerActions` 在操作栏中插入额外的操作按钮（如"了解更多"链接）。
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-xl">
+      <LegacyCodeBlockCommand
+        bun="bun add @hyper/sabraman"
+        headerActions={
+          <a
+            className="text-[#dbeaff]/70 text-xs hover:text-[#dbeaff] transition-colors"
+            href="https://example.com"
+            rel="noreferrer"
+            target="_blank"
+          >
+            了解更多
+          </a>
+        }
+        npm="npm install @hyper/sabraman"
+        pnpm="pnpm add @hyper/sabraman"
+        yarn="yarn add @hyper/sabraman"
+      />
+    </div>
+  )
+}
+```
+
+### 复制回调
+
+通过 `onCopySuccess` 和 `onCopyError` 监听复制结果。
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-xl">
+      <LegacyCodeBlockCommand
+        bun="bun add react"
+        npm="npm install react"
+        onCopyError={(error) => console.error("复制失败", error)}
+        onCopySuccess={({ command, packageManager }) =>
+          console.log("已复制", command, packageManager)
+        }
+        pnpm="pnpm add react"
+        yarn="yarn add react"
+      />
+    </div>
+  )
+}
+```
+
+### 使用 convertNpmCommand 工具函数
+
+`convertNpmCommand` 可将一条 npm 命令转换为四种包管理器的等效命令。
+
+```tsx
+import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+import { convertNpmCommand } from "@/components/_internal/sabraman"
+
+export default function Demo() {
+  const commands = convertNpmCommand("npm install @hyper/sabraman")
+
+  return (
+    <div className="w-full max-w-xl">
+      <LegacyCodeBlockCommand
+        bun={commands.bun}
+        npm={commands.npm}
+        pnpm={commands.pnpm}
+        yarn={commands.yarn}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LegacyCodeBlockCommand
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| bun | bun 包管理器对应的命令 | `string` | - |
+| npm | npm 包管理器对应的命令 | `string` | - |
+| pnpm | pnpm 包管理器对应的命令 | `string` | - |
+| yarn | yarn 包管理器对应的命令 | `string` | - |
+| initialPackageManager | 初始默认包管理器（首次渲染时使用；用户手动选择后会覆盖） | `"bun"` \| `"npm"` \| `"pnpm"` \| `"yarn"` | 第一个有命令的包管理器 |
+| onCopyError | 复制失败回调 | `(error: Error) =&gt; void` | - |
+| onCopySuccess | 复制成功回调 | `(data: { command: string; packageManager: PackageManager }) =&gt; void` | - |
+| headerActions | 操作栏右侧额外操作元素 | `React.ReactNode` | - |
+| className | 附加样式类名 | `string` | - |
+| style | 内联样式 | `React.CSSProperties` | - |
+
+继承所有 `React.HTMLAttributes&lt;HTMLDivElement&gt;`。
+
+### usePreferredPackageManager
+
+Hook，用于读写用户偏好的包管理器，数据持久化到 localStorage。
+
+```ts
+function usePreferredPackageManager(
+  initialPackageManager?: PackageManager
+): readonly [PackageManager, (pm: PackageManager) => void]
+```
+
+### convertNpmCommand
+
+工具函数，将一条 npm 命令转换为四种包管理器的等效命令。
+
+```ts
+function convertNpmCommand(npmCommand: string): Record<PackageManager, string>
+```
+
+支持的转换规则：
+
+| 源命令 | bun | npm | pnpm | yarn |
+| --- | --- | --- | --- | --- |
+| `npm install ...` | `bun add ...` | 原样保留 | `pnpm add ...` | `yarn add ...` |
+| `npx create-*` | `bunx --bun ...` | 原样保留 | `pnpm create ...` | `yarn create ...` |
+| `npm create ...` | `bun create ...` | 原样保留 | `pnpm create ...` | `yarn create ...` |
+| `npx ...` | `bunx --bun ...` | 原样保留 | `pnpm dlx ...` | `yarn ...` |
+| `npm run ...` | `bun ...` | 原样保留 | `pnpm ...` | `yarn ...` |
+| 其他命令 | 原样保留 | 原样保留 | 原样保留 | 原样保留 |
+
+### PackageManagerIcon
+
+根据当前包管理器渲染对应的 SVG 图标。
+
+```ts
+function PackageManagerIcon(props: { packageManager: PackageManager }): JSX.Element
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 如何只展示部分包管理器？
+
+只提供需要的包管理器命令即可，未提供的选项不会渲染。
+
+```tsx
+<LegacyCodeBlockCommand
+  npm="npm install react"
+  pnpm="pnpm add react"
+/>
+```
+
+### 包管理器偏好如何存储？
+
+`usePreferredPackageManager` 将用户选择的包管理器写入 `localStorage`（键名 `sabraman-legacy-blocks/code-block-command-package-manager`）。同一域下的所有 LegacyCodeBlockCommand 实例共享偏好，cross-tab 同步。
+
+### 如果提供的命令中不含用户上一次选择的包管理器怎么办？
+
+组件会自动回退到第一个有命令的可用包管理器。
+
+### 如何使用 convertNpmCommand？
+
+从 `@/components/_internal/sabraman` 导入并使用展开运算符传参：
+
+```tsx
+import { convertNpmCommand } from "@/components/_internal/sabraman"
+
+const cmds = convertNpmCommand("npm install react")
+
+<LegacyCodeBlockCommand {...cmds} />
+```
+
+注意：`convertNpmCommand` 来自 `@/components/_internal/sabraman`，而 `LegacyCodeBlockCommand` 组件从 `@/components/_internal/sabraman` 导入。
+
+### 如何自定义复制按钮的行为？
+
+通过 `onCopySuccess` 和 `onCopyError` 监听复制结果：
+
+```tsx
+<LegacyCodeBlockCommand
+  bun="bun add react"
+  npm="npm install react"
+  pnpm="pnpm add react"
+  yarn="yarn add react"
+  onCopySuccess={({ command, packageManager }) => {
+    toast.success(`已复制 ${packageManager} 命令`)
+  }}
+  onCopyError={(error) => {
+    toast.error("复制失败，请手动复制")
+  }}
+/>
+```
+
+### 组件没有显示任何内容？
+
+当所有包管理器命令（bun / npm / pnpm / yarn）均未提供时，组件返回 `null`。请检查是否至少提供了一条命令。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LegacyCodeBlockCommand 代码时：
+
+1. 从 `@/components/_internal/sabraman` 导入 `LegacyCodeBlockCommand`。
+2. 为需要展示的包管理器分别提供 `bun`、`npm`、`pnpm`、`yarn` 命令字符串。
+3. 使用 `convertNpmCommand` 工具函数（从 `@/components/_internal/sabraman` 导入）可快速生成四条命令。
+4. 通过 `initialPackageManager` 设置默认选中项；用户手动选择后优先使用 localStorage 偏好。
+5. 需要监听复制结果时使用 `onCopySuccess` / `onCopyError`。
+6. 操作栏右侧可通过 `headerActions` 插入自定义元素。
+7. 组件为复古 macOS 10.15 风格，不要添加额外的 UI 包裹层破坏其视觉完整性。
+8. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="references/sabraman/blocks/code-block" />

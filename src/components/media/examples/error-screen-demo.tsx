@@ -2,7 +2,7 @@
 
 import { ExternalLinkIcon, RotateCwIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import {
   ErrorScreen,
   getErrorDetails,

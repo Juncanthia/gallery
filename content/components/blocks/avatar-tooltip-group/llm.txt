@@ -1,0 +1,210 @@
+---
+category: Blocks
+title: AvatarTooltipGroup
+subtitle: 头像提示组
+description: 头像悬停时弹出自定义提示框，支持动画过渡与方向控制。
+demo:
+  cols: 2
+group:
+  title: 复合组件
+  order: 13
+source:
+  component: src/components/blocks/avatar-tooltip-group/index.tsx
+  docs: content/components/blocks/avatar-tooltip-group/index.mdx
+  examples:
+    - content/components/blocks/avatar-tooltip-group/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  typescript: true
+  motion: true
+  nextjs: false
+  radix: false
+---
+
+# AvatarTooltipGroup 头像提示组
+
+将多个 Avatar 头像以重叠方式排列，悬停任意头像时弹出自定义提示框。基于 motion/react-client 实现悬停浮起动效和提示框动画过渡，支持控制弹出方向、偏移量、延迟时间等参数。
+
+本组件是复合组件（Composite Block），由 `AvatarGroup`（头像容器）和 `AvatarGroupTooltip`（提示框内容注册）两部分组成。AvatarGroupTooltip 不产生可见 DOM 输出，而是在 Tooltip 上下文注册内容数据，由底层 TooltipOverlay 通过 portal 渲染。
+
+## 何时使用
+
+- 在紧凑空间中展示一组用户头像，并希望悬停时显示详细信息（如用户名、角色等）。
+- 需要提示框内容根据数据动态变化且希望有平滑过渡动画时。
+- 头像组的弹出方向、动画曲线需要自定义控制的场景。
+- 不适用于仅需静态头像排列的场景——此时使用 `AvatarStack` 或普通的横向 Avatar 列表即可。
+
+## 代码演示
+
+### 基础用法
+
+AvatarGroup 包裹 Avatar，每个 Avatar 内部可放置 AvatarGroupTooltip 注册悬停提示内容。
+
+```tsx
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/core/avatar";
+
+export default function Basic() {
+  return (
+    <AvatarGroup>
+      <Avatar>
+        <AvatarImage src="https://github.com/user1.png" alt="A" />
+        <AvatarFallback>A</AvatarFallback>
+        <AvatarGroupTooltip>User A</AvatarGroupTooltip>
+      </Avatar>
+      <Avatar>
+        <AvatarImage src="https://github.com/user2.png" alt="B" />
+        <AvatarFallback>B</AvatarFallback>
+        <AvatarGroupTooltip>User B</AvatarGroupTooltip>
+      </Avatar>
+      <Avatar>
+        <AvatarFallback>C</AvatarFallback>
+        <AvatarGroupTooltip>User C</AvatarGroupTooltip>
+      </Avatar>
+    </AvatarGroup>
+  );
+}
+```
+
+### 自定义弹出方向与偏移
+
+```tsx
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
+import { Avatar, AvatarFallback } from "@/components/core/avatar";
+
+export default function CustomDirection() {
+  return (
+    <AvatarGroup side="bottom" sideOffset={12} align="start">
+      <Avatar>
+        <AvatarFallback>张</AvatarFallback>
+        <AvatarGroupTooltip>张三 — 前端工程师</AvatarGroupTooltip>
+      </Avatar>
+      <Avatar>
+        <AvatarFallback>李</AvatarFallback>
+        <AvatarGroupTooltip>李四 — 后端工程师</AvatarGroupTooltip>
+      </Avatar>
+    </AvatarGroup>
+  );
+}
+```
+
+### 自定义提示框动画
+
+通过 `layout` 控制提示框内容变化时的 motion 布局动画模式。
+
+```tsx
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
+import { Avatar, AvatarFallback } from "@/components/core/avatar";
+
+export default function CustomLayout() {
+  return (
+    <AvatarGroup>
+      <Avatar>
+        <AvatarFallback>张</AvatarFallback>
+        <AvatarGroupTooltip layout="position">仅跟踪位置变化</AvatarGroupTooltip>
+      </Avatar>
+      <Avatar>
+        <AvatarFallback>李</AvatarFallback>
+        <AvatarGroupTooltip layout={false}>禁用布局动画</AvatarGroupTooltip>
+      </Avatar>
+    </AvatarGroup>
+  );
+}
+```
+
+### 禁用重叠反转
+
+`invertOverlap={false}` 使第一个头像在最上层。
+
+```tsx
+import { AvatarGroup, AvatarGroupTooltip } from "@/components/blocks/avatar-tooltip-group";
+import { Avatar, AvatarFallback } from "@/components/core/avatar";
+
+export default function NoInvert() {
+  return (
+    <AvatarGroup invertOverlap={false}>
+      <Avatar>
+        <AvatarFallback>1</AvatarFallback>
+        <AvatarGroupTooltip>第一人</AvatarGroupTooltip>
+      </Avatar>
+      <Avatar>
+        <AvatarFallback>2</AvatarFallback>
+        <AvatarGroupTooltip>第二人</AvatarGroupTooltip>
+      </Avatar>
+    </AvatarGroup>
+  );
+}
+```
+
+## API
+
+### AvatarGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| children | 子级 Avatar 元素列表 | `React.ReactElement[]` | - |
+| className | 外层容器自定义样式类 | `string` | `'h-12 -space-x-3'` |
+| invertOverlap | 是否反转层级——`true` 时最后一个头像在最上层 | `boolean` | `true` |
+| translate | 悬停时头像的垂直位移量 | `string \| number` | `'-30%'` |
+| transition | 头像悬停位移动画的过渡配置 | `Transition` | `{ type: 'spring', stiffness: 300, damping: 17 }` |
+| openDelay | 提示框显示延迟（毫秒） | `number` | `0` |
+| closeDelay | 提示框隐藏延迟（毫秒） | `number` | `0` |
+| side | 提示框相对于头像的弹出方向 | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| sideOffset | 提示框与头像之间的间距（像素） | `number` | `25` |
+| align | 提示框相对于头像的对齐方式 | `'start' \| 'center' \| 'end'` | `'center'` |
+| alignOffset | 提示框对齐偏移量（像素） | `number` | `0` |
+| tooltipTransition | 提示框显隐动画的过渡配置 | `Transition` | `{ type: 'spring', stiffness: 300, damping: 35 }` |
+| id | 提示框提供者标识 | `string` | - |
+
+此外支持所有标准 div HTML 属性（如 `style`、`ref` 等）。
+
+### AvatarGroupTooltip
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| children | 提示框内显示的内容 | `React.ReactNode` | - |
+| className | 提示框自定义样式类 | `string` | - |
+| layout | 内容变化时 motion 布局动画模式 | `boolean \| 'position' \| 'size' \| 'preserve-aspect'` | `'preserve-aspect'` |
+
+此外支持所有 motion div 属性（`HTMLMotionProps<'div'>`），但不支持 `asChild`。
+
+## 样式模型
+
+- **头像容器**：通过 `h-12 -space-x-3` 定义头像尺寸为 48px 并产生负间距重叠效果。可通过 `className` 覆盖。
+- **头像悬停**：每个子 Avatar 被包裹在 `motion.div` 中，悬停时根据 `translate` 值向上浮动，动画曲线由 `transition` 控制。
+- **层级控制**：`invertOverlap` 决定 z-index 分配顺序。`true` 时最后元素层级最高（视觉上完整可见），`false` 时第一个元素层级最高。
+- **提示框内容**：背景色 `bg-primary`，文字色 `text-primary-foreground`，圆角 `rounded-md`，内边距 `px-3 py-1.5`，字号 `text-xs`。内容由用户通过 `children` 传入。
+- **提示框箭头**：SVG 箭头颜色 `fill-primary` 与提示框背景一致，根据 `side` 方向自动旋转角度（`top`=0°, `right`=90°, `bottom`=180°, `left`=-90°），且附带 1px 的像素对齐微调。
+- **内容动画**：提示框内容通过 `<motion.div layout>` 包裹（参数由 `layout` prop 控制），当 `children` 变化时自动进行布局动画过渡。
+
+## 依赖与实现说明
+
+- **核心文件**：`src/components/blocks/avatar-tooltip-group/index.tsx`
+- **底层原语**：`src/primitives/animate/avatar-group.tsx`，内部依赖 `src/primitives/animate/tooltip.tsx` 提供 TooltipProvider / Tooltip / TooltipTrigger / TooltipContent / TooltipArrow。
+- 依赖 `@/lib/utils` 中的 `cn` 工具函数做类名合并。
+- 依赖 `motion/react-client` 提供悬停动画与提示框内容布局动画。
+- 该组件为复合组件（Composite Block）。AvatarGroupTooltip 是一个"注册型"组件——它不产生可见 DOM（`TooltipContent` 返回 `null`），仅通过 `useEffect` 将自身 props（含 children）注册到父级 Tooltip 的上下文状态中。实际的提示框 UI 由全局 TooltipProvider 内部的 TooltipOverlay 通过 React portal 渲染。
+- Avatar 组件需以 composed mode 使用（即不传 `src` prop 给 Avatar，而是使用 `AvatarImage` 子组件），这样 Avatar 才会渲染其全部 children，使 AvatarGroupTooltip 的注册 useEffect 得以执行。
+- 实际使用中，Avatar 组件从 `@/components/core/avatar` 导入。
+
+## 可访问性
+
+- 提示框由悬停触发，无键盘可达性。如需键盘用户可访问，建议额外提供替代信息展示方式。
+- Avatar 组件应通过 `alt` 或 `AvatarFallback` 提供可读的替代文本。
+- 提示框内容区无 role 属性，如有复杂内容建议在外层自行添加 `role="tooltip"` 等 ARIA 标注。
+
+## 与 Ant Design 的取舍
+
+此组件为项目本地复合区块，无直接 Ant Design 对应物。Ant Design 的 `Avatar.Group` 提供头像堆叠展示但不内置每个头像的独立提示框功能。本组件通过在 primitive 层将独立的 Tooltip 上下文集成到每个 Avatar 容器中，实现了"每个头像悬停即弹提示"的交互模式，且提示框内容完全由调用方自定义（不限于纯文本），同时支持 motion 布局动画。
+
+## LLM 使用规则
+
+1. 从 `@/components/blocks/avatar-tooltip-group` 导入 `AvatarGroup` 和 `AvatarGroupTooltip`。
+2. AvatarGroup 的子级应为 Avatar 元素，每个 Avatar 内部可选择性放置 AvatarGroupTooltip 作为提示内容注册。
+3. Avatar 必须以 composed mode 使用——不传 `src` prop，改用 `AvatarImage` 子组件，以确保 AvatarGroupTooltip 的 useEffect 能正常执行。示例：`<Avatar><AvatarImage src="..." /><AvatarFallback>...</AvatarFallback><AvatarGroupTooltip>...</AvatarGroupTooltip></Avatar>`。
+4. AvatarGroupTooltip 的 `children` 即为提示框显示内容，可以是纯文本、React 元素或复杂布局。该组件不存在 `content` prop。
+5. 通过 `side`、`sideOffset`、`align`、`alignOffset` 精确控制提示框弹出位置。
+6. 通过 `openDelay` 和 `closeDelay` 控制提示框响应速度；通过 `transition` 和 `tooltipTransition` 分别控制头像动效和提示框动效。
+7. 不要在提示框内容中放置 Button、Input 等交互控件——提示框为只读信息展示。
+8. 该组件为复合组件，并非 Ant Design 或 shadcn/ui 的一等公民组件，使用前需确认已在项目中引入。

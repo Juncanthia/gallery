@@ -9,7 +9,7 @@ import {
 } from '@platejs/comment';
 import { toTPlatePlugin } from 'platejs/react';
 
-import { CommentLeaf } from '@/components/ui/comment-node';
+import { CommentLeaf } from '@/components/editor/nodes/comment-node';
 import { getDiscussionClickTarget } from './discussion-kit';
 
 type CommentConfig = ExtendConfig<

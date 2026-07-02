@@ -1,0 +1,158 @@
+---
+category: Components
+title: Gauge
+subtitle: 仪表
+description: 基于 motion/react 的半圆形仪表盘组件，条形图动画展示百分比进度。
+demo:
+  cols: 1
+group:
+  title: Chamaac UI
+  order: 7
+source:
+  component: src/components/charts/gauge-charts/gauge-chamaac/gauge/gauge.tsx
+  examples:
+    - content/components/charts/gauge-charts/gauge-chamaac/gauge/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+  threejs: false
+---
+
+# Gauge 仪表
+
+基于 motion/react 的半圆形仪表盘组件。通过条形图排布展示百分比进度，内置数值动画和响应式尺寸适配。
+
+本组件来自 chamaac UI 库，以源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合以仪表盘形式直观展示进度、评分、完成率等百分比型数据。
+
+常见场景：
+
+- 数据看板、仪表盘的关键指标可视化。
+- 性能评分、目标完成度展示。
+- 需要动画效果的百分比数值展示。
+
+不推荐：
+
+- 精确数值读取场景，仪表盘视觉精度不如数字直接展示。
+- 移动端信息密集区域，小尺寸下辨识度低。
+- 多个指标并排对比，建议用进度条或迷你图表。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Gauge } from "@/components/charts/gauge-charts/gauge-chamaac/gauge"
+
+export default function Demo() {
+  return (
+    <div className="flex items-center justify-center py-8">
+      <Gauge
+        value={70}
+        min={0}
+        max={100}
+        size={400}
+        gap={4}
+        thickness={10}
+        activeColor="bg-blue-600"
+        inactiveColor="bg-blue-100"
+        label="Performance"
+      />
+    </div>
+  )
+}
+```
+
+> 说明：Gauge 通过半圆形条形图展示进度，数值动画在挂载后 100ms 自动启动。所有 props 均有默认值，最简单的用法只需传入 `value`。
+
+## 核心导出 {#exports}
+
+- `Gauge`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface GaugeProps {
+  value?: number        // 默认 70
+  min?: number          // 默认 0
+  max?: number          // 默认 100
+  size?: number         // 直径，默认 400
+  gap?: number          // 条间距（度），默认 4
+  thickness?: number    // 条粗细，默认 10
+  activeColor?: string  // Tailwind 类名，默认 "bg-blue-600"
+  inactiveColor?: string // Tailwind 类名，默认 "bg-blue-100"
+  showValue?: boolean   // 默认 true
+  label?: string        // 默认 "Performance"
+  className?: string
+  delay?: number        // 动画延迟（ms），默认 25
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+
+额外状态属性：
+
+- 无额外 `data-*` 状态属性。
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 组件根元素使用 `cn` 合并 `className`，默认样式为 `relative flex justify-center items-center`。
+- 内部通过 CSS `transform: rotate()` 排列条形图，动态类名控制活跃/非活跃颜色。
+- 左下角显示百分比数值和标签文字。
+- 不依赖 CVA 变体系统。
+- 不包装 Radix/Base UI primitive。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/charts/gauge-charts/gauge-chamaac/gauge/gauge.tsx`
+- `src/components/core/chamaac-gauge.tsx`（barrel 导出）
+
+直接依赖摘要：
+
+- `motion/react`（LazyMotion, domAnimation, m, useMotionValue, useTransform, animate）
+- `clsx`
+
+实现注意：
+
+1. 使用 `useMotionValue` + `animate` 驱动百分比数值的计数动画。
+2. 内置响应式：`window.innerWidth < 640` 时自动缩小至 `280px` / `6px`。
+3. 通过 `setTimeout` 100ms 延迟挂载动画，确保初始渲染完成。
+4. 半圆形条数为 `Math.floor(180 / gap)`，180 度半圆区域。
+5. 颜色通过 Tailwind class 传入，不是 CSS 颜色值。
+
+## 可访问性 {#accessibility}
+
+- 数值通过 `<h2>` + `<p>` 标签展示，语义清晰。
+- 颜色作为视觉辅助，文本内容独立可读。
+- 对于 prefers-reduced-motion 用户，建议在业务层禁用动画。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Gauge 代码时，应遵守：
+
+1. 从 `@/components/charts/gauge-charts/gauge-chamaac/gauge` 导入，不要从 `motion/react` 直接引用。
+2. 颜色 props（activeColor / inactiveColor）传入 Tailwind CSS 类名，不是 CSS 颜色字符串。
+3. 组件内置响应式逻辑，不需要手动添加响应式 wrapper。
+4. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 配置。
+5. 不要引入 Ant Design 相关依赖。
+6. 如果不确定某个 API 是否存在，先检查 `src/components/charts/gauge-charts/gauge-chamaac/gauge/gauge.tsx`，不要凭记忆生成。

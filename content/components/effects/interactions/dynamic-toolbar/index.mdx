@@ -1,0 +1,122 @@
+DynamicToolbar 动态工具栏。一个可展开/收起的动画工具栏，默认显示主要操作，点击展开后显示更多次要操作，所有切换由 spring 物理动画驱动。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在有限空间内组织两级操作时使用。默认态只显示高频主要操作以节省空间，点击展开按钮后露出完整工具集。
+
+常见场景：
+
+- 文档编辑器的格式工具栏，默认显示加粗/斜体/下划线，展开后露出对齐方式、列表、缩进等。
+- 画板或设计工具的绘图工具栏，默认显示常用笔刷，展开后显示形状、填充、图层操作。
+- 邮件客户端的操作栏，默认显示回复/转发/删除，展开后露出归档、标记、移动。
+- 表格行内操作，默认显示编辑/删除，展开后露出复制、导出、分享等。
+- 底部导航栏的二级操作入口，收起时仅显示核心导航项。
+
+组件设计要点：
+
+- **自动测量宽度**：使用 `useMeasure` hook 测量主要面板和次要面板的宽度，容器宽度由内容自适应。
+- **Spring 物理动画**：展开和收起使用不同的 duration 和 delay，展开较快（0.4s），收起有轻微延迟（1.2s），营造自然的弹性手感。
+- **模糊反馈**：部分按钮带有 `blur` 标记，在展开/收起时图标会施加 1px 高斯模糊，形成视觉层级过渡。
+- **自包含状态**：`isExpanded` 由内部 `useState` 管理，调用侧无需传入外部控制。
+
+不推荐：
+
+- 将本组件用于超过两级的操作层级（三级及以上考虑 Dropdown Menu 或 Command Palette）。
+- 在业务侧自行管理展开状态——组件已自包含，不需要外部 props 控制。
+- 将图标替换为非 @hugeicons 来源的图标集合——组件布局和动画已经与 Hugeicons 的渲染行为对齐。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase
+  id="effects/interactions/dynamic-toolbar"
+  path="effects/interactions/dynamic-toolbar/basic"
+/>
+
+```tsx
+import { DynamicToolbar } from "@/components/effects/interactions/dynamic-toolbar"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-8"&gt;
+      &lt;DynamicToolbar /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+DynamicToolbar 为自包含组件，不接受外部 props。所有内部状态由组件自行管理。
+
+如需自定义工具栏按钮，在 `src/components/effects/interactions/dynamic-toolbar.tsx` 中修改以下内部定义：
+
+- `primaryTools`：主要面板按钮数组，每项含 `icon`（Hugeicons 图标）、`label`（标签）、可选 `blur`（是否启用模糊过渡）。
+- `secondaryTools`：次要面板按钮数组，每项含 `icon`、`label`、可选 `blur`、可选 `className`（附加到图标的 CSS 类）。
+- `ICON_SIZE`：图标尺寸常量，默认 `24`。
+
+| 内部配置 | 类型 | 说明 |
+| --- | --- | --- |
+| primaryTools | `{ icon: HugeiconsIcon, label: string, blur?: boolean }[]` | 主要面板操作按钮 |
+| secondaryTools | `{ icon: HugeiconsIcon, label: string, blur?: boolean, className?: string }[]` | 次要面板操作按钮 |
+| isExpanded | `boolean`（内部 state） | 工具栏是否展开，由展开/收起按钮控制 |
+
+动画参数：
+
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| stiffness | `number` | Spring 刚度，默认 `200` |
+| damping | `number` | Spring 阻尼，默认 `20` |
+| mass | `number` | Spring 质量，默认 `0.8` |
+| expandDuration | `number` | 展开动画时长，默认 `0.4`（秒） |
+| collapseDuration | `number` | 收起动画时长，默认 `1.2`（秒） |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何添加或修改工具栏按钮？
+
+修改源码中的 `primaryTools` 和 `secondaryTools` 数组。每项需要提供 `icon`（从 `@hugeicons/core-free-icons` 导入）和 `label`。
+
+```tsx
+import { Settings01Icon } from "@hugeicons/core-free-icons"
+
+const primaryTools = [
+  { icon: InboxIcon, label: "Inbox" },
+  { icon: Settings01Icon, label: "Settings" },
+]
+```
+
+如需给特定按钮添加模糊效果，设置 `blur: true`。
+
+### 为什么要设置 blur 属性？
+
+`blur` 标记的按钮在工具栏展开/收起时，图标会施加 1px 高斯模糊过渡。这是一种视觉层级提示：当工具栏展开时，主要面板的次要操作变模糊，引导注意力到新出现的工具；收起时则相反。如果你不需要此效果，将 `blur: false` 或移除该属性。
+
+### 如何调整动画速度？
+
+展开和收起的动画时长不同，以模拟真实的物理手感。如需调整，修改源码中 `springTransition` 对象的 `duration` 属性：
+
+```tsx
+const springTransition = {
+  // ...
+  duration: isExpanded ? 0.3 : 0.8, // 更快或更慢
+};
+```
+
+### 如何在移动端使用？
+
+组件的固定高度为 `h-14`，按钮和图标尺寸为 24px，在移动端触摸交互友好。如果按钮数量过多导致横向溢出，可在源码中减少 `primaryTools` 和 `secondaryTools` 的项数。
+
+### 如何改变工具栏的视觉外观？
+
+组件使用 Tailwind CSS 定义样式：`rounded-full bg-muted border border-border` 决定了胶囊形态和背景色。如需全局调整，优先修改 Tailwind 主题变量（`--muted`、`--border` 等），而不是在调用处堆叠 className。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/effects/interactions/dynamic-toolbar` 导入 `DynamicToolbar`。
+2. 组件无外部 props，直接渲染即可。
+3. 如需自定义工具栏按钮，修改源码中的 `primaryTools` / `secondaryTools` 数组，不要在外部覆盖。
+4. 图标必须从 `@hugeicons/core-free-icons` 导入，不要混用 lucide-react 或其他图标库。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="effects/interactions/dynamic-toolbar" />

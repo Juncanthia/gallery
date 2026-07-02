@@ -1,0 +1,261 @@
+看板 基于 @dnd-kit 的看板拖拽复合组件，支持卡片在列间拖拽移动与排序，提供完整的拖拽上下文和屏幕阅读器播报。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在界面中实现看板式拖拽管理时使用。
+
+常见场景：
+- 任务管理面板（如 Todo / In Progress / Done）。
+- CRM 销售管道、候选人招聘流程等阶段拖拽。
+- 需要卡片在列间自由移动并实时更新数据源的看板场景。
+- 需要屏幕阅读器无障碍播报的拖拽交互。
+
+不推荐：
+- 简单的列表拖拽排序（不需要列维度时）——使用 @dnd-kit/sortable 即可。
+- 需要同时选中多个卡片批量拖拽——组件仅支持单卡片拖拽。
+- 展示只读的列布局——使用普通 Grid/Flex 布局即可。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="blocks/kanban" path="blocks/kanban/basic" />
+
+```tsx
+import {
+  KanbanProvider,
+  KanbanBoard,
+  KanbanHeader,
+  KanbanCards,
+  KanbanCard,
+} from "@/components/blocks/kanban"
+
+const columns = [
+  { id: "todo", name: "待办" },
+  { id: "in-progress", name: "进行中" },
+  { id: "done", name: "已完成" },
+]
+
+const initialData = [
+  { id: "1", name: "设计稿评审", column: "todo" },
+  { id: "2", name: "API 联调", column: "in-progress" },
+  { id: "3", name: "发布上线", column: "done" },
+]
+
+export default function Demo() {
+  const [data, setData] = useState(initialData)
+
+  return (
+    <KanbanProvider
+      columns={columns}
+      data={data}
+      onDataChange={setData}
+    >
+      {(column) => (
+        <KanbanBoard key={column.id} id={column.id}>
+          <KanbanHeader>{column.name}</KanbanHeader>
+          <KanbanCards id={column.id}>
+            {(item) => (
+              <KanbanCard key={item.id} {...item} />
+            )}
+          </KanbanCards>
+        </KanbanBoard>
+      )}
+    </KanbanProvider>
+  )
+}
+```
+
+### 自定义卡片内容
+
+```tsx
+import {
+  KanbanProvider,
+  KanbanBoard,
+  KanbanHeader,
+  KanbanCards,
+  KanbanCard,
+} from "@/components/blocks/kanban"
+import { Avatar, AvatarFallback } from "@/components/core/avatar"
+
+const columns = [
+  { id: "todo", name: "待办" },
+  { id: "done", name: "已完成" },
+]
+
+const initialData = [
+  { id: "1", name: "设计稿评审", column: "todo", assignee: "张三", priority: "high" },
+  { id: "2", name: "API 联调", column: "todo", assignee: "李四", priority: "normal" },
+  { id: "3", name: "发布上线", column: "done", assignee: "王五", priority: "high" },
+]
+
+export default function Demo() {
+  const [data, setData] = useState(initialData)
+
+  return (
+    <KanbanProvider columns={columns} data={data} onDataChange={setData}>
+      {(column) => (
+        <KanbanBoard key={column.id} id={column.id}>
+          <KanbanHeader>{column.name}</KanbanHeader>
+          <KanbanCards id={column.id}>
+            {(item) => (
+              <KanbanCard key={item.id} id={item.id} name={item.name} column={item.column}>
+                <div className="flex flex-col gap-2">
+                  <p className="font-medium text-sm">{item.name}</p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Avatar className="size-5"><AvatarFallback>{item.assignee[0]}</AvatarFallback></Avatar>
+                    <span>{item.assignee}</span>
+                    <span className="ml-auto rounded bg-orange-100 px-1.5 py-0.5 text-orange-700 text-xs dark:bg-orange-900/20 dark:text-orange-400">
+                      {item.priority}
+                    </span>
+                  </div>
+                </div>
+              </KanbanCard>
+            )}
+          </KanbanCards>
+        </KanbanBoard>
+      )}
+    </KanbanProvider>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### KanbanProvider
+
+拖拽上下文容器，封装 @dnd-kit 的 DndContext、传感器（鼠标/触屏/键盘）和无障碍播报。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| columns | 列定义数组 | `KanbanColumnProps[]` | 必填 |
+| data | 卡片数据数组 | `KanbanItemProps[]` | 必填 |
+| children | render prop，为每列渲染内容 | `(column: KanbanColumnProps) => ReactNode` | 必填 |
+| onDataChange | 数据变更回调，拖拽结束后触发 | `(data: KanbanItemProps[]) => void` | - |
+| onDragStart | 拖拽开始回调 | `(event: DragStartEvent) => void` | - |
+| onDragOver | 拖拽经过回调（跨列时更新 column 字段） | `(event: DragOverEvent) => void` | - |
+| onDragEnd | 拖拽结束回调 | `(event: DragEndEvent) => void` | - |
+| flatCursor | 关闭 grab/grabbing 光标切换，适合触屏或自定义光标场景 | `boolean` | `false` |
+| className | 根容器 CSS 类名 | `string` | - |
+
+同时接受 `DndContextProps` 的其他属性（如 `modifiers` 等），可通过展开传入覆盖默认值；默认 `collisionDetection` 已内置指针优先 + 列内最近卡片兜底的碰撞检测，键盘方向键也已内置感知列边界的坐标换算（跨列用方向键移动更准确），无需自行传入即可获得较好的跨列拖拽体验。
+
+### KanbanBoard
+
+列的 droppable 容器。拖拽悬停时显示 `ring-primary` 高亮环。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 列唯一标识，对应 `data` 中 item 的 `column` 字段与 `columns` 中的列 ID | `string` | 必填 |
+| children | 列内容（通常为 KanbanHeader + KanbanCards） | `ReactNode` | - |
+| className | CSS 类名 | `string` | - |
+
+### KanbanHeader
+
+列标题，渲染为 `<div>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | CSS 类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>` 的全部属性。
+
+### KanbanCards
+
+卡片列表容器，自动过滤当前列的数据并包裹 `SortableContext`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 列 ID，用于过滤 `data` 中 `column` 字段匹配的卡片 | `string` | 必填 |
+| children | render prop，为每个卡片渲染内容 | `(item: KanbanItemProps) => ReactNode` | 必填 |
+| className | CSS 类名 | `string` | - |
+
+继承 `Omit<HTMLAttributes<HTMLDivElement>, "children" | "id">` 的其他 div 属性。
+
+### KanbanCard
+
+可拖拽卡片。拖拽时显示半透明效果，DragOverlay 中渲染完整预览。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 卡片唯一标识 | `string` | 必填 |
+| name | 卡片显示名称（无 children 时作为默认内容） | `string` | 必填 |
+| column | 所属列 ID | `string` | 必填 |
+| children | 自定义卡片内容，不传则显示 name 文本 | `ReactNode` | - |
+| className | CSS 类名 | `string` | - |
+
+支持泛型 `<T extends KanbanItemProps>`，可在数据项上携带任意额外字段。
+
+### 数据类型
+
+```ts
+type KanbanItemProps = {
+  id: string
+  name: string
+  column: string
+} & Record<string, unknown>
+
+type KanbanColumnProps = {
+  id: string
+  name: string
+} & Record<string, unknown>
+```
+
+### 导出类型
+
+- `KanbanBoardProps`、`KanbanCardProps`、`KanbanCardsProps`、`KanbanHeaderProps`、`KanbanProviderProps`
+- `KanbanItemProps`、`KanbanColumnProps`
+- `DragEndEvent`（从 @dnd-kit/core 重导出）
+
+<h2 id="faq">常见问题</h2>
+
+### 如何在数据项中携带额外字段（如优先级、负责人）？
+
+`KanbanItemProps` 和 `KanbanColumnProps` 都包含 `& Record<string, unknown>`，支持泛型扩展。直接在数据中增加任意字段，并在 `KanbanCard` 的 `children` 中访问。
+
+```tsx
+const data = [
+  { id: "1", name: "任务一", column: "todo", priority: "high", assignee: "张三" },
+]
+
+<KanbanCard key={item.id} {...item}>
+  <div>
+    <p>{item.name}</p>
+    <span>{item.priority}</span>
+  </div>
+</KanbanCard>
+```
+
+### 如何监听拖拽事件？
+
+通过 `KanbanProvider` 的 `onDragStart`、`onDragOver`、`onDragEnd` 回调监听拖拽生命周期。`onDataChange` 在拖拽结束时自动触发，携带更新后的数据数组。
+
+```tsx
+<KanbanProvider
+  columns={columns}
+  data={data}
+  onDataChange={setData}
+  onDragEnd={(event) => console.log("拖拽结束", event)}
+>
+```
+
+### 拖拽不生效怎么办？
+
+确保以下几点：
+- 每个 `KanbanCard` 的 `id` 在 data 数组中唯一。
+- `KanbanBoard` 的 `id` 与数据的 `column` 字段以及 columns 中的列 ID 一致。
+- `KanbanCards` 的 `id` 与列 ID 匹配，用于正确过滤卡片。
+- 数据通过 `onDataChange` 回调更新 state，组件不内部持有数据。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/kanban` 导入全部子组件。
+2. `KanbanProvider` 必须提供 `columns`、`data` 和 `onDataChange`，使用 render prop 模式渲染各列。
+3. 每个 `KanbanBoard` 的 `id` 必须与数据项的 `column` 字段以及 `columns` 中的列 ID 一一对应。
+4. `KanbanCards` 的 `id` 用于过滤数据，children 必须是 `(item) => <KanbanCard />` 的 render prop。
+5. 数据驱动：在 `onDataChange` 中更新 state，组件本身不持有数据。
+6. 确保每个 `KanbanCard` 的 `id` 唯一，否则拖拽排序行为异常。
+7. 该组件为项目本地复合组件（Blocks），无 Ant Design 直接对应。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/kanban" />

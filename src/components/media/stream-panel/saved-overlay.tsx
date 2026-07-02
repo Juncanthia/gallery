@@ -8,8 +8,8 @@ import {
 } from "@/components/media/stream-panel/use-stream-panel"
 import { cn } from "@/components/media/lib/utils"
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/core/button"
+import { Separator } from "@/components/core/separator"
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 
 interface SavedOverlayProps {

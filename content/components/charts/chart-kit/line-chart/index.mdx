@@ -1,0 +1,50 @@
+## 测试
+
+折线图用于展示时序数据的趋势变化。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要直观展示数据随时间变化的趋势时，应选择折线图。
+
+常见场景：
+
+- 时序监控
+- 趋势对比
+
+不适用场景：
+
+- 无时序维度的分类数据
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="charts/bklit/charts" path="charts/bklit/charts/basic" />
+
+```tsx
+import { LineChart } from "@/components/charts/chart-kit"
+import { Line } from "@/components/charts/chart-kit"
+
+const data = [
+  { date: new Date(2024, 0, 1), value: 100 },
+  { date: new Date(2024, 0, 2), value: 200 },
+]
+
+export default function Demo() {
+  return (
+    <LineChart data={data}>
+      <Line dataKey="value" stroke="var(--chart-line-primary)" />
+    </LineChart>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### LineChart Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | `Record<string, unknown>[]` | — | — |
+| strokeDasharray | `string` | — | — |
+| curve | `CurveFactory` | `curveMonotoneX` | — |

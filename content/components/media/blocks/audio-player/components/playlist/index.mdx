@@ -1,0 +1,176 @@
+Playlist 播放列表。在媒体播放器中通过下拉菜单展示播放队列，支持点击切换当前播放项，并高亮正在播放的条目。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在视频或音频播放器中展示播放列表时使用。Playlist 通过 `usePlaylistStore` 读取播放队列数据（queue、currentItem、shuffle、shuffleOrder），通过 `usePlayerStore` 获取容器引用用于下拉菜单碰撞检测，通过 `useMediaStore` 控制下拉菜单打开时暂停空闲超时检测。
+
+常见场景：
+
+- 视频播放器右上角的播放列表下拉按钮。
+- 音频播放器中展示当前播放队列。
+- 配合 `MediaProvider` 和 `VideoPlayer`/`MediaPlayer` 使用。
+
+不推荐：
+
+- 在非 `MediaProvider` 上下文之外独立使用 Playlist，它依赖 `usePlaylistStore` 和 `useMediaStore`。
+- 播放队列少于 2 项时，组件自动返回 `null`（隐藏播放列表按钮）。
+- 需要展示音轨或字幕列表时，应使用独立的 Captions 或 Audio 源选择组件。
+
+Playlist 是一个纯展示+交互组件，不包含播放列表的数据加载逻辑。数据加载应通过 `usePlaylist` 或 `usePlaylistStore` 在调用侧完成。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 `usePlaylist` 加载演示数据后渲染 Playlist 组件。当前播放项会以蓝色边框和圆点标识，同时海报上叠加播放图标。
+
+<ComponentShowcase id="limeplay/playlist" path="limeplay/playlist/basic" />
+
+```tsx
+import { useEffect } from "react"
+import { Playlist } from "@/components/core/playlist"
+import { usePlaylist } from "@/components/media/hooks/use-playlist"
+
+const DEMO_ITEMS = [
+  {
+    id: "demo-1",
+    properties: {
+      title: "Big Buck Bunny",
+      description: "A large and lovable rabbit deals with three tiny bullies.",
+      poster: "https://picsum.photos/seed/bbb/320/180",
+      year: "2008",
+      src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    },
+  },
+  {
+    id: "demo-2",
+    properties: {
+      title: "Elephant's Dream",
+      description: "Friends Proog and Emo journey through a strange world.",
+      poster: "https://picsum.photos/seed/edream/320/180",
+      year: "2006",
+      src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    },
+  },
+  {
+    id: "demo-3",
+    properties: {
+      title: "For Bigger Blazes",
+      description: "HBO GO now works with Chromecast.",
+      poster: "https://picsum.photos/seed/blazes/320/180",
+      year: "2015",
+      src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    },
+  },
+]
+
+export default function Demo() {
+  const { load } = usePlaylist()
+
+  useEffect(() => {
+    load(DEMO_ITEMS, 0)
+  }, [load])
+
+  return <Playlist />
+}
+```
+
+<h2 id="api">API</h2>
+
+### Playlist
+
+Playlist 组件不接受任何外部 props，所有状态通过内部 store 读取。
+
+| 依赖 Store | 读取字段 | 说明 |
+| --- | --- | --- |
+| usePlaylistStore | queue | 播放队列，包含所有条目 |
+| usePlaylistStore | currentItem | 当前播放项，用于高亮和播放图标叠加 |
+| usePlaylistStore | shuffle | 是否启用随机播放 |
+| usePlaylistStore | shuffleOrder | 随机播放顺序索引数组 |
+| usePlaylistStore | skipToId | 切换到指定 ID 的播放项 |
+| useMediaStore | setForceIdle | 下拉菜单打开/关闭时控制空闲超时 |
+| usePlayerStore | containerRef | DOM 容器引用，用于下拉菜单碰撞检测边界 |
+
+### 渲染条件
+
+- 当 `orderedItems.length < 2` 时，组件返回 `null`（不渲染按钮）。
+- `orderedItems` 计算规则：如果 `shuffle` 为 `true` 且 `shuffleOrder` 非空，按 `shuffleOrder` 索引排序；否则按原始 `queue` 顺序。
+
+### 条目结构 (VideoPlayerAsset)
+
+每个播放列表条目包含以下属性：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| title | 视频标题，显示为列表项主文本 | `string` |
+| description | 视频描述，显示为列表项副文本（最多两行截断） | `string` |
+| poster | 海报缩略图 URL，16:9 比例显示 | `string` |
+| year | 年份，显示为列表项右对齐文本 | `string` |
+| src | 视频源 URL，用于实际播放 | `string` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何加载播放列表数据？
+
+通过 `usePlaylist` hook 的 `load` 方法加载：
+
+```tsx
+const { load } = usePlaylist()
+
+useEffect(() => {
+  load([
+    { id: "video-1", properties: { title: "First Video", src: "..." } },
+    { id: "video-2", properties: { title: "Second Video", src: "..." } },
+  ])
+}, [load])
+```
+
+也可以在加载后使用 `append`、`prepend`、`insert` 动态添加条目。
+
+### 为什么组件没有显示？
+
+检查以下条件：
+
+1. 是否在 `MediaProvider` 上下文中使用。Playlist 依赖 `usePlaylistStore`，只能在 `MediaProvider` 内部使用。
+2. 播放队列是否至少有 2 个条目。少于 2 个时组件返回 `null`。
+3. 数据是否已通过 `load` 或 `append` 写入 store。
+
+### 如何自定义播放列表样式？
+
+Playlist 内部使用 `DropdownMenu` 组件渲染。局部调整可通过 DropdownMenu 的 className 或修改内部组件源码。播放列表项样式的集中调整应修改 `playlist.tsx` 源码中的 Tailwind 类名。
+
+### 如何响应播放项切换？
+
+通过 `usePlaylistStore` 选择器监听 `currentItem` 变化：
+
+```tsx
+const currentItem = usePlaylistStore((state) => state.currentItem)
+```
+
+或通过 `usePlaylist` hook 返回的 `currentItem`：
+
+```tsx
+const { currentItem } = usePlaylist()
+```
+
+### 如何实现"下一首播放"功能？
+
+使用 `usePlaylist` 的 `playNext` 方法，在当前播放项之后插入条目：
+
+```tsx
+const { playNext } = usePlaylist()
+playNext([{ id: "next", properties: { title: "Next Up", src: "..." } }])
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/playlist` 导入 Playlist。
+2. 必须在 `MediaProvider` 上下文中使用。
+3. 播放列表数据通过 `usePlaylist` 或 `usePlaylistStore` 加载，Playlist 组件本身不接收数据 props。
+4. 确保加载至少 2 个条目，否则组件不会渲染。
+5. 条目 `properties` 应符合 `VideoPlayerAsset` 接口（`title`、`description`、`poster`、`year`、`src` 等）。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="limeplay/playlist" />

@@ -1,0 +1,342 @@
+---
+category: Components
+title: Dashboard
+subtitle: 仪表盘
+description: 仪表盘页面模板组件，聚合统计卡片、图表区域和最近活动，用于构建数据概览页面。
+demo:
+  cols: 1
+group:
+  title: 页面模板
+  order: 5
+source:
+  component: src/components/core/dashboard.tsx
+  docs: content/components/templates/miscellaneous/dashboard/index.mdx
+  examples:
+    - content/components/templates/miscellaneous/dashboard/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  lucide: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Dashboard 仪表盘
+
+Dashboard 是一个仪表盘页面模板组件，用于在管理后台或数据面板中构建关键业务指标的一站式概览页面。它内部组合了 StatCard 统计网格、图表区域占位和最近活动列表，提供开箱即用的仪表盘体验。
+
+本组件是页面模板级别的复合组件，聚合了多个子模块，通过统一的 `data`/`appearance`/`actions`/`control` 四层 prop 结构进行配置。
+
+## 何时使用 {#when-to-use}
+
+当需要在管理后台或数据面板中展示关键业务指标的一站式概览时使用。
+
+常见场景：
+
+- 管理后台首页，展示系统核心运营指标（收入、订单、用户等）。
+- SaaS 产品的用户工作台，提供个人或团队的数据摘要。
+- 数据分析平台的概览页面，快速了解数据趋势和变化。
+- 电商后台的销售总览，同时展示统计数据和最近交易记录。
+
+推荐使用方式：
+
+- 通过 `data.stats` 传入自定义统计指标数据。
+- 通过 `data.recentActivity` 传入最近活动记录。
+- 通过 `appearance.title` 和 `appearance.subtitle` 自定义页面标题。
+- 通过 `appearance.statColumns` 控制统计卡片的列数布局。
+- 通过 `control.isLoading` 和 `control.error` 管理加载和错误状态。
+
+不推荐：
+
+- 在不需要概览页面的场景下使用——Dashboard 是重型页面模板，不适合嵌入弹窗或侧边栏。
+- 仅用来展示单个模块——如需独立使用统计卡片，应直接使用 StatCard 组件。
+- 用 `data.stats` 传入过多（超过 8 个）指标——这会导致信息过载，降低可读性。
+
+## 代码演示 {#examples}
+
+### 基础仪表盘
+
+默认展示内置演示数据，包含统计卡片、图表占位和最近活动列表。
+
+```tsx
+import { Dashboard } from "@/components/templates/miscellaneous/dashboard"
+
+export default function DashboardBasicDemo() {
+  return (
+    <div className="w-full">
+      <Dashboard />
+    </div>
+  )
+}
+```
+
+### 自定义数据
+
+通过 `data` prop 注入自定义的统计数据、图表数据和活动记录。
+
+```tsx
+import { Dashboard } from "@/components/templates/miscellaneous/dashboard"
+
+export default function DashboardDataDemo() {
+  return (
+    <Dashboard
+      data={{
+        stats: [
+          { label: "总收入", value: "¥128,430", change: 12.5, trend: "up" },
+          { label: "订单数", value: "1,284", change: 8.2, trend: "up" },
+          { label: "用户数", value: "24,510", change: -2.4, trend: "down" },
+          { label: "转化率", value: "3.24%", change: 0.8, trend: "up" },
+        ],
+        recentActivity: [
+          { id: "1", action: "新订单 #1284", time: "2 分钟前", user: "张三" },
+          { id: "2", action: "用户注册", time: "15 分钟前", user: "李四" },
+          { id: "3", action: "订单退款 #1276", time: "1 小时前", user: "王五" },
+        ],
+      }}
+    />
+  )
+}
+```
+
+### 自定义外观
+
+通过 `appearance` prop 自定义标题、列数等视觉配置。
+
+```tsx
+import { Dashboard } from "@/components/templates/miscellaneous/dashboard"
+
+export default function DashboardAppearanceDemo() {
+  return (
+    <Dashboard
+      appearance={{
+        title: "销售仪表盘",
+        subtitle: "过去 30 天的核心业务数据概览",
+        statColumns: 4,
+      }}
+    />
+  )
+}
+```
+
+### 加载状态
+
+通过 `control.isLoading` 展示骨架屏加载状态。
+
+```tsx
+import { Dashboard } from "@/components/templates/miscellaneous/dashboard"
+
+export default function DashboardLoadingDemo() {
+  return (
+    <Dashboard control={{ isLoading: true }} />
+  )
+}
+```
+
+### 错误状态
+
+通过 `control.error` 展示错误提示和重试按钮。
+
+```tsx
+import { Dashboard } from "@/components/templates/miscellaneous/dashboard"
+
+export default function DashboardErrorDemo() {
+  return (
+    <Dashboard
+      control={{ error: "数据加载失败，请稍后重试" }}
+      actions={{
+        onRefresh: () => console.log("Retrying..."),
+      }}
+    />
+  )
+}
+```
+
+## API {#api}
+
+### Dashboard
+
+通过 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置仪表盘组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 仪表盘数据配置 | `object` | — |
+| data.stats | 统计卡片列表；不传时使用内置演示数据 | `StatCardItem[]` | — |
+| data.recentActivity | 最近活动列表；不传时使用内置演示数据 | `ActivityItem[]` | — |
+| data.chartData | 图表数据配置 | `ChartData` | — |
+| appearance | 外观配置 | `object` | — |
+| appearance.title | 仪表盘页面标题 | `string` | `"Dashboard"` |
+| appearance.subtitle | 标题下方的描述文字 | `string` | — |
+| appearance.statColumns | 统计卡片网格的列数 | `2 \| 3 \| 4` | `4` |
+| appearance.showRecentActivity | 是否显示最近活动区域 | `boolean` | `true` |
+| appearance.showCharts | 是否显示图表区域 | `boolean` | `true` |
+| actions | 回调配置 | `object` | — |
+| actions.onActivityClick | 点击活动列表某项时的回调，接收该 ActivityItem | `(item: ActivityItem) => void` | — |
+| actions.onRefresh | 点击错误状态下的重试按钮时的回调 | `() => void` | — |
+| control | 控制配置 | `object` | — |
+| control.isLoading | 数据加载中；为 `true` 时各区域显示骨架屏 | `boolean` | `false` |
+| control.error | 数据加载错误信息；非空时显示错误状态和重试按钮 | `string \| null` | `null` |
+
+### StatCardItem
+
+统计卡片的数据项类型。
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| label | 指标名称，如"总收入"、"订单数" | `string` | 是 |
+| value | 指标数值，支持格式化后的字符串或原始数字 | `string \| number` | 是 |
+| change | 变化百分比数值 | `number` | 否 |
+| trend | 趋势方向，影响图标和颜色 | `"up" \| "down" \| "neutral"` | 否 |
+| icon | 自定义图标，覆盖默认的趋势图标 | `React.ReactNode` | 否 |
+
+### ActivityItem
+
+最近活动列表的数据项类型。
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| id | 活动记录的唯一标识符 | `string` | 是 |
+| action | 活动描述文本，如"新订单 #1284" | `string` | 是 |
+| time | 活动发生的相对或绝对时间描述 | `string` | 否 |
+| user | 关联的用户名称 | `string` | 否 |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/core/dashboard.tsx`：组件导出入口，薄包装 re-export。
+- 内部组合了 `StatCard`、最近活动列表和图表区域。
+
+关键行为：
+
+1. 组件不传入 `data` 时使用内置的默认演示数据，方便快速预览。
+2. `control.isLoading` 为 `true` 时各区域显示骨架屏占位，而不是空白。
+3. `control.error` 非空时显示错误提示，并渲染重试按钮（触发 `actions.onRefresh`）。
+4. `appearance.statColumns` 控制桌面端的统计卡片列数；移动端自动降为 2 列。
+5. 统计卡片内部使用趋势图标（TrendingUp / TrendingDown / Minus）和对应的颜色（绿色 / 红色 / 灰色）。
+6. Dashboard 是纯展示型页面模板，不包含数据获取逻辑；调用侧负责通过 `data` 注入数据和通过 `control` 管理状态。
+
+## FAQ {#faq}
+
+### 如何注入自定义数据？
+
+通过 `data.stats` 和 `data.recentActivity` 传入自定义数据列表。不传时组件使用内置演示数据。
+
+```tsx
+<Dashboard
+  data={{
+    stats: [
+      { label: "总收入", value: "¥128,430", change: 12.5, trend: "up" },
+    ],
+    recentActivity: [
+      { id: "1", action: "新订单", time: "2 分钟前", user: "张三" },
+    ],
+  }}
+/>
+```
+
+### 如何处理加载状态？
+
+通过 `control.isLoading` 控制。当值为 `true` 时，统计卡片和最近活动区域显示骨架屏占位。
+
+```tsx
+const [loading, setLoading] = useState(true)
+
+useEffect(() => {
+  fetchDashboardData().then((data) => {
+    setDashboardData(data)
+    setLoading(false)
+  })
+}, [])
+
+<Dashboard data={dashboardData} control={{ isLoading: loading }} />
+```
+
+### 如何处理数据加载错误？
+
+通过 `control.error` 传入错误消息字符串。非空时各区域显示错误提示，并渲染重试按钮。
+
+```tsx
+const [error, setError] = useState<string | null>(null)
+
+<Dashboard
+  control={{ error }}
+  actions={{ onRefresh: () => refetchData() }}
+/>
+```
+
+### 如何自定义仪表盘标题？
+
+通过 `appearance.title` 和 `appearance.subtitle` 自定义标题区域。
+
+```tsx
+<Dashboard
+  appearance={{
+    title: "我的工作台",
+    subtitle: "欢迎回来，以下是您的业务概览",
+  }}
+/>
+```
+
+### 如何调整统计卡片的列数？
+
+通过 `appearance.statColumns` 设置桌面端列数。
+
+```tsx
+<Dashboard appearance={{ statColumns: 3 }} />
+```
+
+支持 `2`、`3`、`4` 列。移动端自动降为 2 列以保证触摸友好。
+
+### 如何隐藏图表区域或最近活动？
+
+通过 `appearance.showCharts` 和 `appearance.showRecentActivity` 控制。
+
+```tsx
+<Dashboard
+  appearance={{
+    showCharts: false,
+    showRecentActivity: false,
+  }}
+/>
+```
+
+### Dashboard 和 StatCard 的区别？
+
+- **StatCard** 是独立的统计卡片网格组件，仅负责展示一行或多行指标卡片。
+- **Dashboard** 是页面模板级别的组件，内部组合了 StatCard、最近活动列表和图表区域。如果需要完整的仪表盘页面，应使用 Dashboard；如果只需要在自定义布局中嵌入统计卡片，应使用 StatCard。
+
+### 如何响应活动项的点击？
+
+通过 `actions.onActivityClick` 回调。回调接收被点击的 `ActivityItem`。
+
+```tsx
+<Dashboard
+  data={{
+    recentActivity: activities,
+  }}
+  actions={{
+    onActivityClick: (item) => {
+      console.log("Clicked:", item.id, item.action)
+      // 导航到详情页等
+    },
+  }}
+/>
+```
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 Dashboard 代码时，应遵守：
+
+1. 从 `@/components/templates/miscellaneous/dashboard` 导入 `Dashboard`。
+2. 使用 `data`、`appearance`、`actions`、`control` 四个顶层 prop 配置组件，不要直接传入子组件。
+3. 统计数据通过 `data.stats` 传入，每项必须包含 `label` 和 `value`，`change`、`trend` 和 `icon` 为可选。
+4. 最近活动通过 `data.recentActivity` 传入，每项必须包含 `id` 和 `action`。
+5. 加载状态仅通过 `control.isLoading` 控制，组件内部已处理骨架屏渲染。
+6. 错误状态通过 `control.error` 和 `actions.onRefresh` 配合处理，不要自行实现错误 UI。
+7. 标题和副标题通过 `appearance.title` 和 `appearance.subtitle` 自定义。
+8. Dashboard 是页面模板组件，不要手动拼装 StatCard 和活动列表来重建它——这会丢失加载/错误状态的统一处理。
+9. 不要引入 Ant Design、ConfigProvider 或 css-in-js 相关依赖。
+10. 不传 `data` 时组件使用内置演示数据，适合快速原型阶段。

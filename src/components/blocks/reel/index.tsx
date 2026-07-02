@@ -25,8 +25,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/core/button";
+import { Progress } from "@/components/core/progress";
 import { cn } from "@/lib/utils";
 
 // Explicit type for reel items

@@ -1,0 +1,230 @@
+Badge 徽标。用于展示状态标记、未读计数、系统通知和彩带标签，支持 CVA 变体、数字/圆点指示器和独立状态点三种使用模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在元素右上角展示数字标记、状态点或彩带标签时使用。与 Tag 的区别：Badge 用于状态/计数，Tag 用于分类标记。
+
+常见场景：
+- 导航菜单的未读消息数。
+- 选项卡的状态标记（进行中、成功、失败）。
+- 商品列表的"新品"或"热卖"标记。
+- 角落的彩带标签。
+- 列表项的计数标记。
+
+Badge 提供三种使用模式：
+- **CVA 变体徽标**：通过 `variant` 控制视觉样式（`default`/`secondary`/`destructive`/`outline`/`ghost`/`link`）。
+- **指示器徽标**：通过 `count`/`dot`/`blocks/status` 在 children 右上角叠加标记。
+- **独立状态点**：通过 `blocks/status` + `text` 不依赖 children，直接渲染状态指示器。
+
+不推荐：
+- 将 Badge 用于分类标记——请使用 Tag。
+- 在调用侧绕过组件 API 手写样式模拟数字徽标。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础变体
+
+通过 `variant` 切换视觉样式。
+
+<ComponentShowcase
+  id="badge"
+  path="badge/basic"
+/>
+
+```tsx
+import { Badge } from "@/components/core/badge"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Badge>默认</Badge>
+      <Badge variant="secondary">次要</Badge>
+      <Badge variant="destructive">危险</Badge>
+      <Badge variant="outline">边框</Badge>
+      <Badge variant="ghost">幽灵</Badge>
+      <Badge variant="link">链接</Badge>
+    </div>
+  )
+}
+```
+
+### 数字徽标
+
+传入 `count` 在子元素右上角显示数字标记。
+
+```tsx
+import { Badge } from "@/components/core/badge"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-6">
+      <Badge count={5}>
+        <div className="size-10 rounded bg-muted" />
+      </Badge>
+      <Badge count={100} overflowCount={99}>
+        <div className="size-10 rounded bg-muted" />
+      </Badge>
+      <Badge count={0} showZero>
+        <div className="size-10 rounded bg-muted" />
+      </Badge>
+    </div>
+  )
+}
+```
+
+### 圆点徽标
+
+`dot` 仅显示圆点无数字，适合简洁状态标记。
+
+```tsx
+import { Badge } from "@/components/core/badge"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-6">
+      <Badge dot>
+        <div className="size-10 rounded bg-muted" />
+      </Badge>
+      <Badge dot color="#22c55e">
+        <div className="size-10 rounded bg-muted" />
+      </Badge>
+    </div>
+  )
+}
+```
+
+### 状态点
+
+`blocks/status` + `text` 展示带文字的状态指示器。
+
+```tsx
+import { Badge } from "@/components/core/badge"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-2">
+      <Badge blocks/status="success" text="成功" />
+      <Badge blocks/status="error" text="错误" />
+      <Badge blocks/status="warning" text="警告" />
+      <Badge blocks/status="processing" text="进行中" />
+      <Badge blocks/status="default" text="默认" />
+    </div>
+  )
+}
+```
+
+### 彩带
+
+`BadgeRibbon` 在容器角落展示彩带标签。
+
+```tsx
+import { BadgeRibbon } from "@/components/core/badge"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-8">
+      <BadgeRibbon text="新品" placement="start">
+        <div className="size-24 rounded bg-muted" />
+      </BadgeRibbon>
+      <BadgeRibbon text="热卖" color="#f97316">
+        <div className="size-24 rounded bg-muted" />
+      </BadgeRibbon>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Badge
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | CVA 变体（无指示器模式时生效） | `default` \| `secondary` \| `destructive` \| `outline` \| `ghost` \| `link` | `default` |
+| asChild | 渲染为子元素而非 span（无指示器模式） | `boolean` | `false` |
+| count | 显示的数字 | `React.ReactNode` | - |
+| showZero | count 为 0 时是否显示 | `boolean` | `false` |
+| overflowCount | 溢出显示阈值 | `number` | `99` |
+| dot | 圆点模式，不显示数字 | `boolean` | `false` |
+| blocks/status | 状态点颜色 | `success` \| `processing` \| `default` \| `error` \| `warning` | - |
+| color | 自定义颜色（CSS 颜色值） | `string` | - |
+| text | 状态文本，配合 blocks/status 使用 | `React.ReactNode` | - |
+| size | 尺寸 | `default` \| `small` | `default` |
+| offset | 位置偏移 [水平, 垂直] | `[number \| string, number \| string]` | - |
+| title | 悬浮提示，传入 `false` 或 `null` 禁用 | `string \| null \| false` | - |
+| className | 附加 CSS 类名 | `string` | - |
+| children | 被标记的元素 | `React.ReactNode` | - |
+
+### BadgeRibbon
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 彩带文字 | `React.ReactNode` | - |
+| color | 彩带颜色（CSS 颜色值） | `string` | - |
+| placement | 彩带位置 | `start` \| `end` | `end` |
+| ribbonClassName | 彩带元素 CSS 类名 | `string` | - |
+| ribbonStyle | 彩带元素内联样式 | `React.CSSProperties` | - |
+| className | 包装容器 CSS 类名 | `string` | - |
+| children | 被包裹的内容 | `React.ReactNode` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义数字溢出格式？
+
+`overflowCount` 默认为 99，数字超过阈值时显示 `99+`：
+
+```tsx
+<Badge count={100} overflowCount={99}>
+  <div className="size-10 rounded bg-muted" />
+</Badge>
+```
+
+### 如何显示 0？
+
+设置 `showZero`：
+
+```tsx
+<Badge count={0} showZero>
+  <div className="size-10 rounded bg-muted" />
+</Badge>
+```
+
+### 如何调整徽标位置？
+
+使用 `offset` 偏移数组，格式为 `[水平偏移, 垂直偏移]`：
+
+```tsx
+<Badge count={5} offset={[10, -10]}>
+  <div className="size-10 rounded bg-muted" />
+</Badge>
+```
+
+### Badge 和 Tag 的区别？
+
+| 特性 | Badge | Tag |
+| --- | --- | --- |
+| 用途 | 状态标记、数字计数 | 分类标记 |
+| 附着性 | 附着于其他元素之上（count/dot 模式） | 独立展示 |
+| 可关闭 | 不支持 | 支持 |
+| 典型场景 | 未读消息数、在线状态 | 标签分类、筛选条件 |
+
+### 如何配合路由库使用 Badge？
+
+使用 `asChild` 属性将 Badge 渲染到自定义链接组件上：
+
+```tsx
+<Badge asChild>
+  <Link to="/references/notifications">通知</Link>
+</Badge>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/badge` 导入 Badge 和 BadgeRibbon。
+2. 标签标记用 `variant`，不要手动写颜色 className。
+3. 数字标记用 `count` + `overflowCount` + `showZero`。
+4. 状态点用 `blocks/status` + `text`，不要拼凑 span 模拟。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="badge" />

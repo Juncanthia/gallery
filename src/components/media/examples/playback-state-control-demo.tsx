@@ -5,7 +5,7 @@ import {
   RepeatIcon,
 } from "@phosphor-icons/react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import { usePlaybackStore } from "@/components/media/hooks/use-playback"
 import { PlaybackControl } from "@/components/media/ui/playback-control"
 

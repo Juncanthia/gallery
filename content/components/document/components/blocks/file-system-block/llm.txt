@@ -1,0 +1,148 @@
+---
+category: Components
+title: FileSystemBlock
+subtitle: 文件系统
+description: 完整的文件系统浏览组件，支持图标、列表、分栏、画廊四种视图，内置搜索、排序、筛选和 PDF/DOCX/XLSX/图片预览。
+demo:
+  cols: 1
+group:
+  title: Extend
+  order: 7
+source:
+  component: src/components/core/extend-file-system-block.tsx
+  implementation: src/components/extend/components/blocks/file-system-block.tsx
+  core: src/components/extend/components/ui/file-system.tsx
+  docs: content/components/extend/file-system-block/index.mdx
+  examples:
+    - content/components/extend/file-system-block/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  pierreTrees: true
+  hugeicons: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# FileSystemBlock 文件系统
+
+FileSystemBlock 是 @pierre/trees FileSystem 的封装，提供完整的文件浏览体验：四种视图模式（图标、列表、分栏、画廊），全文搜索，多维度排序，文件类型/日期筛选，以及内置的 PDF、DOCX、XLSX 和图片查看器对话框。
+
+## 何时使用 {#when-to-use}
+
+需要在界面中嵌入类访达的文件浏览器时使用。
+
+- 云端文件管理：后台管理系统中浏览云存储文件。
+- 文档中心：结构化文档浏览和预览。
+- 附件管理：表单或详情页中展示和预览附件。
+- 知识库导航：按目录展示文档资源。
+
+## API {#api}
+
+### FileSystemBlock
+
+FileSystemBlock Props 继承自 FileSystemProps。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 文件清单（必填） | `FileSystemItem[]` | - |
+| title | 根目录标签 | `string` | `"Files"` |
+| defaultView | 默认视图 | `"icons"` \| `"list"` \| `"columns"` \| `"gallery"` | `"icons"` |
+| view | 受控视图 | `"icons"` \| `"list"` \| `"columns"` \| `"gallery"` | - |
+| onViewChange | 视图切换回调 | `(view) => void` | - |
+| defaultPath | 初始目录 | `string` | `""` |
+| onSelectionChange | 选中变更回调 | `(item \| null) => void` | - |
+| onFileOpen | 自定义文件打开 | `(file, url) => void` | - |
+| getFileUrl | 解析文件 URL | `(file) => string \| Promise<string>` | - |
+| loadChildren | 懒加载子内容 | `(args) => Promise<{items, nextCursor?}>` | - |
+| renderFilePreview | 自定义文件预览 | `(file) => ReactNode` | - |
+| loadPreviewImageUrl | 按页加载缩略图 | `(file, pageIndex) => Promise<string \| null>` | - |
+| className | 附加 className | `string` | - |
+
+### FileSystemItem
+
+#### FileSystemFolderItem (kind: "folder")
+
+| 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| path | `string` | 文件夹路径，末尾 `/` |
+| name | `string` | 文件夹名 |
+| parentPath | `string` | 父路径 |
+| hasChildren | `boolean` | 是否有待懒加载的子内容 |
+| createdAt | `string` | 创建时间（ISO） |
+| updatedAt | `string` | 修改时间（ISO） |
+
+#### FileSystemFileItem (kind: "file")
+
+| 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| path | `string` | 文件路径 |
+| key | `string` | 对象存储 key，默认 = path |
+| name | `string` | 文件名 |
+| parentPath | `string` | 父路径 |
+| contentType | `string` | MIME 类型 |
+| size | `number` | 字节大小 |
+| createdAt | `string` | 创建时间（ISO） |
+| updatedAt | `string` | 修改时间（ISO） |
+| etag | `string` | ETag |
+| url | `string` | 文件 URL |
+| previewImageUrl | `string \| null` | 单页缩略图 |
+| previewImageUrls | `string[] \| null` | 多页缩略图 |
+| previewPageCount | `number` | 总页数 |
+| previewAspectRatio | `number` | 缩略图宽高比 |
+| metadata | `Record<string, string>` | 自定义元数据 |
+
+## 内置预览类型 {#built-in-viewers}
+
+| 文件类型 | 条件 | 查看器 |
+| --- | --- | --- |
+| PDF | `contentType="application/pdf"` 或 `.pdf` | LazyPDFViewer |
+| DOCX | `.docx` | LazyDocxViewerPreview |
+| XLSX | `.xlsx` | LazyXlsxViewerPreview |
+| 图片 | `contentType="image/*"` 或 `.png/.jpg/.gif/.svg/.webp/.avif` | `<img>` |
+
+## 视图模式 {#view-modes}
+
+| 视图 | 值 | 特点 |
+| --- | --- | --- |
+| 图标 | `icons` | 网格图标视图，默认模式 |
+| 列表 | `list` | 详细列表，支持列排序，基于 @pierre/trees |
+| 分栏 | `columns` | macOS 访达式分栏浏览 |
+| 画廊 | `gallery` | 大缩略图预览，支持多页翻页 |
+
+## 关键行为 {#key-behaviors}
+
+1. 组件自动从 `items` 构建目录索引，无需手动组织。
+2. 缺省文件夹路径从文件路径自动推断。
+3. 文件夹缺少 `updatedAt` 时自动继承最新子项的时间。
+4. `⌘F` / `Ctrl+F` 聚焦搜索框。
+5. 切换视图/目录时列表视图的展开状态会被保留。
+6. 画廊和查看器对话框共享预览池，避免重复加载。
+7. 筛选和搜索隐藏的项不会被选中。
+8. 通过 `onFileOpen` 可完全覆盖内置打开逻辑。
+
+## 语义 DOM {#semantic-dom}
+
+| data-slot | 说明 |
+| --- | --- |
+| `file-system` | 组件根节点 |
+
+## LLM 使用规则 {#llm-rules}
+
+1. 从 `@/components/core/file-system-block` 导入
+2. `items` 必填，每个 item 至少含 `kind` 和 `path`
+3. 文件夹 `path` 以 `/` 结尾
+4. 视图用 `defaultView`（非受控）或 `view` + `onViewChange`（受控）
+5. 远程文件用 `getFileUrl` 提供 URL
+6. 大目录用 `loadChildren` 懒加载
+7. 自定义打开用 `onFileOpen`
+8. 不引入 Ant Design 相关依赖
+
+## 源码 {#source}
+
+- 入口：`src/components/core/extend-file-system-block.tsx`
+- Block 实现：`src/components/extend/components/blocks/file-system-block.tsx`
+- FileSystem 核心：`src/components/extend/components/ui/file-system.tsx`

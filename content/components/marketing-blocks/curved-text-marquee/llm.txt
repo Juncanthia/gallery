@@ -1,0 +1,40 @@
+---
+component: CurvedTextMarquee
+slug: marketing-blocks/curved-text-marquee
+
+import: |
+  import { CurvedTextMarquee } from "@/components/marketing-blocks/curved-text-marquee"
+
+usage: |
+  <CurvedTextMarquee />
+
+props:
+  CurvedTextMarquee 不接受任何 props，所有参数已内置优化：
+
+  内置参数：
+    text: "GooseUI ✦ Premium Components ✦ shadcn/ui ✦ React ✦ Tailwind CSS ✦ "
+    duration: 80（秒）
+    direction: "right"
+    fontSize: 40（px）
+    flatness: 2.0
+    height: 300（px）
+    curve: "up"
+    separator: "✦"
+    className: "text-primary/80 [&_text]:[font-size:28px] sm:[&_text]:[font-size:40px]"
+
+  如需自定义参数，请使用 CurvedText 基础组件。
+
+constraints:
+  - 基于 CurvedText 封装的预配置营销区块。
+  - 不接受任何 props，开箱即用。
+  - 内置响应式字号：移动端 28px，桌面端 40px。
+  - 弧线半径根据视口宽度动态计算，确保全屏幕适配。
+  - 每个实例通过 useId() 生成唯一 SVG path ID，支持多实例共存。
+  - 如需自定义文本、速度、弧度等参数，使用 CurvedText 基础组件。
+  - 不要引入 Ant Design 相关依赖。
+  - 不要在调用侧复制 SVG path 或 keyframe 动画实现。
+
+source: src/components/gooseui/components/blocks/marketing/curved-text-marquee.tsx
+example: content/components/marketing-blocks/curved-text-marquee/examples/basic.tsx
+docs: content/components/marketing-blocks/curved-text-marquee/index.mdx
+---

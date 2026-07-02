@@ -1,0 +1,238 @@
+[热力图 / HeatmapChart]
+导入: import { HeatmapChart } from "@/components/core/heatmap-chart"
+包来源: @/components/charts/chart-kit
+组件类型: 图表 / BKLit Charts
+底层依赖: @visx/heatmap, @visx/responsive, motion (framer-motion)
+
+## 何时使用
+以颜色强度矩阵展示二维数据密度与分布。适合贡献日历、时间分布矩阵、多维交叉分析。采用 GitHub 风格单元格渲染，内置单元格悬停高亮、图例联动、加载骨架屏和流畅入场动画。稀疏数据或单维度趋势场景考虑使用折线图/柱状图替代。
+
+## 核心数据模型
+
+```ts
+// 每一列代表一个周期（如一周）
+interface HeatmapColumn {
+  bin: number   // 列索引
+  bins: HeatmapBin[]  // 该列内每行（如每天）的数据
+}
+
+// 每一个 bin 代表一个单元格
+interface HeatmapBin {
+  count: number   // 数值（决定颜色深浅，0-4 映射至 5 级色阶）
+  bin: number     // 行索引
+  date: Date      // 日期（用于 X 轴月份标签和 tooltip 格式化）
+}
+```
+
+## Props 速查
+
+### HeatmapChart
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 热力图数据（列数组） | `HeatmapColumn[]` | 必填 |
+| layout | 布局模式：`fluid` 为 GitHub 风格（高度适配内容），`fill` 为填充父容器 | `"fluid" \| "fill"` | `"fluid"` |
+| margin | 图表边距 | `Partial<Margin>` | `{ top: 28, right: 16, bottom: 0, left: 40 }` |
+| binSize | 固定单元格像素尺寸；0 表示自适应 | `number` | `0` |
+| gap | 单元格间距（px） | `number` | `2` |
+| levelColors | 5 级色阶数组（Less→More），GitHub 绿色默认 | `[string, string, string, string, string]` | GitHub greens |
+| levelStyles | 每级填充样式（颜色+图案），优先级高于 `levelColors` | `[HeatmapLevelStyle×5]` | — |
+| colorScale | 完全自定义的颜色映射函数 | `(count: number \| null \| undefined) => string` | 内置 5 级色阶 |
+| xDomain | 可见时间范围，过滤范围内的列 | `[Date, Date]` | — |
+| sizingColumnCount | 配合 `xDomain` 使用，固定列数以保持单元格高度稳定 | `number` | — |
+| aspectRatio | 外层容器宽高比（如 `"2 / 1"`）；省略则填充父容器 | `string` | — |
+| blocks/status | 加载/显示状态 | `"loading" \| "ready"` | `"ready"` |
+| loadingLabel | 加载中居中标签文字 | `string` | — |
+| className | 容器额外 class | `string` | — |
+| animationDuration | 入场动画时长（ms） | `number` | `1600` |
+| animate | 是否播放入场/加载动画 | `boolean` | `true` |
+| enterTransition | motion 入场过渡配置 | `Transition` | spring 弹性 |
+| enterStaggerScale | 波浪交错延迟倍率（1=默认） | `number` | `1` |
+| revealSignature | motion URL 状态签名，变化时重播入场 | `string` | — |
+| loadingOpacity | 加载期间图表整体透明度 | `number` | `0.5` |
+| showLoadingCells | 加载期间是否显示骨架闪烁 | `boolean` | `true` |
+| loadingCellMaxOpacity | 骨架闪烁最大透明度（0–1） | `number` | `0.5` |
+| loadingCellRandomness | 参与闪烁的单元格比例（0–1） | `number` | `0.65` |
+| children | 子组件（HeatmapCells 等） | `ReactNode` | 必填 |
+
+### HeatmapCells
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| cornerRadius | 单元格圆角（px） | `number` | `2` |
+| colorScale | 覆盖颜色映射 | `(count) => string` | 继承上下文 |
+| fadedOpacity | 非悬停单元格淡化透明度 | `number` | `0.3` |
+| interactive | 是否启用悬停交互 | `boolean` | `true` |
+
+### HeatmapLegend
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| lessLabel | 左侧标签（低值） | `string` | `"Less"` |
+| moreLabel | 右侧标签（高值） | `string` | `"More"` |
+| cellSize | 色块尺寸（px） | `number` | `11` |
+| gap | 色块间距（px） | `number` | `2` |
+| cornerRadius | 色块圆角（px） | `number` | `2` |
+| align | 水平对齐 | `"start" \| "center" \| "end"` | `"end"` |
+| levelStyles | 色阶样式（与图表联动） | `HeatmapLevelStyles` | — |
+| colorScale | 覆盖颜色映射 | `(count) => string` | 默认绿阶 |
+| fadedOpacity | 非高亮色块淡化透明度 | `number` | `0.3` |
+
+### HeatmapTooltip
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| formatLabel | 自定义 tooltip 文字 | `(count: number, date: Date) => string` | `"{count} contributions on {date}"` |
+| className | 额外 class | `string` | — |
+| panelStyle | tooltip 面板内联样式 | `CSSProperties` | — |
+| backgroundColor | 背景色（CSS 变量或色值） | `string` | `var(--chart-tooltip-background)` |
+
+### HeatmapXAxis / HeatmapYAxis
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| className | 标签额外 class | `string` | — |
+
+X 轴自动按月份聚合显示标签，Y 轴固定显示 Mon/Wed/Fri 行标签。
+
+### HeatmapChartLoading（预设加载骨架）
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 目标数据（用于确定骨架网格尺寸） | `HeatmapColumn[]` | 必填 |
+| xDomain | 时间域过滤 | `[Date, Date]` | — |
+| margin | 图表边距 | `Partial<Margin>` | — |
+| gap | 单元格间距 | `number` | `2` |
+| cornerRadius | 单元格圆角 | `number` | `2` |
+| label | 加载中提示文字 | `string` | `"Loading"` |
+
+## 示例代码
+
+### 基础用法（GitHub 贡献图风格）
+
+```tsx
+import { HeatmapChart } from "@/components/core/heatmap-chart"
+import { HeatmapCells, HeatmapXAxis, HeatmapYAxis, HeatmapLegend, HeatmapTooltip } from "@/components/charts/chart-kit"
+
+function d(y: number, m: number, day: number) {
+  return new Date(y, m - 1, day)
+}
+
+const data = [
+  {
+    bin: 0,
+    bins: [
+      { count: 0, bin: 0, date: d(2024, 6, 2) },
+      { count: 2, bin: 1, date: d(2024, 6, 3) },
+      { count: 4, bin: 2, date: d(2024, 6, 4) },
+      { count: 1, bin: 3, date: d(2024, 6, 5) },
+      { count: 0, bin: 4, date: d(2024, 6, 6) },
+      { count: 3, bin: 5, date: d(2024, 6, 7) },
+      { count: 0, bin: 6, date: d(2024, 6, 8) },
+    ],
+  },
+  {
+    bin: 1,
+    bins: [
+      { count: 1, bin: 0, date: d(2024, 6, 9) },
+      { count: 3, bin: 1, date: d(2024, 6, 10) },
+      { count: 2, bin: 2, date: d(2024, 6, 11) },
+      { count: 0, bin: 3, date: d(2024, 6, 12) },
+      { count: 4, bin: 4, date: d(2024, 6, 13) },
+      { count: 0, bin: 5, date: d(2024, 6, 14) },
+      { count: 2, bin: 6, date: d(2024, 6, 15) },
+    ],
+  },
+  {
+    bin: 2,
+    bins: [
+      { count: 0, bin: 0, date: d(2024, 6, 16) },
+      { count: 4, bin: 1, date: d(2024, 6, 17) },
+      { count: 1, bin: 2, date: d(2024, 6, 18) },
+      { count: 3, bin: 3, date: d(2024, 6, 19) },
+      { count: 2, bin: 4, date: d(2024, 6, 20) },
+      { count: 0, bin: 5, date: d(2024, 6, 21) },
+      { count: 4, bin: 6, date: d(2024, 6, 22) },
+    ],
+  },
+]
+
+export default function Demo() {
+  return (
+    <HeatmapChart data={data}>
+      <HeatmapCells />
+      <HeatmapXAxis />
+      <HeatmapYAxis />
+      <HeatmapLegend />
+      <HeatmapTooltip />
+    </HeatmapChart>
+  )
+}
+```
+
+### 自定义色阶
+
+```tsx
+const redScale: HeatmapLevelColors = [
+  "var(--color-muted)",
+  "#ffebee",
+  "#ef9a9a",
+  "#e53935",
+  "#b71c1c",
+]
+
+export default function Demo() {
+  return (
+    <HeatmapChart data={data} levelColors={redScale}>
+      <HeatmapCells />
+      <HeatmapLegend lessLabel="低温" moreLabel="高温" />
+    </HeatmapChart>
+  )
+}
+```
+
+### 加载骨架屏
+
+```tsx
+import { HeatmapChart } from "@/components/core/heatmap-chart"
+import { HeatmapCells, HeatmapXAxis, HeatmapYAxis } from "@/components/charts/chart-kit"
+
+export default function Demo() {
+  return (
+    <HeatmapChart
+      data={skeletonData}
+      gap={2}
+      loadingLabel="正在加载数据..."
+      blocks/status="loading"
+    >
+      <HeatmapCells cornerRadius={2} interactive={false} />
+      <HeatmapXAxis />
+      <HeatmapYAxis />
+    </HeatmapChart>
+  )
+}
+
+// 或使用预设加载组件
+// import { HeatmapChartLoading } from "@/components/charts/chart-kit"
+// <HeatmapChartLoading data={realData} label="加载中" />
+```
+
+## 约束
+
+- 依赖 @visx/heatmap、@visx/responsive、@visx/group、@visx/scale 及 motion (framer-motion)
+- 数据须符合 `HeatmapColumn[]` 格式：每列包含 `bins` 数组，每个 bin 含 `count`/`bin`/`date`
+- `count` 值按阈值（0, 1, 2, 3, 4+）映射至 5 级色阶；如需自定义分段逻辑，使用 `colorScale` 回调
+- `HeatmapChart` 必须包含至少一个子组件（`HeatmapCells`），否则只渲染空白 SVG
+- `layout="fluid"` 时高度随数据行数自适应（GitHub 风格）；`layout="fill"` 时需父容器有明确高度
+- Y 轴标签固定显示 Mon/Wed/Fri，行按 0=Sun 至 6=Sat 索引
+- 每个 `HeatmapColumn` 的 `bins` 长度应一致（建议 7），长度不一致时取首个 column 的 bins 长度
+
+## 最佳实践
+
+- 颜色选择：使用 5 级渐变色阶（低→高），避免使用不可区分的色相；提供 `lessLabel`/`moreLabel` 标注
+- 动画：默认启用入场动画（1600ms），在仪表盘等需要即时显示的场景可通过 `animate={false}` 关闭
+- 性能：超过 100 列时考虑使用 `xDomain` 限制可见范围，避免渲染过多 DOM 节点
+- 交互：`HeatmapTooltip` 自动监听单元格悬停；如需自定义格式化，传入 `formatLabel`
+- 加载态：通过 `blocks/status="loading"` + `loadingLabel` 渲染骨架屏；`HeatmapChartLoading` 提供开箱即用的加载预设
+- 响应式：组件内置 `ParentSize` 自适应容器宽度；通过 `aspectRatio` 或父容器高度控制纵向空间
+- 无障碍：X/Y 轴标签通过 `createPortal` 渲染至容器 DOM，使用 `aria-hidden="true"` 装饰性 SVG 与可见标签分离

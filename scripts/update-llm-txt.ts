@@ -17,7 +17,7 @@ function resolveImportPath(slug: string): string {
   if (registryItem) {
     return registryItem.internalImportPath
   }
-  return `@/components/ui/${slug.split("/").pop()}`
+  return `@/components/core/${slug.split("/").pop()}`
 }
 
 function resolveComponentSourcePath(slug: string): string {
@@ -25,7 +25,7 @@ function resolveComponentSourcePath(slug: string): string {
   if (registryItem?.files[0]?.path) {
     return registryItem.files[0].path
   }
-  return `src/components/ui/${slug.split("/").pop()}.tsx`
+  return `src/components/core/${slug.split("/").pop()}.tsx`
 }
 
 function getExampleFiles(name: string): string[] {

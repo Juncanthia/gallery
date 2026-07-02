@@ -1,0 +1,76 @@
+PlateEditorsShowcase Plate.js 编辑器展示。展示 Plate.js 富文本编辑器的多个内置模块效果，包括 AI 编辑器、多选编辑器、基础编辑器，支持预览与代码切换和桌面/平板/手机三种响应式设备预览。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在文档或网站中展示 Plate.js 编辑器的各种内置模块效果时使用。
+
+常见场景：
+- 组件库文档中展示 Plate.js 编辑器能力
+- 开发选型时对比不同编辑器模块的效果
+- 作为 Plate.js 编辑器集成示例的参考页
+
+不推荐：
+- 作为实际编辑器使用——应使用 `Editor` 组件
+- 在移动端页面中作为主要内容——组件较大且依赖 iframe
+- 传入 props 或 children——组件无外部配置接口，所有展示数据均为内置
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase
+  id="plate-editors-showcase"
+  path="plate-editors-showcase/basic"
+/>
+
+组件无需传入任何 props，直接渲染三个编辑器展示区块。
+
+```tsx
+import { PlateEditorsShowcase } from "@/components/editor/editors-showcase"
+
+export default function Demo() {
+  return <PlateEditorsShowcase />
+}
+```
+
+<h2 id="api">API</h2>
+
+### PlateEditorsShowcase
+
+组件无外部 props，所有展示数据（编辑器模块列表、标题、iframe 地址、示例代码）均为源码内置。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| - | 无外部 props | - | - |
+
+内置展示模块：
+- **AI Editor**（editor-ai）：`npx shadcn@latest add @plate/editor-ai`
+- **Multi-select Editor**（editor-select）：`npx shadcn@latest add @plate/editor-select`
+- **Basic Editor**（editor-basic）：`npx shadcn@latest add @plate/editor-basic`
+
+<h2 id="faq">常见问题</h2>
+
+### 为什么不需要 props？
+
+组件内置了三个 Plate.js 编辑器模块的展示数据（AI 编辑器、多选编辑器、基础编辑器），作为固定的展示页使用，所有配置均写在源码的 `blocks` 数组中。
+
+### 如何添加新的编辑器展示？
+
+修改 `src/components/base/plate-editors-showcase.tsx` 中的 `blocks` 数组，添加新的 block 配置项（包含 id、title、command、src、code 等字段）。
+
+### 这个组件和 Editor 组件有什么区别？
+
+PlateEditorsShowcase 是纯展示组件，通过 iframe 嵌入外部 Plate.js 页面来展示编辑器效果。Editor 组件才是可直接集成到应用中的实际编辑器。不要将 Showcase 用作生产编辑器。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/editor/editors-showcase` 导入 PlateEditorsShowcase。
+2. 该组件无外部 props，直接渲染即可。
+3. 仅用于文档/展示场景，不作为通用编辑器的替代方案。
+4. 需要实际编辑器能力时，应使用 `Editor` 组件。
+5. 不要尝试传入任何 props 或 children。
+6. 如需修改展示内容，应编辑 `src/components/base/plate-editors-showcase.tsx` 中的 `blocks` 数组。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="plate-editors-showcase" />

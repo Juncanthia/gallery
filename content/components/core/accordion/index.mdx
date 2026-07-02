@@ -1,0 +1,282 @@
+Accordion 手风琴折叠面板，用于将内容分组收纳在可折叠的面板中，支持单选和多选模式。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将内容分组收纳在可折叠的面板中时使用。点击标题展开/收起内容区域。
+
+常见场景：
+
+- FAQ 页面，展示问题和答案。
+- 设置面板，按分组折叠不同模块。
+- 多步骤表单，每个步骤一块面板。
+- 文件目录树，以文件夹方式组织嵌套节点。
+
+Accordion 通过 `type` 和 `items`/声明式子组件两种方式构建：
+
+- `type="single"`：每次只能展开一项，适用于问答、步骤等互斥场景。
+- `type="multiple"`：可同时展开多项，适用于设置面板、筛选面板。
+- `items` 配置：声明式构建，适合数据驱动场景。
+- 子组件（`AccordionItem`、`AccordionTrigger`、`AccordionContent`）：命令式构建，适合高度自定义场景。
+
+不推荐：
+
+- 将 Accordion 用于导航菜单，应使用 Navigation Menu 或 Sidebar。
+- 嵌套过深的面板层级（超过 2 层），会影响可读性和可访问性。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 `type="single" collapsible` 实现可全部折叠的单选面板。
+
+<ComponentShowcase
+  id="accordion"
+  path="accordion/basic"
+/>
+
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/core/accordion"
+
+export default function Demo() {
+  return (
+    <Accordion type="single" collapsible className="w-full max-w-sm">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>什么是组件库？</AccordionTrigger>
+        <AccordionContent>
+          组件库是一套可复用的 UI 组件集合，提供统一的视觉风格和交互行为。
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>如何安装？</AccordionTrigger>
+        <AccordionContent>
+          通过 npm 安装依赖后，直接从 @/components/core 导入即可使用。
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+### 使用 items 配置
+
+通过 `items` 数组声明式构建手风琴面板，适用于数据驱动的动态面板列表。
+
+```tsx
+import { Accordion } from "@/components/core/accordion"
+
+export default function Demo() {
+  return (
+    <Accordion
+      type="single"
+      className="w-full max-w-sm"
+      items={[
+        {
+          key: "1",
+          label: "第一节",
+          children: "第一节的内容。"
+        },
+        {
+          key: "2",
+          label: "第二节",
+          children: "第二节的内容。"
+        }
+      ]}
+    />
+  )
+}
+```
+
+### 展开图标位置
+
+`expandIconPlacement` 控制展开图标在标题前（`start`）或标题后（`end`）。
+
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/core/accordion"
+
+export default function Demo() {
+  return (
+    <Accordion type="single" expandIconPlacement="end" className="w-full max-w-sm">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>图标在右侧</AccordionTrigger>
+        <AccordionContent>展开图标位于标题末尾。</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+### 尺寸
+
+`size` 控制面板内边距，支持 `small`、`middle`、`large`。
+
+```tsx
+import { Accordion } from "@/components/core/accordion"
+
+export default function Demo() {
+  return (
+    <Accordion type="single" size="small" className="w-full max-w-sm"
+      items={[
+        { key: "1", label: "小尺寸面板", children: "紧凑型内容区。" }
+      ]}
+    />
+  )
+}
+```
+
+### 附加信息
+
+通过 `extra` 在标题右侧展示额外信息（如数量、时间戳）。
+
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/core/accordion"
+
+export default function Demo() {
+  return (
+    <Accordion type="single" className="w-full max-w-sm">
+      <AccordionItem value="item-1">
+        <AccordionTrigger extra={<span className="text-xs text-muted-foreground">3 项</span>}>
+          设置
+        </AccordionTrigger>
+        <AccordionContent>设置内容区域。</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Accordion
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 选择模式 | `single` \| `multiple` | `multiple` |
+| accordion | `type="single"` 的快捷方式 | `boolean` | - |
+| value | 受控展开项 key(s) | `string \| string[]` | - |
+| defaultValue | 非受控默认展开项 | `string \| string[]` | - |
+| defaultActiveKey | `defaultValue` 别名 | `string \| string[]` | - |
+| activeKey | `value` 别名 | `string \| string[]` | - |
+| onValueChange | 展开变化回调 | `(key) => void` | - |
+| onChange | `onValueChange` 别名 | `(key) => void` | - |
+| collapsible | 可折叠行为 | `boolean \| 'header' \| 'icon' \| 'disabled'` | `true` |
+| bordered | 是否显示边框 | `boolean` | `true` |
+| ghost | 是否去掉边框（连底边也去） | `boolean` | `false` |
+| size | 尺寸 | `small` \| `middle` \| `large` | `middle` |
+| expandIcon | 自定义展开图标 | `AccordionExpandIcon` | - |
+| expandIconPlacement | 展开图标位置 | `start` \| `end` | `start` |
+| items | 声明式面板配置项 | `AccordionItemOption[]` | - |
+| variant | 视觉变体（预留） | `default` | `default` |
+| className | 附加样式 | `string` | - |
+
+### AccordionItemOption
+
+`items` 数组的元素类型。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| key | 面板唯一标识 | `string` | 必填 |
+| label | 标题内容 | `React.ReactNode` | 必填 |
+| children | 面板内容 | `React.ReactNode` | 必填 |
+| className | 附加样式 | `string` | - |
+| collapsible | 触发模式控制 | `'header' \| 'icon' \| 'disabled'` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| extra | 标题右侧附加内容 | `React.ReactNode` | - |
+| forceRender | 折叠时是否保持 DOM | `boolean` | `false` |
+| showArrow | 是否显示箭头 | `boolean` | `true` |
+
+### AccordionItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 面板唯一标识 | `string` | 必填 |
+| disabled | 是否禁用 | `boolean` | `false` |
+| className | 附加样式 | `string` | - |
+
+### AccordionTrigger
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| arrowPlacement | 箭头位置 | `start` \| `end` | `start` |
+| showArrow | 是否显示箭头 | `boolean` | `true` |
+| expandIcon | 自定义展开图标 | `AccordionExpandIcon` | - |
+| extra | 触发区域右侧附加内容 | `React.ReactNode` | - |
+| collapsible | 触发模式控制 | `'header'` \| `'icon'` \| `'disabled'` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| children | 标题内容 | `React.ReactNode` | 必填 |
+
+### AccordionContent
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| keepRendered | 折叠时是否保持 DOM | `boolean` | `false` |
+| className | 附加样式 | `string` | - |
+| children | 内容 | `React.ReactNode` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何实现多选模式？
+
+设置 `type="multiple"`（默认值）：
+
+```tsx
+<Accordion type="multiple">
+  <AccordionItem value="1">...</AccordionItem>
+  <AccordionItem value="2">...</AccordionItem>
+</Accordion>
+```
+
+### 如何让所有面板都关闭？
+
+设置 `collapsible={true}` 且 `type="single"`：
+
+```tsx
+<Accordion type="single" collapsible>
+  ...
+</Accordion>
+```
+
+### 如何使用 items 批量生成？
+
+传入 `items` 配置数组，适用于数据驱动场景：
+
+```tsx
+<Accordion
+  type="single"
+  items={[
+    { key: "1", label: "标题1", children: "内容1" },
+    { key: "2", label: "标题2", children: "内容2", disabled: true }
+  ]}
+/>
+```
+
+### 如何自定义展开图标？
+
+通过 `expandIcon` 传入渲染函数：
+
+```tsx
+<Accordion
+  expandIcon={({ isActive }) => <span>{isActive ? "-" : "+"}</span>}
+>
+  ...
+</Accordion>
+```
+
+### collapsible 各模式的区别？
+
+- `true`（boolean）：允许所有面板关闭。
+- `'header'`：点击标题任意位置触发展开/收起。
+- `'icon'`：仅点击图标触发展开/收起，标题区域不响应。
+- `'disabled'`：完全禁用交互。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/accordion` 导入。
+2. 每个 `AccordionItem` 必须有唯一的 `value`。
+3. 使用 `type="single" collapsible` 实现 FAQ 式可折叠面板。
+4. 数据驱动场景使用 `items` 配置而非手动编写多个 `AccordionItem`。
+5. 如需要可访问名称，在 `AccordionTrigger` 的 children 中提供清晰的文本。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="accordion" />

@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/core/dropdown-menu"
 import { Button } from "@/components/media/blocks/video-player/components/button"
 import { useMediaStore } from "@/components/media/hooks/use-media"
 import { usePlayerStore } from "@/components/media/hooks/use-player"

@@ -1,0 +1,143 @@
+[饼图 / PieChart]
+导入: import { PieChart } from "@/components/charts/chart-kit"
+子组件: import { PieSlice, PieCenter } from "@/components/charts/chart-kit"
+包来源: @/components/charts/chart-kit
+组件类型: 图表 / BKLit Charts
+底层技术: @visx/shape + d3-shape + motion (Framer Motion)
+
+## 何时使用
+展示各部分占整体的比例关系。适用于分类数量少（≤7）的占比数据展示，如市场份额、预算分配等。支持环形图（Donut Chart）模式，环形中心可搭配 PieCenter 展示汇总信息。内置入场动画和悬停交互反馈。
+
+## PieData 数据格式
+```ts
+interface PieData {
+  label: string   // 扇区标签
+  value: number   // 扇区数值，决定扇区大小
+  color?: string  // 扇区颜色；未设置时从默认调色板自动选取
+  fill?: string   // 填充 URL，支持渐变/图案引用，如 "url(#patternId)"
+}
+```
+
+## Props 速查
+
+### PieChart Props
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| data | 饼图数据 | `PieData[]` | — (必填) |
+| size | 固定尺寸 (px)；未设置时自适应父容器 | `number` | — |
+| innerRadius | 内半径 (px)；>0 时转为环形图 | `number` | `0` |
+| padAngle | 扇区间角度间距 (弧度) | `number` | `0` |
+| cornerRadius | 扇区圆角半径 | `number` | `0` |
+| startAngle | 起始角度 (弧度) | `number` | `-PI/2` |
+| endAngle | 结束角度 (弧度) | `number` | `3*PI/2` |
+| hoverOffset | 悬停偏移距离 (px) | `number` | `10` |
+| hoveredIndex | 受控悬停扇区索引 | `number \| null` | — |
+| onHoverChange | 悬停状态变化回调 | `(index: number \| null) => void` | — |
+| enterTransition | 入场动画 Framer Motion Transition 配置 | `Transition` | — |
+| enterStaggerScale | 扇区入场交错延迟缩放系数 | `number` | `1` |
+| geometryScrubbing | 高频几何更新模式；跳过 motion 动画 | `boolean` | `false` |
+| className | 容器附加样式类名 | `string` | — |
+| children | 子组件 (PieSlice, PieCenter, 渐变/图案定义) | `ReactNode` | — |
+
+### PieSlice Props
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| index | 扇区在 data 中的索引 (必填) | `number` | — |
+| color | 扇区颜色覆盖 | `string` | — |
+| fill | 填充覆盖；支持渐变URL/图案URL | `string` | — |
+| animate | 入场动画 | `boolean` | `true` |
+| showGlow | 悬停发光效果 | `boolean` | `true` |
+| hoverEffect | 悬停效果：translate(径向偏移)、grow(外扩)、none(无) | `"translate" \| "grow" \| "none"` | `"translate"` |
+| hoverOffset | 悬停偏移距离 (px)；未设置继承 PieChart | `number` | — |
+| className | 附加样式类名 | `string` | — |
+
+### PieCenter Props (仅 innerRadius > 0 时渲染)
+| 参数 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| defaultLabel | 未悬停时显示的标签 | `string` | `"Total"` |
+| formatOptions | NumberFlow 数值格式化选项 | `ChartStatFlowFormat` | — |
+| prefix | 数值前缀 | `string` | — |
+| suffix | 数值后缀 | `string` | — |
+| valueClassName | 数值文本样式类名 | `string` | — |
+| labelClassName | 标签文本样式类名 | `string` | — |
+| className | 附加样式类名 | `string` | — |
+| children | 自定义渲染函数 `({ value, label, isHovered, data }) => ReactNode` | `function` | — |
+
+## 示例代码
+
+### 基础饼图
+```tsx
+import { PieChart } from "@/components/charts/chart-kit"
+import { PieSlice } from "@/components/charts/chart-kit"
+
+const data = [
+  { label: "产品 A", value: 400, color: "var(--chart-1)" },
+  { label: "产品 B", value: 300, color: "var(--chart-2)" },
+  { label: "产品 C", value: 200, color: "var(--chart-3)" },
+  { label: "产品 D", value: 100, color: "var(--chart-4)" },
+]
+
+export default function Demo() {
+  return (
+    <PieChart data={data}>
+      {data.map((item, i) => (
+        <PieSlice key={item.label} index={i} />
+      ))}
+    </PieChart>
+  )
+}
+```
+
+### 环形图 + 中心文字
+```tsx
+import { PieChart } from "@/components/charts/chart-kit"
+import { PieCenter, PieSlice } from "@/components/charts/chart-kit"
+
+export default function Demo() {
+  return (
+    <PieChart data={data} innerRadius={80}>
+      {data.map((item, i) => (
+        <PieSlice key={item.label} index={i} />
+      ))}
+      <PieCenter prefix="$" suffix="k" />
+    </PieChart>
+  )
+}
+```
+
+### 渐变填充 + 自定义悬停效果
+```tsx
+import { LinearGradient } from "@visx/gradient"
+import { PieChart } from "@/components/charts/chart-kit"
+import { PieSlice } from "@/components/charts/chart-kit"
+
+export default function Demo() {
+  return (
+    <PieChart data={data}>
+      <LinearGradient id="pieGrad" from="#ff7e5f" to="#feb47b" />
+      {data.map((item, i) => (
+        <PieSlice
+          key={item.label}
+          index={i}
+          fill="url(#pieGrad)"
+          hoverEffect="grow"
+          hoverOffset={12}
+        />
+      ))}
+    </PieChart>
+  )
+}
+```
+
+## 约束与最佳实践
+
+- 依赖 @visx/shape、d3-shape、motion (Framer Motion) 系列包
+- 每个 PieSlice 必须提供 `index` 属性，映射到 data 数组对应索引
+- PieData 中 `value` 必须为正数，负值或零值会导致渲染异常
+- 分类数量建议 ≤7 个；超过 7 个时饼图可读性显著下降，改用 BarChart
+- PieCenter 仅在 `innerRadius > 0` 时可见，纯饼图模式下自动隐藏
+- 容器默认 `aspect-square w-full` 自适应正方形；固定尺寸使用 `size` 属性
+- 渐变/图案需在 PieChart 内部定义 SVG `<defs>` 并通过 `fill: "url(#id)"` 引用
+- 受控模式：通过 `hoveredIndex` + `onHoverChange` 可从外部控制悬停状态
+- 入场动画可通过 `enterTransition` 自定义（Framer Motion Transition），设为 falsy 值关闭动画
+- 不要在 PieChart 外层包裹过大的 margin/padding，饼图已内置 hoverOffset 缓冲区域

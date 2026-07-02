@@ -1,0 +1,101 @@
+Calculator 计算器。拟物风四则运算计算器，支持记忆功能（mc/m+/m-/mr）、正负切换、小数点输入和退格删除，配备仿 LCD 显示屏、物理按键音效和全键盘操作。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中嵌入一个完整的计算器工具时使用。
+
+常见场景：
+- 金融类应用的快速计算工具。
+- 表单中的辅助计算入口。
+- 后台管理系统的数据验算工具。
+- 嵌入页面的小型计算器小部件。
+
+不推荐：
+- 将 Calculator 用作表单输入控件——它是带屏幕的完整计算器，不是 input 的替代品。
+- 在多个位置同时渲染多个 Calculator 实例——全局键盘事件监听会冲突。
+- 将 Calculator 嵌入紧凑空间——组件固定宽度 340px。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+直接渲染完整计算器，无需传入必需属性。
+
+<ComponentShowcase
+  id="blocks/calculator"
+  path="blocks/calculator/basic"
+/>
+
+```tsx
+import { Calculator } from "@/components/blocks/calculator"
+
+export default function Demo() {
+  return <Calculator />
+}
+```
+
+### 自定义样式
+
+通过 `className` 控制外层容器样式。
+
+```tsx
+import { Calculator } from "@/components/blocks/calculator"
+
+export default function Demo() {
+  return <Calculator className="mx-auto shadow-2xl" />
+}
+```
+
+<h2 id="api">API</h2>
+
+### Calculator
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名，与默认容器样式合并 | `string` | - |
+
+Calculator 是一个自包含的功能组件，无需传入任何属性即可完整运行。内部状态（display、equation、memory、isFinished、hasMemory）由组件自行管理。
+
+<h2 id="faq">常见问题</h2>
+
+### Calculator 支持哪些运算符？
+
+支持标准四则运算：加（+）、减（-）、乘（*）、除（/）。按钮上显示为 +、-、×、÷，内部计算时将 × 转为 *、÷ 转为 /。
+
+### 计算结果精度如何？
+
+输入数字最多 10 位（不含小数点）。计算结果超过 10 位时使用 `toPrecision(8)` 格式化显示。除以零等异常返回 "Error"。
+
+### 是否支持键盘操作？
+
+完整支持键盘映射：
+
+| 按键 | 功能 |
+| --- | --- |
+| 0-9 | 数字输入 |
+| . | 小数点 |
+| + - * / | 运算符（x 等同于 *） |
+| Enter / = | 计算结果 |
+| Escape / c / C | 全清 |
+| Backspace | 退格删除 |
+
+### 为什么按键点击有声音？
+
+Calculator 使用 Web Audio API 生成物理按键音效——数字键产生短促清脆的 sine wave 音效，运算符产生低沉的 triangle wave 音效。此行为是组件的设计特征，增强拟物化体验。如果无法播放（如浏览器限制），音效会静默失败。
+
+### 如何在页面中使用 Calculator 的计算结果？
+
+Calculator 是自包含组件，状态不对外暴露。如需获取计算结果，建议自行实现计算逻辑，或修改源码将状态提升。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/calculator` 导入 Calculator。
+2. 直接渲染 `<Calculator />` 即可，className 可选。
+3. 不要在同一个页面渲染多个 Calculator 实例——全局键盘监听会冲突。
+4. 不要修改 Calculator 内部的拟物化视觉样式——这是组件的核心设计特征。
+5. 不要移除或替换 Web Audio API 按键音效逻辑。
+6. Calculator 不是表单控件，不要尝试将其值绑定到 form state。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/calculator" />

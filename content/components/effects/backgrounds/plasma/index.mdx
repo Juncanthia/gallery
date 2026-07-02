@@ -1,0 +1,82 @@
+Plasma 等离子体风格的 WebGL 动态背景，支持色相调节、鼠标交互、正向/反向/PingPong 动画方向。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要有机流动感的动态背景时使用。
+常见场景：
+- 科技感 Hero 区域背景
+- AI/数据产品页面的视觉装饰
+- 创意作品背景
+不推荐：
+- 需要静态、可预测视觉的页面
+- 文字直接叠加在动画区域上方（对比度问题）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/plasma" path="rb/plasma/basic" />
+
+```tsx
+import { Plasma } from "@/components/core/plasma"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 overflow-hidden rounded">
+      <Plasma />
+    </div>
+  )
+}
+```
+
+### 自定义颜色 + PingPong 动画
+
+```tsx
+import { Plasma } from "@/components/core/plasma"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 overflow-hidden rounded bg-black">
+      <Plasma
+        color="#ff6b6b"
+        direction="pingpong"
+        speed={1.5}
+        scale={0.8}
+        opacity={0.8}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Plasma
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 自定义颜色（hex），不传则使用多色谱 | string | "#ffffff" |
+| speed | 动画速度倍率 | number | 1 |
+| direction | 动画播放方向 | "forward" \| "reverse" \| "pingpong" | "forward" |
+| scale | 显示缩放 | number | 1 |
+| opacity | 不透明度（0-1） | number | 1 |
+| mouseInteractive | 是否启用鼠标交互（鼠标位置影响流动方向） | boolean | true |
+
+<h2 id="faq">常见问题</h2>
+
+### forward、reverse、pingpong 有什么区别？
+- `forward`：持续正向前进
+- `reverse`：持续反向后退
+- `pingpong`：在正向和反向之间平滑往返（周期约 10 秒）
+
+### 为什么颜色设为自定义 hex 后看起来淡了？
+当指定 `color` 时，Plasma 的强度（亮度）会映射到该颜色上，可以通过调整 `opacity` 增加饱和度感。
+
+### 性能如何？
+Plasma 使用 WebGL 2.0 渲染，在支持 WebGL 2 的设备上性能良好。组件内置 IntersectionObserver 自动在离屏时暂停。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/plasma` 导入。
+2. 组件需要放在有明确宽高的容器中。
+3. 依赖 `ogl` 库（WebGL 2.0），请确保项目已安装。
+4. 默认参数即可正常渲染，自定义颜色需传 hex 色值。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-plasma" />

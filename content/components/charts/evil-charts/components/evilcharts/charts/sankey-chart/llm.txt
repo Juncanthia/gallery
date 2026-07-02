@@ -1,0 +1,218 @@
+---
+category: Components
+title: EvilSankeyChart
+subtitle: 桑基图
+description: EvilSankeyChart 用于展示流量、能量、资金等流向分布，基于 Recharts Sankey 的可组合桑基图组件。
+demo:
+  cols: 1
+group:
+  title: 图表
+source:
+  component: src/components/evilcharts/components/charts/evilchartss/sankey-chart.tsx
+  wrapper: src/components/core/evilcharts-sankey-chart.tsx
+  barrel: src/components/evilcharts/components/sankey-chart.ts
+  docs: content/components/charts/evilcharts/index.mdx
+  examples:
+    - content/components/charts/evilcharts/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  recharts: true
+  motion: true
+---
+
+# EvilSankeyChart 桑基图
+
+EvilSankeyChart 是对 Recharts `<Sankey>` 的可组合封装，用于展示多层级之间流量转移、资源分配或漏斗转化关系的流向图。采用可组合设计——节点、标签、连接线、提示框作为独立子部件配置，而非通过 props 级联控制。
+
+## 导入路径
+
+```tsx
+// 主组件
+import { EvilSankeyChart } from "@/components/charts/evil-charts"
+
+// 可组合子部件
+import { Node, NodeLabel, Link, Tooltip } from "@/components/charts/evil-charts/components/sankey-chart"
+
+// 类型
+import type { SankeyData } from "recharts"
+import { type ChartConfig } from "@/components/charts/evil-charts/components/chart"
+```
+
+## 数据模型
+
+```tsx
+type SankeyData = {
+  nodes: { name: string }[]
+  links: { source: number; target: number; value: number }[]
+}
+
+// source/target 是 nodes 数组中的索引（从 0 开始）
+const data: SankeyData = {
+  nodes: [
+    { name: "Source1" },
+    { name: "Source2" },
+    { name: "Target1" },
+  ],
+  links: [
+    { source: 0, target: 2, value: 100 },
+    { source: 1, target: 2, value: 200 },
+  ],
+}
+
+const chartConfig = {
+  Source1: {
+    label: "来源一",
+    colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
+  },
+  Source2: {
+    label: "来源二",
+    colors: { light: ["#8b5cf6"], dark: ["#a78bfa"] },
+  },
+  Target1: {
+    label: "目标一",
+    colors: { light: ["#10b981"], dark: ["#34d399"] },
+  },
+} satisfies ChartConfig
+```
+
+## API
+
+### EvilSankeyChart Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| data | `SankeyData` | 必填 | 桑基图数据，nodes + links |
+| config | `ChartConfig` | 必填 | 节点颜色和标签配置 |
+| children | `ReactNode` | 必填 | 可组合子部件 |
+| className | `string` | - | 容器附加类名 |
+| nodeWidth | `number` | `10` | 节点宽度（px） |
+| nodePadding | `number` | `10` | 节点垂直间距（px） |
+| linkCurvature | `number` | `0.5` | 连接线曲率，0=直线，1=最大 |
+| iterations | `number` | `32` | 布局迭代精度 |
+| sort | `boolean` | `true` | 自动排序节点 |
+| align | `"left" \| "justify"` | `"justify"` | 水平对齐 |
+| verticalAlign | `"justify" \| "top"` | `"justify"` | 垂直对齐 |
+| backgroundVariant | `BackgroundVariant` | - | 背景纹理 |
+| defaultSelectedNode | `string \| null` | `null` | 初始选中节点 |
+| onSelectionChange | `(selection \| null) => void` | - | 选中变化回调 |
+| isLoading | `boolean` | `false` | 加载骨架屏 |
+| sankeyProps | `Omit<SankeyProps, "data">` | - | Recharts 逃生口 |
+
+### Node Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| radius | `number` | `0` | 圆角半径（px） |
+| isClickable | `boolean` | `false` | 点击选中节点 |
+| glow | `string[]` | `[]` | 发光节点名称 |
+| children | `ReactNode` | - | 内嵌 NodeLabel |
+
+### NodeLabel Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| position | `"inside" \| "outside"` | - | 标签位置 |
+| showValues | `boolean` | `false` | 显示流量值 |
+| valueFormatter | `(value: number) => string` | `toLocaleString()` | 数值格式化 |
+
+### Link Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| variant | `"gradient" \| "solid" \| "source" \| "target"` | `"gradient"` | 着色策略 |
+| verticalPadding | `number` | `0` | 连接处缩减量（px） |
+| glow | `number[]` | `[]` | 发光连接线索引 |
+
+### Tooltip Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| variant | `TooltipVariant` | - | 视觉样式 |
+| roundness | `TooltipRoundness` | - | 圆角程度 |
+| defaultIndex | `number` | - | 默认显示的数据索引 |
+
+## 代码示例
+
+### 基础用法
+
+营销漏斗，节点可点击选中，选中后高亮关联连接线。
+
+```tsx
+import { EvilSankeyChart } from "@/components/charts/evil-charts"
+import { Node, NodeLabel, Link, Tooltip } from "@/components/charts/evil-charts/components/sankey-chart"
+
+export default function Demo() {
+  return (
+    <EvilSankeyChart className="h-full w-full p-4" data={data} config={chartConfig}>
+      <Node isClickable>
+        <NodeLabel position="outside" showValues />
+      </Node>
+      <Link variant="source" />
+      <Tooltip />
+    </EvilSankeyChart>
+  )
+}
+```
+
+### 内部标签 + 渐变连接线
+
+节点宽度较大时使用内部标签，配合渐变连接线和选中回调。
+
+```tsx
+export default function Demo() {
+  return (
+    <EvilSankeyChart
+      className="h-full w-full p-4"
+      data={data}
+      config={chartConfig}
+      nodeWidth={80}
+      nodePadding={24}
+      onSelectionChange={(sel) => console.log(sel)}
+    >
+      <Node isClickable radius={4}>
+        <NodeLabel
+          position="inside"
+          showValues
+          valueFormatter={(v) => v.toLocaleString()}
+        />
+      </Node>
+      <Link variant="gradient" verticalPadding={8} />
+      <Tooltip />
+    </EvilSankeyChart>
+  )
+}
+```
+
+### 加载状态 + 发光节点
+
+展示加载骨架屏，并为关键节点添加柔光效果。
+
+```tsx
+export default function Demo() {
+  return (
+    <EvilSankeyChart
+      className="h-full w-full p-4"
+      data={data}
+      config={chartConfig}
+      isLoading={isFetching}
+    >
+      <Node isClickable glow={["Grid", "Residential"]} />
+      <Link variant="source" />
+      <Tooltip />
+    </EvilSankeyChart>
+  )
+}
+```
+
+## 约束与注意事项
+
+1. **子部件必须在 EvilSankeyChart 内部使用**——Node、Link、Tooltip 等通过 React Context 读取图表数据，在外部使用会抛出运行时错误。
+2. **links 中的 source/target 使用数字索引**，不是节点名称。索引对应 `data.nodes` 数组中的位置。
+3. **config 的 key 必须与 nodes 的 name 完全匹配**，大小写敏感。
+4. **每个 config 条目至少提供 `label` 和 `colors`**，`colors` 需包含 `light` 和 `dark` 两个数组。
+5. **gradient 变体需要多色配置**——如果 `colors.light` 和 `colors.dark` 只有单色，渐变效果不可见。使用 `source` 或 `target` 变体时单色即可。
+6. **Tooltip 在加载状态时自动隐藏**，无需手动控制。
+7. **不要直接使用 Recharts 的 `<Sankey>`**——应始终使用 EvilSankeyChart。如需透传原生属性，使用 `sankeyProps` 逃生口。
+8. **`Node`、`Link`、`NodeLabel` 是配置槽而非渲染组件**——它们不直接输出 DOM，而是由 EvilSankeyChart 读取其 props 后注入 Recharts 渲染器。
+9. **`Link` 的 `glow` 使用连接线索引**（对应 `data.links` 数组中的位置），而非节点名称。

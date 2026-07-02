@@ -53,13 +53,13 @@ import {
 } from "@pierre/diffs/react"
 import { useTheme } from "next-themes"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
 import {
   Collapsible,
   CollapsiblePanel,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/core/collapsible"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,9 +71,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/core/dropdown-menu"
+import { ScrollArea } from "@/components/core/scroll-area"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/core/tabs"
 
 export type SchemaBuilderScalarType =
   | "string"

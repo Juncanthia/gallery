@@ -1,0 +1,224 @@
+代码对比 CodeDiff。基于 @pierre/diffs 封装的代码差异展示组件，支持 file-diff 与 patch-diff 两种模式，提供 unified/split 视图、行号控制、折叠展开和复制功能。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示代码变更差异时使用。CodeDiff 接收新旧代码自动计算差异，或直接渲染 unified diff patch 字符串。
+
+常见场景：
+
+- 代码审查中展示文件级别的修改对比。
+- AI 生成代码后展示原始版本和修改版本的差异。
+- 终端工具中展示 patch 补丁内容。
+
+不推荐：
+
+- 展示纯文本（非代码）差异 —— 组件的语法高亮和行号依赖于 language 参数，纯文本场景应使用命令行 diff 工具。
+- 实时协同编辑中的差异对比 —— 本组件为静态展示，不包含实时冲突解决和编辑器集成。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+在 file-diff 模式下，传入 `oldCode` 和 `newCode` 展示两端代码的差异。渲染 unified view，支持行号、语言高亮和变更行数统计。
+
+<ComponentShowcase id="tool/code-diff" path="tool/code-diff/basic" />
+
+```tsx
+import { CodeDiff } from "@/components/core/code-diff"
+
+const oldCode = `function greet(name) {
+  return "Hello, " + name + "!";
+}`
+
+const newCode = `function greet(name) {
+  return \`Hello, \${name}!\`;
+}`
+
+export default function Demo() {
+  return (
+    <CodeDiff
+      id="demo-diff"
+      oldCode={oldCode}
+      newCode={newCode}
+      language="typescript"
+      filename="utils.ts"
+    />
+  )
+}
+```
+
+### Patch 模式
+
+直接传入 unified diff 格式的 `patch` 字符串，组件自动解析并渲染。
+
+```tsx
+import { CodeDiff } from "@/components/core/code-diff"
+
+const patch = `--- a/utils.ts
++++ b/utils.ts
+@@ -1,4 +1,5 @@
+ function greet(name: string): string {
+-  return "Hello, " + name + "!";
++  return \`Hello, \${name}!\`;
+ }
++
++function multiply(a: number, b: number): number {
++  return a * b;
++}`
+
+export default function Demo() {
+  return (
+    <CodeDiff
+      id="demo-patch"
+      patch={patch}
+      language="typescript"
+      filename="utils.ts"
+    />
+  )
+}
+```
+
+### Split 视图
+
+设置 `diffStyle="split"` 左右并排展示 diff。
+
+```tsx
+import { CodeDiff } from "@/components/core/code-diff"
+
+export default function Demo() {
+  return (
+    <CodeDiff
+      id="demo-split"
+      oldCode="const x = 1;"
+      newCode="const x = 2;"
+      language="typescript"
+      diffStyle="split"
+    />
+  )
+}
+```
+
+### 长文本折叠
+
+设置 `maxCollapsedLines` 指定超过多少行自动折叠，底部显示展开/收起按钮。
+
+```tsx
+import { CodeDiff } from "@/components/core/code-diff"
+
+export default function Demo() {
+  return (
+    <CodeDiff
+      id="demo-collapsed"
+      oldCode={longOldFunction}
+      newCode={longNewFunction}
+      language="javascript"
+      maxCollapsedLines={20}
+    />
+  )
+}
+```
+
+### Compound 模式
+
+通过 `CodeDiff.Root` + 子组件自由组合布局。
+
+```tsx
+import {
+  CodeDiff,
+} from "@/components/core/code-diff"
+
+export default function Demo() {
+  return (
+    <CodeDiff.Root
+      id="demo-compound"
+      oldCode="const x = 1;"
+      newCode="const x = 2;"
+      language="typescript"
+    >
+      <CodeDiff.Header />
+      <CodeDiff.Content />
+      <CodeDiff.CollapseToggle />
+    </CodeDiff.Root>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### CodeDiff（与 CodeDiff.Root 共用 Props）
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识 | `string` | -（必填） |
+| oldCode | 旧版本代码（file-diff 模式） | `string` | - |
+| newCode | 新版本代码（file-diff 模式） | `string` | - |
+| patch | unified diff 格式的 patch 字符串（patch 模式） | `string` | - |
+| language | 代码语言，用于语法高亮 | `string` | `"text"` |
+| filename | 文件名，显示于头部 | `string` | - |
+| lineNumbers | 行号可见性 | `"visible"` \| `"hidden"` | `"visible"` |
+| diffStyle | diff 视图样式 | `"unified"` \| `"split"` | `"unified"` |
+| maxCollapsedLines | 超过此行数自动折叠 | `number` | - |
+| className | 自定义样式类名 | `string` | - |
+| expanded | 受控展开状态（折叠时） | `boolean` | - |
+| defaultExpanded | 默认展开状态（折叠时） | `boolean` | `false` |
+| onExpandedChange | 展开状态变化回调 | `(expanded: boolean) => void` | - |
+
+**输入模式规则**：必须提供 `patch` 或 `oldCode`/`newCode` 中的至少一个，两者不能同时提供。
+
+### CodeDiff.Header
+
+头部子组件，展示语言标识、文件名、变更统计（+添加/-删除）和复制按钮。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式 | `string` | - |
+
+### CodeDiff.Content
+
+差异内容渲染区域。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式 | `string` | - |
+
+### CodeDiff.CollapseToggle
+
+折叠/展开切换按钮，仅在 `maxCollapsedLines` 触发时渲染。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 自定义样式 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### file-diff 和 patch 模式有何区别？
+
+file-diff 模式（默认）传入 `oldCode` 和 `newCode`，组件内部使用 `@pierre/diffs` 的 `parseDiffFromFile()` 自动计算差异。patch 模式直接传入 unified diff 格式的字符串（如 `git diff` 输出），组件使用 `PierrePatchDiff` 直接渲染。
+
+### 何时使用 compound 模式？
+
+默认的 `&lt;CodeDiff /&gt;` 已自动组合 Header + Content + CollapseToggle。仅在需要自定义布局时才使用 `&lt;CodeDiff.Root&gt;` + 子组件。
+
+### 是否需要注册 @pierre/diffs 主题？
+
+项目已在 `CodeDiffRoot` 内部注册了 pierre-dark 和 pierre-light 主题，会自动根据项目主题（light/dark）切换，无需额外配置。
+
+### 如何只展示代码而不显示差异？
+
+使用 [CodeBlock](/components/blocks/code-block) 组件。CodeDiff 专为差异对比设计。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/code-diff` 导入 `CodeDiff`，不要从 `antd` 导入（AntD 无此组件）。
+2. 必须提供 `id` 属性作为组件唯一标识。
+3. 提供 `patch` 或 `oldCode`/`newCode` 中的一组，不能混用。
+4. lang 默认为 `"text"`，建议指定实际语言以获得正确的高亮。
+5. `diffStyle` 可选 `"unified"`（默认单栏）或 `"split"`（左右并排）。
+6. 需要折叠长内容时设置 `maxCollapsedLines`。
+7. 默认使用 `&lt;CodeDiff /&gt;` 简写形式即可获得完整 Header + Content + CollapseToggle。
+8. 仅在需要自定义布局时使用 compound 模式（`&lt;CodeDiff.Root&gt;` + 子组件）。
+9. 不要使用 `@pierre/diffs` 的 `PierreFileDiff` 或 `PierrePatchDiff` 直接渲染 —— 始终通过本组件使用。
+10. 本组件为 AI 工具组件（Tool UI），基于 `@pierre/diffs` 封装，不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tool/code-diff" />

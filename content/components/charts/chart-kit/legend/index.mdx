@@ -1,0 +1,161 @@
+Legend 用于展示图表的图例说明，支持颜色标记、数值显示、进度条和交互高亮。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当图表包含多个数据系列时，使用图例帮助用户理解每个系列的颜色和含义。通过悬停交互高亮对应的图表元素，提供视觉反馈。
+
+常见场景：
+
+- 多系列图表：折线图、柱状图中区分不同数据集。
+- 带进度的指标对比：展示各分类数值及其相对占比。
+- 交互联动：hover 图例项时高亮图表对应系列。
+- 自定义布局：通过组合 Marker/Label/Value/Progress 子组件自由控制图例行内容。
+
+不建议使用的场景：
+
+- 单一系列且含义自明的简单图表，额外的图例会占用视觉空间。
+
+Legend 采用组合式 API：
+
+- `Legend` 作为容器，接收 `items` 数据并通过 `<LegendItem>` 子组件定义每行结构。
+- `<LegendItem>` 内可自由组合 `<LegendMarker>`（颜色标记）、`<LegendLabel>`（标签文本）、`<LegendValue>`（数值）和 `<LegendProgress>`（进度条）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+展示颜色标记、标签、数值和进度条的组合使用。
+
+<ComponentShowcase id="bklit/legend" path="bklit/legend/basic" />
+
+```tsx
+import { Legend, LegendItem, LegendMarker, LegendLabel, LegendValue, LegendProgress } from "@/components/core/legend"
+
+const items = [
+  { label: "产品 A", value: 450, maxValue: 600, color: "var(--chart-1)" },
+  { label: "产品 B", value: 320, maxValue: 600, color: "var(--chart-2)" },
+  { label: "产品 C", value: 280, maxValue: 600, color: "var(--chart-3)" },
+]
+
+export default function Demo() {
+  return (
+    <Legend items={items}>
+      <LegendItem>
+        <div className="flex items-center gap-3">
+          <LegendMarker />
+          <LegendLabel />
+          <LegendValue />
+        </div>
+        <LegendProgress />
+      </LegendItem>
+    </Legend>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Legend
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 图例项数据 | `LegendItemData[]` | — |
+| hoveredIndex | 受控的悬停索引 | `number \| null` | — |
+| onHoverChange | 悬停状态变化回调 | `(index: number \| null) => void` | — |
+| title | 图例上方标题 | `string` | — |
+| titleClassName | 标题样式类名 | `string` | `"text-sm font-semibold"` |
+| className | 容器样式类名 | `string` | — |
+| children | 单个 LegendItem 元素，内部自动根据 items 渲染多份 | `ReactElement` | — |
+
+### LegendItemData
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 显示标签 | `string` | — |
+| value | 当前数值 | `number` | — |
+| maxValue | 最大值，用于计算进度和百分比 | `number` | — |
+| color | 标记颜色（支持 CSS 变量和任意颜色值） | `string` | — |
+
+### LegendItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 图例行样式类名 | `string` | — |
+| children | 子组件组合（LegendMarker、LegendLabel、LegendValue、LegendProgress） | `ReactNode` | — |
+
+### LegendMarker
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 标记尺寸样式类名 | `string` | `"h-2.5 w-2.5"` |
+
+### LegendLabel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 标签样式类名 | `string` | `"text-sm font-medium"` |
+
+### LegendValue
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 数值样式类名 | `string` | `"text-sm tabular-nums"` |
+| showPercentage | 是否显示百分比 | `boolean` | `false` |
+| percentageClassName | 百分比样式类名 | `string` | `"text-xs tabular-nums"` |
+| formatValue | 数值格式化函数 | `(value: number) => string` | `intFmt` |
+| formatPercentage | 百分比格式化函数 | `(percentage: number) => string` | `(p) => \`${p.toFixed(0)}%\`` |
+
+### LegendProgress
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| trackClassName | 进度轨道样式类名 | `string` | — |
+| indicatorClassName | 进度指示器样式类名 | `string` | — |
+| height | 轨道高度 | `string` | `"h-1.5"` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义图例行样式？
+
+通过 `<LegendItem>` 的 `className` 控制整行样式。各子组件也支持 `className` 精确调整：
+
+```tsx
+<Legend items={items}>
+  <LegendItem className="hover:bg-blue-50">
+    <LegendMarker className="h-3 w-3" />
+    <LegendLabel className="font-bold" />
+    <LegendValue className="text-blue-600" />
+  </LegendItem>
+</Legend>
+```
+
+### 如何显示百分比？
+
+在 `<LegendValue>` 上设置 `showPercentage`。百分比根据 `item.maxValue` 计算：
+
+```tsx
+<LegendValue showPercentage />
+```
+
+### 如何与图表交互联动？
+
+通过 `onHoverChange` 回调获取当前悬停索引，配合图表的 series 高亮逻辑实现联动。参考 `useChartLegendHover` hook。
+
+### 如何在图表中使用？
+
+Legend 是独立组件，不依赖 ChartContext。直接将 `items` 数据传入即可，适用于任何需要图例的场景。也可以作为 `ChartLegendHoverProvider` 的子组件，利用 Context 实现与图表的联动悬停效果。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/legend` 导入 `Legend` 及其子组件
+2. 来自 BKLit Charts 库
+3. 始终通过 `items` 属性传入 `LegendItemData[]` 数组
+4. 在 `<Legend>` 中放置单个 `<LegendItem>` 作为子组件模板，内部自动迭代
+5. `<LegendItem>` 内自由组合 `<LegendMarker>`、`<LegendLabel>`、`<LegendValue>`、`<LegendProgress>`
+6. 颜色推荐使用 CSS 变量（如 `var(--chart-1)`）以支持主题切换
+7. 需要进度条时，确保传入了 `maxValue`
+8. 悬停交互通过 `onHoverChange` 回调实现
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="bklit/legend" />

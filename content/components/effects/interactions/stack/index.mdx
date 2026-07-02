@@ -1,0 +1,74 @@
+Stack 卡片堆叠组件，支持拖拽甩出、点击切换、自动播放等交互模式，提供类似 Tinder 的卡片交互体验。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要...时使用。
+常见场景：
+- 照片堆叠浏览，用户通过拖拽或点击切换卡片
+- 推荐卡片轮换，如产品展示、用户匹配
+- 需要多层卡片视觉层次感的展示墙
+不推荐：
+- 单一卡片的简单展示场景（过于复杂）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+<ComponentShowcase id="rb/stack" path="rb/stack/basic" />
+```tsx
+import { Stack } from "@/components/core/stack"
+export default function Demo() { return <Stack /> }
+```
+
+### 自定义配置
+```tsx
+import { Stack } from "@/components/core/stack"
+
+export default function Demo() {
+  return (
+    <Stack
+      cards={[
+        <div key="1" className="bg-blue-500 w-64 h-80 rounded-2xl flex items-center justify-center text-white">Card 1</div>,
+        <div key="2" className="bg-purple-500 w-64 h-80 rounded-2xl flex items-center justify-center text-white">Card 2</div>,
+        <div key="3" className="bg-pink-500 w-64 h-80 rounded-2xl flex items-center justify-center text-white">Card 3</div>,
+      ]}
+      randomRotation
+      sendToBackOnClick
+      autoplay
+      autoplayDelay={2500}
+      pauseOnHover
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### Stack
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| cards | 卡片内容数组 | `ReactNode[]` | 内置示例图片 |
+| randomRotation | 卡片随机微旋转 | `boolean` | `false` |
+| sensitivity | 拖拽触发切换的灵敏度（像素） | `number` | `200` |
+| animationConfig | 弹簧动画配置（刚度/阻尼） | `{ stiffness: number; damping: number }` | `{ stiffness: 260, damping: 20 }` |
+| sendToBackOnClick | 点击卡片发送到堆底 | `boolean` | `false` |
+| autoplay | 自动轮播 | `boolean` | `false` |
+| autoplayDelay | 自动轮播间隔（毫秒） | `number` | `3000` |
+| pauseOnHover | 鼠标悬停时暂停自动播放 | `boolean` | `false` |
+| mobileClickOnly | 移动端仅点击切换，禁用拖拽 | `boolean` | `false` |
+| mobileBreakpoint | 移动端判定断点（像素） | `number` | `768` |
+
+<h2 id="faq">常见问题</h2>
+### 如何在移动端禁用拖拽仅保留点击？
+设置 `mobileClickOnly={true}`，当视口宽度小于 `mobileBreakpoint` 时拖拽自动禁用，仅保留点击切换。
+
+### 如何自定义卡片内容？
+通过 `cards` 属性传入 `ReactNode[]` 数组，每个元素即为一张卡片。若不传则使用内置示例图片。
+
+### 自动播放时如何让用户交互暂停？
+设置 `pauseOnHover={true}`，鼠标悬停在组件上时自动播放会暂停，离开后恢复。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/stack` 导入。
+2. 依赖 `motion/react`（`motion` 和 `useMotionValue`/`useTransform`）。
+3. `cards` 为 `ReactNode[]`，可直接传入 JSX 元素。
+4. 移动端体验可通过 `mobileClickOnly` 和 `mobileBreakpoint` 优化。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-stack" />

@@ -1,0 +1,170 @@
+---
+category: Components
+title: DatePickerWithRange
+subtitle: 日期范围选择器
+description: 日期范围选择器，支持预设快捷选项、日历选区和自定义时间范围输入。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 2
+source:
+  component: src/components/blocks/data-table-filters/components/custom/date-picker-with-range.tsx
+  examples:
+    - content/components/dt/date-picker-with-range/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DatePickerWithRange 日期范围选择器
+
+DatePickerWithRange 是 DataTable 体系中的日期范围筛选组件，支持预设快捷选项、日历选区和自定义时间范围输入。
+
+本组件是 DataTable 筛选体系内的局部组件，API 和行为以源码为准。它通过 `date`/`setDate` 控制值、`presets` 自定义预设项。
+
+## 何时使用 {#when-to-use}
+
+当需要按时间范围筛选表格数据时使用。提供预设快捷键、日历拖选和自定义时间范围三种选取方式。
+
+常见场景：
+
+- 数据表格的时间范围筛选，如「今天」「最近 7 天」。
+- 仪表盘或报表页面的时间维度切换。
+- 需要快捷键盘操作的时间筛选。
+
+不推荐：
+
+- 用于表单中的单一日期选择，应使用 DatePicker。
+- 作为独立的日期范围控件，它设计为配合 DataTable 筛选体系使用。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+通过 `date` 和 `setDate` 控制选中的日期范围。
+
+```tsx
+import { useState } from "react"
+import type { DateRange } from "react-day-picker"
+import { DatePickerWithRange } from "@/components/data-display/blocks/data-table-filters/components/custom/date-picker-with-range"
+
+export default function Demo() {
+  const [date, setDate] = useState&lt;DateRange | undefined&gt;(undefined)
+
+  return (
+    &lt;div className="w-full max-w-sm"&gt;
+      &lt;DatePickerWithRange date={date} setDate={setDate} /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+## 核心导出 {#exports}
+
+- `DatePickerWithRange`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+type DatePreset = {
+  label: string;
+  from: Date;
+  to: Date;
+  shortcut: string;
+};
+```
+
+```ts
+type DatePickerWithRangeProps = React.HTMLAttributes<HTMLDivElement> & {
+  date: DateRange | undefined;
+  setDate: (date: DateRange | undefined) => void;
+  presets?: DatePreset[];
+};
+```
+
+内置预设：
+
+| shortcut | label | 范围 |
+| --- | --- | --- |
+| `d` | Today | 当天 |
+| `y` | Yesterday | 昨天 |
+| `h` | Last hour | 最近 1 小时 |
+| `w` | Last 7 days | 最近 7 天 |
+| `b` | Last 14 days | 最近 14 天 |
+| `m` | Last 30 days | 最近 30 天 |
+
+## Semantic DOM {#semantic-dom}
+
+- 源码未声明 `data-slot`，使用根元素语义和组件名定位。
+- 无额外 `data-*` 状态属性。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 使用 Popover + Calendar + Select + Button + Input + Separator 组合构建。
+- 主题颜色优先使用 `bg-background`、`text-foreground`、`border-border`、`text-muted-foreground` 等项目级语义变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/data-table-filters/components/custom/date-picker-with-range.tsx`
+
+直接依赖：
+
+- `@/components/core/button`
+- `@/components/core/calendar`
+- `@/components/core/input`
+- `@/components/core/kbd`
+- `@/components/core/label`
+- `@/components/core/popover`
+- `@/components/core/select`
+- `@/components/core/separator`
+- `date-fns` (format)
+- `lucide-react` (CalendarIcon)
+- `react-day-picker` (DateRange)
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 样式应优先通过组件 props 或本地 className 扩展点表达。
+3. 预设快捷键通过全局 `keydown` 事件监听实现，仅在 Popover 打开时生效。
+4. 自定义时间范围使用 `datetime-local` input，通过 debounce（1s）延迟触发回调。
+5. 移动端预设使用 Select 下拉，桌面端使用按钮列表。
+
+## 可访问性 {#accessibility}
+
+- 使用 Button id="date" 作为 Popover 触发器，包含 CalendarIcon 和已选日期文本。
+- 键盘快捷键仅在 Popover 打开时生效，避免与页面其他快捷键冲突。
+- `datetime-local` input 使用 `disabled` 属性反映状态。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/blocks/data-table-filters/components/custom/date-picker-with-range.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 配合 DataTable 筛选体系使用，不承诺 AntD DatePicker.RangePicker API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DatePickerWithRange 代码时，应遵守：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/custom/date-picker-with-range` 导入。
+2. 使用 `useState<DateRange | undefined>` 管理日期范围状态。
+3. 搭配 DataTable 筛选时，在 `filterFields` 中使用 `type: "timerange"`，不要手动引入 DatePickerWithRange。
+4. 自定义预设时使用 `DatePreset[]` 类型，包含 `label`、`from`、`to`、`shortcut` 四个字段。
+5. 不要引入 Ant Design 相关依赖。
+6. 如果不确定某个 API 是否存在，先检查源码，不要凭 AntD 记忆生成。

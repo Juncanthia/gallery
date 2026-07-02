@@ -1,0 +1,265 @@
+---
+category: Components
+title: ForgotPassword
+subtitle: 忘记密码
+description: 忘记密码表单组件，用于收集用户邮箱并触发密码重置流程。支持邮箱校验、加载状态和提交成功提示。
+demo:
+  cols: 1
+group:
+  title: 页面模板
+  order: 3
+source:
+  component: src/components/core/manifest-forgot-password.tsx
+  source: src/components/manifest/form/forgot-password.tsx
+  docs: content/components/templates/form/forgot-password/index.mdx
+  examples:
+    - content/components/templates/form/forgot-password/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# ForgotPassword 忘记密码
+
+ForgotPassword 是一个忘记密码表单组件，适用于登录页面的密码重置流程入口。用户输入注册邮箱后，组件进行客户端格式校验，提交成功后展示确认提示。
+
+本组件是页面模板级别的复合组件，内部组合了 Input、Label、Button 等基础组件，提供开箱即用的密码重置表单体验。
+
+## 何时使用 {#when-to-use}
+
+用于用户忘记密码时通过邮箱获取重置链接。适合以下场景：
+
+- 登录页面的"忘记密码"入口，收集邮箱以发送重置链接。
+- SaaS 产品的密码找回流程第一步。
+- 任何需要身份验证后通过邮箱重置密码的系统。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+默认展示标题、描述文字和邮箱输入框，内置客户端邮箱格式校验。提交成功后自动切换到确认提示界面。
+
+```tsx
+import { ForgotPassword } from "@/components/templates/form/forgot-password"
+
+export default function ForgotPasswordDemo() {
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <ForgotPassword
+        actions={{
+          onSubmit: (data) => console.log("Reset email:", data.email)
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 自定义文案
+
+通过 `data` prop 自定义标题、描述、按钮文字和成功提示信息。
+
+```tsx
+import { ForgotPassword } from "@/components/templates/form/forgot-password"
+
+export default function ForgotPasswordCustomDemo() {
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <ForgotPassword
+        data={{
+          title: "忘记密码",
+          subtitle: "请输入您的邮箱地址，我们将发送密码重置链接。",
+          submitLabel: "发送重置链接",
+          successMessage: "重置链接已发送，请检查您的邮箱。",
+          backToLoginLabel: "返回登录",
+        }}
+      />
+    </div>
+  )
+}
+```
+
+### 按需加载
+
+处理表单提交时的异步加载状态。
+
+```tsx
+import { useState } from "react"
+import { ForgotPassword } from "@/components/templates/form/forgot-password"
+
+export default function ForgotPasswordLoadingDemo() {
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(data: { email: string }) {
+    setLoading(true)
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    setLoading(false)
+  }
+
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <ForgotPassword
+        actions={{ onSubmit: handleSubmit }}
+        control={{ isLoading: loading }}
+      />
+    </div>
+  )
+}
+```
+
+## API {#api}
+
+### ForgotPassword
+
+通过 `data`、`actions`、`appearance`、`control` 四个顶层 prop 配置组件行为。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 表单数据配置 | `object` | — |
+| data.title | 表单标题 | `string` | `"Forgot Password"` |
+| data.subtitle | 标题下方描述文字 | `string` | `"Enter your email address and we'll send you a link to reset your password."` |
+| data.submitLabel | 提交按钮文字 | `string` | `"Send Reset Link"` |
+| data.successMessage | 提交成功后显示的提示信息 | `string` | `"If an account exists for that email, you will receive a password reset link shortly."` |
+| data.backToLoginLabel | 返回登录链接文字 | `string` | `"Back to Sign In"` |
+| actions | 回调配置 | `object` | — |
+| actions.onSubmit | 表单提交回调，接收包含 email 字段的对象；支持 async | `(data: ForgotPasswordData) => void \| Promise<void>` | — |
+| actions.onBackToLogin | 点击"返回登录"链接的回调 | `() => void` | — |
+| appearance | 外观配置 | `object` | — |
+| appearance.showTitle | 是否显示标题区域 | `boolean` | `true` |
+| appearance.showBackToLogin | 是否显示返回登录链接 | `boolean` | `true` |
+| control | 控制配置 | `object` | — |
+| control.isLoading | 提交按钮加载状态；为 `true` 时按钮禁用并显示旋转动画 | `boolean` | `false` |
+
+### ForgotPasswordData
+
+表单提交时 `onSubmit` 接收的数据结构。
+
+| 字段 | 说明 | 类型 | 必填 |
+| --- | --- | --- | --- |
+| email | 用户输入的邮箱地址 | `string` | 是 |
+
+## Semantic DOM {#semantic-dom}
+
+ForgotPassword 通过内部语义结构暴露：
+
+| 元素 | 说明 |
+| --- | --- |
+| `form` | 表单容器（提交前），包含邮箱输入和提交按钮 |
+| 成功状态容器 | 提交后显示确认提示和返回登录链接 |
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/manifest/form/forgot-password.tsx`：忘记密码表单组件实现。
+- `src/components/core/manifest-forgot-password.tsx`：组件导出入口，re-export。
+
+关键行为：
+
+1. 表单内部管理邮箱字段状态和校验逻辑，调用侧只需关心 `onSubmit` 回调。
+2. 客户端邮箱格式校验在提交时执行，空值和格式错误均显示对应提示。
+3. 提交成功后组件切换到确认提示界面，展示 successMessage 和返回登录链接。
+4. 提交按钮在 `isLoading` 为 `true` 时禁用并显示旋转加载动画。
+5. `isLoading` 期间邮箱输入框同步禁用，防止重复提交。
+
+## FAQ {#faq}
+
+### 如何获取用户输入的邮箱？
+
+通过 `actions.onSubmit` 回调接收 `ForgotPasswordData` 对象：
+
+```tsx
+<ForgotPassword
+  actions={{
+    onSubmit: (data) => {
+      console.log("Reset requested for:", data.email)
+      // 调用后端 API 发送重置密码邮件
+    }
+  }}
+/>
+```
+
+### 如何设置提交加载状态？
+
+通过 `control.isLoading` 控制。典型用法是配合异步 `onSubmit`：
+
+```tsx
+const [loading, setLoading] = useState(false)
+
+<ForgotPassword
+  actions={{
+    onSubmit: async (data) => {
+      setLoading(true)
+      await sendResetEmail(data.email)
+      setLoading(false)
+    }
+  }}
+  control={{ isLoading: loading }}
+/>
+```
+
+### 如何处理返回登录？
+
+通过 `actions.onBackToLogin` 回调处理导航跳转：
+
+```tsx
+import { useRouter } from "next/navigation"
+
+const router = useRouter()
+
+<ForgotPassword
+  actions={{
+    onBackToLogin: () => router.push("/sign-in")
+  }}
+/>
+```
+
+### 如何隐藏返回登录链接？
+
+设置 `appearance.showBackToLogin` 为 `false`：
+
+```tsx
+<ForgotPassword appearance={{ showBackToLogin: false }} />
+```
+
+### 如何隐藏标题区域？
+
+设置 `appearance.showTitle` 为 `false`：
+
+```tsx
+<ForgotPassword appearance={{ showTitle: false }} />
+```
+
+### 如何自定义所有文案？
+
+通过 `data` 属性自定义标题、描述、按钮文字、成功提示和返回链接文字：
+
+```tsx
+<ForgotPassword
+  data={{
+    title: "忘记密码",
+    subtitle: "请输入您的邮箱地址，我们将发送密码重置链接。",
+    submitLabel: "发送重置链接",
+    successMessage: "重置链接已发送，请检查您的邮箱。",
+    backToLoginLabel: "返回登录",
+  }}
+/>
+```
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成 ForgotPassword 代码时，应遵守：
+
+1. 从 `@/components/templates/form/forgot-password` 导入 `ForgotPassword`。
+2. 使用 `data`、`actions`、`appearance`、`control` 四个顶层 prop，不要直接传入子组件。
+3. 表单提交通过 `actions.onSubmit` 处理，不要手动管理组件内部的邮箱状态或校验逻辑。
+4. 加载状态仅通过 `control.isLoading` 控制，按钮内部已处理加载动画和禁用逻辑。
+5. 邮箱校验由组件内部完成，调用侧无需额外校验。
+6. 提交成功后组件自动切换为确认提示界面，无需外部控制。
+7. 不要引入 Ant Design、ConfigProvider 或 css-in-js 相关依赖。
+8. 不要复刻或重新实现 ForgotPassword 的内部逻辑；它是一个页面模板组件，应直接使用。

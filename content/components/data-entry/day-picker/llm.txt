@@ -1,0 +1,248 @@
+---
+category: Components
+title: DayPicker
+subtitle: 日期选择
+description: 带有交互动画的频率选择器，支持日/周/月/年周期切换和星期选择。
+demo:
+  cols: 1
+group:
+  title: UseLayouts
+  order: 1
+source:
+  component: src/components/data-entry/day-picker.tsx
+  barrel: src/components/core/uselayouts-day-picker.tsx
+  examples:
+    - content/components/data-entry/day-picker/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: true
+  hugeicons: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# DayPicker 日期选择
+
+DayPicker 是一个带有动画切换的频率选择器，支持 Daily / Weekly / Monthly / Yearly 四种周期模式。选择 Weekly 时下方展开 Sun-Sat 七天选择面板，交互全程使用 spring 动画和 layoutId 共享元素过渡。
+
+本组件是 UseLayouts 体系中的演示组件，展示 motion/react 在 layout 动画和选项切换中的实际应用。它不是 Ant Design DatePicker 的替代品，也不是通用日期范围选择器。
+
+## 何时使用 {#when-to-use}
+
+当需要让用户选择时间周期频率（日/周/月/年）并辅助日期选择时使用。
+
+常见场景：
+
+- 任务调度器的频率设置。
+- 报表周期选择。
+- 提醒或通知的重复规则设置。
+- 数据看板的时间粒度切换。
+
+组件提供两种交互状态：
+
+- **频率选择**：点击当前选项展开 Daily / Weekly / Monthly / Yearly 四个选项，带有 smooth spring 动画和 layoutId 共享元素过渡。
+- **星期选择**：选择 Weekly 后下方展开 Sun-Sat 七天选择面板，每项有交错入场动画，选中项带次级背景高亮。
+
+不推荐：
+
+- 将本组件嵌入需要精确日期范围（起止日期）的场景——请使用 DatePicker。
+- 在业务侧手写动画或自行引入 motion/react 覆盖组件内置动效。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+DayPicker 为自包含组件，无需外部 props，直接渲染即可。
+
+```tsx
+import { TwentyThreeFour } from "@/components/data-entry/day-picker"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-8"&gt;
+      &lt;TwentyThreeFour /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+> 说明：组件名 `TwentyThreeFour` 来自 UseLayouts 原始命名，实际业务中可通过别名引用。
+
+## 核心导出 {#exports}
+
+- `TwentyThreeFour`（default export from source，named re-export from barrel）
+
+## API 摘要 {#api}
+
+DayPicker 为自包含组件，无需外部 props。内部状态如下：
+
+```ts
+type Options = "Daily" | "Weekly" | "Monthly" | "Yearly"
+```
+
+| 内部状态 | 类型 | 说明 |
+| --- | --- | --- |
+| option | `Options` | 当前选中的频率周期，初始值为 `"Daily"` |
+| day | `number` | 当 option 为 `"Weekly"` 时选中的星期索引，0=Sun, 6=Sat |
+| isOptionOpen | `boolean` | 频率选项面板是否展开 |
+| isSelectorOpen | `boolean` | 星期选择面板是否可见（仅 `option === "Weekly"` 时生效） |
+
+所有交互行为由组件内部 `useState` 管理，调用侧无需传递外部状态。如需外部控制，需修改源码将状态提升为受控 props。
+
+## Semantic DOM {#semantic-dom}
+
+DayPicker 为纯展示组件，未设置显式 `data-*` 语义槽位。内部 DOM 结构由 motion/react 的 `motion.div` 和 `AnimatePresence` 构成，核心语义通过视觉状态（样式 class 切换）表达。
+
+关键稳定 class 约定：
+
+- 根容器：`.max-w-xs` 限制最大宽度
+- 背景面板：`.bg-muted` 带阴影和圆角
+- 选中项指示器：`bg-secondary` / `bg-primary` / `bg-background` 三色区分选中状态
+- 文本颜色：`text-foreground`（选中）vs `text-muted-foreground`（未选中）
+- 选项容器圆角：`rounded-3xl` / `rounded-[24px]`
+
+## 样式模型 {#styling-model}
+
+- 样式全部来自 Tailwind CSS className，通过 `cn` 工具函数合并条件类名。
+- 不使用 CVA（class-variance-authority），所有变体逻辑在 JSX 中通过条件渲染表达。
+- 动画由 `motion/react` 的 `motion.div` 驱动，使用 spring 过渡参数 `{ type: "spring", damping: 30, stiffness: 400, mass: 1 }`。
+- `layoutId` 用于共享元素动画：`"options"` 连接频率选项的背景，`"dayOptions"` 连接日期选项的高亮，`"button"` 连接切换按钮，`"optionToSelect"` 连接频率选项内的选中指示。
+- 主题颜色使用 `bg-background`、`text-foreground`、`bg-muted`、`bg-secondary`、`bg-primary` 等项目级语义变量。
+- `filter: "blur(8px)"` / `"blur(0px)"` 用于入场/退出的模糊过渡效果。
+
+## 主题变量 {#design-token}
+
+DayPicker 不引入独立的 Design Token。所有颜色通过 Tailwind 语义 class 引用：
+
+| 语义 | Tailwind class |
+| --- | --- |
+| 面板背景 | `bg-muted` |
+| 选项展开背景 | `bg-background` |
+| 选中频率背景 | `bg-secondary` |
+| 确认按钮 | `bg-primary text-primary-foreground` |
+| 选中文本 | `text-foreground` |
+| 未选中文本 | `text-muted-foreground` |
+
+## 可访问性 {#accessibility}
+
+- 所有交互元素为 `div` + `onClick`，未提供 `button` 语义或键盘支持。
+- 未设置 `role`、`tabIndex`、`aria-label`、`aria-expanded` 等 ARIA 属性。
+- 纯展示用图标（Tick02Icon、UnfoldMoreIcon）无文本替代。
+- 如需生产环境使用，建议：
+  1. 将可点击项改为 `<button>` 或添加 `role="button" tabIndex={0}`。
+  2. 为图标按钮添加 `aria-label`。
+  3. 添加 `Enter` / `Space` 键盘事件处理。
+  4. 为展开/收起状态添加 `aria-expanded`。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件:
+
+- `src/components/data-entry/day-picker.tsx`：组件实现。
+- `src/components/core/uselayouts-day-picker.tsx`：barrel re-export。
+
+直接依赖摘要:
+
+- `@hugeicons/core-free-icons`：Tick02Icon、CodeIcon、UnfoldMoreIcon。
+- `@hugeicons/react`：HugeiconsIcon 渲染组件。
+- `motion/react`：motion.div、AnimatePresence、spring 过渡。
+- `@hyper/uselayouts/lib/utils`：cn 类名合并工具。
+- `react`：useState。
+
+实现注意:
+
+1. 组件名 `TwentyThreeFour` 是 UseLayouts 示例命名，不建议直接用于业务代码；可通过 barrel alias 重导出。
+2. 所有内部状态通过 `useState` 管理，无外部 props 接口。
+3. 默认初始状态为 `option="Daily"`、`day=1`（Mon）、`isSelectorOpen=true`、`isOptionOpen=false`。
+4. 当 option 切换为非 Weekly 时，`isSelectorOpen` 自动设为 `false` 不显示日期行。
+5. 点击确认（tick）按钮后 `isOptionOpen=false` 且 `isSelectorOpen=false` 同时收起。
+6. layoutId 动画依赖同一 `layoutId` 的 visible 元素切换，`AnimatePresence` 的 `mode="popLayout"` 控制退出态。
+7. CodeIcon 已导入但未在 JSX 中使用。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 自包含无 props，非 AntD DatePicker API |
+| 功能范围 | 仅频率选择 + 星期选择，不支持日期范围、时间选择 |
+| 动画系统 | motion/react spring，非 AntD CSS transition |
+| 视觉系统 | Tailwind CSS 语义变量，非 AntD Design Token |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 兼容目标 | UseLayouts 演示组件，不追求 AntD 兼容 |
+
+## FAQ {#faq}
+
+### 如何在外部获取选中的频率和星期？
+
+当前版本为演示组件，内部状态未暴露。如需外部控制，修改源码将 `useState` 替换为受控 props：
+
+```tsx
+type DayPickerProps = {
+  option?: Options
+  onOptionChange?: (option: Options) => void
+  day?: number
+  onDayChange?: (day: number) => void
+}
+```
+
+### 如何修改可选频率选项？
+
+修改源码中的 `options` 数组：
+
+```tsx
+const options: options[] = ["Daily", "Weekly", "Monthly", "Yearly"];
+```
+
+增删数组元素即可。类型别名 `type options` 也需同步更新。
+
+### 星期名称如何国际化？
+
+修改源码中的 `days` 数组：
+
+```tsx
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+```
+
+替换为所需语言即可，例如中文 `["日", "一", "二", "三", "四", "五", "六"]`。
+
+### 如何调整动画参数？
+
+修改源码中的 `springTransition` 常量：
+
+```tsx
+const springTransition = {
+  type: "spring",
+  damping: 30,   // 阻尼，越大动画越快停止
+  stiffness: 400, // 刚度，越大动画越快
+  mass: 1,        // 质量
+} as const;
+```
+
+### Weekly 选项文字为什么显示 "Weekly, Mon" 格式？
+
+源码第 138 行有条件渲染：
+
+```tsx
+{option === "Weekly" ? option + ", " + days[day] : option}
+```
+
+选择 Weekly 时拼接当前选中的星期名称。如需修改格式，调整此处的字符串拼接逻辑。
+
+### 为什么选中 Daily/Monthly/Yearly 时日期行消失？
+
+`isSelectorOpen` 仅在 `option === "Weekly"` 时为 `true`。切换到非 Weekly 频率时 `setIsSelectorOpen(false)` 触发 AnimatePresence exit 动画，日期行淡出收起。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DayPicker 代码时，应遵守：
+
+1. 从 `@/components/data-entry/day-picker` 导入 `TwentyThreeFour`。
+2. 组件无外部 props，直接渲染即可。
+3. 如需自定义频率选项或星期文字，修改源码中的 `options` 和 `days` 数组，不要在外部覆盖。
+4. 如需外部控制状态，修改源码添加受控 props（`option` / `onOptionChange` / `day` / `onDayChange`）。
+5. 不要在外部手写 `motion.div` 或 `AnimatePresence` 覆盖组件内置动效。
+6. 不要引入 Ant Design 的 DatePicker、ConfigProvider 或 @ant-design/icons。
+7. 不推荐在业务代码中直接使用组件名 `TwentyThreeFour`，建议通过 barrel alias 重导出为语义化名称。

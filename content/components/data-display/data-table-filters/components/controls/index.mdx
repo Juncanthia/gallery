@@ -1,0 +1,142 @@
+ControlsProvider 筛选控件容器，管理 DataTable 筛选面板的展开/折叠状态，通过 Context 向下传递 `open`/`setOpen`，并在根元素上设置 `data-expanded` 属性，配合 Tailwind `group-data-[expanded=true]` 变体控制子组件的显隐。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在 DataTable 筛选场景中统一管理筛选面板的展开/折叠状态时使用。ControlsProvider 将 `open` 状态持久化到 localStorage，页面刷新后保留上次的展开/折叠状态。
+
+常见场景：
+
+- DataTable 筛选面板的展开/折叠控制。
+- 需要根据筛选面板状态条件性渲染子组件。
+- 需要配合 Tailwind `group-data-[expanded=true]/controls` 变体实现 CSS 驱动的显隐切换。
+- 需要在多个子组件间共享筛选面板的展开状态。
+
+不推荐：
+
+- 在 DataTable 体系之外单独使用 ControlsProvider，它设计为 DataTable 筛选体系的基础设施。
+- 绕过 Context 直接操作 DOM 属性来控制显隐。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+ControlsProvider 包裹筛选控件区域，通过 `useControls` 获取 `open`/`setOpen` 状态。根元素自动设置 `data-expanded` 属性。
+
+<ComponentShowcase
+  id="dt/controls"
+  path="dt/controls/basic"
+/>
+
+```tsx
+import { ControlsProvider } from "@/components/data-display/blocks/data-table-filters/components/controls"
+import { useControls } from "@/components/data-display/blocks/data-table-filters/components/controls"
+import { Button } from "@/components/core/button"
+import { ChevronDown, ChevronRight } from "lucide-react"
+
+function ControlsToggle() {
+  const { open, setOpen } = useControls()
+
+  return (
+    &lt;Button
+      variant="outlined"
+      icon={open ? &lt;ChevronDown /&gt; : &lt;ChevronRight /&gt;}
+      onClick={() =&gt; setOpen(!open)}
+    &gt;
+      {open ? "收起筛选" : "展开筛选"}
+    &lt;/Button&gt;
+  )
+}
+
+function FilterPanel() {
+  const { open } = useControls()
+
+  if (!open) return null
+
+  return (
+    &lt;div className="mt-3 space-y-3 rounded-md border bg-muted/30 p-4"&gt;
+      &lt;p className="text-sm font-medium"&gt;筛选条件&lt;/p&gt;
+      &lt;p className="text-xs text-muted-foreground"&gt;
+        筛选控件内容区，通过 ControlsProvider 的 open 状态控制显隐。
+      &lt;/p&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default function Demo() {
+  return (
+    &lt;ControlsProvider&gt;
+      &lt;div className="w-full max-w-sm"&gt;
+        &lt;ControlsToggle /&gt;
+        &lt;FilterPanel /&gt;
+      &lt;/div&gt;
+    &lt;/ControlsProvider&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ControlsProvider
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| children | 子内容 | `React.ReactNode` | - |
+
+ControlsProvider 内部使用 `useLocalStorage` 管理 `open` 状态，key 为 `CONTROLS_KEY`（`"controls-open"`）。根元素渲染为 `<div>` 并设置 `data-expanded={open}` 和 `className="group/controls"`。
+
+### useControls()
+
+必须在 `ControlsProvider` 内部调用的 Hook，返回：
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| open | 筛选面板是否展开 | `boolean` |
+| setOpen | 设置展开状态 | `React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;` |
+
+<h2 id="faq">常见问题</h2>
+
+### ControlsProvider 与 DataTableProvider 的关系？
+
+ControlsProvider 是 DataTableProvider 的内部依赖，DataTableProvider 在内部自动包裹 ControlsProvider：
+
+```tsx
+&lt;DataTableProvider table={table} filterFields={filterFields} columns={columns}&gt;
+  {/* 内部已包含 ControlsProvider，无需手动包裹 */}
+&lt;/DataTableProvider&gt;
+```
+
+如果单独使用 ControlsProvider（不通过 DataTableProvider），需要手动包裹筛选控件区域。
+
+### 如何用 CSS 控制子组件显隐？
+
+ControlsProvider 在根元素上设置了 `class="group/controls"` 和 `data-expanded` 属性。子组件可通过 Tailwind 变体响应展开状态：
+
+```html
+&lt;div className="group-data-[expanded=true]/controls:block hidden"&gt;
+  展开时可见
+&lt;/div&gt;
+```
+
+这种方式避免了 JavaScript 条件渲染，适合动画过渡场景。
+
+### open 状态如何持久化？
+
+ControlsProvider 内部使用 `useLocalStorage`，状态自动同步到 localStorage，key 为 `"controls-open"`。页面刷新后自动恢复上次的展开/折叠状态。
+
+### 如何在 DataTable 体系外使用？
+
+直接从 `@/components/data-display/blocks/data-table-filters/components/controls` 导入 ControlsProvider，包裹需要控制显隐的筛选区域即可。但注意不通过 DataTableProvider 使用时，需要自行管理筛选逻辑。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ControlsProvider 代码时：
+
+1. 从 `@/components/data-display/blocks/data-table-filters/components/controls` 导入 ControlsProvider。
+2. 在 ControlsProvider 内部使用 `useControls` 获取 `open`/`setOpen` 状态。
+3. 配合 DataTable 体系时，通过 DataTableProvider 间接使用，不要手动包裹 ControlsProvider。
+4. 单独使用时，ControlsProvider 包裹筛选控件区域，内部子组件通过 `useControls` 访问状态。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="dt/controls" />

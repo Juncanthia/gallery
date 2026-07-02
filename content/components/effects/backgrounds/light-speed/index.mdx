@@ -1,0 +1,163 @@
+LightSpeed 是一个基于 Three.js + React Three Fiber 的超光速穿梭动效组件，使用粒子系统模拟相机在圆柱隧道中高速前进的视觉效果，配合 Bloom 后处理实现霓虹辉光。
+
+<h2 id="when-to-use">何时使用</h2>
+
+需要为页面或区块添加高速穿梭、科幻感的粒子隧道背景效果时使用。LightSpeed 通过 GPU 实时渲染数千个发光粒子，模拟光速飞行中的星点拖尾，适合用作：
+
+- 首页 Hero 区域的动感背景。
+- 科幻或科技主题页面的氛围渲染。
+- 加载页面的视觉装饰。
+- 需要速度感、未来感的展示区域。
+
+组件渲染为全屏层，天然采用 `absolute inset-0` 定位，直接覆盖父容器。父容器需要设置 `relative` 和明确的宽高。
+
+<h2 id="examples">代码演示</h2>
+
+<h3 id="basic">基础用法</h3>
+
+默认配色为紫色系（lightColor="#b026ff"），particleCount=1000，speed=2.4，intensity=3.0。
+
+<ComponentShowcase
+  id="effects/backgrounds/light-speed"
+  path="effects/backgrounds/light-speed/basic"
+/>
+
+```tsx
+import { LightSpeed } from "@/components/effects/backgrounds/light-speed"
+
+export default function Demo() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden rounded">
+      <LightSpeed />
+    </div>
+  )
+}
+```
+
+### 自定义颜色与速度
+
+通过 `lightColor` 自定义粒子辉光颜色，`speed` 控制穿梭速度。颜色需使用 CSS 颜色值字符串。
+
+<ComponentShowcase
+  id="effects/backgrounds/light-speed-color"
+  path="effects/backgrounds/light-speed/color"
+/>
+
+```tsx
+import { LightSpeed } from "@/components/effects/backgrounds/light-speed"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="relative h-[200px] w-full overflow-hidden rounded">
+        <LightSpeed lightColor="#33b2ff" speed={2.4} />
+      </div>
+      <div className="relative h-[200px] w-full overflow-hidden rounded">
+        <LightSpeed lightColor="#f033ff" speed={4.0} />
+      </div>
+    </div>
+  )
+}
+```
+
+### 调整粒子数量与半径
+
+`particleCount` 控制粒子总数，`radius` 控制粒子分布的圆柱半径。更多粒子更密集，更大半径更分散。
+
+<ComponentShowcase
+  id="effects/backgrounds/light-speed-count"
+  path="effects/backgrounds/light-speed/count"
+/>
+
+```tsx
+import { LightSpeed } from "@/components/effects/backgrounds/light-speed"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="relative h-[200px] w-full overflow-hidden rounded">
+        <LightSpeed particleCount={500} radius={15} />
+      </div>
+      <div className="relative h-[200px] w-full overflow-hidden rounded">
+        <LightSpeed particleCount={3000} radius={40} speed={3.0} />
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+<h3 id="api-lightspeed">LightSpeed</h3>
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名，合并到外层容器 | `string` | - |
+| particleCount | 粒子（星点/线条）数量 | `number` | `1000` |
+| speed | 穿梭效果的基础速度倍率 | `number` | `2.4` |
+| lightColor | 发光粒子的基础颜色 | `string`（CSS 颜色值） | `#b026ff` |
+| intensity | Bloom 辉光强度 | `number` | `3.0` |
+| radius | 粒子分布的圆柱半径 | `number` | `25` |
+| cylinderLength | 粒子循环前的圆柱长度 | `number` | `150` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义粒子颜色？
+
+传入 `lightColor` 属性即可，支持任意 CSS 颜色值字符串（hex、rgb、hsl 等）。
+
+```tsx
+<LightSpeed lightColor="#00ff88" />
+```
+
+### 如何调整穿梭速度？
+
+使用 `speed` 属性，默认值 2.4。设为 1.0 会明显减缓，设为 5.0 会显著加快。
+
+```tsx
+<LightSpeed speed={5.0} />
+```
+
+### 如何控制粒子密度？
+
+使用 `particleCount` 控制粒子总数，默认 1000。更多粒子意味着更密集的星空效果，但也会消耗更多 GPU 资源。
+
+```tsx
+<LightSpeed particleCount={2000} />
+```
+
+### 如何作为页面背景使用？
+
+LightSpeed 天然是全屏层组件（`absolute inset-0`），将其放在 `relative` 的父容器内即可覆盖整个区域。
+
+```tsx
+<div className="relative h-screen w-screen overflow-hidden">
+  <LightSpeed />
+  <div className="relative z-10 flex items-center justify-center h-full">
+    <h1 className="text-white text-4xl font-bold">欢迎</h1>
+  </div>
+</div>
+```
+
+### 能否在 LightSpeed 上方叠加内容？
+
+可以。LightSpeed 内部 Canvas 渲染层为 `absolute inset-0 pointer-events-none`，不会拦截鼠标事件。只需将内容放在 LightSpeed 之后，设置 `relative z-10` 即可。
+
+### 性能如何？
+
+组件使用 Three.js InstancedMesh 渲染粒子，配合 EffectComposer Bloom 后处理。默认 1000 粒子在现代桌面设备上表现良好。降低 `particleCount` 可显著提升低端设备的帧率。移动端建议将 `particleCount` 降至 500 以下。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 LightSpeed 代码时：
+
+1. 从 `@/components/effects/backgrounds/light-speed` 导入 `LightSpeed`（具名导出）。
+2. 将 LightSpeed 放在 `relative` 容器中，容器需有明确宽高。
+3. 自定义颜色时使用 CSS 颜色值字符串，如 `#33b2ff`。
+4. 需要上方叠加内容时，内容元素设置 `relative z-10`。
+5. 不引入 `@react-three/fiber`、`three` 或 `@react-three/postprocessing` 相关依赖的额外配置 — 组件已内部处理。
+6. 性能调优时优先降低 `particleCount`，其次降低 `speed`。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="effects/backgrounds/light-speed" />

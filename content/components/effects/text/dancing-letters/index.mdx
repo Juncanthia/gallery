@@ -1,0 +1,143 @@
+DancingLetters 舞动字母。基于 motion/react 的交互式字母动画组件，每个字母在 hover 或点击时触发独立的物理动画效果。适合用作标题装饰、品牌展示或交互式文字动效。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为文字标题添加交互式字母动画效果时使用。每个字母独立响应 hover/点击，触发弹跳、旋转、缩放等 8 种不同的物理动画。
+
+常见场景：
+
+- 品牌首页的交互式标题。
+- 营销落地页的动效文字。
+- 个人作品集的名称展示。
+- 任何需要趣味性文字交互的场景。
+
+不推荐：
+
+- 正文段落或长文本，逐字母动画会分散阅读注意力。
+- 需要精确排版对齐的场景，动画期间的变形会破坏对齐。
+- 性能敏感的低端设备页面，每个字母都是一个独立的 motion span。
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase
+  id="effects/text/dancing-letters"
+  path="effects/text/dancing-letters/basic"
+/>
+
+### 基础用法
+
+默认文字为 "ANIMATE"，hover 或点击任意字母即可触发对应的动画效果。
+
+```tsx
+import { DancingLetters } from "@/components/effects/text/dancing-letters"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-8 rounded bg-neutral-50 dark:bg-neutral-950"&gt;
+      &lt;DancingLetters /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义文字
+
+通过 `text` 属性传入任意文字。
+
+```tsx
+import { DancingLetters } from "@/components/effects/text/dancing-letters"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-8 rounded bg-neutral-50 dark:bg-neutral-950"&gt;
+      &lt;DancingLetters text="HELLO" /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+### 自定义字母样式
+
+通过 `letterClassName` 为每个字母附加自定义类名，可调整颜色、字体粗细等。
+
+```tsx
+import { DancingLetters } from "@/components/effects/text/dancing-letters"
+
+export default function Demo() {
+  return (
+    &lt;div className="flex items-center justify-center p-8 rounded bg-neutral-50 dark:bg-neutral-950"&gt;
+      &lt;DancingLetters
+        text="COLOR"
+        letterClassName="text-blue-500 dark:text-blue-400"
+      /&gt;
+    &lt;/div&gt;
+  )
+}
+```
+
+> 说明：每个字母使用 8 种预设动画之一（按字母位置循环分配），包含橡皮筋弹跳、铰链坠落、压缩跳跃、翻转变形、弹性滑动、冲击抖动、弹跳缩放和悬浮升空等效果。
+
+<h2 id="api">API</h2>
+
+### DancingLetters
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| text | 要显示的文字 | `string` | `"ANIMATE"` |
+| className | 附加到外层容器的样式类名 | `string` | - |
+| letterClassName | 附加到每个字母 span 的样式类名 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义文字内容？
+
+通过 `text` 属性传入任意字符串。
+
+```tsx
+&lt;DancingLetters text="MY BRAND" /&gt;
+```
+
+### 如何改变字母颜色？
+
+通过 `letterClassName` 传入 Tailwind 颜色类。
+
+```tsx
+&lt;DancingLetters
+  text="COLOR"
+  letterClassName="text-blue-500 dark:text-blue-400"
+/&gt;
+```
+
+### 字母的动画效果是如何分配的？
+
+每个字母按其在字符串中的位置索引，循环分配 8 种预设动画（索引 % 8）。因此第一个字母始终获得橡皮筋弹跳动画，第九个字母与第一个动画相同。
+
+### 能否自定义动画效果？
+
+当前动画效果由源码中 `letterAnimations` 数组定义，不通过 props 暴露自定义。如需修改动画，直接编辑 `src/components/effects/text/dancing-letters/dancing-letters.tsx` 中的 `letterAnimations` 配置。
+
+### 如何在深色背景上使用？
+
+组件默认支持 dark mode（`dark:text-neutral-100`），深色背景上文字为浅色。如需进一步调整，通过 `letterClassName` 覆盖。
+
+```tsx
+&lt;div className="bg-slate-900 p-8 rounded"&gt;
+  &lt;DancingLetters text="DARK" /&gt;
+&lt;/div&gt;
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 DancingLetters 代码时：
+
+1. 从 `@/components/effects/text/dancing-letters` 导入 `DancingLetters`（具名导出）。
+2. 自定义文字使用 `text` 属性。
+3. 自定义字母样式使用 `letterClassName`，传入 Tailwind class 字符串。
+4. DancingLetters 依赖 motion/react 和 Outfit 字体，组件内部已处理，不需要额外引入。
+5. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 等配置。
+6. 不要引入 Ant Design 相关依赖。
+7. 如果不确定某个 API 是否存在，先检查 `src/components/effects/text/dancing-letters/dancing-letters.tsx`，不要凭记忆生成。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="effects/text/dancing-letters" />

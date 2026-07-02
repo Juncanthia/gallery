@@ -1,0 +1,146 @@
+---
+category: Components
+title: DeformTunnel
+subtitle: 变形隧道
+description: 基于 Three.js 片段着色器的隧道形变视觉效果，支持鼠标 hover 交互。
+demo:
+  cols: 1
+group:
+  title: 视觉效果
+  order: 30
+source:
+  component: src/components/effects/backgrounds/deform-tunnel/deform-tunnel.tsx
+  examples:
+    - content/components/effects/backgrounds/deform-tunnel/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# DeformTunnel 变形隧道
+
+基于 Three.js 和 React Three Fiber 实现的片段着色器隧道效果，支持鼠标 hover 交互产生局部形变与光效响应。
+
+本组件是项目内的本地基础能力，API 和行为以源码为准。
+
+## 何时使用 {#when-to-use}
+
+适合在需要隧道形变视觉效果的界面中使用。DeformTunnel 通过 `absolute inset-0` 撑满父容器，外层需设置 `relative` 和明确宽高。
+
+常见场景：
+
+- 首页 Hero 动态背景，增强视觉冲击力。
+- 创意页面或作品集的沉浸式装饰。
+- 加载过渡页面的动态背景。
+
+不推荐：
+
+- 低性能设备或移动端大量使用。
+- 作为信息承载区域使用，shader 效果会干扰可读性。
+- 多个实例同时渲染，GPU 负载过高。
+- 引入 `three` 或 `@react-three/fiber` 作为使用该组件的前置条件（组件内部已封装）。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { DeformTunnel } from "@/components/effects/backgrounds/deform-tunnel"
+
+export default function Demo() {
+  return (
+    <div className="relative w-full h-[400px] rounded overflow-hidden">
+      <DeformTunnel />
+    </div>
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。DeformTunnel 撑满父容器，支持鼠标 hover 时产生局部形变。
+
+## 核心导出 {#exports}
+
+- `DeformTunnel`
+- `DeformTunnelProps`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface DeformTunnelProps {
+  className?: string;
+  imageSrc?: string;
+  speed?: number;
+  wobble?: [number, number];
+  depth?: number;
+  scale?: number;
+  decay?: number;
+  exposure?: number;
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中未声明 `data-slot` 属性。DeformTunnel 渲染为包含 Canvas 的绝对定位 div。根元素类名通过 `cn` 合并，包含 `w-full h-full absolute inset-0 bg-black cursor-crosshair`。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- Canvas 通过 `absolute inset-0` 撑满父容器，背景色为黑色 (`bg-black`)。
+- 鼠标样式为 `cursor-crosshair` 表明可交互。
+- 无 CVA、无 Radix primitive 依赖。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/effects/backgrounds/deform-tunnel/deform-tunnel.tsx`
+
+直接依赖摘要：
+
+- `@react-three/fiber` — Canvas 和 useFrame
+- `three` — THREE.ShaderMaterial, THREE.TextureLoader 等
+- 内部定义 GLSL 片段着色器，实现隧道形变算法
+- 鼠标交互通过 `state.pointer` 获取，hover 通过 `onPointerOver/onPointerOut` 检测
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. `wobble` 为 `[number, number]` 元组，控制 x 和 y 方向的扭曲幅度。
+3. 纹理通过 THREE.TextureLoader 加载，wrapS/wrapT 设置为 `MirroredRepeatWrapping`。
+4. 鼠标位置使用阻尼平滑插值（damping factor 0.05），hover 状态同样平滑过渡。
+5. 不要将纹理参数替换为本地路径，组件使用 TextureLoader 的网络加载。
+
+## 可访问性 {#accessibility}
+
+- DeformTunnel 为纯视觉效果组件，不包含交互元素。
+- 不设置 ARIA 角色或可访问名称。
+- 建议在包含此组件的页面中，为其他交互元素提供完整的键盘和无障碍支持。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| 来源 | 基于 Three.js 和 @react-three/fiber 的独立 shader 组件 |
+| 视觉系统 | 使用 GLSL 片段着色器 + Tailwind CSS 容器 |
+| AntD 对照 | AntD 无对应组件，此为项目自定义视觉效果组件 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 DeformTunnel 代码时，应遵守：
+
+1. 从 `@/components/effects/backgrounds/deform-tunnel` 导入 `DeformTunnel`，不要从 `@/components/effects/backgrounds/deform-tunnel` 导入。
+2. 外层容器必须设置 `relative` 定位和明确宽高。
+3. 只使用本文件 API 摘要和源码中存在的 props。
+4. 不要引入 `three`、`@react-three/fiber`、`antd` 作为使用该组件的前置依赖。
+5. 纹理 URL 使用有效的网络地址，不支持本地相对路径。
+6. 不建议同时渲染多个 DeformTunnel 实例。
+7. 如果需要在 shader 上叠加其他 UI 元素，使用 z-index 层级控制。

@@ -1,0 +1,201 @@
+---
+category: Charts
+title: EvilBarChart
+subtitle: 可组合柱状图
+description: 基于 Recharts 的可组合柱状图组件，采用 config + data 模式，通过组合子组件构建图表。
+group:
+  title: EvilCharts
+  order: 2
+source:
+  component: src/components/evilcharts/components/bar-chart.tsx
+  wrapper: src/components/core/evilcharts-bar-chart.tsx
+  docs: content/components/charts/evilcharts/index.mdx
+  examples:
+    - content/components/charts/evilcharts/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  recharts: true
+  motion: true
+  cva: false
+  cssInJs: false
+---
+
+# EvilBarChart 可组合柱状图
+
+EvilBarChart 是一个基于 Recharts 的可组合柱状图组件。主组件持有数据和共享上下文，视觉部分通过子组件（Bar、XAxis、YAxis、Grid、Tooltip、Legend）自由组合。
+
+## 导入路径
+
+```tsx
+// 主组件
+import { EvilBarChart } from "@/components/charts/evil-charts"
+// 子组件
+import { Bar, XAxis, YAxis, Grid, Tooltip, Legend } from "@/components/charts/evil-charts/components/bar-chart"
+// 类型
+import { type ChartConfig } from "@/components/charts/evil-charts/components/chart"
+```
+
+## 代码示例
+
+### 基础柱状图
+
+```tsx
+import { EvilBarChart } from "@/components/charts/evil-charts"
+import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evil-charts/components/bar-chart"
+import { type ChartConfig } from "@/components/charts/evil-charts/components/chart"
+
+const data = [
+  { month: "1月", revenue: 342, cost: 184 },
+  { month: "2月", revenue: 876, cost: 491 },
+  // ...
+]
+
+const chartConfig = {
+  revenue: { label: "营收", colors: { light: ["#047857"], dark: ["#10b981"] } },
+  cost: { label: "成本", colors: { light: ["#be123c"], dark: ["#f43f5e"] } },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    <EvilBarChart data={data} config={chartConfig} className="h-full w-full p-4">
+      <Grid />
+      <XAxis dataKey="month" />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="revenue" variant="default" />
+      <Bar dataKey="cost" variant="default" />
+    </EvilBarChart>
+  )
+}
+```
+
+### 堆叠 + 变体
+
+```tsx
+import { EvilBarChart } from "@/components/charts/evil-charts"
+import { Bar, XAxis, Grid, Tooltip, Legend } from "@/components/charts/evil-charts/components/bar-chart"
+
+export default function Demo() {
+  return (
+    <EvilBarChart data={data} config={chartConfig} stackType="stacked" className="h-full w-full p-4">
+      <Grid />
+      <XAxis dataKey="month" />
+      <Tooltip />
+      <Legend isClickable />
+      <Bar dataKey="revenue" variant="gradient" glowing isClickable />
+      <Bar dataKey="cost" variant="hatched" isClickable />
+    </EvilBarChart>
+  )
+}
+```
+
+### 水平布局 + 缩放刷
+
+```tsx
+import { EvilBarChart } from "@/components/charts/evil-charts"
+import { Bar, XAxis, YAxis, Grid, Tooltip } from "@/components/charts/evil-charts/components/bar-chart"
+
+export default function Demo() {
+  return (
+    <EvilBarChart
+      data={data}
+      config={chartConfig}
+      layout="horizontal"
+      showBrush
+      xDataKey="month"
+      className="h-full w-full p-4"
+    >
+      <Grid />
+      <XAxis type="number" />
+      <YAxis dataKey="month" type="category" />
+      <Tooltip />
+      <Bar dataKey="revenue" />
+    </EvilBarChart>
+  )
+}
+```
+
+## API
+
+### EvilBarChart Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| config | `ChartConfig` | 必填 | 系列颜色和标签 |
+| data | `TData[]` | 必填 | 图表行数据 |
+| children | `ReactNode` | 必填 | 子组件 |
+| stackType | `"default" \| "stacked" \| "percent"` | `"default"` | 堆叠模式 |
+| layout | `"vertical" \| "horizontal"` | `"vertical"` | 方向 |
+| barRadius | `number` | `2` | 默认圆角 |
+| animationType | `"none" \| "left-to-right" \| "right-to-left" \| "center-out" \| "edges-in"` | `"left-to-right"` | 入场动画 |
+| barGap | `number` | - | 柱条间距 |
+| barCategoryGap | `number` | - | 分类间距 |
+| backgroundVariant | `BackgroundVariant` | - | 背景图案 |
+| defaultSelectedDataKey | `string \| null` | `null` | 初始选中系列 |
+| onSelectionChange | `(key: string \| null) => void` | - | 选中变化回调 |
+| isLoading | `boolean` | `false` | 加载态 |
+| loadingBars | `number` | `12` | 骨架柱条数 |
+| showBrush | `boolean` | `false` | 缩放刷 |
+| xDataKey | `string` | - | x轴key（brush需要） |
+| brushHeight | `number` | - | 缩放刷高度 |
+| brushFormatLabel | `(value: unknown, index: number) => string` | - | 刻度格式化 |
+| onBrushChange | `(range: EvilBrushRange) => void` | - | 缩放刷回调 |
+| className | `string` | - | 容器样式 |
+| chartProps | `ComponentProps<typeof RechartsBarChart>` | - | Recharts透传 |
+
+### Bar Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| dataKey | `string` | 必填 | 系列key |
+| variant | `"default" \| "hatched" \| "duotone" \| "duotone-reverse" \| "gradient" \| "stripped"` | `"default"` | 填充样式 |
+| radius | `number` | - | 圆角（覆盖chart默认值） |
+| animationType | `BarAnimationType` | - | 动画（覆盖chart默认值） |
+| isClickable | `boolean` | `false` | 可点击选中 |
+| enableHoverHighlight | `boolean` | `false` | 悬停高亮 |
+| glowing | `boolean` | `false` | 外发光 |
+| bufferBar | `boolean` | `false` | 缓冲区柱条 |
+| barProps | `ComponentProps<typeof RechartsBar>` | - | Recharts透传 |
+
+### XAxis / YAxis Props
+
+继承 Recharts XAxis / YAxis 全部属性。type 根据 layout 自动推断：
+- vertical: XAxis=category, YAxis=number
+- horizontal: XAxis=number, YAxis=category
+
+默认值：`tickLine=false`, `axisLine=false`, `tickMargin=8`, `minTickGap=8`
+
+### Grid Props
+
+继承 Recharts CartesianGrid 全部属性。默认 `strokeDasharray="3 3"`，方向根据 layout 自动推断。
+
+### Tooltip Props
+
+| 属性 | 类型 | 默认值 |
+| --- | --- | --- |
+| variant | `TooltipVariant` | - |
+| roundness | `TooltipRoundness` | - |
+| defaultIndex | `number` | - |
+
+### Legend Props
+
+| 属性 | 类型 | 默认值 |
+| --- | --- | --- |
+| variant | `ChartLegendVariant` | - |
+| align | `"left" \| "center" \| "right"` | `"right"` |
+| verticalAlign | `"top" \| "middle" \| "bottom"` | `"top"` |
+| isClickable | `boolean` | `false` |
+
+## 约束
+
+1. **config 与 data 字段必须一致**：config 的每个 key 必须在 data 的每一行中存在对应字段，否则运行时类型不安全。
+2. **必须传入 children**：不带子组件的 EvilBarChart 不渲染任何内容。至少需要一个 Bar 和一个坐标轴。
+3. **不要直接使用 Recharts**：始终通过 EvilBarChart 和子组件使用，不要直接 import recharts 的 BarChart/Bar。
+4. **config 使用 satisfies ChartConfig**：确保类型检查，获得 IDE 自动补全。
+5. **loading 状态由组件管理**：使用 `isLoading` 属性，不要外部实现骨架屏。loading 时所有子组件自动隐藏。
+6. **动画尊重系统偏好**：`animationType="none"` 关闭动画；系统开启"减弱动态效果"时自动回退为 `"none"`。
+7. **水平布局时 type 互换**：`layout="horizontal"` 时 XAxis 需 `type="number"`，YAxis 需 `type="category"` 和 `dataKey`。
+8. **variant 管理视觉样式**：使用 Bar 的 `variant` 属性选择视觉变体，不要手动通过 CSS/className 实现填充效果。
+9. **config colors 支持多色渐变**：colors 数组长度 >1 时自动均分线性渐变，从 color-0 到 color-N。
+10. **不要混淆 Recharts 类型和 EvilCharts 类型**：EvilBarChart 有自己独立的类型系统（BarAnimationType、BarVariant 等），不要使用 Recharts 原生的 animation 相关属性。

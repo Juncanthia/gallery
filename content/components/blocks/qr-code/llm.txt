@@ -1,0 +1,126 @@
+QRCode 二维码生成组件，基于 `qrcode` 库将文本编码为 SVG 二维码。支持自定义尺寸、前景色、背景色、容错级别、中心覆盖内容和下载触发器，自动适配项目 CSS 主题变量。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要将 URL、文本、配置等信息编码为二维码供用户扫码时使用。
+
+常见场景：
+
+- 分享链接、下载地址的二维码生成。
+- 用户身份标识、会员卡号等信息的视觉编码。
+- 支付页面、登录页面的扫码入口。
+- 设备配网信息、WiFi 凭证的二维码展示。
+
+不推荐：
+
+- 编码超长文本（> 4296 字符），高容错级别下容量更小。
+- 高频实时变更编码数据；每次变更都会重新生成 SVG。
+- 引入 `antd` 的 QRCode 或直接在业务侧调用 `qrcode` 作为替代。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="qr-code" path="qr-code/basic" />
+
+```tsx
+import { QRCode } from "@/components/core/qr-code"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <QRCode data="https://example.com" />
+      <QRCode
+        value="https://example.com/docs"
+        foreground="#4f46e5"
+        background="#eef2ff"
+        level="H"
+        size={120}
+        overlay={<span className="px-1 text-xs font-medium">Docs</span>}
+      />
+    </div>
+  )
+}
+```
+
+### 下载按钮
+
+```tsx
+import { QRCodeDownload } from "@/components/blocks/qr-code"
+
+export default function Demo() {
+  return (
+    <QRCodeDownload value="https://example.com" format="svg" fileName="example-qr">
+      下载二维码
+    </QRCodeDownload>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### QRCode
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 要编码为二维码的文本内容 | `string` | - |
+| value | `data` 的等价别名，优先级高于 `data` | `string` | - |
+| foreground | 前景色，支持 CSS 颜色字符串或 oklch 变量 | `string` | CSS `--foreground` |
+| foregroundColor | `foreground` 的等价别名 | `string` | - |
+| background | 背景色，支持 CSS 颜色字符串或 oklch 变量 | `string` | CSS `--background` |
+| backgroundColor | `background` 的等价别名 | `string` | - |
+| robustness | 容错级别。L 约 7% 容错，M 约 15%，Q 约 25%，H 约 30% | `"L" \| "M" \| "Q" \| "H"` | `"M"` |
+| level | `robustness` 的等价别名，优先级高于 `robustness` | `"L" \| "M" \| "Q" \| "H"` | - |
+| margin | 二维码边距 | `number` | `0` |
+| size | 二维码像素尺寸 | `number` | `200` |
+| overlay | 居中叠加内容，常用于小 logo 或短文本 | `ReactNode` | - |
+| className | 根容器 CSS 类名 | `string` | - |
+
+继承 `HTMLAttributes<HTMLDivElement>`。`@/components/core/qr-code` 会额外包一层统一边框容器；真实生成逻辑位于 `@/components/blocks/qr-code`。
+
+### QRCodeDownload
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data / value | 要编码并下载的文本内容 | `string` | - |
+| fileName | 下载文件名（不含扩展名） | `string` | `"qr-code"` |
+| format | 下载格式 | `"png" \| "svg"` | `"svg"` |
+| foreground / background | 二维码颜色 | `string` | `#000000` / `#ffffff` |
+| robustness / level | 容错级别 | `"L" \| "M" \| "Q" \| "H"` | `"M"` |
+| margin | 二维码边距 | `number` | `0` |
+| size | 二维码像素尺寸 | `number` | `200` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何调整二维码尺寸？
+
+优先使用 `size`，它会同时控制生成 SVG 宽度和容器尺寸：
+
+```tsx
+<QRCode data="https://example.com" size={128} />
+<QRCode data="https://example.com" size={192} />
+```
+
+### 编码中文内容乱码怎么办？
+
+`data` 或 `value` 直接传入原始字符串即可，`qrcode` 库已处理 UTF-8 编码。不需要手动 `encodeURIComponent`。
+
+### 如何配合暗色模式使用？
+
+不传 `foreground` 和 `background` 时，组件自动读取 CSS 变量 `--foreground` 和 `--background`，这些变量在项目暗色模式下会自动切换，二维码颜色随之适配。
+
+### 如何在二维码中间添加 Logo？
+
+使用 `overlay`，组件会把内容居中覆盖在二维码上方。覆盖内容要保持小尺寸，避免遮挡过多二维码信息；建议配合 `level="H"`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/qr-code` 导入展示组件；需要下载按钮时从 `@/components/blocks/qr-code` 导入 `QRCodeDownload`。
+2. 使用 `data` 或 `value` 传入要编码的文本，不要把文本写成 children。
+3. 尺寸优先用 `size`，不要只靠 `className` 改宽高。
+4. 颜色通过 `foreground`/`background` 或 `foregroundColor`/`backgroundColor` 设置。
+5. 容错级别使用 `robustness` 或 `level`。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="qr-code" />

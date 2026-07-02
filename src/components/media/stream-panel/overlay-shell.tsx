@@ -6,7 +6,7 @@ import * as React from "react"
 
 import { cn } from "@/components/media/lib/utils"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 
 export type OverlayShellPlacement = "active" | "covered" | "idle"
 

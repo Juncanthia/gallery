@@ -1,0 +1,50 @@
+---
+component: StackingCards
+slug: effects/interactions/stacking-cards
+
+import: |
+  import {
+    StackingCardsAnimated,
+    StackingCardsContainer,
+    StackingCard,
+  } from "@/components/effects/interactions/stacking-cards"
+
+usage: |
+  <StackingCardsAnimated>
+    <div className="rounded-xl border bg-card p-6 shadow-lg">
+      <h3>卡片一</h3>
+      <p>向下滚动查看堆叠效果。</p>
+    </div>
+    <div className="rounded-xl border bg-card p-6 shadow-lg">
+      <h3>卡片二</h3>
+      <p>第二张卡片将堆叠在第一张之上。</p>
+    </div>
+  </StackingCardsAnimated>
+
+props:
+  StackingCard:
+    children: React.ReactNode  -- 卡片内容
+    className?: string  -- 附加样式类名
+    index?: number  -- 卡片索引（0-based），控制堆叠偏移和缩放，默认 0
+
+  StackingCardsContainer:
+    children: React.ReactNode  -- 多个子元素，自动注入 index
+    className?: string  -- 附加样式类名
+
+  StackingCardsAnimated:
+    children: React.ReactNode  -- 卡片内容
+    className?: string  -- 附加样式类名
+
+constraints:
+  - 基于 CSS position: sticky 和滚动驱动动画实现。
+  - StackingCardsAnimated 的动画需要 Chromium 115+ 支持；Firefox/Safari 中动画不生效但基础 sticky 堆叠正常。
+  - StackingCardsContainer 自动为子元素注入 index prop，无需手动指定。
+  - StackingCardsContainer 底部有 50vh 的内边距，确保最后一张卡片有足够空间取消粘性定位。
+  - 每张卡片的视觉样式（背景、边框、阴影）由调用侧控制，组件仅负责定位和堆叠。
+  - 卡片数量不宜过多（建议 ≤ 10），避免偏移累积导致视觉杂乱。
+  - 不要引入 Ant Design 或 antd 相关依赖。
+
+source: src/components/gooseui/components/ui/stacking-cards.tsx
+example: content/components/effects/interactions/stacking-cards/examples/basic.tsx
+docs: content/components/effects/interactions/stacking-cards/index.mdx
+---

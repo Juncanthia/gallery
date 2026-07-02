@@ -1,0 +1,126 @@
+BadgeOverflow 溢出折叠徽章。在固定宽度容器中渲染 Badge 列表，自动测量宽度并根据行数限制折叠超出部分，以 "+N" 形式展示溢出数量。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在受限宽度容器中展示 Badge 列表，超出自动折叠为 "+N" 展示时使用。
+
+常见场景：
+- 表格列中展示标签/徽章列表（空间受限）。
+- 卡片详情中展示项目关联标签。
+- 搜索筛选条件可视化。
+- 任意需要在固定宽度内自适应折叠 Badge 的场景。
+
+核心能力：
+- 自动测量每个 Badge 实际渲染宽度，精确计算折叠点。
+- 通过 `lineCount` 控制最大显示行数（默认 1 行）。
+- 支持自定义 Badge 渲染（`renderBadge`）和溢出提示渲染（`renderOverflow`）。
+- 支持 `getBadgeLabel` 提取对象数组的标识文本。
+- 内置 ResizeObserver 响应容器宽度变化。
+
+不推荐：
+- 非固定宽度容器中使用——组件基于容器宽度计算折叠。
+- Badge 数量极少（总能全部显示）——使用普通 flex-wrap 即可。
+- 需要展开/收起交互——BadgeOverflow 只做截断折叠展示。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`items` 传入数组，`renderBadge` 自定义渲染每个 Badge，`lineCount` 控制行数，超出部分自动折叠为 "+N"。
+
+<ComponentShowcase
+  id="data-display/badge-overflow"
+  path="data-display/badge-overflow/basic"
+/>
+
+```tsx
+import { BadgeOverflow } from "@/components/data-display/badge-overflow"
+
+const items = [
+  { label: "React", color: "bg-sky-100 text-sky-700" },
+  { label: "TypeScript", color: "bg-blue-100 text-blue-700" },
+  { label: "Tailwind CSS", color: "bg-teal-100 text-teal-700" },
+]
+
+export default function Demo() {
+  return (
+    <BadgeOverflow
+      items={items}
+      getBadgeLabel={(item) => item.label}
+      lineCount={1}
+      renderBadge={(item) => (
+        <span className={`inline-flex h-5 items-center rounded-md px-1.5 text-xs font-medium ${item.color}`}>
+          {item.label}
+        </span>
+      )}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### BadgeOverflow
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | Badge 数据数组。支持原始类型（string、number）或对象数组 | `T[]` | - |
+| getBadgeLabel | 从 item 提取标识文本的函数。对象数组时必填，原始类型数组时可选 | `(item: T) => string` | - |
+| lineCount | 最大显示行数。1 行仅最后一排支持溢出折叠，多行时逐行填充 | `number` | `1` |
+| renderBadge | 渲染单个 Badge 的回调，接收 item 和 label | `(item: T, label: string) => React.ReactNode` | - |
+| renderOverflow | 自定义溢出提示渲染，接收溢出数量。不传则使用默认 "+N" 样式 | `(count: number) => React.ReactNode` | - |
+| asChild | 是否将根元素作为子元素的 Slot 渲染 | `boolean` | `false` |
+| className | 附加 CSS 类名 | `string` | - |
+| style | 附加内联样式 | `React.CSSProperties` | - |
+
+> `BadgeOverflow` 支持泛型 `T`，`items` 为对象数组时 `getBadgeLabel` 必填，否则运行时会抛错。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `badge-overflow` | BadgeOverflow 根元素（`<div>` 或 `asChild` 时的 Slot） |
+
+内部渲染分为两层：
+- 隐藏测量层：`pointer-events-none invisible absolute`，用于测量每个 Badge 实际宽度。
+- 可见展示层：仅渲染能容纳的 Badge + 溢出提示。
+
+<h2 id="faq">常见问题</h2>
+
+### BadgeOverflow 和普通 flex-wrap 有什么区别？
+
+`flex-wrap` 只在单行溢出时换行，无法在固定行数限制下精确折叠额外项并以 "+N" 展示。BadgeOverflow 通过实际 DOM 宽度测量 + 逐行填充算法，确保在指定行数内最大化展示 Badge 数量，并以用户友好的 "+N" 方式告知溢出数量。
+
+### 如何让溢出项点击后展开？
+
+BadgeOverflow 的 `renderOverflow` 支持自定义渲染，可以返回一个可点击元素：
+
+```tsx
+renderOverflow={(count) => (
+  <button onClick={handleExpand} className="inline-flex h-5 shrink-0 items-center rounded-md border px-1.5 text-xs font-semibold">
+    +{count} 展开
+  </button>
+)}
+```
+
+展开后的逻辑由业务侧自行实现（如增大 `lineCount` 至 `Infinity` 或切换为自由展示）。
+
+### getBadgeLabel 什么时候必须传？
+
+当 `items` 为对象数组（如 `{ label: string, color: string }[]`）时，组件无法自动推断 label，`getBadgeLabel` 为必填，否则运行时报错。当 `items` 为 `string[]` 或 `number[]` 时，组件直接使用 item 值作为 label，`getBadgeLabel` 可选。
+
+### 容器宽度变化时会重新计算吗？
+
+会。组件内部通过 `ResizeObserver` 监听根容器宽度变化，自动重新计算可见项和溢出数量。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/data-display/badge-overflow` 导入。
+2. `items` 和 `renderBadge` 为必填 props。
+3. 当 `items` 为对象数组时，必须同时提供 `getBadgeLabel`。
+4. 不要用 `flex-wrap` 手动实现折叠逻辑——使用 BadgeOverflow 的自动测量和折叠能力。
+5. 溢出自定义通过 `renderOverflow` prop，不要通过 className 或 CSS 覆盖默认 "+N" 样式。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="data-display/badge-overflow" />

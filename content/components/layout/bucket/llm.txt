@@ -1,0 +1,49 @@
+---
+category: Components
+title: Bucket
+subtitle: 桶形展示
+description: 桶形容器，内部自动轮播特性标签动画。适用于首页 Hero 区域或产品特性展示。
+demo:
+  cols: 1
+group:
+  title: useLayouts
+  order: 5
+source:
+  component: src/components/layout/bucket.tsx
+  reexport: src/components/core/uselayouts-bucket.tsx
+  docs: content/components/layout/bucket/index.mdx
+  examples:
+    - content/components/layout/bucket/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  motion: true
+  hugeicons: true
+  rcComponent: false
+  cssInJs: false
+---
+
+# Bucket 桶形展示
+
+Bucket 是一个自包含的展示组件，渲染一个桶形 SVG 容器，内部通过 motion 动效轮播展示四组特性标签（生产就绪、流畅动效、无障碍、现代设计）。标签每 2 秒从桶口落入并自动切换，适合用于首页 Hero 区域或产品特性展示。
+
+## 导入
+
+```tsx
+import Bucket from "@/components/layout/bucket"
+```
+
+## 使用
+
+```tsx
+<Bucket />
+```
+
+## 约束
+
+- Bucket 为自包含组件，不接收任何外部 props。
+- 标签内容在 `src/components/layout/bucket.tsx` 的 `INITIAL_CHIPS` 常量中定义。
+- 轮播间隔在组件内部 `setInterval` 中定义，默认 2000ms。
+- 依赖 `motion/react` 提供动效，依赖 `@hugeicons/core-free-icons` 和 `@hugeicons/react` 提供图标。
+- 内置 `useIsMobile` hook 实现响应式，自动适配移动端动画参数。
+- 纯展示型组件，无交互逻辑，无状态回调。

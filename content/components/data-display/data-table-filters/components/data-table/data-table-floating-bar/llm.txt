@@ -1,0 +1,28 @@
+---
+category: Components
+title: DataTableFloatingBar
+subtitle: 浮动工具栏
+description: DataTable 的浮动批量操作栏，选中表格行后从底部浮出，展示选中数量、取消选中和自定义操作按钮。
+demo:
+  cols: 2
+group:
+  title: 数据表格
+  order: 7
+source:
+  component: src/components/blocks/data-table-filters/components/blocks/data-table/blocks/data-table-floating-bar.tsx
+  examples:
+    - content/components/dt/blocks/data-table-floating-bar/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+  tanstackTable: true
+  radixTooltip: true
+  lucideReact: true
+---

@@ -1,0 +1,86 @@
+FaultyTerminal 基于 OGL（WebGL）的故障终端风格背景组件，模拟数字矩阵、CRT 扫描线、色散和闪烁效果。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要故障终端、数字矩阵或复古 CRT 显示器风格的背景时使用。
+常见场景：
+- 黑客/赛博朋克主题的页面背景
+- 代码终端或命令行的视觉装饰
+- 加载/过渡页面的故障动画效果
+不推荐：
+- 需要清晰文本叠加的场景（数字矩阵图案会干扰可读性）
+- 移动端低性能设备（WebGL 开销较大）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="rb/faulty-terminal" path="rb/faulty-terminal/basic" />
+
+```tsx
+import { FaultyTerminal } from "@/components/core/faulty-terminal"
+export default function Demo() { return <FaultyTerminal /> }
+```
+
+### 自定义配置
+
+```tsx
+import { FaultyTerminal } from "@/components/core/faulty-terminal"
+
+export default function Demo() {
+  return (
+    <FaultyTerminal
+      tint="#00ff00"
+      glitchAmount={2}
+      chromaticAberration={2}
+      scanlineIntensity={0.6}
+      curvature={0.3}
+      brightness={1.2}
+      mouseStrength={0.5}
+      className="h-64 w-full rounded-lg"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### FaultyTerminal
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| scale | 数字矩阵的缩放比例 | `number` | `1` |
+| gridMul | 网格密度倍率 `[x, y]` | `[number, number]` | `[2, 1]` |
+| digitSize | 每个数字单元的大小 | `number` | `1.5` |
+| timeScale | 动画时间缩放（控制速度） | `number` | `0.3` |
+| pause | 是否暂停动画，暂停时冻结当前帧 | `boolean` | `false` |
+| scanlineIntensity | CRT 扫描线效果的强度 | `number` | `0.3` |
+| glitchAmount | 水平毛刺位移量 | `number` | `1` |
+| flickerAmount | 整体闪烁的概率（大于阈值时闪烁） | `number` | `1` |
+| noiseAmp | 底层噪声振幅 | `number` | `0` |
+| chromaticAberration | 色散/色差强度（红蓝通道偏移） | `number` | `0` |
+| dither | 抖动噪声强度 | `number` | `0` |
+| curvature | CRT 屏幕曲面弯曲程度 | `number` | `0.2` |
+| tint | 全局色调（hex 颜色） | `string` | `"#ffffff"` |
+| mouseReact | 是否响应鼠标移动（靠近时数字变亮） | `boolean` | `true` |
+| mouseStrength | 鼠标交互的影响强度 | `number` | `0.2` |
+| dpr | 设备像素比（默认自动获取但上限为 2） | `number` | `min(devicePixelRatio, 2)` |
+| pageLoadAnimation | 是否启用页面加载渐进动画 | `boolean` | `true` |
+| brightness | 全局亮度系数 | `number` | `1` |
+| className | 容器附加样式类名 | `string` | - |
+| style | 容器内联样式 | `React.CSSProperties` | - |
+
+<h2 id="faq">常见问题</h2>
+### 如何实现绿色终端/黑客帝国风格？
+设置 `tint="#00ff00"`、`brightness=1.5`、`scanlineIntensity=0.5`、`glitchAmount=1.5` 即可获得经典绿色数字矩阵效果。
+
+### curvature 为 0 和 0.3 有什么区别？
+`curvature=0` 时渲染完全的平面矩阵，数字均匀分布。`curvature>0` 时应用桶形畸变，模拟 CRT 显示器的曲面屏幕效果，边缘数字会略微弯曲。
+
+### pageLoadAnimation 是如何工作的？
+启用后，数字单元从随机延迟开始逐个淡入，持续约 2 秒的加载动画，模拟终端启动的效果。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/faulty-terminal` 导入。
+2. 依赖 `ogl`（OGL WebGL 框架），确保项目中已安装。
+3. 组件返回纯 div 容器，需通过 `className` 设置宽高，否则 WebGL canvas 尺寸为零。
+4. `pause` 为 true 时冻结当前动画帧（`frozenTimeRef`），切换为 false 时从冻结位置继续。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-faulty-terminal" />

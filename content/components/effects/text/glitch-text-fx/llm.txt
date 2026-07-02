@@ -1,0 +1,156 @@
+---
+category: Components
+title: GlitchText
+subtitle: 故障文字
+description: 为文本添加故障抖动效果，支持色差偏移、扫描线和辉光。
+demo:
+  cols: 2
+group:
+  title: GooseUI
+  order: 1
+source:
+  component: src/components/core/gooseui-glitch-text.tsx
+  examples:
+    - content/components/effects/text/glitch-text-fx/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# GlitchText 故障文字
+
+为文本添加故障抖动效果，支持色差偏移、扫描线和辉光。
+
+本组件借鉴 GooseUI 的故障效果使用心智，但不是第三方的兼容层。实现以本地源码为准，不引入外部运行时依赖或 CSS-in-JS。
+
+## 何时使用 {#when-to-use}
+
+适合在需要为标题、标语或关键文本赋予故障艺术风格时使用。优先通过组件自身 props 表达效果配置，避免在业务侧重复拼接 className。
+
+常见场景：
+
+- 赛博朋克、黑客、科技感主题页面的标题或标语。
+- 游戏化界面中的特效文本。
+- 品牌标识的视觉强化。
+
+不推荐：
+
+- 正文或长文本内容，故障效果会严重影响可读性。
+- 对无障碍敏感的场景，闪烁效果可能引发不适。
+- 表单标签、按钮文案等功能性文本。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { GlitchText } from "@/components/effects/text/glitch-text-fx"
+
+export default function Demo() {
+  return (
+    <GlitchText text="GLITCH TEXT" />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。更多配置项参见下方 API 摘要。
+
+## 核心导出 {#exports}
+
+- `GlitchText`
+- `GlitchTextProps`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface GlitchTextProps {
+  /** 要渲染的文本内容 */
+  text: string;
+  /** 故障效果强度 */
+  intensity?: "low" | "medium" | "high";
+  /** 是否显示扫描线叠加层 */
+  showScanlines?: boolean;
+  /** 是否显示文字背后辉光效果 */
+  showGlow?: boolean;
+  /** 自定义文字颜色（CSS 颜色值） */
+  color?: string;
+  /** 附加 CSS 类名 */
+  className?: string;
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+GlitchText 渲染多层 span 实现色差偏移，每个实例的 keyframe 名称由 `useId()` 保证唯一。
+
+动画层包括：
+- 辉光层（`showGlow`）：`absolute inset-0 blur-2xl opacity-50`，通过 `aria-hidden="true"` 隐藏。
+- 主文本层：`relative inline-block font-bold`，携带 `data-text` 属性。
+- 色差层 1（cyan）：`absolute` 左偏移，`mix-blend-mode: screen`。
+- 色差层 2（magenta）：`absolute` 右偏移，`mix-blend-mode: screen`。
+- 扫描线层（`showScanlines`）：`repeating-linear-gradient` + `mix-blend-overlay`。
+
+所有装饰层均设置 `aria-hidden="true"`，不影响屏幕阅读器。
+
+## 样式模型 {#styling-model}
+
+- 样式主要通过内联 style 中的 CSS 变量和 CSS keyframe 动画实现。
+- CSS 变量：`--glitch-offset`、`--glitch-skew`、`--glitch-duration`、`--glitch-color`。
+- 布局使用 Tailwind CSS class（`relative`、`inline-block`、`font-bold` 等）。
+- 尊重 `prefers-reduced-motion: reduce` 媒体查询，动画完全关闭。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/core/gooseui-glitch-text.tsx`（re-export）
+- `src/components/gooseui/components/effects/glitch-text.tsx`（实现）
+
+直接依赖摘要：
+
+- React（`useId`）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 通过 `useId()` 生成唯一标识符，确保 keyframe 动画互不冲突。
+3. 支持 `prefers-reduced-motion` 媒体查询，尊重用户动效偏好。
+4. 装饰层均设置 `aria-hidden="true"`，不向屏幕阅读器暴露。
+
+## 可访问性 {#accessibility}
+
+- 所有装饰层（色差偏移 span、scanlines、glow）均设置 `aria-hidden="true"`。
+- 主文本层保留文本内容，对屏幕阅读器可见。
+- 尊重 `prefers-reduced-motion: reduce`，在动效敏感环境下完全关闭动画。
+- 不适用于功能性文本（按钮、标签、表单等）。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/gooseui/components/effects/glitch-text.tsx` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 CSS 变量 + CSS keyframe 动画 + Tailwind CSS |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 样式运行时 | 不引入 AntD css-in-js 或 token 运行时 |
+| 兼容目标 | 非 AntD 组件，无兼容需求 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 GlitchText 代码时，应遵守：
+
+1. 从 `@/components/effects/text/glitch-text-fx` 导入 `GlitchText`。
+2. 必须传入 `text` 属性，组件依赖此属性渲染内容。
+3. `intensity` 使用 `"low"`、`"medium"`、`"high"` 字符串，不要传入数字。
+4. `color` 传入 CSS 颜色字符串（如 `"#00ff88"`），非 Tailwind class。
+5. 不要为正文、长文本或功能性文本使用 GlitchText。
+6. 不要在调用侧复制 CSS 动画实现，应通过 props 控制效果。
+7. 不要引入 Ant Design 相关依赖。

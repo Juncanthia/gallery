@@ -1,0 +1,323 @@
+Gantt 甘特图时间线组件，支持日/月/季视图、拖拽排期、标记线、无限滚动时间轴。基于 @dnd-kit 实现拖拽交互，使用 jotai 管理拖拽和滚动状态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要以时间线形式可视化项目进度和排期时使用。
+
+常见场景：
+
+- 项目路线图规划（Roadmap）展示。
+- 迭代 / Sprint 排期与功能发布时间安排。
+- 多团队资源时间线的统一管理。
+- 按日/月/季度查看功能的时间安排和里程碑标记。
+
+不推荐：
+
+- 简单的日期范围展示——使用时间轴或日历组件更轻量。
+- 需要关键路径、依赖箭头等专业甘特图功能——建议使用专门的 Gantt 库。
+- 数据量极大（数千条）且无分组/分页的场景——当前未实现虚拟滚动。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础甘特图
+
+<ComponentShowcase id="blocks/gantt" path="blocks/gantt/basic" />
+
+```tsx
+import {
+  GanttProvider,
+  GanttSidebar,
+  GanttSidebarGroup,
+  GanttSidebarItem,
+  GanttTimeline,
+  GanttHeader,
+  GanttFeatureList,
+  GanttFeatureListGroup,
+  GanttFeatureRow,
+  GanttToday,
+} from "@/components/blocks/gantt"
+
+const features = [
+  {
+    id: "1",
+    name: "用户认证",
+    startAt: new Date(2025, 0, 1),
+    endAt: new Date(2025, 2, 15),
+    blocks/status: { id: "1", name: "进行中", color: "#3b82f6" },
+  },
+  {
+    id: "2",
+    name: "数据看板",
+    startAt: new Date(2025, 2, 1),
+    endAt: new Date(2025, 4, 30),
+    blocks/status: { id: "2", name: "计划中", color: "#f59e0b" },
+  },
+]
+
+export default function Demo() {
+  return (
+    <GanttProvider range="monthly">
+      <GanttSidebar>
+        <GanttSidebarGroup name="Q1 2025">
+          {features.map((f) => (
+            <GanttSidebarItem key={f.id} feature={f} />
+          ))}
+        </GanttSidebarGroup>
+      </GanttSidebar>
+      <GanttTimeline>
+        <GanttHeader />
+        <GanttFeatureList>
+          <GanttFeatureListGroup>
+            <GanttFeatureRow features={features} />
+          </GanttFeatureListGroup>
+        </GanttFeatureList>
+        <GanttToday />
+      </GanttTimeline>
+    </GanttProvider>
+  )
+}
+```
+
+### 带拖拽排期
+
+```tsx
+import { useState } from "react"
+import {
+  GanttProvider,
+  GanttSidebar,
+  GanttSidebarItem,
+  GanttTimeline,
+  GanttHeader,
+  GanttFeatureList,
+  GanttFeatureRow,
+} from "@/components/blocks/gantt"
+
+export default function Demo() {
+  const [features, setFeatures] = useState(initialFeatures)
+
+  const handleMove = (id: string, startAt: Date, endAt: Date | null) => {
+    setFeatures((prev) =>
+      prev.map((f) => (f.id === id ? { ...f, startAt, endAt } : f))
+    )
+  }
+
+  return (
+    <GanttProvider range="monthly">
+      <GanttSidebar>
+        {features.map((f) => (
+          <GanttSidebarItem key={f.id} feature={f} />
+        ))}
+      </GanttSidebar>
+      <GanttTimeline>
+        <GanttHeader />
+        <GanttFeatureList>
+          <GanttFeatureRow features={features} onMove={handleMove} />
+        </GanttFeatureList>
+      </GanttTimeline>
+    </GanttProvider>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### GanttProvider
+
+甘特图顶层容器，提供 Context、CSS 变量和无限滚动逻辑。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| range | 时间粒度 | `"daily"` \| `"monthly"` \| `"quarterly"` | `"monthly"` |
+| zoom | 缩放百分比，控制列宽缩放 | `number` | `100` |
+| onAddItem | 点击时间轴空白区域的新增回调 | `(date: Date) => void` | - |
+| className | 附加 className | `string` | - |
+| children | 子组件 | `React.ReactNode` | - |
+
+Provider 通过 CSS 变量控制以下尺寸：
+- `--blocks/gantt-column-width`：列宽 = `(zoom / 100) * columnWidth`（daily=50px, monthly=150px, quarterly=100px）。
+- `--blocks/gantt-header-height`：60px。
+- `--blocks/gantt-row-height`：36px。
+- `--blocks/gantt-sidebar-width`：动态检测侧边栏实际宽度，通常为 300px。
+
+### GanttSidebar
+
+左侧功能列表面板（sticky 定位，带有 backdrop-blur 效果）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| children | 侧边栏内容 | `React.ReactNode` | - |
+
+### GanttSidebarHeader
+
+侧边栏表头（sticky），显示列标签 "Issues" 和 "Duration"。无需 props 的 FC。
+
+### GanttSidebarGroup
+
+侧边栏分组容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| name | 分组名称 | `string` | 必填 |
+| className | 附加 className | `string` | - |
+| children | 分组内条目 | `React.ReactNode` | - |
+
+### GanttSidebarItem
+
+侧边栏单个功能条目。点击或按 Enter 可滚动时间线到对应功能条位置。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| feature | 功能数据 | `GanttFeature` | 必填 |
+| onSelectItem | 选中回调 | `(id: string) => void` | - |
+| className | 附加 className | `string` | - |
+
+### GanttTimeline
+
+右侧时间线容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| children | 时间线内容 | `React.ReactNode` | - |
+
+### GanttHeader
+
+时间线头部，根据 `range` 自动渲染日/月/季度视图头部。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+### GanttFeatureList / GanttFeatureListGroup
+
+功能条列表容器和分组容器。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+| children | 子内容 | `React.ReactNode` | - |
+
+### GanttFeatureRow
+
+单行功能条，自动通过子行分配算法处理同时间段内多个功能的重叠展示。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| features | 该行包含的功能列表，按 startAt 排序 | `GanttFeature[]` | 必填 |
+| onMove | 拖拽移动/调整日期后的回调 | `(id: string, startAt: Date, endAt: Date \| null) => void` | - |
+| children | 自定义功能条内容渲染函数 | `(feature: GanttFeature) => React.ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+### GanttFeatureItem
+
+单个可拖拽功能条（支持拖拽移动 + 左右边缘拖拽调整起止日期）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 功能唯一标识 | `string` | 必填 |
+| name | 功能名称 | `string` | 必填 |
+| startAt | 开始日期 | `Date` | 必填 |
+| endAt | 结束日期 | `Date` | 必填 |
+| blocks/status | 状态对象，含 id、name、color | `GanttStatus` | 必填 |
+| lane | 泳道标识，同 lane 功能共享行 | `string` | - |
+| onMove | 拖拽结束回调 | `(id: string, startDate: Date, endDate: Date \| null) => void` | - |
+| children | 自定义功能条内容 | `React.ReactNode` | - |
+| className | 附加 className | `string` | - |
+
+### GanttToday
+
+Today 标记线，自动定位到当前日期，hover 显示完整日期。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+### GanttMarker
+
+自定义标记线（React.memo 包裹以优化渲染）。支持右键菜单删除。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 标记唯一标识 | `string` | 必填 |
+| date | 标记日期 | `Date` | 必填 |
+| label | 标记标签 | `string` | 必填 |
+| onRemove | 右键删除回调 | `(id: string) => void` | - |
+| className | 附加 className | `string` | - |
+
+### GanttCreateMarkerTrigger
+
+鼠标悬停时间轴时显示"在此创建标记"按钮。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| onCreateMarker | 点击创建回调 | `(date: Date) => void` | 必填 |
+| className | 附加 className | `string` | - |
+
+### GanttAddFeatureHelper
+
+时间轴列悬停时显示的"添加功能"引导按钮，由 GanttColumn 内部自动渲染，通常无需手动使用。
+
+### GanttColumns / GanttColumn
+
+时间轴列组件。GanttColumns 渲染等宽列网格，GanttColumn 为单个列，hover 时在 onAddItem 存在的情况下显示 GanttAddFeatureHelper。
+
+### 核心类型
+
+```ts
+type GanttStatus = { id: string; name: string; color: string }
+
+type GanttFeature = {
+  id: string
+  name: string
+  startAt: Date
+  endAt: Date
+  blocks/status: GanttStatus
+  lane?: string
+}
+
+type GanttMarkerProps = { id: string; date: Date; label: string }
+
+type Range = "daily" | "monthly" | "quarterly"
+```
+
+### Hooks
+
+| Hook | 说明 | 返回值 |
+| --- | --- | --- |
+| `useGanttDragging()` | 读写全局拖拽中状态（Jotai atom） | `[boolean, (v: boolean) => void]` |
+| `useGanttScrollX()` | 读写全局横向滚动位置（Jotai atom） | `[number, (v: number) => void]` |
+
+<h2 id="faq">常见问题</h2>
+
+### 组件的基本组装顺序是什么？
+
+`GanttProvider` > `GanttSidebar`（含 Group/Item）+ `GanttTimeline`（含 Header/FeatureList/FeatureRow）。Provider 和 Sidebar+Timeline 在一个 Grid 布局中左右排列，不能省略任一侧。
+
+### 如何实现拖拽调整排期？
+
+`GanttFeatureRow` 传入 `onMove` 回调即可启用拖拽。功能条支持三种拖拽操作：整条移动、左侧边缘拖拽调整起始日期、右侧边缘拖拽调整结束日期。拖拽使用三个独立的 `DndContext` 实现不同方向的约束。
+
+### 时间轴数据量很大时如何处理？
+
+`GanttProvider` 内置了无限滚动逻辑：初始生成 3 年时间线数据（去年、今年、明年），滚动到边界时自动扩展（向前/后各追加一年）。
+
+### 如何添加自定义标记线？
+
+将 `GanttMarker` 放在 `GanttTimeline` 内、`GanttFeatureList` 之后。配合 `GanttCreateMarkerTrigger` 实现鼠标悬停创建标记的交互。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/gantt` 按需导入所有子组件。
+2. 组装顺序：`GanttProvider` > `GanttSidebar`（含 Group/Item）+ `GanttTimeline`（含 Header/FeatureList/FeatureRow）。
+3. `GanttProvider` 必须设置 `range`（"daily" | "monthly" | "quarterly"）。
+4. `GanttFeature` 数据必须包含完整的 `blocks/status` 对象（`id`、`name`、`color`），`color` 为 CSS 颜色字符串。
+5. `GanttFeatureRow` 支持 `onMove` 回调实现拖拽排期，回调中需更新功能数据的 `startAt`/`endAt`。
+6. Sidebar 和 Timeline 在 Grid 布局中左右排列，不能省略任一侧。
+7. `GanttFeatureRow` 的 features 按 `startAt` 排序并自动分配子行，无需手动管理重叠。
+8. 自定义标记通过 `GanttMarker` 放在 `GanttTimeline` 内、`GanttFeatureList` 之后。
+9. 时间轴无限滚动由 `GanttProvider` 内部自动处理，无需额外配置。
+10. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/gantt" />

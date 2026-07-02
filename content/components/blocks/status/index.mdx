@@ -1,0 +1,203 @@
+Status 状态指示，展示系统或服务的在线、离线、维护中、降级等运行状态，也支持 default、success、error、warning、info 等语义状态。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要展示服务、设备、用户或任何实体的运行状态时使用。
+
+常见场景：
+- 服务状态页面，展示各子系统的运行状况（API、数据库、缓存等）。
+- 仪表盘中设备或节点的在线状态。
+- 用户列表或个人资料中的在线/离线指示。
+- 监控面板中的健康检查状态概览。
+
+不推荐：
+- 用 Status 替代 Badge 做数字徽标、通知计数——Badge 是通用徽标组件。
+- 在 StatusIndicator 或 StatusLabel 上单独设置颜色或状态文本——它们依赖父级 Status 的 `blocks/status` 通过 group 选择器联动。
+- 把 Status 当作数字徽标使用；数字、角标和通知计数仍应使用 Badge。
+
+<h2 id="examples">代码演示</h2>
+
+### 四种状态
+
+<ComponentShowcase id="blocks/status" path="blocks/status/basic" />
+
+```tsx
+import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Status blocks/status="online">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+      <Status blocks/status="offline">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+      <Status blocks/status="maintenance">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+      <Status blocks/status="degraded">
+        <StatusIndicator />
+        <StatusLabel />
+      </Status>
+    </div>
+  )
+}
+```
+
+### 自定义中文标签
+
+通过 StatusLabel 的 `children` 覆盖默认英文文本。
+
+```tsx
+import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap gap-4">
+      <Status blocks/status="online">
+        <StatusIndicator />
+        <StatusLabel>运行中</StatusLabel>
+      </Status>
+      <Status blocks/status="offline">
+        <StatusIndicator />
+        <StatusLabel>已离线</StatusLabel>
+      </Status>
+      <Status blocks/status="maintenance">
+        <StatusIndicator />
+        <StatusLabel>维护中</StatusLabel>
+      </Status>
+      <Status blocks/status="degraded">
+        <StatusIndicator />
+        <StatusLabel>性能下降</StatusLabel>
+      </Status>
+    </div>
+  )
+}
+```
+
+### 服务状态面板
+
+遍历服务列表，每行展示服务名加 Status 组合。
+
+```tsx
+import { Status, StatusIndicator, StatusLabel } from "@/components/blocks/status"
+
+const services = [
+  { name: "API Gateway", blocks/status: "online" as const },
+  { name: "Database", blocks/status: "online" as const },
+  { name: "Cache", blocks/status: "degraded" as const },
+  { name: "Message Queue", blocks/status: "maintenance" as const },
+  { name: "File Storage", blocks/status: "offline" as const },
+]
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-2">
+      {services.map((svc) => (
+        <div key={svc.name} className="flex items-center justify-between">
+          <span className="text-sm">{svc.name}</span>
+          <Status blocks/status={svc.blocks/status}>
+            <StatusIndicator />
+            <StatusLabel />
+          </Status>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+### 仅圆点（无标签）
+
+省略 StatusLabel 时，通过 Status 的 `aria-label` 提供可访问名称。
+
+```tsx
+import { Status, StatusIndicator } from "@/components/blocks/status"
+
+export default function Demo() {
+  return (
+    <div className="flex items-center gap-2">
+      {(["online", "offline", "maintenance", "degraded"] as const).map((s) => (
+        <Status key={s} blocks/status={s} aria-label={s}>
+          <StatusIndicator />
+        </Status>
+      ))}
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Status
+
+Status 基于 Badge（`variant="secondary"`）构建，继承 Badge 除自身 `blocks/status` 外的全部 props。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| blocks/status | 运行状态或语义状态，驱动所有子组件的颜色和文本 | `"online"` \| `"offline"` \| `"maintenance"` \| `"degraded"` \| `"default"` \| `"success"` \| `"error"` \| `"warning"` \| `"info"` | 必填 |
+| className | 附加样式类名 | `string` | - |
+| children | 子元素，通常为 StatusIndicator + StatusLabel | `ReactNode` | - |
+
+继承 Badge 的 `asChild`、`count`、`dot`、`color`、`text`、`size`、`offset` 等属性。
+
+### StatusIndicator
+
+渲染带脉冲动画的双层状态圆点，颜色由父级 Status 的 `blocks/status` 自动控制。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+
+颜色映射：
+
+| 状态 | Tailwind class | 视觉效果 |
+| --- | --- | --- |
+| `online` | `bg-emerald-500` | 翠绿色 |
+| `offline` | `bg-red-500` | 红色 |
+| `maintenance` | `bg-blue-500` | 蓝色 |
+| `degraded` | `bg-amber-500` | 琥珀色 |
+
+结构：双层 `<span>` — 外层 `animate-ping` 提供脉冲动画，内层实心圆点。
+
+### StatusLabel
+
+渲染状态文本，默认根据 Status 的 `blocks/status` 显示英文标签。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加样式类名 | `string` | - |
+| children | 自定义标签文本，覆盖默认英文标签 | `ReactNode` | 自动显示 |
+
+默认文本：`online` -> "Online"、`offline` -> "Offline"、`maintenance` -> "Maintenance"、`degraded` -> "Degraded"。
+
+<h2 id="faq">常见问题</h2>
+
+### Status 和 Badge 的 `blocks/status` 属性有什么不同？
+
+Badge 的 `blocks/status` 用于徽标角标；Status 的 `blocks/status` 用于状态指示。Status 支持运行态（`online`/`offline`/`maintenance`/`degraded`）和语义态（`default`/`success`/`error`/`warning`/`info`），但不会启用 Badge 的数字徽标语义。
+
+### 状态颜色是如何联动的？
+
+Status 容器同时携带 `group` class 和状态值 class（如 `online`）。StatusIndicator 和 StatusLabel 使用 Tailwind 的 `group-[.online]:` 变体选择器，根据父级的状态 class 自动匹配对应颜色和文本。只需在 Status 上声明 `blocks/status`，子组件自动适配。
+
+### 为什么 DOM 中有四个隐藏的 span？
+
+StatusLabel 在未传入 `children` 时渲染全部四种状态的文本 span，通过 `hidden group-[.{blocks/status}]:block` 控制只显示匹配当前状态的那一个。这是利用 CSS 而非 JavaScript 进行条件渲染的设计选择。传入 `children` 后直接渲染 children，不再有隐藏 span。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/status` 导入 `Status`、`StatusIndicator`、`StatusLabel`。
+2. `blocks/status` 取值可为运行态 `"online"` / `"offline"` / `"maintenance"` / `"degraded"`，也可为语义态 `"default"` / `"success"` / `"error"` / `"warning"` / `"info"`。
+3. StatusIndicator 和 StatusLabel 必须嵌套在 Status 内部使用，单独使用不会获得正确的颜色和文本。
+4. 不要在子组件上单独设置颜色（由 group 选择器自动处理）。
+5. 自定义文本通过 StatusLabel 的 `children` 传入。
+6. 仅圆点使用（无 StatusLabel）时，通过 Status 的 `aria-label` 提供可访问名称。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/status" />

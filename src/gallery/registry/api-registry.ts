@@ -34,7 +34,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "offsetTop", type: "number", description: "偏移量", defaultValue: "0" },
     ],
   },
-  "announcement": {
+  "blocks/announcement": {
     props: [
       { name: "themed", type: "boolean", description: "主题感知", defaultValue: "false" },
       { name: "className", type: "string", description: "自定义样式" },
@@ -65,13 +65,13 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "fallback", type: "string", description: "回退文本" },
     ],
   },
-  "avatar-stack": {
+  "blocks/avatar-stack": {
     props: [
       { name: "size", type: "number", description: "头像尺寸", defaultValue: "40" },
       { name: "animate", type: "boolean", description: "hover动画", defaultValue: "false" },
     ],
   },
-  "avatar-tooltip-group": {
+  "blocks/avatar-tooltip-group": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -82,7 +82,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "children", type: "ReactNode", description: "内容" },
     ],
   },
-  "banner": {
+  "blocks/banner": {
     props: [
       { name: "open", type: "boolean", description: "受控可见性" },
       { name: "defaultOpen", type: "boolean", description: "默认可见", defaultValue: "true" },
@@ -155,22 +155,22 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "onCheckedChange", type: "(checked: boolean) => void", description: "状态变化回调" },
     ],
   },
-  "choicebox": {
+  "blocks/choicebox": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "code-block": {
+  "blocks/code-block": {
     props: [
       { name: "code", type: "string", description: "代码内容" },
     ],
   },
-  "code-panel": {
+  "blocks/code-panel": {
     props: [
       { name: "code", type: "string", description: "代码内容" },
     ],
   },
-  "code-tabs": {
+  "blocks/code-tabs": {
     props: [
       { name: "codes", type: "Record<string, string>", description: "代码标签映射" },
     ],
@@ -212,7 +212,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "comparison": {
+  "blocks/comparison": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -222,7 +222,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "contribution-graph": {
+  "blocks/contribution-graph": {
     props: [
       { name: "data", type: "Activity[]", description: "活动数据数组" },
     ],
@@ -233,17 +233,17 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "delay", type: "number", description: "提示延迟", defaultValue: "2000" },
     ],
   },
-  "credit-card": {
+  "blocks/credit-card": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "cursor-follow": {
+  "blocks/cursor-follow": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "data-table": {
+  "blocks/data-table": {
     props: [
       { name: "columns", type: "ColumnDef[]", description: "列定义" },
       { name: "data", type: "any[]", description: "数据数组" },
@@ -256,7 +256,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "placeholder", type: "string", description: "占位文本" },
     ],
   },
-  "deck": {
+  "blocks/deck": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -274,7 +274,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "onOpenChange", type: "(open: boolean) => void", description: "打开变化回调" },
     ],
   },
-  "dialog-stack": {
+  "blocks/dialog-stack": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -296,7 +296,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "onOpenChange", type: "(open: boolean) => void", description: "打开变化回调" },
     ],
   },
-  "dropzone": {
+  "blocks/dropzone": {
     props: [
       { name: "onDrop", type: "(files: File[]) => void", description: "文件拖放回调" },
     ],
@@ -312,7 +312,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "description", type: "ReactNode", description: "空状态描述" },
     ],
   },
-  "feature-calendar": {
+  "blocks/feature-calendar": {
     props: [
       { name: "features", type: "Feature[]", description: "功能特性数组" },
     ],
@@ -322,7 +322,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "data", type: "TreeNode[]", description: "树数据" },
     ],
   },
-  "file-upload": {
+  "blocks/file-upload": {
     props: [
       { name: "value", type: "File[]", description: "受控文件列表" },
       { name: "onValueChange", type: "(files: File[]) => void", description: "文件列表变化回调" },
@@ -353,18 +353,18 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "label", type: "ReactNode", description: "标签文本" },
     ],
   },
-  "gantt": {
+  "blocks/gantt": {
     props: [
       { name: "range", type: "string", description: "时间粒度", defaultValue: "'monthly'" },
       { name: "zoom", type: "number", description: "缩放百分比", defaultValue: "100" },
     ],
   },
-  "github-stars-wheel": {
+  "blocks/github-stars-wheel": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "glimpse": {
+  "blocks/glimpse": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -382,13 +382,13 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "preview", type: "boolean", description: "启用预览", defaultValue: "true" },
     ],
   },
-  "image-crop": {
+  "blocks/image-crop": {
     props: [
       { name: "src", type: "string", description: "图片地址" },
       { name: "aspect", type: "number", description: "裁剪比例" },
     ],
   },
-  "image-zoom": {
+  "blocks/image-zoom": {
     props: [
       { name: "src", type: "string", description: "图片地址" },
       { name: "className", type: "string", description: "自定义样式" },
@@ -406,7 +406,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "kanban": {
+  "blocks/kanban": {
     props: [
       { name: "columns", type: "KanbanColumn[]", description: "列定义" },
       { name: "data", type: "KanbanItem[]", description: "卡片数据" },
@@ -445,7 +445,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "children", type: "ReactNode", description: "标记内容" },
     ],
   },
-  "marquee": {
+  "blocks/marquee": {
     props: [
       { name: "side", type: "'left' | 'right' | 'top' | 'bottom'", description: "滚动边向", defaultValue: "'left'" },
       { name: "pauseOnKeyboard", type: "boolean", description: "空格键暂停/恢复", defaultValue: "false" },
@@ -455,7 +455,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "pauseOnHover", type: "boolean", description: "悬停暂停", defaultValue: "true" },
     ],
   },
-  "masonry": {
+  "blocks/masonry": {
     props: [
       { name: "columns", type: "number", description: "列数", defaultValue: "3" },
       { name: "gap", type: "number", description: "间距", defaultValue: "4" },
@@ -483,7 +483,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "mini-calendar": {
+  "blocks/mini-calendar": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -499,14 +499,14 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "items", type: "MenuItem[]", description: "菜单项数组" },
     ],
   },
-  "notification": {
+  "references/notification": {
     props: [
       { name: "title", type: "ReactNode", description: "通知标题" },
       { name: "description", type: "ReactNode", description: "通知内容" },
       { name: "type", type: "string", description: "通知类型", defaultValue: "'info'" },
     ],
   },
-  "notification-api": {
+  "references/notification-api": {
     props: [
       { name: "title", type: "ReactNode", description: "通知标题" },
       { name: "description", type: "ReactNode", description: "通知内容" },
@@ -519,7 +519,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "current", type: "number", description: "当前页" },
     ],
   },
-  "pill": {
+  "blocks/pill": {
     props: [
       { name: "variant", type: "string", description: "变体", defaultValue: "'secondary'" },
       { name: "themed", type: "boolean", description: "主题模式", defaultValue: "false" },
@@ -537,7 +537,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "onOpenChange", type: "(open: boolean) => void", description: "打开变化回调" },
     ],
   },
-  "presence-cursor": {
+  "blocks/presence-cursor": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -571,7 +571,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "count", type: "number", description: "星星数量", defaultValue: "5" },
     ],
   },
-  "rating": {
+  "blocks/rating": {
     props: [
       { name: "defaultValue", type: "number", description: "默认评分", defaultValue: "0" },
       { name: "value", type: "number", description: "受控评分值" },
@@ -583,12 +583,12 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "orientation", type: "'horizontal' | 'vertical'", description: "排列方向", defaultValue: "'horizontal'" },
     ],
   },
-  "reel": {
+  "blocks/reel": {
     props: [
       { name: "data", type: "ReelItem[]", description: "卷轴数据" },
     ],
   },
-  "relative-time": {
+  "blocks/relative-time": {
     props: [
       { name: "date", type: "Date | string", description: "日期时间" },
     ],
@@ -601,11 +601,11 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
   },
   "result": {
     props: [
-      { name: "status", type: "'success' | 'error' | 'info' | 'warning'", description: "结果状态" },
+      { name: "blocks/status", type: "'success' | 'error' | 'info' | 'warning'", description: "结果状态" },
       { name: "title", type: "ReactNode", description: "结果标题" },
     ],
   },
-  "sandbox": {
+  "blocks/sandbox": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -652,7 +652,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "max", type: "number", description: "最大值", defaultValue: "100" },
     ],
   },
-  "snippet": {
+  "blocks/snippet": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -669,7 +669,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "children", type: "ReactNode", description: "包裹内容" },
     ],
   },
-  "spinner": {
+  "blocks/spinner": {
     props: [
       { name: "variant", type: "string", description: "动画变体", defaultValue: "'default'" },
       { name: "size", type: "number", description: "尺寸", defaultValue: "24" },
@@ -681,9 +681,9 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "title", type: "ReactNode", description: "标题" },
     ],
   },
-  "status": {
+  "blocks/status": {
     props: [
-      { name: "status", type: "'online' | 'offline' | 'maintenance' | 'degraded' | 'default' | 'success' | 'error' | 'warning' | 'info'", description: "运行态或语义状态" },
+      { name: "blocks/status", type: "'online' | 'offline' | 'maintenance' | 'degraded' | 'default' | 'success' | 'error' | 'warning' | 'info'", description: "运行态或语义状态" },
       { name: "children", type: "ReactNode", description: "通常为 StatusIndicator + StatusLabel" },
     ],
   },
@@ -693,7 +693,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "items", type: "StepItem[]", description: "步骤项数组" },
     ],
   },
-  "stories": {
+  "blocks/stories": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -716,7 +716,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "value", type: "string", description: "受控标签值" },
     ],
   },
-  "tabs-motion": {
+  "blocks/tabs-motion": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -727,18 +727,18 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "closable", type: "boolean", description: "可关闭", defaultValue: "false" },
     ],
   },
-  "tags": {
+  "blocks/tags": {
     props: [
       { name: "value", type: "string", description: "已选值" },
       { name: "setValue", type: "(val: string) => void", description: "设置值" },
     ],
   },
-  "theme-switcher": {
+  "blocks/theme-switcher": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "ticker": {
+  "blocks/ticker": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
@@ -764,7 +764,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "mode", type: "'left' | 'right' | 'start' | 'end' | 'alternate'", description: "布局模式", defaultValue: "'left'" },
       { name: "orientation", type: "'vertical' | 'horizontal'", description: "排列方向", defaultValue: "'vertical'" },
       { name: "pending", type: "ReactNode", description: "追加的待处理节点" },
-      { name: "status", type: "'completed' | 'active' | 'pending'", description: "单个 item 的显式状态" },
+      { name: "blocks/status", type: "'completed' | 'active' | 'pending'", description: "单个 item 的显式状态" },
       { name: "time", type: "ReactNode", description: "单个 item 的时间语义标签" },
       { name: "animated", type: "boolean", description: "启用入场动画", defaultValue: "true" },
     ],
@@ -792,12 +792,12 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "side", type: "string", description: "弹出方向", defaultValue: "'top'" },
     ],
   },
-  "tooltip-motion": {
+  "blocks/tooltip-motion": {
     props: [
       { name: "className", type: "string", description: "自定义样式" },
     ],
   },
-  "tour": {
+  "blocks/tour": {
     props: [
       { name: "open", type: "boolean", description: "是否显示引导", defaultValue: "false" },
       { name: "steps", type: "TourStepConfig[]", description: "引导步骤" },
@@ -835,7 +835,7 @@ const API_REGISTRY: Record<string, GalleryApiDoc> = {
       { name: "type", type: "string", description: "排版类型" },
     ],
   },
-  "video-player": {
+  "blocks/video-player": {
     props: [
       { name: "src", type: "string", description: "视频地址" },
     ],

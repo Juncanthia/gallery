@@ -10,6 +10,6 @@
  */
 
 export { cn } from "@/lib/utils";
-export { Button } from "@/components/ui/button";
-export { Collapsible } from "@/components/ui/collapsible"
-export { CollapsibleTrigger } from "@/components/ui/collapsible";
+export { Button } from "@/components/core/button";
+export { Collapsible } from "@/components/core/collapsible"
+export { CollapsibleTrigger } from "@/components/core/collapsible";

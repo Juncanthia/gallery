@@ -1,0 +1,314 @@
+天气小组件 WeatherWidget。以卡片形式展示指定城市的当前天气和未来预报，包含天气动画效果、温度信息、城市名称和逐日预报。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在界面中展示天气信息时使用，提供沉浸式天气卡片，支持天气动画特效和明暗主题自适应。
+
+常见场景：
+- AI 对话中展示查询到的天气结果，以可视化卡片替代纯文本回复。
+- 仪表盘或工具面板中集成天气信息模块。
+- 旅行规划、日程管理等场景中嵌入目的地天气预览。
+
+不推荐：
+- 需要展示逐小时详细天气数据（如小时级降水概率、紫外线指数）的场景 —— 组件仅支持逐日预报。
+- 需要用户交互选择城市或切换温度单位的场景 —— 组件为只读展示，数据由外部传入。
+- 需要同时展示多个城市天气对比的场景 —— 每个 WeatherWidget 实例对应单个城市。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 location、current、forecast 等必填属性，展示完整天气卡片含城市名称、当前温度、天气状况、逐日预报和天气动画效果。
+
+<ComponentShowcase id="tool/weather-widget" path="tool/weather-widget/basic" />
+
+```tsx
+import { WeatherWidget } from "@/components/core/weather-widget"
+
+export default function Demo() {
+  return (
+    &lt;WeatherWidget
+      version="3.1"
+      id="weather-demo"
+      location={{ name: "北京" }}
+      units={{ temperature: "celsius" }}
+      current={{
+        conditionCode: "partly-cloudy",
+        temperature: 22,
+        tempMin: 18,
+        tempMax: 26,
+        windSpeed: 12,
+        precipitationLevel: "none",
+        visibility: 10,
+      }}
+      forecast={[
+        { label: "周一", conditionCode: "clear", tempMin: 19, tempMax: 27 },
+        { label: "周二", conditionCode: "partly-cloudy", tempMin: 20, tempMax: 25 },
+        { label: "周三", conditionCode: "rain", tempMin: 17, tempMax: 22 },
+        { label: "周四", conditionCode: "cloudy", tempMin: 16, tempMax: 23 },
+        { label: "周五", conditionCode: "clear", tempMin: 18, tempMax: 28 },
+      ]}
+      time={{ timeBucket: 5 }}
+      updatedAt="2026-06-30T14:00:00Z"
+      effects={{ enabled: true, quality: "medium" }}
+    /&gt;
+  )
+}
+```
+
+### 华氏温度
+
+设置 `units.temperature` 为 `"fahrenheit"` 使用华氏温度显示。
+
+```tsx
+import { WeatherWidget } from "@/components/core/weather-widget"
+
+export default function Demo() {
+  return (
+    &lt;WeatherWidget
+      version="3.1"
+      id="weather-fahrenheit"
+      location={{ name: "New York" }}
+      units={{ temperature: "fahrenheit" }}
+      current={{
+        conditionCode: "clear",
+        temperature: 72,
+        tempMin: 65,
+        tempMax: 78,
+        windSpeed: 8,
+        precipitationLevel: "none",
+        visibility: 10,
+      }}
+      forecast={[
+        { label: "Mon", conditionCode: "clear", tempMin: 66, tempMax: 79 },
+        { label: "Tue", conditionCode: "cloudy", tempMin: 64, tempMax: 75 },
+        { label: "Wed", conditionCode: "rain", tempMin: 60, tempMax: 70 },
+        { label: "Thu", conditionCode: "partly-cloudy", tempMin: 62, tempMax: 73 },
+        { label: "Fri", conditionCode: "clear", tempMin: 65, tempMax: 80 },
+      ]}
+      time={{ timeBucket: 7 }}
+      updatedAt="2026-06-30T14:00:00Z"
+    /&gt;
+  )
+}
+```
+
+### 雨天天气
+
+传入 `conditionCode: "rain"` 渲染雨天效果和对应的天气图标。
+
+```tsx
+import { WeatherWidget } from "@/components/core/weather-widget"
+
+export default function Demo() {
+  return (
+    &lt;WeatherWidget
+      version="3.1"
+      id="weather-rain"
+      location={{ name: "上海" }}
+      units={{ temperature: "celsius" }}
+      current={{
+        conditionCode: "rain",
+        temperature: 16,
+        tempMin: 14,
+        tempMax: 18,
+        windSpeed: 8,
+        precipitationLevel: "moderate",
+        visibility: 5,
+      }}
+      forecast={[
+        { label: "周三", conditionCode: "rain", tempMin: 14, tempMax: 18 },
+        { label: "周四", conditionCode: "drizzle", tempMin: 15, tempMax: 20 },
+        { label: "周五", conditionCode: "cloudy", tempMin: 17, tempMax: 23 },
+        { label: "周六", conditionCode: "partly-cloudy", tempMin: 18, tempMax: 25 },
+        { label: "周日", conditionCode: "clear", tempMin: 20, tempMax: 28 },
+      ]}
+      time={{ timeBucket: 3 }}
+      effects={{ enabled: true, quality: "high" }}
+    /&gt;
+  )
+}
+```
+
+### 禁用动画效果
+
+设置 `effects.enabled` 为 `false` 或传入 `effects.reducedMotion` 禁用天气动画，适用于低性能设备或用户偏好。
+
+```tsx
+import { WeatherWidget } from "@/components/core/weather-widget"
+
+export default function Demo() {
+  return (
+    &lt;WeatherWidget
+      version="3.1"
+      id="weather-no-effects"
+      location={{ name: "深圳" }}
+      units={{ temperature: "celsius" }}
+      current={{
+        conditionCode: "clear",
+        temperature: 30,
+        tempMin: 26,
+        tempMax: 33,
+        windSpeed: 5,
+        precipitationLevel: "none",
+        visibility: 10,
+      }}
+      forecast={[
+        { label: "周三", conditionCode: "clear", tempMin: 27, tempMax: 34 },
+        { label: "周四", conditionCode: "partly-cloudy", tempMin: 26, tempMax: 33 },
+        { label: "周五", conditionCode: "thunderstorm", tempMin: 25, tempMax: 30 },
+        { label: "周六", conditionCode: "rain", tempMin: 24, tempMax: 29 },
+        { label: "周日", conditionCode: "cloudy", tempMin: 26, tempMax: 31 },
+      ]}
+      time={{ timeBucket: 6 }}
+      effects={{ enabled: false }}
+    /&gt;
+  )
+}
+```
+
+### 雪天天气
+
+传入 `conditionCode: "snow"` 渲染雪天效果。
+
+```tsx
+import { WeatherWidget } from "@/components/core/weather-widget"
+
+export default function Demo() {
+  return (
+    &lt;WeatherWidget
+      version="3.1"
+      id="weather-snow"
+      location={{ name: "哈尔滨" }}
+      units={{ temperature: "celsius" }}
+      current={{
+        conditionCode: "snow",
+        temperature: -12,
+        tempMin: -18,
+        tempMax: -8,
+        windSpeed: 15,
+        precipitationLevel: "moderate",
+        visibility: 3,
+      }}
+      forecast={[
+        { label: "周三", conditionCode: "snow", tempMin: -20, tempMax: -10 },
+        { label: "周四", conditionCode: "snow", tempMin: -18, tempMax: -8 },
+        { label: "周五", conditionCode: "cloudy", tempMin: -15, tempMax: -5 },
+        { label: "周六", conditionCode: "partly-cloudy", tempMin: -12, tempMax: -3 },
+        { label: "周日", conditionCode: "clear", tempMin: -10, tempMax: 0 },
+      ]}
+      time={{ timeBucket: 9 }}
+      effects={{ enabled: true, quality: "auto" }}
+    /&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### WeatherWidget
+
+天气小组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| version | 数据协议版本号 | `"3.1"` | -（必填） |
+| id | 组件唯一标识 | `string` | -（必填） |
+| location | 城市信息对象 | `{ name: string }` | -（必填） |
+| units | 温度及其他度量的单位 | `{ temperature: "celsius" \| "fahrenheit" }` | -（必填） |
+| current | 当前天气数据 | `WeatherWidgetCurrent` | -（必填） |
+| forecast | 逐日预报数据数组（至少 1 项） | `ForecastDay[]` | -（必填） |
+| time | 时间信息，控制场景明暗 | `WeatherWidgetTime` | -（必填） |
+| updatedAt | 数据更新时间，ISO 8601 字符串 | `string` | - |
+| className | 自定义样式类名 | `string` | - |
+| effects | 天气动画效果配置 | `EffectSettings` | `{ enabled: true, quality: "auto" }` |
+
+### WeatherWidgetCurrent
+
+当前天气数据。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| conditionCode | 天气状况代码 | `WeatherConditionCode` | -（必填） |
+| temperature | 当前温度 | `number` | -（必填） |
+| tempMin | 当日最低温度 | `number` | -（必填） |
+| tempMax | 当日最高温度 | `number` | -（必填） |
+| windSpeed | 风速（km/h 或 mph） | `number` | - |
+| precipitationLevel | 降水等级 | `"none"` \| `"light"` \| `"moderate"` \| `"heavy"` | - |
+| visibility | 能见度（km 或 mile） | `number` | - |
+
+### ForecastDay
+
+单日预报数据。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 日期标签（如"周一"、"Mon"） | `string` | -（必填） |
+| conditionCode | 天气状况代码 | `WeatherConditionCode` | -（必填） |
+| tempMin | 当日最低温度 | `number` | -（必填） |
+| tempMax | 当日最高温度 | `number` | -（必填） |
+
+### WeatherWidgetTime
+
+时间信息，控制场景明暗主题。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| timeBucket | 时间桶（0-11），映射到一天中不同时段 | `number`（0-11） | - |
+| localTimeOfDay | 当地时间（0-24 的小时数） | `number` | - |
+
+### EffectSettings
+
+效果配置。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| enabled | 是否启用天气动画效果 | `boolean` | `true` |
+| quality | 效果质量等级 | `"low"` \| `"medium"` \| `"high"` \| `"auto"` | `"auto"` |
+| reducedMotion | 是否减少动画（覆盖系统偏好） | `boolean` | 跟随系统 `prefers-reduced-motion` |
+
+### WeatherConditionCode
+
+天气状况代码，支持以下值：
+
+`"clear"` \| `"partly-cloudy"` \| `"cloudy"` \| `"overcast"` \| `"fog"` \| `"drizzle"` \| `"rain"` \| `"heavy-rain"` \| `"thunderstorm"` \| `"snow"` \| `"sleet"` \| `"hail"` \| `"windy"`
+
+<h2 id="faq">常见问题</h2>
+
+### 天气动画如何工作？
+
+组件内部使用 `EffectCompositorRuntime` 根据 `conditionCode`、`windSpeed`、`precipitationLevel` 和 `visibility` 等参数实时渲染天气动画效果，如雨滴、雪花、雾气等。`time` 属性控制场景的整体亮度（白天/夜晚），动画会自适应明暗主题。
+
+### 如何适配暗色模式？
+
+组件根据 `time` 属性和 `conditionCode` 自动计算场景亮度，切换明暗背景渐变，无需手动配置。暗色天气（如夜间、雷暴）使用深色背景，晴朗白天使用浅色背景。
+
+### 动画性能如何优化？
+
+通过 `effects` 属性控制：
+- 设置 `effects.quality` 为 `"low"` 降低粒子数量和渲染精度。
+- 设置 `effects.enabled` 为 `false` 完全关闭动画效果。
+- 组件会自动监听系统 `prefers-reduced-motion` 偏好，用户开启减少动效时自动禁用动画。
+
+### forecast 数组最少需要几项？
+
+至少 1 项，建议传入 3-7 天的预报数据以获得最佳展示效果。
+
+### 如何切换温度单位？
+
+设置 `units.temperature` 为 `"celsius"` 或 `"fahrenheit"`。注意 temperature、tempMin、tempMax 的数值需要与所选单位匹配，组件不会自动转换。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/weather-widget` 导入 `WeatherWidget`。
+2. `version`、`id`、`location`、`units`、`current`、`forecast`、`time` 为必填属性。
+3. `conditionCode` 仅支持上述 13 种天气代码，不要使用未定义的值。
+4. `temperature`、`tempMin`、`tempMax` 数值需与 `units.temperature` 匹配，不要混用摄氏和华氏值。
+5. `forecast` 至少包含 1 项 ForecastDay，建议 3-7 天。
+6. `timeBucket` 为 0-11 的整数，映射到不同时段（0=午夜，3=清晨，6=正午，9=傍晚）。
+7. 不要生成 AntD 专属的 `classNames`、`styles`、ConfigProvider 等配置。
+8. 不要引入 Ant Design 相关依赖。
+9. 若收到外部 API 返回的天气代码，需映射为组件支持的 `WeatherConditionCode` 后再传入。
+
+<h2 id="source">源码</h2>
+&lt;SourceViewer componentId="tool/weather-widget" /&gt;

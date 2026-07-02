@@ -1,0 +1,99 @@
+TwentyTwelveOne 平滑下拉菜单，一个带动画的弹出式下拉菜单，点击三点图标展开菜单项，带有活跃态指示器和流畅的弹簧动画过渡。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要一个紧凑的弹出式操作菜单时使用。点击三点图标展开菜单列表，支持鼠标悬停高亮和活跃项指示器。适用于用户头像下拉、更多操作入口等场景。
+
+常见场景：
+
+- 用户头像旁边的更多操作入口。
+- 卡片右上角的上下文菜单。
+- 工具栏中的快捷操作面板。
+
+TwentyTwelveOne 通过一个三点图标触发器 + 弹出菜单的方式组织交互：
+
+- 点击三点图标展开菜单，包含分隔线分隔的多个操作项。
+- 点击外部区域自动收起菜单。
+- 活跃项带有左侧竖条指示器和背景高亮。
+- 悬停项同步显示指示器（layoutId 动画衔接）。
+- Logout 项样式特殊（红色文本/背景）。
+
+不推荐：
+
+- 将 TwentyTwelveOne 用于长列表导航，应使用 Drawer 或 Sidebar。
+- 菜单项过多（超过 10 个），应考虑分组或使用 Command。
+- 在已存在 dropdown-menu 的场景中重复叠加弹出层。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+点击三点图标展开下拉菜单，包含 Profile、Upgrade、Projects、Documentation、Settings、Get Help、Logout 七个操作项。
+
+<ComponentShowcase
+  id="navigation/smooth-dropdown"
+  path="navigation/smooth-dropdown/basic"
+/>
+
+```tsx
+import { TwentyTwelveOne } from "@/components/navigation/smooth-dropdown"
+
+export default function Demo() {
+  return &lt;TwentyTwelveOne /&gt;
+}
+```
+
+<h2 id="api">API</h2>
+
+### TwentyTwelveOne
+
+TwentyTwelveOne 是一个零 props 的独立组件，所有菜单项在组件内部的 `menuItems` 数组中定义。如需定制菜单项，请直接修改 `src/components/navigation/smooth-dropdown.tsx` 中的 `menuItems` 数组。
+
+| 内部状态 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| isOpen | 菜单是否展开 | `boolean` | `false` |
+| activeItem | 当前活跃的菜单项 ID | `string` | `"profile"` |
+| hoveredItem | 当前悬停的菜单项 ID | `string \| null` | `null` |
+
+### 菜单项配置
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| id | 菜单项唯一标识，"divider" 表示分隔线 | `string` |
+| label | 菜单项文本 | `string` |
+| icon | 菜单项图标（hugeicons 图标对象，divider 时为 null） | `HugeiconsIcon \| null` |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何自定义菜单项？
+
+直接修改 `src/components/navigation/smooth-dropdown.tsx` 中的 `menuItems` 数组，增删改条目即可。分隔线使用 `{ id: "divider", label: "", icon: null }`。
+
+### 如何修改图标？
+
+从 `@hugeicons/core-free-icons` 中导入需要的图标，并在 `menuItems` 中替换对应的 `icon` 字段。
+
+### 点击菜单项后菜单没有关闭？
+
+默认只有点击 Logout 项会关闭菜单。如需其他项也关闭菜单，在对应 `onClick` 中添加 `setIsOpen(false)`。
+
+### 菜单打开时点击外部没有收起？
+
+组件通过容器 ref + `mousedown` 事件监听外部点击。如果外层元素阻止了事件冒泡，需调整监听逻辑。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 TwentyTwelveOne 代码时：
+
+1. 从 `@/components/navigation/smooth-dropdown` 导入 TwentyTwelveOne。
+2. TwentyTwelveOne 为零 props 组件，直接渲染即可。
+3. 如需要定制菜单项，修改源码中的 `menuItems` 数组，不要通过 props 传递。
+4. 图标使用 `@hugeicons/core-free-icons` 和 `@hugeicons/react` 的 `HugeiconsIcon`。
+5. 不要引入 Ant Design 或 rc-component 相关依赖。
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/navigation/smooth-dropdown.tsx` — TwentyTwelveOne 完整实现，包含菜单列表、动画过渡、活跃态指示器。
+- `src/components/core/uselayouts-smooth-dropdown.tsx` — 统一导入入口。

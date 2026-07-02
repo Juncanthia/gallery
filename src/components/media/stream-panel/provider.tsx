@@ -15,7 +15,7 @@ import type { StreamPreset } from "@/components/media/lib/stream-presets"
 import type {
   PopoverHandle,
   PopoverOpenChangeDetails,
-} from "@/components/ui/popover"
+} from "@/components/core/popover"
 
 export interface StreamPanelController {
   onLoadStream?: (src: string, config?: string) => void

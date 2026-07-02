@@ -1,0 +1,173 @@
+Popover 气泡卡片。点击或悬停元素时弹出气泡式的卡片浮层，用于展示额外信息或提供快捷操作。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在目标元素附近展示浮层内容时使用，内容可以是文本、表单、菜单或任意 React 节点。
+
+常见场景：
+- 展示额外详情信息（如列表项的描述、术语解释）
+- 提供快捷操作面板（如行内编辑、快捷筛选）
+- 触发器和内容分离的场景（使用 `PopoverAnchor` 定位锚点）
+- 需要箭头指向目标元素的提示卡片
+
+不推荐：
+- 需要用户确认的破坏性操作——使用 `Popconfirm`
+- 复杂的表单或大量内容——使用 `Dialog` 或 `Drawer`
+- 鼠标悬停即显示的简单提示——使用 `Tooltip`
+- 为了照搬 Ant Design Popover API 而引入本组件——API 以本地源码为准
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="popover" path="popover/basic" />
+
+```tsx
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/core/popover"
+import { Button } from "@/components/core/button"
+
+export default function Demo() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outlined">打开气泡</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-60">
+        <div className="space-y-2">
+          <h4 className="font-medium text-sm">气泡标题</h4>
+          <p className="text-sm text-muted-foreground">可放置任意内容，如表单、菜单等。</p>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+```
+
+### 快捷 API 模式（trigger + title + content）
+
+```tsx
+import { Popover } from "@/components/core/popover"
+import { Button } from "@/components/core/button"
+
+export default function Demo() {
+  return (
+    <Popover
+      trigger={<Button variant="outlined">详情</Button>}
+      title="用户信息"
+      content={<p className="text-muted-foreground">这里是用户的详细信息。</p>}
+      placement="bottom"
+      arrow
+    />
+  )
+}
+```
+
+### 带箭头的弹出卡片
+
+```tsx
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/core/popover"
+import { Button } from "@/components/core/button"
+
+export default function Demo() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outlined">带箭头</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-48" arrow>
+        <p className="text-sm">箭头指向触发器。</p>
+      </PopoverContent>
+    </Popover>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Popover
+
+顶层容器组件，支持两种使用模式：组合模式（`PopoverTrigger` + `PopoverContent`）和快捷 API 模式（`trigger` + `title` + `content` props）。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| trigger | 触发器元素（快捷 API 模式） | `ReactNode` | - |
+| title | 气泡标题（快捷 API 模式） | `ReactNode` | - |
+| content | 气泡内容（快捷 API 模式） | `ReactNode` | - |
+| placement | 弹出位置 | `PopoverPlacement` | - |
+| arrow | 是否显示箭头（快捷 API 模式） | `boolean` | `false` |
+| contentProps | 透传给 PopoverContent 的属性 | `PopoverContentProps` | - |
+| open | 受控打开状态 | `boolean` | - |
+| onOpenChange | 打开状态变化回调 | `(open: boolean) => void` | - |
+| （其他） | 支持 Radix PopoverPrimitive 的全部属性 | `PopoverPrimitiveProps` | - |
+
+### PopoverTrigger
+
+触发器包装，内部使用 Radix `asChild` 将触发器元素作为弹出触发点。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| （全部） | 支持 Radix PopoverTrigger 的全部属性 | `PopoverTriggerPrimitiveProps` | - |
+
+### PopoverContent
+
+弹出内容容器，默认通过 Portal 渲染，带边框、阴影和圆角。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| arrow | 是否显示指向箭头 | `boolean` | `false` |
+| align | 对齐方式 | `"start" \| "center" \| "end"` | `"center"` |
+| sideOffset | 距触发器侧边的偏移量（px） | `number` | `4` |
+| className | 附加 CSS 类名 | `string` | - |
+| （其他） | 支持 Radix PopoverContent 的全部属性 | `PopoverContentPrimitiveProps` | - |
+
+### PopoverArrow
+
+指向触发器的箭头元素，需放在 PopoverContent 内部。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 CSS 类名 | `string` | - |
+| （其他） | 支持 Radix PopoverArrow 的全部属性 | `PopoverArrowPrimitiveProps` | - |
+
+### PopoverClose
+
+关闭按钮包装，点击时关闭 Popover。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| （全部） | 支持 Radix PopoverClose 的全部属性 | `PopoverClosePrimitiveProps` | - |
+
+### PopoverAnchor
+
+定位锚点，用于将 Popover 定位到非触发器元素。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| （全部） | 支持 Radix PopoverAnchor 的全部属性 | `PopoverAnchorPrimitiveProps` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 组合模式和快捷 API 模式如何选择？
+
+组合模式（`PopoverTrigger` + `PopoverContent`）更灵活，适合内容复杂的场景。快捷 API 模式（`trigger` + `title` + `content` props）更简洁，适合简单的标题+内容展示场景。
+
+### PopoverContent 和 Popover 的 arrow 属性有什么区别？
+
+在快捷 API 模式下，`Popover` 的 `arrow` 属性控制是否在内部自动生成的 `PopoverContent` 中显示箭头。在组合模式下，需要在 `PopoverContent` 上设置 `arrow` 属性。
+
+### 如何让 Popover 在特定条件下禁用？
+
+Popover 本身不提供 `disabled` 属性。如需禁用，可在触发器上设置 `disabled`，或使用受控模式通过 `open` 和 `onOpenChange` 控制是否允许打开。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/popover` 导入所需的子组件，不要从 `antd` 导入。
+2. `PopoverTrigger` 通常配合 `asChild` 使用，将子元素作为触发器而不是额外包裹一层。
+3. `PopoverContent` 在组合模式下需手动放置，在快捷 API 模式下由 `Popover` 自动生成。
+4. 不需要箭头时可以省略 `PopoverArrow` 或设置 `arrow={false}`。
+5. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider` 等属性。
+6. `placement` 值（如 `"bottomLeft"`）内部映射到 Radix 的 `side` + `align` 组合。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="popover" />

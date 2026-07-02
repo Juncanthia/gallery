@@ -1,0 +1,97 @@
+DomeGallery 穹顶画廊，基于 CSS 3D 变换的球面图片网格画廊，支持拖拽旋转、惯性滑动和点击放大查看。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要以 3D 球面布局展示图片集，并提供沉浸式拖拽浏览体验时使用。
+常见场景：
+- 作品集或摄影集的全景展示
+- 品牌产品线的 3D 陈列
+- 创意交互式画廊页面
+不推荐：
+- 少量图片（少于 10 张）的场景，球面效果不明显
+- 移动端体验（拖拽和 3D 变换在触屏上适配复杂）
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="marketing-blocks/dome-gallery" path="marketing-blocks/dome-gallery/basic" />
+
+```tsx
+import { DomeGallery } from "@/components/marketing-blocks/dome-gallery"
+export default function Demo() { return <DomeGallery /> }
+```
+
+### 自定义配置
+
+```tsx
+import { DomeGallery } from "@/components/marketing-blocks/dome-gallery"
+
+const myImages = [
+  { src: "/gallery/photo1.jpg", alt: "Nature" },
+  { src: "/gallery/photo2.jpg", alt: "City" },
+  { src: "/gallery/photo3.jpg", alt: "Portrait" },
+  { src: "/gallery/photo4.jpg", alt: "Abstract" },
+  { src: "/gallery/photo5.jpg", alt: "Architecture" },
+  { src: "/gallery/photo6.jpg", alt: "Landscape" },
+]
+
+export default function Demo() {
+  return (
+    <DomeGallery
+      images={myImages}
+      segments={40}
+      maxVerticalRotationDeg={10}
+      dragSensitivity={25}
+      dragDampening={2.5}
+      fit={0.6}
+      grayscale={false}
+      imageBorderRadius="16px"
+      openedImageWidth="400px"
+      openedImageHeight="500px"
+      overlayBlurColor="#0a0a0a"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### DomeGallery
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| images | 图片列表，字符串 URL 或 `{ src, alt }` 对象 | `DomeImage[]` | 7 张默认图 |
+| fit | 球面适配系数，值越大球面越大 | `number` | `0.5` |
+| fitBasis | 适配基准维度 | `"auto"` \| `"min"` \| `"max"` \| `"width"` \| `"height"` | `"auto"` |
+| minRadius | 球面最小半径（像素） | `number` | `600` |
+| maxRadius | 球面最大半径（像素） | `number` | `Infinity` |
+| padFactor | 查看器内边距比例 | `number` | `0.25` |
+| overlayBlurColor | 边缘模糊遮罩的颜色 | `string` | `"#120F17"` |
+| maxVerticalRotationDeg | 最大垂直旋转角度 | `number` | `5` |
+| dragSensitivity | 拖拽灵敏度 | `number` | `20` |
+| enlargeTransitionMs | 点击放大过渡动画时长（毫秒） | `number` | `300` |
+| segments | 球面分段数，控制网格密度 | `number` | `35` |
+| dragDampening | 惯性阻尼系数（0~1，越大越持久） | `number` | `2` |
+| openedImageWidth | 点击放大图片的宽度 | `string` | `"250px"` |
+| openedImageHeight | 点击放大图片的高度 | `string` | `"350px"` |
+| imageBorderRadius | 缩略图圆角 | `string` | `"30px"` |
+| openedImageBorderRadius | 放大图圆角 | `string` | `"30px"` |
+| grayscale | 缩略图是否使用灰度滤镜 | `boolean` | `true` |
+
+<h2 id="faq">常见问题</h2>
+
+### 图片过多时会自动排列吗？
+会。组件将图片重复铺满球面网格（`segments` 列 x 5 行的交错排列）。图片通过 `buildItems` 循环填充，相邻位置不会重复相同图片，确保视觉多样性。
+
+### dragDampening 如何影响拖拽手感？
+范围 0~1（实际 clamp 到此范围），值越小阻力越大惯性越快停止，值越大惯性越持久。类似于物理中的空气阻力，0.6 是一个自然的手感，2.0 会有长长的滑行感。
+
+### 点击放大时如何退出？
+点击遮罩层（scrim）或按 Escape 键。退出动画会先将放大图还原到原始瓦片位置再渐隐，过渡时间为 `enlargeTransitionMs`。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/marketing-blocks/dome-gallery` 导入。
+2. 组件依赖 `@use-gesture/react` 处理拖拽手势。
+3. 球面旋转通过 CSS `transform: translateZ(calc(var(--radius) * -1)) rotateX(...) rotateY(...)` 实现。
+4. 组件通过 ResizeObserver 动态计算球面半径和视口适配，响应式布局自适应。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-dome-gallery" />

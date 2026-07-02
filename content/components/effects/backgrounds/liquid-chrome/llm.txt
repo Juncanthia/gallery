@@ -1,0 +1,10 @@
+---
+category: react-bits
+title: LiquidChrome
+subtitle: 液态金属
+description: 液态金属风格的交互式背景。
+demo: { cols: 1 }
+group: { title: Backgrounds, order: 0 }
+source: { component: src/components/react-bits/liquid-chrome.tsx, docs: content/components/effects/backgrounds/liquid-chrome/index.mdx, examples: [content/components/effects/backgrounds/liquid-chrome/examples/basic.tsx] }
+stack: { react: true, tailwindcss: true, webgl: true }
+---

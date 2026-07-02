@@ -1,0 +1,206 @@
+NavigationMenu 导航菜单。为站点提供顶级导航菜单，支持下拉面板和链接项，基于 Radix NavigationMenu 实现。支持声明式 items 配置、viewport 动画和分组布局。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要为网站或应用提供主导航栏时使用，通常置于页面顶部。
+
+常见场景：
+
+- 网站主导航（产品、资源、定价等）。
+- 带下拉面板的多级导航菜单。
+- 需要在导航项下方展示丰富内容（图标+描述+链接组）。
+- 响应式导航栏的桌面端实现。
+
+不推荐：
+
+- 桌面应用风格的纯菜单列表——使用 Menubar。
+- 侧边导航——使用 Sidebar 或垂直 Menu。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法（子组件模式）
+
+<ComponentShowcase id="navigation-menu" path="navigation-menu/basic" />
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/core/navigation-menu"
+
+export default function Demo() {
+  return (
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>产品</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="grid w-[400px] gap-2 p-4">
+              <NavigationMenuLink href="#">
+                <div className="font-medium">Web 端</div>
+                <p className="text-xs text-muted-foreground">
+                  浏览器访问的在线版本
+                </p>
+              </NavigationMenuLink>
+              <NavigationMenuLink href="#">
+                <div className="font-medium">移动端</div>
+                <p className="text-xs text-muted-foreground">
+                  iOS 和 Android 原生应用
+                </p>
+              </NavigationMenuLink>
+              <NavigationMenuLink href="#">
+                <div className="font-medium">桌面端</div>
+                <p className="text-xs text-muted-foreground">
+                  Windows 和 macOS 客户端
+                </p>
+              </NavigationMenuLink>
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>资源</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="grid w-[300px] gap-2 p-4">
+              <NavigationMenuLink href="#">文档</NavigationMenuLink>
+              <NavigationMenuLink href="#">API 参考</NavigationMenuLink>
+              <NavigationMenuLink href="#">博客</NavigationMenuLink>
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="#">定价</NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="#">关于</NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
+}
+```
+
+### items 声明式配置
+
+```tsx
+import { NavigationMenu } from "@/components/core/navigation-menu"
+
+export default function Demo() {
+  return (
+    <NavigationMenu
+      items={[
+        {
+          label: "产品",
+          children: [
+            {
+              label: "Web 端",
+              href: "#",
+              description: "浏览器访问的在线版本",
+              icon: <GlobeIcon className="size-4" />,
+            },
+            {
+              label: "移动端",
+              href: "#",
+              description: "iOS 和 Android 原生应用",
+            },
+            {
+              label: "桌面端",
+              href: "#",
+              description: "Windows 和 macOS 客户端",
+            },
+          ],
+        },
+        {
+          label: "资源",
+          children: [
+            { label: "文档", href: "#" },
+            { label: "API 参考", href: "#" },
+            { type: "divider" },
+            { label: "博客", href: "#" },
+          ],
+        },
+        { label: "定价", href: "#" },
+        { label: "关于", href: "#" },
+      ]}
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### NavigationMenu
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 声明式菜单配置数组 | `NavigationMenuItemOption[]` | - |
+| viewport | 是否显示 viewport 动画容器 | `boolean` | `true` |
+| selectedKeys | 受控选中项 keys | `React.Key[]` | - |
+| defaultSelectedKeys | 默认选中项 keys | `React.Key[]` | `[]` |
+| onSelect | 选中回调 | `(info: NavigationMenuSelectInfo) => void` | - |
+| listProps | 传给 List 的额外属性 | `ComponentProps<typeof NavigationMenuPrimitive.List>` | - |
+
+### NavigationMenuItemOption
+
+| 类型 | 关键属性 | 说明 |
+| --- | --- | --- |
+| `"item"`（默认） | `label`, `icon?`, `extra?`, `description?`, `href?`, `content?`, `disabled?`, `danger?`, `onSelect?`, `children?` | 菜单项。有 `children` 时自动渲染为 Trigger + Content |
+| `"divider"` | - | 分隔线（在 Content 内跨列显示） |
+| `"group"` | `label`, `children` | 分组（在 Content 内显示标题 + 子项） |
+
+### NavigationMenuSelectInfo
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| key | 选中项的 key | `React.Key` |
+| keyPath | 选中项的 key 路径 | `React.Key[]` |
+| selectedKeys | 当前选中项 keys | `React.Key[]` |
+| item | 选中项配置 | `NavigationMenuItemOption` |
+| domEvent | 原始点击事件 | `React.MouseEvent` |
+
+### 子组件
+
+| 组件 | 说明 |
+| --- | --- |
+| `NavigationMenuList` | 导航链接列表容器 |
+| `NavigationMenuItem` | 单个导航项 |
+| `NavigationMenuTrigger` | 触发器按钮，支持 `selected`、`danger` 状态属性 |
+| `NavigationMenuContent` | 下拉内容面板 |
+| `NavigationMenuLink` | 导航链接，支持 `asChild`、`active`、`disabled`、`danger` |
+| `NavigationMenuIndicator` | 下拉指示器箭头 |
+| `NavigationMenuViewport` | 下拉视口容器（带动画） |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何配合路由库使用？
+
+`NavigationMenuLink` 支持 `asChild` 属性：
+
+```tsx
+<NavigationMenuLink asChild>
+  <Link to="/products">产品</Link>
+</NavigationMenuLink>
+```
+
+### 如何禁用 viewport 动画？
+
+设置 `viewport={false}`，此时下拉面板直接定位在触发器下方，不使用视口容器动画。
+
+### NavigationMenu 和 Menubar 的区别？
+
+- **NavigationMenu**：Web 站点风格，支持 viewport 动画和丰富的下拉内容面板。
+- **Menubar**：桌面应用风格，纯菜单列表，无 viewport 动画。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/navigation-menu` 导入。
+2. 有 `children` 的 item 会自动渲染为 Trigger + Content 下拉面板。
+3. `NavigationMenuLink` 在有 Content 面板的上下文中会以网格布局展示，支持 `description` 呈现副文本。
+4. 配合路由库使用 `asChild` 属性。
+5. 不要引入 Ant Design 的 `Menu`（horizontal 模式）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="navigation-menu" />

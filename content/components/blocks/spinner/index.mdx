@@ -1,0 +1,142 @@
+Spinner 加载旋转，提供 8 种预置视觉变体的加载动画指示器，适用于内联异步等待反馈。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在内联位置展示加载动画指示器时使用。
+
+常见场景：
+- 数据加载中的占位指示。
+- 表单提交按钮内部的状态展示。
+- 无限滚动底部的"加载更多"指示。
+- 任何需要简洁视觉反馈的异步操作等待期。
+
+不推荐：
+- 在同一页面内混用多种变体（应在项目内统一 1-2 种视觉风格）。
+- 在非异步操作的上下文中使用 Spinner（会误导用户）。
+- 将 Spinner 包裹子内容做覆盖层——这是 `Spin` 组件的职责。
+
+<h2 id="examples">代码演示</h2>
+
+### 所有变体
+
+<ComponentShowcase id="blocks/spinner" path="blocks/spinner/basic" />
+
+```tsx
+import { Spinner } from "@/components/blocks/spinner"
+
+const variants = [
+  "default",
+  "throbber",
+  "pinwheel",
+  "circle-filled",
+  "ellipsis",
+  "ring",
+  "bars",
+  "infinite",
+] as const
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      {variants.map((variant) => (
+        <div key={variant} className="flex flex-col items-center gap-1">
+          <Spinner variant={variant} />
+          <span className="text-xs text-muted-foreground">{variant}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+### 自定义尺寸和颜色
+
+通过 `size` 控制像素尺寸，通过 `className="text-*"` 控制颜色（组件使用 `currentColor`）。
+
+```tsx
+import { Spinner } from "@/components/blocks/spinner"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-6">
+      <Spinner size={16} className="text-blue-500" />
+      <Spinner variant="circle-filled" size={32} className="text-emerald-500" />
+      <Spinner variant="ellipsis" size={40} className="text-red-500" />
+      <Spinner variant="ring" size={48} className="text-purple-500" />
+    </div>
+  )
+}
+```
+
+### 在按钮内使用
+
+```tsx
+import { Spinner } from "@/components/blocks/spinner"
+import { Button } from "@/components/core/button"
+
+export default function Demo() {
+  return (
+    <div className="flex gap-2">
+      <Button disabled>
+        <Spinner size={16} className="mr-2" />
+        保存中...
+      </Button>
+      <Button disabled variant="outline">
+        <Spinner variant="ellipsis" size={20} />
+      </Button>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Spinner
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 视觉变体 | `"default"` \| `"throbber"` \| `"pinwheel"` \| `"circle-filled"` \| `"ellipsis"` \| `"ring"` \| `"bars"` \| `"infinite"` | `"default"` |
+| size | 图标像素尺寸 | `number` | `24` |
+| className | 附加样式类名，推荐通过 `text-*` 控制颜色 | `string` | - |
+
+Spinner 继承 `LucideProps`（来自 lucide-react），额外支持 `color`、`strokeWidth` 等 Lucide 图标通用属性。
+
+### 变体对照
+
+| 变体 | 基础实现 | 动画方式 |
+| --- | --- | --- |
+| `default` | `Loader2Icon` (lucide) | Tailwind `animate-spin` |
+| `throbber` | `LoaderIcon` (lucide) | Tailwind `animate-spin` |
+| `pinwheel` | `LoaderPinwheelIcon` (lucide) | Tailwind `animate-spin` |
+| `circle-filled` | 双层 `LoaderCircleIcon` | 上层 `animate-spin`，下层固定半透明 `rotate-180` |
+| `ellipsis` | 自定义 SVG（3 圆点） | SVG `<animate>` 弹跳 |
+| `ring` | 自定义 SVG（圆环扩展） | SVG `<animate>` 半径 + 透明度渐变 |
+| `bars` | 自定义 SVG（3 竖条） | CSS `@keyframes` 高度变化 |
+| `infinite` | 自定义 SVG（无限路径） | SVG `<animate>` stroke-dashoffset |
+
+<h2 id="faq">常见问题</h2>
+
+### Spinner 和 Spin 该用哪个？
+
+Spinner 是纯展示型图标指示器，只能独立渲染一个加载动画。Spin 是容器型组件，可以包裹子内容、显示加载文案、设置延迟显示。需要覆盖层包裹内容时用 Spin，只需要一个旋转图标时用 Spinner。
+
+### 如何让 Spinner 带加载文字？
+
+Spinner 本身不支持文字。如需加载文字，使用 `Spin` 组件并设置 `tip` 属性，或手动在 Spinner 下方放置一个 `<span>`。
+
+### SVG 变体和 lucide 变体有什么区别？
+
+lucide 变体（default/throbber/pinwheel/circle-filled）使用 lucide-react 图标库，色彩通过 `currentColor` 继承。SVG 变体（ellipsis/ring/bars/infinite）使用自定义 SVG 结构，动画引擎为 SVG `<animate>` 元素或 CSS `@keyframes`。两者均通过 `size` + `className="text-*"` 控制外观，使用方式一致。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/spinner` 导入。
+2. 通过 `variant` 选择变体，项目内统一使用 1-2 种，默认变体已满足大部分场景。
+3. 通过 `className="text-*"` 控制颜色（使用 `currentColor` 机制）。
+4. 通过 `size` 控制尺寸，不要用 className 覆盖宽高。
+5. 不要设置 `role` 或 `aria-label`（组件已内置）。
+6. 异步容器（如 Button）应配合设置 `aria-busy="true"`。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/spinner" />

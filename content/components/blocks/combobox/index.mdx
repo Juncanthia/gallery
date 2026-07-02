@@ -1,0 +1,225 @@
+Combobox 组合框，基于 `cmdk` 与 Radix Popover 组合实现，提供搜索过滤的下拉选择能力。当前组件采用高层 `options` API，不再暴露底层 Combobox primitive。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当选项数量较多，需要通过键盘输入快速筛选并选择时使用。
+
+常见场景：
+
+- 搜索并选择：在大量候选项中通过关键词实时筛选。
+- 表单自动补全：输入时实时匹配并推荐候选项。
+- 分组选项：按类别展示可选项。
+- 异步搜索：通过 `onSearch` 在外部更新 `options`。
+
+不推荐：
+
+- 简单下拉选择（少于 10 个选项），优先使用 Select。
+- 复杂多选标签输入，使用 Tags 或 MultiSelect，而不是基础 Combobox。
+- 全局命令面板，直接使用 Command。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="combobox" path="combobox/basic" />
+
+```tsx
+import { Combobox, type ComboboxOption } from "@/components/core/combobox"
+
+const options: ComboboxOption[] = [
+  { label: "Apple", value: "apple" },
+  { label: "Banana", value: "banana" },
+  { label: "Cherry", value: "cherry" },
+]
+
+export default function Demo() {
+  return (
+    <Combobox
+      className="w-48"
+      options={options}
+      placeholder="选择水果"
+      searchPlaceholder="搜索水果..."
+    />
+  )
+}
+```
+
+### 受控用法
+
+```tsx
+import * as React from "react"
+import { Combobox, type ComboboxOption } from "@/components/core/combobox"
+
+const options: ComboboxOption[] = [
+  { label: "React", value: "react" },
+  { label: "Vue", value: "vue" },
+  { label: "Svelte", value: "svelte" },
+]
+
+export default function Demo() {
+  const [value, setValue] = React.useState<string>()
+
+  return (
+    <Combobox
+      allowClear
+      className="w-56"
+      options={options}
+      placeholder="选择框架"
+      value={value}
+      onValueChange={setValue}
+    />
+  )
+}
+```
+
+### 分组选项
+
+```tsx
+import { Combobox, type ComboboxOptionItem } from "@/components/core/combobox"
+
+const options: ComboboxOptionItem[] = [
+  {
+    label: "热带水果",
+    options: [
+      { label: "芒果", value: "mango" },
+      { label: "菠萝", value: "pineapple" },
+    ],
+  },
+  {
+    label: "浆果类",
+    options: [
+      { label: "草莓", value: "strawberry" },
+      { label: "蓝莓", value: "blueberry" },
+    ],
+  },
+]
+
+export default function Demo() {
+  return <Combobox className="w-56" options={options} placeholder="选择水果" />
+}
+```
+
+### 自定义选项渲染
+
+```tsx
+import { Combobox, type ComboboxOption } from "@/components/core/combobox"
+
+const options: ComboboxOption[] = [
+  { description: "用于构建用户界面", label: "React", value: "react" },
+  { description: "渐进式前端框架", label: "Vue", value: "vue" },
+]
+
+export default function Demo() {
+  return (
+    <Combobox
+      className="w-64"
+      options={options}
+      optionRender={(option) => (
+        <span className="min-w-0 flex-1">
+          <span className="block truncate">{option.label}</span>
+          <span className="block truncate text-xs text-muted-foreground">
+            {option.description}
+          </span>
+        </span>
+      )}
+      placeholder="选择技术栈"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Combobox
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 选项数组，支持扁平选项和分组选项 | `ComboboxOptionItem[]` | `[]` |
+| value | 受控选中值 | `string` | - |
+| defaultValue | 默认选中值 | `string` | - |
+| onValueChange | 选中值变化回调 | `(value: string \| undefined) => void` | - |
+| onChange | `onValueChange` 的别名 | `(value: string \| undefined) => void` | - |
+| onSelect | 选择选项时触发 | `(value: string, option: ComboboxOption) => void` | - |
+| inputValue | 受控搜索输入值 | `string` | - |
+| defaultInputValue | 默认搜索输入值 | `string` | `""` |
+| onInputValueChange | 搜索输入值变化回调 | `(value: string) => void` | - |
+| placeholder | 未选择时的占位文本 | `string` | `"请选择"` |
+| searchPlaceholder | 搜索输入框占位文本 | `string` | `"搜索..."` |
+| emptyContent | 无匹配结果内容 | `React.ReactNode` | `"无匹配结果"` |
+| loading | 是否显示加载状态 | `boolean` | `false` |
+| loadingContent | 加载状态内容 | `React.ReactNode` | `"加载中..."` |
+| allowClear | 是否允许清除当前选中值 | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| readOnly | 是否只读，只读时保留展示但禁止打开和选择 | `boolean` | `false` |
+| name | 原生表单字段名，会渲染隐藏 input | `string` | - |
+| required | 是否标记为必填字段 | `boolean` | `false` |
+| open | 受控弹层状态 | `boolean` | - |
+| defaultOpen | 默认弹层状态 | `boolean` | `false` |
+| onOpenChange | 弹层开关变化回调 | `(open: boolean) => void` | - |
+| openOnFocus | 聚焦触发器时打开弹层 | `boolean` | `false` |
+| onSearch | 搜索输入变化回调 | `(value: string) => void` | - |
+| filterOption | 本地过滤逻辑，设为 `false` 可交给外部异步过滤 | `boolean \| ((input, option) => boolean)` | `true` |
+| autoHighlight | 无选中值时默认高亮第一个可用项 | `boolean` | `false` |
+| loop | 键盘导航是否循环 | `boolean` | `true` |
+| optionRender | 自定义选项渲染 | `(option: ComboboxOption) => React.ReactNode` | - |
+| popupRender | 自定义弹层列表包裹 | `(originNode: React.ReactNode) => React.ReactNode` | - |
+| className | 触发器样式 | `string` | - |
+| contentClassName | 弹层样式 | `string` | - |
+| listClassName | 列表样式 | `string` | - |
+
+### ComboboxOption
+
+```ts
+type ComboboxOption = {
+  label: string
+  value: string
+  disabled?: boolean
+  description?: React.ReactNode
+  keywords?: string[]
+  group?: string
+}
+```
+
+### ComboboxOptionGroup
+
+```ts
+type ComboboxOptionGroup = {
+  label: string
+  options: ComboboxOption[]
+}
+```
+
+<h2 id="faq">常见问题</h2>
+
+### Combobox 和 Select 的区别？
+
+`Combobox` 用于带搜索的下拉选择，适合选项较多或需要异步搜索的场景。`Select` 更适合常规、数量较少的固定选项选择。
+
+### 如何实现异步选项加载？
+
+将 `filterOption` 设置为 `false`，在 `onSearch` 中请求数据并更新 `options`。
+
+```tsx
+<Combobox
+  filterOption={false}
+  onSearch={fetchOptions}
+  options={options}
+/>
+```
+
+### 为什么不再提供 Chips API？
+
+基础 Combobox 只负责单值搜索选择。多选标签输入属于 Tags/MultiSelect 场景，应该使用专门组件承载，避免一个基础组件同时承担过多状态模型。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/combobox` 导入 `Combobox` 和类型。
+2. 优先使用 `options` 配置，不要手动拼装底层列表结构。
+3. 异步搜索时设置 `filterOption={false}`，并通过 `onSearch` 更新外部 `options`，加载中使用 `loading`。
+4. 需要控制搜索框文本时使用 `inputValue` + `onInputValueChange`。
+5. 需要原生表单提交时使用 `name`，组件会生成隐藏 input。
+6. 多选标签输入使用 Tags/MultiSelect，不要把 Chips 逻辑塞进 Combobox。
+7. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="combobox" />

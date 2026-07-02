@@ -1,0 +1,97 @@
+---
+category: Components
+title: Visually Hidden
+subtitle: 视觉隐藏
+description: 将内容从视觉呈现中隐藏，但仍可使屏幕阅读器等辅助技术访问。
+demo:
+  cols: 1
+group:
+  title: 辅助功能
+  order: 50
+source:
+  component: src/components/core/dice-visually-hidden.tsx
+  implementation: src/components/dice/components/visually-hidden.tsx
+  docs: content/components/general/headless/visually-hidden/index.mdx
+  examples:
+    - content/components/general/headless/visually-hidden/examples/basic.tsx
+stack:
+  react: true
+  radixSlot: true
+---
+
+# Visually Hidden 视觉隐藏
+
+VisuallyHidden 用于将内容从视觉呈现中隐藏，但仍可使屏幕阅读器等辅助技术访问。它是一个轻量级无障碍组件，通过经典的内联 CSS 方案实现视觉隐藏，不依赖任何外部样式表。
+
+本组件使用 Radix Slot 原语支持 `asChild`，允许将隐藏样式合并到已有元素上，避免额外的 DOM 包裹层。
+
+## 何时使用 {#when-to-use}
+
+当需要在 UI 中提供辅助信息，但又不希望它在视觉上占据空间时使用。
+
+常见场景：
+
+- 为纯图标按钮提供可读文本标签。
+- 在列表或表格中补充选中数量、筛选状态等辅助描述。
+- 为交互控件提供屏幕阅读器专属的状态提示。
+- 语义化标题或区域标签中补充额外上下文。
+
+VisuallyHidden 与 `display: none` 的本质区别：后者会同时移除视觉渲染和可访问性树，而 VisuallyHidden 仅移除视觉呈现，保留屏幕阅读器的访问能力。
+
+## 代码演示 {#examples}
+
+```tsx
+import { VisuallyHidden } from "@/components/general/headless/visually-hidden"
+
+export default function Demo() {
+  return (
+    <div>
+      <p>
+        这段文字后面有隐藏的辅助信息
+        <VisuallyHidden>（已选中 3 项）</VisuallyHidden>
+      </p>
+    </div>
+  )
+}
+```
+
+### asChild 模式
+
+将隐藏样式合并到已有的语义元素上，不额外生成 `div`。
+
+```tsx
+import { VisuallyHidden } from "@/components/general/headless/visually-hidden"
+
+export default function Demo() {
+  return (
+    <VisuallyHidden asChild>
+      <span>当前搜索关键词：按钮组件</span>
+    </VisuallyHidden>
+  )
+}
+```
+
+## API {#api}
+
+### VisuallyHidden
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| asChild | 使用 Radix Slot 将隐藏样式合并到子元素 | `boolean` | `false` |
+| children | 需要隐藏的内容，屏幕阅读器可访问 | `React.ReactNode` | - |
+| className | 附加 className | `string` | - |
+| style | 附加内联样式，与隐藏样式合并 | `React.CSSProperties` | - |
+
+支持所有原生 `div` 属性。
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 VisuallyHidden 代码时，应遵守：
+
+1. 从 `@/components/general/headless/visually-hidden` 导入 VisuallyHidden。
+2. 隐藏内容应提供有意义的辅助信息，不要放无关文本。
+3. 纯图标按钮添加文本标签时，优先考虑 `aria-label`；VisuallyHidden 适合需要富文本的场景。
+4. 需要合并到已有元素时使用 `asChild`。
+5. 不要在 VisuallyHidden 内放置复杂交互组件。
+6. 不要用 VisuallyHidden 隐藏大量内容或整块布局。
+7. 不要引入 `display: none` 或 `visibility: hidden` 作为替代方案。

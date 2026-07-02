@@ -8,7 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/core/dropdown-menu"
 import { cn } from "@/components/media/lib/utils"
 import {
   type AudioPlayerAsset,

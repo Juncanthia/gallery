@@ -1,0 +1,45 @@
+---
+component: BorderBeam
+slug: effects/interactions/border-beam
+
+import: |
+  import { BorderBeam } from "@/components/effects/interactions/border-beam"
+
+usage: |
+  <div className="relative overflow-hidden rounded-xl border bg-card p-8 shadow">
+    <h3>边框流光</h3>
+    <p>BorderBeam 绕容器边缘旋转。</p>
+    <BorderBeam
+      size={250}
+      duration={8}
+      colorFrom="#ffaa40"
+      colorTo="#9c40ff"
+      borderWidth={2}
+    />
+  </div>
+
+props:
+  BorderBeam:
+    className?: string  -- 附加 CSS 类名
+    size?: number  -- 光束尺寸（像素），控制渐变区域大小，默认 200
+    duration?: number  -- 完整旋转周期（秒），默认 12
+    delay?: number  -- 动画相位偏移（秒），默认 0
+    colorFrom?: string  -- 光束起始颜色，默认 "#ffaa40"
+    colorTo?: string  -- 光束结束颜色，默认 "#9c40ff"
+    borderWidth?: number  -- 边框宽度（像素），默认 1.5
+    squircle?: boolean  -- iOS 风格 squircle 圆角（Chrome 139+），默认 false
+
+constraints:
+  - 基于 CSS @property 和 @keyframes 动画，无 JavaScript 定时器。
+  - 父容器必须设置 position: relative 和 overflow: hidden。
+  - 父容器建议设置 rounded-[inherit] 以使 BorderBeam 正确匹配圆角。
+  - @property 需要 Chrome 85+、Safari 15.4+、Firefox 128+；不兼容的浏览器中光束不显示但不影响内容。
+  - squircle 需要 Chrome 139+ 的 corner-shape: squircle 支持。
+  - 每个实例创建独立 compositor 层，大量实例（>20）可能影响低端设备性能。
+  - 多个实例使用不同 delay 值错开旋转相位，避免视觉同步。
+  - 不要引入 Ant Design 或 antd 相关依赖。
+
+source: src/components/gooseui/components/effects/border-beam.tsx
+example: content/components/effects/interactions/border-beam/examples/basic.tsx
+docs: content/components/effects/interactions/border-beam/index.mdx
+---

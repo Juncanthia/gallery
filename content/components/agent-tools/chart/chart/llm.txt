@@ -1,0 +1,267 @@
+---
+category: Components
+title: Chart
+subtitle: 图表
+description: 基于 Recharts 封装的通用图表组件，支持 bar（柱状图）和 line（折线图）两种类型。
+demo:
+  cols: 2
+group:
+  title: Tool
+  order: 7
+source:
+  component: src/components/agent-tools/chart/chart/chart.tsx
+  examples:
+    - content/components/agent-tools/chart/chart/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: true
+  motion: false
+  baseUi: false
+  sonner: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Chart 图表
+
+基于 Recharts 封装的通用图表组件，支持 bar（柱状图）和 line（折线图）两种类型，提供标题、图例、网格线和数据点点击回调。
+
+本组件是项目内的本地基础能力，API 和行为以源码为准，不对应 Ant Design 的完整公共组件契约。
+
+## 何时使用 {#when-to-use}
+
+当需要在界面中展示数据趋势、对比或分布时使用。Chart 接收结构化数据数组，通过 xKey 指定横轴字段，通过 series 指定纵轴系列。
+
+常见场景：
+
+- 仪表盘中展示销售额、流量、用户增长等统计数据的趋势图。
+- 数据报告中以柱状图对比不同维度的指标。
+- AI 分析结果中以折线图展示时间序列变化。
+
+不推荐：
+
+- 需要饼图、雷达图、散点图等非柱状/折线图类型 —— 本组件仅支持 bar 和 line。
+- 数据量极大（10 万+数据点）需要高性能渲染的场景 —— Recharts DOM 渲染性能有限。
+- 需要复杂交互（缩放、拖拽、框选）的高级可视化场景。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { Chart } from "@/components/agent-tools/chart/chart"
+
+const data = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
+]
+
+export default function Demo() {
+  return (
+    <Chart
+      id="chart-demo"
+      type="bar"
+      title="Monthly Revenue"
+      description="January - June 2024"
+      data={data}
+      xKey="month"
+      series={[
+        { key: "desktop", label: "Desktop" },
+        { key: "mobile", label: "Mobile" },
+      ]}
+      showLegend
+    />
+  )
+}
+```
+
+### 折线图
+
+```tsx
+import { Chart } from "@/components/agent-tools/chart/chart"
+
+const data = [
+  { month: "Jan", revenue: 4000, cost: 2400 },
+  { month: "Feb", revenue: 3000, cost: 1398 },
+  { month: "Mar", revenue: 2000, cost: 9800 },
+  { month: "Apr", revenue: 2780, cost: 3908 },
+  { month: "May", revenue: 1890, cost: 4800 },
+  { month: "Jun", revenue: 2390, cost: 3800 },
+]
+
+export default function Demo() {
+  return (
+    <Chart
+      id="line-demo"
+      type="line"
+      title="Revenue vs Cost"
+      description="H1 2024"
+      data={data}
+      xKey="month"
+      series={[
+        { key: "revenue", label: "Revenue" },
+        { key: "cost", label: "Cost" },
+      ]}
+      showLegend
+    />
+  )
+}
+```
+
+### 自定义颜色
+
+```tsx
+import { Chart } from "@/components/agent-tools/chart/chart"
+
+const data = [
+  { name: "Page A", uv: 4000, pv: 2400, amt: 2000 },
+  { name: "Page B", uv: 3000, pv: 1398, amt: 1000 },
+  { name: "Page C", uv: 2000, pv: 9800, amt: 2780 },
+]
+
+export default function Demo() {
+  return (
+    <Chart
+      id="color-demo"
+      type="bar"
+      title="Page Views"
+      data={data}
+      xKey="name"
+      series={[
+        { key: "uv", label: "UV", color: "#8884d8" },
+        { key: "pv", label: "PV", color: "#82ca9d" },
+        { key: "amt", label: "Amt", color: "#ffc658" },
+      ]}
+      showLegend
+    />
+  )
+}
+```
+
+> 说明：这是面向 LLM 的最小导入示例。复杂组件应结合下方 API 摘要和源码类型补充必需 props。
+
+## 核心导出 {#exports}
+
+- `Chart`
+- `ChartProps`
+- `ChartSeries`
+- `ChartDataPoint`
+- `ChartClientProps`
+- `SerializableChart`
+
+## API 摘要 {#api}
+
+以下类型来自本地源码，是生成代码时的主要依据：
+
+```ts
+interface ChartProps {
+  id: string;
+  type: "bar" | "line";
+  title?: string;
+  description?: string;
+  data: Record<string, unknown>[];
+  xKey: string;
+  series: ChartSeries[];
+  colors?: string[];
+  showLegend?: boolean;
+  showGrid?: boolean;
+  className?: string;
+  onDataPointClick?: (point: ChartDataPoint) => void;
+}
+```
+
+```ts
+interface ChartSeries {
+  key: string;       // 系列唯一标识，对应 data 行中的字段名
+  label: string;     // 系列显示名称，用于图例和 tooltip
+  color?: string;    // 系列颜色，优先于 colors 调色板
+}
+```
+
+```ts
+interface ChartDataPoint {
+  seriesKey: string;
+  seriesLabel: string;
+  xValue: unknown;
+  yValue: unknown;
+  index: number;
+  payload: Record<string, unknown>;
+}
+```
+
+## Semantic DOM {#semantic-dom}
+
+源码中出现的稳定语义槽位：
+
+- `data-slot="chart"` — 图表元素的语义标记。
+- `data-tool-ui-id` — 图表实例的唯一标识。
+
+生成测试、样式定位或自动化脚本时，优先使用这些语义属性；不要依赖易变的 Tailwind class 拼接顺序。
+
+## 样式模型 {#styling-model}
+
+- 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
+- 图表内部使用 Card/CardHeader/CardTitle/CardDescription/CardContent 结构。
+- 图表渲染由 Recharts 的 BarChart/LineChart 驱动，使用 `var(--chart-1)` 到 `var(--chart-5)` 作为默认颜色。
+- 颜色优先级：series.color > colors 数组 > 默认 CSS 变量。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/agent-tools/chart/chart/chart.tsx` — Chart 图表组件
+- `src/components/agent-tools/chart/chart/schema.ts` — Zod schema 与类型定义
+- `src/components/agent-tools/chart/chart/index.tsx` — 模块导出入口
+- `src/components/agent-tools/chart/chart/_adapter.tsx` — 内部适配层（ChartContainer、ChartTooltip 等）
+- `src/components/core/tool-chart.tsx` — 统一导出入口
+
+直接依赖摘要：
+
+- `recharts`（BarChart、LineChart、Bar、Line、XAxis、YAxis、CartesianGrid）
+- `zod`（schema 校验）
+
+实现注意：
+
+1. 组件 API 以本地 TypeScript 类型为准。
+2. 样式应优先通过组件 props（title、description、showLegend、showGrid、className）表达。
+3. 如果需要新增能力，应先修改该组件源码和相邻 schema 文件，再更新本 llm 文档。
+4. 不要把第三方文档中的全量 API 视为本地已支持能力。
+5. `data` 数组中每行必须包含 `xKey` 和所有 `series.key` 对应字段，y 值必须为 number 或 null。
+6. series 中每个 key 必须唯一，不可重复。
+
+## 可访问性 {#accessibility}
+
+- 图表使用 Recharts 的 `accessibilityLayer` 属性提供基础可访问性支持。
+- XAxis 和 YAxis 隐藏轴线（`axisLine={false}`）和刻度线（`tickLine={false}`），依赖 tick label 提供信息。
+- 数据点点击交互时，cursor 样式会根据是否绑定 `onDataPointClick` 自动切换。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+| 方向 | 本地决策 |
+| --- | --- |
+| API 来源 | 以 `src/components/agent-tools/chart/chart/` 的 TypeScript 类型为准 |
+| 视觉系统 | 使用 Tailwind CSS 和项目主题变量 |
+| 图表引擎 | 使用 Recharts，非 Ant Design Charts（G2） |
+| 全局配置 | 不依赖 AntD ConfigProvider |
+| 兼容目标 | 借鉴 shadcn 图表模式，但不承诺 API 兼容 |
+
+## LLM 使用规则 {#llm-rules}
+
+当 AI 生成本项目 Chart 代码时，应遵守：
+
+1. 从 `@/components/agent-tools/chart/chart` 导入 `Chart`，不要从 `antd` 或 `recharts` 直接导入原始组件。
+2. 只使用本文件 API 摘要和源码中存在的 props。
+3. `id`、`type`、`data`、`xKey`、`series` 为必填属性。
+4. `type` 仅支持 `"bar"` 和 `"line"` 两种，不要生成其他图表类型。
+5. `data` 数组每行必须包含 `xKey` 和所有 `series.key` 对应字段，y 值必须为 number 或 null。
+6. series 中每个 key 必须唯一，不可重复。
+7. 不要生成 AntD 专属的 `classNames`、`styles`、`ConfigProvider`、Design Token 配置。
+8. 不要在外部包裹额外的 Card 组件，Chart 内部已集成 Card 结构。
+9. 需要自定义样式时，优先使用组件暴露的 props；最后才使用 `className`。
+10. 如果不确定某个 API 是否存在，先检查 `src/components/agent-tools/chart/chart/` 源码，不要凭记忆生成。

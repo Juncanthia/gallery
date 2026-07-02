@@ -29,10 +29,10 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
 import { FileThumbnail } from "@/components/document/components/ui/file-thumbnail"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/core/scroll-area"
 
 export type DocumentSplitPageId = `page-${number}`
 export type DocumentSplit = {

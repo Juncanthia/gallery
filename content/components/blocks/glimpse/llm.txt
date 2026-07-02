@@ -1,0 +1,234 @@
+---
+category: Blocks
+title: Glimpse
+subtitle: 一瞥效果
+description: 悬停预览卡片组件，基于 HoverCard 封装，支持标题、描述、图片等内容布局。
+demo:
+  cols: 1
+group:
+  title: 复合组件
+  order: 22
+source:
+  component: src/components/blocks/glimpse/index.tsx
+  docs: content/components/blocks/glimpse/index.mdx
+  examples:
+    - content/components/blocks/glimpse/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# Glimpse 一瞥效果
+
+Glimpse 是基于 Radix HoverCard 封装的悬停预览卡片组件系统。当用户将鼠标悬停在触发器上时，弹出浮层显示额外的内容预览，例如文章摘要、用户卡片、产品缩略信息等。组件提供 Glimpse（HoverCard）、GlimpseTrigger、GlimpseContent、GlimpseTitle、GlimpseDescription、GlimpseImage 六个子组件。
+
+## 何时使用 {#when-to-use}
+
+适用于需要悬停展示补充信息而不离开当前页面的场景：
+
+- 链接悬停预览（文章标题悬停显示摘要和封面图）。
+- 用户头像悬停显示用户卡片。
+- 产品名称悬停显示缩略信息。
+- 术语悬停显示定义。
+
+常见场景：
+
+- 内容列表中的快速预览（标题 -> 摘要、缩略图）。
+- 社交场景中 hover 查看用户简介。
+- 导航菜单中 hover 查看子页面预览。
+
+不推荐：
+
+- 需要复杂交互的弹出内容（如表单、操作按钮）——使用 Popover。
+- 移动端必须使用（HoverCard 无 touch 支持）。
+- 需要点击打开的场景——使用 Dialog 或 Popover。
+
+## 代码演示 {#examples}
+
+### 基础悬停预览
+
+```tsx
+import {
+  Glimpse,
+  GlimpseTrigger,
+  GlimpseContent,
+  GlimpseImage,
+  GlimpseTitle,
+  GlimpseDescription,
+} from "@/components/blocks/glimpse"
+
+export default function Demo() {
+  return (
+    <Glimpse>
+      <GlimpseTrigger asChild>
+        <a href="/article" className="font-medium underline">
+          深入理解 React 并发模式
+        </a>
+      </GlimpseTrigger>
+      <GlimpseContent>
+        <GlimpseImage
+          src="https://example.com/thumbnail.jpg"
+          alt="React 并发模式"
+        />
+        <GlimpseTitle>深入理解 React 并发模式</GlimpseTitle>
+        <GlimpseDescription>
+          React 18 引入的并发特性如何改变前端应用的渲染方式。
+        </GlimpseDescription>
+      </GlimpseContent>
+    </Glimpse>
+  )
+}
+```
+
+### 用户卡片
+
+```tsx
+import {
+  Glimpse,
+  GlimpseTrigger,
+  GlimpseContent,
+  GlimpseTitle,
+  GlimpseDescription,
+} from "@/components/blocks/glimpse"
+
+export default function Demo() {
+  return (
+    <Glimpse>
+      <GlimpseTrigger asChild>
+        <span className="cursor-pointer underline decoration-dotted">
+          @juncanthia
+        </span>
+      </GlimpseTrigger>
+      <GlimpseContent className="w-64">
+        <GlimpseTitle>Jun Canthia</GlimpseTitle>
+        <GlimpseDescription>
+          全栈开发者，专注于 React 生态和设计系统。
+        </GlimpseDescription>
+      </GlimpseContent>
+    </Glimpse>
+  )
+}
+```
+
+## API {#api}
+
+### Glimpse
+
+悬停卡片顶层容器，等同于 `HoverCard`。
+
+继承 `ComponentProps<typeof HoverCard>`，所有 Radix HoverCard 属性均可用。常用属性：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| open | 受控开启状态 | `boolean` | - |
+| defaultOpen | 默认开启状态 | `boolean` | - |
+| onOpenChange | 开启状态变化回调 | `(open: boolean) => void` | - |
+| openDelay | 悬停到打开的延迟（ms） | `number` | - |
+| closeDelay | 移开到关闭的延迟（ms） | `number` | - |
+
+### GlimpseTrigger
+
+触发器，悬停在此元素上弹出预览内容。
+
+继承 `ComponentProps<typeof HoverCardTrigger>`。常用 `asChild` 模式包裹链接或文本。
+
+### GlimpseContent
+
+弹出浮层的内容容器。
+
+继承 `ComponentProps<typeof HoverCardContent>`。常用属性：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| side | 弹出方向 | `"top" \| "bottom" \| "left" \| "right"` | - |
+| align | 对齐方式 | `"start" \| "center" \| "end"` | - |
+| className | 附加 className | `string` | - |
+
+### GlimpseTitle
+
+预览卡片标题，渲染为 `<p>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+继承 `ComponentProps<"p">`。默认样式：`truncate font-semibold text-sm`。
+
+### GlimpseDescription
+
+预览卡片描述文本，渲染为 `<p>`，最多显示 2 行。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| className | 附加 className | `string` | - |
+
+继承 `ComponentProps<"p">`。默认样式：`line-clamp-2 text-muted-foreground text-sm`。
+
+### GlimpseImage
+
+预览卡片缩略图，渲染为 `<img>`。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| src | 图片地址 | `string` | - |
+| alt | 图片替代文本 | `string` | - |
+| className | 附加 className | `string` | - |
+
+继承 `ComponentProps<"img">`。默认样式：`mb-4 aspect-[120/63] w-full rounded-md border object-cover`。
+
+## 样式模型 {#styling-model}
+
+全部使用 Tailwind CSS，不引入 CVA 或 CSS-in-JS。
+
+- GlimpseContent 使用 HoverCardContent 的内置样式（`rounded-md border bg-popover p-4 shadow-md`）。
+- GlimpseTitle：`truncate font-semibold text-sm`，防止过长标题溢出。
+- GlimpseDescription：`line-clamp-2 text-muted-foreground text-sm`，限两行超出省略。
+- GlimpseImage：`aspect-[120/63] w-full rounded-md border object-cover`，16:9 比例缩略图。
+- 可通过 `className` 覆盖以上默认样式。
+
+## 依赖与实现说明 {#implementation-notes}
+
+核心文件：
+
+- `src/components/blocks/glimpse/index.tsx`：全部实现。
+
+关键依赖：
+
+- `@/components/core/hover-card`：Radix HoverCard 的封装组件（HoverCard、HoverCardTrigger、HoverCardContent）。
+- `@/lib/utils`：`cn` 工具函数。
+
+关键行为：
+
+1. Glimpse 是对 HoverCard 的语义化重导出，所有 props 透传至 HoverCard。
+2. GlimpseTrigger 和 GlimpseContent 同样是对 HoverCardTrigger / HoverCardContent 的透传。
+3. GlimpseTitle、GlimpseDescription、GlimpseImage 是在原生 `<p>` / `<img>` 上施加 Tailwind 默认样式的薄封装。
+4. 组件类型使用 `ComponentProps<typeof X>` 确保与底层组件的 props 类型完全一致。
+
+## 可访问性 {#accessibility}
+
+- HoverCard 由 Radix 提供基础无障碍支持。
+- 内容仅在悬停时显示，无键盘触发（符合 HoverCard 设计意图）。
+- 如需键盘可访问的弹出内容，使用 Popover 替代。
+- GlimpseImage 的 `alt` 属性默认值为空字符串，调用侧应提供有意义的替代文本。
+
+## 与 Ant Design 的取舍 {#antd-differences}
+
+Ant Design 不提供等价的 HoverCard 组件。AntD 的 `Popover` 支持 hover 触发，但语义和使用场景不同。
+
+| AntD 能力 | 本地决策 | 原因 |
+| --- | --- | --- |
+| Popover trigger="hover" | 部分等价 | Glimpse 是专门的悬停预览组件，仅支持 hover；Popover 支持 click/hover/focus 等多种触发 |
+
+## LLM 使用规则 {#llm-rules}
+
+1. 从 `@/components/blocks/glimpse` 导入所需的子组件。
+2. Glimpse 必须包含 GlimpseTrigger 和 GlimpseContent 作为直接子节点。
+3. GlimpseContent 内部推荐顺序：GlimpseImage（可选）-> GlimpseTitle -> GlimpseDescription。
+4. GlimpseTrigger 通常使用 `asChild` 包裹触发元素（链接、按钮、文本等）。
+5. 所有组件透传底层 Radix 属性，type 与 HoverCard 一致，可直接查阅 Radix HoverCard 文档。
+6. 不要用于移动端主要交互路径，HoverCard 无 touch 事件支持。

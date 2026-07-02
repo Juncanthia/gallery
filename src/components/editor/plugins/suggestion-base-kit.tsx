@@ -11,7 +11,7 @@ import { KEYS, TextApi } from 'platejs';
 import {
   SuggestionLeafStatic,
   VoidRemoveSuggestionOverlayStatic,
-} from '@/components/ui/suggestion-node-static';
+} from '@/components/editor/nodes/suggestion-node-static';
 
 const INLINE_SUGGESTION_TARGET_PLUGINS = [
   KEYS.date,

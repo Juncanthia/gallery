@@ -1,0 +1,89 @@
+Radar 基于 WebGL 的雷达扫描动画背景，支持环形、辐条和扇形扫描效果，可调节鼠标交互。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要雷达/扫描风格的动态背景时使用。
+常见场景：
+- 安全/监控类产品页面背景
+- 科技主题的 Hero 区域
+- 数据探测/搜索页面的视觉氛围
+不推荐：
+- 需要静态稳定视觉的页面
+- 文字直接叠加在扫描区域上方
+
+<h2 id="examples">代码演示</h2>
+
+<ComponentShowcase id="rb/radar" path="rb/radar/basic" />
+
+```tsx
+import { Radar } from "@/components/core/radar"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-64 relative"><Radar /></div>
+  )
+}
+```
+
+### 自定义样式 + 禁用鼠标交互
+
+```tsx
+import { Radar } from "@/components/core/radar"
+
+export default function Demo() {
+  return (
+    <div className="w-full h-96 relative bg-slate-950">
+      <Radar
+        color="#22d3ee"
+        backgroundColor="#0f172a"
+        ringCount={8}
+        spokeCount={12}
+        sweepWidth={3}
+        sweepLobes={2}
+        enableMouseInteraction={false}
+      />
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Radar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| speed | 动画速度 | number | 1.0 |
+| scale | 雷达整体缩放 | number | 0.5 |
+| ringCount | 同心环数量 | number | 10.0 |
+| spokeCount | 辐条（射线）数量 | number | 10.0 |
+| ringThickness | 环线粗细 | number | 0.05 |
+| spokeThickness | 辐条粗细 | number | 0.01 |
+| sweepSpeed | 扫描光束旋转速度 | number | 1.0 |
+| sweepWidth | 扫描光束宽度 | number | 2.0 |
+| sweepLobes | 扫描光束波瓣数（1=单光束，2=双光束） | number | 1.0 |
+| color | 雷达主色 | string | "#9f29ff" |
+| backgroundColor | 背景色 | string | "#000000" |
+| falloff | 边缘衰减系数 | number | 2.0 |
+| brightness | 整体亮度 | number | 1.0 |
+| enableMouseInteraction | 是否启用鼠标交互（雷达跟随鼠标偏移） | boolean | true |
+| mouseInfluence | 鼠标影响的偏移幅度 | number | 0.1 |
+
+<h2 id="faq">常见问题</h2>
+
+### 扫描光束如何变为双光束？
+设置 `sweepLobes={2}`，可创建对称的双向扫描光束。更大的值会产生多光束效果。
+
+### 环线和辐条太密集或太稀疏？
+调整 `ringCount` 和 `spokeCount`。环线数量建议 5-15，辐条数量建议 8-20。
+
+### 如何让雷达居中显示？
+`scale` 参数控制显示比例，默认 0.5 让扫描区域居中显示。增大到 1.0 会填充更多空间。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/core/radar` 导入。
+2. 父容器需要有明确的宽高，建议使用 `relative` 定位。
+3. 依赖 `ogl` 库，请确保项目已安装。
+4. `enableMouseInteraction` 为 true 时，雷达中心会随鼠标位置偏移。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-radar" />

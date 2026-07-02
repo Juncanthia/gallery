@@ -1,0 +1,209 @@
+# EvilLineChart
+
+## Import Path
+
+```tsx
+import { EvilLineChart } from "@/components/charts/evil-charts"
+import {
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Grid,
+  Dot,
+  ActiveDot,
+} from "@/components/charts/evil-charts/components/line-chart"
+import { type ChartConfig } from "@/components/charts/evil-charts/components/chart"
+```
+
+From the evilcharts barrel:
+```tsx
+import { EvilLineChart } from "@/components/charts/evil-charts"
+```
+
+## Component Overview
+
+EvilLineChart is a composable line chart built on Recharts. It uses a root container (`<EvilLineChart>`) with fblocks/reely composable child components: `<Line>`, `<XAxis>`, `<YAxis>`, `<Tooltip>`, `<Legend>`, `<Grid>`, `<Dot>`, `<ActiveDot>`.
+
+## Props Reference
+
+### EvilLineChart (Root Container)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| config | `ChartConfig` | required | Series colors and labels (must satisfy `ChartConfig`) |
+| data | `TData[]` | required | Data rows rendered by the chart |
+| children | `ReactNode` | required | Child components |
+| className | `string` | - | Extra container classes |
+| chartProps | `ComponentProps<typeof RechartsLineChart>` | - | Escape hatch for raw Recharts props |
+| curveType | `CurveType` | `"linear"` | Default curve interpolation (`"linear"`, `"bump"`, `"step"`, `"natural"`, `"monotone"`, etc.) |
+| animationType | `LineAnimationType` | `"left-to-right"` | Default intro reveal (`"none"`, `"left-to-right"`, `"right-to-left"`, `"center-out"`, `"edges-in"`) |
+| defaultSelectedDataKey | `string \| null` | `null` | Initially selected series |
+| onSelectionChange | `(key: string \| null) => void` | - | Fires when selection changes |
+| isLoading | `boolean` | `false` | Shows animated loading skeleton |
+| loadingPoints | `number` | - | Skeleton data point count |
+| showBrush | `boolean` | `false` | Renders zoom brush footer |
+| xDataKey | `keyof TData & string` | - | X-axis key (required for brush) |
+| brushHeight | `number` | - | Brush height in pixels |
+| brushFormatLabel | `(value: unknown, index: number) => string` | - | Brush axis label formatter |
+| onBrushChange | `(range: EvilBrushRange) => void` | - | Brush range change callback |
+
+### Line (Series)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| dataKey | `string` | required | Series key (must exist in data and config) |
+| strokeVariant | `"solid" \| "dashed" \| "animated-dashed"` | `"solid"` | Stroke style |
+| curveType | `CurveType` | chart default | Per-line curve override |
+| animationType | `LineAnimationType` | chart default | Per-line animation override |
+| connectNulls | `boolean` | `false` | Join segments across null values |
+| isClickable | `boolean` | `false` | Enable click-to-select |
+| glowing | `boolean` | `false` | Soft outer glow |
+| enableBufferLine | `boolean` | `false` | Render last segment as dashed (prediction) |
+| children | `ReactNode` | - | Compose `<Dot>` and `<ActiveDot>` inside |
+| lineProps | `ComponentProps<typeof RechartsLine>` | - | Escape hatch |
+
+### Dot / ActiveDot
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | `"default" \| "border" \| "colored-border"` | `"default"` | Point marker style |
+
+### XAxis / YAxis
+
+Both forward all Recharts axis props with these defaults:
+
+XAxis: `tickLine={false} axisLine={false} tickMargin={8} minTickGap={8}`
+YAxis: `tickLine={false} axisLine={false} tickMargin={8} minTickGap={8} width="auto"`
+
+### Tooltip
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | `"default" \| "frosted-glass"` | `"default"` | Visual style |
+| roundness | `"sm" \| "md" \| "lg" \| "xl"` | - | Border radius |
+| defaultIndex | `number` | - | Default visible data index |
+| cursor | `boolean` | `true` | Show vertical cursor line |
+
+### Legend
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | `"square" \| "circle" \| "circle-outline" \| "rounded-square" \| "rounded-square-outline" \| "vertical-bar" \| "horizontal-bar"` | `"rounded-square"` | Indicator style |
+| align | `"left" \| "center" \| "right"` | `"right"` | Horizontal alignment |
+| verticalAlign | `"top" \| "middle" \| "bottom"` | `"top"` | Vertical alignment |
+| isClickable | `boolean` | `false` | Toggle selection on click |
+
+### Grid
+
+Forwards all Recharts CartesianGrid props. Defaults: `vertical={false} strokeDasharray="3 3"`.
+
+## Code Examples
+
+### Basic Line Chart
+
+```tsx
+import { EvilLineChart } from "@/components/charts/evil-charts"
+import { Line, XAxis, Tooltip, Legend, Dot, ActiveDot } from "@/components/charts/evil-charts/components/line-chart"
+import { type ChartConfig } from "@/components/charts/evil-charts/components/chart"
+
+const data = [
+  { month: "1月", desktop: 342, mobile: 184 },
+  { month: "2月", desktop: 876, mobile: 491 },
+  { month: "3月", desktop: 512, mobile: 290 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "桌面端",
+    colors: { light: ["#047857"], dark: ["#10b981"] },
+  },
+  mobile: {
+    label: "移动端",
+    colors: { light: ["#be123c"], dark: ["#f43f5e"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    <EvilLineChart data={data} config={chartConfig} className="h-full w-full p-4" xDataKey="month">
+      <XAxis dataKey="month" />
+      <Legend isClickable />
+      <Tooltip />
+      <Line dataKey="desktop" strokeVariant="solid" isClickable>
+        <Dot variant="border" />
+        <ActiveDot variant="colored-border" />
+      </Line>
+      <Line dataKey="mobile" strokeVariant="solid" isClickable>
+        <Dot variant="border" />
+        <ActiveDot variant="colored-border" />
+      </Line>
+    </EvilLineChart>
+  )
+}
+```
+
+### With Brush and Custom Curve
+
+```tsx
+<EvilLineChart
+  data={data}
+  config={chartConfig}
+  className="h-full w-full p-4"
+  curveType="bump"
+  showBrush
+  xDataKey="month"
+  brushFormatLabel={(v) => String(v).substring(0, 3)}
+>
+  <XAxis dataKey="month" tickFormatter={(v) => v.substring(0, 3)} />
+  <YAxis dataKey="desktop" />
+  <Legend isClickable />
+  <Tooltip />
+  <Line dataKey="desktop" strokeVariant="solid" isClickable>
+    <Dot variant="default" />
+    <ActiveDot variant="default" />
+  </Line>
+  <Line dataKey="mobile" strokeVariant="solid" isClickable glowing>
+    <Dot variant="default" />
+    <ActiveDot variant="default" />
+  </Line>
+</EvilLineChart>
+```
+
+### Loading State
+
+```tsx
+<EvilLineChart data={data} config={chartConfig} className="h-full w-full p-4" isLoading loadingPoints={12}>
+  <XAxis dataKey="month" />
+  <Legend isClickable />
+  <Tooltip />
+  <Line dataKey="desktop" strokeVariant="solid" isClickable>
+    <Dot variant="border" />
+    <ActiveDot variant="colored-border" />
+  </Line>
+</EvilLineChart>
+```
+
+## Constraints
+
+1. Every `dataKey` in `<Line>` MUST exist in both `data` rows and `config` object.
+2. `config` MUST satisfy `ChartConfig` — each series requires at least one theme key (`light` or `dark`) under `colors`.
+3. All child components (`<Line>`, `<XAxis>`, `<Tooltip>`, `<Legend>`, etc.) MUST be placed inside `<EvilLineChart>`.
+4. `<Dot>` and `<ActiveDot>` MUST be composed as children of `<Line>`, not as standalone siblings.
+5. Use `strokeVariant` for stroke style — do NOT pass raw `strokeDasharray` directly.
+6. Use `curveType` for interpolation — do NOT use Recharts' native `type` prop.
+7. Do NOT use raw Recharts `<LineChart>`, `<CartesianGrid>`, or `<Tooltip>` directly — always use the composable parts.
+8. When `showBrush` is enabled, `xDataKey` MUST be provided.
+9. The `animationType` intro reveal automatically falls back to `"none"` when the OS "reduce motion" preference is active.
+
+## Source Files
+
+- `src/components/evilcharts/components/charts/evilchartss/line-chart.tsx` — Main component definition
+- `src/components/evilcharts/components/evilcharts/ui/chart.tsx` — ChartConfig type, ChartContainer, ChartStyle
+- `src/components/evilcharts/components/evilcharts/ui/dot.tsx` — Dot component and DotVariant
+- `src/components/evilcharts/components/evilcharts/ui/tooltip.tsx` — ChartTooltip and variants
+- `src/components/evilcharts/components/evilcharts/ui/legend.tsx` — ChartLegend and variants
+- `src/components/evilcharts/components/evilcharts/ui/evil-brush.tsx` — EvilBrush zoom control
+- `src/components/core/evilcharts-line-chart.tsx` — Re-export wrapper for gallery
+- `src/components/evilcharts/index.ts` — Public barrel exports

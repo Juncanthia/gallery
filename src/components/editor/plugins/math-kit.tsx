@@ -6,7 +6,7 @@ import { EquationPlugin, InlineEquationPlugin } from '@platejs/math/react';
 import {
   EquationElement,
   InlineEquationElement,
-} from '@/components/ui/equation-node';
+} from '@/components/editor/nodes/equation-node';
 
 export const MathKit = [
   InlineEquationPlugin.configure({

@@ -57,10 +57,10 @@ function resolveImportPath(path: string, explicitId?: string): string {
 
   const itemId = inferItemId(path, explicitId)
   if (itemId) {
-    return `@/components/ui/${itemId}`
+    return `@/components/core/${itemId}`
   }
 
-  return `@/components/ui/${path.split("/")[0]}`
+  return `@/components/core/${path.split("/")[0]}`
 }
 
 function getGalleryItem(path: string, explicitId?: string): GalleryItem | null {

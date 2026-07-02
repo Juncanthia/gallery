@@ -1,0 +1,84 @@
+---
+category: Components
+title: ScrollContainer
+subtitle: 自定义滚动条容器
+description: 使用现代 CSS scrollbar-color 和 scrollbar-width 属性定制滚动条样式的容器组件，支持多种变体和交互模式。
+source:
+  component: src/components/gooseui/components/ui/scroll-container.tsx
+  docs: content/components/navigation/scroll-container/index.mdx
+  examples:
+    - content/components/navigation/scroll-container/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---
+
+# ScrollContainer 自定义滚动条容器
+
+ScrollContainer 使用现代 CSS `scrollbar-color` + `scrollbar-width`（Chrome 121+、Firefox 64+、Safari 26.2+）定制滚动条样式，并以 `::-webkit-scrollbar` 作为旧版浏览器回退方案。组件通过 `React.useId` 生成 scoped CSS 类名实现样式隔离。
+
+## 使用示例
+
+```tsx
+import { ScrollContainer } from "@/components/navigation/scroll-container"
+
+// 默认用法：200px 高容器，default 变体滚动条
+export default function Demo() {
+  return (
+    <ScrollContainer height={200} className="rounded border p-4">
+      <p>内容超出时出现自定义滚动条</p>
+    </ScrollContainer>
+  )
+}
+
+// minimal 变体
+function MinimalDemo() {
+  return (
+    <ScrollContainer height={150} variant="minimal" className="rounded border p-4">
+      <p>极简滚动条，透明轨道</p>
+    </ScrollContainer>
+  )
+}
+
+// primary 变体 + 悬停显隐
+function AutoHideDemo() {
+  return (
+    <ScrollContainer height={150} variant="primary" autoHide className="rounded border p-4">
+      <p>hover 时才显示滚动条</p>
+    </ScrollContainer>
+  )
+}
+
+// 强制显示 + 数值高度
+function ForceVisibleDemo() {
+  return (
+    <ScrollContainer height={120} forceVisible className="rounded border p-4">
+      <p>始终预留滚动条空间，避免布局抖动</p>
+    </ScrollContainer>
+  )
+}
+```
+
+## API 速览
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| height | `string` \| `number` | `"100%"` | 容器高度，数字自动添加 px |
+| variant | `"default"` \| `"minimal"` \| `"primary"` | `"default"` | 滚动条样式变体 |
+| autoHide | `boolean` | `false` | 默认隐藏滚动条，hover 显示 |
+| forceVisible | `boolean` | `false` | scrollbar-gutter: stable 预留空间 |
+| className | `string` | - | 附加 Tailwind 类名 |
+| children | `React.ReactNode` | - | 子内容 |
+
+组件继承 `React.HTMLAttributes<HTMLDivElement>`，支持所有原生 div 属性。
+
+## 约束
+
+1. 从 `@/components/navigation/scroll-container` 导入，不要从 gooseui 内部路径导入。
+2. 使用现代 CSS `scrollbar-color` / `scrollbar-width` 实现，不要引入 `simplebar`、`overlayscrollbars` 等第三方 JS 滚动条库。
+3. 组件通过 `React.useId` 生成 scoped CSS 类名 + `<style>` 标签实现样式隔离，不会污染全局滚动条样式。
+4. `height` 为数字时自动添加 `px` 单位；字符串直接作为 CSS height 值（支持 `"100%"`、`"50vh"` 等）。
+5. `autoHide` 和 `forceVisible` 同时使用会在默认状态下显示空白轨道空间，视觉上不够理想。
+6. 浏览器兼容：`scrollbar-color` 需要 Chrome 121+、Firefox 64+、Safari 26.2+。旧版浏览器回退到 `::-webkit-scrollbar` 伪元素样式。
+7. 容器内滚动进度跟踪请配合 `ScrollProgress` 使用；页面级进度条直接使用 `ScrollProgress`。
+8. 组件是纯 CSS 滚动条定制方案，零 JavaScript 运行时开销，滚动性能不受影响。

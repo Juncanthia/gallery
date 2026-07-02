@@ -1,0 +1,155 @@
+Tag 标签。用于标记和分类的小标签。支持 9 种预设颜色、可关闭模式、前置图标和两种视觉风格（default 实色 / 仅 default 一个 variant）。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对事物进行标记、分类或展示筛选条件时使用。
+
+常见场景：
+- 展示事物的属性标签（如文章类型、任务优先级、版本号）。
+- 筛选条件的可视化展示（可关闭的筛选 Tag）。
+- 列表或表格中的分类标记。
+- 信息展示中的关键词标签。
+
+不推荐：
+- 用于状态/计数的展示——使用 Badge 组件。
+- 多选标签选择器——使用 Tags 复合组件。
+- 需要勾选交互的标签——Tag 只支持关闭操作，不支持选中态。
+
+与 Badge 的区别：Tag 用于分类标记（属性维度），Badge 用于状态/计数（状态维度）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+默认实色风格，支持 `default`/`blue`/`green`/`red`/`orange`/`purple`/`cyan`/`magenta` 八种预设颜色。
+
+<ComponentShowcase id="tag" path="tag/basic" />
+
+```tsx
+import { Tag } from "@/components/core/tag"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Tag>默认</Tag>
+      <Tag color="blue">蓝色</Tag>
+      <Tag color="green">绿色</Tag>
+      <Tag color="red">红色</Tag>
+      <Tag color="orange">橙色</Tag>
+      <Tag color="purple">紫色</Tag>
+      <Tag color="cyan">青色</Tag>
+      <Tag color="magenta">品红</Tag>
+    </div>
+  )
+}
+```
+
+### 可关闭 + 前置图标
+
+`closable` 显示关闭按钮，`icon` 添加前置图标，`onClose` 处理关闭回调。
+
+```tsx
+import { Tag } from "@/components/core/tag"
+import { CheckIcon, XIcon } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Tag icon={<CheckIcon className="size-3" />} color="green">已完成</Tag>
+      <Tag closable onClose={() => {}}>可关闭</Tag>
+      <Tag closable closeIcon={<XIcon className="size-3" />} onClose={() => {}} color="red">
+        自定义关闭图标
+      </Tag>
+      <Tag bordered={false} color="blue">无边框</Tag>
+      <Tag variant="default" color="blue">实色风格</Tag>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Tag
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| color | 颜色语义 | `"default"` \| `"blue"` \| `"green"` \| `"red"` \| `"orange"` \| `"purple"` \| `"cyan"` \| `"magenta"` \| `string` | `"default"` |
+| variant | 视觉风格。`"default"` 为实色渐变风格，无其他可选值 | `"default"` | `"default"` |
+| closable | 是否可关闭（显示 X 按钮） | `boolean` | `false` |
+| closeIcon | 自定义关闭图标 | `React.ReactNode` | `<XIcon>` |
+| onClose | 关闭按钮点击回调 | `() => void` | - |
+| icon | 标签前图标 | `React.ReactNode` | - |
+| bordered | 是否显示边框 | `boolean` | `true` |
+| children | 标签文本内容 | `React.ReactNode` | - |
+| className | 附加 CSS 类名 | `string` | - |
+| style | 附加内联样式 | `React.CSSProperties` | - |
+
+### TagColor
+
+| 值 | 说明 |
+| --- | --- |
+| `"default"` | 默认灰色（default variant 下为渐变色，非 default variant 下为浅色背景） |
+| `"blue"` | 蓝色 |
+| `"green"` | 绿色 |
+| `"red"` | 红色 |
+| `"orange"` | 橙色 |
+| `"purple"` | 紫色 |
+| `"cyan"` | 青色 |
+| `"magenta"` | 品红 |
+
+> `color` 支持任意 `string` 值，不在预设范围内的颜色会 fallback 到 `"default"` 样式。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+| data-slot | 说明 |
+| --- | --- |
+| `tag` | Tag 根元素（`<span>`） |
+
+关闭按钮使用 `role="button"` + `aria-label="Remove tag"`，点击事件通过 `e.stopPropagation()` 阻止冒泡。
+
+<h2 id="faq">常见问题</h2>
+
+### Tag 和 Badge 有什么区别？
+
+- **Tag**：用于分类/属性标记，`rounded-full` 圆角胶囊形，支持关闭操作，有实色渐变风格。
+- **Badge**：用于状态/计数，`rounded-sm` 小圆角矩形，有多种 variant（default/secondary/destructive/outline），不支持关闭。
+
+### 如何实现可勾选的 Tag（类似 CheckableTag）？
+
+Tag 组件本身不支持 `checked`/`onChange` 选中态。如需可勾选 Tag，可以通过 `className` 和 `onClick` 自行实现：
+
+```tsx
+const [checked, setChecked] = useState(false)
+<Tag
+  className={checked ? "ring-2 ring-primary" : ""}
+  onClick={() => setChecked(!checked)}
+>
+  可勾选
+</Tag>
+```
+
+### color 传入自定义颜色字符串（如 "#ff0000"）有效吗？
+
+传入非预设值的字符串会 fallback 到 `"default"` 的样式。如需自定义颜色，应通过 `style` 属性覆盖：
+
+```tsx
+<Tag style={{ backgroundColor: "#ff0000", color: "#fff", borderColor: "#cc0000" }}>
+  自定义色
+</Tag>
+```
+
+### closable 的关闭按钮如何阻止事件冒泡？
+
+组件内部已通过 `e.stopPropagation()` 处理，无需手动处理。如需在关闭时执行额外逻辑（如调 API 删除标签），在 `onClose` 回调中实现即可。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/tag` 导入。
+2. 用 `color` 表达语义，预设值为 `default`/`blue`/`green`/`red`/`orange`/`purple`/`cyan`/`magenta`，不要使用 Ant Design 的 `primary`/`success`/`warning`/`danger`/`info`。
+3. 可关闭标签使用 `closable` + `onClose`，移除按钮自动渲染。
+4. 前置图标使用 `icon` prop，不要手动在 children 中拼接图标。
+5. Tag 不支持选中态，不要生成 `checked`/`onChange` 相关代码。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="tag" />

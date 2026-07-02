@@ -1,0 +1,87 @@
+---
+category: Components
+title: SmartForm
+subtitle: 智能表单
+description: 基于 CSS :has() 选择器的零 JavaScript 表单验证反馈组件。
+group:
+  title: UI
+  order: 1
+library: gooseui
+source:
+  component: src/components/gooseui/components/ui/smart-form.tsx
+  reexport: src/components/core/gooseui-smart-form.tsx
+  docs: content/components/data-entry/smart-form/index.mdx
+  examples:
+    - content/components/data-entry/smart-form/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+---
+
+# SmartForm
+
+基于 CSS `:has()` 选择器的零 JavaScript 表单验证反馈。通过 `SmartFormField` 包裹输入控件，自动根据 HTML5 验证状态显示错误或成功提示。
+
+## 何时使用
+
+- 登录/注册表单的实时字段校验反馈。
+- 设置页面中需要输入校验的配置项。
+- 依赖 HTML5 原生表单验证的输入场景。
+
+## 导入
+
+```tsx
+import { SmartForm, SmartFormField } from "@/components/data-entry/smart-form"
+```
+
+## 用法
+
+```tsx
+import { SmartForm, SmartFormField } from "@/components/data-entry/smart-form"
+import { Button } from "@/components/core/button"
+import { Input } from "@/components/core/input"
+import { Label } from "@/components/core/label"
+
+function App() {
+  return (
+    &lt;SmartForm&gt;
+      &lt;SmartFormField
+        errorMessage="请输入有效的邮箱地址"
+        successMessage="邮箱格式正确"
+      &gt;
+        &lt;Label htmlFor="email"&gt;邮箱&lt;/Label&gt;
+        &lt;Input id="email" type="email" placeholder="请输入邮箱" required /&gt;
+      &lt;/SmartFormField&gt;
+
+      &lt;SmartFormField
+        errorMessage="用户名至少3个字符"
+        successMessage="用户名可用"
+      &gt;
+        &lt;Label htmlFor="username"&gt;用户名&lt;/Label&gt;
+        &lt;Input id="username" type="text" placeholder="请输入用户名" required minLength={3} /&gt;
+      &lt;/SmartFormField&gt;
+
+      &lt;Button type="submit" className="submit-btn"&gt;提交&lt;/Button&gt;
+    &lt;/SmartForm&gt;
+  )
+}
+```
+
+## SmartFormField 属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| children | React.ReactNode | - | 字段内容 |
+| errorMessage | string | "This field is invalid" | 验证失败提示 |
+| successMessage | string | "Looks good!" | 验证通过提示 |
+| className | string | - | 自定义样式类名 |
+
+## 约束
+
+- 依赖 CSS `:has()` 选择器（Chrome 105+、Firefox 121+、Safari 15.4+）。
+- 输入控件必须设置 HTML5 验证属性（`required`、`type`、`minLength`、`pattern` 等）。
+- 提交按钮必须包含 `submit-btn` 类名，以启用表单级别的无效状态样式。
+- `SmartFormField` 应包裹 Label 和 Input 组件对，Label 的 `htmlFor` 必须与 Input 的 `id` 匹配。
+- 不要引入 JavaScript 验证状态变量（`useState` 追踪错误等）；利用 CSS 驱动的反馈。
+- 不要在不支持 `:has()` 的浏览器中依赖此组件作为唯一的验证方式；保留 HTML5 原生验证作为后备。
+- 不要直接使用 `SmartFormField` 而不使用 `SmartForm` 容器。

@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/core/tooltip";
 import { cn } from "../../lib/utils";
 import React, { useEffect, useRef, useState } from "react";
 

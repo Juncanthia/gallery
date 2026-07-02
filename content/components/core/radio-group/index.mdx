@@ -1,0 +1,180 @@
+RadioGroup 单选组，用于在多个互斥选项中选中单个值。支持水平/垂直排列、三种尺寸和 `options` 声明式配置，基于 Radix RadioGroup primitive 实现完整键盘导航和 ARIA 支持。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当选项互斥且所有选项立即可见时使用。
+
+常见场景：
+
+- 性别选择、支付方式选择。
+- 设置页面的单选组。
+- 表单中的必选字段。
+- 步骤切换、视图切换。
+
+当选项少于 5 个时，RadioGroup 是最佳选择（所有选项立即可见，无需额外点击展开）。如果需要多选，使用 CheckboxGroup。如果选项很多（> 5）或空间有限，使用 Select。
+
+不推荐：
+
+- 多选场景——应使用 Checkbox 或 CheckboxGroup。
+- 选项过多（> 5）且空间受限——应使用 Select 下拉。
+- 绕过 `options` 和 `children` 直接操作内部 DOM。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="radio-group" path="radio-group/basic" />
+
+```tsx
+import { useState } from "react"
+import { RadioGroup } from "@/components/core/radio-group"
+
+export default function Demo() {
+  const [value, setValue] = useState("a")
+  return (
+    <RadioGroup
+      options={[
+        { label: "选项 A", value: "a" },
+        { label: "选项 B", value: "b" },
+        { label: "选项 C（禁用）", value: "c", disabled: true },
+      ]}
+      value={value}
+      onValueChange={setValue}
+    />
+  )
+}
+```
+
+### 自定义布局
+
+<ComponentShowcase id="radio-group-custom" path="radio-group/custom" />
+
+```tsx
+import { useState } from "react"
+import { RadioGroup, RadioGroupItem } from "@/components/core/radio-group"
+import { Label } from "@/components/core/label"
+
+export default function Demo() {
+  const [value, setValue] = useState("a")
+  return (
+    <RadioGroup value={value} onValueChange={setValue}>
+      <div className="flex items-center gap-2">
+        <RadioGroupItem value="a" id="opt-a" />
+        <Label htmlFor="opt-a">自定义布局选项 A</Label>
+      </div>
+      <div className="flex items-center gap-2">
+        <RadioGroupItem value="b" id="opt-b" />
+        <Label htmlFor="opt-b">自定义布局选项 B</Label>
+      </div>
+    </RadioGroup>
+  )
+}
+```
+
+### 水平排列
+
+```tsx
+import { RadioGroup } from "@/components/core/radio-group"
+
+export default function Demo() {
+  return (
+    <RadioGroup
+      direction="horizontal"
+      options={[
+        { label: "小", value: "small" },
+        { label: "中", value: "middle" },
+        { label: "大", value: "large" },
+      ]}
+      defaultValue="middle"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### RadioGroup
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| options | 选项配置列表，声明式配置 | `RadioGroupOption[]` | - |
+| value | 受控选中值 | `string` | - |
+| defaultValue | 默认选中值 | `string` | - |
+| onValueChange | 选中值变化回调 | `(value: string) => void` | - |
+| direction | 排列方向 | `"horizontal"` \| `"vertical"` | `"vertical"` |
+| size | 控件尺寸 | `"small"` \| `"middle"` \| `"large"` | `"middle"` |
+| variant | 视觉变体 | `"default"` | `"default"` |
+| disabled | 是否整体禁用 | `boolean` | - |
+| optionClassName | 每个选项包装元素的 CSS 类名 | `string` | - |
+| labelClassName | 每个标签文本的 CSS 类名 | `string` | - |
+| className | 根元素 CSS 类名 | `string` | - |
+
+继承 Radix RadioGroup 的全部 props（`orientation`、`required`、`name`、`loop` 等）。当 `options` 和 `children` 同时存在时，`options` 优先生效。
+
+### RadioGroupItem
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 选项值 | `string` | - |
+| size | 控件尺寸 | `"small"` \| `"middle"` \| `"large"` | `"middle"` |
+| variant | 视觉变体 | `"default"` | `"default"` |
+| disabled | 是否禁用 | `boolean` | - |
+| className | CSS 类名 | `string` | - |
+
+继承 Radix `RadioGroupItem` 的全部 props。一般在 `RadioGroup` 内部使用，必须指定 `value`。内部使用 Circle 图标作为选中指示器。
+
+### RadioGroupOption
+
+| 属性 | 说明 | 类型 |
+| --- | --- | --- |
+| label | 选项文本 | `React.ReactNode` |
+| value | 选项值 | `string` |
+| disabled | 是否禁用 | `boolean` |
+| className | 选项包装 CSS 类名 | `string` |
+| labelClassName | 标签文本 CSS 类名 | `string` |
+| title | HTML title 属性 | `string` |
+| id | HTML id 属性 | `string` |
+| required | 是否必填 | `boolean` |
+
+### 导出类型
+
+- `RadioGroupSize` = `"small" | "middle" | "large"`
+
+<h2 id="faq">常见问题</h2>
+
+### RadioGroup 和 Select 如何选择？
+
+- **RadioGroup**：选项 <= 5 个，所有选项立即可见，用户可快速对比选择。
+- **Select**：选项多（> 5）、空间有限、需要搜索时。
+
+### 如何单独使用 RadioGroupItem？
+
+在 `RadioGroup` 内部自由组合子元素，`RadioGroupItem` 可单独使用实现复杂布局：
+
+```tsx
+<RadioGroup value={value} onValueChange={setValue}>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="a" />
+    <Label>选项 A</Label>
+  </div>
+</RadioGroup>
+```
+
+### 如何水平排列？
+
+设置 `direction="horizontal"`，选项会自动 `flex flex-row flex-wrap` 排列。
+
+### 如何实现按钮样式的单选组？
+
+RadioGroup 目前仅支持默认圆形 radio 样式。如需按钮样式单选组，可使用 `ButtonGroup` 配合受控状态手动实现。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/radio-group` 导入 `RadioGroup` 和 `RadioGroupItem`。
+2. 优先使用 `options` 声明模式配置选项列表，复杂布局使用 `children` + `RadioGroupItem`。
+3. 选项 <= 5 个时用 RadioGroup 代替 Select。
+4. `onValueChange` 返回 `string`（不是事件对象），不要与 `onChange` 混淆。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="radio-group" />

@@ -9,10 +9,10 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import type SignaturePad from "signature_pad"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
 import { PDFViewer } from "@/components/document/components/ui/pdf-viewer"
 import { PdfBlockResizableShell } from "@/components/document/components/pdf-block-resizable-shell"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import {
   Dialog,
   DialogContent,
@@ -21,8 +21,8 @@ import {
   DialogHeader,
   DialogPanel,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/core/dialog"
+import { ScrollArea } from "@/components/core/scroll-area"
 
 type BoundingBox = {
   x: number

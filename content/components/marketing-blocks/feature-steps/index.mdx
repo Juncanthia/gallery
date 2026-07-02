@@ -1,0 +1,127 @@
+FeatureSteps 是一个特性介绍展示组件，通过左侧特性列表与右侧配图联动，自动轮播切换，支持点击跳转和进度条指示，内置流畅的进出场动画。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在页面中展示产品的核心特性或功能亮点时使用。FeatureSteps 适合用作：
+
+- 产品首页的特性介绍区域。
+- SaaS 平台的功能概览页。
+- 营销落地页的核心卖点展示。
+- 文档站点的快速入门引导。
+
+组件采用左右分栏布局：桌面端左侧展示特性列表，右侧展示对应配图；移动端自动切换为上下布局。特性列表自动轮播，点击可手动切换，底部进度条指示当前项的播放进度。
+
+不推荐在需要展示大量纯文本步骤（使用 Steps）或需要用户手动逐步操作的向导场景（使用多步表单）中使用。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+传入 `features` 数组，每项包含标题、描述文字和配图。组件自动轮播，点击任意项可手动切换。
+
+<ComponentShowcase
+  id="marketing-blocks/feature-steps"
+  path="marketing-blocks/feature-steps/basic"
+/>
+
+```tsx
+import { FeatureSteps } from "@/components/marketing-blocks/feature-steps"
+
+const features = [
+  {
+    step: "01",
+    title: "智能分析",
+    content: "通过 AI 驱动的数据分析引擎，自动识别业务趋势。",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+  },
+  {
+    step: "02",
+    title: "自动化工作流",
+    content: "拖拽式流程编排，将重复性任务转化为自动化工作流。",
+    image: "https://images.unsplash.com/photo-1618172193763-c511deb635ca?w=800&h=600&fit=crop",
+  },
+]
+
+export default function Demo() {
+  return <FeatureSteps features={features} autoPlayInterval={4000} />
+}
+```
+
+### 自定义轮播间隔
+
+通过 `autoPlayInterval` 控制自动切换的时间间隔（毫秒），默认 3000ms。
+
+```tsx
+// 每 5 秒切换一次
+<FeatureSteps features={features} autoPlayInterval={5000} />
+```
+
+### 自定义图片区域高度
+
+通过 `imageClassName` 覆盖图片容器区域的高度样式，默认 `h-[400px]`。
+
+```tsx
+// 图片区域高度调整为 300px
+<FeatureSteps
+  features={features}
+  imageClassName="h-[300px]"
+/>
+```
+
+<h2 id="api">API</h2>
+
+### FeatureSteps
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| features | 特性列表数据，每项包含标题、描述和配图 | `Feature[]` | - |
+| autoPlayInterval | 自动轮播间隔（毫秒） | `number` | `3000` |
+| imageClassName | 右侧图片容器区域的附加样式类名 | `string` | `"h-[400px]"` |
+| className | 根容器的附加样式类名 | `string` | - |
+
+### Feature
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| step | 步骤序号，显示在标题前方（可选） | `string` | - |
+| title | 特性标题 | `string` | - |
+| content | 特性描述文字 | `string` | - |
+| image | 配图 URL，使用 Next.js Image 组件渲染 | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何停止自动轮播？
+
+将 `autoPlayInterval` 设置为一个极大值（如 `Number.MAX_SAFE_INTEGER`）即可达到近似停止的效果。组件内部通过 `setInterval` 实现轮播，不提供直接的暂停 API。
+
+```tsx
+<FeatureSteps features={features} autoPlayInterval={Number.MAX_SAFE_INTEGER} />
+```
+
+### 移动端如何适配？
+
+组件内置响应式布局：桌面端（md 及以上）采用左右分栏，左侧特性列表和右侧图片各占 50%；移动端自动切换为上下堆叠布局，图片区域在上方，特性列表在下方。
+
+### 图片支持什么格式？
+
+`image` 字段传入 URL 字符串，使用 Next.js `Image` 组件渲染。支持任意 Next.js Image 兼容的图片源（本地 `/public` 路径、远程 URL 需在 `next.config` 中配置 `remotePatterns`）。图片以 `object-cover` 模式填充容器。
+
+### 如何自定义动画效果？
+
+组件使用 `motion/react`（原 framer-motion）实现动画，图片切换为从底部滑入，进度条从左到右展开。如需深度定制动画参数，可直接修改 `src/components/marketing-blocks/feature-steps/feature-steps.tsx` 中的 `transition` 和动画属性。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 FeatureSteps 代码时：
+
+1. 从 `@/components/marketing-blocks/feature-steps` 导入 `FeatureSteps`。
+2. `features` 数组中每项必须包含 `title`、`content` 和 `image` 三个必填字段，`step` 为可选字段。
+3. `image` 使用 Next.js `Image` 组件渲染，若使用远程 URL 需在 `next.config` 中配置 `remotePatterns`（如 `images.unsplash.com`）。
+4. `autoPlayInterval` 单位为毫秒，默认 3000ms。
+5. `imageClassName` 接受 Tailwind CSS 类名字符串，用于控制图片容器高度，默认 `h-[400px]`。
+6. 组件依赖 `motion/react`、`clsx` 和 `next/image`，确保这些依赖已在项目中安装。
+7. 组件使用 `use client` 指令，只能在客户端组件中使用。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="marketing-blocks/feature-steps" />

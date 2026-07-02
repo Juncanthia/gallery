@@ -1,0 +1,227 @@
+Terminal 终端组件。用于展示命令行执行结果，支持 stdout / stderr 输出、ANSI 转义码渲染、执行耗时、退出码显示和输出复制功能。
+
+<h2 id="when-to-use">何时使用</h2>
+
+在 AI 对话界面中展示命令行执行结果时使用。Terminal 提供终端风格的输出展示，包含命令头、耗时、退出码和可折叠的输出区域。
+
+常见场景：
+
+- AI 助手执行 shell 命令后展示标准输出和错误输出。
+- 代码审查结果展示，包含命令、执行时间和退出状态。
+- CI/CD 日志片段在对话界面中以内嵌终端形式展示。
+- 支持 ANSI 转义码的彩色输出渲染。
+
+不推荐：
+
+- 需要实时流式输出的场景，Terminal 为静态输出展示，不支持增量更新。
+- 需要交互式终端（如用户可输入命令），Terminal 为只读展示。
+- 输出量极大（数万行以上）的场景，应考虑分页或截断机制。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+展示一条命令的执行结果，包含命令、工作目录、退出码和执行耗时。
+
+<ComponentShowcase
+  id="tool/terminal"
+  path="tool/terminal/basic"
+/>
+
+```tsx
+import { Terminal } from "@/components/core/terminal"
+
+export default function Demo() {
+  return (
+    &lt;Terminal
+      id="terminal-1"
+      command="git log --oneline -5"
+      cwd="~/project"
+      exitCode={0}
+      durationMs={342}
+      stdout={"abc1234 feat: add terminal component\ndef5678 fix: resolve rendering bug"}
+    /&gt;
+  )
+}
+```
+
+### 命令执行失败
+
+当命令执行失败时，exitCode 非零会以红色显示，stderr 内容也会以红色渲染。
+
+```tsx
+import { Terminal } from "@/components/core/terminal"
+
+export default function Demo() {
+  return (
+    &lt;Terminal
+      id="terminal-error"
+      command="npm run build"
+      cwd="~/project"
+      exitCode={1}
+      durationMs={2847}
+      stderr={"src/components/Terminal.tsx:42:11 - error TS2304: Cannot find name 'ansi'.\n\n42   return &lt;ansi&gt;{output}&lt;/ansi&gt;\n             ~~~~\n\nFound 1 error."}
+    /&gt;
+  )
+}
+```
+
+### 无输出
+
+命令执行成功但无任何输出时，显示"No output"提示。
+
+```tsx
+import { Terminal } from "@/components/core/terminal"
+
+export default function Demo() {
+  return (
+    &lt;Terminal
+      id="terminal-empty"
+      command="touch README.md"
+      cwd="~/project"
+      exitCode={0}
+    /&gt;
+  )
+}
+```
+
+### 输出折叠
+
+通过 `maxCollapsedLines` 设置折叠阈值，当输出行数超过该值时自动折叠，用户可展开查看全部。
+
+```tsx
+import { Terminal } from "@/components/core/terminal"
+
+export default function Demo() {
+  return (
+    &lt;Terminal
+      id="terminal-collapsed"
+      command="cat package.json"
+      cwd="~/project"
+      exitCode={0}
+      maxCollapsedLines={10}
+      stdout={`{\n  "name": "my-app",\n  "version": "1.0.0",\n  "private": true,\n  "scripts": {\n    "dev": "next dev",\n    "build": "next build",\n    "start": "next start",\n    "lint": "next lint"\n  },\n  "dependencies": {\n    "next": "14.2.0",\n    "react": "^18.3.0",\n    "react-dom": "^18.3.0"\n  },\n  "devDependencies": {\n    "typescript": "^5.4.0",\n    "@types/react": "^18.3.0",\n    "@types/react-dom": "^18.3.0"\n  }\n}`}
+    /&gt;
+  )
+}
+```
+
+### 外部控制展开/折叠
+
+通过 `expanded` 和 `onExpandedChange` 实现外部状态控制。
+
+```tsx
+import { Terminal } from "@/components/core/terminal"
+import { useState } from "react"
+
+export default function Demo() {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    &lt;Terminal
+      id="terminal-controlled"
+      command="find . -name '*.tsx'"
+      cwd="~/project/src"
+      exitCode={0}
+      maxCollapsedLines={8}
+      expanded={expanded}
+      onExpandedChange={setExpanded}
+      stdout={`./components/button/button.tsx\n./components/button/button-group.tsx\n./components/card/card.tsx\n./components/dialog/dialog.tsx\n./components/input/input.tsx\n./components/select/select.tsx\n./components/table/table.tsx\n./components/tabs/tabs.tsx\n./components/tag/tag.tsx\n./components/tooltip/tooltip.tsx`}
+    /&gt;
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Terminal
+
+终端命令执行结果展示组件。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 组件唯一标识，用于 data 属性标注 | `string` | 必填 |
+| command | 执行的命令文本 | `string` | 必填 |
+| exitCode | 命令退出码，0 为成功，非 0 显示红色 | `number` | 必填 |
+| stdout | 标准输出内容，支持 ANSI 转义码 | `string` | - |
+| stderr | 标准错误内容，红色渲染 | `string` | - |
+| durationMs | 命令执行耗时（毫秒） | `number` | - |
+| cwd | 命令执行时的工作目录 | `string` | - |
+| truncated | 标记输出是否被截断 | `boolean` | `false` |
+| maxCollapsedLines | 输出折叠行数阈值，超过时自动折叠 | `number` | - |
+| className | 附加样式类名 | `string` | - |
+| expanded | 受控展开状态 | `boolean` | - |
+| defaultExpanded | 默认展开状态 | `boolean` | `false` |
+| onExpandedChange | 展开状态变化回调 | `(expanded: boolean) => void` | - |
+
+### Terminal.Header
+
+终端头部子组件，展示命令行、退出码、耗时和复制按钮。
+
+### Terminal.Output
+
+终端输出子组件，展示 stdout、stderr 内容和截断提示。
+
+### Terminal.Empty
+
+无输出时的占位子组件，显示"No output"提示。
+
+### Semantic DOM
+
+| data-slot | 说明 |
+| --- | --- |
+| `terminal` | 根容器 |
+
+附加属性：
+
+| data 属性 | 说明 |
+| --- | --- |
+| `data-tool-ui-id` | 组件 id |
+
+<h2 id="faq">常见问题</h2>
+
+### 如何展示 ANSI 彩色输出？
+
+直接将包含 ANSI 转义码的字符串传入 `stdout` 或 `stderr`，组件内部使用 `ansi-to-react` 库自动解析并渲染颜色。
+
+### 输出内容过多时如何处理？
+
+设置 `maxCollapsedLines` 属性，当输出行数超过阈值时自动折叠，用户可点击按钮展开查看全部内容。折叠按钮显示总行数。
+
+### 如何从外部控制展开/折叠？
+
+使用 `expanded` 和 `onExpandedChange` 实现受控模式，便于父组件同步状态或实现额外的折叠/展开逻辑。
+
+```tsx
+&lt;Terminal
+  id="controlled"
+  command="..."
+  exitCode={0}
+  expanded={isExpanded}
+  onExpandedChange={setIsExpanded}
+/&gt;
+```
+
+### 如何实现一键复制输出内容？
+
+组件内置复制按钮，位于命令头右侧。点击后将 stdout 和 stderr 拼接后的完整文本复制到剪贴板，复制成功后图标变为勾选状态。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Terminal 代码时：
+
+1. 从 `@/components/core/terminal` 导入 `Terminal`
+2. `id`、`command`、`exitCode` 为必填属性
+3. stdout 和 stderr 为可选，至少提供其一才能展示输出区域
+4. durationMs 单位为毫秒，组件自动格式化为易读格式（&lt;1000ms 显示 ms，否则显示 s）
+5. 输出内容包含 ANSI 转义码时无需手动处理，组件自动渲染
+6. 长输出建议设置 `maxCollapsedLines` 避免占用过多垂直空间
+7. 不要将 `expanded` 和 `onExpandedChange` 与不设置 `maxCollapsedLines` 同时使用（无折叠阈值时展开控制无意义）
+
+<h2 id="source">源码</h2>
+
+核心文件：
+
+- `src/components/tool/terminal/terminal.tsx` — Terminal 组件主逻辑，包含 Header、Output、Empty 子组件
+- `src/components/tool/terminal/schema.ts` — Zod Schema 定义与 TypeScript 类型
+- `src/components/core/tool-terminal.tsx` — 对外导出入口

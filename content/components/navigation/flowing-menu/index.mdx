@@ -1,0 +1,93 @@
+FlowingMenu 流动菜单导航组件，鼠标悬停时从最近边缘滑入跑马灯效果的导航条。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要带有流动跑马灯悬停效果的导航菜单时使用。
+常见场景：
+- 创意型网站的导航菜单
+- 作品集/画廊的入口菜单
+- 品牌展示页面的导航交互
+不推荐：
+- 需要快速导航的实用型界面（动画有延迟）
+- 菜单项过多时（跑马灯内容过长影响体验）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="navigation/flowing-menu" path="navigation/flowing-menu/basic" />
+
+```tsx
+import { FlowingMenu } from "@/components/navigation/flowing-menu"
+export default function Demo() {
+  return (
+    <FlowingMenu
+      items={[
+        { link: "#home", text: "Home", image: "/path/to/image.jpg" },
+        { link: "#about", text: "About", image: "/path/to/image.jpg" },
+        { link: "#contact", text: "Contact", image: "/path/to/image.jpg" },
+      ]}
+    />
+  )
+}
+```
+
+### 自定义颜色
+
+```tsx
+import { FlowingMenu } from "@/components/navigation/flowing-menu"
+
+export default function Demo() {
+  return (
+    <FlowingMenu
+      items={[
+        { link: "#work", text: "Work", image: "/img/work.jpg" },
+        { link: "#studio", text: "Studio", image: "/img/studio.jpg" },
+        { link: "#journal", text: "Journal", image: "/img/journal.jpg" },
+      ]}
+      speed={20}
+      textColor="#FF6F37"
+      bgColor="#1a1a2e"
+      blocks/marqueeBgColor="#FF6F37"
+      blocks/marqueeTextColor="#1a1a2e"
+      borderColor="#FF6F3733"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### FlowingMenu
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 菜单项列表，每项包含链接、文字和图片 | `FlowingMenuItem[]` | `[]` |
+| speed | 跑马灯滚动速度（秒/次，值越大越慢） | `number` | `15` |
+| textColor | 菜单文字颜色 | `string` | `"#fff"` |
+| bgColor | 菜单背景色 | `string` | `"#120F17"` |
+| blocks/marqueeBgColor | 悬停时跑马灯条背景色 | `string` | `"#fff"` |
+| blocks/marqueeTextColor | 跑马灯条中的文字颜色 | `string` | `"#120F17"` |
+| borderColor | 菜单项之间的分隔边框颜色 | `string` | `"#fff"` |
+
+### FlowingMenuItem
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| link | 导航链接地址 | `string` | - |
+| text | 菜单项显示文字 | `string` | - |
+| image | 跑马灯中展示的图片 URL | `string` | - |
+
+<h2 id="faq">常见问题</h2>
+### 悬停时跑马灯从哪个方向滑入？
+组件会计算鼠标进入位置距离菜单项上边缘和下边缘哪个更近，从更近的边缘滑入跑马灯。这样无论从上方或下方悬停都会有自然的动画方向。
+
+### speed 参数越大是越快还是越慢？
+`speed` 是跑马灯完成一次完整滚动的秒数，值越大滚动越慢。默认 15 秒完成一次循环。
+
+### 跑马灯图片如何展示？
+每段跑马灯包含文字和背景图片，图片通过 `backgroundImage: url(...)` 内联样式设置。重复段数根据视口宽度和内容宽度自动计算（最少 4 段）。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/navigation/flowing-menu` 导入。
+2. 依赖 `gsap`（GreenSock Animation Platform），确保项目中已安装。
+3. `items` 为必填属性，每项必须包含 `link`、`text`、`image` 三个字段。
+4. 所有颜色参数接受 CSS 颜色值（hex、rgb、rgba 等）。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-flowing-menu" />

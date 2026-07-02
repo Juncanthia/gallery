@@ -1,0 +1,174 @@
+Rating 评分复合组件，用于收集或展示用户对内容的星级评价。由 `Rating`（容器）和 `RatingButton`（单个评分项）组合而成，支持受控/非受控、自动生成评分项、半星、清除、只读、禁用、尺寸和方向。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要对内容进行星级评分的交互场景时使用。
+
+常见场景：
+
+- 商品、文章、服务等的用户评分入口。
+- 用户评价表单中的星级选择。
+- 只读展示已有的评分结果。
+- 需要自定义评分图标或评分数量的场景。
+
+不推荐：
+
+- 绕过 `Rating` 容器直接使用 `RatingButton`（会因缺少 Context 抛出异常）。
+- 在 `RatingButton` 上自行管理选中状态，该状态由 Context 统一提供。
+- 为了照搬 Ant Design Rate API 引入 `antd` 或全局 ConfigProvider。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+<ComponentShowcase id="blocks/rating" path="blocks/rating/basic" />
+
+```tsx
+import { Rating } from "@/components/blocks/rating"
+
+export default function Demo() {
+  return (
+    <div className="flex flex-col gap-3">
+      <Rating defaultValue={3} />
+      <Rating defaultValue={3.5} allowHalf clearable size="lg" />
+    </div>
+  )
+}
+```
+
+### 自定义图标
+
+```tsx
+import { Rating, RatingButton } from "@/components/blocks/rating"
+import { Heart } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <Rating defaultValue={3} count={5}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <RatingButton key={i} icon={<Heart />} />
+      ))}
+    </Rating>
+  )
+}
+```
+
+### 受控模式
+
+```tsx
+import { Rating } from "@/components/blocks/rating"
+import { useState } from "react"
+
+export default function Demo() {
+  const [value, setValue] = useState(2.5)
+
+  return <Rating value={value} onValueChange={setValue} allowHalf />
+}
+```
+
+### 只读展示
+
+```tsx
+import { Rating } from "@/components/blocks/rating"
+
+export default function Demo() {
+  return <Rating value={4.5} allowHalf readOnly />
+}
+```
+
+### 自定义数量和方向
+
+```tsx
+import { Rating } from "@/components/blocks/rating"
+
+export default function Demo() {
+  return <Rating defaultValue={7} count={10} orientation="vertical" />
+}
+```
+
+<h2 id="api">API</h2>
+
+### Rating
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| defaultValue | 非受控模式下的默认评分值 | `number` | `0` |
+| value | 受控模式下的评分值 | `number` | - |
+| onChange | 值变化回调，传入原始事件和规范化后的值 | `(event: MouseEvent \| KeyboardEvent, value: number) => void` | - |
+| onValueChange | 值变化回调，仅传入新值 | `(value: number) => void` | - |
+| count | 未传 children 时自动生成的评分项数量 | `number` | `5` |
+| max | `count` 的等价别名 | `number` | - |
+| step | 评分步进 | `0.5 \| 1` | `allowHalf ? 0.5 : 1` |
+| allowHalf | 开启半星评分 | `boolean` | `false` |
+| clearable | 再次点击当前值时清空评分 | `boolean` | `false` |
+| size | 评分项尺寸 | `"sm" \| "default" \| "lg"` | `"default"` |
+| orientation | 排列方向 | `"horizontal" \| "vertical"` | `"horizontal"` |
+| disabled | 禁用交互并降低透明度 | `boolean` | `false` |
+| readOnly | 只读展示，禁止交互但保留展示状态 | `boolean` | `false` |
+| className | 根容器 CSS 类名 | `string` | - |
+| children | 自定义评分项，通常为 `RatingButton` 数组 | `ReactNode` | 自动生成 |
+
+未传 `children` 时，`Rating` 会根据 `count`/`max` 自动生成默认星标。传入 `children` 时，容器会通过 `cloneElement` 自动注入 `index`。
+
+### RatingButton
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| index | 评分项序号（0-based），通常由 Rating 自动注入 | `number` | 自动注入 |
+| disabled | 禁用当前评分项 | `boolean` | `false` |
+| size | 图标像素尺寸；不传时由 Rating 的 size 推导 | `number` | - |
+| className | 按钮 CSS 类名 | `string` | - |
+| icon | 自定义图标元素，激活时自动填充 | `ReactElement<LucideProps>` | `<StarIcon />` |
+
+继承 `LucideProps`，可透传 `strokeWidth`、`color` 等图标属性。
+
+<h2 id="faq">常见问题</h2>
+
+### Rating 和 Rate 有什么区别？
+
+- **Rate**：单一组件，更接近 Ant Design 的使用心智。
+- **Rating**：复合组件，适合需要自定义每个评分项、组合子组件或复用主线 blocks 能力的场景。
+- 当前 Rating 已支持 `count`、`allowHalf`、`clearable` 等常用能力，但 API 仍以本地源码为准，不承诺 Ant Design 兼容。
+
+### 如何自定义评分图标？
+
+通过 `RatingButton` 的 `icon` prop 传入任意 Lucide 图标或自定义 SVG：
+
+```tsx
+<Rating defaultValue={3}>
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+  <RatingButton icon={<Heart />} />
+</Rating>
+```
+
+### 如何开启半星？
+
+设置 `allowHalf`，或显式设置 `step={0.5}`：
+
+```tsx
+<Rating defaultValue={3.5} allowHalf />
+```
+
+### 如何让评分组件只读？
+
+设置 `readOnly`。如果需要禁用态的视觉弱化，使用 `disabled`：
+
+```tsx
+<Rating value={4.5} allowHalf readOnly />
+<Rating value={4.5} allowHalf disabled />
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/blocks/rating` 导入 `Rating` 和 `RatingButton`，不要从 `antd` 导入。
+2. 简单五星评分优先直接使用 `<Rating defaultValue={3} />`，不要手写重复的星标数组。
+3. 需要自定义图标时才显式传入 `RatingButton` children。
+4. 半星使用 `allowHalf` 或 `step={0.5}`；清除使用 `clearable`。
+5. 受控模式使用 `value` + `onValueChange`，非受控使用 `defaultValue`。
+6. 不要生成 AntD 专属的 `character`、`tooltips`、`classNames`、`styles` 或 ConfigProvider 配置。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="blocks/rating" />

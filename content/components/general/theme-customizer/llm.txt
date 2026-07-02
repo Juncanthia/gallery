@@ -1,0 +1,66 @@
+---
+category: Components
+title: ThemeCustomizer
+subtitle: 主题定制器
+description: 提供多种主题色切换与深色/浅色模式切换的 UI 控件，包含 6 种布局变体。
+source:
+  component: src/components/gooseui/components/ui/theme-customizer.tsx
+  docs: content/components/general/theme-customizer/index.mdx
+  examples:
+    - content/components/general/theme-customizer/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  next-themes: true
+---
+
+# ThemeCustomizer 主题定制器
+
+提供 6 种布局变体的主题定制控件：Pill（浮动圆钮）、Bar（内联工具栏）、Sidebar（侧边栏）、Dock（底部停靠栏）、Corner（角落按钮）、Toolbar（动态工具栏）。默认导出为 Pill 变体。
+
+## 使用示例
+
+```tsx
+import { ThemeCustomizer, ThemeCustomizerBar } from "@/components/general/theme-customizer"
+
+// Pill 变体，默认 fixed 定位
+<ThemeCustomizer />
+
+// Pill 变体，inline 模式（静态定位）
+<ThemeCustomizer inline />
+
+// 内联工具栏
+<ThemeCustomizerBar />
+
+// 其他变体
+import {
+  ThemeCustomizerSidebar,
+  ThemeCustomizerDock,
+  ThemeCustomizerCorner,
+  ThemeCustomizerToolbar,
+} from "@/components/general/theme-customizer"
+```
+
+## API 速览
+
+| 变体 | 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| ThemeCustomizer (Pill) | className | `string` | - | 附加类名 |
+| ThemeCustomizer (Pill) | inline | `boolean` | `false` | 取消 fixed 定位 |
+| ThemeCustomizerBar | className | `string` | - | 附加类名 |
+| ThemeCustomizerSidebar | className | `string` | - | 附加类名 |
+| ThemeCustomizerDock | className | `string` | - | 附加类名 |
+| ThemeCustomizerCorner | className | `string` | - | 附加类名 |
+| ThemeCustomizerToolbar | className | `string` | - | 附加类名 |
+
+支持的 7 种主题色：`zinc, red, orange, green, blue, violet, pink`。选中颜色持久化到 `localStorage` key `theme-color`，同时在 `document.documentElement` 设置 `data-theme-color` 属性。
+
+## 约束
+
+1. 从 `@/components/general/theme-customizer` 导入，不要从 gooseui 内部路径导入。
+2. 确保应用根节点已包裹 `next-themes` 的 `ThemeProvider`。
+3. Pill/Corner/Sidebar/Dock/Toolbar 变体使用 `fixed` 定位，设计为页面级控件。Pill 传入 `inline` 属性可切换为静态定位。
+4. Bar 变体为普通 flex 容器，非 fixed，可直接嵌入任意布局。
+5. 不要自行实现 localStorage 读写或主题色切换逻辑，组件内部已处理。
+6. 主题色选择后自动持久化，跨页面保持。
+7. 不要引入其他主题切换库，使用组件内置的 `useTheme`（来自 next-themes）和自定义 `useThemeColor` hook。

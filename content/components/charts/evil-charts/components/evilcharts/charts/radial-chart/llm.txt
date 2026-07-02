@@ -1,0 +1,277 @@
+---
+category: Components
+title: EvilRadialChart
+subtitle: 径向图
+description: 径向图以同心圆环方式展示数据比例分布，通过环形长度直观对比不同分类的数值大小。
+demo:
+  cols: 1
+group:
+  title: 图表
+  order: 7
+source:
+  component: src/components/core/evilcharts-radial-chart.tsx
+  chart: src/components/evilcharts/components/charts/evilchartss/radial-chart.tsx
+  barrel: src/components/evilcharts/components/radial-chart.ts
+  docs: content/components/evilcharts/radial-chart/index.mdx
+  examples:
+    - content/components/evilcharts/radial-chart/examples/basic.tsx
+stack:
+  react: true
+  tailwindcss: true
+  recharts: true
+  cva: false
+  radixSlot: false
+  motion: false
+  rcComponent: false
+  cssInJs: false
+---
+
+# EvilRadialChart 径向图
+
+EvilRadialChart 以同心圆环方式展示数据比例分布，通过环形长度直观对比不同分类的数值大小。它是 EvilCharts 图表库中的径向图组件，基于 Recharts 的 RadialBarChart 封装，提供组合式 API 用于自由组装 Tooltip、Legend 和 RadialBar 等子组件。
+
+径向图相比柱状图更节省空间，相比饼图能同时展示多个分类的独立进度。适合浏览器市场份额、渠道流量占比、多品类销售量对比等场景。
+
+## 何时使用 {#when-to-use}
+
+径向图适合展示多个分类在单一维度上的数值对比，以同心环的径向长度表达数据大小。
+
+常见场景：
+
+- 浏览器市场份额对比。
+- 各渠道流量占比展示。
+- 多品类销售量对比。
+- 指标完成进度展示（半圆 variants）。
+- 各维度评分雷达图替代。
+
+EvilRadialChart 采用组合式 API：`<EvilRadialChart>` 作为容器，内部自由组合 `<RadialBar>`、`<Tooltip>`、`<Legend>` 等子组件。所有子组件必须置于 `<EvilRadialChart>` 内部，否则会抛出错误。
+
+## 代码演示 {#examples}
+
+### 基础用法
+
+```tsx
+import { EvilRadialChart } from "@/components/core/radial-chart"
+import { RadialBar, Tooltip, Legend } from "@/components/charts/evil-charts/components/radial-chart"
+import { type ChartConfig } from "@/components/charts/evil-charts/components/chart"
+
+const data = [
+  { browser: "chrome", visitors: 275 },
+  { browser: "safari", visitors: 200 },
+  { browser: "firefox", visitors: 187 },
+  { browser: "edge", visitors: 173 },
+  { browser: "other", visitors: 90 },
+]
+
+const chartConfig = {
+  chrome: {
+    label: "Chrome",
+    colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
+  },
+  safari: {
+    label: "Safari",
+    colors: { light: ["#10b981"], dark: ["#34d399"] },
+  },
+  firefox: {
+    label: "Firefox",
+    colors: { light: ["#f59e0b"], dark: ["#fbbf24"] },
+  },
+  edge: {
+    label: "Edge",
+    colors: { light: ["#8b5cf6"], dark: ["#a78bfa"] },
+  },
+  other: {
+    label: "Other",
+    colors: { light: ["#6b7280"], dark: ["#9ca3af"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    <EvilRadialChart
+      data={data}
+      config={chartConfig}
+      className="h-full w-full p-4"
+      nameKey="browser"
+      variant="full"
+    >
+      <Legend isClickable />
+      <Tooltip />
+      <RadialBar dataKey="visitors" isClickable />
+    </EvilRadialChart>
+  )
+}
+```
+
+### 半圆变体
+
+```tsx
+<EvilRadialChart
+  data={data}
+  config={chartConfig}
+  nameKey="browser"
+  variant="semi"
+>
+  <Legend />
+  <Tooltip />
+  <RadialBar dataKey="visitors" />
+</EvilRadialChart>
+```
+
+### 发光效果 + 加载状态
+
+```tsx
+// 发光效果：为 Chrome 和 Safari 添加柔光滤镜
+<RadialBar dataKey="visitors" glowingBars={["chrome", "safari"]} />
+
+// 加载状态：传递空数据 + isLoading
+<EvilRadialChart
+  data={isLoading ? [] : data}
+  config={chartConfig}
+  isLoading={isLoading}
+  nameKey="browser"
+>
+  <Legend />
+  <Tooltip />
+  <RadialBar dataKey="visitors" />
+</EvilRadialChart>
+```
+
+## API {#api}
+
+### EvilRadialChart
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| config | 分类颜色和标签配置 | `ChartConfig` | - |
+| data | 图表数据行，每行对应一个径向环 | `TData[]` | - |
+| nameKey | 数据中作为分类名称的字段 | `keyof TData & string` | - |
+| children | 组合的子组件 | `ReactNode` | - |
+| className | 容器附加样式类名 | `string` | - |
+| chartProps | 透传 Recharts RadialBarChart 属性 | `ComponentProps<typeof RechartsRadialBarChart>` | - |
+| variant | 环形形状 | `"full"` \| `"semi"` | `"full"` |
+| innerRadius | 环形内半径 | `number` \| `string` | `"30%"` |
+| outerRadius | 环形外半径 | `number` \| `string` | `"100%"` |
+| defaultSelectedDataKey | 初始选中的分类 key | `string` \| `null` | `null` |
+| onSelectionChange | 选中分类变更回调 | `(selection: { dataKey: string; value: number } \| null) => void` | - |
+| isLoading | 显示加载骨架 | `boolean` | `false` |
+| backgroundVariant | 图表背景图案 | `BackgroundVariant` | - |
+
+`BackgroundVariant` 可选值：`"dots"` \| `"grid"` \| `"cross-hatch"` \| `"diagonal-lines"` \| `"plus"` \| `"falling-triangles"` \| `"4-pointed-star"` \| `"tiny-checkers"` \| `"overlapping-circles"` \| `"wiggle-lines"` \| `"bubbles"`
+
+### RadialBar
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| dataKey | 数值字段，决定环形长度 | `string` | - |
+| cornerRadius | 环形端点圆角半径 | `number` | `5` |
+| barSize | 环形线条粗细 | `number` | `14` |
+| showBackground | 显示未填充的背景轨道 | `boolean` | `true` |
+| isClickable | 允许点击选中/取消选中该环 | `boolean` | `false` |
+| glowingBars | 需要发光效果的数据 key 列表 | `string[]` | `[]` |
+| radialBarProps | 透传 Recharts RadialBar 属性 | `Omit<ComponentProps<typeof RechartsRadialBar>, "dataKey">` | - |
+
+### Tooltip
+
+加载期间自动隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 提示框视觉样式 | `TooltipVariant` | - |
+| roundness | 提示框圆角 | `TooltipRoundness` | - |
+| defaultIndex | 无 hover 时默认展示的数据索引 | `number` | - |
+
+`TooltipVariant`: `"default"` \| `"frosted-glass"`
+`TooltipRoundness`: `"sm"` \| `"md"` \| `"lg"` \| `"xl"`
+
+### Legend
+
+加载期间自动隐藏。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 图例指示器样式 | `ChartLegendVariant` | - |
+| align | 水平对齐 | `"left"` \| `"center"` \| `"right"` | `"center"` |
+| verticalAlign | 垂直对齐 | `"top"` \| `"middle"` \| `"bottom"` | `"bottom"` |
+| isClickable | 允许点击图例项切换选中 | `boolean` | `false` |
+
+`ChartLegendVariant`: `"square"` \| `"circle"` \| `"circle-outline"` \| `"rounded-square"` \| `"rounded-square-outline"` \| `"vertical-bar"` \| `"horizontal-bar"`
+
+## 约束 {#constraints}
+
+1. `config` 必须包含每个分类的 `label` 和 `colors`（至少一个主题键 `light`/`dark`）。多色数组自动生成对角渐变。
+2. `nameKey` 值必须在 `data` 和 `config` 中同时存在，否则环形不会渲染或颜色回退。
+3. 所有子组件（RadialBar、Tooltip、Legend）必须置于 `<EvilRadialChart>` 内部，否则抛出运行时错误。
+4. `isLoading` 时，RadialBar、Tooltip、Legend 自动隐藏，由容器内部的骨架动画接管。骨架固定渲染 5 条随机环。
+5. `isClickable` 选中行为：点击已选中的分类会清除选择（全部恢复可见）；`onSelectionChange` 回调在每次选择变更时触发。
+6. `glowingBars` 为每个指定分类独立生成 SVG `<filter>` 元素，滤镜 ID 带 chart instance 前缀，同一页面多实例不会冲突。
+7. 环形颜色使用 `<linearGradient>` 定义，每个分类一条渐变，`id` 带 `chartId` 前缀以保证唯一性。
+8. 不应直接导入 Recharts 的 `RadialBarChart`、`RadialBar` 等原生组件，使用 EvilCharts 封装层。
+9. `semi` variant 的 center 为 `cy="70%"`（非 50%），以便半圆正向朝上渲染。
+
+## 与 Recharts 原生 RadialBarChart 的差异 {#recharts-differences}
+
+| Recharts 原生 | EvilRadialChart |
+| --- | --- |
+| 每个 ring 手动指定 fill prop | 通过 `config.colors` 自动生成 `<linearGradient>` |
+| 无内置 loading 骨架 | `isLoading` 驱动内置骨架动画 |
+| 无点击选中/发光/背景图案 | `isClickable`、`glowingBars`、`backgroundVariant` |
+| 图例和 Tooltip 需单独配置 | `<Legend>`、`<Tooltip>` 内置并共享 context |
+| 无选中态管理 | 共享 context 驱动 selectedBar 状态 |
+
+## FAQ {#faq}
+
+### 如何配置分类颜色？
+
+```tsx
+const chartConfig = {
+  chrome: {
+    label: "Chrome",
+    colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
+  },
+}
+```
+
+多色数组生成渐变色：
+
+```tsx
+colors: { light: ["#6366f1", "#a855f7", "#ec4899"], dark: ["#818cf8", "#c084fc", "#f472b6"] }
+```
+
+### 如何实现点击选中交互？
+
+为 `<RadialBar>` 添加 `isClickable`，配合 `<Legend isClickable>`：
+
+```tsx
+<RadialBar dataKey="visitors" isClickable />
+<Legend isClickable />
+```
+
+### 如何调整环形粗细和间距？
+
+```tsx
+<EvilRadialChart innerRadius="20%" outerRadius="90%">
+  <RadialBar dataKey="visitors" barSize={20} />
+</EvilRadialChart>
+```
+
+### 如何处理加载状态？
+
+```tsx
+<EvilRadialChart data={isLoading ? [] : data} config={chartConfig} isLoading={isLoading}>
+  ...
+</EvilRadialChart>
+```
+
+## LLM 使用规则 {#llm-rules}
+
+AI 生成 EvilRadialChart 代码时：
+
+1. 从 `@/components/core/radial-chart` 导入 `EvilRadialChart`
+2. 从 `@/components/charts/evil-charts/components/radial-chart` 导入 `RadialBar`、`Tooltip`、`Legend`
+3. `config` 必须包含每个分类的 `label` 和 `colors`（至少一个主题键 `light`/`dark`）
+4. 使用组合式 API：`<EvilRadialChart>` 作为容器，内部自由组合子组件
+5. `nameKey` 指定分类字段，`dataKey` 指定数值字段，两者必须在 `data` 中对应
+6. 所有子组件必须位于 `<EvilRadialChart>` 内部
+7. 加载时传递空数据数组 + `isLoading={true}`
+8. 不应直接导入 Recharts 的 `RadialBarChart`、`RadialBar` 等原生组件

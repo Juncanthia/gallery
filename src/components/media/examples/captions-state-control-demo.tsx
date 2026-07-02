@@ -3,7 +3,7 @@
 import { ClosedCaptioningIcon } from "@phosphor-icons/react"
 import { useEffect } from "react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/core/button"
 import { useCaptionsStore } from "@/components/media/hooks/use-captions"
 import {
   MediaReadyState,

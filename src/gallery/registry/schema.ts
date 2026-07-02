@@ -15,7 +15,7 @@ export type DomainCategory =
   | "feedback"
   | "blocks"
   | "ui"
-  | "_shared"
+  | "_internal"
 
 export type RegistryFileRole = "source" | "style" | "helper" | "example"
 
@@ -32,7 +32,7 @@ export type DisplayImportPath = {
 }
 
 export type ComponentRegistryItem = {
-  /** Unique registry id, e.g. `gooseui/border-beam` */
+  /** Unique registry id, e.g. `effects/interactions/border-beam` */
   id: string
   title: string
   titleEn: string
@@ -51,7 +51,7 @@ export type ComponentRegistryItem = {
   registryTarget?: string
   /** Copy-to-clipboard display path with explicit semantics. */
   displayImportPath?: DisplayImportPath
-  /** Previous `@/components/ui/*` shell path, used during migration/codemod. */
+  /** Previous `@/components/core/*` shell path, used during migration/codemod. */
   legacyShellImportPath?: string
   legacy?: {
     antd?: boolean

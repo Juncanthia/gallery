@@ -1,0 +1,172 @@
+Slider 滑动输入条。滑动型输入器，展示当前值和可选范围。支持单值、双值范围、刻度标记、步进圆点、垂直模式和 Tooltip 提示。基于 Radix Slider primitive 实现。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在连续或离散的数值范围内进行选择时使用 Slider。相较直接输入数值，滑块更适合精确度要求不高的直观调节。
+
+常见场景：
+- 音量、亮度等精确度要求不高的调节
+- 价格区间、年龄段等范围筛选
+- 评分或权重等数值调校
+- 视频进度或时间范围选择
+
+不推荐：
+- 需要精确数值输入时单独使用 —— 应配合 InputNumber 组合
+- 离散选项的选择 —— 使用 Select 或 Radio 更合适
+- 作为进度条展示 —— 使用 Progress 组件
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+单值、范围、刻度标记三种典型模式。
+
+<ComponentShowcase id="slider" path="slider/basic" />
+
+```tsx
+import { useState } from "react"
+import { Slider } from "@/components/core/slider"
+
+export default function Demo() {
+  const [value, setValue] = useState(30)
+  return (
+    <div className="w-full max-w-sm space-y-6">
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">基础: {value}</p>
+        <Slider value={value} onChange={setValue} />
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">范围</p>
+        <Slider range defaultValue={[20, 60]} />
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">刻度</p>
+        <Slider marks={{ 0: "0", 25: "25", 50: "50", 75: "75", 100: "100" }} defaultValue={40} />
+      </div>
+    </div>
+  )
+}
+```
+
+### Tooltip 与步进
+
+支持拖拽时显示 Tooltip，以及 dots 步进圆点。
+
+```tsx
+import { Slider } from "@/components/core/slider"
+
+export default function Demo() {
+  return (
+    <div className="w-full max-w-sm space-y-6">
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">格式化 Tooltip</p>
+        <Slider
+          defaultValue={30}
+          tooltip={{ formatter: (v) => `${v}%` }}
+        />
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">步进圆点 (step=25)</p>
+        <Slider defaultValue={50} step={25} dots />
+      </div>
+      <div>
+        <p className="mb-2 text-sm text-muted-foreground">离散取值（step=null + marks 吸附）</p>
+        <Slider
+          defaultValue={25}
+          marks={{ 0: "0", 25: "25", 50: "50", 75: "75", 100: "100" }}
+          step={null}
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Slider
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 受控值，单值模式为 `number`，范围模式为 `number[]` | `number` \| `number[]` | - |
+| defaultValue | 默认值 | `number` \| `number[]` | 单值 `0`，范围 `[0, 100]` |
+| onChange | 值变化回调，单值返回 `number`，范围返回 `number[]` | `(value: number) => void` \| `(value: number[]) => void` | - |
+| onChangeComplete | 拖拽结束（mouseup/touchend）后的回调 | `(value: number) => void` \| `(value: number[]) => void` | - |
+| range | 是否启用双滑块范围模式，设为 `true` 后 `value`/`defaultValue`/`onChange` 等均使用 `number[]` | `boolean` | `false` |
+| min | 最小值 | `number` | `0` |
+| max | 最大值 | `number` | `100` |
+| step | 步长，`null` 表示连续滑动（配合 marks 实现离散吸附） | `number` \| `null` | `1` |
+| marks | 刻度标记，键为数值，值为展示文本或 `{ label, className, style }` 配置对象 | `Record<number, SliderMark>` | - |
+| dots | 是否显示步进圆点，有 marks 时显示 mark 位置，无 marks 时按 step 均匀分布 | `boolean` | `false` |
+| tooltip | 拖拽时浮层提示，`false` 关闭，或传入 `{ formatter?, placement?, open? }` 配置 | `false` \| `SliderTooltip` | 显示数值 |
+| included | 轨道已选部分是否高亮填充 | `boolean` | `true` |
+| reverse | 是否反向（最大值在起始端） | `boolean` | `false` |
+| orientation | 水平或垂直方向 | `"horizontal"` \| `"vertical"` | `"horizontal"` |
+| vertical | 垂直模式简写，等同于 `orientation="vertical"` | `boolean` | `false` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| variant | 视觉变体，仅支持 `"default"` | `"default"` | `"default"` |
+
+### SliderMark 类型
+
+```ts
+type SliderMark = React.ReactNode | {
+  label: React.ReactNode
+  className?: string
+  style?: React.CSSProperties
+}
+```
+
+传字符串或 ReactNode 直接作为刻度文本展示；对象格式支持文字+样式。
+
+### SliderTooltip 类型
+
+```ts
+type SliderTooltip = false | {
+  open?: boolean
+  formatter?: (value: number) => React.ReactNode
+  placement?: "top" | "bottom" | "left" | "right"
+}
+```
+
+`false` 关闭 Tooltip；对象模式下默认展示原始数值，`formatter` 可自定义格式。
+
+<h2 id="faq">常见问题</h2>
+
+### `step={null}` 和 `marks` 如何配合使用？
+
+当 `step={null}` 且设置了 `marks` 时，滑块会在 mark 刻度值之间自由滑动，松手后自动吸附到最近的 mark 值。这本质上提供了一个带标签的离散选择器，将底层的连续 Slider 转换为离散交互。
+
+```tsx
+<Slider
+  marks={{ 0: "0", 25: "25", 50: "50", 75: "75", 100: "100" }}
+  step={null}
+  defaultValue={25}
+/>
+```
+
+### 范围模式和非范围模式的类型区别？
+
+当 `range={false}`（默认）时：
+- `value`/`defaultValue` 类型为 `number`
+- `onChange`/`onChangeComplete` 回调参数为 `number`
+
+当 `range={true}` 时：
+- `value`/`defaultValue` 类型为 `number[]`（长度为 2）
+- `onChange`/`onChangeComplete` 回调参数为 `number[]`
+
+类型系统会根据 `range` 属性自动推断。
+
+### dots 和 marks 同时存在时显示什么？
+
+当同时设置 `dots` 和 `marks` 时，dots 圆点会显示在所有 mark 位置（而不再按 step 均匀分布）。这确保刻度标记和视觉指示点一致。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+1. 从 `@/components/core/slider` 导入，不要从 `antd` 导入。
+2. 单值不设 `range`，范围必须设 `range`。
+3. 需要停顿点用 `marks`，需要均匀步进点用 `dots`。
+4. `marks` 的 key 必须在 `[min, max]` 范围内，超出部分会被过滤。
+5. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="slider" />

@@ -1,0 +1,97 @@
+GlassIcons 玻璃拟态风格图标按钮组，每个图标拥有渐变背景和毛玻璃效果，支持预设渐变色。
+
+<h2 id="when-to-use">何时使用</h2>
+当需要展示一组带有视觉层次感和玻璃质感的图标按钮时使用。
+常见场景：
+- 社交媒体链接入口
+- 功能导航图标组
+- 品牌或服务的快捷入口按钮
+不推荐：
+- 需要复杂交互的按钮（组件为纯展示型 button，无路由或状态逻辑）
+- 图标数量过多时（水平排列空间有限）
+
+<h2 id="examples">代码演示</h2>
+### 基础用法
+
+<ComponentShowcase id="marketing-blocks/glass-icons" path="marketing-blocks/glass-icons/basic" />
+
+```tsx
+import { GlassIcons } from "@/components/marketing-blocks/glass-icons"
+import { Github, Twitter, Linkedin } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <GlassIcons
+      items={[
+        { icon: <Github size={20} />, label: "GitHub", color: "purple" },
+        { icon: <Twitter size={20} />, label: "Twitter", color: "blue" },
+        { icon: <Linkedin size={20} />, label: "LinkedIn", color: "indigo" },
+      ]}
+    />
+  )
+}
+```
+
+### 自定义颜色与图标
+
+```tsx
+import { GlassIcons } from "@/components/marketing-blocks/glass-icons"
+import { Mail, MessageCircle, Share2 } from "lucide-react"
+
+export default function Demo() {
+  return (
+    <GlassIcons
+      items={[
+        { icon: <Mail size={20} />, label: "Email", color: "red" },
+        { icon: <MessageCircle size={20} />, label: "Chat", color: "green" },
+        { icon: <Share2 size={20} />, label: "Share", color: "#FF6F37" },
+      ]}
+      className="gap-4"
+    />
+  )
+}
+```
+
+<h2 id="api">API</h2>
+### GlassIcons
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| items | 图标项数组（必填） | `GlassIconsItem[]` | - |
+| className | 外层容器附加样式类名 | `string` | - |
+
+### GlassIconsItem
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| icon | 图标 React 节点 | `React.ReactNode` | - |
+| label | 图标下方的文字标签 | `string` | - |
+| color | 背景渐变颜色 | `string` | - |
+| customClass | 单个按钮的自定义类名 | `string` | - |
+
+### 预设颜色映射
+| 颜色名 | 渐变值 |
+| --- | --- |
+| blue | `linear-gradient(hsl(223, 90%, 50%), hsl(208, 90%, 50%))` |
+| purple | `linear-gradient(hsl(283, 90%, 50%), hsl(268, 90%, 50%))` |
+| red | `linear-gradient(hsl(3, 90%, 50%), hsl(348, 90%, 50%))` |
+| indigo | `linear-gradient(hsl(253, 90%, 50%), hsl(238, 90%, 50%))` |
+| orange | `linear-gradient(hsl(43, 90%, 50%), hsl(28, 90%, 50%))` |
+| green | `linear-gradient(hsl(123, 90%, 40%), hsl(108, 90%, 40%))` |
+
+<h2 id="faq">常见问题</h2>
+### color 支持哪些值？
+支持 6 种预设颜色名：`blue`、`purple`、`red`、`indigo`、`orange`、`green`。如果传入的值不在预设映射中，则直接作为 CSS `background` 值使用，支持任意合法的 CSS 背景值（如 hex、linear-gradient 等）。
+
+### 按钮的悬浮效果是什么？
+按钮包含三层结构：`icon-btn__back`（渐变背景）、`icon-btn__front`（毛玻璃覆盖层）和 `icon-btn__label`（底部文字）。CSS 样式通过 `icon-btn` 类实现 hover 时的缩放、阴影和文字显现效果。
+
+### 图标和文字如何对应？
+`icon` 为任意 React 节点（建议使用 `lucide-react` 图标或 SVG），`label` 为 `aria-label` 的无障碍文本，同时也是悬浮时显示的底部文字。
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+1. 从 `@/components/marketing-blocks/glass-icons` 导入。
+2. 纯 CSS 实现，无额外第三方依赖。
+3. `items` 为必填属性，每项需提供 `icon`（React 节点）、`label`（文字）和 `color`（预设名或 CSS 背景值）。
+4. 每个按钮通过 `aria-label={item.label}` 提供无障碍支持，`icon` 元素设置 `aria-hidden="true"`。
+
+<h2 id="source">源码</h2>
+<SourceViewer componentId="rb-glass-icons" />

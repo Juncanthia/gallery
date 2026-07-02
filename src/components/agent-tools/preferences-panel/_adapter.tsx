@@ -14,14 +14,14 @@
  */
 
 export { cn } from "@/lib/utils";
-export { Button } from "@/components/ui/button";
-export { Switch } from "@/components/ui/switch";
-export { ToggleGroup } from "@/components/ui/toggle-group"
-export { ToggleGroupItem } from "@/components/ui/toggle-group";
-export { Select } from "@/components/ui/select"
-export { SelectContent } from "@/components/ui/select"
-export { SelectItem } from "@/components/ui/select"
-export { SelectTrigger } from "@/components/ui/select"
-export { SelectValue } from "@/components/ui/select"
-export { Separator } from "@/components/ui/separator";
-export { Label } from "@/components/ui/label";
+export { Button } from "@/components/core/button";
+export { Switch } from "@/components/core/switch";
+export { ToggleGroup } from "@/components/core/toggle-group"
+export { ToggleGroupItem } from "@/components/core/toggle-group";
+export { Select } from "@/components/core/select"
+export { SelectContent } from "@/components/core/select"
+export { SelectItem } from "@/components/core/select"
+export { SelectTrigger } from "@/components/core/select"
+export { SelectValue } from "@/components/core/select"
+export { Separator } from "@/components/core/separator";
+export { Label } from "@/components/core/label";

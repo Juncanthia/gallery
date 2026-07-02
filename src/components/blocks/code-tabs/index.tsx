@@ -13,8 +13,8 @@ import {
   TabsHighlight,
   TabsHighlightItem,
   type TabsProps,
-} from '@/components/_primitives/animate/tabs';
-import { CopyButton } from '@/components/ui/copy-button';
+} from '@/components/_internal/animate/tabs';
+import { CopyButton } from '@/components/core/copy-button';
 
 type CodeTabsProps = {
   codes: Record<string, string>;

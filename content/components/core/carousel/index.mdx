@@ -1,0 +1,221 @@
+Carousel 轮播走马灯，基于 Embla Carousel 实现，支持水平/垂直滚动、自动播放、指示器和键盘导航。
+
+<h2 id="when-to-use">何时使用</h2>
+
+当需要在有限空间内展示一组可切换的卡片或媒体内容时使用。
+
+常见场景：
+
+- 首页的 Banner 轮播。
+- 商品图片的预览切换。
+- 内容推荐的卡片滑动。
+- 图库的缩略图浏览。
+
+Carousel 基于 Embla Carousel 实现高性能的滑动体验，支持：
+
+- 水平/垂直滚动方向。
+- 自动播放（`autoplay`）。
+- 指示器（`dots`），支持进度条模式。
+- 导航按钮（`arrows`）。
+- 回调钩子（`beforeChange`/`afterChange`）。
+- `items` 声明式配置或子组件手动布局。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+`CarouselContent` + `CarouselItem` 构建轮播项，`CarouselPrevious`/`CarouselNext` 添加导航按钮。
+
+<ComponentShowcase
+  id="carousel"
+  path="carousel/basic"
+/>
+
+```tsx
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/core/carousel"
+import { Card, CardContent } from "@/components/core/card"
+
+export default function Demo() {
+  return (
+    <Carousel className="w-full max-w-xs">
+      <CarouselContent>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <CarouselItem key={i}>
+            <Card>
+              <CardContent className="flex aspect-square items-center justify-center p-6">
+                <span className="text-2xl font-semibold">{i}</span>
+              </CardContent>
+            </Card>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  )
+}
+```
+
+### 使用 items 配置
+
+`items` 数组声明式构建轮播项。
+
+```tsx
+import { Carousel } from "@/components/core/carousel"
+
+export default function Demo() {
+  return (
+    <Carousel
+      className="w-full max-w-sm"
+      items={[
+        { key: "1", content: <div className="flex aspect-video items-center justify-center rounded bg-muted text-2xl">1</div> },
+        { key: "2", content: <div className="flex aspect-video items-center justify-center rounded bg-muted text-2xl">2</div> },
+        { key: "3", content: <div className="flex aspect-video items-center justify-center rounded bg-muted text-2xl">3</div> }
+      ]}
+    />
+  )
+}
+```
+
+### 自动播放
+
+`autoplay` 启用自动切换，`autoplaySpeed` 控制间隔（毫秒）。
+
+```tsx
+import { Carousel, CarouselContent, CarouselItem } from "@/components/core/carousel"
+
+export default function Demo() {
+  return (
+    <Carousel className="w-full max-w-sm" autoplay autoplaySpeed={2000}>
+      <CarouselContent>
+        {[1, 2, 3].map((i) => (
+          <CarouselItem key={i}>
+            <div className="flex aspect-video items-center justify-center rounded bg-muted text-2xl">{i}</div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
+  )
+}
+```
+
+### 指示器位置
+
+`dotPlacement` 控制指示器位置：`top`、`bottom`、`start`、`end`。
+
+```tsx
+import { Carousel, CarouselContent, CarouselItem } from "@/components/core/carousel"
+
+export default function Demo() {
+  return (
+    <Carousel className="w-full max-w-sm" dots dotPlacement="top">
+      <CarouselContent>
+        {[1, 2, 3].map((i) => (
+          <CarouselItem key={i}>
+            <div className="flex aspect-video items-center justify-center rounded bg-muted text-2xl">{i}</div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
+  )
+}
+```
+
+### 隐藏箭头和指示器
+
+设置 `arrows={false}` 和 `dots={false}` 隐藏控件。
+
+```tsx
+import { Carousel, CarouselContent, CarouselItem } from "@/components/core/carousel"
+
+export default function Demo() {
+  return (
+    <Carousel className="w-full max-w-sm" arrows={false} dots={false}>
+      <CarouselContent>
+        {[1, 2, 3].map((i) => (
+          <CarouselItem key={i}>
+            <div className="flex aspect-video items-center justify-center rounded bg-muted text-2xl">{i}</div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### Carousel
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| orientation | 滚动方向 | `horizontal` \| `vertical` | `horizontal` |
+| opts | Embla Carousel 配置 | `CarouselOptions` | - |
+| plugins | Embla Carousel 插件 | `CarouselPlugin` | - |
+| items | 声明式轮播项 | `CarouselItemOption[]` | - |
+| arrows | 显示导航箭头 | `boolean` | `true` |
+| dots | 显示指示器 | `boolean \| { className?: string }` | `true` |
+| dotPlacement | 指示器位置 | `top` \| `bottom` \| `start` \| `end` | `bottom` |
+| autoplay | 自动播放 | `boolean \| { dotDuration?: boolean }` | `false` |
+| autoplaySpeed | 自动播放间隔（毫秒） | `number` | `3000` |
+| beforeChange | 切换前回调 | `(current: number, next: number) => void` | - |
+| afterChange | 切换后回调 | `(current: number) => void` | - |
+| setApi | 获取 Embla API | `(api: CarouselApi) => void` | - |
+| contentClassName | 内容区附加 className | `string` | - |
+| itemClassName | 每个轮播项的附加 className | `string` | - |
+| className | 附加样式 | `string` | - |
+
+### CarouselContent
+
+轮播轨道容器，`overflow-hidden`。
+
+### CarouselItem
+
+单个轮播项，`min-w-0 shrink-0 grow-0 basis-full`。
+
+### CarouselPrevious / CarouselNext
+
+导航按钮，自动根据 `canScrollPrev`/`canScrollNext` 禁用。
+
+<h2 id="faq">常见问题</h2>
+
+### 如何禁用自动播放？
+
+设置 `autoplay={false}`（默认值）。
+
+### 如何控制每次滚动的数量？
+
+通过 `opts` 传入 Embla 配置：
+
+```tsx
+<Carousel opts={{ slidesToScroll: 2 }}>
+```
+
+### 如何获取当前 slide 索引？
+
+通过 `afterChange` 回调：
+
+```tsx
+<Carousel afterChange={(index) => console.log(index)}>
+```
+
+或通过 `setApi` 获取底层 Embla API：
+
+```tsx
+<Carousel setApi={(api) => { /* 使用 api */ }}>
+```
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 Carousel 代码时：
+
+1. 从 `@/components/core/carousel` 导入。
+2. 每个 `CarouselItem` 必须有唯一的 `key`。
+3. 简单场景使用 `items` 声明式配置。
+4. 需要自定义卡片内容时使用 `CarouselContent` + `CarouselItem` 子组件模式。
+5. 导航按钮使用 `CarouselPrevious` 和 `CarouselNext`（自带样式和 disabled 状态），不要手动实现。
+6. 不要引入 Ant Design 相关依赖。
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="carousel" />

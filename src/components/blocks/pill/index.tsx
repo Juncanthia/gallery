@@ -1,8 +1,8 @@
 import { ChevronDown as ChevronDownIcon, ChevronUp as ChevronUpIcon, Minus as MinusIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/core/avatar";
+import { Badge } from "@/components/core/badge";
+import { Button } from "@/components/core/button";
 import { cn } from "@/lib/utils";
 
 export type PillProps = ComponentProps<typeof Badge> & {

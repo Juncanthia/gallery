@@ -31,7 +31,7 @@ import {
   type SortableContextProps,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/core/button";
 import { composeRefs } from "@/components/data-display/data-table-filters/lib/compose-refs";
 import { cn } from "@/components/data-display/data-table-filters/lib/utils";
 import { Slot, type SlotProps } from "@radix-ui/react-slot";

@@ -1,0 +1,285 @@
+ChartContainer 是 EvilCharts 的底层容器组件，基于 Recharts ResponsiveContainer 封装，为所有上层图表组件提供主题感知的 CSS 变量注入、ChartConfig 校验、共享 Context 及可选的 footer 区域（如 EvilBrush）。
+
+<h2 id="when-to-use">何时使用</h2>
+
+使用 ChartContainer 构建自定义图表布局。
+
+常见场景：
+
+- 直接使用 Recharts 原生图表组件（AreaChart、BarChart、LineChart 等），需要 EvilCharts 的 theme-aware 颜色系统和统一容器行为。
+- 需要自定义图表结构，不完全满足 EvilBarChart、EvilLineChart 等高层组件的语义时。
+- 作为 EvilCharts 上层图表组件（EvilBarChart、EvilLineChart、EvilComposedChart、EvilPieChart、EvilRadarChart、EvilRadialChart、EvilSankeyChart）的内部基础设施——这些组件均基于 ChartContainer 构建。
+
+ChartContainer 核心概念：
+
+- `config`：`ChartConfig` 类型，定义每个数据系列的 `label`、`icon` 和 `colors: { light: string[], dark: string[] }`。颜色通过 `--color-{key}-{index}` CSS 变量注入图表内所有 Recharts 子组件。
+- 底层包裹 `RechartsPrimitive.ResponsiveContainer`，支持 `aspect`、`initialDimension`、`debounce`、`minHeight`/`minWidth`/`maxHeight`、`onResize` 等响应式能力。
+- `footer` 插槽用于在图表下方渲染辅助 UI（如 EvilBrush 刷选控件）。
+
+<h2 id="examples">代码演示</h2>
+
+### 基础用法
+
+使用 ChartContainer 包裹原生 Recharts AreaChart，通过 `config` 注入双主题颜色。子组件通过 `var(--color-{key}-{index})` 引用 CSS 变量。
+
+<ComponentShowcase
+  id="charts/evilcharts"
+  path="charts/evilcharts/basic"
+/>
+
+```tsx
+import { ChartContainer } from "@/components/charts/evil-charts"
+import type { ChartConfig } from "@/components/charts/evil-charts/components/chart"
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts"
+
+const data = [
+  { month: "1月", desktop: 186, mobile: 80 },
+  { month: "2月", desktop: 305, mobile: 200 },
+  { month: "3月", desktop: 237, mobile: 120 },
+  { month: "4月", desktop: 273, mobile: 190 },
+  { month: "5月", desktop: 209, mobile: 130 },
+  { month: "6月", desktop: 346, mobile: 250 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: { light: ["#2563eb"], dark: ["#60a5fa"] },
+  },
+  mobile: {
+    label: "Mobile",
+    colors: { light: ["#059669"], dark: ["#34d399"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  return (
+    <ChartContainer config={chartConfig} className="h-full w-full p-4">
+      <AreaChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="month" />
+        <YAxis />
+        <Tooltip />
+        <Area
+          dataKey="desktop"
+          type="monotone"
+          fill="var(--color-desktop-0)"
+          stroke="var(--color-desktop-0)"
+          fillOpacity={0.2}
+        />
+        <Area
+          dataKey="mobile"
+          type="monotone"
+          fill="var(--color-mobile-0)"
+          stroke="var(--color-mobile-0)"
+          fillOpacity={0.2}
+        />
+      </AreaChart>
+    </ChartContainer>
+  )
+}
+```
+
+### 加载状态
+
+通过 `LoadingIndicator` 在数据加载期间显示脉冲动画遮罩。`getLoadingData` 可生成随机占位数据。
+
+```tsx
+import { ChartContainer, LoadingIndicator, getLoadingData } from "@/components/charts/evil-charts"
+import { BarChart, Bar, XAxis, CartesianGrid } from "recharts"
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    colors: { light: ["#2563eb"], dark: ["#60a5fa"] },
+  },
+} satisfies ChartConfig
+
+export default function Demo() {
+  const loading = true
+
+  return (
+    <ChartContainer config={chartConfig} className="h-full w-full p-4">
+      <LoadingIndicator isLoading={loading} />
+      <BarChart data={loading ? getLoadingData(8) : realData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="month" />
+        <Bar dataKey="desktop" fill="var(--color-desktop-0)" radius={[2, 2, 0, 0]} />
+      </BarChart>
+    </ChartContainer>
+  )
+}
+```
+
+### Footer 插槽
+
+`footer` 用于在图表下方放置辅助控件（如 EvilBrush 刷选组件）。EvilBrush 的 `skipStyle` 应设为 `true`，因为 ChartContainer 已注入 CSS 变量。
+
+```tsx
+import { ChartContainer } from "@/components/charts/evil-charts"
+import { EvilBrush } from "@/components/core/brush"
+import { LineChart, Line, XAxis, CartesianGrid, Tooltip } from "recharts"
+
+export default function Demo() {
+  return (
+    <ChartContainer
+      config={chartConfig}
+      className="h-full w-full p-4"
+      footer={
+        <EvilBrush
+          data={fullData}
+          chartConfig={chartConfig}
+          xDataKey="month"
+          variant="area"
+          height={48}
+          skipStyle
+          className="mt-1"
+          onChange={(range) => setVisibleRange(range)}
+        />
+      }
+    >
+      <LineChart data={visibleData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="month" />
+        <Tooltip />
+        <Line dataKey="desktop" stroke="var(--color-desktop-0)" />
+      </LineChart>
+    </ChartContainer>
+  )
+}
+```
+
+<h2 id="api">API</h2>
+
+### ChartContainer
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| config | 图表颜色和标签配置，键名需与数据系列 dataKey 对应 | `ChartConfig` | 必填 |
+| children | Recharts 图表组件（AreaChart、BarChart、LineChart 等） | `React.ReactNode` | 必填 |
+| className | 容器附加样式 | `string` | - |
+| id | 图表唯一标识，生成 CSS 作用域前缀 | `string` | 自动生成 |
+| footer | 图表下方辅助内容（如 EvilBrush） | `React.ReactNode` | - |
+| initialDimension | Recharts ResponsiveContainer 初始尺寸 | `{ width: number; height: number }` | `{ width: 320, height: 200 }` |
+| aspect | Recharts ResponsiveContainer 宽高比 | `number` | - |
+| debounce | Recharts ResponsiveContainer resize 防抖 | `number` | - |
+| minHeight | Recharts ResponsiveContainer 最小高度 | `number` | - |
+| minWidth | Recharts ResponsiveContainer 最小宽度 | `number` | - |
+| maxHeight | Recharts ResponsiveContainer 最大高度 | `number` | - |
+| height | Recharts ResponsiveContainer 固定高度 | `number \| string` | - |
+| width | Recharts ResponsiveContainer 固定宽度 | `number \| string` | - |
+| onResize | Recharts ResponsiveContainer 尺寸变化回调 | `(width: number, height: number) => void` | - |
+| innerResponsiveContainerStyle | Recharts ResponsiveContainer style 透传 | `React.CSSProperties` | - |
+
+### ChartConfig
+
+每个系列的颜色与标签配置。键名对应数据行的 dataKey。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 系列标签，用于 Tooltip 和 Legend | `React.ReactNode` | - |
+| icon | 系列图标，用于 Tooltip 和 Legend | `React.ComponentType` | - |
+| colors | 双主题颜色数组，至少一个主题键 | `{ light?: string[]; dark?: string[] }` | - |
+
+`colors` 必须至少提供 `light` 或 `dark` 之一。数组长度决定该系列的颜色梯度数量——单值时为纯色，多值时为渐变。
+
+### LoadingIndicator
+
+加载遮罩组件。放置在 ChartContainer children 内。
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| isLoading | 是否显示加载遮罩 | `boolean` | - |
+
+### useChart
+
+读取 ChartContainer 上下文的 Hook。用于自定义 Recharts 内容组件读取 `config`。
+
+```tsx
+const { config } = useChart()
+```
+
+### getPayloadConfigFromPayload
+
+从 Recharts payload 中提取对应系列的 config 条目。
+
+```tsx
+getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string)
+```
+
+### getColorsCount
+
+获取某个 config 条目的最大颜色数（跨主题）。
+
+```tsx
+getColorsCount(config: ChartConfig[string]): number
+```
+
+### getLoadingData
+
+生成随机加载占位数据。
+
+```tsx
+getLoadingData(points?: number, min?: number, max?: number): { loading: number }[]
+```
+
+<h2 id="faq">常见问题</h2>
+
+### 何时直接使用 ChartContainer 而非 EvilBarChart / EvilLineChart？
+
+当你需要自由组合原生 Recharts 组件构建自定义图表结构时使用 ChartContainer。EvilBarChart、EvilLineChart 等高层组件提供了声明式子组件（Bar、Line、XAxis、Tooltip 等）和交互状态管理（选择、动画、Brush），大部分场景应优先使用它们以简化代码。
+
+### config 中的 colors 数组如何工作？
+
+`colors` 下的每个主题键是一个颜色数组。ChartContainer 通过 ChartStyle 将颜色值注入为 CSS 变量 `--color-{key}-{index}`。子组件通过 `var(--color-desktop-0)` 引用颜色。多色值数组产生渐变，单色值渲染纯色。
+
+### 如何配合 EvilBrush 使用？
+
+通过 `footer` 属性传入 EvilBrush。EvilBrush 的 `skipStyle` 应设为 `true`（因为 ChartContainer 已经注入了 CSS 变量）。监听 EvilBrush 的 `onChange` 回调获取可见范围，对 data 切片后传入图表组件。
+
+### ChartContainer 和 Recharts ResponsiveContainer 的关系？
+
+ChartContainer 内部使用 Recharts ResponsiveContainer，并透传其大部分 props。ChartContainer 额外提供：
+
+- theme-aware CSS 变量注入（ChartStyle）
+- ChartContext（供 useChart 消费）
+- 统一的样式重置和 Recharts 默认样式覆写
+- 可选的 footer 插槽
+- LoadingIndicator 集成
+
+<h2 id="llm-rules">LLM 使用规则</h2>
+
+AI 生成 ChartContainer 代码时：
+
+1. `ChartContainer`、`LoadingIndicator`、`getLoadingData`、`useChart` 从 `@/components/charts/evil-charts` 导入。
+2. `ChartConfig` 类型从 `@/components/charts/evil-charts/components/chart` 导入。
+3. `config` 必须使用 `satisfies ChartConfig`，每个 key 的 `colors` 至少包含 `light` 或 `dark` 之一。
+4. Recharts 子组件中引用颜色使用 `var(--color-{key}-{index})` 格式。
+5. 需要加载状态时使用 `LoadingIndicator` + `getLoadingData`，不要自行实现加载 UI。
+6. 需要刷选缩放时通过 `footer` 传入 EvilBrush，并设 `skipStyle=true`。
+7. 优先使用 EvilCharts 高层图表组件（EvilBarChart、EvilLineChart 等），仅在需要自由组合时使用 ChartContainer。
+8. 不要从 recharts 的 ResponsiveContainer 自带 props 中重复指定已在 ChartContainer 中透传的属性。
+
+<h2 id="semantic-dom">Semantic DOM</h2>
+
+ChartContainer 通过 `data-slot` 和 `data-chart` 属性暴露稳定语义：
+
+| data-slot | 说明 |
+| --- | --- |
+| `chart` | 图表根容器 |
+
+### 渲染结构
+
+```tsx
+<div data-slot="chart" data-chart="chart-{id}">
+  <style>{/* CSS variables: --color-{key}-{index} */}</style>
+  <ResponsiveContainer>
+    {children}
+  </ResponsiveContainer>
+  {footer}
+</div>
+```
+
+<h2 id="source">源码</h2>
+
+<SourceViewer componentId="charts/evilcharts" />

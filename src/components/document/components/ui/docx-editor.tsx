@@ -65,9 +65,9 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { cn } from "@/components/_shared/uselayouts/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ColorPickerTriggerButton } from "@/components/ui/color-picker"
+import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { Button } from "@/components/core/button"
+import { ColorPickerTriggerButton } from "@/components/core/color-picker"
 import {
   DocumentViewerThumbnailSidebar,
   useElementWidth,
@@ -83,31 +83,31 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/core/dropdown-menu"
 import { FileThumbnail } from "@/components/document/components/ui/file-thumbnail"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/core/input"
 import {
   Popover,
   PopoverAnchor,
   PopoverContent,
-} from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/core/popover"
+import { ScrollArea } from "@/components/core/scroll-area"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Spinner } from "@/components/ui/spinner"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/core/select"
+import { Separator } from "@/components/core/separator"
+import { Spinner } from "@/components/blocks/spinner"
+import { ToggleGroup, ToggleGroupItem } from "@/components/core/toggle-group"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/core/tooltip"
 
 const DOCX_MIME_TYPE =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
