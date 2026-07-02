@@ -6,7 +6,7 @@ import { useTheme } from "next-themes"
 import * as React from "react"
 import { BrushCleaning } from "@/components/effects/interactions/_internal/animate-icons/brush-cleaning"
 import { ThemeToggle } from "@/components/general/theme-toggle"
-import { useClickOutside } from "@/components/_internal/gooseui/hooks/use-click-outside"
+import { useClickOutside } from "@/_internals/foundations/hooks/use-click-outside"
 import { cn } from "@/components/_internal/gooseui/lib/utils"
 
 const colors = [

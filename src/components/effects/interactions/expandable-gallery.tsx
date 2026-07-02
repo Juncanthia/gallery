@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { useState, useId, useRef } from "react";
-import { useOutsideClick } from "@/components/_internal/uselayouts/hooks/use-outside-click";
+import { useClickOutside } from "@/_internals/foundations/hooks/use-click-outside";
 import { Button } from "@/components/core/button";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -82,7 +82,7 @@ export default function ExpandableGallery() {
   const layoutGroupId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useOutsideClick(containerRef, () => {
+  useClickOutside(containerRef, () => {
     if (isExpanded) {
       setIsExpanded(false);
     }
