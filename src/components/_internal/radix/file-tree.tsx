@@ -10,17 +10,17 @@ import {
   type HighlightProps,
 } from '@/components/_internal/effects/highlight';
 import {
-  Accordion,
-  AccordionItem,
-  AccordionHeader,
-  AccordionTrigger,
-  AccordionContent,
-  type AccordionProps,
-  type AccordionItemProps,
+  AccordionPrimitive as Accordion,
+  AccordionItemPrimitive as AccordionItem,
+  AccordionHeaderPrimitive as AccordionHeader,
+  AccordionTriggerPrimitive as AccordionTrigger,
+  AccordionContentPrimitive as AccordionContent,
+  type AccordionPrimitiveProps as AccordionProps,
+  type AccordionItemPrimitiveProps as AccordionItemProps,
   type AccordionHeaderProps,
-  type AccordionTriggerProps,
-  type AccordionContentProps,
-} from '@/components/_internal/radix/accordion';
+  type AccordionTriggerPrimitiveProps as AccordionTriggerProps,
+  type AccordionContentPrimitiveProps as AccordionContentProps,
+} from '@/components/core/accordion';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 
