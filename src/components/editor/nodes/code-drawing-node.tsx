@@ -31,7 +31,7 @@ import debounce from 'lodash/debounce.js';
 import { Trash2, DownloadIcon } from 'lucide-react';
 
 import { Button } from '@/components/core/button';
-import { useIsMobile } from '@/components/_internal/hooks/use-mobile';
+import { useIsMobile } from '@/_internals/foundations/hooks/use-mobile';
 import {
   Popover,
   PopoverAnchor,
