@@ -1,20 +1,194 @@
 'use client';
 
 import * as React from 'react';
-
+import {HoverCard as RadixHoverCard} from 'radix-ui';
 import {
-  HoverCard as HoverCardPrimitive,
-  HoverCardTrigger as HoverCardTriggerPrimitive,
-  HoverCardContent as HoverCardContentPrimitive,
-  HoverCardPortal as HoverCardPortalPrimitive,
-  HoverCardArrow as HoverCardArrowPrimitive,
-  type HoverCardProps as HoverCardPropsPrimitive,
-  type HoverCardTriggerProps as HoverCardTriggerPropsPrimitive,
-  type HoverCardContentProps as HoverCardContentPropsPrimitive,
-  type HoverCardPortalProps as HoverCardPortalPropsPrimitive,
-  type HoverCardArrowProps as HoverCardArrowPropsPrimitive,
-} from '@/components/_internal/radix/hover-card';
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useSpring,
+  type MotionValue,
+  type HTMLMotionProps,
+  type SpringOptions,
+} from 'motion/react';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
+
+type HoverCardContextType = {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  x: MotionValue<number>;
+  y: MotionValue<number>;
+  followCursor?: boolean | 'x' | 'y';
+  followCursorSpringOptions?: SpringOptions;
+};
+
+const [HoverCardProvider, useHoverCard] =
+  getStrictContext<HoverCardContextType>('HoverCardContext');
+
+type HoverCardPropsPrimitive = React.ComponentProps<typeof RadixHoverCard.Root> & {
+  followCursor?: boolean | 'x' | 'y';
+  followCursorSpringOptions?: SpringOptions;
+};
+
+function HoverCardPrimitive({
+  followCursor = false,
+  followCursorSpringOptions = { stiffness: 200, damping: 17 },
+  ...props
+}: HoverCardPropsPrimitive) {
+  const [isOpen, setIsOpen] = useControlledState({
+    value: props?.open,
+    defaultValue: props?.defaultOpen,
+    onChange: props?.onOpenChange,
+  });
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  return (
+    <HoverCardProvider
+      value={{
+        isOpen,
+        setIsOpen,
+        x,
+        y,
+        followCursor,
+        followCursorSpringOptions,
+      }}
+    >
+      <RadixHoverCard.Root
+        data-slot="hover-card"
+        {...props}
+        onOpenChange={setIsOpen}
+      />
+    </HoverCardProvider>
+  );
+}
+
+type HoverCardTriggerPropsPrimitive = React.ComponentProps<
+  typeof RadixHoverCard.Trigger
+>;
+
+function HoverCardTriggerPrimitive({ onMouseMove, ...props }: HoverCardTriggerPropsPrimitive) {
+  const { x, y, followCursor } = useHoverCard();
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    onMouseMove?.(event);
+
+    const target = event.currentTarget.getBoundingClientRect();
+
+    if (followCursor === 'x' || followCursor === true) {
+      const eventOffsetX = event.clientX - target.left;
+      const offsetXFromCenter = (eventOffsetX - target.width / 2) / 2;
+      x.set(offsetXFromCenter);
+    }
+
+    if (followCursor === 'y' || followCursor === true) {
+      const eventOffsetY = event.clientY - target.top;
+      const offsetYFromCenter = (eventOffsetY - target.height / 2) / 2;
+      y.set(offsetYFromCenter);
+    }
+  };
+
+  return (
+    <RadixHoverCard.Trigger
+      data-slot="hover-card-trigger"
+      onMouseMove={handleMouseMove}
+      {...props}
+    />
+  );
+}
+
+type HoverCardPortalPropsPrimitive = Omit<
+  React.ComponentProps<typeof RadixHoverCard.Portal>,
+  'forceMount'
+>;
+
+function HoverCardPortalPrimitive(props: HoverCardPortalPropsPrimitive) {
+  const { isOpen } = useHoverCard();
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <RadixHoverCard.Portal
+          forceMount
+          data-slot="hover-card-portal"
+          {...props}
+        />
+      )}
+    </AnimatePresence>
+  );
+}
+
+type HoverCardContentPropsPrimitive = React.ComponentProps<
+  typeof RadixHoverCard.Content
+> &
+  HTMLMotionProps<'div'>;
+
+function HoverCardContentPrimitive({
+  align,
+  alignOffset,
+  side,
+  sideOffset,
+  avoidCollisions,
+  collisionBoundary,
+  collisionPadding,
+  arrowPadding,
+  sticky,
+  hideWhenDetached,
+  style,
+  transition = { type: 'spring', stiffness: 300, damping: 25 },
+  ...props
+}: HoverCardContentPropsPrimitive) {
+  const { x, y, followCursor, followCursorSpringOptions } = useHoverCard();
+  const translateX = useSpring(x, followCursorSpringOptions);
+  const translateY = useSpring(y, followCursorSpringOptions);
+
+  return (
+    <RadixHoverCard.Content
+      asChild
+      forceMount
+      align={align}
+      alignOffset={alignOffset}
+      side={side}
+      sideOffset={sideOffset}
+      avoidCollisions={avoidCollisions}
+      collisionBoundary={collisionBoundary}
+      collisionPadding={collisionPadding}
+      arrowPadding={arrowPadding}
+      sticky={sticky}
+      hideWhenDetached={hideWhenDetached}
+    >
+      <motion.div
+        key="hover-card-content"
+        data-slot="hover-card-content"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.5 }}
+        transition={transition}
+        style={{
+          x:
+            followCursor === 'x' || followCursor === true
+              ? translateX
+              : undefined,
+          y:
+            followCursor === 'y' || followCursor === true
+              ? translateY
+              : undefined,
+          ...style,
+        }}
+        {...props}
+      />
+    </RadixHoverCard.Content>
+  );
+}
+
+type HoverCardArrowPropsPrimitive = React.ComponentProps<
+  typeof RadixHoverCard.Arrow
+>;
+
+function HoverCardArrowPrimitive(props: HoverCardArrowPropsPrimitive) {
+  return <RadixHoverCard.Arrow data-slot="hover-card-arrow" {...props} />;
+}
 
 type PreviewLinkCardContextType = {
   href: string;
