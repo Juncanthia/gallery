@@ -1,6 +1,80 @@
-# 组件库目录架构（Stage A + Stage A+ + Stage B 落地版）
+# 组件库目录架构
 
-> 本文档描述 `src/components/` 的目标目录结构。Stage A（`src/components/` 内部物理搬迁）、Stage A+（`src/hooks/`、`src/lib/`、`src/primitives/` 二次搬迁）、**Stage B（487 个 `ui/` 转发壳改名 + 引用同步 + `catalog.ts` 按功能分类重写）** 均已落地。
+> **Phase 3 封板（2026-07-02）**：hooks/lib 治理重构已完成。本节描述当前生效的 `kit/` + `_internals/` 架构；下方 Stage A/B 章节保留为历史迁移记录。
+
+## 当前架构（kit/ + _internals/）
+
+### 目标结构
+
+```
+src/
+├── kit/                              # 唯一对外公开 API
+│   ├── hooks/                        # Tier 1 公开 hooks
+│   ├── utils/                        # cn、composeRefs、customToast
+│   ├── primitives/                   # 动效/文本原语公开出口
+│   └── index.ts
+│
+├── _internals/                       # 组件库私有实现（禁止外部直接 import）
+│   ├── foundations/                  # Tier 1 实现 + Tier 2 基础设施
+│   │   ├── hooks/                    # use-mobile、use-debounce 等合并后唯一实现
+│   │   ├── utils/                    # cn、compose-refs、get-strict-context
+│   │   ├── primitives/               # radix/animate/effects/texts
+│   │   ├── headless/                 # 原 dice/internal 无头原语系统
+│   │   └── theme/
+│   └── domains/                      # Tier 3 功能域私有代码
+│       ├── charts/hooks/
+│       ├── media/hooks/ + utils/
+│       ├── data-table/hooks/ + utils/ + store/
+│       ├── document/
+│       └── editor/
+│
+├── components/                       # 组件实现（按功能域组织，无 vendor 子目录）
+├── app/                              # Gallery 应用（非组件库）
+└── lib/                              # Gallery 应用专属（uploadthing 等）
+```
+
+### Tier 分级（复用语义，非引用计数）
+
+| Tier | 位置 | 判断标准 | 示例 |
+| --- | --- | --- | --- |
+| **Tier 1** | `kit/` 导出 ← `_internals/foundations/` 实现 | 与业务无关、跨系统复用的稳定工具 | `useMobile`、`useDebounce`、`cn` |
+| **Tier 2** | `_internals/foundations/` | 组件库内部多域共享、不对外承诺稳定 | `useIsomorphicLayoutEffect`、`headless/*` |
+| **Tier 3** | `_internals/domains/<domain>/` | 只被单一功能域消费 | `use-chart-interaction`、`use-player` |
+
+### 新增 hook 决策树
+
+```
+新 hook 要放哪？
+├─ 会被外部系统直接复用？
+│  └─ 是 → foundations/hooks/ 实现 + kit/hooks/ 导出（Tier 1）
+├─ 只被组件库内多个功能域共享？
+│  └─ 是 → _internals/foundations/hooks/（Tier 2，暂不导出 kit）
+└─ 只服务单一功能域（charts/media/data-table/...）？
+   └─ 是 → _internals/domains/<domain>/hooks/（Tier 3）
+```
+
+**禁止事项：**
+- 禁止在 `src/components/<domain>/hooks/` 新增散装 hook（除审计豁免的演示代码）
+- 禁止引入 vendor 来源标记（`dice`、`gooseui` 等）到路径或文件名
+- 禁止 `components/` 反向 import `@/app/*`
+- 禁止 `kit/` 直通 `_internals/domains/*`
+
+### 防回潮机制
+
+```bash
+pnpm verify                    # typecheck + registry + duplicate-hooks + no-vendor-names + lint
+pnpm check:duplicate-hooks     # 同名 use-* 检测
+pnpm check:no-vendor-names     # vendor 路径段检测
+pnpm check:registry            # registry 路径一致性
+```
+
+ESLint `no-restricted-imports` 规则固化：components↛app、domains 间隔离、kit↛domains。
+
+---
+
+## 历史：Stage A + Stage A+ + Stage B 落地版
+
+> 以下章节记录 2026 年 3–6 月 `src/components/` 物理搬迁过程，部分路径表述已被上方 kit/_internals 架构取代。
 
 ## 核心原则
 

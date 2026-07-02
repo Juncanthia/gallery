@@ -73,6 +73,70 @@ src/lib
 | `pnpm check:registry` | ✅ 通过 | Registry OK (220 items) |
 | `ts-morph` | ✅ 已安装 | v28.0.0（T0.3 新增 devDependency） |
 
+---
+
+## 重构后指标（Phase 3 封板，2026-07-02）
+
+> 分支：`refactor/kit-internals` · 对比基线：上方 Phase 0 数据
+
+### Hooks
+
+| 指标 | 基线 | 重构后 | 变化 |
+| --- | ---: | ---: | --- |
+| `use-*` 文件总数 | 97 | 79 | −18（去重 + 域迁移） |
+| hooks 所在目录数 | 17 | 11 | −6 |
+| use-mobile 副本数 | 6 | 1 | 合并至 foundations |
+
+### hooks 目录清单（重构后）
+
+```
+src/_internals/foundations/hooks
+src/_internals/foundations/headless/hooks
+src/_internals/foundations/theme
+src/_internals/domains/charts/hooks
+src/_internals/domains/data-table/hooks
+src/_internals/domains/media/hooks
+src/app/navigation/toc
+src/app/shell
+src/components/agent-tools/shared
+src/components/editor
+src/components/marketing-blocks/complex-component/hooks   # 审计豁免：演示数据
+```
+
+### Lib 目录
+
+| 指标 | 基线 | 重构后 |
+| --- | ---: | ---: |
+| `lib/` 目录数 | 16 | 4 |
+
+```
+src/_internals/foundations/headless/lib     # headless 原语专用
+src/components/marketing-blocks/complex-component/lib   # 审计豁免
+src/components/effects/interactions/lib     # 领域内聚
+src/lib                                     # Gallery app 专属
+```
+
+### 架构清洁度
+
+| 检查项 | 基线 | 重构后 |
+| --- | --- | --- |
+| `rg "@/components/_internal" src content` | 大量 | **0** |
+| `src/components/_internal/` 目录 | 80 文件 | **已删除** |
+| `src/components/base/` | 1 文件 | **已归档** |
+| vendor 路径段（dice/gooseui/...） | 大量 | **0**（check:no-vendor-names） |
+| 同名 hook 重复 | use-mobile ×6 等 | **0**（1 组 headless 豁免） |
+
+### 验证命令（重构后）
+
+| 命令 | 结果 | 备注 |
+| --- | --- | --- |
+| `pnpm typecheck` | ✅ 0 错误 | ~60s |
+| `pnpm check:registry` | ✅ 通过 | Registry OK (220 items) |
+| `pnpm check:duplicate-hooks` | ✅ 通过 | 78 unique files |
+| `pnpm check:no-vendor-names` | ✅ 通过 | src/ 无 vendor 路径段 |
+| `pnpm verify` | ⚠️ lint 段失败 | 893 个既有 lint 问题，非本次引入 |
+| `pnpm build` | ❌ 失败 | 63 个 MDX 解析错误（content/ 既有问题） |
+
 ## 其他
 
 | 指标 | 数值 |
