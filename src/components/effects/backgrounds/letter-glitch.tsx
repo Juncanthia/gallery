@@ -196,7 +196,7 @@ export function LetterGlitch({
       cancelAnimationFrame(animationRef.current)
       window.removeEventListener("resize", handleResize)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [glitchSpeed, smooth])
 
   return (

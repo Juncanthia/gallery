@@ -561,7 +561,7 @@ export function useLoadingData(isLoading: boolean, loadingPoints: number = LOADI
   const loadingData = useMemo(
     () => generateLoadingData(loadingPoints),
     // refreshKey toggle triggers re-computation each animation cycle
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [loadingPoints, refreshKey],
   );
 

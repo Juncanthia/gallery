@@ -38,7 +38,7 @@ const Coursel = ({
     }, 3000);
 
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   // Get previous, current, and next items

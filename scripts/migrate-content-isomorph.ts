@@ -206,7 +206,7 @@ function resolveTarget(oldSlug: string, srcIndex: Map<string, string[]>): Move {
   const vendor = oldSlug.includes("/") ? oldSlug.split("/")[0] : null
 
   if (registryItem) {
-    let target = registryItem.internalImportPath.replace(/^@\/components\//, "")
+    const target = registryItem.internalImportPath.replace(/^@\/components\//, "")
     if (target.startsWith("_shared/") || target.startsWith("_primitives/")) {
       return { from: oldSlug, to: `references/${oldSlug}`, reason: "shared-primitive-skip" }
     }

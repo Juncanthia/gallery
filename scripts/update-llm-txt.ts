@@ -49,11 +49,11 @@ function updateLlmTxt(filePath: string, examplePaths: string[]) {
   let modified = false
 
   // 1. check if "  examples:" already exists in frontmatter
-  if (content.match(/^  examples:/m)) {
+  if (content.match(/^ {2}examples:/m)) {
     // Replace existing examples block up to next top-level key (before --- or non-indented)
     const newBlock = buildExamplesBlock(examplePaths)
     const replaced = content.replace(
-      /^  examples:[\s\S]*?(?=\n[^ \n])/m,
+      /^ {2}examples:[\s\S]*?(?=\n[^ \n])/m,
       newBlock
     )
     if (replaced !== content) {

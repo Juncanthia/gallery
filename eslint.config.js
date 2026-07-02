@@ -25,7 +25,7 @@ function domainIsolationConfigs() {
 }
 
 export default defineConfig([
-  globalIgnores(['dist', 'references']),
+  globalIgnores(['dist', 'references', 'content/**/*.tsx']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

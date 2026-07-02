@@ -199,7 +199,7 @@ const ShaderPlane = ({
       uHoverRepulsionRadius: { value: hoverRepulsionRadius },
       uHoverRepulsionStrength: { value: hoverRepulsionStrength },
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     []
   );
 

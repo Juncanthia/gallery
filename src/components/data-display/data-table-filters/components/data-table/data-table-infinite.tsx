@@ -232,7 +232,7 @@ export function DataTableInfinite<TData, TValue>({ columns, getRowClassName, get
         .getVisibleLeafColumns()
         .map((c) => c.id)
         .join(","),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [table.getState().columnVisibility],
   );
   const columnOrderString = React.useMemo(

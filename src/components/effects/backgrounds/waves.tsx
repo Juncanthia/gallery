@@ -64,7 +64,7 @@ class Noise {
     seed = Math.floor(seed)
     if (seed < 256) seed |= seed << 8
     for (let i = 0; i < 256; i++) {
-      let v =
+      const v =
         i & 1
           ? this.p[i] ^ (seed & 255)
           : this.p[i] ^ ((seed >> 8) & 255)

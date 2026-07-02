@@ -102,7 +102,7 @@ export function useDataTableStoreSync() {
 
     lastSentFiltersRef.current = { ...currentFilters };
     setFilters(updates);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [columnFilters, context, filterFields, setFilters]);
 
   // Sync sorting

@@ -462,7 +462,7 @@ function useLoadingData(isLoading: boolean) {
   }, [isLoading]);
 
   // Regenerate skeleton data whenever the interval ticks
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const loadingData = useMemo(() => generateLoadingData(), [tick]);
 
   return loadingData;

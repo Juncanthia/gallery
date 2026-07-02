@@ -261,7 +261,7 @@ void main() {
       renderer.gl.getExtension("WEBGL_lose_context")?.loseContext()
       c?.removeChild(gl.canvas)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [])
 
   useEffect(() => {

@@ -211,7 +211,7 @@ function AnimateIcon({
     setCurrentAnimation(typeof animate === "string" ? animate : animation)
     if (animate) startAnimation(animate as TriggerProp)
     else stopAnimation()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [animate])
 
   React.useEffect(() => {
@@ -370,7 +370,7 @@ function AnimateIcon({
         loopDelayRef.current = null
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [localAnimate, controls])
 
   const childProps = (

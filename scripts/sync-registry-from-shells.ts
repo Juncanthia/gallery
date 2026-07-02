@@ -149,7 +149,7 @@ function main() {
       continue
     }
 
-    let targetRepoPath = resolveRepoPath(parsed.targetAlias)
+    const targetRepoPath = resolveRepoPath(parsed.targetAlias)
     if (!targetRepoPath) {
       skipped++
       continue

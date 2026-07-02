@@ -194,7 +194,7 @@ export function GhostCursor({ className, style, trailLength = 50, inertia = 0.5,
         parent.style.position = prevParentPos
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [
     trailLength, inertia, grainIntensity, pixelBudget, fadeDelay, fadeDuration,
     isTouch, color, brightness, mixBlendMode, edgeIntensity,

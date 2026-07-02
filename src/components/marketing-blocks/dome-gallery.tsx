@@ -255,7 +255,7 @@ export function DomeGallery({
         }
         if (last) {
           draggingRef.current = false
-          let [vMagX, vMagY] = velocity; const [dirX, dirY] = direction
+          const [vMagX, vMagY] = velocity; const [dirX, dirY] = direction
           let vx = vMagX * dirX; let vy = vMagY * dirY
           if (Math.abs(vx) < 0.001 && Math.abs(vy) < 0.001 && Array.isArray(movement)) {
             const [mx, my] = movement

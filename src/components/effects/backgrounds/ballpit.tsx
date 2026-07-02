@@ -758,7 +758,7 @@ export function Ballpit({ className = "", followCursor = true, ...props }: Ballp
         spheresInstanceRef.current.dispose()
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [])
 
   return (

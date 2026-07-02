@@ -843,7 +843,7 @@ export function useLoadingData(isLoading: boolean, loadingPoints: number = 14) {
   const loadingData = useMemo(
     () => getLoadingData(loadingPoints),
     // loadingDataKey toggle triggers re-computation when the shimmer exits
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [loadingPoints, loadingDataKey],
   );
 

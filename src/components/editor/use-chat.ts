@@ -1,6 +1,6 @@
 'use client';
 
-/* eslint-disable react-hooks/refs -- Fake stream abort control is imperative transport state. */
+ 
 
 import * as React from 'react';
 
@@ -284,7 +284,7 @@ export const useChat = () => {
 
   React.useEffect(() => {
     editor.setOption(AIChatPlugin, 'chat', chat as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [chat.status, chat.messages, chat.error, _abortFakeStream]);
 
   return chat;
