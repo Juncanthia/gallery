@@ -5,7 +5,7 @@ import { RouterProvider } from "@tanstack/react-router"
 import "../styles/index.css"
 import "katex/dist/katex.min.css"
 import { router } from "./router"
-import { ThemeProvider } from "./theme-provider.tsx"
+import { ThemeProvider } from "@/_internals/foundations/theme"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
