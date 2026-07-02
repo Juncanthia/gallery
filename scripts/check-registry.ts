@@ -92,11 +92,28 @@ function checkRegisteredShells() {
   }
 }
 
+function checkLegacyInternalPaths() {
+  for (const item of COMPONENT_REGISTRY) {
+    if (item.internalImportPath.includes("@/components/_internal")) {
+      errors.push(`Stale _internal path in internalImportPath for ${item.id}: ${item.internalImportPath}`)
+    }
+    if (item.legacyShellImportPath?.includes("@/components/_internal")) {
+      errors.push(`Stale _internal path in legacyShellImportPath for ${item.id}: ${item.legacyShellImportPath}`)
+    }
+    for (const file of item.files) {
+      if (file.path.includes("components/_internal")) {
+        errors.push(`Stale _internal path in files[].path for ${item.id}: ${file.path}`)
+      }
+    }
+  }
+}
+
 function checkStaleVendorPaths() {
   const stalePatterns = [
     "@/components/ui/",
     "@/components/_shared/",
     "@/components/_primitives/",
+    "@/components/_internal/",
     "/gooseui/",
     "/chamaac/",
     "/react-bits/",
@@ -134,6 +151,7 @@ function main() {
   checkDocsSlugExists()
   checkFilesExist()
   checkInternalImportPath()
+  checkLegacyInternalPaths()
   checkStaleVendorPaths()
   checkRegisteredShells()
 

@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc -b",
     "preview": "vite preview",
-    "sync:registry": "npx tsx scripts/sync-registry-from-shells.ts",
+    "sync:registry": "npx tsx scripts/sync-registry-paths.ts && npx tsx scripts/sync-registry-from-shells.ts",
     "sync:registry-paths": "npx tsx scripts/sync-docs-slug-from-content.ts && npx tsx scripts/fix-bklit-docs-slug.ts && npx tsx scripts/sync-registry-paths.ts",
     "check:registry": "npx tsx scripts/check-registry.ts",
     "codemod:registry-examples": "npx tsx scripts/codemod-registry-examples.ts",
