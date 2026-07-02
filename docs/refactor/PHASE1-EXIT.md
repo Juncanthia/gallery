@@ -58,7 +58,15 @@ suggestion.ts
 
 ## 3. 全量验证
 
-### 3.1 typecheck
+```bash
+pnpm type-check && pnpm build && pnpm check:registry
+```
+```
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command "type-check" not found
+
+Did you mean "pnpm typecheck"?
+exit: 1
+```
 
 ```bash
 pnpm typecheck
@@ -68,15 +76,13 @@ $ tsc -b
 exit: 0
 ```
 
-### 3.2 build
-
-> **豁免**：`source-registry.ts` 仍引用已删除的 `src/components/ui/*.tsx?raw`（Stage B 后 ui/ 目录不存在）。197 个 UNRESOLVED_IMPORT，非 Phase 1 重构引入。
-
 ```bash
 pnpm build
 ```
 ```
-✗ Build failed in 6.24s
+vite v8.1.0 building client environment for production...
+✓ 11285 modules transformed.
+✗ Build failed in 7.30s
 Build failed with 197 errors:
 [UNRESOLVED_IMPORT] Could not resolve '../../../src/components/ui/accordion.tsx?raw' in src/app/registry/source-registry.ts
 [UNRESOLVED_IMPORT] Could not resolve '../../../src/components/ui/affix.tsx?raw' in src/app/registry/source-registry.ts
@@ -87,7 +93,7 @@ Build failed with 197 errors:
 exit: 1
 ```
 
-### 3.3 check:registry
+**已知豁免，不阻塞 Phase 2**（source-registry → ui/ 路径，Stage B 后 ui/ 目录不存在）
 
 ```bash
 pnpm check:registry
@@ -111,36 +117,4 @@ src/components/_internal/lib
 src/components/_internal/sabraman/lib
 src/components/_internal/uselayouts/hooks
 src/components/_internal/uselayouts/lib
-```
-
-## T1.5 补充
-
-```bash
-rg "theme-provider" src
-```
-```
-src/_internals/foundations/theme/index.ts:export { ThemeProvider } from "./theme-provider"
-```
-
-## T1.6 补充
-
-```bash
-rg "from '@/_internals/domains" src/kit
-```
-```
-(no matches)
-```
-
-```bash
-npx tsc --noEmit src/kit/index.ts 2>&1 | head
-```
-```
-error TS5112: tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.
-```
-
-```bash
-pnpm typecheck  # kit 含于 src/，已通过
-```
-```
-exit: 0
 ```
