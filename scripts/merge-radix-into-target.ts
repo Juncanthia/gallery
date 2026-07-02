@@ -1,6 +1,11 @@
+#!/usr/bin/env tsx
 /**
- * Merge _internal/radix/<name>.tsx implementation into a target file.
- * Renames radix exports to match the import aliases already used in the target.
+ * T1.4 codemod：将 `_internal/radix/<name>.tsx` 的实现合并进目标文件（core/ 或跨域目标）。
+ * 按目标文件中已有的 import alias 重命名 radix 导出符号，删除 radix import 并内联实现。
+ *
+ * Run: pnpm exec tsx scripts/merge-radix-into-target.ts [component-name]
+ *   无参数 → 批量处理全部 11 个一对一 + accordion/link-preview 配对
+ *   有参数 → 仅处理指定组件（如 `button`）
  */
 import fs from 'node:fs';
 import path from 'node:path';
