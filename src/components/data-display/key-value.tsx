@@ -8,7 +8,7 @@ import { cn } from "@/components/charts/chart-kit/lib/utils";
 import { VisuallyHiddenInput } from "@/components/general/headless/visually-hidden-input";
 import { useAsRef } from "@/_internals/foundations/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
-import { useLazyRef } from "@/components/_internal/dice/hooks/use-lazy-ref";
+import { useLazyRef } from "@/_internals/foundations/hooks/use-lazy-ref";
 import { Button } from "@/components/core/button";
 import { Input } from "@/components/core/input";
 import { Textarea } from "@/components/core/textarea";

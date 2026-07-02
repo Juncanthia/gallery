@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/components/charts/chart-kit/lib/utils";
 import { useAsRef } from "@/_internals/foundations/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
-import { useLazyRef } from "@/components/_internal/dice/hooks/use-lazy-ref";
+import { useLazyRef } from "@/_internals/foundations/hooks/use-lazy-ref";
 import { useIsMobile } from "@/_internals/foundations/hooks/use-mobile";
 import {
   Dialog,
