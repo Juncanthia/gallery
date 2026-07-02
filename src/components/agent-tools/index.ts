@@ -1,3 +1,19 @@
+export type {
+  ChartDataPoint,
+  ForecastDay,
+  GeoMapMarker,
+  GeoMapRoute,
+  PrecipitationLevel,
+  SerializableChart,
+  SerializableGeoMap,
+  TemperatureUnit,
+  WeatherConditionCode,
+  WeatherWidgetCurrent,
+  WeatherWidgetLocation,
+  WeatherWidgetPayload,
+  WeatherWidgetTime,
+} from "./tool-returns";
+
 export * as ApprovalCardToolUi from "./approval-card";
 export * as AudioToolUi from "./audio";
 export * as ChartToolUi from "./chart";

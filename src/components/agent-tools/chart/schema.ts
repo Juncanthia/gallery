@@ -88,6 +88,17 @@ export const ChartPropsSchema = z
     });
   });
 
+/** Subset of Recharts ActiveDotProps used by the Chart line click handler. */
+export type ChartLineActiveDotProps = {
+  cx?: number;
+  cy?: number;
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+  index: number;
+  payload?: Record<string, unknown>;
+};
+
 export type ChartDataPoint = {
   seriesKey: string;
   seriesLabel: string;

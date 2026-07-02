@@ -56,8 +56,7 @@ function getAlignmentClass(
 }
 
 const DataTableContext = React.createContext<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  DataTableContextValue<any> | undefined
+  DataTableContextValue<RowData> | undefined
 >(undefined);
 
 export function useDataTable<T extends object = RowData>() {
@@ -162,7 +161,9 @@ function DataTableProvider<T extends object = RowData>({
   };
 
   return (
-    <DataTableContext.Provider value={contextValue}>
+    <DataTableContext.Provider
+      value={contextValue as DataTableContextValue<RowData>}
+    >
       {children}
     </DataTableContext.Provider>
   );

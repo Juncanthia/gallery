@@ -25,7 +25,7 @@ import {
   CardContent,
   type ChartConfig,
 } from "./_adapter";
-import type { ChartProps } from "./schema";
+import type { ChartLineActiveDotProps, ChartProps } from "./schema";
 
 const DEFAULT_COLORS = [
   "var(--chart-1)",
@@ -136,19 +136,29 @@ export const Chart = memo(function Chart({
               stroke={seriesColors[i]}
               strokeWidth={2}
               dot={{ r: 4, cursor: onDataPointClick ? "pointer" : undefined }}
-              activeDot={{
-                r: 6,
-                cursor: onDataPointClick ? "pointer" : undefined,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onClick: ((dotProps: any, index: number) => {
-                  handleDataPointClick(
-                    s.key,
-                    s.label,
-                    dotProps.payload,
-                    index,
-                  );
-                }) as any,
-              }}
+              activeDot={
+                onDataPointClick
+                  ? (dotProps: ChartLineActiveDotProps) => (
+                      <circle
+                        cx={dotProps.cx}
+                        cy={dotProps.cy}
+                        r={6}
+                        fill={dotProps.fill}
+                        stroke={dotProps.stroke}
+                        strokeWidth={dotProps.strokeWidth}
+                        cursor="pointer"
+                        onClick={() => {
+                          handleDataPointClick(
+                            s.key,
+                            s.label,
+                            dotProps.payload ?? {},
+                            dotProps.index,
+                          );
+                        }}
+                      />
+                    )
+                  : { r: 6 }
+              }
             />
           ))}
       </ChartComponent>
