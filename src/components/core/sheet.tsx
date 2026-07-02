@@ -1,31 +1,174 @@
+'use client';
+
 import * as React from 'react';
+import {Dialog as RadixDialog} from 'radix-ui';
+import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
+import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { X as XIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';
-
 import { Button } from '@/components/core/button';
 import { ScrollArea } from '@/components/core/scroll-area';
-import {
-  Sheet as SheetPrimitive,
-  SheetTrigger as SheetTriggerPrimitive,
-  SheetOverlay as SheetOverlayPrimitive,
-  SheetClose as SheetClosePrimitive,
-  SheetPortal as SheetPortalPrimitive,
-  SheetContent as SheetContentPrimitive,
-  SheetHeader as SheetHeaderPrimitive,
-  SheetFooter as SheetFooterPrimitive,
-  SheetTitle as SheetTitlePrimitive,
-  SheetDescription as SheetDescriptionPrimitive,
-  type SheetProps as SheetPrimitiveProps,
-  type SheetTriggerProps as SheetTriggerPrimitiveProps,
-  type SheetOverlayProps as SheetOverlayPrimitiveProps,
-  type SheetCloseProps as SheetClosePrimitiveProps,
-  type SheetContentProps as SheetContentPrimitiveProps,
-  type SheetHeaderProps as SheetHeaderPrimitiveProps,
-  type SheetFooterProps as SheetFooterPrimitiveProps,
-  type SheetTitleProps as SheetTitlePrimitiveProps,
-  type SheetDescriptionProps as SheetDescriptionPrimitiveProps,
-} from '@/components/_internal/radix/sheet';
 import { cn } from '@/lib/utils';
+
+type SheetContextType = {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+};
+
+const [SheetProvider, useSheet] =
+  getStrictContext<SheetContextType>('SheetContext');
+
+type SheetPrimitiveProps = React.ComponentProps<typeof RadixDialog.Root>;
+
+function SheetPrimitive(props: SheetPrimitiveProps) {
+  const [isOpen, setIsOpen] = useControlledState({
+    value: props.open,
+    defaultValue: props.defaultOpen,
+    onChange: props.onOpenChange,
+  });
+
+  return (
+    <SheetProvider value={{ isOpen, setIsOpen }}>
+      <RadixDialog.Root
+        data-slot="sheet"
+        {...props}
+        onOpenChange={setIsOpen}
+      />
+    </SheetProvider>
+  );
+}
+
+type SheetTriggerPrimitiveProps = React.ComponentProps<typeof RadixDialog.Trigger>;
+
+function SheetTriggerPrimitive(props: SheetTriggerPrimitiveProps) {
+  return <RadixDialog.Trigger data-slot="sheet-trigger" {...props} />;
+}
+
+type SheetClosePrimitiveProps = React.ComponentProps<typeof RadixDialog.Close>;
+
+function SheetClosePrimitive(props: SheetClosePrimitiveProps) {
+  return <RadixDialog.Close data-slot="sheet-close" {...props} />;
+}
+
+type SheetPortalProps = React.ComponentProps<typeof RadixDialog.Portal>;
+
+function SheetPortalPrimitive(props: SheetPortalProps) {
+  const { isOpen } = useSheet();
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <RadixDialog.Portal forceMount data-slot="sheet-portal" {...props} />
+      )}
+    </AnimatePresence>
+  );
+}
+
+type SheetOverlayPrimitiveProps = Omit<
+  React.ComponentProps<typeof RadixDialog.Overlay>,
+  'asChild' | 'forceMount'
+> &
+  HTMLMotionProps<'div'>;
+
+function SheetOverlayPrimitive({
+  transition = { duration: 0.2, ease: 'easeInOut' },
+  ...props
+}: SheetOverlayPrimitiveProps) {
+  return (
+    <RadixDialog.Overlay asChild forceMount>
+      <motion.div
+        key="sheet-overlay"
+        data-slot="sheet-overlay"
+        initial={{ opacity: 0, filter: 'blur(4px)' }}
+        animate={{ opacity: 1, filter: 'blur(0px)' }}
+        exit={{ opacity: 0, filter: 'blur(4px)' }}
+        transition={transition}
+        {...props}
+      />
+    </RadixDialog.Overlay>
+  );
+}
+
+type Side = 'top' | 'bottom' | 'left' | 'right';
+
+type SheetContentPrimitiveProps = React.ComponentProps<typeof RadixDialog.Content> &
+  HTMLMotionProps<'div'> & {
+    side?: Side;
+  };
+
+function SheetContentPrimitive({
+  side = 'right',
+  transition = { type: 'spring', stiffness: 150, damping: 22 },
+  style,
+  children,
+  ...props
+}: SheetContentPrimitiveProps) {
+  const axis = side === 'left' || side === 'right' ? 'x' : 'y';
+
+  const offscreen: Record<Side, { x?: string; y?: string; opacity: number }> = {
+    right: { x: '100%', opacity: 0 },
+    left: { x: '-100%', opacity: 0 },
+    top: { y: '-100%', opacity: 0 },
+    bottom: { y: '100%', opacity: 0 },
+  };
+
+  const positionStyle: Record<Side, React.CSSProperties> = {
+    right: { insetBlock: 0, right: 0 },
+    left: { insetBlock: 0, left: 0 },
+    top: { insetInline: 0, top: 0 },
+    bottom: { insetInline: 0, bottom: 0 },
+  };
+
+  return (
+    <RadixDialog.Content asChild forceMount {...props}>
+      <motion.div
+        key="sheet-content"
+        data-slot="sheet-content"
+        data-side={side}
+        initial={offscreen[side]}
+        animate={{ [axis]: 0, opacity: 1 }}
+        exit={offscreen[side]}
+        style={{
+          position: 'fixed',
+          ...positionStyle[side],
+          ...style,
+        }}
+        transition={transition}
+      >
+        {children}
+      </motion.div>
+    </RadixDialog.Content>
+  );
+}
+
+type SheetHeaderPrimitiveProps = React.ComponentProps<'div'>;
+
+function SheetHeaderPrimitive(props: SheetHeaderPrimitiveProps) {
+  return <div data-slot="sheet-header" {...props} />;
+}
+
+type SheetFooterPrimitiveProps = React.ComponentProps<'div'>;
+
+function SheetFooterPrimitive(props: SheetFooterPrimitiveProps) {
+  return <div data-slot="sheet-footer" {...props} />;
+}
+
+type SheetTitlePrimitiveProps = React.ComponentProps<typeof RadixDialog.Title>;
+
+function SheetTitlePrimitive(props: SheetTitlePrimitiveProps) {
+  return <RadixDialog.Title data-slot="sheet-title" {...props} />;
+}
+
+type SheetDescriptionPrimitiveProps = React.ComponentProps<
+  typeof RadixDialog.Description
+>;
+
+function SheetDescriptionPrimitive(props: SheetDescriptionPrimitiveProps) {
+  return (
+    <RadixDialog.Description data-slot="sheet-description" {...props} />
+  );
+}
 
 type SheetPlacement = 'top' | 'bottom' | 'left' | 'right';
 type SheetSize = 'default' | 'large' | number | string;
