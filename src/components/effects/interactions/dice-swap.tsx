@@ -4,7 +4,7 @@ import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
 import { cn } from "@/components/charts/chart-kit/lib/utils";
 import { useAsRef } from "@/components/_internal/dice/hooks/use-as-ref";
-import { useIsomorphicLayoutEffect } from "@/components/_internal/dice/hooks/use-isomorphic-layout-effect";
+import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 import { useLazyRef } from "@/components/_internal/dice/hooks/use-lazy-ref";
 
 interface DivProps extends React.ComponentProps<"div"> {

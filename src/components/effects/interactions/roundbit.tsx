@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useIsomorphicLayoutEffect } from "@/components/_internal/sabraman/lib/hooks/use-isomorphic-layout-effect";
+import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 import { initRoundbit } from "@/components/_internal/sabraman/lib/roundbit";
 import { cn } from "@/components/_internal/sabraman/lib/utils";
 

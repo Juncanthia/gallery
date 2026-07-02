@@ -1,6 +1,6 @@
 import * as React from "react";
 import { isFirefox, isIOS, isSafari } from "../lib/browser";
-import { useIsomorphicLayoutEffect } from "./use-isomorphic-layout-effect";
+import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 
 // HTML input types that do not cause the software keyboard to appear
 const nonTextInputTypes = new Set([

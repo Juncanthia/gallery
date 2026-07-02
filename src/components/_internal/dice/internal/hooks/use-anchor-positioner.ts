@@ -9,7 +9,7 @@ import {
 } from "../constants";
 import type { Align, Side } from "../types";
 import { useDirection } from "./use-direction";
-import { useIsomorphicLayoutEffect } from "./use-isomorphic-layout-effect";
+import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 
 const LONGHAND_SIDES: Record<Side, Side> = {
   top: "bottom",

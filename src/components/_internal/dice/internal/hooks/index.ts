@@ -12,7 +12,7 @@ export * from "./use-filter-store";
 export * from "./use-form-control";
 export * from "./use-form-reset";
 export * from "./use-id";
-export * from "./use-isomorphic-layout-effect";
+export { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 export * from "./use-item-collection";
 export * from "./use-label";
 export * from "./use-layout-effect";
