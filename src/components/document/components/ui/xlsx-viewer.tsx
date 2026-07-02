@@ -28,7 +28,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { createPortal } from "react-dom"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Button } from "@/components/core/button"
 import {
   DropdownMenu,

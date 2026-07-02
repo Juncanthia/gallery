@@ -18,7 +18,7 @@ import rehypeRaw from "rehype-raw"
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import remarkGfm from "remark-gfm"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { ScrollArea } from "@/components/core/scroll-area"
 
 export type Point = {

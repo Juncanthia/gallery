@@ -9,7 +9,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import type SignaturePad from "signature_pad"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { PDFViewer } from "@/components/document/components/ui/pdf-viewer"
 import { PdfBlockResizableShell } from "@/components/document/components/pdf-block-resizable-shell"
 import { Button } from "@/components/core/button"

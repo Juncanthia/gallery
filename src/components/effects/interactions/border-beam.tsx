@@ -1,7 +1,7 @@
 "use client"
 
 import { useGlobalStyles } from "@/components/_internal/gooseui/hooks/use-global-styles"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const BORDER_BEAM_STYLES = `
 @keyframes border-beam-spin {

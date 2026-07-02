@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 import { initRoundbit } from "@/components/_internal/sabraman/lib/roundbit";
-import { cn } from "@/components/_internal/sabraman/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 export interface RoundbitFrameProps
 	extends React.HTMLAttributes<HTMLDivElement> {

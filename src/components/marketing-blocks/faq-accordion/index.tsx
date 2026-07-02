@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react"
 import * as React from "react"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const demoFaqs = [
   {

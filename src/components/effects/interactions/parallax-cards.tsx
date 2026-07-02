@@ -2,7 +2,7 @@
 
 import type * as React from "react"
 import { useGlobalStyles } from "@/components/_internal/gooseui/hooks/use-global-styles"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const PARALLAX_CARDS_STYLES = `
 @keyframes parallax-card {

@@ -29,7 +29,7 @@ import {
 import { FileTree as PierreFileTree, useFileTree } from "@pierre/trees/react"
 import { createPortal } from "react-dom"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Button } from "@/components/core/button"
 import {
   Command,

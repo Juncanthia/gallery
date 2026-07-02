@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 interface ScrollProgressProps {
   className?: string

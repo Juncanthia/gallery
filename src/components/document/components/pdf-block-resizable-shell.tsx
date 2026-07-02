@@ -7,7 +7,7 @@ import {
   type LayoutStorage,
 } from "react-resizable-panels"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import {
   ResizableHandle,
   ResizablePanel,

@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/core/button"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type ToastType = "success" | "error" | "warning" | "info"
 

@@ -3,7 +3,7 @@
 import { CheckIcon, CircleXIcon, CopyIcon } from "lucide-react";
 import * as React from "react";
 import { useSafeLegacyUiLocale } from "@/components/_internal/sabraman/components/legacy-locale-context";
-import { cn } from "@/components/_internal/sabraman/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { LegacyBarButton } from "@/components/navigation/legacy-bar-button";
 import { LegacySegmentedControl } from "@/components/data-entry/legacy-segmented-control";
 

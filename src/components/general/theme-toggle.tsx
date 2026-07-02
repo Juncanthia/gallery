@@ -3,7 +3,7 @@
 import { motion, type Variants } from "motion/react"
 import { useTheme } from "next-themes"
 import * as React from "react"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const sunPath =
   "M49 68C59.4934 68 68 59.4934 68 49C68 38.5066 59.4934 30 49 30C38.5066 30 30 38.5066 30 49C30 59.4934 38.5066 68 49 68Z"

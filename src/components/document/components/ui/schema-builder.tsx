@@ -53,7 +53,7 @@ import {
 } from "@pierre/diffs/react"
 import { useTheme } from "next-themes"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Button } from "@/components/core/button"
 import {
   Collapsible,

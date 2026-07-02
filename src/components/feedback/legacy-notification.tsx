@@ -3,7 +3,7 @@
 import * as React from "react";
 import { type ExternalToast, toast } from "sonner";
 
-import { cn } from "@/components/_internal/sabraman/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 const LEGACY_NOTIFICATION_FONT_FAMILY =
 	'"Helvetica Neue", Helvetica, Arial, sans-serif';

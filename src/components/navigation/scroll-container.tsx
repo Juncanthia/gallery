@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 interface ScrollContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Container height */

@@ -10,7 +10,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { BorderBeam } from "border-beam"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Card } from "@/components/core/card"
 import { FileThumbnail } from "@/components/document/components/ui/file-thumbnail"
 import {

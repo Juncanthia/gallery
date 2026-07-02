@@ -7,8 +7,8 @@ import {
   type BaselineStatus as BaselineStatusType,
   getBaselineStatus,
   getBaselineStatusText,
-} from "@/components/_internal/gooseui/lib/baseline"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+} from "@/_internals/foundations/utils/baseline"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 // ============================================================================
 // Browser Feature Detection

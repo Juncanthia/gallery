@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "@/components/_internal/sabraman/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 type LegacyBarButtonVariant = "default" | "accent" | "destructive";
 type LegacyBarButtonLayout = "text" | "icon" | "text-icon" | "backward";

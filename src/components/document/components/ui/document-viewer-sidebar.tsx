@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const INLINE_THUMBNAIL_SIDEBAR_MIN_WIDTH = 768
 

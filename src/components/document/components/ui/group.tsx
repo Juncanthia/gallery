@@ -4,7 +4,7 @@ import type * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@/components/_internal/uselayouts/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Separator } from "@/components/core/separator"
 
 export const groupVariants = cva(

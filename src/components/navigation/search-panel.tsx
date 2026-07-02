@@ -17,7 +17,7 @@ import {
 import * as React from "react"
 import { FaGithub } from "react-icons/fa"
 
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 /* -------------------------------------------------------------------------------------------------
  * Types

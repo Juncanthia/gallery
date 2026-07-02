@@ -15,7 +15,7 @@ import {
   type WithAsChild,
 } from "@/components/effects/interactions/_internal/animate/slot"
 import { useIsInView } from "@/_internals/foundations/hooks/use-is-in-view"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const staticAnimations = {
   path: {

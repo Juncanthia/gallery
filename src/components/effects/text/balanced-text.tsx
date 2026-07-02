@@ -1,7 +1,7 @@
 "use client"
 
 import type * as React from "react"
-import { cn } from "@/components/_internal/gooseui/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 interface BalancedHeadingProps {
   children: React.ReactNode

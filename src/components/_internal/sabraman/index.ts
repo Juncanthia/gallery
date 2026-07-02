@@ -1,4 +1,4 @@
-export { cn } from "@/components/_internal/sabraman/lib/utils"
+export { cn } from "@/_internals/foundations/utils/cn"
 export { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect"
 export { buildRoundbitPaths, initRoundbit } from "@/components/_internal/sabraman/lib/roundbit"
 export type { RoundbitController, RoundbitCornerValues, RoundbitPathOptions, RoundbitPathResult } from "@/components/_internal/sabraman/lib/roundbit"

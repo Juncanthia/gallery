@@ -3,7 +3,7 @@
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 import * as React from "react";
 
-import { cn } from "@/components/_internal/sabraman/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 export interface LegacySwitchProps
 	extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {
