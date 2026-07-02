@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { Edit01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Input } from "@/components/core/input";
-import { cn } from "@/components/_internal/uselayouts/lib/cn";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 function SaveInput() {
   const [isEditing, setIsEditing] = useState(false);
