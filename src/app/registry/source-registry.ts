@@ -115,7 +115,7 @@ import chamaacEmissiveDotGridTsx from "../../../src/components/effects/backgroun
 import chamaacIridescentWindowsTsx from "../../../src/components/effects/backgrounds/iridescent-windows/index.tsx?raw"
 import chamaacWaterCausticTsx from "../../../src/components/effects/backgrounds/water-caustic/index.tsx?raw"
 import chamaacDancingLettersTsx from "../../../src/components/effects/text/dancing-letters/index.tsx?raw"
-import chamaacGaugeTsx from "../../../src/components/charts/gauge-chamaac/gauge.tsx?raw"
+import chamaacGaugeTsx from "../../../src/components/charts/gauge/radial.tsx?raw"
 import chamaacTextLoopTsx from "../../../src/components/effects/text/text-loop/index.tsx?raw"
 import chamaacShimmerButtonTsx from "../../../src/components/general/shimmer-button/index.tsx?raw"
 import chamaacFeatureStepsTsx from "../../../src/components/marketing-blocks/feature-steps/index.tsx?raw"
@@ -142,7 +142,7 @@ import textPressureTsx from "../../../src/components/effects/text/text-pressure.
 import textTypeTsx from "../../../src/components/effects/text/text-type.tsx?raw"
 import trueFocusTsx from "../../../src/components/effects/text/true-focus.tsx?raw"
 import variableProximityTsx from "../../../src/components/effects/text/variable-proximity.tsx?raw"
-import sabramanSliderTsx from "../../../src/components/data-entry/legacy-slider.tsx?raw"
+import sabramanSliderTsx from "../../../src/components/data-entry/slider-rounded.tsx?raw"
 
 // GooseUI components
 import gooseuiBorderBeamTsx from "../../../src/components/effects/interactions/border-beam.tsx?raw"
@@ -268,7 +268,7 @@ const LEGACY_SOURCES: Record<string, ComponentSourceFile[]> = {
   "sidebar": [{ name: "sidebar.tsx", source: sidebarTsx }],
   "skeleton": [{ name: "skeleton.tsx", source: skeletonTsx }],
   "slider": [{ name: "slider.tsx", source: sliderTsx }],
-  "sabraman-slider": [{ name: "legacy-slider.tsx", source: sabramanSliderTsx }],
+  "sabraman-slider": [{ name: "slider-rounded.tsx", source: sabramanSliderTsx }],
   "space": [{ name: "space.tsx", source: spaceTsx }],
   "spin": [{ name: "spin.tsx", source: spinTsx }],
   "statistic": [{ name: "statistic.tsx", source: statisticTsx }],

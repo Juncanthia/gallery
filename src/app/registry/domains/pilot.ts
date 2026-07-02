@@ -122,8 +122,8 @@ export const CHAMAAC_REGISTRY: ComponentRegistryItem[] = [
     titleEn: "Gauge",
     category: "charts",
     docsSlug: "charts/gauge-chamaac/gauge",
-    files: [{ path: "src/components/charts/gauge-chamaac/gauge.tsx", role: "source" }],
-    internalImportPath: "@/components/charts/gauge-chamaac/gauge",
+    files: [{ path: "src/components/charts/gauge/radial.tsx", role: "source" }],
+    internalImportPath: "@/components/charts/gauge/radial",
     legacyShellImportPath: "@/components/core/gauge-chamaac",
   }),
   item({

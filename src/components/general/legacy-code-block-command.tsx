@@ -5,7 +5,7 @@ import * as React from "react";
 import { useSafeLegacyUiLocale } from "@/components/general/legacy-locale-context";
 import { cn } from "@/_internals/foundations/utils/cn";
 import { LegacyBarButton } from "@/components/navigation/legacy-bar-button";
-import { LegacySegmentedControl } from "@/components/data-entry/legacy-segmented-control";
+import { LegacySegmentedControl } from "@/components/data-entry/segmented-control-pill";
 
 const PACKAGE_MANAGERS = ["bun", "npm", "pnpm", "yarn"] as const;
 const STORAGE_KEY = "sabraman-legacy-code-block-command-package-manager";

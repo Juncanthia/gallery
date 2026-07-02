@@ -9,17 +9,17 @@ export type { RoundbitFrameProps } from "@/components/effects/interactions/round
 export { LegacyBarButton } from "@/components/navigation/legacy-bar-button"
 export type { LegacyBarButtonProps } from "@/components/navigation/legacy-bar-button"
 
-export { LegacySegmentedControl } from "@/components/data-entry/legacy-segmented-control"
-export type { LegacySegmentedControlItem, LegacySegmentedControlProps } from "@/components/data-entry/legacy-segmented-control"
+export { LegacySegmentedControl } from "@/components/data-entry/segmented-control-pill"
+export type { LegacySegmentedControlItem, LegacySegmentedControlProps } from "@/components/data-entry/segmented-control-pill"
 
-export { LegacySwitch } from "@/components/data-entry/legacy-switch"
-export type { LegacySwitchProps } from "@/components/data-entry/legacy-switch"
+export { LegacySwitch } from "@/components/data-entry/switch-rounded"
+export type { LegacySwitchProps } from "@/components/data-entry/switch-rounded"
 
-export { LegacySlider } from "@/components/data-entry/legacy-slider"
-export type { LegacySliderProps } from "@/components/data-entry/legacy-slider"
+export { LegacySlider } from "@/components/data-entry/slider-rounded"
+export type { LegacySliderProps } from "@/components/data-entry/slider-rounded"
 
-export { LegacyClock } from "@/components/data-display/legacy-clock"
-export type { LegacyClockProps, LegacyClockVariant } from "@/components/data-display/legacy-clock"
+export { LegacyClock } from "@/components/data-display/clock-flip"
+export type { LegacyClockProps, LegacyClockVariant } from "@/components/data-display/clock-flip"
 
 export { LegacyNotification, showLegacyNotification } from "@/components/feedback/legacy-notification"
 export type { LegacyNotificationProps, ShowLegacyNotificationOptions } from "@/components/feedback/legacy-notification"

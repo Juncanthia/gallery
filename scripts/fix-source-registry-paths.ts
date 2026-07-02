@@ -45,12 +45,12 @@ const REPLACEMENTS: Record<string, string> = {
   "src/components/marketing-blocks/chamaac/feature-steps/feature-steps.tsx":
     "src/components/marketing-blocks/feature-steps/index.tsx",
   "src/components/charts/chamaac/gauge/gauge.tsx":
-    "src/components/charts/gauge-chamaac/gauge.tsx",
+    "src/components/charts/gauge/radial.tsx",
   "src/components/general/uselayouts/discover-button.tsx": "src/components/general/discover-button.tsx",
   "src/components/data-entry/uselayouts/multi-step-form.tsx": "src/components/data-entry/multi-step-form.tsx",
   "src/components/general/uselayouts/status-button.tsx": "src/components/general/status-button.tsx",
   "src/components/navigation/uselayouts/vertical-tabs.tsx": "src/components/navigation/vertical-tabs.tsx",
-  "src/components/data-entry/sabraman/legacy-slider.tsx": "src/components/data-entry/legacy-slider.tsx",
+  "src/components/data-entry/sabraman/legacy-slider.tsx": "src/components/data-entry/slider-rounded.tsx",
   "src/components/effects/interactions/gooseui/border-beam.tsx":
     "src/components/effects/interactions/border-beam.tsx",
   "src/components/effects/text/gooseui/curved-text.tsx": "src/components/effects/text/curved-text/index.tsx",
