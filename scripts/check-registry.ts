@@ -5,7 +5,7 @@
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import path from "node:path"
-import { COMPONENT_REGISTRY } from "../src/gallery/registry/index"
+import { COMPONENT_REGISTRY } from "../src/app/registry/index"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CONTENT_DIR = path.join(ROOT, "content/components")

@@ -8,8 +8,8 @@ import path from "node:path"
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CONTENT = path.join(ROOT, "content/components")
 const FILES = [
-  path.join(ROOT, "src/gallery/registry/domains/generated.ts"),
-  path.join(ROOT, "src/gallery/registry/domains/pilot.ts"),
+  path.join(ROOT, "src/app/registry/domains/generated.ts"),
+  path.join(ROOT, "src/app/registry/domains/pilot.ts"),
 ]
 
 /** Explicit docsSlug overrides by registry id (wins over auto resolution). */

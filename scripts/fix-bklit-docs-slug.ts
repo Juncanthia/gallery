@@ -4,7 +4,7 @@ import path from "node:path"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CONTENT = path.join(ROOT, "content/components")
-const GENERATED = path.join(ROOT, "src/gallery/registry/domains/generated.ts")
+const GENERATED = path.join(ROOT, "src/app/registry/domains/generated.ts")
 
 function findChartKitSlug(name: string): string | null {
   const direct = path.join(CONTENT, "charts/chart-kit", name, "index.mdx")

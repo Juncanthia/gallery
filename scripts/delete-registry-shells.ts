@@ -6,7 +6,7 @@
 import { readFileSync, unlinkSync, readdirSync } from "node:fs"
 import path from "node:path"
 import { execSync } from "node:child_process"
-import { COMPONENT_REGISTRY } from "../src/gallery/registry/index"
+import { COMPONENT_REGISTRY } from "../src/app/registry/index"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 
@@ -29,7 +29,7 @@ function isPureReexport(filePath: string): boolean {
 function hasReferences(shellImportPath: string, shellFile: string): string[] {
   try {
     const result = execSync(
-      `rg -l "${shellImportPath.replace(/"/g, '\\"')}" src content --glob '*.tsx' --glob '*.ts' --glob '!src/gallery/registry/domains/*'`,
+      `rg -l "${shellImportPath.replace(/"/g, '\\"')}" src content --glob '*.tsx' --glob '*.ts' --glob '!src/app/registry/domains/*'`,
       {
         cwd: ROOT,
         encoding: "utf8",

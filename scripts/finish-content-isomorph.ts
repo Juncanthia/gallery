@@ -5,7 +5,7 @@
 import { execSync } from "node:child_process"
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
-import { COMPONENT_REGISTRY } from "../src/gallery/registry/index"
+import { COMPONENT_REGISTRY } from "../src/app/registry/index"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CONTENT = path.join(ROOT, "content/components")
@@ -106,9 +106,9 @@ function updateRegistryDocsSlugs() {
   }
 
   const files = [
-    path.join(ROOT, "src/gallery/registry/domains/generated.ts"),
-    path.join(ROOT, "src/gallery/registry/domains/pilot.ts"),
-    path.join(ROOT, "src/gallery/registry/catalog.ts"),
+    path.join(ROOT, "src/app/registry/domains/generated.ts"),
+    path.join(ROOT, "src/app/registry/domains/pilot.ts"),
+    path.join(ROOT, "src/app/registry/catalog.ts"),
   ]
 
   for (const file of files) {
@@ -167,7 +167,7 @@ function replaceContentReferences(slugMap: Map<string, string>) {
   }
 
   walk(CONTENT)
-  walk(path.join(ROOT, "src/gallery"))
+  walk(path.join(ROOT, "src/app"))
 }
 
 function countVendorSlugs(): number {

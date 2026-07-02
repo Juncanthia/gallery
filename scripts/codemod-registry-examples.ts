@@ -5,7 +5,7 @@
  */
 import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs"
 import path from "node:path"
-import { COMPONENT_REGISTRY, getRegistryItemByShellImport } from "../src/gallery/registry/index"
+import { COMPONENT_REGISTRY, getRegistryItemByShellImport } from "../src/app/registry/index"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 const EXAMPLES_GLOB = path.join(ROOT, "content/components")

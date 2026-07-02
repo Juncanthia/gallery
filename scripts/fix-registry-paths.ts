@@ -10,8 +10,8 @@ import path from "node:path"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 const TARGETS = [
-  path.join(ROOT, "src/gallery/registry/domains/generated.ts"),
-  path.join(ROOT, "src/gallery/registry/domains/pilot.ts"),
+  path.join(ROOT, "src/app/registry/domains/generated.ts"),
+  path.join(ROOT, "src/app/registry/domains/pilot.ts"),
 ]
 
 function resolveRepoPath(alias: string): string | null {

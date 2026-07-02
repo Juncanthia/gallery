@@ -41,7 +41,7 @@ Stage A 只处理了 `src/components/` 内部。但 `src/` 下与 `components/` 
 | 目录 | 核实方法 | 结论 | 处理 |
 | --- | --- | --- | --- |
 | `src/styles/` | `rg` 全仓库引用 | 只被 `src/app/main.tsx` 一处全局导入（Tailwind/主题/MDX 排版 CSS），与 `components/` 无耦合，是正常的 App 级全局样式入口 | **不动**，保留在 `src/styles/` |
-| `src/lib/utils.ts` | `rg` 引用统计：296 处引用，其中 10 处在 `src/components/`、`src/primitives/` 之外 | `cn()` classname 工具，被 `src/app/`、`src/gallery/` 广泛使用，是真正的全局工具 | **不动**，保留在 `src/lib/` |
+| `src/lib/utils.ts` | `rg` 引用统计：296 处引用，其中 10 处在 `src/components/`、`src/primitives/` 之外 | `cn()` classname 工具，被 `src/app/` 广泛使用，是真正的全局工具 | **不动**，保留在 `src/lib/` |
 | `src/lib/uploadthing.ts` | 同上：2 处引用，均在 `components/`/`primitives/` 之外 | 第三方上传服务封装，App 级服务集成，不是组件实现细节 | **不动**，保留在 `src/lib/` |
 | `src/lib/{block-discussion-index,compose-refs,get-strict-context,markdown-joiner-transform,suggestion}.ts(x)` | 同上：全部引用（合计 38 处）均在 `src/components/`（含 `primitives/`）内部，仓库其余部分 0 引用 | 100% 组件库内部实现细节（Plate 编辑器节点、compound component context 等），被错放在顶层 `lib/` | **迁移**：`src/lib/*.ts(x)` → `src/components/_internal/lib/*.ts(x)`（这 5 个文件） |
 | `src/hooks/*`（12 个文件） | 逐个 `rg` 引用统计 | 全部 12 个文件的引用 100% 落在 `src/components/`（含 `primitives/`）内部，仓库其余部分 0 引用；说明这批 hooks 并非真正"全局通用"，而是组件库内部（file-upload/masonry/sidebar/Plate 等）专用的实现细节，只是历史上被放在了顶层 | **迁移**：`src/hooks/*` → `src/components/_internal/hooks/*`（全部 12 个文件） |
@@ -157,7 +157,7 @@ flowchart TD
 
 ### 已落地：声明式 Component Registry（取代大规模 ui/ 转发壳）
 
-`src/gallery/registry/` 现为 Gallery 的**唯一数据源**，取代原先 `catalog.ts`、`source-registry.ts`、`resolve-showcase.ts` 各自猜测路径的模式：
+`src/app/registry/` 现为 Gallery 的**唯一数据源**，取代原先 `catalog.ts`、`source-registry.ts`、`resolve-showcase.ts` 各自猜测路径的模式：
 
 | 文件 | 职责 |
 | --- | --- |

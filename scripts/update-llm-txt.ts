@@ -7,7 +7,7 @@
  */
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
-import { getRegistryItem } from "../src/gallery/registry/index"
+import { getRegistryItem } from "../src/app/registry/index"
 
 const COMPONENTS_DIR = join(import.meta.dirname, "..", "content", "components")
 const INDENT = "    "

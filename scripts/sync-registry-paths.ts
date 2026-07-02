@@ -9,8 +9,8 @@ import path from "node:path"
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CONTENT = path.join(ROOT, "content/components")
 const TARGETS = [
-  path.join(ROOT, "src/gallery/registry/domains/generated.ts"),
-  path.join(ROOT, "src/gallery/registry/domains/pilot.ts"),
+  path.join(ROOT, "src/app/registry/domains/generated.ts"),
+  path.join(ROOT, "src/app/registry/domains/pilot.ts"),
 ]
 
 const SLUG_OVERRIDES: Record<string, string> = {

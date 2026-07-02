@@ -6,7 +6,7 @@ import path from "node:path"
 const ROOT = path.resolve(import.meta.dirname, "..")
 const TARGET_DIRS = [
   path.join(ROOT, "content/components"),
-  path.join(ROOT, "src/gallery"),
+  path.join(ROOT, "src/app"),
 ]
 
 const REPLACEMENTS: Array<[string, string]> = [

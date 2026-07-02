@@ -1,4 +1,4 @@
-import { GalleryDocsLayout } from "../gallery/shell/gallery-layout"
+import { GalleryDocsLayout } from "./shell/gallery-layout"
 
 export function App() {
   return <GalleryDocsLayout />

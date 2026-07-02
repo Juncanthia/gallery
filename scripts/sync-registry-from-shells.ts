@@ -9,7 +9,7 @@ import path from "node:path"
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CORE_DIR = path.join(ROOT, "src/components/core")
 const CONTENT_DIR = path.join(ROOT, "content/components")
-const OUT_FILE = path.join(ROOT, "src/gallery/registry/domains/generated.ts")
+const OUT_FILE = path.join(ROOT, "src/app/registry/domains/generated.ts")
 
 type ParsedShell = {
   shellFile: string

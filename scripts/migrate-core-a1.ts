@@ -265,7 +265,7 @@ function updateRegistry(): void {
   execSync("pnpm exec tsx scripts/sync-registry-from-shells.ts", { cwd: ROOT, stdio: "inherit" })
   execSync("pnpm exec tsx scripts/fix-registry-paths.ts", { cwd: ROOT, stdio: "inherit" })
 
-  const generated = path.join(ROOT, "src/gallery/registry/domains/generated.ts")
+  const generated = path.join(ROOT, "src/app/registry/domains/generated.ts")
   let content = readFileSync(generated, "utf8")
   content = content.replace(/@\/components\/ui\//g, "@/components/core/")
   writeFileSync(generated, content)

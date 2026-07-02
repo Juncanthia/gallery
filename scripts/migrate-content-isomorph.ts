@@ -15,7 +15,7 @@ import {
   writeFileSync,
 } from "node:fs"
 import path from "node:path"
-import { COMPONENT_REGISTRY } from "../src/gallery/registry/index"
+import { COMPONENT_REGISTRY } from "../src/app/registry/index"
 
 const ROOT = path.resolve(import.meta.dirname, "..")
 const CONTENT_DIR = path.join(ROOT, "content/components")
@@ -286,8 +286,8 @@ function replaceInTree(dir: string, replacements: Array<[string, string]>) {
 
 function updateRegistryFiles(slugMap: Map<string, string>) {
   const registryFiles = [
-    path.join(ROOT, "src/gallery/registry/domains/generated.ts"),
-    path.join(ROOT, "src/gallery/registry/domains/pilot.ts"),
+    path.join(ROOT, "src/app/registry/domains/generated.ts"),
+    path.join(ROOT, "src/app/registry/domains/pilot.ts"),
   ]
 
   for (const file of registryFiles) {
@@ -315,7 +315,7 @@ function updateRegistryFiles(slugMap: Map<string, string>) {
 }
 
 function updateCatalogRoutes(slugMap: Map<string, string>) {
-  const catalogFile = path.join(ROOT, "src/gallery/registry/catalog.ts")
+  const catalogFile = path.join(ROOT, "src/app/registry/catalog.ts")
   if (!existsSync(catalogFile)) return
   let content = readFileSync(catalogFile, "utf8")
   let changed = false
@@ -413,7 +413,7 @@ function main() {
   }
 
   replaceInTree(CONTENT_DIR, replacements)
-  replaceInTree(path.join(ROOT, "src/gallery"), replacements)
+  replaceInTree(path.join(ROOT, "src/app"), replacements)
   updateRegistryFiles(slugMap)
   updateCatalogRoutes(slugMap)
   addVendorMetadata(slugMap)

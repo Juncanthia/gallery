@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 
-import { ComponentDocPage } from "../../../gallery/docs/component-doc-page"
+import { ComponentDocPage } from "../../docs/component-doc-page"
 
 export const Route = createFileRoute("/components/$")({
   component: ComponentPage,
