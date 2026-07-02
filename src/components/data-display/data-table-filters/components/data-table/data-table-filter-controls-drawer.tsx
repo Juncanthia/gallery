@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from "@/components/core/tooltip";
 import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
-import { useMediaQuery } from "@/components/data-display/data-table-filters/hooks/use-media-query";
+import { useMediaQuery } from "@/_internals/foundations/hooks/use-media-query";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { FilterIcon } from "lucide-react";
 import React from "react";
