@@ -1,27 +1,207 @@
-import * as React from 'react';
-import { Folder as FolderIcon, FolderOpen as FolderOpenIcon, File as FileIcon } from 'lucide-react';
+'use client';
 
+import * as React from 'react';
+import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
 import {
-  Files as FilesPrimitive,
-  FilesHighlight as FilesHighlightPrimitive,
-  FolderItem as FolderItemPrimitive,
-  FolderHeader as FolderHeaderPrimitive,
-  FolderTrigger as FolderTriggerPrimitive,
-  FolderHighlight as FolderHighlightPrimitive,
-  Folder as FolderPrimitive,
-  FolderIcon as FolderIconPrimitive,
-  FileLabel as FileLabelPrimitive,
-  FolderContent as FolderContentPrimitive,
-  FileHighlight as FileHighlightPrimitive,
-  File as FilePrimitive,
-  FileIcon as FileIconPrimitive,
-  type FilesProps as FilesPrimitiveProps,
-  type FolderItemProps as FolderItemPrimitiveProps,
-  type FolderContentProps as FolderContentPrimitiveProps,
-  type FileProps as FilePrimitiveProps,
-  type FileLabelProps as FileLabelPrimitiveProps,
-} from '@/components/_internal/radix/file-tree';
+  Highlight,
+  HighlightItem,
+  type HighlightItemProps,
+  type HighlightProps,
+} from '@/components/_internal/effects/highlight';
+import {
+  AccordionPrimitive as Accordion,
+  AccordionItemPrimitive as AccordionItem,
+  AccordionHeaderPrimitive as AccordionHeader,
+  AccordionTriggerPrimitive as AccordionTrigger,
+  AccordionContentPrimitive as AccordionContent,
+  type AccordionPrimitiveProps as AccordionProps,
+  type AccordionItemPrimitiveProps as AccordionItemProps,
+  type AccordionHeaderProps,
+  type AccordionTriggerPrimitiveProps as AccordionTriggerProps,
+  type AccordionContentPrimitiveProps as AccordionContentProps,
+} from '@/components/core/accordion';
+import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
+import { Folder as FolderIcon, FolderOpen as FolderOpenIcon, File as FileIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+type FilesContextType = {
+  open: string[];
+};
+
+type FolderContextType = {
+  isOpen: boolean;
+};
+
+const [FilesProvider, useFiles] =
+  getStrictContext<FilesContextType>('FilesContext');
+
+const [FolderProvider, useFolder] =
+  getStrictContext<FolderContextType>('FolderContext');
+
+type BaseFilesProps = {
+  children: React.ReactNode;
+} & Omit<AccordionProps, 'type' | 'defaultValue' | 'value' | 'onValueChange'>;
+
+type ControlledFilesProps = {
+  defaultOpen?: never;
+  open?: string[];
+  onOpenChange?: (open: string[]) => void;
+};
+
+type UncontrolledFilesProps = {
+  defaultOpen: string[];
+  open?: never;
+  onOpenChange?: never;
+};
+
+type FilesPrimitiveProps = BaseFilesProps &
+  (ControlledFilesProps | UncontrolledFilesProps);
+
+function FilesPrimitive({
+  children,
+  defaultOpen = [],
+  open,
+  onOpenChange,
+  style,
+  ...props
+}: FilesPrimitiveProps) {
+  const [openValue, setOpenValue] = useControlledState({
+    value: open,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+
+  return (
+    <FilesProvider value={{ open: openValue ?? [] }}>
+      <Accordion
+        data-slot="files"
+        type="multiple"
+        defaultValue={defaultOpen}
+        value={open}
+        onValueChange={setOpenValue}
+        style={{
+          position: 'relative',
+          overflow: 'auto',
+          ...style,
+        }}
+        {...props}
+      >
+        {children}
+      </Accordion>
+    </FilesProvider>
+  );
+}
+
+type FilesHighlightProps = Omit<HighlightProps, 'controlledItems' | 'mode'>;
+
+function FilesHighlightPrimitive({ hover = true, ...props }: FilesHighlightProps) {
+  return (
+    <Highlight
+      data-slot="files-highlight"
+      controlledItems
+      mode="parent"
+      hover={hover}
+      {...props}
+    />
+  );
+}
+
+type FolderItemPrimitiveProps = AccordionItemProps;
+
+function FolderItemPrimitive({ value, ...props }: FolderItemPrimitiveProps) {
+  const { open } = useFiles();
+
+  return (
+    <FolderProvider value={{ isOpen: open.includes(value) }}>
+      <AccordionItem data-slot="folder-item" value={value} {...props} />
+    </FolderProvider>
+  );
+}
+
+type FolderHeaderProps = AccordionHeaderProps;
+
+function FolderHeaderPrimitive(props: FolderHeaderProps) {
+  return <AccordionHeader data-slot="folder-header" {...props} />;
+}
+
+type FolderTriggerPrimitiveProps = AccordionTriggerProps;
+
+function FolderTriggerPrimitive(props: FolderTriggerPrimitiveProps) {
+  return <AccordionTrigger data-slot="folder-trigger" {...props} />;
+}
+
+type FolderContentPrimitiveProps = AccordionContentProps;
+
+function FolderContentPrimitive(props: FolderContentPrimitiveProps) {
+  return <AccordionContent data-slot="folder-content" {...props} />;
+}
+
+type FolderHighlightProps = HighlightItemProps;
+
+function FolderHighlightPrimitive(props: FolderHighlightProps) {
+  return <HighlightItem data-slot="folder-highlight" {...props} />;
+}
+
+type FolderProps = React.ComponentProps<'div'>;
+
+function FolderPrimitive(props: FolderProps) {
+  return <div data-slot="folder" {...props} />;
+}
+
+type FolderIconProps = HTMLMotionProps<'span'> & {
+  closeIcon: React.ReactNode;
+  openIcon: React.ReactNode;
+};
+
+function FolderIconPrimitive({
+  closeIcon,
+  openIcon,
+  transition = { duration: 0.15 },
+  ...props
+}: FolderIconProps) {
+  const { isOpen } = useFolder();
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.span
+        key={isOpen ? 'open' : 'close'}
+        data-slot="folder-icon"
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.9 }}
+        transition={transition}
+        {...props}
+      >
+        {isOpen ? openIcon : closeIcon}
+      </motion.span>
+    </AnimatePresence>
+  );
+}
+
+type FileHighlightProps = HighlightItemProps;
+
+function FileHighlightPrimitive(props: FileHighlightProps) {
+  return <HighlightItem data-slot="file-highlight" {...props} />;
+}
+
+type FilePrimitiveProps = React.ComponentProps<'div'>;
+
+function FilePrimitive(props: FilePrimitiveProps) {
+  return <div data-slot="file" {...props} />;
+}
+
+type FileIconProps = React.ComponentProps<'span'>;
+
+function FileIconPrimitive(props: FileIconProps) {
+  return <span data-slot="file-icon" {...props} />;
+}
+
+type FileLabelPrimitiveProps = React.ComponentProps<'span'>;
+
+function FileLabelPrimitive(props: FileLabelPrimitiveProps) {
+  return <span data-slot="file-label" {...props} />;
+}
 
 type GitStatus = 'untracked' | 'modified' | 'deleted';
 
