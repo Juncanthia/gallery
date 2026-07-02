@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Clock, Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2, Vector3, WebGLRenderer } from "three"
+import { Clock, Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2, Vector3, WebGLRenderer, type IUniform } from "three"
 
 const vertexShader = `
 precision highp float;
@@ -251,7 +251,7 @@ export function FloatingLines({
     renderer.domElement.style.height = "100%"
     container.appendChild(renderer.domElement)
 
-    const uniforms: any = {
+    const uniforms: Record<string, IUniform> = {
       iTime: { value: 0 }, iResolution: { value: new Vector3(1, 1, 1) }, animationSpeed: { value: animationSpeed },
       enableTop: { value: enabledWaves.includes("top") }, enableMiddle: { value: enabledWaves.includes("middle") }, enableBottom: { value: enabledWaves.includes("bottom") },
       topLineCount: { value: topLineCount }, middleLineCount: { value: middleLineCount }, bottomLineCount: { value: bottomLineCount },
@@ -333,5 +333,5 @@ export function FloatingLines({
     }
   }, [linesGradient, enabledWaves, lineCount, lineDistance, topWavePosition, middleWavePosition, bottomWavePosition, animationSpeed, interactive, bendRadius, bendStrength, mouseDamping, parallax, parallaxStrength])
 
-  return <div ref={containerRef} className="floating-lines-container" style={{ mixBlendMode: mixBlendMode as any }} />
+  return <div ref={containerRef} className="floating-lines-container" style={{ mixBlendMode: mixBlendMode as React.CSSProperties["mixBlendMode"] }} />
 }

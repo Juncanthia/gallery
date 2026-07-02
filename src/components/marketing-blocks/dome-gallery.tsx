@@ -45,7 +45,7 @@ const wrapAngleSigned = (deg: number) => {
   return a - 180
 }
 const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
-  const attr = (el.dataset as any)[name] ?? el.getAttribute(`data-${name}`)
+  const attr = el.dataset[name as keyof DOMStringMap] ?? el.getAttribute(`data-${name}`)
   const n = attr == null ? NaN : parseFloat(attr)
   return Number.isFinite(n) ? n : fallback
 }
@@ -110,7 +110,13 @@ export function DomeGallery({
   const viewerRef = useRef<HTMLDivElement>(null)
   const scrimRef = useRef<HTMLDivElement>(null)
   const focusedElRef = useRef<HTMLElement | null>(null)
-  const originalTilePositionRef = useRef<any>(null)
+  const originalTilePositionRef = useRef<{
+    left: number
+    top: number
+    width: number
+    height: number
+    transform?: string
+  } | null>(null)
 
   const rotationRef = useRef({ x: 0, y: 0 })
   const startRotRef = useRef({ x: 0, y: 0 })

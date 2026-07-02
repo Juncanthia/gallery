@@ -49,7 +49,7 @@ export interface FieldBuilder<T> {
 
 // Schema definition as a record of field builders
 
-export type SchemaDefinition = Record<string, FieldBuilder<any>>;
+export type SchemaDefinition = Record<string, FieldBuilder<unknown>>;
 
 // Infer the TypeScript type from a schema definition
 export type InferSchemaType<T extends SchemaDefinition> = {

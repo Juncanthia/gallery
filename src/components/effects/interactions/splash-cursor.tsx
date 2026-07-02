@@ -1,6 +1,18 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import {
+  type DoubleFBO,
+  type FBOAttachment,
+  type FluidGL,
+  type FluidPointer,
+  type RGBColor,
+  type HalfFloatExtension,
+  FluidPointerInstance,
+  type TextureFormat,
+  type UniformLocations,
+  isWebGL2Context,
+} from "../_internal/fluid-simulation-types"
 
 export type SplashCursorProps = {
   SIM_RESOLUTION?: number
@@ -48,18 +60,7 @@ export function SplashCursor({
 
     let isActive = true
 
-    function pointerPrototype(this: any) {
-      this.id = -1
-      this.texcoordX = 0
-      this.texcoordY = 0
-      this.prevTexcoordX = 0
-      this.prevTexcoordY = 0
-      this.deltaX = 0
-      this.deltaY = 0
-      this.down = false
-      this.moved = false
-      this.color = [0, 0, 0]
-    }
+    const pointers: FluidPointer[] = [new FluidPointerInstance()]
 
     const config = {
       SIM_RESOLUTION,
@@ -81,8 +82,6 @@ export function SplashCursor({
       COLOR,
     }
 
-    const pointers = [new (pointerPrototype as any)()]
-
     const { gl, ext } = getWebGLContext(canvas)
     if (!ext.supportLinearFiltering) {
       config.DYE_RESOLUTION = 256
@@ -97,14 +96,14 @@ export function SplashCursor({
         antialias: false,
         preserveDrawingBuffer: false,
       }
-      let gl = canvas.getContext("webgl2", params) as WebGL2RenderingContext
+      let gl: FluidGL = canvas.getContext("webgl2", params) as WebGL2RenderingContext
       const isWebGL2 = !!gl
       if (!isWebGL2)
         gl = (canvas.getContext("webgl", params) ||
-          canvas.getContext("experimental-webgl", params)) as any
+          canvas.getContext("experimental-webgl", params)) as WebGLRenderingContext
 
-      let halfFloat: any
-      let supportLinearFiltering: any
+      let halfFloat: HalfFloatExtension | null = null
+      let supportLinearFiltering: unknown
       if (isWebGL2) {
         gl.getExtension("EXT_color_buffer_float")
         supportLinearFiltering = gl.getExtension("OES_texture_float_linear")
@@ -114,15 +113,18 @@ export function SplashCursor({
       }
       gl.clearColor(0.0, 0.0, 0.0, 1.0)
 
-      const halfFloatTexType = isWebGL2 ? gl.HALF_FLOAT : halfFloat && halfFloat.HALF_FLOAT_OES
-      let formatRGBA: any
-      let formatRG: any
-      let formatR: any
+      const halfFloatTexType = (isWebGL2
+        ? (gl as WebGL2RenderingContext).HALF_FLOAT
+        : halfFloat && halfFloat.HALF_FLOAT_OES) ?? gl.FLOAT
+      let formatRGBA: TextureFormat | null
+      let formatRG: TextureFormat | null
+      let formatR: TextureFormat | null
 
       if (isWebGL2) {
-        formatRGBA = getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, halfFloatTexType)
-        formatRG = getSupportedFormat(gl, gl.RG16F, gl.RG, halfFloatTexType)
-        formatR = getSupportedFormat(gl, gl.R16F, gl.RED, halfFloatTexType)
+        const gl2 = gl as WebGL2RenderingContext
+        formatRGBA = getSupportedFormat(gl2, gl2.RGBA16F, gl2.RGBA, halfFloatTexType)
+        formatRG = getSupportedFormat(gl2, gl2.RG16F, gl2.RG, halfFloatTexType)
+        formatR = getSupportedFormat(gl2, gl2.R16F, gl2.RED, halfFloatTexType)
       } else {
         formatRGBA = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType)
         formatRG = getSupportedFormat(gl, gl.RGBA, gl.RGBA, halfFloatTexType)
@@ -141,21 +143,34 @@ export function SplashCursor({
       }
     }
 
-    function getSupportedFormat(gl: WebGLRenderingContext | WebGL2RenderingContext, internalFormat: any, format: any, type: any): any {
+    function getSupportedFormat(
+      gl: FluidGL,
+      internalFormat: number,
+      format: number,
+      type: number
+    ): TextureFormat | null {
       if (!supportRenderTextureFormat(gl, internalFormat, format, type)) {
-        switch (internalFormat) {
-          case (gl as any).R16F:
-            return getSupportedFormat(gl, (gl as any).RG16F, (gl as any).RG, type)
-          case (gl as any).RG16F:
-            return getSupportedFormat(gl, (gl as any).RGBA16F, gl.RGBA, type)
-          default:
-            return null
+        if (isWebGL2Context(gl)) {
+          switch (internalFormat) {
+            case gl.R16F:
+              return getSupportedFormat(gl, gl.RG16F, gl.RG, type)
+            case gl.RG16F:
+              return getSupportedFormat(gl, gl.RGBA16F, gl.RGBA, type)
+            default:
+              return null
+          }
         }
+        return null
       }
       return { internalFormat, format }
     }
 
-    function supportRenderTextureFormat(gl: any, internalFormat: any, format: any, type: any) {
+    function supportRenderTextureFormat(
+      gl: FluidGL,
+      internalFormat: number,
+      format: number,
+      type: number
+    ) {
       const texture = gl.createTexture()
       gl.bindTexture(gl.TEXTURE_2D, texture)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
@@ -173,15 +188,15 @@ export function SplashCursor({
     class Material {
       vertexShader: WebGLShader
       fragmentShaderSource: string
-      programs: any[]
-      activeProgram: any
-      uniforms: any
+      programs: Record<number, WebGLProgram>
+      activeProgram: WebGLProgram | null
+      uniforms: UniformLocations
       constructor(vertexShader: WebGLShader, fragmentShaderSource: string) {
         this.vertexShader = vertexShader
         this.fragmentShaderSource = fragmentShaderSource
-        this.programs = []
+        this.programs = {}
         this.activeProgram = null
-        this.uniforms = []
+        this.uniforms = {}
       }
       setKeywords(keywords: string[]) {
         let hash = 0
@@ -202,7 +217,7 @@ export function SplashCursor({
     }
 
     class Program {
-      uniforms: any
+      uniforms: UniformLocations
       program: WebGLProgram
       constructor(vertexShader: WebGLShader, fragmentShader: WebGLShader) {
         this.uniforms = {}
@@ -223,7 +238,7 @@ export function SplashCursor({
     }
 
     function getUniforms(program: WebGLProgram) {
-      const uniforms: any = []
+      const uniforms: UniformLocations = {}
       const uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS)
       for (let i = 0; i < uniformCount; i++) {
         const uniformName = gl.getActiveUniform(program, i)!.name
@@ -551,7 +566,7 @@ export function SplashCursor({
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0, 1, 2, 0, 2, 3]), gl.STATIC_DRAW)
       gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0)
       gl.enableVertexAttribArray(0)
-      return (target: any, clear = false) => {
+      return (target: FBOAttachment | null, clear = false) => {
         if (target == null) {
           gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
           gl.bindFramebuffer(gl.FRAMEBUFFER, null)
@@ -567,7 +582,11 @@ export function SplashCursor({
       }
     })()
 
-    let dye: any, velocity: any, divergence: any, curl: any, pressure: any
+    let dye: DoubleFBO
+    let velocity: DoubleFBO
+    let divergence: FBOAttachment
+    let curl: FBOAttachment
+    let pressure: DoubleFBO
 
     const copyProgram = new Program(baseVertexShader, copyShader)
     const clearProgram = new Program(baseVertexShader, clearShader)
@@ -587,6 +606,7 @@ export function SplashCursor({
       const rgba = ext.formatRGBA
       const rg = ext.formatRG
       const r = ext.formatR
+      if (!rgba || !rg || !r) return
       const filtering = ext.supportLinearFiltering ? gl.LINEAR : gl.NEAREST
       gl.disable(gl.BLEND)
 
@@ -605,7 +625,7 @@ export function SplashCursor({
       pressure = createDoubleFBO(simRes.width, simRes.height, r.internalFormat, r.format, texType, gl.NEAREST)
     }
 
-    function createFBO(w: number, h: number, internalFormat: any, format: any, type: any, param: any) {
+    function createFBO(w: number, h: number, internalFormat: number, format: number, type: number, param: number) {
       gl.activeTexture(gl.TEXTURE0)
       const texture = gl.createTexture()
       gl.bindTexture(gl.TEXTURE_2D, texture)
@@ -638,7 +658,7 @@ export function SplashCursor({
       }
     }
 
-    function createDoubleFBO(w: number, h: number, internalFormat: any, format: any, type: any, param: any) {
+    function createDoubleFBO(w: number, h: number, internalFormat: number, format: number, type: number, param: number) {
       let fbo1 = createFBO(w, h, internalFormat, format, type, param)
       let fbo2 = createFBO(w, h, internalFormat, format, type, param)
       return {
@@ -666,7 +686,7 @@ export function SplashCursor({
       }
     }
 
-    function resizeFBO(target: any, w: number, h: number, internalFormat: any, format: any, type: any, param: any) {
+    function resizeFBO(target: FBOAttachment, w: number, h: number, internalFormat: number, format: number, type: number, param: number) {
       const newFBO = createFBO(w, h, internalFormat, format, type, param)
       copyProgram.bind()
       gl.uniform1i(copyProgram.uniforms.uTexture, target.attach(0))
@@ -674,7 +694,7 @@ export function SplashCursor({
       return newFBO
     }
 
-    function resizeDoubleFBO(target: any, w: number, h: number, internalFormat: any, format: any, type: any, param: any) {
+    function resizeDoubleFBO(target: DoubleFBO, w: number, h: number, internalFormat: number, format: number, type: number, param: number) {
       if (target.width === w && target.height === h) return target
       target.read = resizeFBO(target.read, w, h, internalFormat, format, type, param)
       target.write = createFBO(w, h, internalFormat, format, type, param)
@@ -731,14 +751,14 @@ export function SplashCursor({
       colorUpdateTimer += dt * config.COLOR_UPDATE_SPEED
       if (colorUpdateTimer >= 1) {
         colorUpdateTimer = wrap(colorUpdateTimer, 0, 1)
-        pointers.forEach((p: any) => {
+        pointers.forEach((p: FluidPointer) => {
           p.color = generateColor()
         })
       }
     }
 
     function applyInputs() {
-      pointers.forEach((p: any) => {
+      pointers.forEach((p: FluidPointer) => {
         if (p.moved) {
           p.moved = false
           splatPointer(p)
@@ -810,13 +830,13 @@ export function SplashCursor({
       dye.swap()
     }
 
-    function render(target: any) {
+    function render(target: FBOAttachment | null) {
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
       gl.enable(gl.BLEND)
       drawDisplay(target)
     }
 
-    function drawDisplay(target: any) {
+    function drawDisplay(target: FBOAttachment | null) {
       const width = target == null ? gl.drawingBufferWidth : target.width
       const height = target == null ? gl.drawingBufferHeight : target.height
       displayMaterial.bind()
@@ -825,13 +845,13 @@ export function SplashCursor({
       blit(target)
     }
 
-    function splatPointer(pointer: any) {
+    function splatPointer(pointer: FluidPointer) {
       const dx = pointer.deltaX * config.SPLAT_FORCE
       const dy = pointer.deltaY * config.SPLAT_FORCE
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, pointer.color)
     }
 
-    function clickSplat(pointer: any) {
+    function clickSplat(pointer: FluidPointer) {
       const color = generateColor()
       color.r *= 10.0
       color.g *= 10.0
@@ -841,7 +861,7 @@ export function SplashCursor({
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color)
     }
 
-    function splat(x: number, y: number, dx: number, dy: number, color: any) {
+    function splat(x: number, y: number, dx: number, dy: number, color: RGBColor) {
       splatProgram.bind()
       gl.uniform1i(splatProgram.uniforms.uTarget, velocity.read.attach(0))
       gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas!.width / canvas!.height)
@@ -863,7 +883,7 @@ export function SplashCursor({
       return radius
     }
 
-    function updatePointerDownData(pointer: any, id: number, posX: number, posY: number) {
+    function updatePointerDownData(pointer: FluidPointer, id: number, posX: number, posY: number) {
       pointer.id = id
       pointer.down = true
       pointer.moved = false
@@ -876,7 +896,7 @@ export function SplashCursor({
       pointer.color = generateColor()
     }
 
-    function updatePointerMoveData(pointer: any, posX: number, posY: number, color: any) {
+    function updatePointerMoveData(pointer: FluidPointer, posX: number, posY: number, color: RGBColor) {
       pointer.prevTexcoordX = pointer.texcoordX
       pointer.prevTexcoordY = pointer.texcoordY
       pointer.texcoordX = posX / canvas!.width
@@ -887,7 +907,7 @@ export function SplashCursor({
       pointer.color = color
     }
 
-    function updatePointerUpData(pointer: any) {
+    function updatePointerUpData(pointer: FluidPointer) {
       pointer.down = false
     }
 
@@ -924,12 +944,12 @@ export function SplashCursor({
     }
 
     function HSVtoRGB(h: number, s: number, v: number) {
-      let r: number, g: number, b: number, i: number, f: number, p: number, q: number, t: number
-      i = Math.floor(h * 6)
-      f = h * 6 - i
-      p = v * (1 - s)
-      q = v * (1 - f * s)
-      t = v * (1 - (1 - f) * s)
+      const i = Math.floor(h * 6)
+      const f = h * 6 - i
+      const p = v * (1 - s)
+      const q = v * (1 - f * s)
+      const t = v * (1 - (1 - f) * s)
+      let r: number, g: number, b: number
       switch (i % 6) {
         case 0: r = v; g = t; b = p; break
         case 1: r = q; g = v; b = p; break

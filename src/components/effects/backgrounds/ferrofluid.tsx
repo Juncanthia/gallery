@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type CSSProperties } from "react"
 import { Renderer, Program, Mesh, Triangle } from "ogl"
+import type { OGLUniforms } from "../_internal/ogl-types"
 
 const MAX_COLORS = 8
 
@@ -224,10 +225,10 @@ export function Ferrofluid({
 }: FerrofluidProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const rafRef = useRef<number | null>(null)
-  const programRef = useRef<any>(null)
-  const meshRef = useRef<any>(null)
-  const geometryRef = useRef<any>(null)
-  const rendererRef = useRef<any>(null)
+  const programRef = useRef<Program | null>(null)
+  const meshRef = useRef<Mesh | null>(null)
+  const geometryRef = useRef<Triangle | null>(null)
+  const rendererRef = useRef<Renderer | null>(null)
   const mouseTargetRef = useRef([0, 0])
   const lastTimeRef = useRef(0)
 
@@ -251,7 +252,7 @@ export function Ferrofluid({
 
     const { arr, count, avg } = prepColors(colors)
 
-    const uniforms: any = {
+    const uniforms: OGLUniforms = {
       iResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight, 1] },
       iMouse: { value: [0, 0] },
       iTime: { value: 0 },
@@ -302,7 +303,7 @@ export function Ferrofluid({
         let factor = 1 - Math.exp(-dt / tau)
         if (factor > 1) factor = 1
         const target = mouseTargetRef.current
-        const cur = uniforms.iMouse.value
+        const cur = uniforms.iMouse.value as number[]
         cur[0] += (target[0] - cur[0]) * factor
         cur[1] += (target[1] - cur[1]) * factor
       } else {
@@ -319,9 +320,9 @@ export function Ferrofluid({
       if (mouseInteraction) canvas.removeEventListener("pointermove", onPointerMove)
       ro.disconnect()
       if (canvas.parentElement === container) container.removeChild(canvas)
-      ;[programRef, geometryRef, meshRef, rendererRef].forEach((ref) => {
-        if (ref.current && typeof ref.current.remove === "function") ref.current.remove()
-      })
+      programRef.current?.remove()
+      meshRef.current?.remove()
+      geometryRef.current?.remove()
       programRef.current = null; geometryRef.current = null; meshRef.current = null; rendererRef.current = null
     }
   }, [dpr, paused, colors, speed, scale, turbulence, fluidity, rimWidth, sharpness, shimmer, glow, flowDirection, opacity, mouseInteraction, mouseStrength, mouseRadius, mouseDampening])

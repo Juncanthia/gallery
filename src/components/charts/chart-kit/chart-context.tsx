@@ -2,9 +2,11 @@
 
 import type { scaleBand, scaleLinear, scaleTime } from "@visx/scale";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- visx scale input generic placeholder
 type ScaleLinear<Output, _Input = number> = ReturnType<
   typeof scaleLinear<Output>
 >;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- visx scale input generic placeholder
 type ScaleTime<Output, _Input = Date | number> = ReturnType<
   typeof scaleTime<Output>
 >;

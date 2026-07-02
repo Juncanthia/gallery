@@ -198,7 +198,7 @@ export function Plasma({
       canvas.removeEventListener("webglcontextlost", handleContextLost)
       canvas.removeEventListener("webglcontextrestored", handleContextRestored)
       if (mouseInteractive && containerEl) containerEl.removeEventListener("mousemove", handleMouseMove)
-      try { containerEl?.removeChild(canvas) } catch {}
+      try { containerEl?.removeChild(canvas) } catch { /* ignore detached canvas cleanup */ }
     }
   }, [color, speed, direction, scale, opacity, mouseInteractive])
 

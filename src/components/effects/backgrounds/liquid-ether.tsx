@@ -46,8 +46,54 @@ export function LiquidEther({
   autoResumeDelay = 1000,
   autoRampDuration = 0.6,
 }: LiquidEtherProps) {
+  interface LiquidEtherSimulationOptions {
+    iterations_poisson: number
+    iterations_viscous: number
+    mouse_force: number
+    resolution: number
+    cursor_size: number
+    viscous: number
+    isBounce: boolean
+    dt: number
+    isViscous: boolean
+    BFECC: boolean
+  }
+
+  interface LiquidEtherAutoDriverOptions {
+    enabled: boolean
+    speed: number
+    resumeDelay?: number
+    rampDuration?: number
+  }
+
+  interface LiquidEtherOutput {
+    scene: THREE.Scene
+    camera: THREE.Camera
+    simulation: Simulation
+    render: () => void
+    resize?: () => void
+  }
+
+  interface LiquidEtherManagerHandle {
+    start(): void
+    pause(): void
+    dispose(): void
+    _resize(): void
+    lastUserInteraction: number
+  }
+
+  interface LiquidEtherManagerProps {
+    $wrapper: HTMLElement
+    autoDemo: boolean
+    autoSpeed: number
+    autoIntensity: number
+    takeoverDuration: number
+    autoResumeDelay: number
+    autoRampDuration: number
+  }
+
   const mountRef = useRef<HTMLDivElement>(null)
-  const webglRef = useRef<any>(null)
+  const webglRef = useRef<LiquidEtherManagerHandle | null>(null)
   const resizeObserverRef = useRef<ResizeObserver | null>(null)
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null)
   const isVisibleRef = useRef(true)
@@ -254,7 +300,7 @@ export function LiquidEther({
     // AutoDriver
     class AutoDriver {
       mouse: MouseClass
-      manager: any
+      manager: LiquidEtherManagerHandle
       enabled: boolean
       speed: number
       resumeDelay: number
@@ -267,7 +313,7 @@ export function LiquidEther({
       margin = 0.2
       _tmpDir = new THREE.Vector2()
 
-      constructor(mouse: MouseClass, manager: any, opts: any) {
+      constructor(mouse: MouseClass, manager: LiquidEtherManagerHandle, opts: LiquidEtherAutoDriverOptions) {
         this.mouse = mouse
         this.manager = manager
         this.enabled = opts.enabled
@@ -316,14 +362,14 @@ export function LiquidEther({
     // For brevity, implement the essential path inline
 
     // Build WebGLManager
-    class WebGLManager {
-      props: any
-      output: any
+    class WebGLManager implements LiquidEtherManagerHandle {
+      props: LiquidEtherManagerProps
+      output: LiquidEtherOutput | null = null
       running = false
       lastUserInteraction = performance.now()
       autoDriver: AutoDriver
 
-      constructor(props: any) {
+      constructor(props: LiquidEtherManagerProps) {
         this.props = props
         Common.init(props.$wrapper)
         Mouse.init(props.$wrapper)
@@ -412,11 +458,11 @@ export function LiquidEther({
 
     // Minimal Simulation stub - full fluid sim
     class Simulation {
-      options: any
+      options: LiquidEtherSimulationOptions
       fbos: Record<string, THREE.WebGLRenderTarget> = {}
       fboSize = new THREE.Vector2()
       cellScale = new THREE.Vector2()
-      constructor(options: any) {
+      constructor(options: Partial<LiquidEtherSimulationOptions>) {
         this.options = { iterations_poisson: 32, iterations_viscous: 32, mouse_force: 20, resolution: 0.5, cursor_size: 100, viscous: 30, isBounce: false, dt: 0.014, isViscous: false, BFECC: true, ...options }
         this.calcSize(); this.createFBOs()
       }

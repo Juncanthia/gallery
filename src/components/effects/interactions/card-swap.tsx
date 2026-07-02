@@ -177,7 +177,11 @@ export function CardSwap({
 
   const rendered = childArr.map((child, i) => {
     if (!isValidElement(child)) return child
-    const element = child as React.ReactElement<any>
+    const element = child as React.ReactElement<{
+      style?: React.CSSProperties
+      onClick?: (e: React.MouseEvent) => void
+      ref?: React.Ref<HTMLDivElement>
+    }>
     return cloneElement(element, {
       key: i,
       ref: refs[i],

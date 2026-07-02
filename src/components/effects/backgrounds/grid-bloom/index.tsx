@@ -302,7 +302,6 @@ const ShaderPlane = ({
   return (
     <mesh>
       <planeGeometry args={[2, 2]} />
-      {/* eslint-disable react/no-unknown-property */}
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
@@ -313,7 +312,6 @@ const ShaderPlane = ({
         transparent={true}
         blending={THREE.AdditiveBlending}
       />
-      {/* eslint-enable react/no-unknown-property */}
     </mesh>
   );
 };

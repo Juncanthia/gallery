@@ -190,7 +190,6 @@ export function SoftAurora({
     const gl = renderer.gl
     gl.clearColor(0, 0, 0, 0)
 
-    let program: Program
     const currentMouse = [0.5, 0.5]
     let targetMouse = [0.5, 0.5]
 
@@ -206,21 +205,8 @@ export function SoftAurora({
       targetMouse = [0.5, 0.5]
     }
 
-    function resize() {
-      renderer.setSize(container.offsetWidth, container.offsetHeight)
-      if (program) {
-        program.uniforms.uResolution.value = [
-          gl.canvas.width,
-          gl.canvas.height,
-          gl.canvas.width / gl.canvas.height,
-        ]
-      }
-    }
-    window.addEventListener("resize", resize)
-    resize()
-
     const geometry = new Triangle(gl)
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: vertexShader,
       fragment: fragmentShader,
       uniforms: {
@@ -249,6 +235,17 @@ export function SoftAurora({
         uEnableMouse: { value: enableMouseInteraction },
       },
     })
+
+    function resize() {
+      renderer.setSize(container.offsetWidth, container.offsetHeight)
+      program.uniforms.uResolution.value = [
+        gl.canvas.width,
+        gl.canvas.height,
+        gl.canvas.width / gl.canvas.height,
+      ]
+    }
+    window.addEventListener("resize", resize)
+    resize()
 
     const mesh = new Mesh(gl, { geometry, program })
     container.appendChild(gl.canvas)

@@ -20,11 +20,11 @@ export function CurvedLoop({
   interactive = true,
 }: CurvedLoopProps) {
   const text = useMemo(() => {
-    const hasTrailing = /\s| $/.test(marqueeText)
+    const hasTrailing = /\s|\u00A0$/.test(marqueeText)
     return (
       (hasTrailing
         ? marqueeText.replace(/\s+$/, "")
-        : marqueeText) + " "
+        : marqueeText) + "\u00A0"
     )
   }, [marqueeText])
 

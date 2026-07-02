@@ -294,7 +294,11 @@ const BottomMenu = () => {
             className={`p-3 rounded-[16px] transition-all ${
               view === name ? "bg-accent" : "hover:bg-muted"
             }`}
-            onClick={() => setView(view === name ? "default" : (name as any))}
+            onClick={() =>
+              setView(
+                view === name ? "default" : (name as Exclude<typeof view, "default">)
+              )
+            }
           >
             <HugeiconsIcon
               icon={Icon}

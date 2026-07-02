@@ -3,6 +3,7 @@
 import { AIChatPlugin } from '@platejs/ai/react';
 import { BlockSelectionPlugin } from '@platejs/selection/react';
 import { getPluginTypes, isHotkey, KEYS } from 'platejs';
+import type { PlateElementProps } from 'platejs/react';
 
 import { BlockSelection } from '@/components/editor/blocks/block-selection';
 
@@ -36,7 +37,7 @@ export const BlockSelectionKit = [
       belowRootNodes: (props) => {
         if (!hasSelectableClass(props)) return null;
 
-        return <BlockSelection {...(props as any)} />;
+        return <BlockSelection {...(props as PlateElementProps)} />;
       },
     },
   })),

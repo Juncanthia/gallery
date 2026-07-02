@@ -17,7 +17,30 @@ export type DotFieldProps = {
   gradientFrom?: string
   gradientTo?: string
   glowColor?: string
-  [key: string]: any
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "children">
+
+interface DotFieldDot {
+  ax: number
+  ay: number
+  sx: number
+  sy: number
+  vx: number
+  vy: number
+  x: number
+  y: number
+}
+
+interface DotFieldPropsSnapshot {
+  dotRadius: number
+  dotSpacing: number
+  cursorRadius: number
+  cursorForce: number
+  bulgeOnly: boolean
+  bulgeStrength: number
+  sparkle: boolean
+  waveAmplitude: number
+  gradientFrom: string
+  gradientTo: string
 }
 
 export const DotField = memo(function DotField({
@@ -38,13 +61,24 @@ export const DotField = memo(function DotField({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const glowRef = useRef<SVGCircleElement>(null)
-  const dotsRef = useRef<any[]>([])
+  const dotsRef = useRef<DotFieldDot[]>([])
   const mouseRef = useRef({ x: -9999, y: -9999, prevX: -9999, prevY: -9999, speed: 0 })
   const rafRef = useRef<number | null>(null)
   const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 })
   const glowOpacity = useRef(0)
   const engagement = useRef(0)
-  const propsRef = useRef<any>({})
+  const propsRef = useRef<DotFieldPropsSnapshot>({
+    dotRadius,
+    dotSpacing,
+    cursorRadius,
+    cursorForce,
+    bulgeOnly,
+    bulgeStrength,
+    sparkle,
+    waveAmplitude,
+    gradientFrom,
+    gradientTo,
+  })
   propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo }
   const rebuildRef = useRef<(() => void) | null>(null)
   const glowIdRef = useRef(`dot-field-glow-${Math.random().toString(36).slice(2, 9)}`)
@@ -130,7 +164,7 @@ export const DotField = memo(function DotField({
       if (glowEl) {
         glowEl.setAttribute("cx", String(m.x))
         glowEl.setAttribute("cy", String(m.y))
-        ;(glowEl.style as any).opacity = glowOpacity.current
+        glowEl.style.opacity = String(glowOpacity.current)
       }
       ctx.clearRect(0, 0, w, h)
       const grad = ctx.createLinearGradient(0, 0, w, h)

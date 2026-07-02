@@ -181,7 +181,6 @@ const ShaderPlane = ({
       onPointerOut={() => (hoverStateRef.current = false)}
     >
       <planeGeometry args={[2, 2]} />
-      {/* eslint-disable react/no-unknown-property */}
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
@@ -190,7 +189,6 @@ const ShaderPlane = ({
         depthWrite={false}
         depthTest={false}
       />
-      {/* eslint-enable react/no-unknown-property */}
     </mesh>
   );
 };

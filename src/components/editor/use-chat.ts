@@ -48,7 +48,9 @@ export type MessageDataPart = {
   table?: TTableCellUpdate;
 };
 
-export type Chat = UseChatHelpers<ChatMessage>;
+export type Chat = UseChatHelpers<ChatMessage> & {
+  _abortFakeStream: () => void;
+};
 
 export type ChatMessage = UIMessage<{}, MessageDataPart>;
 
@@ -86,7 +88,9 @@ function createChatTransport({
           const body = JSON.parse(init?.body as string);
           const content = body.messages
             .at(-1)
-            .parts.find((p: any) => p.type === 'text')?.text;
+            .parts.find(
+              (p: { type: string; text?: string }) => p.type === 'text'
+            )?.text;
 
           if (content.includes('Generate a markdown sample')) {
             sample = 'markdown';
@@ -283,6 +287,7 @@ export const useChat = () => {
   };
 
   React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AIChatPlugin chat option includes local _abortFakeStream helper
     editor.setOption(AIChatPlugin, 'chat', chat as any);
      
   }, [chat.status, chat.messages, chat.error, _abortFakeStream]);

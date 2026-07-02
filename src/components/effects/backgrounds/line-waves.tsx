@@ -1,6 +1,7 @@
 "use client"
 
 import { Renderer, Program, Mesh, Triangle } from "ogl"
+import { loseWebGLContext, type WebGLContext } from "../_internal/webgl-utils"
 import { useEffect, useRef } from "react"
 
 function hexToVec3(hex: string): [number, number, number] {
@@ -141,7 +142,6 @@ export function LineWaves({
     const gl = renderer.gl
     gl.clearColor(0, 0, 0, 0)
 
-    let program: Program
     const currentMouse = [0.5, 0.5]
     let targetMouse: [number, number] = [0.5, 0.5]
 
@@ -152,21 +152,10 @@ export function LineWaves({
     function handleMouseLeave() {
       targetMouse = [0.5, 0.5]
     }
-    function resize() {
-      renderer.setSize(container.offsetWidth, container.offsetHeight)
-      if (program) {
-        ;(program.uniforms.uResolution.value as number[])[0] = (gl.canvas as HTMLCanvasElement).width
-        ;(program.uniforms.uResolution.value as number[])[1] = (gl.canvas as HTMLCanvasElement).height
-        ;(program.uniforms.uResolution.value as number[])[2] =
-          (gl.canvas as HTMLCanvasElement).width / (gl.canvas as HTMLCanvasElement).height
-      }
-    }
-    window.addEventListener("resize", resize)
-    resize()
 
     const geometry = new Triangle(gl)
     const rotationRad = (rotation * Math.PI) / 180
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: vertexShader,
       fragment: fragmentShader,
       uniforms: {
@@ -194,6 +183,16 @@ export function LineWaves({
         uEnableMouse: { value: enableMouseInteraction },
       },
     })
+
+    function resize() {
+      renderer.setSize(container.offsetWidth, container.offsetHeight)
+      ;(program.uniforms.uResolution.value as number[])[0] = (gl.canvas as HTMLCanvasElement).width
+      ;(program.uniforms.uResolution.value as number[])[1] = (gl.canvas as HTMLCanvasElement).height
+      ;(program.uniforms.uResolution.value as number[])[2] =
+        (gl.canvas as HTMLCanvasElement).width / (gl.canvas as HTMLCanvasElement).height
+    }
+    window.addEventListener("resize", resize)
+    resize()
 
     const mesh = new Mesh(gl, { geometry, program })
     container.appendChild(gl.canvas)
@@ -229,7 +228,7 @@ export function LineWaves({
         ;(gl.canvas as HTMLCanvasElement).removeEventListener("mouseleave", handleMouseLeave)
       }
       if (container.contains(gl.canvas)) container.removeChild(gl.canvas)
-      ;(gl as any).getExtension("WEBGL_lose_context")?.loseContext()
+      loseWebGLContext(gl as WebGLContext)
     }
   }, [
     speed,

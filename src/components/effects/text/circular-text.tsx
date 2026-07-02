@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { motion, useAnimation, useMotionValue } from "motion/react"
+import { motion, useAnimation, useMotionValue, type Transition } from "motion/react"
 
 const getRotationTransition = (
   duration: number,
@@ -55,7 +55,7 @@ export function CircularText({
     const start = rotation.get()
     if (!onHover) return
 
-    let transitionConfig: ReturnType<typeof getTransition>
+    let transitionConfig: ReturnType<typeof getTransition> | Transition
     let scaleVal = 1
 
     switch (onHover) {
@@ -67,7 +67,7 @@ export function CircularText({
         break
       case "pause":
         transitionConfig = {
-          rotate: { type: "spring", damping: 20, stiffness: 300 } as any,
+          rotate: { type: "spring", damping: 20, stiffness: 300 },
           scale: { type: "spring", damping: 20, stiffness: 300 },
         }
         scaleVal = 1
@@ -84,7 +84,7 @@ export function CircularText({
       rotate: start + 360,
       scale: scaleVal,
       transition: transitionConfig,
-    } as any)
+    })
   }
 
   const handleHoverEnd = () => {
@@ -93,7 +93,7 @@ export function CircularText({
       rotate: start + 360,
       scale: 1,
       transition: getTransition(spinDuration, start),
-    } as any)
+    })
   }
 
   return (

@@ -26,7 +26,9 @@ export function StarBorder<T extends React.ElementType = "button">({
         padding: `${thickness}px 0`,
         ...rest.style,
       }}
-      {...rest as any}
+      // Polymorphic `as` prop: rest props can't satisfy LibraryManagedAttributes at compile time.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic element prop spread
+      {...(rest as any)}
     >
       <div
         className="absolute w-[300%] h-1/2 opacity-70 rounded-[50%] z-0"

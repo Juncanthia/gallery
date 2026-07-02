@@ -13,7 +13,7 @@ import {
   ArrowRight01Icon,
   ArrowLeft01Icon,
 } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import useMeasure from "@/_internals/foundations/hooks/use-measure";
 
 const ICON_SIZE = 24;
@@ -49,7 +49,7 @@ function ToolbarButton({
   isBlurred = false,
   className = "",
 }: {
-  icon: any;
+  icon: IconSvgElement;
   size?: number;
   blur?: boolean;
   isBlurred?: boolean;

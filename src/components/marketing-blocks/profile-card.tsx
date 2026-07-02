@@ -240,9 +240,11 @@ const ProfileCardComponent = function ProfileCard({
 
     const handleClick = () => {
       if (!enableMobileTilt || location.protocol !== "https:") return
-      const anyMotion = window.DeviceMotionEvent as any
-      if (anyMotion && typeof anyMotion.requestPermission === "function") {
-        anyMotion.requestPermission().then((state: string) => {
+      const motionEvent = window.DeviceMotionEvent as typeof DeviceMotionEvent & {
+        requestPermission?: () => Promise<PermissionState>
+      }
+      if (motionEvent && typeof motionEvent.requestPermission === "function") {
+        motionEvent.requestPermission().then((state: string) => {
           if (state === "granted") {
             window.addEventListener("deviceorientation", handleDeviceOrientation)
           }

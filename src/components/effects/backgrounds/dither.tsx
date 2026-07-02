@@ -158,13 +158,30 @@ class RetroEffectImpl extends Effect {
   }
 }
 
-const WrappedRetro = wrapEffect(RetroEffectImpl as any)
+const WrappedRetro = wrapEffect(RetroEffectImpl)
 
-const RetroEffect = forwardRef((props: any, ref) => {
+type RetroEffectProps = {
+  colorNum?: number
+  pixelSize?: number
+}
+
+const RetroEffect = forwardRef<unknown, RetroEffectProps>((props, ref) => {
   const { colorNum, pixelSize } = props
   return <WrappedRetro ref={ref} colorNum={colorNum} pixelSize={pixelSize} />
 })
 RetroEffect.displayName = "RetroEffect"
+
+type DitheredWavesProps = {
+  waveSpeed: number
+  waveFrequency: number
+  waveAmplitude: number
+  waveColor: [number, number, number]
+  colorNum: number
+  pixelSize: number
+  disableAnimation: boolean
+  enableMouseInteraction: boolean
+  mouseRadius: number
+}
 
 function DitheredWaves({
   waveSpeed,
@@ -176,7 +193,7 @@ function DitheredWaves({
   disableAnimation,
   enableMouseInteraction,
   mouseRadius,
-}: any) {
+}: DitheredWavesProps) {
   const mesh = useRef<THREE.Mesh>(null!)
   const mouseRef = useRef(new THREE.Vector2())
   const { viewport, size, gl } = useThree()
@@ -223,7 +240,7 @@ function DitheredWaves({
     }
   })
 
-  const handlePointerMove = (e: any) => {
+  const handlePointerMove = (e: PointerEvent) => {
     if (!enableMouseInteraction) return
     const rect = gl.domElement.getBoundingClientRect()
     const dpr = gl.getPixelRatio()

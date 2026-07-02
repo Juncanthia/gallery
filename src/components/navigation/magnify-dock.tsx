@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, type MotionStyle } from "motion/react"
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, type MotionStyle, type MotionValue } from "motion/react"
 import { Children, cloneElement, useEffect, useMemo, useRef, useState } from "react"
 
 import { cn } from "@/_internals/foundations/utils/cn"
@@ -37,8 +37,8 @@ function DockItem({
   children: React.ReactNode
   className?: string
   onClick?: () => void
-  mouseX: any
-  spring: any
+  mouseX: MotionValue<number>
+  spring: { mass: number; stiffness: number; damping: number }
   distance: number
   magnification: number
   baseItemSize: number
@@ -78,16 +78,26 @@ function DockItem({
       aria-label={label}
       onKeyDown={handleKeyDown}
     >
-      {Children.map(children, (child) => cloneElement(child as React.ReactElement<any>, { isHovered }))}
+      {Children.map(children, (child) =>
+        cloneElement(child as React.ReactElement<{ isHovered?: MotionValue<number> }>, { isHovered })
+      )}
     </motion.div>
   )
 }
 
-function DockLabel({ children, className = "", ...rest }: { children: React.ReactNode; className?: string;[key: string]: any }) {
-  const { isHovered } = rest
+function DockLabel({
+  children,
+  className = "",
+  isHovered,
+}: {
+  children: React.ReactNode
+  className?: string
+  isHovered?: MotionValue<number>
+}) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    if (!isHovered) return
     const unsubscribe = isHovered.on("change", (latest: number) => {
       setIsVisible(latest === 1)
     })

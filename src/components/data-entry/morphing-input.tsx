@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Input } from "./input";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
   ArrowRight02Icon,
   UnfoldMoreIcon,
@@ -14,7 +14,7 @@ import {
 interface PlaceholderConfig {
   id: number;
   placeholder: string;
-  icon: any;
+  icon: IconSvgElement;
 }
 
 // Change Here
@@ -136,7 +136,7 @@ const InputSwitch = () => {
         <Input
           type="text"
           value={inputValue}
-          onChange={(e: any) => setInputValue(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
           className="!border-0 outline-none border-none bg-transparent! m-0 !pl-1.5 text-sm focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground"
         />
       </div>

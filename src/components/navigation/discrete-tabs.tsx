@@ -143,7 +143,8 @@ function Button({
         },
       }}
       onClick={() => {
-        setActiveButton(title), setIsLoaded(true);
+        setActiveButton(title)
+        setIsLoaded(true)
       }}
       className="w-fit h-fit flex"
       style={{ willChange: "transform" }}

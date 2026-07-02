@@ -3,6 +3,12 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
 
+interface CanvasContextWithVendorSmoothing extends CanvasRenderingContext2D {
+  webkitImageSmoothingEnabled: boolean
+  mozImageSmoothingEnabled: boolean
+  msImageSmoothingEnabled: boolean
+}
+
 function mapRange(value: number, inMin: number, inMax: number, outMin: number, outMax: number) {
   return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
 }
@@ -105,10 +111,10 @@ class AsciiFilter {
       charset ??
       " .'`^\",:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
-    // Vendor-prefixed smoothing flags aren't part of the standard DOM lib types.
-    ;(this.context as any).webkitImageSmoothingEnabled = false
-    ;(this.context as any).mozImageSmoothingEnabled = false
-    ;(this.context as any).msImageSmoothingEnabled = false
+    const ctx = this.context as CanvasContextWithVendorSmoothing
+    ctx.webkitImageSmoothingEnabled = false
+    ctx.mozImageSmoothingEnabled = false
+    ctx.msImageSmoothingEnabled = false
     this.context.imageSmoothingEnabled = false
 
     this.onMouseMove = this.onMouseMove.bind(this)
@@ -494,13 +500,14 @@ class CanvAscii {
         obj instanceof THREE.Mesh
       ) {
         Object.keys(obj.material).forEach((key) => {
-          const matProp = (obj.material as any)[key]
+          const matProp = (obj.material as Record<string, unknown>)[key]
           if (
             matProp !== null &&
             typeof matProp === "object" &&
+            "dispose" in matProp &&
             typeof matProp.dispose === "function"
           ) {
-            matProp.dispose()
+            ;(matProp as { dispose: () => void }).dispose()
           }
         })
         obj.material.dispose()

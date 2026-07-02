@@ -6,8 +6,27 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { PerspectiveCamera } from "@react-three/drei"
 import { degToRad } from "three/src/math/MathUtils.js"
 
-function extendMaterial(BaseMaterial: any, cfg: any) {
-  const physical = THREE.ShaderLib.physical as any
+type MaterialConstructor = new (params?: object) => THREE.Material
+
+type ShaderLibPhysical = {
+  vertexShader: string
+  fragmentShader: string
+  uniforms: Record<string, THREE.IUniform>
+  defines?: Record<string, unknown>
+}
+
+type ExtendMaterialConfig = {
+  header?: string
+  vertexHeader?: string
+  fragmentHeader?: string
+  material?: object
+  uniforms?: Record<string, THREE.IUniform | unknown>
+  vertex?: Record<string, string>
+  fragment?: Record<string, string>
+}
+
+function extendMaterial(BaseMaterial: MaterialConstructor, cfg: ExtendMaterialConfig) {
+  const physical = THREE.ShaderLib.physical as unknown as ShaderLibPhysical
   const { vertexShader: baseVert, fragmentShader: baseFrag, uniforms: baseUniforms } = physical
   const baseDefines = physical.defines ?? {}
   const uniforms = THREE.UniformsUtils.clone(baseUniforms)
@@ -17,7 +36,7 @@ function extendMaterial(BaseMaterial: any, cfg: any) {
   if ("metalness" in defaults) uniforms.metalness.value = defaults.metalness
   if ("envMap" in defaults) uniforms.envMap.value = defaults.envMap
   if ("envMapIntensity" in defaults) uniforms.envMapIntensity.value = defaults.envMapIntensity
-  Object.entries(cfg.uniforms ?? {}).forEach(([key, u]: [string, any]) => {
+  Object.entries(cfg.uniforms ?? {}).forEach(([key, u]: [string, THREE.IUniform | unknown]) => {
     uniforms[key] = u !== null && typeof u === "object" && "value" in u ? u : { value: u }
   })
   let vert = `${cfg.header}\n${cfg.vertexHeader ?? ""}\n${baseVert}`
@@ -178,7 +197,14 @@ function createStackedPlanesBufferGeometry(
   return geometry
 }
 
-const MergedPlanes = forwardRef(({ material, width, count, height }: any, ref) => {
+type MergedPlanesProps = {
+  material: THREE.ShaderMaterial
+  width: number
+  count: number
+  height: number
+}
+
+const MergedPlanes = forwardRef<THREE.Mesh, MergedPlanesProps>(({ material, width, count, height }, ref) => {
   const mesh = useRef<THREE.Mesh>(null!)
   useImperativeHandle(ref, () => mesh.current)
   const geometry = useMemo(
@@ -192,7 +218,7 @@ const MergedPlanes = forwardRef(({ material, width, count, height }: any, ref) =
 })
 MergedPlanes.displayName = "MergedPlanes"
 
-const PlaneNoise = forwardRef((props: any, ref) => (
+const PlaneNoise = forwardRef<THREE.Mesh, MergedPlanesProps>((props, ref) => (
   <MergedPlanes ref={ref} material={props.material} width={props.width} count={props.count} height={props.height} />
 ))
 PlaneNoise.displayName = "PlaneNoise"

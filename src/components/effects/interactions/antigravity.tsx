@@ -124,7 +124,7 @@ const AntigravityInner = ({
     const globalRotation = state.clock.getElapsedTime() * rotationSpeed
 
     particles.forEach((particle) => {
-      let { speed, mx, my, mz, cz, randomRadiusOffset } = particle
+      const { speed, mx, my, mz, cz, randomRadiusOffset } = particle
 
       particle.t += speed / 2
       const t = particle.t

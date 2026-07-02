@@ -186,7 +186,7 @@ export function FallingText({
         render: { visible: false },
       },
     })
-    ;(render as any).mouse = mouse
+    ;(render as Matter.Render & { mouse: Matter.Mouse }).mouse = mouse
 
     World.add(engine.world, [
       floor,

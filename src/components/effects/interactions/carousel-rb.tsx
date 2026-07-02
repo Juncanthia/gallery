@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { motion, useMotionValue, useTransform, type PanInfo } from "motion/react"
+import { motion, useMotionValue, useTransform, type MotionValue, type PanInfo, type Transition } from "motion/react"
 import { Circle, Code, FileText, Layers, Layout } from "lucide-react"
 
 import { cn } from "@/_internals/foundations/utils/cn"
@@ -50,8 +50,8 @@ function CarouselItem({
   itemWidth: number
   round: boolean
   trackItemOffset: number
-  x: any
-  transition: any
+  x: MotionValue<number>
+  transition: Transition
 }) {
   const range = [-(index + 1) * trackItemOffset, -index * trackItemOffset, -(index - 1) * trackItemOffset]
   const outputRange = [90, 0, -90]
@@ -183,7 +183,7 @@ export function Carousel({
     setIsAnimating(false)
   }
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const { offset, velocity } = info
     const direction =
       offset.x < -DRAG_BUFFER || velocity.x < -VELOCITY_THRESHOLD

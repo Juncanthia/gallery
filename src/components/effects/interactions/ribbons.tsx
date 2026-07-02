@@ -18,6 +18,15 @@ export type RibbonsProps = {
   backgroundColor?: number[]
 }
 
+interface RibbonLine {
+  spring: number
+  friction: number
+  mouseVelocity: Vec3
+  mouseOffset: Vec3
+  points: Vec3[]
+  polyline: Polyline | null
+}
+
 export function Ribbons({
   colors = ["#FC8EAC"],
   baseSpring = 0.03,
@@ -54,7 +63,7 @@ export function Ribbons({
     container.appendChild(gl.canvas)
 
     const scene = new Transform()
-    const lines: any[] = []
+    const lines: RibbonLine[] = []
 
     const vertex = `
       precision highp float;
@@ -121,7 +130,7 @@ export function Ribbons({
       const width = container.clientWidth
       const height = container.clientHeight
       renderer.setSize(width, height)
-      lines.forEach((line) => line.polyline.resize())
+      lines.forEach((line) => line.polyline?.resize())
     }
     window.addEventListener("resize", resize)
 
@@ -142,7 +151,7 @@ export function Ribbons({
         mouseVelocity: new Vec3(),
         mouseOffset,
         points: [] as Vec3[],
-        polyline: null as any,
+        polyline: null as Polyline | null,
       }
 
       const count = pointCount
@@ -202,6 +211,9 @@ export function Ribbons({
       lastTime = currentTime
 
       lines.forEach((line) => {
+        const polyline = line.polyline
+        if (!polyline) return
+
         tmp.copy(mouse).add(line.mouseOffset).sub(line.points[0]).multiply(line.spring)
         line.mouseVelocity.add(tmp).multiply(line.friction)
         line.points[0].add(line.mouseVelocity)
@@ -215,10 +227,10 @@ export function Ribbons({
             line.points[i].lerp(line.points[i - 1], 0.9)
           }
         }
-        if (line.polyline.mesh.program.uniforms.uTime) {
-          line.polyline.mesh.program.uniforms.uTime.value = currentTime * 0.001
+        if (polyline.mesh.program.uniforms.uTime) {
+          polyline.mesh.program.uniforms.uTime.value = currentTime * 0.001
         }
-        line.polyline.updateGeometry()
+        polyline.updateGeometry()
       })
 
       renderer.render({ scene })

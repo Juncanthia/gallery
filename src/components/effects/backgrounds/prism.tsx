@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react"
 import { Renderer, Triangle, Program, Mesh } from "ogl"
 
+const prismObservers = new WeakMap<HTMLDivElement, IntersectionObserver>()
+
 export type PrismProps = {
   height?: number
   baseWidth?: number
@@ -63,9 +65,9 @@ export function Prism({
     const dpr = Math.min(2, window.devicePixelRatio || 1)
     const renderer = new Renderer({ dpr, alpha: transparent, antialias: false })
     const gl = renderer.gl
-    gl.disable((gl as any).DEPTH_TEST)
-    gl.disable((gl as any).CULL_FACE)
-    gl.disable((gl as any).BLEND)
+    gl.disable(gl.DEPTH_TEST)
+    gl.disable(gl.CULL_FACE)
+    gl.disable(gl.BLEND)
 
     Object.assign((gl.canvas as HTMLCanvasElement).style, { position: "absolute", inset: "0", width: "100%", height: "100%", display: "block" })
     container.appendChild(gl.canvas)
@@ -235,9 +237,13 @@ void main(){
     }
 
     if (suspendWhenOffscreen) {
-      const io = new IntersectionObserver((entries) => { entries.some(e => e.isIntersecting) ? startRAF() : stopRAF() })
-      io.observe(container); startRAF()
-      ;(container as any).__prismIO = io
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) startRAF()
+        else stopRAF()
+      })
+      io.observe(container)
+      prismObservers.set(container, io)
+      startRAF()
     } else { startRAF() }
 
     return () => {
@@ -247,7 +253,13 @@ void main(){
         window.removeEventListener("mouseleave", onLeave)
         window.removeEventListener("blur", onBlur)
       }
-      if (suspendWhenOffscreen) { const io = (container as any).__prismIO; if (io) { io.disconnect(); delete (container as any).__prismIO } }
+      if (suspendWhenOffscreen) {
+        const io = prismObservers.get(container)
+        if (io) {
+          io.disconnect()
+          prismObservers.delete(container)
+        }
+      }
       if ((gl.canvas as HTMLCanvasElement).parentElement === container) container.removeChild(gl.canvas)
     }
   }, [height, baseWidth, animationType, glow, noise, offset?.x, offset?.y, scale, transparent, hueShift, colorFrequency, timeScale, hoverStrength, inertia, bloom, suspendWhenOffscreen])

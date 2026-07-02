@@ -337,7 +337,7 @@ export function GridScan({ enableWebcam = false, showPreview = false, sensitivit
     renderer.setClearColor(0x000000, 0)
     container.appendChild(renderer.domElement)
 
-    const uniforms: any = {
+    const uniforms: Record<string, THREE.IUniform> = {
       iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, renderer.getPixelRatio()) },
       iTime: { value: 0 },
       uSkew: { value: new THREE.Vector2(0, 0) }, uTilt: { value: 0 }, uYaw: { value: 0 },

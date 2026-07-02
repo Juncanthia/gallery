@@ -86,9 +86,8 @@ function Slot<T extends HTMLElement = HTMLElement>({
     <Base
       {...mergedProps}
       // React 19 + motion generics resolve Base's ref prop to `never` under
-      // jsx:preserve; the merged ref is valid at runtime. ts-ignore (not
-      // ts-expect-error) so react-jsx contexts don't flag it as unused.
-      // @ts-ignore ref resolves to never under jsx:preserve
+      // jsx:preserve; the merged ref is valid at runtime.
+      // @ts-expect-error ref resolves to never under jsx:preserve
       ref={mergeRefs(childRef as React.Ref<T>, ref)}
     />
   );

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type CSSProperties } from "react"
 import { Renderer, Program, Mesh, Triangle } from "ogl"
+import type { OGLUniforms } from "../_internal/ogl-types"
 
 const MAX_COLORS = 8
 const hexToRGB = (hex: string): [number, number, number] => {
@@ -156,10 +157,10 @@ export function GradientBlinds({
 }: GradientBlindsProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const rafRef = useRef<number | null>(null)
-  const programRef = useRef<any>(null)
-  const meshRef = useRef<any>(null)
-  const geometryRef = useRef<any>(null)
-  const rendererRef = useRef<any>(null)
+  const programRef = useRef<Program | null>(null)
+  const meshRef = useRef<Mesh | null>(null)
+  const geometryRef = useRef<Triangle | null>(null)
+  const rendererRef = useRef<Renderer | null>(null)
   const mouseTargetRef = useRef([0, 0])
   const lastTimeRef = useRef(0)
   const firstResizeRef = useRef(true)
@@ -175,7 +176,7 @@ export function GradientBlinds({
     container.appendChild(canvas)
 
     const { arr: colorArr, count: colorCount } = prepStops(gradientColors)
-    const uniforms: any = {
+    const uniforms: OGLUniforms = {
       iResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight, 1] },
       iMouse: { value: [0, 0] }, iTime: { value: 0 },
       uAngle: { value: (angle * Math.PI) / 180 }, uNoise: { value: noise },
@@ -226,7 +227,8 @@ export function GradientBlinds({
         const dt = (t - lastTimeRef.current) / 1000; lastTimeRef.current = t
         const tau = Math.max(1e-4, mouseDampening)
         let factor = 1 - Math.exp(-dt / tau); if (factor > 1) factor = 1
-        const target = mouseTargetRef.current; const cur = uniforms.iMouse.value
+        const target = mouseTargetRef.current
+        const cur = uniforms.iMouse.value as number[]
         cur[0] += (target[0] - cur[0]) * factor; cur[1] += (target[1] - cur[1]) * factor
       } else { lastTimeRef.current = t }
       if (!paused && programRef.current && meshRef.current) {
@@ -239,9 +241,9 @@ export function GradientBlinds({
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       canvas.removeEventListener("pointermove", onPointerMove); ro.disconnect()
       if (canvas.parentElement === container) container.removeChild(canvas)
-      ;[programRef, geometryRef, meshRef, rendererRef].forEach((ref) => {
-        if (ref.current && typeof ref.current.remove === "function") ref.current.remove()
-      })
+      programRef.current?.remove()
+      meshRef.current?.remove()
+      geometryRef.current?.remove()
     }
   }, [dpr, paused, gradientColors, angle, noise, blindCount, blindMinWidth, mouseDampening, mirrorGradient, spotlightRadius, spotlightSoftness, spotlightOpacity, distortAmount, shineDirection])
 

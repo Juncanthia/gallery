@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useEffect, useLayoutEffect, useRef, useState } from "react"
-import { motion, useMotionValue, useTransform, animate } from "motion/react"
+import { motion, useMotionValue, useTransform, animate, type Easing, type MotionValue } from "motion/react"
 
 function generateEllipsePath(cx: number, cy: number, rx: number, ry: number) {
   return `M ${cx - rx} ${cy} A ${rx} ${ry} 0 1 0 ${cx + rx} ${cy} A ${rx} ${ry} 0 1 0 ${cx - rx} ${cy}`
@@ -85,7 +85,7 @@ function OrbitItem({
   path: string
   itemSize: number
   rotation: number
-  progress: any
+  progress: MotionValue<number>
   fill: boolean
 }) {
   const itemOffset = fill ? (index / totalItems) * 100 : 0
@@ -220,15 +220,15 @@ export function OrbitImages({
     if (paused) return
     const controls = animate(progress, direction === "reverse" ? -100 : 100, {
       duration,
-      ease: easing as any,
+      ease: easing as Easing,
       repeat: Infinity,
       repeatType: "loop",
     })
     return () => controls.stop()
   }, [progress, duration, easing, direction, paused])
 
-  const containerWidth = responsive ? "100%" : (typeof width === "number" ? width : "100%") as any
-  const containerHeight = responsive ? "auto" : (typeof height === "number" ? height : (typeof width === "number" ? width : "auto")) as any
+  const containerWidth: React.CSSProperties["width"] = responsive ? "100%" : (typeof width === "number" ? width : "100%")
+  const containerHeight: React.CSSProperties["height"] = responsive ? "auto" : (typeof height === "number" ? height : (typeof width === "number" ? width : "auto"))
 
   const items = images.map((src, index) => (
     <img

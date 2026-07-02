@@ -47,6 +47,7 @@ interface DataTableContextType<TData = unknown, TValue = unknown>
     DataTableBaseContextType<TData, TValue> {}
 
 export const DataTableContext = createContext<DataTableContextType<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- default context before provider generic is applied
   any,
   any
 > | null>(null);

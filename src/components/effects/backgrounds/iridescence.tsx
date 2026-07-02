@@ -2,6 +2,7 @@
 
 import { Renderer, Program, Mesh, Color, Triangle, type OGLRenderingContext } from "ogl"
 import { useEffect, useRef } from "react"
+import { loseWebGLContext, type WebGLContext } from "../_internal/webgl-utils"
 
 const vertexShader = `
 attribute vec2 uv;
@@ -70,24 +71,8 @@ export function Iridescence({
     const gl = renderer.gl as OGLRenderingContext
     gl.clearColor(1, 1, 1, 1)
 
-    let program: Program
-
-    function resize() {
-      const scale = 1
-      renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale)
-      if (program) {
-        program.uniforms.uResolution.value = new Color(
-          gl.canvas.width,
-          gl.canvas.height,
-          gl.canvas.width / gl.canvas.height
-        )
-      }
-    }
-    window.addEventListener("resize", resize, false)
-    resize()
-
     const geometry = new Triangle(gl)
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: vertexShader,
       fragment: fragmentShader,
       uniforms: {
@@ -101,6 +86,18 @@ export function Iridescence({
         uSpeed: { value: speed },
       },
     })
+
+    function resize() {
+      const scale = 1
+      renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale)
+      program.uniforms.uResolution.value = new Color(
+        gl.canvas.width,
+        gl.canvas.height,
+        gl.canvas.width / gl.canvas.height
+      )
+    }
+    window.addEventListener("resize", resize, false)
+    resize()
 
     const mesh = new Mesh(gl, { geometry, program })
     let animateId: number
@@ -134,7 +131,7 @@ export function Iridescence({
       if (ctn.contains(gl.canvas)) {
         ctn.removeChild(gl.canvas)
       }
-      ;(gl as any).getExtension("WEBGL_lose_context")?.loseContext()
+      loseWebGLContext(gl as WebGLContext)
     }
   }, [color, speed, amplitude, mouseReact])
 

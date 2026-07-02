@@ -1,6 +1,7 @@
 "use client"
 
 import { Mesh, Program, Renderer, Triangle, Vec3 } from "ogl"
+import { loseWebGLContext, type WebGLContext } from "../_internal/webgl-utils"
 import { useEffect, useRef } from "react"
 
 export type OrbProps = {
@@ -249,7 +250,7 @@ export function Orb({
       container.removeEventListener("mousemove", handleMouseMove)
       container.removeEventListener("mouseleave", handleMouseLeave)
       if (container.contains(gl.canvas)) container.removeChild(gl.canvas)
-      ;(gl as any).getExtension("WEBGL_lose_context")?.loseContext()
+      loseWebGLContext(gl as WebGLContext)
     }
   }, [hue, hoverIntensity, rotateOnHover, forceHoverState, backgroundColor])
 

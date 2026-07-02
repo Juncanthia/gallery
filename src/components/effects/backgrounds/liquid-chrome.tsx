@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react"
 import { Renderer, Program, Mesh, Triangle } from "ogl"
+import { loseWebGLContext, type WebGLContext } from "../_internal/webgl-utils"
 
 export type LiquidChromeProps = {
   baseColor?: [number, number, number]
@@ -156,7 +157,7 @@ export function LiquidChrome({
       if ((gl.canvas as HTMLCanvasElement).parentElement) {
         ;(gl.canvas as HTMLCanvasElement).parentElement!.removeChild(gl.canvas)
       }
-      ;(gl as any).getExtension("WEBGL_lose_context")?.loseContext()
+      loseWebGLContext(gl as WebGLContext)
     }
   }, [baseColor, speed, amplitude, frequencyX, frequencyY, interactive])
 

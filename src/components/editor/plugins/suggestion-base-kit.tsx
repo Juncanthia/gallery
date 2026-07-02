@@ -4,9 +4,9 @@ import type {
   TSuggestionData,
   TSuggestionText,
 } from 'platejs';
-
-import { BaseSuggestionPlugin } from '@platejs/suggestion';
 import { KEYS, TextApi } from 'platejs';
+import { BaseSuggestionPlugin } from '@platejs/suggestion';
+import type { PlateEditor } from 'platejs/react';
 
 import {
   SuggestionLeafStatic,
@@ -20,7 +20,7 @@ const INLINE_SUGGESTION_TARGET_PLUGINS = [
   KEYS.mention,
 ];
 
-function getInlineSuggestionData(editor: any, element: TElement) {
+function getInlineSuggestionData(editor: PlateEditor, element: TElement) {
   const suggestionApi = editor.getApi(BaseSuggestionPlugin).suggestion;
   const data = suggestionApi.suggestionData(element) as
     | TSuggestionData
@@ -63,8 +63,8 @@ export const BaseSuggestionKit = [
       targetPlugins: INLINE_SUGGESTION_TARGET_PLUGINS,
     },
     render: {
-      belowRootNodes: VoidRemoveSuggestionOverlayStatic as any,
-      node: SuggestionLeafStatic as any,
+      belowRootNodes: VoidRemoveSuggestionOverlayStatic as never,
+      node: SuggestionLeafStatic as never,
     },
   }),
 ];

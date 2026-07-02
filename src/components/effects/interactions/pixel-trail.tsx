@@ -119,8 +119,8 @@ export type PixelTrailProps = {
   maxAge?: number
   interpolate?: number
   easingFunction?: (x: number) => number
-  canvasProps?: Record<string, any>
-  glProps?: Record<string, any>
+  canvasProps?: Record<string, unknown>
+  glProps?: Record<string, unknown>
   gooeyFilter?: { id: string; strength: number }
   color?: string
   className?: string

@@ -240,7 +240,7 @@ export function FootnoteDefinitionElement(
       !isDuplicateDefinition && identifier
         ? footnoteApi
             .references({ identifier })
-            .map((entry: any, index: number) => ({
+            .map((entry: [unknown, Path], index: number) => ({
               index,
               label: getReferenceContextLabel(editor, entry[1], index),
             }))

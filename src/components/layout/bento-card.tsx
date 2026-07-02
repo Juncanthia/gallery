@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
+import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { DashboardSquare01Icon, UserGroupIcon, Message01Icon, Folder02Icon, Add01Icon, CircleArrowUpRight02Icon, Search01Icon, BarChartIcon, Tick01Icon, Settings02Icon, InformationCircleIcon, DatabaseIcon, Mail01Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { cn } from "@/_internals/foundations/utils/cn";
@@ -9,7 +10,7 @@ import { cn } from "@/_internals/foundations/utils/cn";
 interface TabConfig {
   id: string;
   label: string;
-  icon: any;
+  icon: IconSvgElement;
   badge?: string;
   header: string;
   description: string;

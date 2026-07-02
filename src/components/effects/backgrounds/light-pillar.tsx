@@ -68,7 +68,8 @@ export function LightPillar({
     const isMobile =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     const isLowEndDevice =
-      isMobile || (typeof navigator !== "undefined" && "hardwareConcurrency" in navigator && (navigator as any).hardwareConcurrency <= 4)
+      isMobile ||
+      (typeof navigator !== "undefined" && navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 4)
 
     let effectiveQuality: "low" | "medium" | "high" = quality
     if (isLowEndDevice && quality === "high") effectiveQuality = "medium"
@@ -366,6 +367,6 @@ export function LightPillar({
   }
 
   return (
-    <div ref={containerRef} className={`w-full h-full ${className}`} style={{ mixBlendMode: mixBlendMode as any }} />
+    <div ref={containerRef} className={`w-full h-full ${className}`} style={{ mixBlendMode: mixBlendMode as React.CSSProperties["mixBlendMode"] }} />
   )
 }

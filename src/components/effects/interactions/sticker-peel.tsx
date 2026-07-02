@@ -39,7 +39,7 @@ export function StickerPeel({
   const dragTargetRef = useRef<HTMLDivElement>(null)
   const pointLightRef = useRef<SVGFEPointLightElement>(null)
   const pointLightFlippedRef = useRef<SVGFEPointLightElement>(null)
-  const draggableInstanceRef = useRef<any>(null)
+  const draggableInstanceRef = useRef<Draggable | null>(null)
 
   const defaultPadding = 10
 
@@ -71,8 +71,8 @@ export function StickerPeel({
       type: "x,y",
       bounds: boundsEl,
       inertia: true,
-      onDrag() {
-        const rot = gsap.utils.clamp(-24, 24, (this as any).deltaX * 0.4)
+      onDrag(this: Draggable) {
+        const rot = gsap.utils.clamp(-24, 24, this.deltaX * 0.4)
         gsap.to(target, { rotation: rot, duration: 0.15, ease: "power1.out" })
       },
       onDragEnd() {
@@ -124,20 +124,20 @@ export function StickerPeel({
       const y = e.clientY - rect.top
 
       if (pointLightRef.current) {
-        ;(pointLightRef.current as any).setAttribute?.("x", String(x))
-        ;(pointLightRef.current as any).setAttribute?.("y", String(y))
+        pointLightRef.current.setAttribute("x", String(x))
+        pointLightRef.current.setAttribute("y", String(y))
       }
 
       const normalizedAngle = Math.abs(peelDirection % 360)
       if (normalizedAngle !== 180) {
         if (pointLightFlippedRef.current) {
-          ;(pointLightFlippedRef.current as any).setAttribute?.("x", String(x))
-          ;(pointLightFlippedRef.current as any).setAttribute?.("y", String(rect.height - y))
+          pointLightFlippedRef.current.setAttribute("x", String(x))
+          pointLightFlippedRef.current.setAttribute("y", String(rect.height - y))
         }
       } else {
         if (pointLightFlippedRef.current) {
-          ;(pointLightFlippedRef.current as any).setAttribute?.("x", "-1000")
-          ;(pointLightFlippedRef.current as any).setAttribute?.("y", "-1000")
+          pointLightFlippedRef.current.setAttribute("x", "-1000")
+          pointLightFlippedRef.current.setAttribute("y", "-1000")
         }
       }
     }
@@ -215,7 +215,7 @@ export function StickerPeel({
           <filter id="pointLight">
             <feGaussianBlur stdDeviation="1" result="blur" />
             <feSpecularLighting result="spec" in="blur" specularExponent="100" specularConstant={lightingIntensity} lightingColor="white">
-              <fePointLight ref={pointLightRef as any} x="100" y="100" z="300" />
+              <fePointLight ref={pointLightRef} x="100" y="100" z="300" />
             </feSpecularLighting>
             <feComposite in="spec" in2="SourceGraphic" result="lit" />
             <feComposite in="lit" in2="SourceAlpha" operator="in" />
@@ -223,7 +223,7 @@ export function StickerPeel({
           <filter id="pointLightFlipped">
             <feGaussianBlur stdDeviation="10" result="blur" />
             <feSpecularLighting result="spec" in="blur" specularExponent="100" specularConstant={lightingIntensity * 7} lightingColor="white">
-              <fePointLight ref={pointLightFlippedRef as any} x="100" y="100" z="300" />
+              <fePointLight ref={pointLightFlippedRef} x="100" y="100" z="300" />
             </feSpecularLighting>
             <feComposite in="spec" in2="SourceGraphic" result="lit" />
             <feComposite in="lit" in2="SourceAlpha" operator="in" />

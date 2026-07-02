@@ -200,6 +200,35 @@ export type PixelBlastProps = {
   noiseAmount?: number
 }
 
+type PixelBlastConfig = {
+  antialias: boolean
+  liquid: boolean
+  noiseAmount: number
+}
+
+type PixelBlastUniforms = Record<string, THREE.IUniform>
+
+interface PixelBlastRuntime {
+  renderer: THREE.WebGLRenderer
+  scene: THREE.Scene
+  camera: THREE.OrthographicCamera
+  material: THREE.ShaderMaterial
+  clock: THREE.Clock
+  clickIx: number
+  uniforms: PixelBlastUniforms
+  resizeObserver: ResizeObserver
+  raf: number
+  quad: THREE.Mesh
+  timeOffset: number
+  composer?: EffectComposer
+  touch?: ReturnType<typeof createTouchTexture>
+  liquidEffect?: Effect
+}
+
+interface EffectPassWithEffects extends EffectPass {
+  effects: Effect[]
+}
+
 export function PixelBlast({
   variant = "square",
   pixelSize = 3,
@@ -227,8 +256,8 @@ export function PixelBlast({
   const containerRef = useRef<HTMLDivElement>(null)
   const visibilityRef = useRef({ visible: true })
   const speedRef = useRef(speed)
-  const threeRef = useRef<any>(null)
-  const prevConfigRef = useRef<any>(null)
+  const threeRef = useRef<PixelBlastRuntime | null>(null)
+  const prevConfigRef = useRef<PixelBlastConfig | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -240,7 +269,13 @@ export function PixelBlast({
     let mustReinit = false
     if (!threeRef.current) mustReinit = true
     else if (prevConfigRef.current) {
-      for (const k of needsReinitKeys) if (prevConfigRef.current[k] !== (cfg as any)[k]) { mustReinit = true; break }
+      for (const k of needsReinitKeys) {
+        const key = k as keyof PixelBlastConfig
+        if (prevConfigRef.current[key] !== cfg[key]) {
+          mustReinit = true
+          break
+        }
+      }
     }
 
     if (mustReinit) {
@@ -355,11 +390,15 @@ export function PixelBlast({
       const animate = () => {
         if (autoPauseOffscreen && !visibilityRef.current.visible) { raf = requestAnimationFrame(animate); return }
         uniforms.uTime.value = timeOffset + clock.getElapsedTime() * speedRef.current
-        if (liquidEffect) (liquidEffect as any).uniforms.get("uTime").value = uniforms.uTime.value
+        if (liquidEffect) liquidEffect.uniforms.get("uTime")!.value = uniforms.uTime.value
         if (composer) {
           if (touch) touch.update()
-          composer.passes.forEach((p) => {
-            const effs = (p as any).effects; if (effs) effs.forEach((eff: any) => { const u = eff.uniforms?.get("uTime"); if (u) u.value = uniforms.uTime.value })
+          composer.passes.forEach((pass) => {
+            const effectPass = pass as EffectPassWithEffects
+            effectPass.effects?.forEach((eff) => {
+              const u = eff.uniforms?.get("uTime")
+              if (u) u.value = uniforms.uTime.value
+            })
           })
           composer.render()
         } else renderer.render(scene, camera)
@@ -370,6 +409,7 @@ export function PixelBlast({
       threeRef.current = { renderer, scene, camera, material, clock, clickIx: 0, uniforms, resizeObserver: ro, raf, quad, timeOffset, composer, touch, liquidEffect }
     } else {
       const t = threeRef.current
+      if (!t) return
       t.uniforms.uShapeType.value = SHAPE_MAP[variant] ?? 0
       t.uniforms.uPixelSize.value = pixelSize * t.renderer.getPixelRatio()
       t.uniforms.uColor.value.set(color)

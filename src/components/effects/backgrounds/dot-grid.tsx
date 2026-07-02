@@ -6,15 +6,23 @@ import { InertiaPlugin } from "gsap/InertiaPlugin"
 
 gsap.registerPlugin(InertiaPlugin)
 
-const throttle = (func: Function, limit: number) => {
+const throttle = <Args extends unknown[]>(func: (...args: Args) => void, limit: number) => {
   let lastCall = 0
-  return function (this: any, ...args: any[]) {
+  return function (this: unknown, ...args: Args) {
     const now = performance.now()
     if (now - lastCall >= limit) {
       lastCall = now
       func.apply(this, args)
     }
   }
+}
+
+interface DotGridDot {
+  cx: number
+  cy: number
+  xOffset: number
+  yOffset: number
+  _inertiaApplied: boolean
 }
 
 function hexToRgb(hex: string) {
@@ -56,7 +64,7 @@ export function DotGrid({
 }: DotGridProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const dotsRef = useRef<any[]>([])
+  const dotsRef = useRef<DotGridDot[]>([])
   const pointerRef = useRef({ x: 0, y: 0, vx: 0, vy: 0, speed: 0, lastTime: 0, lastX: 0, lastY: 0 })
   const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor])
   const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor])
@@ -89,7 +97,7 @@ export function DotGrid({
     const extraY = height - gridH
     const startX = extraX / 2 + dotSize / 2
     const startY = extraY / 2 + dotSize / 2
-    const dots: any[] = []
+    const dots: DotGridDot[] = []
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const cx = startX + x * cell
@@ -143,7 +151,8 @@ export function DotGrid({
     let ro: ResizeObserver | null = null
     if (typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(buildGrid)
-      wrapperRef.current && ro.observe(wrapperRef.current)
+      const wrapper = wrapperRef.current
+      if (wrapper) ro.observe(wrapper)
     } else {
       window.addEventListener("resize", buildGrid)
     }
@@ -228,7 +237,7 @@ export function DotGrid({
       }
     }
     const throttledMove = throttle(onMove, 50)
-    window.addEventListener("mousemove", throttledMove, { passive: true } as any)
+    window.addEventListener("mousemove", throttledMove, { passive: true })
     window.addEventListener("click", onClick)
     return () => {
       window.removeEventListener("mousemove", throttledMove)

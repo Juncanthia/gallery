@@ -21,7 +21,7 @@ interface DivProps extends React.ComponentProps<"div"> {
   asChild?: boolean;
 }
 
-interface PathProps extends React.ComponentProps<"path"> {}
+type PathProps = React.ComponentProps<"path">;
 
 function getGaugeState(
   value: number | undefined | null,

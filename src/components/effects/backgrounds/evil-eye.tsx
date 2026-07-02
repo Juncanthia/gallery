@@ -1,6 +1,6 @@
 "use client"
 
-import { Renderer, Program, Mesh, Triangle, Texture } from "ogl"
+import { Renderer, Program, Mesh, Triangle, Texture, type TextureOptions } from "ogl"
 import { useEffect, useRef } from "react"
 
 function hexToVec3(hex: string) {
@@ -183,7 +183,7 @@ export function EvilEye({
       height: 256,
       generateMipmaps: false,
       flipY: false,
-    } as any)
+    } as Partial<TextureOptions>)
     noiseTexture.minFilter = gl.LINEAR
     noiseTexture.magFilter = gl.LINEAR
     noiseTexture.wrapS = gl.REPEAT
@@ -205,19 +205,8 @@ export function EvilEye({
     container.addEventListener("mousemove", onMouseMove)
     container.addEventListener("mouseleave", onMouseLeave)
 
-    let program: Program
-
-    function resize() {
-      renderer.setSize(container.offsetWidth, container.offsetHeight)
-      if (program) {
-        program.uniforms.uResolution.value = [gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height]
-      }
-    }
-    window.addEventListener("resize", resize)
-    resize()
-
     const geometry = new Triangle(gl)
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: vertexShader,
       fragment: fragmentShader,
       uniforms: {
@@ -237,6 +226,13 @@ export function EvilEye({
         uBgColor: { value: hexToVec3(backgroundColor) },
       },
     })
+
+    function resize() {
+      renderer.setSize(container.offsetWidth, container.offsetHeight)
+      program.uniforms.uResolution.value = [gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height]
+    }
+    window.addEventListener("resize", resize)
+    resize()
 
     const mesh = new Mesh(gl, { geometry, program })
     container.appendChild(gl.canvas)

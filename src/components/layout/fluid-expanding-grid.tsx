@@ -124,7 +124,7 @@ export default function FluidExpandingGrid({
                   key={item.id}
                   layoutId={`${id}-${item.id}`}
                   onClick={() => handleExpand(item.id)}
-                  style={{ gridRow, gridColumn } as any}
+                  style={{ gridRow, gridColumn } as React.CSSProperties}
                   className={cn(
                     "relative cursor-pointer group w-full h-full",
                     isSelected ? "z-30" : "z-10"

@@ -1,10 +1,10 @@
 "use client"
 
-import { motion, useSpring, useTransform } from "motion/react"
+import { motion, useSpring, useTransform, type MotionValue } from "motion/react"
 import { useEffect } from "react"
 
 
-function Number({ mv, number, height }: { mv: any; number: number; height: number }) {
+function Number({ mv, number, height }: { mv: MotionValue<number>; number: number; height: number }) {
   const y = useTransform(mv, (latest: number) => {
     const placeValue = latest % 10
     const offset = (10 + number - placeValue) % 10

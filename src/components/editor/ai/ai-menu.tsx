@@ -60,6 +60,7 @@ import {
 import { cn } from '@/_internals/foundations/utils/cn';
 import { commentPlugin } from '@/components/editor/plugins/comment-kit';
 
+import type { Chat } from '@/components/editor/use-chat';
 import { AIChatEditor } from './ai-chat-editor';
 
 export function AIMenu() {
@@ -141,7 +142,7 @@ export function AIMenu() {
     api.aiChat.stop();
 
     // remove when you implement the route /api/ai/command
-    (chat as any)._abortFakeStream();
+    (chat as Chat)._abortFakeStream();
   });
 
   const isLoading = status === 'streaming' || status === 'submitted';
@@ -656,7 +657,7 @@ export function AILoadingBar() {
     api.aiChat.stop();
 
     // remove when you implement the route /api/ai/command
-    (chat as any)._abortFakeStream();
+    (chat as Chat)._abortFakeStream();
   });
 
   if (

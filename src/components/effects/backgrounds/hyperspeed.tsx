@@ -363,6 +363,13 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
       },
     }
 
+    type HyperspeedDistortionMap = typeof distortions
+    type HyperspeedDistortionKey = keyof HyperspeedDistortionMap
+    type HyperspeedDistortion = HyperspeedDistortionMap[HyperspeedDistortionKey]
+    type HyperspeedEffectOptions = Omit<typeof DEFAULT_EFFECT_OPTIONS, "distortion"> & {
+      distortion: HyperspeedDistortion
+    }
+
     const random = (base: number | number[]) => {
       if (Array.isArray(base)) return Math.random() * (base[1] - base[0]) + base[0]
       return Math.random() * base
@@ -383,7 +390,7 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
 
     class CarLights {
       webgl: App
-      options: typeof DEFAULT_EFFECT_OPTIONS
+      options: HyperspeedEffectOptions
       colors: number[] | number
       speed: number[]
       fade: THREE.Vector2
@@ -391,7 +398,7 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
 
       constructor(
         webgl: App,
-        options: typeof DEFAULT_EFFECT_OPTIONS,
+        options: HyperspeedEffectOptions,
         colors: number[] | number,
         speed: number[],
         fade: THREE.Vector2
@@ -493,14 +500,14 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
               uFade: { value: this.fade },
             },
             this.webgl.fogUniforms,
-            (this.options as any).distortion.uniforms
+            this.options.distortion.uniforms
           ),
         })
 
         material.onBeforeCompile = (shader) => {
           shader.vertexShader = shader.vertexShader.replace(
             "#include <getDistortion_vertex>",
-            (this.options as any).distortion.getDistortion
+            this.options.distortion.getDistortion
           )
         }
 
@@ -566,10 +573,10 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
 
     class LightsSticks {
       webgl: App
-      options: typeof DEFAULT_EFFECT_OPTIONS
+      options: HyperspeedEffectOptions
       mesh!: THREE.Mesh
 
-      constructor(webgl: App, options: typeof DEFAULT_EFFECT_OPTIONS) {
+      constructor(webgl: App, options: HyperspeedEffectOptions) {
         this.webgl = webgl
         this.options = options
       }
@@ -631,14 +638,14 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
               uTime: { value: 0 },
             },
             this.webgl.fogUniforms,
-            (this.options as any).distortion.uniforms
+            this.options.distortion.uniforms
           ),
         })
 
         material.onBeforeCompile = (shader) => {
           shader.vertexShader = shader.vertexShader.replace(
             "#include <getDistortion_vertex>",
-            (this.options as any).distortion.getDistortion
+            this.options.distortion.getDistortion
           )
         }
 
@@ -706,13 +713,13 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
 
     class Road {
       webgl: App
-      options: typeof DEFAULT_EFFECT_OPTIONS
+      options: HyperspeedEffectOptions
       uTime: { value: number }
       leftRoadWay!: THREE.Mesh
       rightRoadWay!: THREE.Mesh
       island!: THREE.Mesh
 
-      constructor(webgl: App, options: typeof DEFAULT_EFFECT_OPTIONS) {
+      constructor(webgl: App, options: HyperspeedEffectOptions) {
         this.webgl = webgl
         this.options = options
         this.uTime = { value: 0 }
@@ -727,7 +734,7 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
           20,
           segments
         )
-        let uniforms: Record<string, any> = {
+        let uniforms: Record<string, THREE.IUniform> = {
           uTravelLength: { value: options.length },
           uColor: {
             value: new THREE.Color(isRoad ? options.colors.roadColor : options.colors.islandColor),
@@ -753,14 +760,14 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
           uniforms: Object.assign(
             uniforms,
             this.webgl.fogUniforms,
-            (this.options as any).distortion.uniforms
+            this.options.distortion.uniforms
           ),
         })
 
         material.onBeforeCompile = (shader) => {
           shader.vertexShader = shader.vertexShader.replace(
             "#include <getDistortion_vertex>",
-            (this.options as any).distortion.getDistortion
+            this.options.distortion.getDistortion
           )
         }
 
@@ -858,7 +865,10 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
       }
     `
 
-    function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer, setSize: Function) {
+    function resizeRendererToDisplaySize(
+      renderer: THREE.WebGLRenderer,
+      setSize: (width: number, height: number, updateStyles?: boolean) => void
+    ) {
       const canvas = renderer.domElement
       const width = canvas.clientWidth
       const height = canvas.clientHeight
@@ -872,14 +882,14 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
 
     class App {
       container: HTMLDivElement
-      options: any
+      options: HyperspeedEffectOptions
       renderer!: THREE.WebGLRenderer
       composer!: EffectComposer
       camera!: THREE.PerspectiveCamera
       scene!: THREE.Scene
       fogUniforms!: { fogColor: { value: THREE.Color }; fogNear: { value: number }; fogFar: { value: number } }
       clock!: THREE.Clock
-      assets: any = {}
+      assets: Record<string, unknown> = {}
       disposed = false
       road!: Road
       leftCarLights!: CarLights
@@ -893,13 +903,13 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
       renderPass!: RenderPass
       bloomPass!: EffectPass
 
-      constructor(container: HTMLDivElement, options: any = {}) {
+      constructor(container: HTMLDivElement, options: HyperspeedEffectOptions) {
         this.options = options
         if (this.options.distortion == null) {
           this.options.distortion = {
             uniforms: distortion_uniforms,
             getDistortion: distortion_vertex,
-          }
+          } as HyperspeedDistortion
         }
         this.container = container
 
@@ -1234,9 +1244,13 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
       ...effectOptions,
       colors: { ...DEFAULT_EFFECT_OPTIONS.colors, ...(effectOptions.colors || {}) },
     }
-    ;(options as any).distortion = (distortions as any)[(options as any).distortion]
+    const distortionKey = options.distortion as HyperspeedDistortionKey
+    const resolvedOptions: HyperspeedEffectOptions = {
+      ...options,
+      distortion: distortions[distortionKey],
+    }
 
-    const myApp = new App(container, options)
+    const myApp = new App(container, resolvedOptions)
     appRef.current = myApp
     myApp.loadAssets().then(myApp.init)
 

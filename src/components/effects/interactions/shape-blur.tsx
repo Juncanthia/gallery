@@ -238,9 +238,8 @@ export function ShapeBlur({
       const dt = time - lastTime
       lastTime = time
 
-      ;["x", "y"].forEach((k) => {
-        ;(vMouseDamp as any)[k] = THREE.MathUtils.damp((vMouseDamp as any)[k], (vMouse as any)[k], 8, dt)
-      })
+      vMouseDamp.x = THREE.MathUtils.damp(vMouseDamp.x, vMouse.x, 8, dt)
+      vMouseDamp.y = THREE.MathUtils.damp(vMouseDamp.y, vMouse.y, 8, dt)
 
       renderer.render(scene, camera)
       animationFrameId = requestAnimationFrame(update)

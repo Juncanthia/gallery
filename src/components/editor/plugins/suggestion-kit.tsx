@@ -7,13 +7,15 @@ import type {
   TSuggestionData,
   TSuggestionText,
 } from 'platejs';
-
 import { KEYS, TextApi, TrailingBlockPlugin } from 'platejs';
 import {
   type BaseSuggestionConfig,
   BaseSuggestionPlugin,
 } from '@platejs/suggestion';
-import { toTPlatePlugin } from 'platejs/react';
+import {
+  type PlateEditor,
+  toTPlatePlugin,
+} from 'platejs/react';
 
 import {
   SuggestionLeaf,
@@ -41,7 +43,7 @@ const INLINE_SUGGESTION_TARGET_PLUGINS = [
   KEYS.mention,
 ];
 
-function getInlineSuggestionData(editor: any, element: TElement) {
+function getInlineSuggestionData(editor: PlateEditor, element: TElement) {
   const suggestionApi = editor.getApi(BaseSuggestionPlugin).suggestion;
   const data = suggestionApi.suggestionData(element) as
     | TSuggestionData
@@ -122,8 +124,8 @@ export const suggestionPlugin = toTPlatePlugin<SuggestionConfig>(
     targetPlugins: INLINE_SUGGESTION_TARGET_PLUGINS,
   },
   render: {
-    belowNodes: SuggestionLineBreak as any,
-    belowRootNodes: VoidRemoveSuggestionOverlay as any,
+    belowNodes: SuggestionLineBreak as never,
+    belowRootNodes: VoidRemoveSuggestionOverlay as never,
     node: SuggestionLeaf,
   },
 });

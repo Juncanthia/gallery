@@ -259,7 +259,6 @@ export function ChartBrush({
   brushDirection = "horizontal",
   selectedBoxStyle,
   initialSelection,
-  selection: _selection,
   useWindowMoveEvents = true,
   blurPx,
   fadeOuterEdges,

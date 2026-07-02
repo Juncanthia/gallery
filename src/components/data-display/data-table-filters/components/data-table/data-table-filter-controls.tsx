@@ -20,6 +20,7 @@ import { DataTableFilterTimerange } from "./data-table-filter-timerange";
 // https://tanstack.com/table/v8/docs/framework/react/examples/filters
 
 // Pluggable filter registry — extend by adding entries
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- filter field props vary by filter type
 export const FILTER_COMPONENTS: Record<string, React.ComponentType<any>> = {
   checkbox: DataTableFilterCheckbox,
   input: DataTableFilterInput,

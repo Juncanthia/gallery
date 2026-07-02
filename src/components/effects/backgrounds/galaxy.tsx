@@ -209,16 +209,8 @@ export function Galaxy({
       gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.clearColor(0, 0, 0, 0)
     } else { gl.clearColor(0, 0, 0, 1) }
 
-    let program: Program
-    function resize() {
-      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight)
-      if (program) program.uniforms.uResolution.value = new Color(gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height)
-    }
-    window.addEventListener("resize", resize, false)
-    resize()
-
     const geometry = new Triangle(gl)
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: vertexShader, fragment: fragmentShader,
       uniforms: {
         uTime: { value: 0 },
@@ -233,6 +225,13 @@ export function Galaxy({
         uTransparent: { value: transparent },
       },
     })
+
+    function resize() {
+      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight)
+      program.uniforms.uResolution.value = new Color(gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height)
+    }
+    window.addEventListener("resize", resize, false)
+    resize()
 
     const mesh = new Mesh(gl, { geometry, program })
     let animateId: number

@@ -24,9 +24,47 @@ import {
   Raycaster as y,
 } from "three"
 import { RoomEnvironment as z } from "three/examples/jsm/environments/RoomEnvironment.js"
+import type { OrthographicCamera, Object3D, WebGLRendererParameters } from "three"
+
+type SceneSize = { width: number; height: number } | "parent" | number
+
+interface SceneManagerConfig {
+  canvas?: HTMLCanvasElement
+  id?: string
+  size?: SceneSize
+  rendererOptions?: WebGLRendererParameters
+  maxPixelRatio?: number
+  minPixelRatio?: number
+  cameraMinAspect?: number
+  cameraMaxAspect?: number
+}
+
+interface PostProcessingPass {
+  render: () => void
+  setSize: (width: number, height: number) => void
+  dispose: () => void
+}
+
+interface RenderTiming {
+  elapsed: number
+  delta: number
+}
+
+interface PointerInteractionState {
+  position: r
+  nPosition: r
+  hover: boolean
+  touching: boolean
+  onEnter: (state: PointerInteractionState) => void
+  onMove: (state: PointerInteractionState) => void
+  onClick: (state: PointerInteractionState) => void
+  onLeave: (state: PointerInteractionState) => void
+  dispose?: () => void
+  domElement?: HTMLElement
+}
 
 class x {
-  #e: any
+  #e: SceneManagerConfig
   canvas: HTMLCanvasElement | null = null
   camera!: t
   cameraMinAspect = 0
@@ -36,22 +74,22 @@ class x {
   minPixelRatio = 0
   scene!: i
   renderer!: s
-  #t: any
+  #t: PostProcessingPass | null = null
   size = { width: 0, height: 0, wWidth: 0, wHeight: 0, ratio: 0, pixelRatio: 0 }
-  render: any = this.#i
-  onBeforeRender: any = () => {}
-  onAfterRender: any = () => {}
-  onAfterResize: any = () => {}
+  render: () => void = this.#i
+  onBeforeRender: (timing: RenderTiming) => void = () => {}
+  onAfterRender: (timing: RenderTiming) => void = () => {}
+  onAfterResize: (size: typeof this.size) => void = () => {}
   #s = false
   #n = false
   isDisposed = false
-  #o: any
-  #r: any
-  #a: any
+  #o: IntersectionObserver | null = null
+  #r: ResizeObserver | null = null
+  #a: ReturnType<typeof setTimeout> | null = null
   #c = new e()
   #h = { elapsed: 0, delta: 0 }
-  #l: any
-  constructor(config: any) {
+  #l = 0
+  constructor(config: SceneManagerConfig) {
     this.#e = { ...config }
     this.#m()
     this.#d()
@@ -76,8 +114,8 @@ class x {
     }
     this.canvas!.style.display = "block"
     const opts = {
-      canvas: this.canvas,
-      powerPreference: "high-performance",
+      canvas: this.canvas ?? undefined,
+      powerPreference: "high-performance" as WebGLPowerPreference,
       ...(this.#e.rendererOptions ?? {}),
     }
     this.renderer = new s(opts)
@@ -88,7 +126,7 @@ class x {
       window.addEventListener("resize", this.#f.bind(this))
       if (this.#e.size === "parent" && this.canvas?.parentNode) {
         this.#r = new ResizeObserver(this.#f.bind(this))
-        this.#r.observe(this.canvas.parentNode)
+        this.#r.observe(this.canvas.parentNode as Element)
       }
     }
     this.#o = new IntersectionObserver(this.#u.bind(this), {
@@ -105,13 +143,21 @@ class x {
     this.#o?.disconnect()
     document.removeEventListener("visibilitychange", this.#v.bind(this))
   }
-  #u(entries: any) {
+  #u(entries: IntersectionObserverEntry[]) {
     this.#s = entries[0].isIntersecting
-    this.#s ? this.#w() : this.#z()
+    if (this.#s) {
+      this.#w()
+    } else {
+      this.#z()
+    }
   }
   #v() {
     if (this.#s) {
-      document.hidden ? this.#z() : this.#w()
+      if (document.hidden) {
+        this.#z()
+      } else {
+        this.#w()
+      }
     }
   }
   #f() {
@@ -162,8 +208,9 @@ class x {
       this.size.wHeight = 2 * Math.tan(vFov / 2) * this.camera.position.length()
       this.size.wWidth = this.size.wHeight * this.camera.aspect
     } else if ((this.camera as unknown as { isOrthographicCamera?: boolean }).isOrthographicCamera) {
-      this.size.wHeight = (this.camera as any).top - (this.camera as any).bottom
-      this.size.wWidth = (this.camera as any).right - (this.camera as any).left
+      const ortho = this.camera as unknown as OrthographicCamera
+      this.size.wHeight = ortho.top - ortho.bottom
+      this.size.wWidth = ortho.right - ortho.left
     }
   }
   #b() {
@@ -181,9 +228,9 @@ class x {
   get postprocessing() {
     return this.#t
   }
-  set postprocessing(v: any) {
+  set postprocessing(v: PostProcessingPass | null) {
     this.#t = v
-    this.render = v.render.bind(v)
+    this.render = v ? v.render.bind(v) : this.#i
   }
   #w() {
     if (this.#n) return
@@ -210,16 +257,21 @@ class x {
     this.renderer.render(this.scene, this.camera)
   }
   clear() {
-    this.scene.traverse((obj: any) => {
-      if (obj.isMesh && typeof obj.material === "object" && obj.material !== null) {
-        Object.keys(obj.material).forEach((key) => {
-          const val = obj.material[key]
+    this.scene.traverse((obj: Object3D) => {
+      const mesh = obj as Object3D & {
+        isMesh?: boolean
+        material?: Record<string, unknown> & { dispose?: () => void }
+        geometry?: { dispose: () => void }
+      }
+      if (mesh.isMesh && typeof mesh.material === "object" && mesh.material !== null) {
+        Object.keys(mesh.material).forEach((key) => {
+          const val = mesh.material![key] as { dispose?: () => void } | null
           if (val !== null && typeof val === "object" && typeof val.dispose === "function") {
             val.dispose()
           }
         })
-        obj.material.dispose()
-        obj.geometry.dispose()
+        ;(mesh.material as { dispose?: () => void }).dispose?.()
+        mesh.geometry?.dispose()
       }
     })
     this.scene.clear()
@@ -236,32 +288,32 @@ class x {
   }
 }
 
-const b = new Map()
+const b = new Map<HTMLElement, PointerInteractionState>()
 const A = new r()
 let R = false
-function S(e: any) {
-  const t = {
+function S(e: Partial<PointerInteractionState> & { domElement: HTMLElement }) {
+  const t: PointerInteractionState = {
     position: new r(),
     nPosition: new r(),
     hover: false,
     touching: false,
-    onEnter() {},
-    onMove() {},
-    onClick() {},
-    onLeave() {},
+    onEnter: () => {},
+    onMove: () => {},
+    onClick: () => {},
+    onLeave: () => {},
     ...e,
   }
-  ;(function (elem: any, data: any) {
+  ;(function (elem: HTMLElement, data: PointerInteractionState) {
     if (!b.has(elem)) {
       b.set(elem, data)
       if (!R) {
-        document.body.addEventListener("pointermove", M as any)
+        document.body.addEventListener("pointermove", M)
         document.body.addEventListener("pointerleave", L)
-        document.body.addEventListener("click", C as any)
-        document.body.addEventListener("touchstart", TouchStart as any, { passive: false })
-        document.body.addEventListener("touchmove", TouchMove as any, { passive: false })
-        document.body.addEventListener("touchend", TouchEnd as any, { passive: false })
-        document.body.addEventListener("touchcancel", TouchEnd as any, { passive: false })
+        document.body.addEventListener("click", C)
+        document.body.addEventListener("touchstart", TouchStart, { passive: false })
+        document.body.addEventListener("touchmove", TouchMove, { passive: false })
+        document.body.addEventListener("touchend", TouchEnd, { passive: false })
+        document.body.addEventListener("touchcancel", TouchEnd, { passive: false })
         R = true
       }
     }
@@ -270,13 +322,13 @@ function S(e: any) {
     const elem = e.domElement
     b.delete(elem)
     if (b.size === 0) {
-      document.body.removeEventListener("pointermove", M as any)
+      document.body.removeEventListener("pointermove", M)
       document.body.removeEventListener("pointerleave", L)
-      document.body.removeEventListener("click", C as any)
-      document.body.removeEventListener("touchstart", TouchStart as any)
-      document.body.removeEventListener("touchmove", TouchMove as any)
-      document.body.removeEventListener("touchend", TouchEnd as any)
-      document.body.removeEventListener("touchcancel", TouchEnd as any)
+      document.body.removeEventListener("click", C)
+      document.body.removeEventListener("touchstart", TouchStart)
+      document.body.removeEventListener("touchmove", TouchMove)
+      document.body.removeEventListener("touchend", TouchEnd)
+      document.body.removeEventListener("touchcancel", TouchEnd)
       R = false
     }
   }
@@ -372,7 +424,7 @@ function TouchEnd() {
     }
   }
 }
-function P(e: any, t: DOMRect) {
+function P(e: PointerInteractionState, t: DOMRect) {
   const { position: pos, nPosition: npos } = e
   pos.x = A.x - t.left
   pos.y = A.y - t.top
@@ -529,11 +581,25 @@ class W {
   }
 }
 
-class Y extends c {
-  uniforms: any
-  onBeforeCompile2?: (shader: any) => void
+interface BallpitSceneOptions extends BallpitPhysicsConfig {
+  colors: number[]
+  ambientColor: number
+  ambientIntensity: number
+  lightIntensity: number
+  materialParams: ConstructorParameters<typeof c>[0]
+  followCursor?: boolean
+}
 
-  constructor(params: any) {
+interface BallpitShader {
+  uniforms: Record<string, unknown>
+  fragmentShader: string
+}
+
+class Y extends c {
+  uniforms: Record<string, { value: number }>
+  onBeforeCompile2?: (shader: BallpitShader) => void
+
+  constructor(params: ConstructorParameters<typeof c>[0]) {
     super(params)
     this.uniforms = {
       thicknessDistortion: { value: 0.1 },
@@ -543,7 +609,7 @@ class Y extends c {
       thicknessScale: { value: 10 },
     }
     this.defines!.USE_UV = ""
-    this.onBeforeCompile = (shader: any) => {
+    this.onBeforeCompile = (shader: BallpitShader) => {
       Object.assign(shader.uniforms, this.uniforms)
       shader.fragmentShader =
         "\n        uniform float thicknessPower;\n        uniform float thicknessScale;\n        uniform float thicknessDistortion;\n        uniform float thicknessAmbient;\n        uniform float thicknessAttenuation;\n      " +
@@ -591,12 +657,12 @@ const X = {
 const U = new m()
 
 class Z extends d {
-  config: any
+  config: BallpitSceneOptions
   physics: W
   ambientLight: f
   light: u
 
-  constructor(renderer: any, options: any = {}) {
+  constructor(renderer: s, options: Partial<BallpitSceneOptions> = {}) {
     const config = { ...X, ...options }
     const roomEnv = new z()
     const pmrem = new p(renderer)
@@ -667,7 +733,7 @@ class Z extends d {
   }
 }
 
-function createBallpit(canvas: HTMLCanvasElement, options: any = {}) {
+function createBallpit(canvas: HTMLCanvasElement, options: Partial<BallpitSceneOptions> = {}) {
   const three = new x({
     canvas,
     size: "parent",
@@ -687,7 +753,7 @@ function createBallpit(canvas: HTMLCanvasElement, options: any = {}) {
 
   canvas.style.touchAction = "none"
   canvas.style.userSelect = "none"
-  ;(canvas.style as any).webkitUserSelect = "none"
+  ;(canvas.style as CSSStyleDeclaration & { webkitUserSelect?: string }).webkitUserSelect = "none"
 
   const interaction = S({
     domElement: canvas,
@@ -703,7 +769,7 @@ function createBallpit(canvas: HTMLCanvasElement, options: any = {}) {
     },
   })
 
-  function initialize(opts: any) {
+  function initialize(opts: Partial<BallpitSceneOptions>) {
     if (spheres) {
       three.clear()
       three.scene.remove(spheres)
@@ -712,10 +778,10 @@ function createBallpit(canvas: HTMLCanvasElement, options: any = {}) {
     three.scene.add(spheres)
   }
 
-  three.onBeforeRender = (timeInfo: any) => {
+  three.onBeforeRender = (timeInfo: RenderTiming) => {
     if (!paused) spheres.update(timeInfo)
   }
-  three.onAfterResize = (size: any) => {
+  three.onAfterResize = (size: x["size"]) => {
     spheres.config.maxX = size.wWidth / 2
     spheres.config.maxY = size.wHeight / 2
   }
@@ -731,7 +797,7 @@ function createBallpit(canvas: HTMLCanvasElement, options: any = {}) {
       paused = !paused
     },
     dispose() {
-      interaction.dispose()
+      interaction.dispose?.()
       three.dispose()
     },
   }
@@ -740,12 +806,11 @@ function createBallpit(canvas: HTMLCanvasElement, options: any = {}) {
 export type BallpitProps = {
   className?: string
   followCursor?: boolean
-  [key: string]: any
-}
+} & Partial<BallpitSceneOptions>
 
 export function Ballpit({ className = "", followCursor = true, ...props }: BallpitProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const spheresInstanceRef = useRef<any>(null)
+  const spheresInstanceRef = useRef<ReturnType<typeof createBallpit> | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current

@@ -15,6 +15,7 @@ import {
   Camera01Icon,
   BrushIcon,
 } from "@hugeicons/core-free-icons";
+import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/_internals/foundations/utils/cn";
 import { useState } from "react";
@@ -25,7 +26,7 @@ interface CollectionItem {
   subtitle: string;
   idNumber: string;
   image: string;
-  icon: any;
+  icon: IconSvgElement;
 }
 
 // Change Here
@@ -262,7 +263,7 @@ function Tab({
 }: {
   active: boolean;
   onClick: () => void;
-  icon: any;
+  icon: IconSvgElement;
   label: string;
 }) {
   return (

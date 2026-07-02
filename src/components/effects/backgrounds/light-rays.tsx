@@ -2,6 +2,8 @@
 
 import { useRef, useEffect, useState } from "react"
 import { Renderer, Program, Triangle, Mesh } from "ogl"
+import type { OGLUniforms } from "../_internal/ogl-types"
+import { type WebGLLoseContextExtension } from "../_internal/webgl-utils"
 
 const DEFAULT_COLOR = "#ffffff"
 
@@ -64,7 +66,7 @@ export function LightRays({
   className = "",
 }: LightRaysProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const uniformsRef = useRef<any>(null)
+  const uniformsRef = useRef<OGLUniforms | null>(null)
   const rendererRef = useRef<Renderer | null>(null)
   const mouseRef = useRef({ x: 0.5, y: 0.5 })
   const smoothMouseRef = useRef({ x: 0.5, y: 0.5 })
@@ -246,10 +248,12 @@ void main(){vec4 color;mainImage(color,gl_FragCoord.xy);gl_FragColor=color;}`
         if (renderer) {
           try {
             const canvas = renderer.gl.canvas
-            const loseContext = (renderer.gl as any).getExtension("WEBGL_lose_context")
+            const loseContext = renderer.gl.getExtension(
+              "WEBGL_lose_context"
+            ) as WebGLLoseContextExtension | null
             if (loseContext) loseContext.loseContext()
             if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas)
-          } catch {}
+          } catch { /* ignore WebGL cleanup errors */ }
         }
         rendererRef.current = null
         uniformsRef.current = null

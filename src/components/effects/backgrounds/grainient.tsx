@@ -181,13 +181,27 @@ export function Grainient({
     const tryStart = () => { if (isVisible && isPageVisible && raf === 0) raf = requestAnimationFrame(loop) }
     const tryStop = () => { if (raf !== 0) { cancelAnimationFrame(raf); raf = 0 } }
 
-    const io = new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting; isVisible ? tryStart() : tryStop() }, { threshold: 0 })
+    const io = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting
+      if (isVisible) {
+        tryStart()
+      } else {
+        tryStop()
+      }
+    }, { threshold: 0 })
     io.observe(container)
-    const onVisibility = () => { isPageVisible = !document.hidden; isPageVisible ? tryStart() : tryStop() }
+    const onVisibility = () => {
+      isPageVisible = !document.hidden
+      if (isPageVisible) {
+        tryStart()
+      } else {
+        tryStop()
+      }
+    }
     document.addEventListener("visibilitychange", onVisibility)
     tryStart()
 
-    return () => { tryStop(); ro.disconnect(); io.disconnect(); document.removeEventListener("visibilitychange", onVisibility); ctxMap.delete(container); try { container.removeChild(canvas) } catch {} }
+    return () => { tryStop(); ro.disconnect(); io.disconnect(); document.removeEventListener("visibilitychange", onVisibility); ctxMap.delete(container); try { container.removeChild(canvas) } catch { /* canvas may already be removed */ } }
   }, [])
 
   useEffect(() => {

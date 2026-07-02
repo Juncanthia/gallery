@@ -244,7 +244,7 @@ void main() {
             const canvas = renderer.gl.canvas
             if (canvas && canvas.parentNode)
               canvas.parentNode.removeChild(canvas)
-          } catch {}
+          } catch { /* ignore WebGL cleanup errors */ }
         }
         rendererRef.current = null
         uniformsRef.current = null

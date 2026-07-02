@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react"
 import { Renderer, Camera, Transform, Program, Mesh, Geometry } from "ogl"
+import { loseWebGLContext, type WebGLContext } from "../_internal/webgl-utils"
 
 function hexToRgb(hex: string): [number, number, number] {
   const r = parseInt(hex.slice(1, 3), 16) / 255
@@ -156,7 +157,7 @@ export function PlasmaWave({
     return () => {
       cancelAnimationFrame(animateId); ro.disconnect()
       if (ctn && (gl.canvas as HTMLCanvasElement).parentNode === ctn) ctn.removeChild(gl.canvas)
-      ;(gl as any).getExtension("WEBGL_lose_context")?.loseContext()
+      loseWebGLContext(gl as WebGLContext)
     }
   }, [])
 
