@@ -30,7 +30,7 @@ function extendMaterial(BaseMaterial: MaterialConstructor, cfg: ExtendMaterialCo
   const { vertexShader: baseVert, fragmentShader: baseFrag, uniforms: baseUniforms } = physical
   const baseDefines = physical.defines ?? {}
   const uniforms = THREE.UniformsUtils.clone(baseUniforms)
-  const defaults = new BaseMaterial(cfg.material || {})
+  const defaults = new BaseMaterial(cfg.material || {}) as THREE.MeshStandardMaterial
   if (defaults.color) uniforms.diffuse.value = defaults.color
   if ("roughness" in defaults) uniforms.roughness.value = defaults.roughness
   if ("metalness" in defaults) uniforms.metalness.value = defaults.metalness
@@ -53,7 +53,7 @@ function extendMaterial(BaseMaterial: MaterialConstructor, cfg: ExtendMaterialCo
     vertexShader: vert,
     fragmentShader: frag,
     lights: true,
-    fog: !!cfg.material?.fog,
+    fog: !!(cfg.material && "fog" in cfg.material && cfg.material.fog),
   })
   return mat
 }

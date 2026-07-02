@@ -366,8 +366,10 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
     type HyperspeedDistortionMap = typeof distortions
     type HyperspeedDistortionKey = keyof HyperspeedDistortionMap
     type HyperspeedDistortion = HyperspeedDistortionMap[HyperspeedDistortionKey]
-    type HyperspeedEffectOptions = Omit<typeof DEFAULT_EFFECT_OPTIONS, "distortion"> & {
+    type HyperspeedEffectOptions = Omit<typeof DEFAULT_EFFECT_OPTIONS, "distortion" | "onSpeedUp" | "onSlowDown"> & {
       distortion: HyperspeedDistortion
+      onSpeedUp?: (ev: MouseEvent | TouchEvent) => void
+      onSlowDown?: (ev: MouseEvent | TouchEvent) => void
     }
 
     const random = (base: number | number[]) => {
@@ -889,7 +891,12 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
       scene!: THREE.Scene
       fogUniforms!: { fogColor: { value: THREE.Color }; fogNear: { value: number }; fogFar: { value: number } }
       clock!: THREE.Clock
-      assets: Record<string, unknown> = {}
+      assets: {
+        smaa?: {
+          search?: HTMLImageElement
+          area?: HTMLImageElement
+        }
+      } = {}
       disposed = false
       road!: Road
       leftCarLights!: CarLights
@@ -909,7 +916,7 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
           this.options.distortion = {
             uniforms: distortion_uniforms,
             getDistortion: distortion_vertex,
-          } as HyperspeedDistortion
+          } as unknown as HyperspeedDistortion
         }
         this.container = container
 
@@ -1028,11 +1035,11 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
           const areaImage = new Image()
           assets.smaa = {}
           searchImage.addEventListener("load", function () {
-            assets.smaa.search = this
+            assets.smaa!.search = this
             manager.itemEnd("smaa-search")
           })
           areaImage.addEventListener("load", function () {
-            assets.smaa.area = this
+            assets.smaa!.area = this
             manager.itemEnd("smaa-area")
           })
           manager.itemStart("smaa-search")
@@ -1110,7 +1117,7 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
           updateCamera = true
         }
 
-        if (this.options.distortion.getJS) {
+        if ("getJS" in this.options.distortion && this.options.distortion.getJS) {
           const distortion = this.options.distortion.getJS(0.025, time)
           this.camera.lookAt(
             new THREE.Vector3(

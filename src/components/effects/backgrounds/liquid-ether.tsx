@@ -69,7 +69,7 @@ export function LiquidEther({
   interface LiquidEtherOutput {
     scene: THREE.Scene
     camera: THREE.Camera
-    simulation: Simulation
+    simulation: { update(): void }
     render: () => void
     resize?: () => void
   }

@@ -225,7 +225,7 @@ interface PixelBlastRuntime {
   liquidEffect?: Effect
 }
 
-interface EffectPassWithEffects extends EffectPass {
+interface EffectPassInternals {
   effects: Effect[]
 }
 
@@ -394,7 +394,7 @@ export function PixelBlast({
         if (composer) {
           if (touch) touch.update()
           composer.passes.forEach((pass) => {
-            const effectPass = pass as EffectPassWithEffects
+            const effectPass = pass as unknown as EffectPassInternals
             effectPass.effects?.forEach((eff) => {
               const u = eff.uniforms?.get("uTime")
               if (u) u.value = uniforms.uTime.value

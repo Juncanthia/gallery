@@ -321,7 +321,9 @@ export function Ferrofluid({
       ro.disconnect()
       if (canvas.parentElement === container) container.removeChild(canvas)
       programRef.current?.remove()
-      meshRef.current?.remove()
+      if (meshRef.current && "remove" in meshRef.current && typeof meshRef.current.remove === "function") {
+        meshRef.current.remove()
+      }
       geometryRef.current?.remove()
       programRef.current = null; geometryRef.current = null; meshRef.current = null; rendererRef.current = null
     }

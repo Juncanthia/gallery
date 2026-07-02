@@ -242,7 +242,9 @@ export function GradientBlinds({
       canvas.removeEventListener("pointermove", onPointerMove); ro.disconnect()
       if (canvas.parentElement === container) container.removeChild(canvas)
       programRef.current?.remove()
-      meshRef.current?.remove()
+      if (meshRef.current && "remove" in meshRef.current && typeof meshRef.current.remove === "function") {
+        meshRef.current.remove()
+      }
       geometryRef.current?.remove()
     }
   }, [dpr, paused, gradientColors, angle, noise, blindCount, blindMinWidth, mouseDampening, mirrorGradient, spotlightRadius, spotlightSoftness, spotlightOpacity, distortAmount, shineDirection])
