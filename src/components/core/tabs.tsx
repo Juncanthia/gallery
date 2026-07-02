@@ -13,13 +13,13 @@ import {
   HighlightItem,
   type HighlightProps,
   type HighlightItemProps,
-} from '@/components/_internal/effects/highlight';
+} from '@/_internals/foundations/primitives/effects/highlight';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import {
   AutoHeight,
   type AutoHeightProps,
-} from '@/components/_internal/effects/auto-height';
+} from '@/_internals/foundations/primitives/effects/auto-height';
 import { cn } from '@/lib/utils';
 
 type TabsContextType = {

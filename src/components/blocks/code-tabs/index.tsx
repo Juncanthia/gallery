@@ -13,7 +13,7 @@ import {
   TabsHighlight,
   TabsHighlightItem,
   type TabsProps,
-} from '@/components/_internal/animate/tabs';
+} from '@/_internals/foundations/primitives/animate/tabs';
 import { CopyButton } from '@/components/core/copy-button';
 
 type CodeTabsProps = {

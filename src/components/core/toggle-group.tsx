@@ -8,7 +8,7 @@ import {
   HighlightItem,
   type HighlightItemProps,
   type HighlightProps,
-} from '@/components/_internal/effects/highlight';
+} from '@/_internals/foundations/primitives/effects/highlight';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { type VariantProps } from 'class-variance-authority';

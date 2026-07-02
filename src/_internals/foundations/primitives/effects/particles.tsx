@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { motion, AnimatePresence, type HTMLMotionProps } from 'motion/react';
 
-import { Slot, type WithAsChild } from '@/components/_internal/animate/slot';
+import { Slot, type WithAsChild } from '@/_internals/foundations/primitives/animate/slot';
 import {
   useIsInView,
   type UseIsInViewOptions,

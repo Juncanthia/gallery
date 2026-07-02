@@ -21,7 +21,7 @@ import {
 } from '@floating-ui/react';
 
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
-import { Slot, type WithAsChild } from '@/components/_internal/animate/slot';
+import { Slot, type WithAsChild } from '@/_internals/foundations/primitives/animate/slot';
 
 type Side = 'top' | 'bottom' | 'left' | 'right';
 type Align = 'start' | 'center' | 'end';

@@ -9,12 +9,12 @@ import {
   ScrollingNumberItems as ScrollingNumberItemsPrimitive,
   ScrollingNumberHighlight as ScrollingNumberHighlightPrimitive,
   type ScrollingNumberContainerProps as ScrollingNumberContainerPrimitiveProps,
-} from '@/components/_internal/texts/scrolling-number';
+} from '@/_internals/foundations/primitives/texts/scrolling-number';
 import { cn } from '@/lib/utils';
 import {
   Particles,
   ParticlesEffect,
-} from '@/components/_internal/effects/particles';
+} from '@/_internals/foundations/primitives/effects/particles';
 
 function percentageBetween(value: number, min: number, max: number): number {
   return ((value - min) / (max - min)) * 100;

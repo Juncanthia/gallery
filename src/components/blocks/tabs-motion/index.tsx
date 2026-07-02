@@ -11,7 +11,7 @@ import {
   type TabsTriggerProps as TabsTriggerPrimitiveProps,
   type TabsContentProps as TabsContentPrimitiveProps,
   type TabsContentsProps as TabsContentsPrimitiveProps,
-} from '@/components/_internal/animate/tabs';
+} from '@/_internals/foundations/primitives/animate/tabs';
 import { cn } from '@/lib/utils';
 
 type TabsProps = TabsPrimitiveProps;

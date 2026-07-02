@@ -13,7 +13,7 @@ import {
   type TooltipProps,
   type TooltipContentProps,
   type TooltipArrowProps,
-} from '@/components/_internal/animate/tooltip';
+} from '@/_internals/foundations/primitives/animate/tooltip';
 
 type AvatarProps = Omit<HTMLMotionProps<'div'>, 'translate'> & {
   children: React.ReactNode;

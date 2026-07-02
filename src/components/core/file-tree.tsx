@@ -7,7 +7,7 @@ import {
   HighlightItem,
   type HighlightItemProps,
   type HighlightProps,
-} from '@/components/_internal/effects/highlight';
+} from '@/_internals/foundations/primitives/effects/highlight';
 import {
   AccordionPrimitive as Accordion,
   AccordionItemPrimitive as AccordionItem,

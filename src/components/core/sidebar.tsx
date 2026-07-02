@@ -28,7 +28,7 @@ import {
 import {
   Highlight,
   HighlightItem,
-} from '@/components/_internal/effects/highlight';
+} from '@/_internals/foundations/primitives/effects/highlight';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
