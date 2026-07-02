@@ -1,18 +1,153 @@
-import { type VariantProps } from 'class-variance-authority';
-import * as React from 'react';
+'use client';
 
+import * as React from 'react';
+import {ToggleGroup as RadixToggleGroup} from 'radix-ui';
+import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
 import {
-  ToggleGroup as ToggleGroupPrimitive,
-  ToggleGroupItem as ToggleGroupItemPrimitive,
-  ToggleGroupHighlight as ToggleGroupHighlightPrimitive,
-  ToggleGroupHighlightItem as ToggleGroupHighlightItemPrimitive,
-  useToggleGroup as useToggleGroupPrimitive,
-  type ToggleGroupProps as ToggleGroupPrimitiveProps,
-  type ToggleGroupItemProps as ToggleGroupItemPrimitiveProps,
-} from '@/components/_internal/radix/toggle-group';
+  Highlight,
+  HighlightItem,
+  type HighlightItemProps,
+  type HighlightProps,
+} from '@/components/_internal/effects/highlight';
+import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
+import { type VariantProps } from 'class-variance-authority';
 import { toggleVariants } from '@/components/core/toggle';
 import { cn } from '@/lib/utils';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+
+type ToggleGroupPrimitiveContextType = {
+  value: string | string[] | undefined;
+  setValue: (value: string | string[] | undefined) => void;
+  type: 'single' | 'multiple';
+};
+
+const [ToggleGroupValueProvider, useToggleGroupPrimitive] =
+  getStrictContext<ToggleGroupPrimitiveContextType>('ToggleGroupPrimitiveContext');
+
+type ToggleGroupPrimitiveProps = React.ComponentProps<typeof RadixToggleGroup.Root>;
+
+function ToggleGroupPrimitive(props: ToggleGroupPrimitiveProps) {
+  const [value, setValue] = useControlledState<string | string[] | undefined>({
+    value: props.value,
+    defaultValue: props.defaultValue,
+    onChange: props.onValueChange as (
+      value: string | string[] | undefined,
+    ) => void,
+  });
+
+  return (
+    <ToggleGroupValueProvider value={{ value, setValue, type: props.type }}>
+      <RadixToggleGroup.Root
+        data-slot="toggle-group"
+        {...props}
+        onValueChange={setValue}
+      />
+    </ToggleGroupValueProvider>
+  );
+}
+
+type ToggleGroupItemPrimitiveProps = Omit<
+  React.ComponentProps<typeof RadixToggleGroup.Item>,
+  'asChild'
+> &
+  HTMLMotionProps<'button'>;
+
+function ToggleGroupItemPrimitive({ value, disabled, ...props }: ToggleGroupItemPrimitiveProps) {
+  return (
+    <RadixToggleGroup.Item value={value} disabled={disabled} asChild>
+      <motion.button
+        data-slot="toggle-group-item"
+        whileTap={{ scale: 0.95 }}
+        {...props}
+      />
+    </RadixToggleGroup.Item>
+  );
+}
+
+type ToggleGroupHighlightProps = Omit<HighlightProps, 'controlledItems'>;
+
+function ToggleGroupHighlightPrimitive({
+  transition = { type: 'spring', stiffness: 200, damping: 25 },
+  ...props
+}: ToggleGroupHighlightProps) {
+  const { value } = useToggleGroupPrimitive();
+
+  return (
+    <Highlight
+      data-slot="toggle-group-highlight"
+      controlledItems
+      value={typeof value === 'string' ? value : null}
+      exitDelay={0}
+      transition={transition}
+      {...props}
+    />
+  );
+}
+
+type ToggleGroupHighlightItemProps = HighlightItemProps &
+  HTMLMotionProps<'div'> & {
+    children: React.ReactElement;
+  };
+
+function ToggleGroupHighlightItemPrimitive({
+  children,
+  style,
+  ...props
+}: ToggleGroupHighlightItemProps) {
+  const { type, value } = useToggleGroupPrimitive();
+
+  if (type === 'single') {
+    return (
+      <HighlightItem
+        data-slot="toggle-group-highlight-item"
+        style={{ inset: 0, ...style }}
+        {...props}
+      >
+        {children}
+      </HighlightItem>
+    );
+  }
+
+  if (type === 'multiple' && React.isValidElement(children)) {
+    const isActive = props.value && value && value.includes(props.value);
+
+    const element = children as React.ReactElement<React.ComponentProps<'div'>>;
+
+    return React.cloneElement(
+      children,
+      {
+        style: {
+          ...element.props.style,
+          position: 'relative',
+        },
+        ...element.props,
+      },
+      <>
+        <AnimatePresence>
+          {isActive && (
+            <motion.div
+              data-slot="toggle-group-highlight-item"
+              style={{ position: 'absolute', inset: 0, zIndex: 0, ...style }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              {...props}
+            />
+          )}
+        </AnimatePresence>
+
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          {element.props.children}
+        </div>
+      </>,
+    );
+  }
+}
 
 const [ToggleGroupProvider, useToggleGroup] =
   getStrictContext<VariantProps<typeof toggleVariants>>('ToggleGroupContext');
