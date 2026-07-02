@@ -226,7 +226,7 @@ function smoothDampVec2(current: THREE.Vector2, target: THREE.Vector2, currentVe
   const omega = 2 / st
   const x = omega * deltaTime
   const exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x)
-  let change = current.clone().sub(target)
+  const change = current.clone().sub(target)
   const originalTo = target.clone()
   const maxChange = _maxSpeed * st
   if (change.length() > maxChange) change.setLength(maxChange)
@@ -361,9 +361,8 @@ export function GridScan({ enableWebcam = false, showPreview = false, sensitivit
     const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material)
     scene.add(quad)
 
-    let composer: EffectComposer | null = null
     if (enablePost) {
-      composer = new EffectComposer(renderer)
+      const composer = new EffectComposer(renderer)
       composerRef.current = composer
       const renderPass = new RenderPass(scene, camera)
       composer.addPass(renderPass)

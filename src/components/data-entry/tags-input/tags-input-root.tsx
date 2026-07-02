@@ -234,7 +234,7 @@ const TagsInputRoot = React.forwardRef<
           return false;
         }
 
-        let newValues: InputValue[] = [];
+        let newValues: InputValue[];
         for (const v of splitValues) {
           if (value.includes(v)) {
             onInvalid?.(v);

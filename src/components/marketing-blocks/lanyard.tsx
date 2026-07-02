@@ -22,7 +22,7 @@ export type LanyardProps = {
 // This is a simplified wrapper. The full interactive 3D lanyard card requires
 // @react-three/fiber and @react-three/rapier, which add significant bundle weight.
 // Use the full implementation from the React Bits reference when those deps are available.
-export function Lanyard(_props: LanyardProps) {
+export function Lanyard() {
   const [, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768
   )

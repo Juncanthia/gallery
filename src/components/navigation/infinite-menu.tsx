@@ -354,7 +354,7 @@ class ArcballControl {
     const s = Math.max(w, h) - 1
     const x = (2 * pos[0] - w - 1) / s
     const y = (2 * pos[1] - h - 1) / s
-    let z = 0
+    let z: number
     const xySq = x * x + y * y
     const rSq = r * r
     if (xySq <= rSq / 2.0) z = Math.sqrt(rSq - xySq)

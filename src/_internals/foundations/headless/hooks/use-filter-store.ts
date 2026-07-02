@@ -82,7 +82,7 @@ function useFilterStore<
 
       const scores = new Map<string, number>();
 
-      for (const [_, itemData] of pendingBatch) {
+      for (const [, itemData] of pendingBatch) {
         const score = getItemScore(itemData.value, searchTerm);
         if (score > 0) {
           scores.set(itemData.value, score);

@@ -573,7 +573,7 @@ function compareEntriesBySort(
   right: FileSystemEntry,
   sort: FileSystemSortState
 ) {
-  let result = 0
+  let result: number;
 
   if (sort.key === "name") {
     result = compareEntryNames(left, right)

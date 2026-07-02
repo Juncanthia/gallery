@@ -816,7 +816,7 @@ const MentionInput = React.forwardRef<InputElement, MentionInputProps>(
               .replace(SEPARATORS_PATTERN, " ")
               .trim()
               .replace(/\s+/g, "");
-          } catch (_err) {
+          } catch {
             normalized = str
               .toLowerCase()
               .normalize("NFC")

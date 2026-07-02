@@ -166,7 +166,7 @@ export default function HowItWorks({
   const data = features && features.length > 0 ? features : defaultFeatures;
   const positions = stepPositions || DEFAULT_CARD_POSITIONS;
 
-  let height = 1130;
+  let height: number;
   if (data.length === 1) height = 400;
   else if (data.length === 2) height = 450;
   else if (data.length === 3) height = 800;

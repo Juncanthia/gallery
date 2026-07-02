@@ -398,17 +398,17 @@ export function PrismaticBurst({
       }
       try {
         meshRef.current?.parent?.removeChild(meshRef.current)
-      } catch (_e) {
+      } catch {
         /* ignore dispose errors */
       }
       try {
         triRef.current?.remove?.()
-      } catch (_e) {
+      } catch {
         /* ignore dispose errors */
       }
       try {
         programRef.current?.remove?.()
-      } catch (_e) {
+      } catch {
         /* ignore dispose errors */
       }
       try {
@@ -416,7 +416,7 @@ export function PrismaticBurst({
         if (glCtx && gradTexRef.current?.texture) {
           glCtx.deleteTexture(gradTexRef.current.texture)
         }
-      } catch (_e) {
+      } catch {
         /* ignore texture delete errors */
       }
       programRef.current = null
@@ -425,7 +425,7 @@ export function PrismaticBurst({
       meshRef.current = null
       triRef.current = null
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [])
 
   useEffect(() => {
@@ -465,7 +465,7 @@ export function PrismaticBurst({
       Math.floor(rayCount ?? 0)
     )
 
-    let count = 0
+    let count: number
     if (Array.isArray(colors) && colors.length > 0) {
       const gl = renderer.gl
       const capped = colors.slice(0, 64)

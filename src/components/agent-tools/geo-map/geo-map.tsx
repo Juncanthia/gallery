@@ -71,8 +71,6 @@ function resolveMapAriaLabel(title?: string, description?: string): string {
 
 export const GeoMap = memo(function GeoMap({
   id,
-  role: _role,
-  receipt: _receipt,
   title,
   description,
   markers,

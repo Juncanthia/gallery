@@ -8191,45 +8191,45 @@ const OcrBlockMarkdown = React.memo(function OcrBlockMarkdown({
         rehypePlugins={OCR_MARKDOWN_REHYPE_PLUGINS}
         remarkPlugins={OCR_MARKDOWN_REMARK_PLUGINS}
         components={{
-          h1: ({ node: _node, ...props }) => (
+          h1: ({ ...props }) => (
             <h1
               className="my-0 text-base leading-5 font-semibold text-foreground"
               {...props}
             />
           ),
-          p: ({ node: _node, ...props }) => (
+          p: ({ ...props }) => (
             <p className="my-0 text-[13px] leading-5" {...props} />
           ),
-          ol: ({ node: _node, ...props }) => (
+          ol: ({ ...props }) => (
             <ol className="my-0 list-decimal space-y-0.5 pl-4" {...props} />
           ),
-          table: ({ node: _node, ...props }) => (
+          table: ({ ...props }) => (
             <div className="overflow-hidden rounded-md border bg-background">
               <table className="w-full border-collapse text-xs" {...props} />
             </div>
           ),
-          figure: ({ node: _node, ...props }) => (
+          figure: ({ ...props }) => (
             <figure
               className="my-0 space-y-2 rounded-md border bg-muted/20 p-2 text-[13px]"
               {...props}
             />
           ),
-          figcaption: ({ node: _node, ...props }) => (
+          figcaption: ({ ...props }) => (
             <figcaption
               className="border-t pt-2 text-xs leading-5 text-muted-foreground"
               {...props}
             />
           ),
-          caption: ({ node: _node, ...props }) => (
+          caption: ({ ...props }) => (
             <figcaption
               className="block border-t pt-2 text-xs leading-5 text-muted-foreground"
               {...props}
             />
           ),
-          th: ({ node: _node, ...props }) => (
+          th: ({ ...props }) => (
             <th className="border-b bg-muted px-2 py-1 text-left" {...props} />
           ),
-          td: ({ node: _node, ...props }) => (
+          td: ({ ...props }) => (
             <td className="border-t px-2 py-1" {...props} />
           ),
         }}

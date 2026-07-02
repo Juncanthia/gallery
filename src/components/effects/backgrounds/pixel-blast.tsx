@@ -23,7 +23,7 @@ const createTouchTexture = () => {
   const clear = () => { ctx.fillStyle = "black"; ctx.fillRect(0, 0, canvas.width, canvas.height) }
   const drawPoint = (p: (typeof trail)[number]) => {
     const pos = { x: p.x * size, y: (1 - p.y) * size }
-    let intensity = 1
+    let intensity: number
     const easeOutSine = (t: number) => Math.sin((t * Math.PI) / 2)
     const easeOutQuad = (t: number) => -t * (t - 2)
     if (p.age < maxAge * 0.3) intensity = easeOutSine(p.age / (maxAge * 0.3))
@@ -351,7 +351,7 @@ export function PixelBlast({
       renderer.domElement.addEventListener("pointerdown", onPointerDown, { passive: true })
       renderer.domElement.addEventListener("pointermove", onPointerMove, { passive: true })
 
-      let raf = 0
+      let raf: number
       const animate = () => {
         if (autoPauseOffscreen && !visibilityRef.current.visible) { raf = requestAnimationFrame(animate); return }
         uniforms.uTime.value = timeOffset + clock.getElapsedTime() * speedRef.current

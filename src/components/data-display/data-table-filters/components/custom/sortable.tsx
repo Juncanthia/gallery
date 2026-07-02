@@ -334,7 +334,8 @@ function SortableDragHandle({
   // native `color` field collides with Button's semantic `color` variant
   // prop. Drop it before spreading so the union of the two doesn't widen
   // Button's `color` prop back to a bare `string`.
-  const { color: _nativeColor, ...safeAttributes } = attributes;
+  const { color, ...safeAttributes } = attributes;
+  void color;
 
   return (
     <Button

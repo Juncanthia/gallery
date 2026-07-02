@@ -32,7 +32,7 @@ import { BlockSuggestionCard, isResolvedSuggestion } from './block-suggestion';
 import { Comment, CommentCreateForm } from '@/components/editor/toolbars/comment';
 
 export const BlockDiscussion: RenderNodeWrapper<AnyPluginConfig> =
-  (_props) => (props) => <BlockCommentContent {...props} />;
+  () => (props) => <BlockCommentContent {...props} />;
 
 const BlockCommentContent = ({ children, element }: PlateElementProps) => {
   const editor = useEditorRef();
@@ -117,7 +117,7 @@ const BlockCommentContent = ({ children, element }: PlateElementProps) => {
     if (!activeNode) return null;
 
     return editor.api.toDOMNode(activeNode[0])!;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [
     open,
     activeSuggestion,

@@ -18,7 +18,6 @@ import { WeatherDataOverlay } from "./weather-data-overlay";
 type TimeCheckpoint = "dawn" | "noon" | "dusk" | "midnight";
 
 export function WeatherWidget({
-  version: _version,
   id,
   location,
   units,

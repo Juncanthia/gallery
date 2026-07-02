@@ -203,7 +203,7 @@ class AsciiFilter {
             continue
           }
 
-          let gray = (0.3 * r + 0.6 * g + 0.1 * b) / 255
+          const gray = (0.3 * r + 0.6 * g + 0.1 * b) / 255
           let idx = Math.floor((1 - gray) * (this.charset.length - 1))
           if (this.invert) idx = this.charset.length - idx - 1
           str += this.charset[idx]
@@ -359,7 +359,7 @@ class CanvAscii {
     try {
       await document.fonts.load('600 200px "IBM Plex Mono"')
       await document.fonts.load('500 12px "IBM Plex Mono"')
-    } catch (_e) {
+    } catch {
       // Font loading failed, continue with fallback
     }
     await document.fonts.ready

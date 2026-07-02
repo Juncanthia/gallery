@@ -149,7 +149,7 @@ function AvatarGroupItem(props: AvatarGroupItemProps) {
   const maskStyle = React.useMemo<React.CSSProperties>(() => {
     let maskImage = "";
 
-    let shouldMask = false;
+    let shouldMask: boolean;
 
     if (orientation === "vertical" && dir === "rtl" && reverse) {
       shouldMask = index !== itemCount - 1;

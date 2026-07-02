@@ -222,7 +222,7 @@ void main() {
         try {
           renderer.render({ scene: mesh })
           animationIdRef.current = requestAnimationFrame(loop)
-        } catch (_e) {
+        } catch {
           return
         }
       }
@@ -244,7 +244,7 @@ void main() {
             const canvas = renderer.gl.canvas
             if (canvas && canvas.parentNode)
               canvas.parentNode.removeChild(canvas)
-          } catch (_e) {}
+          } catch {}
         }
         rendererRef.current = null
         uniformsRef.current = null

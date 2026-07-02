@@ -71,7 +71,7 @@ export function LaserFlow({ className, style, dpr, horizontalBeamOffset = 0.1, v
     }
     canvas.addEventListener("pointermove", onMove, { passive: true })
 
-    const animate = (_t: number) => {
+    const animate = () => {
       if (!ctx) return
       const dt = Math.min(0.033, 0.016)
       time += dt
@@ -147,7 +147,7 @@ export function LaserFlow({ className, style, dpr, horizontalBeamOffset = 0.1, v
       canvas.removeEventListener("pointermove", onMove)
       if (canvas.parentElement) canvas.parentElement.removeChild(canvas)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [dpr])
 
   return (

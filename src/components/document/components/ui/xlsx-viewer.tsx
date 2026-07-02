@@ -560,7 +560,8 @@ export function WorkbookTableHeaderMenu({
   const [open, setOpen] = React.useState(false)
   // `triggerProps` is typed as native `ButtonHTMLAttributes`, whose `color`
   // field collides with Button's semantic `color` variant prop.
-  const { color: _nativeColor, ...safeTriggerProps } = triggerProps
+  const { color, ...safeTriggerProps } = triggerProps
+  void color
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

@@ -108,7 +108,7 @@ export default function FluidExpandingGrid({
               const isSelected = rowArr.length === 1 && rowArr[0] === item.id;
 
               const gridRow = isRow1 ? 1 : 2;
-              let gridColumn = "";
+              let gridColumn: string;
               if (isSelected) {
                 gridColumn = "1 / span 2";
               } else {

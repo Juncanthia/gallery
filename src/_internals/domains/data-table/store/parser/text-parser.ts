@@ -129,8 +129,8 @@ export function createTextParser<T extends SchemaDefinition>(
       const word = input.slice(start, end);
       const colonIndex = word.indexOf(keyValueDelimiter);
 
-      let field: string | null = null;
-      let value: string | null = null;
+      let field: string | null;
+      let value: string | null;
 
       if (colonIndex !== -1) {
         field = resolveAlias(word.slice(0, colonIndex));

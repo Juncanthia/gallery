@@ -513,7 +513,7 @@ export function CommentCreateForm({
     if (commentsNodeEntry.length === 0) return;
 
     const documentContent = commentsNodeEntry
-      .map(([node, _path]: NodeEntry<TCommentText>) => node.text)
+      .map(([node]: NodeEntry<TCommentText>) => node.text)
       .join('');
 
     const _discussionId = nanoid();

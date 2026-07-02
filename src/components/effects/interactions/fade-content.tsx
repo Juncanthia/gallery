@@ -22,7 +22,6 @@ export type FadeContentProps = {
 
 export function FadeContent({
   children,
-  container,
   blur = false,
   duration = 1000,
   ease = "power2.out",
@@ -82,7 +81,7 @@ export function FadeContent({
     return () => {
       observer.disconnect()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [])
 
   return (
