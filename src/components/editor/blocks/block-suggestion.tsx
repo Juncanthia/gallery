@@ -18,7 +18,7 @@ import { Comment, CommentCreateForm, formatCommentDate } from '@/components/edit
 import {
   BLOCK_SUGGESTION_TOKEN,
   type ResolvedSuggestion,
-} from '@/components/_internal/lib/block-discussion-index';
+} from '@/_internals/foundations/utils/block-discussion-index';
 
 export function BlockSuggestionCard({
   idx,

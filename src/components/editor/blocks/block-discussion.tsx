@@ -25,7 +25,7 @@ import {
 } from '@/components/core/popover';
 import { commentPlugin } from '@/components/editor/plugins/comment-kit';
 import type { TDiscussion } from '@/components/editor/plugins/discussion-kit';
-import { useBlockDiscussionItems } from '@/components/_internal/lib/block-discussion-index';
+import { useBlockDiscussionItems } from '@/_internals/foundations/utils/block-discussion-index';
 import { suggestionPlugin } from '@/components/editor/plugins/suggestion-kit';
 
 import { BlockSuggestionCard, isResolvedSuggestion } from './block-suggestion';

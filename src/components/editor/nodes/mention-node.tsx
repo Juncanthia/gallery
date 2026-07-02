@@ -16,7 +16,7 @@ import {
 
 import { cn } from '@/lib/utils';
 import { useMounted } from '@/_internals/foundations/hooks/use-mounted';
-import { inlineSuggestionVariants } from '@/components/_internal/lib/suggestion';
+import { inlineSuggestionVariants } from '@/_internals/foundations/utils/suggestion';
 
 import {
   InlineCombobox,

@@ -28,7 +28,7 @@ import {
   PopoverTrigger,
 } from '@/components/core/popover';
 import { cn } from '@/lib/utils';
-import { inlineSuggestionVariants } from '@/components/_internal/lib/suggestion';
+import { inlineSuggestionVariants } from '@/_internals/foundations/utils/suggestion';
 
 export function EquationElement(props: PlateElementProps<TEquationElement>) {
   const selected = useSelected();

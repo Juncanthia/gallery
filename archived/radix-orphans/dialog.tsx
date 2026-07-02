@@ -5,7 +5,7 @@ import { Dialog as DialogPrimitive } from 'radix-ui';
 import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
 
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 
 type DialogContextType = {
   isOpen: boolean;

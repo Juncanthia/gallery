@@ -11,7 +11,7 @@ import {
   type HTMLMotionProps,
   type SpringOptions,
 } from 'motion/react';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { cn } from '@/lib/utils';
 

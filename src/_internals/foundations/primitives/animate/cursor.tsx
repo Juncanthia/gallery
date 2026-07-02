@@ -10,7 +10,7 @@ import {
   type SpringOptions,
 } from 'motion/react';
 
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { Slot, type WithAsChild } from '@/_internals/foundations/primitives/animate/slot';
 
 type CursorContextType = {

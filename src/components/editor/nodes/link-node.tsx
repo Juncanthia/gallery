@@ -8,7 +8,7 @@ import { getLinkAttributes } from '@platejs/link';
 import { PlateElement } from 'platejs/react';
 
 import { cn } from '@/lib/utils';
-import { inlineSuggestionVariants } from '@/components/_internal/lib/suggestion';
+import { inlineSuggestionVariants } from '@/_internals/foundations/utils/suggestion';
 
 export function LinkElement(props: PlateElementProps<TLinkElement>) {
   return (

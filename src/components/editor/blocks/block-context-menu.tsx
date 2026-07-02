@@ -26,7 +26,7 @@ import {
   ContextMenuTrigger,
 } from '@/components/core/context-menu';
 import { setBlockType } from '@/components/editor/transforms';
-import { useIsTouchDevice } from '@/components/_internal/hooks/use-is-touch-device';
+import { useIsTouchDevice } from '@/_internals/foundations/hooks/use-is-touch-device';
 
 type Value = 'askAI' | null;
 

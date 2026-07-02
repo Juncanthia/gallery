@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {RadioGroup as RadixRadioGroup} from 'radix-ui';
 import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { Circle as CircleIcon } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';

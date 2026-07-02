@@ -10,9 +10,9 @@ import {
   type HighlightItemProps,
   type HighlightProps,
 } from '@/_internals/foundations/primitives/effects/highlight';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
-import { useDataState } from '@/components/_internal/hooks/use-data-state';
+import { useDataState } from '@/_internals/foundations/hooks/use-data-state';
 
 type DropdownMenuContextType = {
   isOpen: boolean;

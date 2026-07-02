@@ -14,7 +14,7 @@ import {
   useIsInView,
   type UseIsInViewOptions,
 } from '@/_internals/foundations/hooks/use-is-in-view';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 
 const formatter = new Intl.NumberFormat('en-US');
 

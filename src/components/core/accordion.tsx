@@ -4,7 +4,7 @@ import * as React from 'react';
 import {Accordion as RadixAccordion} from 'radix-ui';
 import { motion, AnimatePresence, type HTMLMotionProps } from 'motion/react';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { ChevronDown as ChevronDownIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

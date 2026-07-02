@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Toggle as RadixToggle} from 'radix-ui';
 import { motion, AnimatePresence, type HTMLMotionProps } from 'motion/react';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';

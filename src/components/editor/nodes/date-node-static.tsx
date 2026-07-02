@@ -5,7 +5,7 @@ import type { SlateElementProps } from 'platejs/static';
 
 import { SlateElement } from 'platejs/static';
 import { cn } from '@/lib/utils';
-import { inlineSuggestionVariants } from '@/components/_internal/lib/suggestion';
+import { inlineSuggestionVariants } from '@/_internals/foundations/utils/suggestion';
 
 export function DateElementStatic(props: SlateElementProps<TDateElement>) {
   const { element } = props;

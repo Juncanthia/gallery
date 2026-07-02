@@ -28,10 +28,10 @@ export {
   type UseControllableStateOptions,
 } from "@/_internals/foundations/hooks/use-controllable-state-agent-tools"
 /** @public */
-export { useUploadFile, type UploadedFile } from "@/components/_internal/hooks/use-upload-file"
+export { useUploadFile, type UploadedFile } from "@/_internals/foundations/hooks/use-upload-file"
 /** @public */
-export { useAutoHeight } from "@/components/_internal/hooks/use-auto-height"
+export { useAutoHeight } from "@/_internals/foundations/hooks/use-auto-height"
 /** @public */
-export { useDataState, type DataStateValue } from "@/components/_internal/hooks/use-data-state"
+export { useDataState, type DataStateValue } from "@/_internals/foundations/hooks/use-data-state"
 /** @public */
-export { useIsTouchDevice } from "@/components/_internal/hooks/use-is-touch-device"
+export { useIsTouchDevice } from "@/_internals/foundations/hooks/use-is-touch-device"

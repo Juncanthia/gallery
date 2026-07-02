@@ -9,7 +9,7 @@ import {
   type Transition,
 } from 'motion/react';
 
-import { useAutoHeight } from '@/components/_internal/hooks/use-auto-height';
+import { useAutoHeight } from '@/_internals/foundations/hooks/use-auto-height';
 import { Slot, type WithAsChild } from '@/_internals/foundations/primitives/animate/slot';
 
 type AutoHeightProps = WithAsChild<

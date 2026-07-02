@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {Dialog as RadixDialog} from 'radix-ui';
 import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
-import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { X as XIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';

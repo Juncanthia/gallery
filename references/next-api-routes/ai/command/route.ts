@@ -21,7 +21,7 @@ import { type SlateEditor, createSlateEditor, nanoid } from 'platejs';
 import { z } from 'zod';
 
 import { BaseEditorKit } from '@/components/editor/editor-base-kit';
-import { markdownJoinerTransform } from '@/components/_internal/lib/markdown-joiner-transform';
+import { markdownJoinerTransform } from '@/_internals/foundations/utils/markdown-joiner-transform';
 
 import {
   buildEditTableMultiCellPrompt,
