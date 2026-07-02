@@ -12,7 +12,7 @@
 
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@/components/_internal/lib/compose-refs";
+import { useComposedRefs } from "@/_internals/foundations/utils/compose-refs";
 import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 
 const NODE_COLOR = {

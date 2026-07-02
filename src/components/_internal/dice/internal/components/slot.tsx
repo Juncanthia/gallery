@@ -3,7 +3,7 @@
  */
 
 import * as React from "react";
-import { composeRefs } from "../lib/compose-refs";
+import { composeRefs } from "@/_internals/foundations/utils/compose-refs";
 import { getElementRef } from "../lib/get-element-ref";
 
 type PrimitiveProps = Record<string, unknown>;

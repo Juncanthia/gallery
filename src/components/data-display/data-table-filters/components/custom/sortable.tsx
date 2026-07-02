@@ -32,7 +32,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/core/button";
-import { composeRefs } from "@/components/data-display/data-table-filters/lib/compose-refs";
+import { composeRefs } from "@/_internals/foundations/utils/compose-refs";
 import { cn } from "@/components/data-display/data-table-filters/lib/utils";
 import { Slot, type SlotProps } from "@radix-ui/react-slot";
 import * as React from "react";

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { useComposedRefs } from "@/components/_internal/dice/lib/compose-refs";
+import { useComposedRefs } from "@/_internals/foundations/utils/compose-refs";
 import { cn } from "@/components/charts/chart-kit/lib/utils";
 
 const DATA_TOP_SCROLL = "data-top-scroll";
