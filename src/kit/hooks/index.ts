@@ -1,4 +1,6 @@
 /** @public */
+export { useTheme, type Theme } from "@/_internals/foundations/theme"
+/** @public */
 export { useIsMobile } from "@/_internals/foundations/hooks/use-mobile"
 /** @public */
 export { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect"
