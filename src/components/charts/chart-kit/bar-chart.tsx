@@ -14,7 +14,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { cn } from "./lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { DEFAULT_ANIMATION_EASING } from "./animation";
 import type { BarProps } from "./bar";
 import {
@@ -42,7 +42,7 @@ import {
 } from "./chart-phase";
 import { BarLoadingSkeleton } from "./loading-sweep";
 import { extractReferenceAreaConfigs } from "./reference-area-config";
-import { useScheduledTooltip } from "./use-scheduled-tooltip";
+import { useScheduledTooltip } from "@/_internals/domains/charts/hooks/use-scheduled-tooltip";
 import {
   buildYScalesForLines,
   getPrimaryYScale,

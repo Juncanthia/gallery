@@ -3,8 +3,8 @@
 import { geoCentroid } from "d3-geo";
 import { motion, useTransform } from "motion/react";
 import { memo, useCallback, useMemo } from "react";
-import { useEnterComplete } from "../use-enter-complete";
-import { useMountProgress } from "../use-mount-progress";
+import { useEnterComplete } from "@/_internals/domains/charts/hooks/use-enter-complete";
+import { useMountProgress } from "@/_internals/domains/charts/hooks/use-mount-progress";
 import {
   type ChoroplethFeature as ChoroplethFeatureType,
   defaultChoroplethColors,

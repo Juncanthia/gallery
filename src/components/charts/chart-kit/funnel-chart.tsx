@@ -10,9 +10,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { cn } from "./lib/utils";
-import { useEnterComplete } from "./use-enter-complete";
-import { useMountProgress } from "./use-mount-progress";
+import { cn } from "@/_internals/foundations/utils/cn";
+import { useEnterComplete } from "@/_internals/domains/charts/hooks/use-enter-complete";
+import { useMountProgress } from "@/_internals/domains/charts/hooks/use-mount-progress";
 
 // ─── Public types ───────────────────────────────────────────────────
 

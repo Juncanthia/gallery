@@ -1,7 +1,7 @@
 import * as CheckboxGroupPrimitive from "@/components/data-entry/checkbox-group";
 import { Check } from "lucide-react";
 import type * as React from "react";
-import { cn } from "@/components/charts/chart-kit/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 function CheckboxGroup({
   className,

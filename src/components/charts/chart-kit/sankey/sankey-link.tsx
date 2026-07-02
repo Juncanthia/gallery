@@ -6,7 +6,7 @@ import type {
 } from "d3-sankey";
 import { motion, useTransform } from "motion/react";
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useMountProgress } from "../use-mount-progress";
+import { useMountProgress } from "@/_internals/domains/charts/hooks/use-mount-progress";
 import {
   type SankeyLinkDatum,
   type SankeyNodeDatum,

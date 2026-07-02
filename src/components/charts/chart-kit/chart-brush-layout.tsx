@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { cn } from "./lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import type { ChartBrushSelection } from "./chart-brush";
 import { resolveBrushTrackXExtent } from "./filter-data-by-x-domain";
 

@@ -1,7 +1,7 @@
 import * as TagsInputPrimitive from "@/components/data-entry/tags-input";
 import { X } from "lucide-react";
 import type * as React from "react";
-import { cn } from "@/components/charts/chart-kit/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 function TagsInput({
   className,

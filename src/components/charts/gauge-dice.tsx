@@ -2,7 +2,7 @@
 
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { cn } from "@/components/charts/chart-kit/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 const GAUGE_NAME = "Gauge";
 const INDICATOR_NAME = "GaugeIndicator";

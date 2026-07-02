@@ -1,7 +1,7 @@
 import * as MentionPrimitive from "@/components/data-entry/mention";
 import type * as React from "react";
 
-import { cn } from "@/components/charts/chart-kit/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 function Mention({
   className,

@@ -16,7 +16,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { cn } from "./lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import {
   isClipExcludedComponent,
   isPostOverlayComponent,
@@ -30,7 +30,7 @@ import {
   maxRenderPointsForWidth,
 } from "./decimate-time-series";
 import { extractReferenceAreaConfigs } from "./reference-area-config";
-import { useChartInteraction } from "./use-chart-interaction";
+import { useChartInteraction } from "@/_internals/domains/charts/hooks/use-chart-interaction";
 import { wrapSingleYScale } from "./y-axis-scales";
 
 export interface OHLCDataPoint {

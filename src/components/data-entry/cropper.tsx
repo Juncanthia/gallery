@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
 import { useComposedRefs } from "@/_internals/foundations/utils/compose-refs";
-import { cn } from "@/components/charts/chart-kit/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { useAsRef } from "@/_internals/foundations/hooks/use-as-ref";
 import { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect";
 import { useLazyRef } from "@/_internals/foundations/hooks/use-lazy-ref";

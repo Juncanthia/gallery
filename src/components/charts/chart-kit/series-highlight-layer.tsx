@@ -3,7 +3,7 @@
 import type { RefObject } from "react";
 import { useChartStable } from "./chart-context";
 import { HighlightSegment } from "./highlight-segment";
-import { useHighlightSegment } from "./use-highlight-segment";
+import { useHighlightSegment } from "@/_internals/domains/charts/hooks/use-highlight-segment";
 
 interface SeriesHighlightLayerProps {
   /** Caller already gated `showHighlight && showLine`; this just routes through. */

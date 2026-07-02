@@ -60,9 +60,9 @@ import {
   computeSeriesBarWidth,
 } from "./series-bar-layout";
 import { useStaticChartPreview } from "./static-chart-preview-context";
-import { useAnimatedYDomains } from "./use-animated-y-domains";
-import { useChartInteraction } from "./use-chart-interaction";
-import { useChartPhaseOrchestrator } from "./use-chart-phase-orchestrator";
+import { useAnimatedYDomains } from "@/_internals/domains/charts/hooks/use-animated-y-domains";
+import { useChartInteraction } from "@/_internals/domains/charts/hooks/use-chart-interaction";
+import { useChartPhaseOrchestrator } from "@/_internals/domains/charts/hooks/use-chart-phase-orchestrator";
 import {
   buildYScalesFromDomains,
   DEFAULT_Y_AXIS_ID,

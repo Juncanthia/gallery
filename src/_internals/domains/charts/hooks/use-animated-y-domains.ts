@@ -2,15 +2,15 @@
 
 import { animate, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import type { ChartPhase } from "./chart-phase";
-import { LINE_LOADING_PULSE_EASE } from "./line-loading-timing";
+import type { ChartPhase } from "@/components/charts/chart-kit/chart-phase";
+import { LINE_LOADING_PULSE_EASE } from "@/components/charts/chart-kit/line-loading-timing";
 import {
   domainsEqual,
   isYDomainTweenPhase,
   resolveAnimatedYDestinationDomains,
   shouldTweenYDomain,
   type YDomain,
-} from "./y-domain-utils";
+} from "@/components/charts/chart-kit/y-domain-utils";
 
 function lerpDomain(from: YDomain, to: YDomain, progress: number): YDomain {
   return [

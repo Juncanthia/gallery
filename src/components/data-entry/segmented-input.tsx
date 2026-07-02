@@ -6,7 +6,7 @@ import {
   Slot as SlotPrimitive,
 } from "radix-ui";
 import * as React from "react";
-import { cn } from "@/components/charts/chart-kit/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { Input } from "@/components/core/input";
 
 const ROOT_NAME = "SegmentedInput";

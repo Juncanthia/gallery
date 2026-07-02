@@ -1,7 +1,7 @@
 "use client";
 
 import * as ProgressPrimitive from "@radix-ui/react-progress";
-import { cn } from "../lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { useLegendItem } from "./legend-context";
 
 export interface LegendProgressProps {

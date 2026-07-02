@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { cn } from "../lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { useHeatmap } from "./heatmap-context";
 
 export interface HeatmapXAxisProps {

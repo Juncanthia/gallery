@@ -4,8 +4,8 @@ import type { MotionValue } from "motion/react";
 import { motion, useTransform } from "motion/react";
 import { memo, useMemo } from "react";
 import { radarCssVars, useRadarHover, useRadarStable } from "./radar-context";
-import { useEnterComplete } from "./use-enter-complete";
-import { useMountProgress } from "./use-mount-progress";
+import { useEnterComplete } from "@/_internals/domains/charts/hooks/use-enter-complete";
+import { useMountProgress } from "@/_internals/domains/charts/hooks/use-mount-progress";
 
 export interface RadarAreaProps {
   /** Index of this area in the data array */

@@ -1,4 +1,4 @@
-import { cn } from "@/components/charts/evil-charts/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import * as React from "react";
 
 export type DotVariant = "default" | "border" | "colored-border";

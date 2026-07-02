@@ -2,7 +2,7 @@
 
 import { Slot as SlotPrimitive } from "radix-ui";
 import * as React from "react";
-import { cn } from "@/components/charts/chart-kit/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 const CIRCULAR_PROGRESS_NAME = "CircularProgress";
 const INDICATOR_NAME = "CircularProgressIndicator";

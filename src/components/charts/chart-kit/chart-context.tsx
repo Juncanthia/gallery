@@ -24,7 +24,7 @@ import {
 } from "react";
 import type { ChartPhase, ChartStatus } from "./chart-phase";
 import type { ReferenceAreaConfig } from "./reference-area-config";
-import type { ChartSelection } from "./use-chart-interaction";
+import type { ChartSelection } from "@/_internals/domains/charts/hooks/use-chart-interaction";
 import { DEFAULT_Y_AXIS_ID } from "./y-axis-scales";
 import type { YDomain } from "./y-domain-utils";
 

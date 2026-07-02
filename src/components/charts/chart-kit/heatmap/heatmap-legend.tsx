@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { memo, useCallback } from "react";
-import { cn } from "../lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import {
   defaultHeatmapColorScale,
   type HeatmapLevelStyles,

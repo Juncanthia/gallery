@@ -4,7 +4,7 @@ import { GridColumns, GridRows } from "@visx/grid";
 import { motion } from "motion/react";
 import { useId } from "react";
 import { chartCssVars, useChartStable, useYScale } from "./chart-context";
-import { useGridShimmer } from "./use-grid-shimmer";
+import { useGridShimmer } from "@/_internals/domains/charts/hooks/use-grid-shimmer";
 import {
   isLoadingChromePhase,
   isLoadingGridChromePhase,

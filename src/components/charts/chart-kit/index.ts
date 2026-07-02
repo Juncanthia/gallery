@@ -504,12 +504,12 @@ export {
   type TooltipIndicatorProps,
   type TooltipRow,
 } from "./tooltip";
-export { useAnimatedYDomains } from "./use-animated-y-domains";
+export { useAnimatedYDomains } from "@/_internals/domains/charts/hooks/use-animated-y-domains";
 // Chart interaction hook
 export {
   type ChartSelection,
   useChartInteraction,
-} from "./use-chart-interaction";
+} from "@/_internals/domains/charts/hooks/use-chart-interaction";
 export {
   PatternCircles,
   PatternHexagons,
@@ -538,4 +538,4 @@ export {
   shouldTweenYDomain,
   type YDomain,
 } from "./y-domain-utils";
-export { cn } from "./lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";

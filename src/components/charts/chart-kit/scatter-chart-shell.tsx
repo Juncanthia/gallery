@@ -29,7 +29,7 @@ import { isGradientDefComponent, isPatternDefComponent } from "./chart-defs";
 import { shortDateFmt } from "./chart-formatters";
 import { type ChartPhase, DEFAULT_CHART_LIFECYCLE } from "./chart-phase";
 import { extractReferenceAreaConfigs } from "./reference-area-config";
-import { useScatterChartInteraction } from "./use-scatter-chart-interaction";
+import { useScatterChartInteraction } from "@/_internals/domains/charts/hooks/use-scatter-chart-interaction";
 import { buildYScalesForLines, getPrimaryYScale } from "./y-axis-scales";
 
 export interface ScatterChartInnerProps {
