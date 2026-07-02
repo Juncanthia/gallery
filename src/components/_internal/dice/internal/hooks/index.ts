@@ -2,7 +2,7 @@ export * from "./use-anchor";
 export * from "./use-anchor-positioner";
 export * from "./use-callback-ref";
 export * from "./use-collection";
-export * from "./use-controllable-state";
+export { useControllableState } from "@/_internals/foundations/hooks/use-controllable-state-radix";
 export * from "./use-direction";
 export * from "./use-dismiss";
 export * from "./use-escape-keydown";

@@ -22,7 +22,7 @@ import {
   type AccordionContentProps,
 } from '@/components/_internal/radix/accordion';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
-import { useControlledState } from '@/components/_internal/hooks/use-controlled-state';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 
 type FilesContextType = {
   open: string[];

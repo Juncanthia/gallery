@@ -4,7 +4,7 @@
 
 import * as React from "react";
 
-import { useCallbackRef } from "./use-callback-ref";
+import { useCallbackRef } from "@/components/_internal/dice/internal/hooks/use-callback-ref";
 
 interface UseControllableStateParams<T> {
   prop?: T | undefined;

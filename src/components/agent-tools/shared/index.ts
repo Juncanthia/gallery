@@ -21,7 +21,7 @@ export * from "./contract";
 export * from "./parse";
 export * from "./schema";
 export * from "./toolkit";
-export * from "./use-controllable-state";
+export * from "@/_internals/foundations/hooks/use-controllable-state-agent-tools";
 export * from "./use-copy-to-clipboard";
 export * from "./use-signature-reset";
 export * from "./utils";

@@ -16,7 +16,7 @@ import {
   type HighlightItemProps,
 } from '@/components/_internal/effects/highlight';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
-import { useControlledState } from '@/components/_internal/hooks/use-controlled-state';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import {
   AutoHeight,
   type AutoHeightProps,

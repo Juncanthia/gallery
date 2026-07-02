@@ -5,7 +5,7 @@ import { Popover as PopoverPrimitive } from 'radix-ui';
 import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
 
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
-import { useControlledState } from '@/components/_internal/hooks/use-controlled-state';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 
 type PopoverContextType = {
   isOpen: boolean;

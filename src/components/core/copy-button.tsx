@@ -4,7 +4,7 @@ import * as React from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check as CheckIcon, Copy as CopyIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useControlledState } from "@/components/_internal/hooks/use-controlled-state";
+import { useControlledState } from "@/_internals/foundations/hooks/use-controlled-state";
 import { Button } from "@/components/core/button";
 import type { ComponentProps } from "react";
 
