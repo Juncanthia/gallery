@@ -55,9 +55,17 @@ export type HyperspeedProps = {
   }
 }
 
+// `App` is defined as a local class inside the effect below (it captures
+// per-mount THREE.js state), so it isn't nameable as a type at the top of
+// the component. Only `dispose()` is called on the ref from outside that
+// scope, so this minimal structural interface is sufficient and precise.
+interface HyperspeedAppHandle {
+  dispose: () => void
+}
+
 export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: HyperspeedProps) {
   const hyperspeed = useRef<HTMLDivElement>(null)
-  const appRef = useRef<App | null>(null)
+  const appRef = useRef<HyperspeedAppHandle | null>(null)
 
   useEffect(() => {
     if (appRef.current) {
@@ -360,7 +368,7 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
       return Math.random() * base
     }
 
-    const pickRandom = (arr: number[] | number) => {
+    function pickRandom<T>(arr: T[] | T): T {
       if (Array.isArray(arr)) return arr[Math.floor(Math.random() * arr.length)]
       return arr
     }
@@ -400,7 +408,12 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
         const curve = new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1))
         const geometry = new THREE.TubeGeometry(curve, 40, 1, 8, false)
 
-        const instanced = new THREE.InstancedBufferGeometry().copy(geometry)
+        // three.js types `BufferGeometry#copy` on `InstancedBufferGeometry` as
+        // only accepting another `InstancedBufferGeometry`, even though at
+        // runtime it copies from any `BufferGeometry` (e.g. `TubeGeometry`).
+        const instanced = new THREE.InstancedBufferGeometry().copy(
+          geometry as unknown as THREE.InstancedBufferGeometry
+        )
         instanced.instanceCount = options.lightPairsPerRoadWay * 2
 
         const laneWidth = options.roadWidth / options.lanesPerRoad
@@ -409,12 +422,10 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
         const aMetrics: number[] = []
         const aColor: number[] = []
 
-        let colors: THREE.Color[] | THREE.Color = this.colors
-        if (Array.isArray(colors)) {
-          colors = colors.map((c) => new THREE.Color(c))
-        } else {
-          colors = new THREE.Color(colors)
-        }
+        const rawColors = this.colors
+        const colors: THREE.Color[] | THREE.Color = Array.isArray(rawColors)
+          ? rawColors.map((c) => new THREE.Color(c))
+          : new THREE.Color(rawColors)
 
         for (let i = 0; i < options.lightPairsPerRoadWay; i++) {
           const radius = random(options.carLightsRadius)
@@ -566,7 +577,10 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
       init() {
         const options = this.options
         const geometry = new THREE.PlaneGeometry(1, 1)
-        const instanced = new THREE.InstancedBufferGeometry().copy(geometry)
+        // See the analogous cast in `CarLights.init` above.
+        const instanced = new THREE.InstancedBufferGeometry().copy(
+          geometry as unknown as THREE.InstancedBufferGeometry
+        )
         const totalSticks = options.totalSideLightSticks
         instanced.instanceCount = totalSticks
 
@@ -575,12 +589,10 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
         const aColor: number[] = []
         const aMetrics: number[] = []
 
-        let colors: THREE.Color[] | THREE.Color = options.colors.sticks
-        if (Array.isArray(colors)) {
-          colors = colors.map((c) => new THREE.Color(c))
-        } else {
-          colors = new THREE.Color(colors)
-        }
+        const rawStickColors = options.colors.sticks
+        const colors: THREE.Color[] | THREE.Color = Array.isArray(rawStickColors)
+          ? rawStickColors.map((c) => new THREE.Color(c))
+          : new THREE.Color(rawStickColors)
 
         for (let i = 0; i < totalSticks; i++) {
           const width = random(options.lightStickWidth)
@@ -706,7 +718,7 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
         this.uTime = { value: 0 }
       }
 
-      createPlane(side: number, width: number, isRoad: boolean) {
+      createPlane(side: number, _width: number, isRoad: boolean) {
         const options = this.options
         const segments = 100
         const geometry = new THREE.PlaneGeometry(
@@ -981,12 +993,13 @@ export function Hyperspeed({ effectOptions = DEFAULT_EFFECT_OPTIONS }: Hyperspee
             resolutionScale: 1,
           })
         )
+        // The installed `postprocessing` version loads its own default
+        // search/area lookup images internally; `searchImage`/`areaImage`
+        // are no longer accepted constructor options.
         const smaaPass = new EffectPass(
           this.camera,
           new SMAAEffect({
             preset: SMAAPreset.MEDIUM,
-            searchImage: SMAAEffect.searchImageDataURL,
-            areaImage: SMAAEffect.areaImageDataURL,
           })
         )
         this.renderPass.renderToScreen = false

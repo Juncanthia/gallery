@@ -68,11 +68,14 @@ function Slot<T extends HTMLElement = HTMLElement>({
     children.type !== null &&
     isMotionComponent(children.type);
 
+  // Cast through `ComponentType<any>` (not the broader `ElementType`) so TS
+  // resolves concrete prop/ref types here instead of collapsing them to
+  // `never`, which happens with a bare generic `ElementType` JSX tag.
   const Base = React.useMemo(
     () =>
-      isAlreadyMotion
+      (isAlreadyMotion
         ? (children.type as React.ElementType)
-        : motion.create(children.type as React.ElementType),
+        : motion.create(children.type as React.ElementType)) as unknown as React.ComponentType<AnyProps>,
     [isAlreadyMotion, children.type],
   );
 

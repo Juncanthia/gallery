@@ -39,7 +39,7 @@ export const SeekControl = React.forwardRef<
     ...restProps
   } = props
 
-  const Comp = asChild ? Slot : Button
+  const Comp: React.ElementType = asChild ? Slot : Button
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event)

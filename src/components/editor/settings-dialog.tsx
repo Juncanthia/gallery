@@ -272,8 +272,8 @@ export function SettingsDialog() {
         </label>
         <Button
           asChild
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
           className="absolute top-0 right-[28px] h-full"
         >
           <a
@@ -304,11 +304,11 @@ export function SettingsDialog() {
         type={showKey[service] ? 'text' : 'password'}
       />
       <Button
-        size="icon"
-        variant="ghost"
+        shape="square"
+        variant="text"
         className="absolute top-0 right-0 h-full"
         onClick={() => toggleKeyVisibility(service)}
-        type="button"
+        htmlType="button"
       >
         {showKey[service] ? (
           <EyeOff className="size-4" />
@@ -326,8 +326,8 @@ export function SettingsDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          size="icon"
-          variant="default"
+          shape="square"
+          variant="solid"
           className={cn(
             'group fixed right-4 bottom-4 z-50 size-10 overflow-hidden',
             'rounded-full shadow-md hover:shadow-lg'
@@ -368,8 +368,8 @@ export function SettingsDialog() {
                 <Popover open={openModel} onOpenChange={setOpenModel}>
                   <PopoverTrigger id="select-model" asChild>
                     <Button
-                      size="lg"
-                      variant="outline"
+                      size="large"
+                      variant="outlined"
                       className="w-full justify-between"
                       aria-expanded={openModel}
                       role="combobox"
@@ -427,7 +427,7 @@ export function SettingsDialog() {
             </div>
           </div> */}
 
-          <Button size="lg" className="w-full" type="submit">
+          <Button size="large" className="w-full" htmlType="submit">
             Save changes
           </Button>
         </form>

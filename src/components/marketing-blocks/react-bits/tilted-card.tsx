@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react"
 import { motion, useMotionValue, useSpring } from "motion/react"
-import { cn } from "@/lib/utils"
 
 const springValues = {
   damping: 30,

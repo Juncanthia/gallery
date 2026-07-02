@@ -110,7 +110,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  type SelectLegacyProps,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
@@ -412,7 +411,7 @@ export const CodeBlockFilename = ({
   );
 };
 
-export type CodeBlockSelectProps = SelectLegacyProps;
+export type CodeBlockSelectProps = ComponentProps<typeof Select>;
 
 export const CodeBlockSelect = (props: CodeBlockSelectProps) => {
   const { value, onValueChange } = useContext(CodeBlockContext);

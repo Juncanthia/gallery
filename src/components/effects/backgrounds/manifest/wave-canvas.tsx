@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createNoise3D } from "simplex-noise";
 
 const DEFAULT_LIGHT_COLORS = [

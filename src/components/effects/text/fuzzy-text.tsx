@@ -383,28 +383,7 @@ export function FuzzyText({
         canvas.addEventListener("click", handleClick)
       }
 
-      const cleanup = () => {
-        window.cancelAnimationFrame(animationFrameId)
-        clearTimeout(glitchTimeoutId)
-        clearTimeout(glitchEndTimeoutId)
-        clearTimeout(clickTimeoutId)
-        if (enableHover) {
-          canvas.removeEventListener("mousemove", handleMouseMove)
-          canvas.removeEventListener(
-            "mouseleave",
-            handleMouseLeave
-          )
-          canvas.removeEventListener(
-            "touchmove",
-            handleTouchMove
-          )
-          canvas.removeEventListener("touchend", handleTouchEnd)
-        }
-        if (clickEffect) {
-          canvas.removeEventListener("click", handleClick)
-        }
-      }
-    }
+          }
 
     init()
 

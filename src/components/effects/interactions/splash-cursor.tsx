@@ -716,6 +716,7 @@ export function SplashCursor({
     }
 
     function resizeCanvas() {
+      if (!canvas) return false
       let width = scaleByPixelRatio(canvas.clientWidth)
       let height = scaleByPixelRatio(canvas.clientHeight)
       if (canvas.width !== width || canvas.height !== height) {
@@ -843,7 +844,7 @@ export function SplashCursor({
     function splat(x: number, y: number, dx: number, dy: number, color: any) {
       splatProgram.bind()
       gl.uniform1i(splatProgram.uniforms.uTarget, velocity.read.attach(0))
-      gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height)
+      gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas!.width / canvas!.height)
       gl.uniform2f(splatProgram.uniforms.point, x, y)
       gl.uniform3f(splatProgram.uniforms.color, dx, dy, 0.0)
       gl.uniform1f(splatProgram.uniforms.radius, correctRadius(config.SPLAT_RADIUS / 100.0))
@@ -857,7 +858,7 @@ export function SplashCursor({
     }
 
     function correctRadius(radius: number) {
-      let aspectRatio = canvas.width / canvas.height
+      let aspectRatio = canvas!.width / canvas!.height
       if (aspectRatio > 1) radius *= aspectRatio
       return radius
     }
@@ -866,8 +867,8 @@ export function SplashCursor({
       pointer.id = id
       pointer.down = true
       pointer.moved = false
-      pointer.texcoordX = posX / canvas.width
-      pointer.texcoordY = 1.0 - posY / canvas.height
+      pointer.texcoordX = posX / canvas!.width
+      pointer.texcoordY = 1.0 - posY / canvas!.height
       pointer.prevTexcoordX = pointer.texcoordX
       pointer.prevTexcoordY = pointer.texcoordY
       pointer.deltaX = 0
@@ -878,8 +879,8 @@ export function SplashCursor({
     function updatePointerMoveData(pointer: any, posX: number, posY: number, color: any) {
       pointer.prevTexcoordX = pointer.texcoordX
       pointer.prevTexcoordY = pointer.texcoordY
-      pointer.texcoordX = posX / canvas.width
-      pointer.texcoordY = 1.0 - posY / canvas.height
+      pointer.texcoordX = posX / canvas!.width
+      pointer.texcoordY = 1.0 - posY / canvas!.height
       pointer.deltaX = correctDeltaX(pointer.texcoordX - pointer.prevTexcoordX)
       pointer.deltaY = correctDeltaY(pointer.texcoordY - pointer.prevTexcoordY)
       pointer.moved = Math.abs(pointer.deltaX) > 0 || Math.abs(pointer.deltaY) > 0
@@ -891,13 +892,13 @@ export function SplashCursor({
     }
 
     function correctDeltaX(delta: number) {
-      let aspectRatio = canvas.width / canvas.height
+      let aspectRatio = canvas!.width / canvas!.height
       if (aspectRatio < 1) delta *= aspectRatio
       return delta
     }
 
     function correctDeltaY(delta: number) {
-      let aspectRatio = canvas.width / canvas.height
+      let aspectRatio = canvas!.width / canvas!.height
       if (aspectRatio > 1) delta /= aspectRatio
       return delta
     }

@@ -1,12 +1,35 @@
 "use client";
 
 import { cn, Button, Card } from "./_adapter";
+import type { ButtonColor, ButtonVariant } from "./_adapter";
 import type { Item } from "./schema";
 
 interface ItemCardProps {
   item: Item;
   onItemClick?: (itemId: string) => void;
   onItemAction?: (itemId: string, actionId: string) => void;
+}
+
+// `Item.actions[].variant` uses the shadcn-style enum for portability across
+// projects (see ./schema); map it to this project's antd-style Button variant/color.
+type ItemAction = NonNullable<Item["actions"]>[number];
+
+function toButtonVisual(
+  variant: ItemAction["variant"],
+): { variant: ButtonVariant; color?: ButtonColor } {
+  switch (variant) {
+    case "destructive":
+      return { variant: "solid", color: "danger" };
+    case "secondary":
+      return { variant: "filled" };
+    case "ghost":
+      return { variant: "text" };
+    case "outline":
+      return { variant: "outlined" };
+    case "default":
+    default:
+      return { variant: "solid" };
+  }
 }
 
 export function ItemCard({ item, onItemClick, onItemAction }: ItemCardProps) {
@@ -88,20 +111,24 @@ export function ItemCard({ item, onItemClick, onItemAction }: ItemCardProps) {
               "relative z-20 mt-auto flex flex-col-reverse gap-2 pt-2 @[176px]/card:flex-row",
             )}
           >
-            {actions.map((action) => (
-              <Button
-                key={action.id}
-                type="button"
-                variant={action.variant ?? "default"}
-                size="sm"
-                disabled={action.disabled}
-                className="min-h-11 w-full px-3 md:min-h-8 @[176px]/card:h-8 @[176px]/card:w-auto @[176px]/card:flex-1"
-                onClick={() => handleActionClick(action.id)}
-              >
-                {action.icon}
-                {action.label}
-              </Button>
-            ))}
+            {actions.map((action) => {
+              const { variant, color } = toButtonVisual(action.variant);
+              return (
+                <Button
+                  key={action.id}
+                  htmlType="button"
+                  variant={variant}
+                  color={color}
+                  size="small"
+                  disabled={action.disabled}
+                  className="min-h-11 w-full px-3 md:min-h-8 @[176px]/card:h-8 @[176px]/card:w-auto @[176px]/card:flex-1"
+                  onClick={() => handleActionClick(action.id)}
+                >
+                  {action.icon}
+                  {action.label}
+                </Button>
+              );
+            })}
           </div>
         )}
       </div>

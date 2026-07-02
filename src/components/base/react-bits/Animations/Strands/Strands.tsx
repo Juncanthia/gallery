@@ -1,5 +1,6 @@
 import { Renderer, Program, Mesh, Color, Triangle, RenderTarget } from 'ogl';
-import { useEffect, useRef, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
+import { useEffect, useRef } from 'react';
 
 const MAX_STRANDS = 12;
 const MAX_COLORS = 8;
@@ -388,7 +389,7 @@ export default function Strands({
       }
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   return <div ref={ctnDom} className={`relative w-full h-full bg-transparent ${className}`} style={style} />;

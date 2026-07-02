@@ -15,7 +15,7 @@ import {
   AutoConversationsIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import React, { useMemo, useState, useRef, useEffect } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import useMeasure from "react-use-measure";
 import { cn } from "@/components/templates/manifest/lib/utils";

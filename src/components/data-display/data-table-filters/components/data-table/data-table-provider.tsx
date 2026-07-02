@@ -1,4 +1,4 @@
-import { DataTableFilterField } from "@/components/data-display/data-table-filters/components/data-table/types";
+import type { DataTableFilterField } from "@/components/data-display/data-table-filters/components/data-table/types";
 import { ControlsProvider } from "@/components/data-display/data-table-filters/components/controls";
 import type {
   ColumnDef,
@@ -59,7 +59,7 @@ export function DataTableProvider<TData, TValue>({
     children: React.ReactNode;
   }) {
   const value = useMemo(
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
+     
     () => ({
       ...props,
       columnFilters: props.columnFilters ?? [],

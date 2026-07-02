@@ -1,8 +1,7 @@
 "use client"
 
-import { motion, useMotionValue, useTransform, type Transition } from "motion/react"
+import { motion, useMotionValue, useTransform } from "motion/react"
 import { useState, useEffect, type ReactNode } from "react"
-import { cn } from "@/lib/utils"
 
 type CardItem = {
   id: number

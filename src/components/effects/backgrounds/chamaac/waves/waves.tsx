@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import { useRef, useMemo } from "react";
+import type {
+  ThreeElement} from "@react-three/fiber";
 import {
   Canvas,
   useFrame,
   extend,
-  ThreeElement,
   useThree,
 } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";

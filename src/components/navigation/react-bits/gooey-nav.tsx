@@ -1,7 +1,6 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
-import { cn } from "@/lib/utils"
 
 export type GooeyNavItem = {
   label: string
@@ -151,7 +150,7 @@ export function GooeyNav({
       e.preventDefault()
       const liEl = (e.currentTarget as HTMLElement).parentElement
       if (liEl) {
-        handleClick({ currentTarget: liEl } as React.MouseEvent, index)
+        handleClick({ currentTarget: liEl } as unknown as React.MouseEvent, index)
       }
     }
   }

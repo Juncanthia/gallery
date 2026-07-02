@@ -102,7 +102,7 @@ void main(){
 
 const ctxMap = new WeakMap()
 
-type GrainientProps = {
+export type GrainientProps = {
   timeSpeed?: number
   colorBalance?: number
   warpStrength?: number

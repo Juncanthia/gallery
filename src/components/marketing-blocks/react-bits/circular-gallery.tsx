@@ -3,7 +3,6 @@
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from "ogl"
 import { useEffect, useRef } from "react"
 
-import { cn } from "@/lib/utils"
 
 type GalleryItem = {
   image: string

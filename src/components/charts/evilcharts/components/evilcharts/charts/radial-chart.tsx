@@ -102,7 +102,7 @@ type EvilRadialChartBaseProps<TData extends Record<string, unknown>> = {
   backgroundVariant?: BackgroundVariant; // background pattern behind the chart
 };
 
-type EvilRadialChartProps<TData extends Record<string, unknown>> =
+export type EvilRadialChartProps<TData extends Record<string, unknown>> =
   EvilRadialChartBaseProps<TData>;
 
 /**

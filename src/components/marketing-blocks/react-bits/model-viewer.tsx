@@ -1,8 +1,5 @@
 "use client"
 
-import { Suspense, useRef, useLayoutEffect, useEffect, useMemo } from "react"
-import { cn } from "@/lib/utils"
-
 // NOTE: This component requires @react-three/fiber, @react-three/drei to function.
 // The full implementation imports OrbitControls, useGLTF, useFBX, useProgress, etc.
 // Install: @react-three/fiber @react-three/drei three
@@ -36,34 +33,7 @@ export type ModelViewerProps = {
   onModelLoaded?: () => void
 }
 
-export function ModelViewer({
-  url,
-  width = 400,
-  height = 400,
-  modelXOffset = 0,
-  modelYOffset = 0,
-  defaultRotationX = -50,
-  defaultRotationY = 20,
-  defaultZoom = 0.5,
-  minZoomDistance = 0.5,
-  maxZoomDistance = 10,
-  enableMouseParallax = true,
-  enableManualRotation = true,
-  enableHoverRotation = true,
-  enableManualZoom = true,
-  ambientIntensity = 0.3,
-  keyLightIntensity = 1,
-  fillLightIntensity = 0.5,
-  rimLightIntensity = 0.8,
-  environmentPreset = "forest",
-  autoFrame = false,
-  placeholderSrc,
-  showScreenshotButton = true,
-  fadeIn = false,
-  autoRotate = false,
-  autoRotateSpeed = 0.35,
-  onModelLoaded,
-}: ModelViewerProps) {
+export function ModelViewer({ url, width = 400, height = 400 }: ModelViewerProps) {
   // Render placeholder: the full component requires @react-three/fiber & @react-three/drei.
   // The complete implementation is ~470 lines and handles:
   // - GLB/GLTF/FBX/OBJ loading with progress

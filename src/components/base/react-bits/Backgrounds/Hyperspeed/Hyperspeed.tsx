@@ -1,5 +1,6 @@
 import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPreset } from 'postprocessing';
-import { FC, useEffect, useRef } from 'react';
+import type { FC} from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 interface Distortion {
@@ -748,7 +749,7 @@ class Road {
     this.uTime = { value: 0 };
   }
 
-  createPlane(side: number, width: number, isRoad: boolean) {
+  createPlane(side: number, _width: number, isRoad: boolean) {
     const options = this.options;
     const segments = 100;
     const geometry = new THREE.PlaneGeometry(

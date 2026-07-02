@@ -496,8 +496,8 @@ function DataTableHead({
       }
     >
       <Button
-        type="button"
-        size="sm"
+        htmlType="button"
+        size="small"
         onClick={handleClick}
         onKeyDown={(e) => {
           if (isDisabled) return;
@@ -507,7 +507,7 @@ function DataTableHead({
           }
         }}
         disabled={isDisabled}
-        variant="ghost"
+        variant="text"
         className={cn(
           buttonAlignClass,
           "w-fit min-w-10",

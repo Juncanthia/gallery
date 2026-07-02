@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { m, LazyMotion, domAnimation, SVGMotionProps } from "motion/react";
+import type { SVGMotionProps } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 
 interface SettingsIconProps extends SVGMotionProps<SVGSVGElement> {
   size?: number;

@@ -63,7 +63,7 @@ export function DatePickerWithRange({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant="outline"
+            variant="outlined"
             className={cn(
               "hover:bg-muted/50 max-w-full justify-start truncate text-left font-normal shadow-none",
               !date && "text-muted-foreground",
@@ -135,7 +135,7 @@ function DatePresets({
           return (
             <Button
               key={label}
-              variant={isActive ? "outline" : "ghost"}
+              variant={isActive ? "outlined" : "text"}
               onClick={() => onSelect({ from, to })}
               className={cn(
                 "flex items-center justify-between gap-6",

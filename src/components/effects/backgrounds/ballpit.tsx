@@ -28,14 +28,14 @@ import { RoomEnvironment as z } from "three/examples/jsm/environments/RoomEnviro
 class x {
   #e: any
   canvas: HTMLCanvasElement | null = null
-  camera!: THREE.PerspectiveCamera
+  camera!: t
   cameraMinAspect = 0
   cameraMaxAspect = 0
   cameraFov = 0
   maxPixelRatio = 0
   minPixelRatio = 0
-  scene!: THREE.Scene
-  renderer!: THREE.WebGLRenderer
+  scene!: i
+  renderer!: s
   #t: any
   size = { width: 0, height: 0, wWidth: 0, wHeight: 0, ratio: 0, pixelRatio: 0 }
   render: any = this.#i
@@ -161,7 +161,7 @@ class x {
       const vFov = (this.camera.fov * Math.PI) / 180
       this.size.wHeight = 2 * Math.tan(vFov / 2) * this.camera.position.length()
       this.size.wWidth = this.size.wHeight * this.camera.aspect
-    } else if (this.camera.isOrthographicCamera) {
+    } else if ((this.camera as unknown as { isOrthographicCamera?: boolean }).isOrthographicCamera) {
       this.size.wHeight = (this.camera as any).top - (this.camera as any).bottom
       this.size.wWidth = (this.camera as any).right - (this.camera as any).left
     }
@@ -409,7 +409,6 @@ interface BallpitPhysicsConfig {
   maxX: number
   maxY: number
   maxZ: number
-  maxSize: number
   controlSphere0: boolean
 }
 
@@ -543,7 +542,7 @@ class Y extends c {
       thicknessPower: { value: 2 },
       thicknessScale: { value: 10 },
     }
-    this.defines.USE_UV = ""
+    this.defines!.USE_UV = ""
     this.onBeforeCompile = (shader: any) => {
       Object.assign(shader.uniforms, this.uniforms)
       shader.fragmentShader =
@@ -600,7 +599,7 @@ class Z extends d {
   constructor(renderer: any, options: any = {}) {
     const config = { ...X, ...options }
     const roomEnv = new z()
-    const pmrem = new p(renderer, 0.04)
+    const pmrem = new p(renderer)
     const envMap = pmrem.fromScene(roomEnv).texture
     const sphereGeometry = new g()
     const material = new Y({ envMap, ...config.materialParams })

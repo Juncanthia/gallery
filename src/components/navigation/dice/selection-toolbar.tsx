@@ -626,7 +626,7 @@ function SelectionToolbarItem(props: SelectionToolbarItemProps) {
   const onPointerDown = React.useCallback(
     (event: React.PointerEvent<ItemElement>) => {
       pointerTypeRef.current = event.pointerType;
-      propsRef.current.onPointerDown?.(event);
+      propsRef.current.onPointerDown?.(event as React.PointerEvent<HTMLButtonElement>);
 
       if (event.pointerType === "mouse") {
         event.preventDefault();
@@ -649,7 +649,7 @@ function SelectionToolbarItem(props: SelectionToolbarItemProps) {
 
   const onPointerUp = React.useCallback(
     (event: React.PointerEvent<ItemElement>) => {
-      propsRef.current.onPointerUp?.(event);
+      propsRef.current.onPointerUp?.(event as React.PointerEvent<HTMLButtonElement>);
       if (event.defaultPrevented) return;
 
       if (pointerTypeRef.current === "mouse") {

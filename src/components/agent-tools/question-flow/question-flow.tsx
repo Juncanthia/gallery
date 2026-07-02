@@ -122,8 +122,8 @@ function OptionItem({
     <Button
       ref={buttonRef}
       data-id={option.id}
-      variant="ghost"
-      size="lg"
+      variant="text"
+      size="large"
       role="option"
       aria-selected={isSelected}
       onClick={onToggle}
@@ -543,8 +543,8 @@ function StepContent({
         <div className="flex items-center justify-between pt-2">
           {showBack ? (
             <Button
-              variant="ghost"
-              size="default"
+              variant="text"
+              size="middle"
               onClick={onBack}
               disabled={isTransitioning}
               className="gap-1 rounded-full text-muted-foreground"
@@ -556,8 +556,8 @@ function StepContent({
             <div />
           )}
           <Button
-            variant="default"
-            size="default"
+            variant="solid"
+            size="middle"
             onClick={onNext}
             disabled={!canProceed || isTransitioning}
             className="rounded-full"

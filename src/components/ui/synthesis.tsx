@@ -1,3 +1,3 @@
 "use client"
 
-export { Synthesis } from "@/components/effects/interactions/chamaac/synthesis/synthesis"
+export { default as Synthesis } from "@/components/effects/interactions/chamaac/synthesis/synthesis"

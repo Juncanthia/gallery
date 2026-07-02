@@ -1111,7 +1111,6 @@ export const EditorSelector = ({
           <ChevronDownIcon size={12} />
         </Button>
       </PopoverTrigger>
-      {/* @ts-expect-error — HTMLMotionProps onAnimationStart conflicts with HTMLAttributes */}
       <PopoverContent
         align="start"
         className={cn("w-48 p-1", className)}

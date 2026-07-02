@@ -1,18 +1,12 @@
 import { shaderMaterial, useTrailTexture } from '@react-three/drei';
-import { Canvas, CanvasProps, ThreeEvent, useThree } from '@react-three/fiber';
+import type { CanvasProps, ThreeEvent} from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import React, { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 
 interface GooeyFilterProps {
   id?: string;
   strength?: number;
-}
-
-interface DotMaterialUniforms {
-  resolution: THREE.Vector2;
-  mouseTrail: THREE.Texture | null;
-  gridSize: number;
-  pixelColor: THREE.Color;
 }
 
 interface SceneProps {

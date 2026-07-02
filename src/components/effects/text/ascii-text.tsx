@@ -3,6 +3,10 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
 
+function mapRange(value: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+}
+
 const vertexShader = `
 varying vec2 vUv;
 uniform float uTime;
@@ -57,12 +61,12 @@ class AsciiFilter {
   fontSize: number
   fontFamily: string
   charset: string
-  width: number
-  height: number
-  center: { x: number; y: number }
-  mouse: { x: number; y: number }
-  cols: number
-  rows: number
+  width!: number
+  height!: number
+  center!: { x: number; y: number }
+  mouse!: { x: number; y: number }
+  cols!: number
+  rows!: number
 
   constructor(
     renderer: THREE.WebGLRenderer,
@@ -101,7 +105,8 @@ class AsciiFilter {
       charset ??
       " .'`^\",:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
-    this.context.webkitImageSmoothingEnabled = false
+    // Vendor-prefixed smoothing flags aren't part of the standard DOM lib types.
+    ;(this.context as any).webkitImageSmoothingEnabled = false
     ;(this.context as any).mozImageSmoothingEnabled = false
     ;(this.context as any).msImageSmoothingEnabled = false
     this.context.imageSmoothingEnabled = false
@@ -457,21 +462,21 @@ class CanvAscii {
     this.textCanvas.render()
     this.texture.needsUpdate = true
 
-    this.mesh.material.uniforms.uTime.value = Math.sin(time)
+    ;(this.mesh.material as THREE.ShaderMaterial).uniforms.uTime.value = Math.sin(time)
 
     this.updateRotation()
     this.filter.render(this.scene, this.camera)
   }
 
   updateRotation() {
-    const x = Math.map(
+    const x = mapRange(
       this.mouse.y,
       0,
       this.height,
       0.5,
       -0.5
     )
-    const y = Math.map(
+    const y = mapRange(
       this.mouse.x,
       0,
       this.width,

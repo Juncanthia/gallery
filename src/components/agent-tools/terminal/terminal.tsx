@@ -92,8 +92,8 @@ function TerminalHeader({
           {exitCode}
         </span>
         <Button
-          variant="ghost"
-          size="sm"
+          variant="text"
+          size="small"
           onClick={onCopy}
           disabled={!hasOutput}
           className="h-7 w-7 p-0"
@@ -159,7 +159,7 @@ function TerminalOutput({
       {shouldCollapse && (
         <CollapsibleTrigger asChild>
           <Button
-            variant="ghost"
+            variant="text"
             onClick={onToggleCollapse}
             className="text-muted-foreground w-full rounded-none border-t font-normal"
           >

@@ -674,8 +674,8 @@ export function AILoadingBar() {
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
         <span>{status === 'submitted' ? 'Thinking...' : 'Writing...'}</span>
         <Button
-          size="sm"
-          variant="ghost"
+          size="small"
+          variant="text"
           className="flex items-center gap-1 text-xs"
           onClick={() => api.aiChat.stop()}
         >
@@ -701,7 +701,7 @@ export function AILoadingBar() {
         <div className="flex w-full items-center justify-between gap-3">
           <div className="flex items-center gap-5">
             <Button
-              size="sm"
+              size="small"
               disabled={isLoading}
               onClick={() => handleComments('accept')}
             >
@@ -709,7 +709,7 @@ export function AILoadingBar() {
             </Button>
 
             <Button
-              size="sm"
+              size="small"
               disabled={isLoading}
               onClick={() => handleComments('reject')}
             >

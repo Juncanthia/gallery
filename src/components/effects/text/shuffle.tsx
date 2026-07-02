@@ -65,8 +65,7 @@ export function Shuffle({
   const [fontsLoaded, setFontsLoaded] = useState(false)
   const [ready, setReady] = useState(false)
 
-  const splitRef = useRef<GSAPSplitText | null>(null)
-  const wrappersRef = useRef<HTMLSpanElement[]>([])
+    const wrappersRef = useRef<HTMLSpanElement[]>([])
   const tlRef = useRef<gsap.core.Timeline | null>(null)
   const playingRef = useRef(false)
   const hoverHandlerRef = useRef<(() => void) | null>(null)
@@ -363,12 +362,4 @@ export function Shuffle({
 
   const Tag = tag as keyof JSX.IntrinsicElements
   return React.createElement(Tag, { ref, className: classes, style: commonStyle }, text)
-}
-
-// Simplified type for GSAP SplitText to avoid import errors
-type GSAPSplitText = {
-  chars: HTMLElement[]
-  words: HTMLElement[]
-  lines: HTMLElement[]
-  revert: () => void
 }

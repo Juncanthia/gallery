@@ -1,8 +1,7 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 
-type StarBorderProps<T extends React.ElementType = "button"> = {
+export type StarBorderProps<T extends React.ElementType = "button"> = {
   as?: T
   className?: string
   color?: string

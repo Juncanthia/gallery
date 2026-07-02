@@ -1,4 +1,3 @@
-import * as React from 'react';
 
 import type { SlateElementProps } from 'platejs/static';
 
@@ -33,7 +32,7 @@ export function TocElementStatic(props: SlateElementProps) {
           headingList.map((item: Heading) => (
             <Button
               key={item.title}
-              variant="ghost"
+              variant="text"
               className={headingItemVariants({
                 depth: item.depth as 1 | 2 | 3,
               })}

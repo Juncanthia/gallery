@@ -1,4 +1,5 @@
-import { FC, Suspense, useRef, useLayoutEffect, useEffect, useMemo } from 'react'
+import type { FC} from 'react';
+import { Suspense, useRef, useLayoutEffect, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useLoader, useThree, invalidate } from '@react-three/fiber'
 import {
   OrbitControls,

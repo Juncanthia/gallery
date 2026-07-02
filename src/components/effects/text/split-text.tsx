@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect, useState, type ComponentType, type Ref, type CSSProperties, type ReactNode } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
@@ -66,12 +66,12 @@ export function SplitText({
       const el = ref.current
 
       // Clean up previous split
-      const prevInstance = (el as Record<string, unknown>)._rbsplitInstance as
+      const prevInstance = (el as unknown as Record<string, unknown>)._rbsplitInstance as
         | { revert: () => void }
         | undefined
       if (prevInstance) {
         try { prevInstance.revert() } catch { /* noop */ }
-        ;(el as Record<string, unknown>)._rbsplitInstance = null
+        ;(el as unknown as Record<string, unknown>)._rbsplitInstance = null
       }
 
       // Manual character/word splitting
@@ -131,14 +131,14 @@ export function SplitText({
       }, el)
 
       const splitInstance = { revert: () => ctx.revert() }
-      ;(el as Record<string, unknown>)._rbsplitInstance = splitInstance
+      ;(el as unknown as Record<string, unknown>)._rbsplitInstance = splitInstance
 
       return () => {
         ScrollTrigger.getAll().forEach((st) => {
           if (st.trigger === el) st.kill()
         })
         try { splitInstance.revert() } catch { /* noop */ }
-        ;(el as Record<string, unknown>)._rbsplitInstance = null
+        ;(el as unknown as Record<string, unknown>)._rbsplitInstance = null
       }
     },
     {
@@ -151,7 +151,13 @@ export function SplitText({
     }
   )
 
-  const Tag = tag as keyof JSX.IntrinsicElements
+  const Tag = tag as unknown as ComponentType<{
+    ref?: Ref<HTMLElement>
+    "data-slot"?: string
+    className?: string
+    style?: CSSProperties
+    children?: ReactNode
+  }>
 
   return (
     <Tag

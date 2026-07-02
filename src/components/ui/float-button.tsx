@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { Badge, type BadgeProps } from "@/components/ui/badge";
 import {
   Tooltip,
+  TooltipContent,
   TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { floatButtonVariants, type FloatButtonShape, type FloatButtonSize, type FloatButtonType } from "./float-button-variants";
@@ -20,6 +22,20 @@ type FloatButtonTooltipConfig = {
 type FloatButtonTooltip =
   | React.ReactNode
   | FloatButtonTooltipConfig;
+
+const TOOLTIP_PLACEMENT_TO_SIDE: Record<
+  NonNullable<FloatButtonTooltipConfig["placement"]>,
+  { side: "top" | "right" | "bottom" | "left"; align: "start" | "center" | "end" }
+> = {
+  top: { side: "top", align: "center" },
+  topLeft: { side: "top", align: "start" },
+  topRight: { side: "top", align: "end" },
+  bottom: { side: "bottom", align: "center" },
+  bottomLeft: { side: "bottom", align: "start" },
+  bottomRight: { side: "bottom", align: "end" },
+  left: { side: "left", align: "center" },
+  right: { side: "right", align: "center" },
+}
 
 export type FloatButtonProps = Omit<React.ComponentProps<"button">, "children" | "type" | "onClick"> & {
   type?: FloatButtonType;
@@ -115,11 +131,15 @@ export const FloatButton = React.forwardRef<FloatButtonElement, FloatButtonProps
     if (tooltip) {
       const tooltipConfig = isTooltipConfig(tooltip) ? tooltip : undefined;
       const tooltipTitle = tooltipConfig ? tooltipConfig.title ?? tooltipConfig.content : tooltip as React.ReactNode;
+      const { side, align } = TOOLTIP_PLACEMENT_TO_SIDE[tooltipConfig?.placement ?? "top"];
 
       return (
         <TooltipProvider>
-          <Tooltip title={tooltipTitle} placement={tooltipConfig?.placement} open={tooltipConfig?.open}>
-            {node}
+          <Tooltip open={tooltipConfig?.open}>
+            <TooltipTrigger asChild>{node}</TooltipTrigger>
+            <TooltipContent side={side} align={align}>
+              {tooltipTitle}
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       );

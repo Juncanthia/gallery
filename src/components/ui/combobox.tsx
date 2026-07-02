@@ -130,7 +130,7 @@ function Combobox({
   required = false,
   searchPlaceholder = "搜索...",
   value: valueProp,
-  variant = "outline",
+  variant = "outlined",
   ...props
 }: ComboboxProps) {
   const [open = false, setOpen] = useControllableState({
@@ -261,7 +261,7 @@ function Combobox({
             if (openOnFocus) handleOpenChange(true)
           }}
           role="combobox"
-          type="button"
+          htmlType="button"
           variant={variant}
           {...props}
         >

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect, useRef } from "react"
-import { motion, useMotionValue, useAnimationFrame, useTransform } from "motion/react"
+import { motion, useMotionValue, useAnimationFrame, useTransform, type MotionStyle } from "motion/react"
 import { cn } from "@/lib/utils"
 
 export type ShinyTextProps = {
@@ -115,7 +115,7 @@ export function ShinyText({
           backgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundPosition,
-        } as React.CSSProperties
+        } as MotionStyle
       }
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

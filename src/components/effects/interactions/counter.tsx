@@ -3,7 +3,6 @@
 import { motion, useSpring, useTransform } from "motion/react"
 import { useEffect } from "react"
 
-import { cn } from "@/lib/utils"
 
 function Number({ mv, number, height }: { mv: any; number: number; height: number }) {
   const y = useTransform(mv, (latest: number) => {

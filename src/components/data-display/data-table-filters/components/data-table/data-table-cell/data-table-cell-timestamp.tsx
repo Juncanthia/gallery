@@ -5,7 +5,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/lib/utils";
+} from "@/components/ui/hover-card";
 
 export function DataTableCellTimestamp({
   date,

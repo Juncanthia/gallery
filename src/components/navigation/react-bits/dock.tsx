@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "motion/react"
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, type MotionStyle } from "motion/react"
 import { Children, cloneElement, useEffect, useMemo, useRef, useState } from "react"
 
 import { cn } from "@/lib/utils"
@@ -138,7 +138,7 @@ export function Dock({
   const height = useSpring(heightRow, spring)
 
   return (
-    <motion.div style={{ height, scrollbarWidth: "none" } as React.CSSProperties} className="dock-outer">
+    <motion.div style={{ height, scrollbarWidth: "none" } as MotionStyle} className="dock-outer">
       <motion.div
         onMouseMove={({ pageX }) => {
           isHovered.set(1)

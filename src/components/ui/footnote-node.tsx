@@ -201,9 +201,9 @@ export function FootnoteReferenceElement(
                 </div>
               ) : (
                 <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
+                  htmlType="button"
+                  variant="outlined"
+                  size="small"
                   className="h-6 rounded-xs px-2 text-[11px]"
                   onMouseDown={(event) => {
                     event.preventDefault();
@@ -364,9 +364,9 @@ export function FootnoteDefinitionElement(
           >
             {duplicateReplacementIdentifier && path ? (
               <Button
-                type="button"
-                variant="outline"
-                size="sm"
+                htmlType="button"
+                variant="outlined"
+                size="small"
                 className="h-6 rounded-xs border-amber-500/40 px-2 text-[11px] text-amber-700 hover:bg-amber-500/10 hover:text-amber-800"
                 onClick={(event) => {
                   event.preventDefault();

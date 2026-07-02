@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 interface DecayCardProps {
@@ -63,7 +64,7 @@ const DecayCard: React.FC<DecayCardProps> = ({
     const render = () => {
       let targetX = lerp(imgValues.imgTransforms.x, map(cursor.current.x, 0, winsize.current.width, -120, 120), 0.1);
       let targetY = lerp(imgValues.imgTransforms.y, map(cursor.current.y, 0, winsize.current.height, -120, 120), 0.1);
-      let targetRz = lerp(imgValues.imgTransforms.rz, map(cursor.current.x, 0, winsize.current.width, -10, 10), 0.1);
+      const targetRz = lerp(imgValues.imgTransforms.rz, map(cursor.current.x, 0, winsize.current.width, -10, 10), 0.1);
 
       if (targetX > movementBound) targetX = movementBound + (targetX - movementBound) * 0.2;
       if (targetX < -movementBound) targetX = -movementBound + (targetX + movementBound) * 0.2;

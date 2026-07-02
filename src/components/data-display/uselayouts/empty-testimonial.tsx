@@ -8,10 +8,7 @@ export default function EmptyTestimonial() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const pageVariants = {
-    spring: { type: "spring" as const, duration: 0.6 },
-  };
-
+  
   return (
     <div className="w-full flex flex-col items-center justify-center py-24 px-4">
       <div className="mb-20 text-center">

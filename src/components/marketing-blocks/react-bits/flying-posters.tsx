@@ -112,7 +112,7 @@ function AutoBind(self: any, { include, exclude }: any = {}) {
     return true
   }
 
-  for (const [object, key] of getAllProperties(self.constructor.prototype) as [any, string][]) {
+  for (const [object, key] of getAllProperties(self.constructor.prototype) as unknown as [any, string][]) {
     if (key === "constructor" || !filter(key)) continue
     const descriptor = Reflect.getOwnPropertyDescriptor(object, key)
     if (descriptor && typeof descriptor.value === "function") {

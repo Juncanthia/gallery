@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Input, type InputRef } from "@/components/ui/input"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { gallerySearchEntries } from "../../registry/catalog"
 import { readRecentVisits, rememberRecentVisit } from "../../runtime/recent-visits"
@@ -87,7 +87,7 @@ export function GallerySearchDialog({
   const [recentPaths, setRecentPaths] = useState<string[]>(() =>
     typeof window === "undefined" ? [] : readRecentVisits()
   )
-  const inputRef = useRef<InputRef>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const entryByPath = useMemo(() => {
     const entries = new Map<string, SearchEntry>()
@@ -187,8 +187,8 @@ export function GallerySearchDialog({
     setRecentPaths(rememberRecentVisit(to))
     closePanel()
     navigate({
-      params: { slug },
-      to: "/components/$slug",
+      params: { _splat: slug },
+      to: "/components/$",
     })
   }, [closePanel, navigate])
 

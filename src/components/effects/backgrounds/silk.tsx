@@ -4,6 +4,7 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { forwardRef, useRef, useMemo, useLayoutEffect } from "react"
 import { Color } from "three"
+import type * as THREE from "three"
 
 const hexToNormalizedRGB = (hex: string): [number, number, number] => {
   hex = hex.replace("#", "")
@@ -72,6 +73,7 @@ void main() {
 `
 
 interface SilkPlaneUniforms {
+  [uniform: string]: THREE.IUniform<unknown>
   uSpeed: { value: number }
   uScale: { value: number }
   uNoiseIntensity: { value: number }
@@ -128,7 +130,9 @@ export function Silk({
   noiseIntensity = 1.5,
   rotation = 0,
 }: SilkProps) {
-  const meshRef = useRef<THREE.Mesh>(null)
+  const meshRef = useRef<
+    THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial & { uniforms: SilkPlaneUniforms }>
+  >(null)
 
   const uniforms = useMemo<SilkPlaneUniforms>(
     () => ({

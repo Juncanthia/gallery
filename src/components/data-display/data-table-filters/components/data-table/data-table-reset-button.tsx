@@ -20,7 +20,7 @@ export function DataTableResetButton() {
     <TooltipProvider>
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>
-          <Button variant="ghost" onClick={() => table.resetColumnFilters()}>
+          <Button variant="text" onClick={() => table.resetColumnFilters()}>
             <X className="mr-2 h-4 w-4" />
             Reset
           </Button>

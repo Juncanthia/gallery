@@ -45,11 +45,12 @@ type CodeHeaderProps = React.ComponentProps<'div'> & {
 function CodeHeader({
   className,
   children,
-  icon: Icon,
+  icon: IconProp,
   copyButton = false,
   ...props
 }: CodeHeaderProps) {
   const { code } = useCode();
+  const Icon = IconProp as React.ComponentType<{ className?: string }> | undefined;
 
   return (
     <div

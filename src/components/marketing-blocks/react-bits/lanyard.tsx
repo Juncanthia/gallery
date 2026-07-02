@@ -1,15 +1,11 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
-import * as THREE from "three"
-import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
 
 // NOTE: This component requires @react-three/fiber, @react-three/drei, @react-three/rapier, and meshline to work.
 // The full Three.js-based Lanyard is provided as a thin wrapper below.
 // For production use, install: @react-three/fiber @react-three/drei @react-three/rapier meshline
 
-const BLANK_PIXEL =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
 
 export type LanyardProps = {
   position?: [number, number, number]
@@ -26,18 +22,8 @@ export type LanyardProps = {
 // This is a simplified wrapper. The full interactive 3D lanyard card requires
 // @react-three/fiber and @react-three/rapier, which add significant bundle weight.
 // Use the full implementation from the React Bits reference when those deps are available.
-export function Lanyard({
-  position = [0, 0, 30],
-  gravity = [0, -40, 0],
-  fov = 20,
-  transparent = true,
-  frontImage = null,
-  backImage = null,
-  imageFit = "cover",
-  lanyardImage = null,
-  lanyardWidth = 1,
-}: LanyardProps) {
-  const [isMobile, setIsMobile] = useState(
+export function Lanyard(_props: LanyardProps) {
+  const [, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768
   )
 

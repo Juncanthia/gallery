@@ -1,6 +1,6 @@
 "use client";
-import { delay, motion } from "motion/react";
-import React, { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import React, { useEffect, useState } from "react";
 import {
   InboxIcon,
   Message01Icon,

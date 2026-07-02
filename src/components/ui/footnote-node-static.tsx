@@ -1,4 +1,3 @@
-import * as React from 'react';
 
 import type { TFootnoteElement } from '@platejs/footnote';
 import type { SlateElementProps } from 'platejs/static';

@@ -44,8 +44,8 @@ export function DataTableViewOptions() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
-          size="icon"
+          variant="outlined"
+          shape="square"
           role="combobox"
           aria-expanded={open}
           className="shadow-none"
@@ -104,8 +104,8 @@ export function DataTableViewOptions() {
                         <span data-slot="command-shortcut" className="hidden" />
                         {enableColumnOrdering && !search ? (
                           <SortableDragHandle
-                            variant="ghost"
-                            size="icon"
+                            variant="text"
+                            shape="square"
                             className="text-muted-foreground hover:text-foreground focus:bg-muted focus:text-foreground ml-auto size-5"
                           >
                             <GripVertical

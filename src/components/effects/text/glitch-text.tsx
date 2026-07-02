@@ -11,8 +11,6 @@ export type GlitchTextProps = {
   className?: string
 }
 
-export type { GlitchTextProps }
-
 export function GlitchText({
   children,
   speed = 1,

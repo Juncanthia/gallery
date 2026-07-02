@@ -16,7 +16,7 @@ import {
   useEditorSelector,
 } from 'platejs/react';
 
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button-variants';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -402,8 +402,9 @@ function ColorCustom({
           <DropdownMenuItem
             className={cn(
               buttonVariants({
-                size: 'icon',
-                variant: 'outline',
+                size: 'small',
+                shape: 'circle',
+                variant: 'outlined',
               }),
               'flex size-8 items-center justify-center rounded-full'
             )}
@@ -478,8 +479,9 @@ function ColorDropdownMenuItem({
     <DropdownMenuItem
       className={cn(
         buttonVariants({
-          size: 'icon',
-          variant: 'outline',
+          size: 'small',
+          shape: 'circle',
+          variant: 'outlined',
         }),
         'my-1 flex size-6 items-center justify-center rounded-full border border-muted border-solid p-0 transition-all hover:scale-125',
         !isBrightColor && 'border-transparent text-white',

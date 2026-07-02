@@ -1,8 +1,29 @@
 "use client";
 
 import type { Action } from "./schema";
+import type { ButtonColor, ButtonVariant } from "./_adapter";
 import { cn, Button } from "./_adapter";
 import { useActionButtons } from "./use-action-buttons";
+
+// `Action.variant` uses the shadcn-style enum for portability across projects
+// (see ./schema); map it to this project's antd-style Button variant/color.
+function toButtonVisual(
+  variant: Action["variant"],
+): { variant: ButtonVariant; color?: ButtonColor } {
+  switch (variant) {
+    case "destructive":
+      return { variant: "solid", color: "danger" };
+    case "secondary":
+      return { variant: "filled" };
+    case "ghost":
+      return { variant: "text" };
+    case "outline":
+      return { variant: "outlined" };
+    case "default":
+    default:
+      return { variant: "solid" };
+  }
+}
 
 export interface ActionButtonsProps {
   actions: Action[];
@@ -41,12 +62,13 @@ export function ActionButtons({
     >
       {resolvedActions.map((action) => {
         const label = action.currentLabel;
-        const variant = action.variant || "default";
+        const { variant, color } = toButtonVisual(action.variant);
 
         return (
           <Button
             key={action.id}
             variant={variant}
+            color={color}
             onClick={() => runAction(action.id)}
             disabled={action.isDisabled}
             className={cn(

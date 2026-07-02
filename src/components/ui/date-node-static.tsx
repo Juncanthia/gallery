@@ -1,4 +1,3 @@
-import * as React from 'react';
 
 import { getDateDisplayLabel } from '@platejs/date';
 import type { TDateElement } from 'platejs';

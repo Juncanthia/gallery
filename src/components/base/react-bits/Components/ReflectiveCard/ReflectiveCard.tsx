@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Fingerprint, User, Activity, Lock } from 'lucide-react';
+import { Fingerprint, Activity, Lock } from 'lucide-react';
 
 interface ReflectiveCardProps {
   blurStrength?: number;
@@ -31,7 +31,7 @@ const ReflectiveCard: React.FC<ReflectiveCardProps> = ({
   style = {}
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [streamActive, setStreamActive] = useState(false);
+  const [, setStreamActive] = useState(false);
 
   useEffect(() => {
     let stream: MediaStream | null = null;

@@ -28,7 +28,7 @@ import {
   usePluginOption,
 } from 'platejs/react';
 
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button-variants';
 import { Separator } from '@/components/ui/separator';
 
 const popoverVariants = cva(
@@ -131,7 +131,7 @@ export function LinkFloatingToolbar({
   ) : (
     <div className="box-content flex items-center">
       <button
-        className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+        className={buttonVariants({ size: 'small', variant: 'text' })}
         type="button"
         {...editButtonProps}
       >
@@ -146,8 +146,8 @@ export function LinkFloatingToolbar({
 
       <button
         className={buttonVariants({
-          size: 'sm',
-          variant: 'ghost',
+          size: 'small',
+          variant: 'text',
         })}
         type="button"
         {...unlinkButtonProps}
@@ -193,8 +193,8 @@ function LinkOpenButton() {
     <a
       {...attributes}
       className={buttonVariants({
-        size: 'sm',
-        variant: 'ghost',
+        size: 'small',
+        variant: 'text',
       })}
       onMouseOver={(e) => {
         e.stopPropagation();

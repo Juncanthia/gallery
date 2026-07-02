@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import type {
+  SVGMotionProps,
+  Easing} from "motion/react";
 import {
   m,
   LazyMotion,
-  domAnimation,
-  SVGMotionProps,
-  Easing,
+  domAnimation
 } from "motion/react";
 
 interface MailIconProps extends SVGMotionProps<SVGSVGElement> {

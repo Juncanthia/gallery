@@ -166,9 +166,9 @@ function CarouselNavButton({
 
   return (
     <Button
-      type="button"
-      variant="secondary"
-      size="sm"
+      htmlType="button"
+      variant="filled"
+      size="small"
       className={cn(
         "pointer-events-none scale-90 border-none opacity-0",
         "bg-background/60 absolute inset-y-0 z-20 my-auto hidden h-[6cqh] min-h-[50px] rounded-2xl backdrop-blur-lg",

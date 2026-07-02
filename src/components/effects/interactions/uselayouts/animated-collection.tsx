@@ -17,7 +17,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/components/templates/manifest/lib/utils";
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface CollectionItem {
   id: string;

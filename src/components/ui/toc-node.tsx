@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 
 import type { PlateElementProps } from 'platejs/react';
 
@@ -39,7 +38,7 @@ export function TocElement(props: PlateElementProps) {
           headingList.map((item) => (
             <Button
               key={item.id}
-              variant="ghost"
+              variant="text"
               className={headingItemVariants({
                 active: item.id === activeContentId,
                 depth: item.depth as 1 | 2 | 3,

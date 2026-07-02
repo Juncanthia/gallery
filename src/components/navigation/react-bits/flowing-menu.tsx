@@ -3,7 +3,6 @@
 import { useRef, useEffect, useState } from "react"
 import { gsap } from "gsap"
 
-import { cn } from "@/lib/utils"
 
 type FlowingMenuItem = {
   link: string

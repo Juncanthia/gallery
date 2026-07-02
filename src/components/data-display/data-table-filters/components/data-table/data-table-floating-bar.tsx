@@ -47,8 +47,8 @@ export function DataTableFloatingBar<TData>({
             <Tooltip delayDuration={100}>
               <TooltipTrigger asChild>
                 <Button
-                  variant="ghost"
-                  size="icon"
+                  variant="text"
+                  shape="square"
                   onClick={() => table.resetRowSelection()}
                   className="text-muted-foreground hover:text-foreground size-5 rounded-sm p-0.5 transition-colors"
                   aria-label="Deselect all"

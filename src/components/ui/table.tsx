@@ -378,20 +378,16 @@ function Table<T extends TableRecord = TableRecord>({
                               String(getRecordKey(record, index, rowKey))
                             )
                           )
+                            ? true
+                            : pagedData.some((record, index) =>
+                                mergedSelectedRowKeys.map(String).includes(
+                                  String(getRecordKey(record, index, rowKey))
+                                )
+                              )
+                              ? "indeterminate"
+                              : false
                         }
-                        indeterminate={
-                          pagedData.some((record, index) =>
-                            mergedSelectedRowKeys.map(String).includes(
-                              String(getRecordKey(record, index, rowKey))
-                            )
-                          ) &&
-                          !pagedData.every((record, index) =>
-                            mergedSelectedRowKeys.map(String).includes(
-                              String(getRecordKey(record, index, rowKey))
-                            )
-                          )
-                        }
-                        onChange={(checked) => {
+                        onCheckedChange={(checked) => {
                           const pageKeys = pagedData.map((record, index) =>
                             getRecordKey(record, index, rowKey)
                           )

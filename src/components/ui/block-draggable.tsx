@@ -148,7 +148,7 @@ function Draggable(props: PlateElementProps) {
             >
               <Button
                 ref={handleRef}
-                variant="ghost"
+                variant="text"
                 className="-left-0 absolute h-6 w-full p-0"
                 style={{ top: `${dragButtonTop + 3}px` }}
                 data-plate-prevent-deselect

@@ -3,9 +3,9 @@ import { Navigate } from "@tanstack/react-router"
 export function IndexRedirect() {
   return (
     <Navigate
-      params={{ slug: "button" }}
+      params={{ _splat: "button" }}
       replace
-      to="/components/$slug"
+      to="/components/$"
     />
   )
 }

@@ -564,7 +564,7 @@ function ToolbarIconButton({
     <ToolbarTooltip label={label}>
       <Button
         htmlType="button"
-        variant={active ? "secondary" : "ghost"}
+        variant={active ? "filled" : "text"}
         size="small" shape="square"
         aria-label={label}
         data-pressed={active ? "" : undefined}
@@ -973,10 +973,9 @@ function DocxEditorToolbar({
                 }
               }}
               disabled={!canEdit}
-              modal={false}
             >
               <SelectTrigger
-                size="small"
+                size="sm"
                 className="w-[136px] min-w-[136px]"
                 aria-label="Paragraph style"
               >
@@ -998,7 +997,6 @@ function DocxEditorToolbar({
                     <SelectItem
                       key={option.id}
                       value={option.id}
-                      label={option.name}
                       className="relative min-w-[190px]"
                       onFocus={() => openParagraphStylePreview(option.id)}
                       onPointerEnter={() => openParagraphStylePreview(option.id)}
@@ -1039,10 +1037,9 @@ function DocxEditorToolbar({
               }
             }}
             disabled={!canEdit}
-            modal={false}
           >
             <SelectTrigger
-              size="small"
+              size="sm"
               className="w-[156px] min-w-[156px]"
               aria-label="Font family"
             >
@@ -1070,10 +1067,9 @@ function DocxEditorToolbar({
               }
             }}
             disabled={!canEdit}
-            modal={false}
           >
             <SelectTrigger
-              size="small"
+              size="sm"
               className="w-[86px] min-w-[86px]"
               aria-label="Font size"
             >
@@ -1101,10 +1097,9 @@ function DocxEditorToolbar({
               }
             }}
             disabled={!canEdit}
-            modal={false}
           >
             <SelectTrigger
-              size="small"
+              size="sm"
               className="w-[94px] min-w-[94px]"
               aria-label="Line spacing"
             >
@@ -1138,19 +1133,19 @@ function DocxEditorToolbar({
             }
           >
             <ToolbarTooltip label="Bold">
-              <ToggleGroupItem aria-label="Bold" size="small" value="bold">
+              <ToggleGroupItem aria-label="Bold" size="sm" value="bold">
                 <HugeiconsIcon icon={TextBoldIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Italic">
-              <ToggleGroupItem aria-label="Italic" size="small" value="italic">
+              <ToggleGroupItem aria-label="Italic" size="sm" value="italic">
                 <HugeiconsIcon icon={TextItalicIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Underline">
               <ToggleGroupItem
                 aria-label="Underline"
-                size="small"
+                size="sm"
                 value="underline"
               >
                 <HugeiconsIcon icon={TextUnderlineIcon} className="size-4" />
@@ -1159,7 +1154,7 @@ function DocxEditorToolbar({
             <ToolbarTooltip label="Strikethrough">
               <ToggleGroupItem
                 aria-label="Strikethrough"
-                size="small"
+                size="sm"
                 value="strike"
               >
                 <HugeiconsIcon
@@ -1171,7 +1166,7 @@ function DocxEditorToolbar({
             <ToolbarTooltip label="Superscript">
               <ToggleGroupItem
                 aria-label="Superscript"
-                size="small"
+                size="sm"
                 value="superscript"
               >
                 <HugeiconsIcon icon={TextSuperscriptIcon} className="size-4" />
@@ -1180,7 +1175,7 @@ function DocxEditorToolbar({
             <ToolbarTooltip label="Subscript">
               <ToggleGroupItem
                 aria-label="Subscript"
-                size="small"
+                size="sm"
                 value="subscript"
               >
                 <HugeiconsIcon icon={TextSubscriptIcon} className="size-4" />
@@ -1423,10 +1418,9 @@ function DocxEditorToolbar({
               value={zoomScale.toString()}
               onValueChange={(value) => setZoomScale(Number(value))}
               disabled={controlsDisabled}
-              modal={false}
             >
               <SelectTrigger
-                size="small"
+                size="sm"
                 className="w-[84px] min-w-[84px]"
                 aria-label="Zoom level"
               >

@@ -1,4 +1,5 @@
-import { useRef, useEffect, useState, useMemo, useId, FC, PointerEvent } from 'react';
+import type { FC, PointerEvent } from 'react';
+import { useRef, useEffect, useState, useMemo, useId } from 'react';
 
 interface CurvedLoopProps {
   marqueeText?: string;

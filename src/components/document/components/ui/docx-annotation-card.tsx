@@ -71,7 +71,7 @@ function DocxAnnotationCard({
         </div>
         <Badge
           variant={badgeVariant}
-          size="sm"
+          size="small"
           className="max-w-[92px] truncate"
         >
           {badge}

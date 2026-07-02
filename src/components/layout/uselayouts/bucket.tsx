@@ -1,7 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
-import React, { useEffect, useState } from "react";
-import { Sparkles, ShieldCheck, Zap, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   SecurityCheckIcon,
   ZapIcon,

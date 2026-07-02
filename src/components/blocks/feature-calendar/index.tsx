@@ -12,7 +12,13 @@ import {
   useMemo,
 } from "react";
 import { Button } from "@/components/ui/button";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 export type CalendarState = {
@@ -69,15 +75,24 @@ const CalendarSelect = ({
   className,
 }: CalendarSelectProps) => (
   <Select
-    className={cn("w-40 capitalize", className)}
     onValueChange={(nextValue: string | undefined) => {
       if (nextValue) {
         setValue(nextValue);
       }
     }}
-    options={data}
     value={value}
-  />
+  >
+    <SelectTrigger className={cn("w-40 capitalize", className)}>
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent>
+      {data.map((item) => (
+        <SelectItem key={item.value} value={item.value}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
 );
 
 export const monthsForLocale = (

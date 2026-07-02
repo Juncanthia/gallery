@@ -702,7 +702,7 @@ function ToolbarIconButton({
     <ToolbarTooltip label={label}>
       <Button
         htmlType="button"
-        variant={active ? "secondary" : "ghost"}
+        variant={active ? "filled" : "text"}
         size="small" shape="square"
         aria-label={label}
         data-pressed={active ? "" : undefined}
@@ -768,7 +768,7 @@ function MergeCellsMenu({
         >
           <Button
             htmlType="button"
-            variant={isMerged ? "secondary" : "ghost"}
+            variant={isMerged ? "filled" : "text"}
             size="small"
             aria-label="Merge & Center"
             className="h-7 rounded-r-none border-0 px-2.5 before:rounded-r-none"
@@ -785,7 +785,7 @@ function MergeCellsMenu({
         <DropdownMenuTrigger asChild>
           <Button
             htmlType="button"
-            variant={isMerged ? "secondary" : "ghost"}
+            variant={isMerged ? "filled" : "text"}
             size="small" shape="square"
             aria-label="Merge cells options"
             className="h-7 w-6 rounded-l-none border-0 px-0 before:rounded-l-none"
@@ -850,7 +850,7 @@ function NumberFormatSelect({
       disabled={disabled}
     >
       <SelectTrigger
-        size="small"
+        size="sm"
         className={cn(
           "w-[132px] min-w-[132px]",
           XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -1640,10 +1640,9 @@ function EditorToolbar({
                 }
               }}
               disabled={!canStyleSelection}
-              modal={false}
             >
               <SelectTrigger
-                size="small"
+                size="sm"
                 className={cn(
                   "w-[132px] min-w-[132px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -1674,10 +1673,9 @@ function EditorToolbar({
                 applyStyle({ font: { size: nextFontSize } })
               }}
               disabled={!canStyleSelection}
-              modal={false}
             >
               <SelectTrigger
-                size="small"
+                size="sm"
                 className={cn(
                   "w-[78px] min-w-[78px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -1711,19 +1709,19 @@ function EditorToolbar({
             }
           >
             <ToolbarTooltip label="Bold">
-              <ToggleGroupItem aria-label="Bold" size="small" value="bold">
+              <ToggleGroupItem aria-label="Bold" size="sm" value="bold">
                 <HugeiconsIcon icon={TextBoldIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Italic">
-              <ToggleGroupItem aria-label="Italic" size="small" value="italic">
+              <ToggleGroupItem aria-label="Italic" size="sm" value="italic">
                 <HugeiconsIcon icon={TextItalicIcon} className="size-4" />
               </ToggleGroupItem>
             </ToolbarTooltip>
             <ToolbarTooltip label="Underline">
               <ToggleGroupItem
                 aria-label="Underline"
-                size="small"
+                size="sm"
                 value="underline"
               >
                 <HugeiconsIcon icon={TextUnderlineIcon} className="size-4" />
@@ -1732,7 +1730,7 @@ function EditorToolbar({
             <ToolbarTooltip label="Strikethrough">
               <ToggleGroupItem
                 aria-label="Strikethrough"
-                size="small"
+                size="sm"
                 value="strikethrough"
               >
                 <HugeiconsIcon
@@ -1782,6 +1780,7 @@ function EditorToolbar({
           <ToolbarSeparator />
           <div className="flex shrink-0 items-center gap-1">
             <ToggleGroup
+              type="multiple"
               className="shrink-0"
               disabled={!canStyleSelection}
               spacing="default"
@@ -1790,7 +1789,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align left">
                 <ToggleGroupItem
                   aria-label="Align left"
-                  size="small"
+                  size="sm"
                   value="left"
                   onClick={() => applyHorizontalAlignment("left")}
                 >
@@ -1803,7 +1802,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align center">
                 <ToggleGroupItem
                   aria-label="Align center"
-                  size="small"
+                  size="sm"
                   value="center"
                   onClick={() => applyHorizontalAlignment("center")}
                 >
@@ -1816,7 +1815,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align right">
                 <ToggleGroupItem
                   aria-label="Align right"
-                  size="small"
+                  size="sm"
                   value="right"
                   onClick={() => applyHorizontalAlignment("right")}
                 >
@@ -1828,6 +1827,7 @@ function EditorToolbar({
               </ToolbarTooltip>
             </ToggleGroup>
             <ToggleGroup
+              type="multiple"
               className="shrink-0"
               disabled={!canStyleSelection}
               spacing="default"
@@ -1836,7 +1836,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align top">
                 <ToggleGroupItem
                   aria-label="Align top"
-                  size="small"
+                  size="sm"
                   value="top"
                   onClick={() => applyVerticalAlignment("top")}
                 >
@@ -1849,7 +1849,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align middle">
                 <ToggleGroupItem
                   aria-label="Align middle"
-                  size="small"
+                  size="sm"
                   value="center"
                   onClick={() => applyVerticalAlignment("center")}
                 >
@@ -1862,7 +1862,7 @@ function EditorToolbar({
               <ToolbarTooltip label="Align bottom">
                 <ToggleGroupItem
                   aria-label="Align bottom"
-                  size="small"
+                  size="sm"
                   value="bottom"
                   onClick={() => applyVerticalAlignment("bottom")}
                 >
@@ -1945,7 +1945,7 @@ function EditorToolbar({
               disabled={!hasWorkbook}
             >
               <SelectTrigger
-                size="small"
+                size="sm"
                 className={cn(
                   "w-[150px] min-w-[150px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS
@@ -1987,10 +1987,9 @@ function EditorToolbar({
               value={currentZoom.toString()}
               onValueChange={(value) => setZoomScale(Number(value))}
               disabled={!hasWorkbook}
-              modal={false}
             >
               <SelectTrigger
-                size="small"
+                size="sm"
                 className={cn(
                   "w-[84px] min-w-[84px]",
                   XLSX_EDITOR_SELECT_CHROME_CLASS

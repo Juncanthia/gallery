@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type {
+  Transition} from "motion/react";
 import {
   LazyMotion,
   domAnimation,
   m,
-  AnimatePresence,
-  Transition,
+  AnimatePresence
 } from "motion/react";
 import cn from "clsx";
 

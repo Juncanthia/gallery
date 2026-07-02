@@ -384,7 +384,7 @@ function SpeedDialTrigger(props: React.ComponentProps<typeof Button>) {
 
   const onMouseEnter = React.useCallback(
     (event: React.MouseEvent<TriggerElement>) => {
-      onMouseEnterProp?.(event);
+      onMouseEnterProp?.(event as React.MouseEvent<HTMLButtonElement>);
       if (event.defaultPrevented || activationMode !== "hover" || isDisabled)
         return;
 
@@ -413,7 +413,7 @@ function SpeedDialTrigger(props: React.ComponentProps<typeof Button>) {
 
   const onMouseLeave = React.useCallback(
     (event: React.MouseEvent<TriggerElement>) => {
-      onMouseLeaveProp?.(event);
+      onMouseLeaveProp?.(event as React.MouseEvent<HTMLButtonElement>);
       if (event.defaultPrevented || activationMode !== "hover" || isDisabled)
         return;
 

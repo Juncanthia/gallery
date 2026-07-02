@@ -104,7 +104,7 @@ const ColumnDragHandle = React.memo(function ColumnDragHandle() {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant="ghost" className="!px-1 h-5">
+          <Button variant="text" className="!px-1 h-5">
             <GripHorizontal
               className="text-muted-foreground"
               onClick={(event) => {
@@ -183,35 +183,35 @@ function ColumnFloatingToolbar({ children }: React.PropsWithChildren) {
       >
         <div className="box-content flex h-8 items-center">
           <Button
-            variant="ghost"
+            variant="text"
             className="size-8"
             onClick={() => onColumnChange(['50%', '50%'])}
           >
             <DoubleColumnOutlined />
           </Button>
           <Button
-            variant="ghost"
+            variant="text"
             className="size-8"
             onClick={() => onColumnChange(['33%', '33%', '33%'])}
           >
             <ThreeColumnOutlined />
           </Button>
           <Button
-            variant="ghost"
+            variant="text"
             className="size-8"
             onClick={() => onColumnChange(['70%', '30%'])}
           >
             <RightSideDoubleColumnOutlined />
           </Button>
           <Button
-            variant="ghost"
+            variant="text"
             className="size-8"
             onClick={() => onColumnChange(['30%', '70%'])}
           >
             <LeftSideDoubleColumnOutlined />
           </Button>
           <Button
-            variant="ghost"
+            variant="text"
             className="size-8"
             onClick={() => onColumnChange(['25%', '50%', '25%'])}
           >
@@ -219,7 +219,7 @@ function ColumnFloatingToolbar({ children }: React.PropsWithChildren) {
           </Button>
 
           <Separator orientation="vertical" className="mx-1 h-6" />
-          <Button variant="ghost" className="size-8" {...buttonProps}>
+          <Button variant="text" className="size-8" {...buttonProps}>
             <Trash2Icon />
           </Button>
         </div>

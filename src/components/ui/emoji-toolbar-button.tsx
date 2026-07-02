@@ -401,15 +401,15 @@ function EmojiPickerSearchAndClear({
       </div>
       {searchValue && (
         <Button
-          size="icon"
-          variant="ghost"
+          shape="square"
+          variant="text"
           className={cn(
             '-translate-y-1/2 absolute top-1/2 right-0.5 flex size-8 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-popover-foreground hover:bg-transparent'
           )}
           onClick={clearSearch}
           title={i18n.clear}
           aria-label="Clear"
-          type="button"
+          htmlType="button"
         >
           {emojiSearchIcons.delete}
         </Button>
@@ -503,8 +503,8 @@ function EmojiPickerNavigation({
               <Tooltip key={id}>
                 <TooltipTrigger asChild>
                   <Button
-                    size="sm"
-                    variant="ghost"
+                    size="small"
+                    variant="text"
                     className={cn(
                       'h-fit rounded-full fill-current p-1.5 text-muted-foreground hover:bg-muted hover:text-muted-foreground',
                       id === focusedCategory &&
@@ -514,7 +514,7 @@ function EmojiPickerNavigation({
                       onClick(id);
                     }}
                     aria-label={i18n.categories[id]}
-                    type="button"
+                    htmlType="button"
                   >
                     <span className="inline-flex size-5 items-center justify-center">
                       {icons.categories[id].outline}

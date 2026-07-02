@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion, type TargetAndTransition } from "motion/react"
 import { useEffect, useRef, useState, useMemo } from "react"
 
 const buildKeyframes = (
@@ -121,7 +121,7 @@ export function BlurText({
             className="inline-block will-change-[transform,filter,opacity]"
             key={index}
             initial={fromSnapshot}
-            animate={inView ? animateKeyframes : fromSnapshot}
+            animate={inView ? (animateKeyframes as TargetAndTransition) : fromSnapshot}
             transition={spanTransition}
             onAnimationComplete={
               index === elements.length - 1

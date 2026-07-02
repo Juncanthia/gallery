@@ -35,17 +35,17 @@ const ModeWrapper = memo(function ModeWrapper({
   ...props
 }: any) {
   const ref = useRef<THREE.Mesh>(null!)
-  const { nodes } = useGLTF(glb)
+  const { nodes } = useGLTF(glb as string)
   const buffer = useFBO()
   const { viewport: vp } = useThree()
   const [scene] = useState(() => new THREE.Scene())
   const geoWidthRef = useRef(1)
 
   useEffect(() => {
-    const geo = nodes[geometryKey]?.geometry
+    const geo = (nodes[geometryKey] as THREE.Mesh | undefined)?.geometry
     if (geo) {
       geo.computeBoundingBox()
-      geoWidthRef.current = geo.boundingBox.max.x - geo.boundingBox.min.x || 1
+      geoWidthRef.current = geo.boundingBox!.max.x - geo.boundingBox!.min.x || 1
     }
   }, [nodes, geometryKey])
 
@@ -82,7 +82,7 @@ const ModeWrapper = memo(function ModeWrapper({
         ref={ref}
         scale={scale ?? 0.15}
         rotation-x={Math.PI / 2}
-        geometry={nodes[geometryKey]?.geometry}
+        geometry={(nodes[geometryKey] as THREE.Mesh | undefined)?.geometry}
         {...props}
       >
         <MeshTransmissionMaterial
@@ -137,7 +137,7 @@ function NavItems({ items }: { items: NavItem[] }) {
     tablet: { max: 1023, spacing: 0.24, fontSize: 0.035 },
     desktop: { max: Infinity, spacing: 0.3, fontSize: 0.035 },
   }
-  const getDevice = () => {
+  const getDevice = (): "mobile" | "tablet" | "desktop" => {
     const w = window.innerWidth
     return w <= DEVICE.mobile.max ? "mobile" : w <= DEVICE.tablet.max ? "tablet" : "desktop"
   }
@@ -175,12 +175,12 @@ function NavItems({ items }: { items: NavItem[] }) {
           color="white"
           anchorX="center"
           anchorY="middle"
-          depthWrite={false}
+          material-depthWrite={false}
           outlineWidth={0}
           outlineBlur="20%"
           outlineColor="#000"
           outlineOpacity={0.5}
-          depthTest={false}
+          material-depthTest={false}
           renderOrder={10}
           onClick={(e) => { e.stopPropagation(); handleNavigate(link) }}
           onPointerOver={() => (document.body.style.cursor = "pointer")}
@@ -199,19 +199,20 @@ function Images() {
   const { height } = useThree((s) => s.viewport)
 
   useFrame(() => {
-    group.current.children[0].material.zoom = 1 + data.range(0, 1 / 3) / 3
-    group.current.children[1].material.zoom = 1 + data.range(0, 1 / 3) / 3
-    group.current.children[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
-    group.current.children[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
-    group.current.children[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
+    const images = group.current.children as unknown as { material: { zoom: number } }[]
+    images[0].material.zoom = 1 + data.range(0, 1 / 3) / 3
+    images[1].material.zoom = 1 + data.range(0, 1 / 3) / 3
+    images[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
+    images[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
+    images[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2
   })
 
   return (
     <group ref={group}>
-      <Image position={[-2, 0, 0]} scale={[3, height / 1.1, 1]} url="/assets/demo/cs1.webp" />
+      <Image position={[-2, 0, 0]} scale={[3, height / 1.1]} url="/assets/demo/cs1.webp" />
       <Image position={[2, 0, 3]} scale={3} url="/assets/demo/cs2.webp" />
-      <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="/assets/demo/cs3.webp" />
-      <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="/assets/demo/cs1.webp" />
+      <Image position={[-2.05, -height, 6]} scale={[1, 3]} url="/assets/demo/cs3.webp" />
+      <Image position={[-0.6, -height, 9]} scale={[1, 2]} url="/assets/demo/cs1.webp" />
       <Image position={[0.75, -height, 10.5]} scale={1.5} url="/assets/demo/cs2.webp" />
     </group>
   )

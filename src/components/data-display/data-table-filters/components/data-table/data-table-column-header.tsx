@@ -22,7 +22,7 @@ export function DataTableColumnHeader<TData, TValue>({
 
   return (
     <Button
-      variant="ghost"
+      variant="text"
       onClick={() => {
         column.toggleSorting(undefined);
       }}

@@ -5,7 +5,7 @@ import { format as formatDate } from "date-fns"
 import { Calendar as CalendarIcon, X as XIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
-import { Popover } from "@/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   selectTriggerVariants,
   type SelectSize,
@@ -93,11 +93,8 @@ function DatePicker(props: DatePickerProps) {
   const canClear = allowClear && value && !disabled
 
   return (
-    <Popover
-      open={open}
-      onOpenChange={handleOpenChange}
-      placement="bottomLeft"
-      trigger={
+    <Popover open={open} onOpenChange={handleOpenChange}>
+      <PopoverTrigger asChild>
         <button
           type="button"
           className={cn(
@@ -123,13 +120,14 @@ function DatePicker(props: DatePickerProps) {
             </span>
           )}
         </button>
-      }
-      content={
+      </PopoverTrigger>
+      <PopoverContent sideOffset={4} className="p-0">
         <div className="p-1">
           <Calendar
-            value={value}
-            onChange={handleSelect}
-            disabledDate={disabledDate}
+            mode="single"
+            selected={value}
+            onSelect={(date) => date && handleSelect(date)}
+            disabled={disabledDate}
             className="p-0"
           />
           {value && (
@@ -148,9 +146,8 @@ function DatePicker(props: DatePickerProps) {
             </div>
           )}
         </div>
-      }
-      contentProps={{ sideOffset: 4, className: "p-0" }}
-    />
+      </PopoverContent>
+    </Popover>
   )
 }
 

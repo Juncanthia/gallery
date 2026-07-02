@@ -26,7 +26,7 @@ void main() {
   gl_FragColor = texture2D(uTexture, uv - 0.02 * offset.rg);
 }`
 
-type GridDistortionProps = {
+export type GridDistortionProps = {
   grid?: number
   mouse?: number
   strength?: number
@@ -143,7 +143,7 @@ export function GridDistortion({
       animationIdRef.current = requestAnimationFrame(animate)
       if (!renderer || !scene || !camera) return
       uniforms.time.value += 0.05
-      const imgData = dataTexture.image.data
+      const imgData = data
       for (let i = 0; i < size * size; i++) { imgData[i * 4] *= relaxation; imgData[i * 4 + 1] *= relaxation }
       const gridMouseX = size * mouseState.x, gridMouseY = size * mouseState.y
       const maxDist = size * mouse

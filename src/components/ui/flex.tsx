@@ -101,7 +101,9 @@ function Flex<T extends React.ElementType = "div">({
   style,
   ...props
 }: FlexProps<T>) {
-  const Component = as ?? "div";
+  const Component = (as ?? "div") as unknown as React.ComponentType<
+    React.ComponentPropsWithoutRef<"div"> & Record<string, unknown>
+  >;
   const mergedDirection = vertical || orientation === "vertical" ? "col" : direction;
   const wrapValue = getWrapValue(wrap);
   const gapClass = gap === undefined ? undefined : presetGapClasses[gap];

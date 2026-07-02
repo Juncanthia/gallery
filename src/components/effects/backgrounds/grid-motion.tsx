@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 
-type GridMotionProps = {
+export type GridMotionProps = {
   items?: string[]
   gradientColor?: string
 }

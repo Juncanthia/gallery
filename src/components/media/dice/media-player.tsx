@@ -2368,13 +2368,15 @@ function MediaPlayerTime(props: MediaPlayerTimeProps) {
   );
 }
 
-interface MediaPlayerPlaybackSpeedProps
-  extends Omit<React.ComponentProps<typeof DropdownMenu>, "dir">,
-    Pick<React.ComponentProps<typeof DropdownMenuContent>, "sideOffset">,
-    React.ComponentProps<typeof DropdownMenuTrigger>,
-    React.ComponentProps<typeof Button> {
-  speeds?: number[];
-}
+type MediaPlayerPlaybackSpeedProps = Omit<
+  React.ComponentProps<typeof DropdownMenu>,
+  "dir"
+> &
+  Pick<React.ComponentProps<typeof DropdownMenuContent>, "sideOffset"> &
+  React.ComponentProps<typeof DropdownMenuTrigger> &
+  React.ComponentProps<typeof Button> & {
+    speeds?: number[];
+  };
 
 function MediaPlayerPlaybackSpeed(props: MediaPlayerPlaybackSpeedProps) {
   const {

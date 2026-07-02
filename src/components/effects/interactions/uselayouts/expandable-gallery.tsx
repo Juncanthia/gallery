@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
-import React, { useState, useId, useRef } from "react";
+import { useState, useId, useRef } from "react";
 import { useOutsideClick } from "@/components/_shared/uselayouts/hooks/use-outside-click";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";

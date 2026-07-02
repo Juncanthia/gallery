@@ -169,7 +169,7 @@ function renderNodeIcon(icon: FileTreeDataNode['icon'], fallback: React.ElementT
     return icon;
   }
 
-  const Icon = (icon ?? fallback) as React.ElementType;
+  const Icon = (icon ?? fallback) as React.ComponentType<{ className?: string }>;
   return <Icon className="size-4.5" />;
 }
 

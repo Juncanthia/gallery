@@ -26,28 +26,7 @@ export type LaserFlowProps = {
   color?: string
 }
 
-export function LaserFlow({
-  className,
-  style,
-  wispDensity = 1,
-  dpr,
-  mouseSmoothTime = 0.0,
-  mouseTiltStrength = 0.01,
-  horizontalBeamOffset = 0.1,
-  verticalBeamOffset = 0.0,
-  flowSpeed = 0.35,
-  verticalSizing = 2.0,
-  horizontalSizing = 0.5,
-  fogIntensity = 0.45,
-  fogScale = 0.3,
-  wispSpeed = 15.0,
-  wispIntensity = 5.0,
-  flowStrength = 0.25,
-  decay = 1.1,
-  falloffStart = 1.2,
-  fogFallSpeed = 0.6,
-  color = "#FF79C6",
-}: LaserFlowProps) {
+export function LaserFlow({ className, style, dpr, horizontalBeamOffset = 0.1, verticalSizing = 2.0, horizontalSizing = 0.5, fogIntensity = 0.45, fogScale = 0.3, wispSpeed = 15.0, wispIntensity = 5.0, fogFallSpeed = 0.6, color = "#FF79C6" }: LaserFlowProps) {
   const mountRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -92,7 +71,7 @@ export function LaserFlow({
     }
     canvas.addEventListener("pointermove", onMove, { passive: true })
 
-    const animate = (t: number) => {
+    const animate = (_t: number) => {
       if (!ctx) return
       const dt = Math.min(0.033, 0.016)
       time += dt
@@ -110,9 +89,7 @@ export function LaserFlow({
 
       const cx = w * (0.5 + horizontalBeamOffset)
       const cy = h * 0.5
-      const px = mouseTarget.x
-      const py = mouseTarget.y
-
+            
       // Draw a stylized laser beam
       const grad = ctx.createLinearGradient(cx - 200, 0, cx + 200, 0)
       const c = hexToRgb(color)

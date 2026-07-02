@@ -9,5 +9,5 @@ export const Route = createFileRoute("/components/$")({
 function ComponentPage() {
   const { _splat } = Route.useParams()
 
-  return <ComponentDocPage slug={_splat} />
+  return <ComponentDocPage slug={_splat ?? ""} />
 }

@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
 
 export type CubesProps = {
   gridSize?: number

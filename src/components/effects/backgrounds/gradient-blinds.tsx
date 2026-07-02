@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, type CSSProperties } from "react"
 import { Renderer, Program, Mesh, Triangle } from "ogl"
 
 const MAX_COLORS = 8
@@ -133,7 +133,7 @@ export type GradientBlindsProps = {
   spotlightOpacity?: number
   distortAmount?: number
   shineDirection?: string
-  mixBlendMode?: string
+  mixBlendMode?: CSSProperties["mixBlendMode"]
 }
 
 export function GradientBlinds({

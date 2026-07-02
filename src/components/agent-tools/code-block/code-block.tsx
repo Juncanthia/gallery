@@ -375,8 +375,8 @@ function CodeBlockHeader({ className }: CodeBlockSectionProps) {
         )}
       </div>
       <Button
-        variant="ghost"
-        size="sm"
+        variant="text"
+        size="small"
         onClick={copyCode}
         className="h-7 w-7 p-0"
         aria-label={isCopied ? "Copied" : "Copy code"}
@@ -417,7 +417,7 @@ function CodeBlockCollapseToggle({ className }: CodeBlockSectionProps) {
   return (
     <CollapsibleTrigger asChild>
       <Button
-        variant="ghost"
+        variant="text"
         onClick={toggleExpanded}
         className={cn(
           "text-muted-foreground w-full rounded-none border-t font-normal",

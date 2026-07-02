@@ -258,12 +258,8 @@ function smoothDampFloat(current: number, target: number, velRef: { v: number },
   return { value: out, v: velRef.v }
 }
 
-function medianPush(buf: number[], v: number, maxLen: number) { buf.push(v); if (buf.length > maxLen) buf.shift() }
-function median(buf: number[]) { if (buf.length === 0) return 0; const a = [...buf].sort((x, y) => x - y); const mid = Math.floor(a.length / 2); return a.length % 2 ? a[mid] : (a[mid - 1] + a[mid]) * 0.5 }
-function centroid(points: { x: number; y: number }[]) { let x = 0, y = 0; const n = points.length || 1; for (const p of points) { x += p.x; y += p.y } return { x: x / n, y: y / n } }
-function dist2(a: { x: number; y: number }, b: { x: number; y: number }) { return Math.hypot(a.x - b.x, a.y - b.y) }
 
-type GridScanProps = {
+export type GridScanProps = {
   enableWebcam?: boolean
   showPreview?: boolean
   modelsPath?: string
@@ -294,36 +290,7 @@ type GridScanProps = {
   style?: React.CSSProperties
 }
 
-export function GridScan({
-  enableWebcam = false,
-  showPreview = false,
-  modelsPath = "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights",
-  sensitivity = 0.55,
-  lineThickness = 1,
-  linesColor = "#2F293A",
-  scanColor = "#FF9FFC",
-  scanOpacity = 0.4,
-  gridScale = 0.1,
-  lineStyle = "solid",
-  lineJitter = 0.1,
-  scanDirection = "pingpong",
-  enablePost = true,
-  bloomIntensity = 0,
-  bloomThreshold = 0,
-  bloomSmoothing = 0,
-  chromaticAberration = 0.002,
-  noiseIntensity = 0.01,
-  scanGlow = 0.5,
-  scanSoftness = 2,
-  scanPhaseTaper = 0.9,
-  scanDuration = 2.0,
-  scanDelay = 2.0,
-  enableGyro = false,
-  scanOnClick = false,
-  snapBackDelay = 250,
-  className,
-  style,
-}: GridScanProps) {
+export function GridScan({ enableWebcam = false, showPreview = false, sensitivity = 0.55, lineThickness = 1, linesColor = "#2F293A", scanColor = "#FF9FFC", scanOpacity = 0.4, gridScale = 0.1, lineStyle = "solid", lineJitter = 0.1, scanDirection = "pingpong", enablePost = true, bloomIntensity = 0, bloomThreshold = 0, bloomSmoothing = 0, chromaticAberration = 0.002, noiseIntensity = 0.01, scanGlow = 0.5, scanSoftness = 2, scanPhaseTaper = 0.9, scanDuration = 2.0, scanDelay = 2.0, className, style }: GridScanProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
@@ -333,8 +300,8 @@ export function GridScan({
   const chromaRef = useRef<ChromaticAberrationEffect | null>(null)
   const rafRef = useRef<number | null>(null)
 
-  const [modelsReady, setModelsReady] = useState(false)
-  const [uiFaceActive, setUiFaceActive] = useState(false)
+  const [modelsReady] = useState(false)
+  const [uiFaceActive] = useState(false)
 
   const lookTarget = useRef(new THREE.Vector2(0, 0))
   const tiltTarget = useRef(0)
@@ -347,21 +314,8 @@ export function GridScan({
   const yawVel = useRef(0)
 
   const MAX_SCANS = 8
-  const scanStartsRef = useRef<number[]>([])
-
-  const pushScan = (t: number) => {
-    const arr = scanStartsRef.current.slice()
-    if (arr.length >= MAX_SCANS) arr.shift()
-    arr.push(t)
-    scanStartsRef.current = arr
-    if (materialRef.current) {
-      const u = materialRef.current.uniforms
-      const buf = new Array(MAX_SCANS).fill(0)
-      for (let i = 0; i < arr.length && i < MAX_SCANS; i++) buf[i] = arr[i]
-      u.uScanStarts.value = buf; u.uScanCount.value = arr.length
-    }
-  }
-
+  
+  
   const s = THREE.MathUtils.clamp(sensitivity, 0, 1)
   const skewScale = THREE.MathUtils.lerp(0.06, 0.2, s)
   const tiltScale = THREE.MathUtils.lerp(0.12, 0.3, s)

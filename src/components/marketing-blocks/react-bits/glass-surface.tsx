@@ -57,8 +57,7 @@ export function GlassSurface({
   className = "",
   style = {},
 }: GlassSurfaceProps) {
-  const uniqueId = cn
-  const filterId = `glass-filter-${Math.random().toString(36).slice(2)}`
+    const filterId = `glass-filter-${Math.random().toString(36).slice(2)}`
   const redGradId = `red-grad-${filterId}`
   const blueGradId = `blue-grad-${filterId}`
 

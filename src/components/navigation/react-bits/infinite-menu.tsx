@@ -79,6 +79,13 @@ class Vertex {
   }
 }
 
+type GeometryData = {
+  vertices: Float32Array
+  indices: Uint16Array
+  normals: Float32Array
+  uvs: Float32Array
+}
+
 class Geometry {
   vertices: Vertex[] = []
   faces: Face[] = []
@@ -119,7 +126,7 @@ class Geometry {
     return this
   }
 
-  get data() {
+  get data(): GeometryData {
     return {
       vertices: new Float32Array(this.vertices.flatMap(v => Array.from(v.position))),
       indices: new Uint16Array(this.faces.flatMap(f => [f.a, f.b, f.c])),
@@ -379,7 +386,7 @@ class InfiniteGridMenu {
   discProgram!: WebGLProgram
   discLocations!: Record<string, WebGLUniformLocation | number>
   discGeo!: DiscGeometry
-  discBuffers!: ReturnType<Geometry["data"]>
+  discBuffers!: GeometryData
   discVAO!: WebGLVertexArrayObject
 
   icoGeo!: IcosahedronGeometry
@@ -602,7 +609,8 @@ class InfiniteGridMenu {
 
   private updateProjectionMatrix() {
     const gl = this.gl
-    this.camera.aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
+    const canvas = gl.canvas as HTMLCanvasElement
+    this.camera.aspect = canvas.clientWidth / canvas.clientHeight
     const height = this.SPHERE_RADIUS * 0.35
     const distance = this.camera.position[2]
     if (this.camera.aspect > 1) this.camera.fov = 2 * Math.atan(height / distance)

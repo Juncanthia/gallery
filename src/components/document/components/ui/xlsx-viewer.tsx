@@ -558,12 +558,15 @@ export function WorkbookTableHeaderMenu({
   triggerProps,
 }: XlsxTableHeaderMenuRenderProps) {
   const [open, setOpen] = React.useState(false)
+  // `triggerProps` is typed as native `ButtonHTMLAttributes`, whose `color`
+  // field collides with Button's semantic `color` variant prop.
+  const { color: _nativeColor, ...safeTriggerProps } = triggerProps
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
-          {...triggerProps}
+          {...safeTriggerProps}
           htmlType="button"
           variant="text"
           size="small" shape="square"
@@ -898,10 +901,9 @@ function WorkbookToolbar({
             <Select
               value={currentZoom.toString()}
               onValueChange={(value) => setZoomScale(Number(value))}
-              modal={false}
             >
               <SelectTrigger
-                size="small"
+                size="sm"
                 className="w-[84px] min-w-[84px]"
                 aria-label="Zoom level"
               >

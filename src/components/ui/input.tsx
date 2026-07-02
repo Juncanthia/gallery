@@ -8,6 +8,7 @@ type InputProps = Omit<React.ComponentProps<"input">, "size"> & {
   size?: InputSize | number
   nativeInput?: boolean
   unstyled?: boolean
+  ref?: React.Ref<HTMLInputElement>
 }
 
 function Input({
@@ -16,6 +17,7 @@ function Input({
   size,
   nativeInput,
   unstyled,
+  ref,
   ...props
 }: InputProps) {
   void nativeInput
@@ -24,6 +26,7 @@ function Input({
 
   return (
     <input
+      ref={ref}
       type={type}
       data-slot="input"
       className={cn(

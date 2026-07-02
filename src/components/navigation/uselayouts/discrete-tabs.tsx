@@ -1,7 +1,8 @@
 "use client";
 
-import { SetStateAction, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import type { SetStateAction} from "react";
+import { useState, useEffect } from "react";
+import { motion } from "motion/react";
 import { cn } from "@/components/templates/manifest/lib/utils";
 
 const Calendar: React.FC<React.SVGProps<SVGSVGElement> & { size?: number }> = ({
@@ -116,7 +117,7 @@ function Button({
   isActive: boolean;
   setActiveButton: React.Dispatch<SetStateAction<string>>;
 }) {
-  const [showShine, setShowShine] = useState(false);
+  const [, setShowShine] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {

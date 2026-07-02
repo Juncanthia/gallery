@@ -227,10 +227,6 @@ export function ScrollStack({
         wrapper: scroller,
         content: scroller.querySelector(".scroll-stack-inner")!,
         ...lenisOptions,
-        gestureOrientationHandler: true,
-        normalizeWheel: true,
-        touchInertiaMultiplier: 35,
-        touchInertia: 0.6,
       })
       lenis.on("scroll", handleScroll)
       const raf = (time: number) => {

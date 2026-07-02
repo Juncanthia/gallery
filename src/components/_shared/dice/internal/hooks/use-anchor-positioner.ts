@@ -1,23 +1,4 @@
-import {
-  type AutoUpdateOptions,
-  arrow,
-  autoUpdate,
-  type Boundary,
-  type FloatingContext,
-  flip,
-  hide,
-  inline,
-  limitShift,
-  type Middleware,
-  offset,
-  type Placement,
-  type Strategy,
-  shift,
-  size,
-  type UseFloatingReturn,
-  useFloating,
-  type VirtualElement,
-} from "@floating-ui/react";
+import { type AutoUpdateOptions, arrow, autoUpdate, type Boundary, type FloatingContext, flip, hide, inline, limitShift, offset, type Placement, type Strategy, shift, size, type UseFloatingReturn, useFloating, type VirtualElement } from "@floating-ui/react";
 import * as React from "react";
 import {
   VAR_ANCHOR_HEIGHT,

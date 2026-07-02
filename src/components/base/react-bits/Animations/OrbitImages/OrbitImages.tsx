@@ -1,8 +1,10 @@
 // Component created by Dominik Koch
 // https://x.com/dominikkoch
 
-import { useMemo, useEffect, useLayoutEffect, useRef, useState, ReactNode } from 'react';
-import { motion, useMotionValue, useTransform, animate, MotionValue } from 'motion/react';
+import type { ReactNode } from 'react';
+import { useMemo, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { MotionValue } from 'motion/react';
+import { motion, useMotionValue, useTransform, animate } from 'motion/react';
 
 type OrbitShape =
   | 'ellipse'

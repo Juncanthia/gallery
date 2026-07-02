@@ -1,6 +1,7 @@
 "use client";
 import { motion, MotionConfig } from "motion/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useState } from "react";
 import clsx from "clsx";
 
 import {
@@ -13,7 +14,6 @@ import {
   Tick02Icon,
   FilterHorizontalIcon,
 } from "@hugeicons/core-free-icons";
-import { HugeiconsFreeIcons } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 export type FilterKey = (typeof filterKeys)[number];

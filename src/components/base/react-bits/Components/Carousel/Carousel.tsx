@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, PanInfo, useMotionValue, useTransform } from 'motion/react';
-import React, { JSX } from 'react';
+import type { PanInfo} from 'motion/react';
+import { motion, useMotionValue, useTransform } from 'motion/react';
+import type { JSX } from 'react';
+import React from 'react';
 
 // replace icons with your own if needed
 import { FiCircle, FiCode, FiFileText, FiLayers, FiLayout } from 'react-icons/fi';

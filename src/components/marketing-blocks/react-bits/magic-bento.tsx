@@ -31,17 +31,7 @@ export type ParticleCardProps = {
   enableMagnetism?: boolean
 }
 
-function ParticleCard({
-  children,
-  className = "",
-  disableAnimations = false,
-  style,
-  particleCount = DEFAULT_PARTICLE_COUNT,
-  glowColor = DEFAULT_GLOW_COLOR,
-  enableTilt = true,
-  clickEffect = false,
-  enableMagnetism = false,
-}: ParticleCardProps) {
+function ParticleCard({ children, className = "", disableAnimations = false, style, particleCount = DEFAULT_PARTICLE_COUNT, glowColor = DEFAULT_GLOW_COLOR, enableTilt = true, enableMagnetism = false }: ParticleCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const particlesRef = useRef<HTMLElement[]>([])
   const timeoutsRef = useRef<number[]>([])

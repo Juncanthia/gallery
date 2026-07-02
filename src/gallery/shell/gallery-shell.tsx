@@ -31,7 +31,7 @@ import {
   type GalleryNavGroup,
   type GalleryNavItem,
 } from "../registry/catalog"
-import { LIBRARIES, getFilteredGroups, type Library } from "../registry/libraries"
+import { LIBRARIES, getFilteredGroups } from "../registry/libraries"
 import { PRIMARY_NAV } from "../registry/labels"
 import { buildBreadcrumbSegments } from "../navigation/breadcrumb/build-breadcrumb"
 import {

@@ -1,9 +1,5 @@
 "use client";
-import {
-  Tick02Icon,
-  CodeIcon,
-  UnfoldMoreIcon,
-} from "@hugeicons/core-free-icons";
+import { Tick02Icon, UnfoldMoreIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
 import { cn } from "@/components/templates/manifest/lib/utils";

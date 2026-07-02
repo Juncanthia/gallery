@@ -1,7 +1,6 @@
 "use client"
 
 import { useRef, useEffect, useCallback } from "react"
-import { cn } from "@/lib/utils"
 
 export type BlobCursorProps = {
   blobType?: "circle" | "square"

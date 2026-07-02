@@ -2027,11 +2027,16 @@ export function FileSystem({
     : ""
   const activeViewOption = VIEW_OPTIONS.find((option) => option.value === view)
   const viewerCloseToolbarAction = (
-    <DialogClose
-      aria-label="Close preview"
-      render={<Button htmlType="button" variant="text" size="small" shape="square" />}
-    >
-      <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
+    <DialogClose asChild>
+      <Button
+        htmlType="button"
+        variant="text"
+        size="small"
+        shape="square"
+        aria-label="Close preview"
+      >
+        <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
+      </Button>
     </DialogClose>
   )
 
@@ -2088,7 +2093,7 @@ export function FileSystem({
             onValueChange={(value) => setView(value as FileSystemView)}
           >
             <SelectTrigger
-              size="small"
+              size="sm"
               aria-label="View"
               // Icon-only like the sort select: sheds the base min-width to
               // hug icon + chevron at the filter button's 28px height.
@@ -2423,20 +2428,18 @@ function FileSystemSearchField({
 
   return (
     <Popover open={isExpanded} onOpenChange={onExpandedChange}>
-      <PopoverTrigger
-        render={
-          <button
-            type="button"
-            aria-label="Search"
-            title="Search"
-            className={cn(TOOLBAR_ICON_BUTTON_CLASSNAME, "relative")}
-          />
-        }
-      >
-        <HugeiconsIcon icon={Search01Icon} className="size-4" />
-        {value ? (
-          <span className="absolute top-1 right-1 size-1.5 rounded-full bg-primary" />
-        ) : null}
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          aria-label="Search"
+          title="Search"
+          className={cn(TOOLBAR_ICON_BUTTON_CLASSNAME, "relative")}
+        >
+          <HugeiconsIcon icon={Search01Icon} className="size-4" />
+          {value ? (
+            <span className="absolute top-1 right-1 size-1.5 rounded-full bg-primary" />
+          ) : null}
+        </button>
       </PopoverTrigger>
       <PopoverContent align="end" sideOffset={6} className="w-64 p-1">
         {input}
@@ -2466,7 +2469,7 @@ function FileSystemSortSelect({
       onValueChange={(value) => onKeyChange(value as FileSystemSortKey)}
     >
       <SelectTrigger
-        size="small"
+        size="sm"
         aria-label="Sort by"
         title="Sort by"
         className="h-7 min-h-7 w-auto min-w-0 shrink-0 [&_svg]:size-4"
@@ -2595,22 +2598,21 @@ function FileSystemFilterMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            htmlType="button"
-            variant="outlined"
-            size="small" shape="square"
-            aria-label="Filter"
-            title="Filter"
-            className="relative size-7 sm:size-7"
-          />
-        }
-      >
-        <HugeiconsIcon icon={FilterIcon} className="size-4" />
-        {filters.length > 0 ? (
-          <span className="absolute top-1 right-1 size-1.5 rounded-full bg-primary" />
-        ) : null}
+      <DropdownMenuTrigger asChild>
+        <Button
+          htmlType="button"
+          variant="outlined"
+          size="small"
+          shape="square"
+          aria-label="Filter"
+          title="Filter"
+          className="relative size-7 sm:size-7"
+        >
+          <HugeiconsIcon icon={FilterIcon} className="size-4" />
+          {filters.length > 0 ? (
+            <span className="absolute top-1 right-1 size-1.5 rounded-full bg-primary" />
+          ) : null}
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
         <DropdownMenuSub>
@@ -2714,15 +2716,13 @@ function FileSystemFilterPill({
         {FILTER_TYPE_LABELS[filter.type]}
       </span>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <button
-              type="button"
-              className={cn(FILTER_PILL_BUTTON_CLASSNAME, "text-primary")}
-            />
-          }
-        >
-          {FILTER_OPERATOR_LABELS[filter.operator]}
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className={cn(FILTER_PILL_BUTTON_CLASSNAME, "text-primary")}
+          >
+            {FILTER_OPERATOR_LABELS[filter.operator]}
+          </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="min-w-28">
           {filterOperatorChoices(filter).map((operator) => (
@@ -2737,18 +2737,16 @@ function FileSystemFilterPill({
       </DropdownMenu>
       {filter.type === "fileType" ? (
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <button
-                type="button"
-                title={selectedTypeLabels.join(", ")}
-                className={FILTER_PILL_BUTTON_CLASSNAME}
-              />
-            }
-          >
-            {filter.value.length === 1
-              ? selectedTypeLabels[0]
-              : `${filter.value.length} selected`}
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              title={selectedTypeLabels.join(", ")}
+              className={FILTER_PILL_BUTTON_CLASSNAME}
+            >
+              {filter.value.length === 1
+                ? selectedTypeLabels[0]
+                : `${filter.value.length} selected`}
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-60">
             <FileSystemFileTypeCommand
@@ -2770,12 +2768,10 @@ function FileSystemFilterPill({
         </button>
       ) : (
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <button type="button" className={FILTER_PILL_BUTTON_CLASSNAME} />
-            }
-          >
-            {filter.value[0]}
+          <DropdownMenuTrigger asChild>
+            <button type="button" className={FILTER_PILL_BUTTON_CLASSNAME}>
+              {filter.value[0]}
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <ScrollArea orientation="vertical" className="h-auto max-h-72">

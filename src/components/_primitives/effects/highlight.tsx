@@ -252,10 +252,19 @@ function Highlight<T extends React.ElementType = 'div'>({
     return () => container.removeEventListener('scroll', onScroll);
   }, [mode, activeValue]);
 
+  // `T` is a generic type parameter here, and TS cannot resolve
+  // `JSX.LibraryManagedAttributes<T, ...>` for a bare generic constrained to
+  // `React.ElementType` inside the function body (a known TS limitation).
+  // Casting through `React.ComponentType<any>` restores normal prop/children
+  // checking for the concrete element the ref/props are actually applied to.
+  const ComponentTag = Component as unknown as React.ComponentType<
+    React.ComponentProps<'div'> & { ref?: React.Ref<HTMLDivElement> }
+  >
+
   const render = (children: React.ReactNode) => {
     if (mode === 'parent') {
       return (
-        <Component
+        <ComponentTag
           ref={localRef}
           data-slot="motion-highlight-container"
           style={{ position: 'relative', zIndex: 1 }}
@@ -293,7 +302,7 @@ function Highlight<T extends React.ElementType = 'div'>({
             )}
           </AnimatePresence>
           {children}
-        </Component>
+        </ComponentTag>
       );
     }
 

@@ -221,8 +221,8 @@ function ActionButton({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="ghost"
-          size="sm"
+          variant="text"
+          size="small"
           onClick={(e: React.MouseEvent) => {
             e.stopPropagation();
             onClick();

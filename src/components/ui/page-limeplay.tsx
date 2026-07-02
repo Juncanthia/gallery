@@ -1,3 +1,3 @@
 "use client"
 
-export { Page } from "@/components/media/blocks/video-player/page"
+export { default as Page } from "@/components/media/blocks/video-player/page"

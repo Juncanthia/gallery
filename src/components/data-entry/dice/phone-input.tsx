@@ -22,6 +22,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  type PopoverOpenChangeDetails,
 } from "@/components/ui/popover";
 
 const ROOT_NAME = "PhoneInput";
@@ -659,9 +660,9 @@ function PhoneInputCountrySelect(props: PhoneInputCountrySelectProps) {
   const countryContext = countries.find((c) => c.code === country);
 
   const onOpenChange = React.useCallback(
-    (open: boolean) => {
+    (open: boolean, eventDetails: PopoverOpenChangeDetails) => {
       store.setState("open", open);
-      onOpenChangeRef.current?.(open);
+      onOpenChangeRef.current?.(open, eventDetails);
     },
     [store, onOpenChangeRef],
   );

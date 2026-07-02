@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect, useRef } from "react"
-import { motion, useMotionValue, useAnimationFrame, useTransform } from "motion/react"
+import { motion, useMotionValue, useAnimationFrame, useTransform, type MotionStyle } from "motion/react"
 import { cn } from "@/lib/utils"
 
 export type GradientTextProps = {
@@ -128,7 +128,7 @@ export function GradientText({
           backgroundPosition,
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
-        } as React.CSSProperties}
+        } as MotionStyle}
       >
         {children}
       </motion.div>

@@ -22,7 +22,7 @@ interface DataTableToolbarProps {
 }
 
 export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
-  const { table, isLoading, columnFilters, totalRows, filterRows } =
+  const { table, columnFilters, totalRows, filterRows } =
     useDataTable();
   const { open, setOpen } = useControls();
   useHotKey(() => setOpen((prev) => !prev), "b");
@@ -38,7 +38,7 @@ export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
           <Tooltip delayDuration={100}>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
+                variant="text"
                 onClick={() => setOpen((prev) => !prev)}
                 className="hidden gap-2 sm:flex"
               >

@@ -23,25 +23,7 @@ export type GhostCursorProps = {
   zIndex?: number
 }
 
-export function GhostCursor({
-  className,
-  style,
-  trailLength = 50,
-  inertia = 0.5,
-  grainIntensity = 0.05,
-  bloomStrength = 0.1,
-  bloomRadius = 1.0,
-  bloomThreshold = 0.025,
-  brightness = 1,
-  color = "#B497CF",
-  mixBlendMode = "screen",
-  edgeIntensity = 0,
-  maxDevicePixelRatio = 0.5,
-  targetPixels,
-  fadeDelayMs,
-  fadeDurationMs,
-  zIndex = 10,
-}: GhostCursorProps) {
+export function GhostCursor({ className, style, trailLength = 50, inertia = 0.5, grainIntensity = 0.05, brightness = 1, color = "#B497CF", mixBlendMode = "screen", edgeIntensity = 0, maxDevicePixelRatio = 0.5, targetPixels, fadeDelayMs, fadeDurationMs, zIndex = 10 }: GhostCursorProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)

@@ -68,7 +68,7 @@ export function LightRays({
   const rendererRef = useRef<Renderer | null>(null)
   const mouseRef = useRef({ x: 0.5, y: 0.5 })
   const smoothMouseRef = useRef({ x: 0.5, y: 0.5 })
-  const animationIdRef = useRef<number>(0)
+  const animationIdRef = useRef<number | null>(0)
   const meshRef = useRef<Mesh | null>(null)
   const cleanupFunctionRef = useRef<(() => void) | null>(null)
   const [isVisible, setIsVisible] = useState(false)

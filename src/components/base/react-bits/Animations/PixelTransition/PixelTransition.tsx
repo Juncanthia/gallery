@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 
 interface PixelTransitionProps {

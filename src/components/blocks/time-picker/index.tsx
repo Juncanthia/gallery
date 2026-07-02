@@ -74,7 +74,7 @@ function padZero(value: number): string {
 }
 
 function normalizeStep(step: number | undefined): number {
-  return Number.isInteger(step) && step > 0 ? step : 1
+  return step !== undefined && Number.isInteger(step) && step > 0 ? step : 1
 }
 
 function clamp(value: number, min: number, max: number): number {

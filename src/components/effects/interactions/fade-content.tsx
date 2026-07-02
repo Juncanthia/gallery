@@ -1,7 +1,6 @@
 "use client"
 
 import { useRef, useEffect } from "react"
-import { cn } from "@/lib/utils"
 
 export type FadeContentProps = {
   children: React.ReactNode

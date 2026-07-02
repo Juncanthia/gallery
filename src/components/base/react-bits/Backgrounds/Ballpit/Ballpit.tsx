@@ -1,6 +1,9 @@
 import { gsap } from 'gsap';
 import { Observer } from 'gsap/Observer';
 import React, { useEffect, useRef } from 'react';
+import type {
+  WebGLRendererParameters
+} from 'three';
 import {
   ACESFilmicToneMapping,
   AmbientLight,
@@ -21,8 +24,7 @@ import {
   Timer,
   Vector2,
   Vector3,
-  WebGLRenderer,
-  WebGLRendererParameters
+  WebGLRenderer
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
@@ -867,7 +869,7 @@ const Ballpit: React.FC<BallpitProps> = ({ className = '', followCursor = true, 
         spheresInstanceRef.current.dispose();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   return <canvas className={`${className} w-full h-full`} ref={canvasRef} />;

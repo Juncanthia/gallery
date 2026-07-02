@@ -1,7 +1,12 @@
 import * as React from "react"
 import { Slot } from "radix-ui"
 
-import { DropdownMenu } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { ChevronDown as ChevronDownIcon, ChevronRight as ChevronRightIcon, MoveHorizontal as MoreHorizontalIcon } from "lucide-react"
 
@@ -130,26 +135,31 @@ function Breadcrumb({
             </BreadcrumbPage>
           )
           const originalNode = routeItem.menu?.items?.length ? (
-            <DropdownMenu
-              trigger={
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <span className="inline-flex items-center gap-1">
                   {linkNode}
                   {dropdownIcon ?? <ChevronDownIcon className="size-3" />}
                 </span>
-              }
-              items={routeItem.menu.items.map((menuItem, menuIndex) => {
-                const label = menuItem.label ?? menuItem.title
-                const menuHref = menuItem.href ?? (menuItem.path ? `${href ?? ""}/${menuItem.path}` : undefined)
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {routeItem.menu.items.map((menuItem, menuIndex) => {
+                  const label = menuItem.label ?? menuItem.title
+                  const menuHref = menuItem.href ?? (menuItem.path ? `${href ?? ""}/${menuItem.path}` : undefined)
 
-                return {
-                  key: menuItem.key ?? menuIndex,
-                  label,
-                  onSelect: () => {
-                    if (menuHref) window.location.href = menuHref
-                  },
-                }
-              })}
-            />
+                  return (
+                    <DropdownMenuItem
+                      key={menuItem.key ?? menuIndex}
+                      onSelect={() => {
+                        if (menuHref) window.location.href = menuHref
+                      }}
+                    >
+                      {label}
+                    </DropdownMenuItem>
+                  )
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : linkNode
           const node = itemRender?.(item, params, mergedItems, paths) ?? originalNode
 

@@ -248,8 +248,8 @@ export function CodeDrawingElement(
         <div className="flex items-center gap-1">
           {image && (
             <Button
-              size="icon"
-              variant="ghost"
+              shape="square"
+              variant="text"
               className="size-8"
               onClick={handleDownload}
               title="Export"
@@ -258,8 +258,8 @@ export function CodeDrawingElement(
             </Button>
           )}
           <Button
-            size="icon"
-            variant="ghost"
+            shape="square"
+            variant="text"
             className="size-8"
             onClick={removeNode}
             title="Delete"

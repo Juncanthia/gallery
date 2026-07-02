@@ -122,19 +122,7 @@ export function ChartMarkers({
   }, [items]);
 
   // Get markers for currently hovered date
-  const _activeMarkers = useMemo(() => {
-    if (!tooltipData) {
-      return [];
-    }
-    const point = tooltipData.point;
-    const date =
-      point.date instanceof Date
-        ? point.date
-        : new Date(point.date as string | number);
-    const dateKey = date.toDateString();
-    return markersByDate.get(dateKey) || [];
-  }, [tooltipData, markersByDate]);
-
+  
   // Y position for markers (above chart area)
   const markerY = -8;
 

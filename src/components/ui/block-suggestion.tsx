@@ -181,7 +181,7 @@ export function BlockSuggestionCard({
         {hovering && (
           <div className="absolute top-4 right-4 flex gap-2">
             <Button
-              variant="ghost"
+              variant="text"
               className="size-6 p-1 text-muted-foreground"
               onClick={() => accept(suggestion)}
             >
@@ -189,7 +189,7 @@ export function BlockSuggestionCard({
             </Button>
 
             <Button
-              variant="ghost"
+              variant="text"
               className="size-6 p-1 text-muted-foreground"
               onClick={() => reject(suggestion)}
             >

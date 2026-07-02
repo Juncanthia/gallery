@@ -84,8 +84,7 @@ export function AnimatedContent({
       { threshold }
     )
 
-    const startPct = (1 - threshold) * 100
-    // Set initial state
+        // Set initial state
     const axis = direction === "horizontal" ? "translateX" : "translateY"
     const offset = reverse ? -distance : distance
     el.style.transform = `${axis}(${offset}px) scale(${scale})`

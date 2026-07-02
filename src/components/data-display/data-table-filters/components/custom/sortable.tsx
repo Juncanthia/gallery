@@ -330,6 +330,11 @@ function SortableDragHandle({
   ...props
 }: SortableDragHandleProps) {
   const { attributes, listeners, isDragging } = useSortableItem();
+  // `attributes` is typed as `React.HTMLAttributes<HTMLElement>`, whose
+  // native `color` field collides with Button's semantic `color` variant
+  // prop. Drop it before spreading so the union of the two doesn't widen
+  // Button's `color` prop back to a bare `string`.
+  const { color: _nativeColor, ...safeAttributes } = attributes;
 
   return (
     <Button
@@ -339,7 +344,7 @@ function SortableDragHandle({
         "cursor-grab data-[state=dragging]:cursor-grabbing",
         className,
       )}
-      {...attributes}
+      {...safeAttributes}
       {...listeners}
       {...props}
     />

@@ -44,7 +44,7 @@ export function CalloutElement({
           {...emojiToolbarDropdownProps}
           control={
             <Button
-              variant="ghost"
+              variant="text"
               className="size-6 select-none p-1 text-[18px] hover:bg-muted-foreground/15"
               style={{
                 fontFamily:

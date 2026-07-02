@@ -205,7 +205,7 @@ const BlockCommentContent = ({ children, element }: PlateElementProps) => {
           <div className="relative left-0 size-0 select-none">
             <PopoverTrigger asChild>
               <Button
-                variant="ghost"
+                variant="text"
                 className="!px-1.5 mt-1 ml-1 flex h-6 gap-1 py-0 text-muted-foreground/80 hover:text-muted-foreground/80 data-[active=true]:bg-muted"
                 data-active={open}
                 contentEditable={false}

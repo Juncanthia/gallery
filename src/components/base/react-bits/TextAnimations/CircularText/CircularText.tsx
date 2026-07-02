@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { motion, useAnimation, useMotionValue, MotionValue, Transition } from 'motion/react';
+import type { MotionValue, Transition } from 'motion/react';
+import { motion, useAnimation, useMotionValue } from 'motion/react';
 interface CircularTextProps {
   text: string;
   spinDuration?: number;

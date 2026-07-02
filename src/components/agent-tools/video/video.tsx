@@ -212,8 +212,8 @@ function VideoInner(props: Omit<VideoProps, "defaultMuted">) {
                 <div className="flex items-center gap-2">
                   {primaryHref && (
                     <Button
-                      variant="secondary"
-                      size="sm"
+                      variant="filled"
+                      size="small"
                       onClick={handleOpen}
                       className="bg-black/55 text-white hover:bg-black/70"
                     >
@@ -225,8 +225,8 @@ function VideoInner(props: Omit<VideoProps, "defaultMuted">) {
                     </Button>
                   )}
                   <Button
-                    variant="default"
-                    size="sm"
+                    variant="solid"
+                    size="small"
                     onClick={handleWatch}
                     className="shadow-sm"
                   >

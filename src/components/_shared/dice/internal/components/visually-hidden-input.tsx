@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useFormReset, usePrevious, useSize } from "../hooks";
-import { visuallyHidden } from "../lib";
 
 type InputValue = string[] | string;
 

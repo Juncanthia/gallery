@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { m, LazyMotion, domAnimation, SVGMotionProps } from "motion/react";
+import type { SVGMotionProps } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 
 interface ZapIconProps
   extends Omit<SVGMotionProps<SVGSVGElement>, "strokeWidth"> {

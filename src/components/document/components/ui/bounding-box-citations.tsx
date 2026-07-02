@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import {
+  CompactSelection,
   DataEditor,
-  emptyGridSelection,
   GridCellKind,
   TextCellEntry,
   type EditableGridCell,
@@ -18,6 +18,13 @@ import {
   type TextCell,
   type Theme,
 } from "@glideapps/glide-data-grid"
+
+// `emptyGridSelection` is no longer exported by the installed version of
+// @glideapps/glide-data-grid; reconstruct the same shape locally.
+const emptyGridSelection: GridSelection = {
+  columns: CompactSelection.empty(),
+  rows: CompactSelection.empty(),
+}
 import {
   ArrowLeft01Icon,
   CancelCircleIcon,
@@ -178,7 +185,6 @@ function ScrollAreaVirtualizer({
   )
 }
 
-const DEFAULT_ZOOM = 1
 const REVIEW_HIGHLIGHT_STYLE =
   "border-blue-500/70 bg-blue-500/12 shadow-[0_4px_16px_rgb(59_130_246_/_10%)]"
 
@@ -984,7 +990,7 @@ function HumanReviewValueInput({
             key={String(option)}
             htmlType="button"
             size="small"
-            variant={value === option ? "outline" : "ghost"}
+            variant={value === option ? "outlined" : "text"}
             className={cn(
               "h-7 shadow-none",
               value === option && "bg-background dark:bg-input"
@@ -2277,7 +2283,7 @@ export function HumanReviewPanel({
   }, [])
 
   return (
-    <TooltipProvider delay={200}>
+    <TooltipProvider delayDuration={200}>
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}

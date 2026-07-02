@@ -140,6 +140,11 @@ export function LiquidEther({
       takeoverFrom = new THREE.Vector2()
       takeoverTo = new THREE.Vector2()
       onInteract: (() => void) | null = null
+      _onMouseMove: (event: MouseEvent) => void
+      _onTouchStart: (event: TouchEvent) => void
+      _onTouchMove: (event: TouchEvent) => void
+      _onTouchEnd: () => void
+      _onDocumentLeave: () => void
 
       constructor() {
         this._onMouseMove = this.onDocumentMouseMove.bind(this)
@@ -343,7 +348,7 @@ export function LiquidEther({
       }
 
       init() {
-        props.$wrapper.prepend(Common.renderer!.domElement)
+        this.props.$wrapper.prepend(Common.renderer!.domElement)
         // Output renders velocity field as palette
         const scene = new THREE.Scene()
         const camera = new THREE.Camera()

@@ -19,7 +19,7 @@ export type CrosshairProps = {
 
 export function Crosshair({
   color = "white",
-  containerRef = null,
+  containerRef,
 }: CrosshairProps) {
   const cursorRef = useRef<HTMLDivElement>(null)
   const lineHorizontalRef = useRef<HTMLDivElement>(null)
@@ -51,7 +51,7 @@ export function Crosshair({
     }
 
     const target = containerRef?.current ?? window
-    target.addEventListener("mousemove", handleMouseMove)
+    target.addEventListener("mousemove", handleMouseMove as EventListener)
 
     const renderedStyles = {
       tx: { previous: 0, current: 0, amt: 0.15 },
@@ -146,7 +146,7 @@ export function Crosshair({
     })
 
     return () => {
-      target.removeEventListener("mousemove", handleMouseMove)
+      target.removeEventListener("mousemove", handleMouseMove as EventListener)
       target.removeEventListener("mousemove", onMouseMove)
       links.forEach((link) => {
         link.removeEventListener("mouseenter", enter)

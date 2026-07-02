@@ -9,6 +9,8 @@ import React, {
   createContext,
   useContext,
 } from "react";
+import type {
+  LucideIcon} from "lucide-react";
 import {
   Mic,
   ArrowUp,
@@ -24,8 +26,7 @@ import {
   BookOpen,
   Paperclip,
   File,
-  Square,
-  LucideIcon,
+  Square
 } from "lucide-react";
 
 // =============================================================================

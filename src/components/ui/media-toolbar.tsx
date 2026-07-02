@@ -22,7 +22,8 @@ import {
   useSelected,
 } from 'platejs/react';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button-variants';
 import {
   Popover,
   PopoverAnchor,
@@ -95,18 +96,18 @@ export function MediaToolbar({
         ) : (
           <div className="box-content flex items-center">
             <FloatingMediaPrimitive.EditButton
-              className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+              className={buttonVariants({ size: 'small', variant: 'text' })}
             >
               Edit link
             </FloatingMediaPrimitive.EditButton>
 
-            <CaptionButton size="sm" variant="ghost">
+            <CaptionButton size="small" variant="text">
               Caption
             </CaptionButton>
 
             <Separator orientation="vertical" className="mx-1 h-6" />
 
-            <Button size="sm" variant="ghost" {...buttonProps}>
+            <Button size="small" variant="text" {...buttonProps}>
               <Trash2Icon />
             </Button>
           </div>

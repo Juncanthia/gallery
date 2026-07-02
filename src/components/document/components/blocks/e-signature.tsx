@@ -499,7 +499,7 @@ function SignatureFieldsPanel({
                   <Button
                     htmlType="button"
                     size="small"
-                    variant={field.imageDataUrl ? "outline" : "default"}
+                    variant={field.imageDataUrl ? "outlined" : "solid"}
                     className="flex-1"
                     onClick={onSign}
                   >

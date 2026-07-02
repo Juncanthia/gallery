@@ -1,8 +1,9 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import type {
+  Transition} from 'motion/react';
 import {
   motion,
   AnimatePresence,
-  Transition,
   type VariantLabels,
   type Target,
   type TargetAndTransition

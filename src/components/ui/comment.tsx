@@ -206,10 +206,10 @@ export function Comment(props: {
           <div className="absolute top-0 right-0 flex space-x-1">
             {index === 0 && (
               <Button
-                variant="ghost"
+                variant="text"
                 className="h-6 p-1 text-muted-foreground"
                 onClick={onResolveComment}
-                type="button"
+                htmlType="button"
               >
                 <CheckIcon className="size-4" />
               </Button>
@@ -261,8 +261,8 @@ export function Comment(props: {
             {isEditing && (
               <div className="ml-auto flex shrink-0 gap-1">
                 <Button
-                  size="icon"
-                  variant="ghost"
+                  shape="square"
+                  variant="text"
                   className="size-[28px]"
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation();
@@ -275,8 +275,8 @@ export function Comment(props: {
                 </Button>
 
                 <Button
-                  size="icon"
-                  variant="ghost"
+                  shape="square"
+                  variant="text"
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation();
                     void onSave();
@@ -365,7 +365,7 @@ function CommentMoreDropdown(props: {
       modal={false}
     >
       <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-        <Button variant="ghost" className={cn('h-6 p-1 text-muted-foreground')}>
+        <Button variant="text" className={cn('h-6 p-1 text-muted-foreground')}>
           <MoreHorizontalIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -587,8 +587,8 @@ export function CommentCreateForm({
             />
 
             <Button
-              size="icon"
-              variant="ghost"
+              shape="square"
+              variant="text"
               className="absolute right-0.5 bottom-0.5 ml-auto size-6 shrink-0"
               disabled={commentContent.trim().length === 0}
               onClick={(e) => {

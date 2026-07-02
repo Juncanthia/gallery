@@ -58,14 +58,7 @@ export function PillNav({
   const navItemsRef = useRef<HTMLDivElement>(null)
   const logoRef = useRef<HTMLAnchorElement | HTMLDivElement>(null)
 
-  const isExternalLink = (href: string) =>
-    href.startsWith("http://") ||
-    href.startsWith("https://") ||
-    href.startsWith("//") ||
-    href.startsWith("mailto:") ||
-    href.startsWith("tel:") ||
-    href.startsWith("#")
-
+  
   useEffect(() => {
     const layout = () => {
       circleRefs.current.forEach((circle) => {

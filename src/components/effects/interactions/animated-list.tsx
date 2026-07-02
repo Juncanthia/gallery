@@ -30,7 +30,7 @@ function AnimatedItem({
   onClick?: () => void
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { amount: 0.5, triggerOnce: false })
+  const inView = useInView(ref, { amount: 0.5, once: false })
   return (
     <motion.div
       ref={ref}

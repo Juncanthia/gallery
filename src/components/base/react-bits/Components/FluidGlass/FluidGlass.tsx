@@ -1,7 +1,9 @@
 /* eslint-disable react/no-unknown-property */
 import * as THREE from 'three';
-import { useRef, useState, useEffect, memo, ReactNode } from 'react';
-import { Canvas, createPortal, useFrame, useThree, ThreeElements } from '@react-three/fiber';
+import type { ReactNode } from 'react';
+import { useRef, useState, useEffect, memo } from 'react';
+import type { ThreeElements } from '@react-three/fiber';
+import { Canvas, createPortal, useFrame, useThree } from '@react-three/fiber';
 import {
   useFBO,
   useGLTF,

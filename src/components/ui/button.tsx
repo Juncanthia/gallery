@@ -30,7 +30,16 @@ type ButtonNativeProps = Omit<
     onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>
   }
 
-type ButtonProps = ButtonNativeProps & ButtonOwnProps
+// Flattened via mapped type (instead of a bare intersection) so that TS
+// reports precise, readable diagnostics at call sites. A bare
+// `ButtonNativeProps & ButtonOwnProps` intersection causes the checker to
+// sometimes surface assignability errors against just one narrow member of
+// the intersection (e.g. `VariantProps<typeof buttonVariants>`), which is
+// confusing and hides the actual offending field. This is a pure type-level
+// simplification; it does not add, remove, or widen any prop.
+type ButtonProps = {
+  [K in keyof (ButtonNativeProps & ButtonOwnProps)]: (ButtonNativeProps & ButtonOwnProps)[K]
+}
 
 const isTextLikeVariant = (variant: ButtonVariant) =>
   variant === "text" || variant === "link"

@@ -1,25 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  DashboardSquare01Icon,
-  UserGroupIcon,
-  Message01Icon,
-  Folder02Icon,
-  Add01Icon,
-  CircleArrowUpRight02Icon,
-  Search01Icon,
-  BarChartIcon,
-  Tick01Icon,
-  Settings02Icon,
-  InformationCircleIcon,
-  DatabaseIcon,
-  Mail01Icon,
-  LeftToRightListDashIcon,
-  UserIcon,
-} from "@hugeicons/core-free-icons";
+import { DashboardSquare01Icon, UserGroupIcon, Message01Icon, Folder02Icon, Add01Icon, CircleArrowUpRight02Icon, Search01Icon, BarChartIcon, Tick01Icon, Settings02Icon, InformationCircleIcon, DatabaseIcon, Mail01Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { cn } from "@/components/templates/manifest/lib/utils";
 
 interface TabConfig {

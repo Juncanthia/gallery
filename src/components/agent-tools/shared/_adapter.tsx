@@ -10,3 +10,4 @@
 
 export { cn } from "@/lib/utils";
 export { Button } from "@/components/ui/button";
+export type { ButtonColor, ButtonVariant } from "@/components/ui/button";

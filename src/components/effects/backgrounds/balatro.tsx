@@ -104,7 +104,7 @@ void main() {
 }
 `
 
-type BalatroProps = {
+export type BalatroProps = {
   spinRotation?: number
   spinSpeed?: number
   offset?: [number, number]

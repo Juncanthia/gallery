@@ -427,8 +427,8 @@ export function MessageDraft(props: MessageDraftProps) {
 
   const expandButton = needsExpansion ? (
     <Button
-      variant="ghost"
-      size="sm"
+      variant="text"
+      size="small"
       onClick={handleToggleExpand}
       className="h-7 gap-1 px-2 text-sm"
     >
@@ -450,8 +450,8 @@ export function MessageDraft(props: MessageDraftProps) {
             </span>
             <Button
               ref={undoButtonRef}
-              variant="outline"
-              size="sm"
+              variant="outlined"
+              size="small"
               onClick={handleUndo}
               className="rounded-full"
             >

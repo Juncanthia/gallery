@@ -25,7 +25,7 @@ export { AccordionItem } from "@/components/ui/accordion"
 export { AccordionTrigger } from "@/components/ui/accordion"
 export { Tooltip } from "@/components/ui/tooltip"
 export { TooltipContent } from "@/components/ui/tooltip"
-export { TooltipProvider } from "@/components/ui/tooltip-provider"
+export { TooltipProvider } from "@/components/ui/tooltip"
 export { TooltipTrigger } from "@/components/ui/tooltip"
 export { Badge } from "@/components/ui/badge";
 export { Table } from "@/components/ui/table"

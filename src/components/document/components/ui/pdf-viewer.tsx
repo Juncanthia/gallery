@@ -2330,9 +2330,8 @@ function PDFViewerInner({
                   value={String(currentZoomLevel)}
                   onValueChange={(value) => zoom?.requestZoom(Number(value))}
                   disabled={controlsDisabled}
-                  modal={false}
                 >
-                  <SelectTrigger size="small" className="w-[84px] min-w-[84px]">
+                  <SelectTrigger size="sm" className="w-[84px] min-w-[84px]">
                     <SelectValue placeholder="Zoom">
                       {Math.round(currentZoomLevel * 100)}%
                     </SelectValue>

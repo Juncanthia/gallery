@@ -11,10 +11,14 @@ import type {
   Item,
   Theme,
 } from "@glideapps/glide-data-grid"
-import {
-  CompactSelection,
-  emptyGridSelection,
-} from "@glideapps/glide-data-grid"
+import { CompactSelection } from "@glideapps/glide-data-grid"
+
+// `emptyGridSelection` is no longer exported by the installed version of
+// @glideapps/glide-data-grid; reconstruct the same shape locally.
+const emptyGridSelection: GridSelection = {
+  columns: CompactSelection.empty(),
+  rows: CompactSelection.empty(),
+}
 
 import "@glideapps/glide-data-grid/dist/index.css"
 
@@ -796,10 +800,9 @@ export function CsvViewer({ className, data, search = false }: CsvViewerProps) {
                 onValueChange={(value) =>
                   setZoom(Number(value) as (typeof ZOOM_OPTIONS)[number])
                 }
-                modal={false}
               >
                 <SelectTrigger
-                  size="small"
+                  size="sm"
                   className="w-[84px] min-w-[84px]"
                   aria-label="Zoom level"
                 >
@@ -908,7 +911,6 @@ export function CsvViewer({ className, data, search = false }: CsvViewerProps) {
             onGridSelectionChange={
               search ? handleGridSelectionChange : undefined
             }
-            scrollToActiveCell={search}
             keybindings={{ search: true }}
             smoothScrollX
             smoothScrollY

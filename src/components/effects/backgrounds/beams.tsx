@@ -186,7 +186,7 @@ const MergedPlanes = forwardRef(({ material, width, count, height }: any, ref) =
     [count, width, height]
   )
   useFrame((_, delta) => {
-    mesh.current.material.uniforms.time.value += 0.1 * delta
+    ;(mesh.current.material as THREE.ShaderMaterial).uniforms.time.value += 0.1 * delta
   })
   return <mesh ref={mesh} geometry={geometry} material={material} />
 })

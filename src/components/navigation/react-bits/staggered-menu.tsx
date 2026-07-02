@@ -34,24 +34,7 @@ export type StaggeredMenuProps = {
   onMenuClose?: () => void
 }
 
-export function StaggeredMenu({
-  position = "right",
-  colors = ["#B497CF", "#5227FF"],
-  items = [],
-  socialItems = [],
-  displaySocials = true,
-  displayItemNumbering = true,
-  className,
-  logoUrl,
-  menuButtonColor = "#fff",
-  openMenuButtonColor = "#fff",
-  accentColor = "#5227FF",
-  changeMenuColorOnOpen = true,
-  isFixed = false,
-  closeOnClickAway = true,
-  onMenuOpen,
-  onMenuClose,
-}: StaggeredMenuProps) {
+export function StaggeredMenu({ position = "right", colors = ["#B497CF", "#5227FF"], items = [], socialItems = [], displaySocials = true, className, logoUrl, menuButtonColor = "#fff", openMenuButtonColor = "#fff", accentColor = "#5227FF", changeMenuColorOnOpen = true, isFixed = false, onMenuOpen, onMenuClose }: StaggeredMenuProps) {
   const [open, setOpen] = useState(false)
   const openRef = useRef(false)
   const panelRef = useRef<HTMLElement>(null)
@@ -267,18 +250,7 @@ export function StaggeredMenu({
     animateText(target)
   }, [playOpen, playClose, animateIcon, animateColor, animateText, onMenuOpen, onMenuClose])
 
-  const closeMenu = useCallback(() => {
-    if (openRef.current) {
-      openRef.current = false
-      setOpen(false)
-      onMenuClose?.()
-      playClose()
-      animateIcon(false)
-      animateColor(false)
-      animateText(false)
-    }
-  }, [playClose, animateIcon, animateColor, animateText, onMenuClose])
-
+  
   return (
     <div
       className={cn("staggered-menu-wrapper", isFixed && "fixed-wrapper", className)}

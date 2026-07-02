@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import { useEffect, useRef, type CSSProperties } from "react"
 import { Renderer, Program, Mesh, Triangle } from "ogl"
 
 const MAX_COLORS = 8
@@ -198,7 +198,7 @@ export type FerrofluidProps = {
   mouseStrength?: number
   mouseRadius?: number
   mouseDampening?: number
-  mixBlendMode?: string
+  mixBlendMode?: CSSProperties["mixBlendMode"]
 }
 
 export function Ferrofluid({

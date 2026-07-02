@@ -2,8 +2,26 @@
 
 import * as React from "react"
 import { TriangleAlert as WarningIcon } from "lucide-react"
-import { Popover } from "@/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
+
+const PLACEMENT_TO_SIDE: Record<
+  NonNullable<PopconfirmProps["placement"]>,
+  { side: "top" | "right" | "bottom" | "left"; align: "start" | "center" | "end" }
+> = {
+  top: { side: "top", align: "center" },
+  topLeft: { side: "top", align: "start" },
+  topRight: { side: "top", align: "end" },
+  bottom: { side: "bottom", align: "center" },
+  bottomLeft: { side: "bottom", align: "start" },
+  bottomRight: { side: "bottom", align: "end" },
+  left: { side: "left", align: "center" },
+  leftTop: { side: "left", align: "start" },
+  leftBottom: { side: "left", align: "end" },
+  right: { side: "right", align: "center" },
+  rightTop: { side: "right", align: "start" },
+  rightBottom: { side: "right", align: "end" },
+}
 
 type PopconfirmProps = {
   /** Confirmation title/message. */
@@ -89,15 +107,15 @@ function Popconfirm({
     </div>
   )
 
+  const { side, align } = PLACEMENT_TO_SIDE[placement]
+
   return (
-    <Popover
-      open={open}
-      onOpenChange={handleOpenChange}
-      placement={placement}
-      trigger={children}
-      content={content}
-      contentProps={{ sideOffset: 8 }}
-    />
+    <Popover open={open} onOpenChange={handleOpenChange}>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverContent side={side} align={align} sideOffset={8}>
+        {content}
+      </PopoverContent>
+    </Popover>
   )
 }
 

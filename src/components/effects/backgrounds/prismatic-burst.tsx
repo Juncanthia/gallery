@@ -318,7 +318,7 @@ export function PrismaticBurst({
     }
 
     let ro: ResizeObserver | null = null
-    if ("ResizeObserver" in window) {
+    if (typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(resize)
       ro.observe(container)
     } else {
@@ -397,7 +397,7 @@ export function PrismaticBurst({
         console.warn("Canvas already removed")
       }
       try {
-        meshRef.current?.remove?.()
+        meshRef.current?.parent?.removeChild(meshRef.current)
       } catch (_e) {
         /* ignore dispose errors */
       }

@@ -24,7 +24,7 @@ export function DataTableFilterResetButton<TData>({
 
   return (
     <Button
-      variant="outline"
+      variant="outlined"
       className="h-5 gap-1 rounded-full px-1.5! py-1! font-mono text-[10px] shadow-none"
       onClick={(e) => {
         e.stopPropagation();

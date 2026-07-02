@@ -42,7 +42,7 @@ export const PlaybackControl = React.forwardRef<
     ...restProps
   } = props
 
-  const Comp = render ? Slot : asChild ? Slot : Button
+  const Comp: React.ElementType = render ? Slot : asChild ? Slot : Button
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event)

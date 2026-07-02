@@ -3,7 +3,7 @@
 import { Undo03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion, AnimatePresence } from "motion/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const DeleteButton = () => {
   const [isDeleting, setIsDeleting] = useState(false);

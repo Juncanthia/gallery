@@ -1,3 +1,3 @@
 "use client"
 
-export { PictureInPictureControlDemo } from "@/components/media/examples/picture-in-picture-control-demo"
+export { default as PictureInPictureControlDemo } from "@/components/media/examples/picture-in-picture-control-demo"

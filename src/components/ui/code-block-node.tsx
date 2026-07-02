@@ -158,8 +158,8 @@ export function CodeBlockElement({
         >
           {isLangSupported(element.lang) && (
             <Button
-              size="icon"
-              variant="ghost"
+              shape="square"
+              variant="text"
               className="size-6 text-xs"
               onClick={() => formatCodeBlock(editor, { element })}
               title="Format code"
@@ -171,8 +171,8 @@ export function CodeBlockElement({
           <CodeBlockCombobox showLanguageLabel={showLanguageLabel} />
 
           <CopyButton
-            size="icon"
-            variant="ghost"
+            shape="square"
+            variant="text"
             className="size-6 gap-1 text-muted-foreground text-xs"
             value={() => NodeApi.string(element)}
           />
@@ -214,8 +214,8 @@ function CodeBlockCombobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          size="sm"
-          variant="ghost"
+          size="small"
+          variant="text"
           className="h-6 select-none justify-between gap-1 px-2 text-muted-foreground text-xs"
           aria-expanded={open}
           role="combobox"

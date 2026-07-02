@@ -1,6 +1,6 @@
 "use client"
 
-import { Renderer, Program, Mesh, Color, Triangle } from "ogl"
+import { Renderer, Program, Mesh, Color, Triangle, type OGLRenderingContext } from "ogl"
 import { useEffect, useRef } from "react"
 
 const vertexShader = `
@@ -51,7 +51,7 @@ export type IridescenceProps = {
   speed?: number
   amplitude?: number
   mouseReact?: boolean
-} & React.HTMLAttributes<HTMLDivElement>
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "color">
 
 export function Iridescence({
   color = [1, 1, 1],
@@ -67,7 +67,7 @@ export function Iridescence({
     if (!ctnDom.current) return
     const ctn = ctnDom.current
     const renderer = new Renderer()
-    const gl = renderer.gl as WebGLRenderingContext
+    const gl = renderer.gl as OGLRenderingContext
     gl.clearColor(1, 1, 1, 1)
 
     let program: Program

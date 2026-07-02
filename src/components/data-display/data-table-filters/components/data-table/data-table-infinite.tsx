@@ -103,37 +103,7 @@ export interface DataTableInfiniteProps<TData, TValue> {
   className?: string;
 }
 
-export function DataTableInfinite<TData, TValue>({
-  columns,
-  getRowClassName,
-  getRowId,
-  data,
-  defaultColumnFilters = [],
-  defaultColumnSorting = [],
-  defaultRowSelection = {},
-  defaultColumnVisibility = {},
-  filterFields = [],
-  isFetching,
-  isLoading,
-  fetchNextPage,
-  hasNextPage,
-  fetchPreviousPage,
-  refetch,
-  totalRows,
-  filterRows,
-  totalRowsFetched = 0,
-  getFacetedUniqueValues,
-  getFacetedMinMaxValues,
-  renderLiveRow,
-  tableId = "infinite",
-  commandSlot,
-  sheetSlot,
-  toolbarActions,
-  chartSlot,
-  footerSlot,
-  floatingBarSlot,
-  className,
-}: DataTableInfiniteProps<TData, TValue>) {
+export function DataTableInfinite<TData, TValue>({ columns, getRowClassName, getRowId, data, defaultColumnFilters = [], defaultColumnSorting = [], defaultRowSelection = {}, defaultColumnVisibility = {}, filterFields = [], isFetching, isLoading, fetchNextPage, hasNextPage, totalRows, filterRows, totalRowsFetched = 0, getFacetedUniqueValues, getFacetedMinMaxValues, renderLiveRow, tableId = "infinite", commandSlot, sheetSlot, toolbarActions, chartSlot, footerSlot, floatingBarSlot }: DataTableInfiniteProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(defaultColumnFilters);
   const [sorting, setSorting] =
@@ -476,7 +446,7 @@ export function DataTableInfinite<TData, TValue>({
                       <Button
                         disabled={isFetching || isLoading}
                         onClick={() => fetchNextPage()}
-                        variant="outline"
+                        variant="outlined"
                       >
                         {isFetching ? (
                           <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -515,15 +485,7 @@ export function DataTableInfinite<TData, TValue>({
  * e.g. DataTableFilterControls, DataTableFilterCommand, DataTableToolbar, DataTableHeader
  */
 
-function Row<TData>({
-  row,
-  table,
-  selected,
-  detailRowId,
-  onRowClick,
-  visibleColumnIds,
-  columnOrder,
-}: {
+function Row<TData>({ row, table, selected, detailRowId, onRowClick }: {
   row: Row<TData>;
   table: TTable<TData>;
   // REMINDER: row.getIsSelected(); - just for memoization

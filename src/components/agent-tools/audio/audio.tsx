@@ -85,10 +85,12 @@ function FullPlayer({
         <div className="flex items-start gap-3">
           <div className="flex flex-1 flex-col gap-2">
             <Slider
-              value={[controls.currentTime]}
+              value={controls.currentTime}
               max={controls.duration || 100}
               step={0.1}
-              onValueChange={controls.onSeek}
+              onValueChange={(value) =>
+                controls.onSeek(Array.isArray(value) ? value : [value])
+              }
               onPointerDown={controls.onSeekStart}
               onPointerUp={controls.onSeekEnd}
               className="cursor-pointer [&_[data-slot=range]]:bg-foreground [&_[data-slot=thumb]]:size-3 [&_[data-slot=thumb]]:border-2 [&_[data-slot=thumb]]:border-background [&_[data-slot=thumb]]:bg-foreground"
@@ -100,8 +102,8 @@ function FullPlayer({
             </div>
           </div>
           <Button
-            variant="default"
-            size="icon"
+            variant="solid"
+            shape="square"
             onClick={controls.onPlayPause}
             className="-mt-4 size-10 shrink-0 rounded-full"
             aria-label={controls.isPlaying ? "Pause" : "Play"}
@@ -187,8 +189,8 @@ function CompactPlayer({
         )}
       </div>
       <Button
-        variant="default"
-        size="icon"
+        variant="solid"
+        shape="square"
         onClick={controls.onPlayPause}
         className="relative size-10 shrink-0 rounded-full shadow-md"
         aria-label={controls.isPlaying ? "Pause" : "Play"}

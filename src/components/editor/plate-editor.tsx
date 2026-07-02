@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 
 import { normalizeStaticValue } from 'platejs';
 import { Plate, usePlateEditor } from 'platejs/react';

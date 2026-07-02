@@ -1,15 +1,15 @@
 "use client"
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react"
-import { motion, AnimatePresence, type Transition } from "motion/react"
+import { motion, AnimatePresence, type Transition, type TargetAndTransition, type VariantLabels } from "motion/react"
 import { cn } from "@/lib/utils"
 
 export type RotatingTextProps = {
   texts: string[]
   transition?: Transition
-  initial?: Record<string, unknown>
-  animate?: Record<string, unknown>
-  exit?: Record<string, unknown>
+  initial?: boolean | VariantLabels | TargetAndTransition
+  animate?: boolean | VariantLabels | TargetAndTransition
+  exit?: VariantLabels | TargetAndTransition
   animatePresenceMode?: "wait" | "popLayout" | "sync"
   animatePresenceInitial?: boolean
   rotationInterval?: number
@@ -23,8 +23,6 @@ export type RotatingTextProps = {
   splitLevelClassName?: string
   elementLevelClassName?: string
 }
-
-export type { RotatingTextProps }
 
 function splitIntoCharacters(text: string): string[] {
   if (typeof Intl !== "undefined" && Intl.Segmenter) {

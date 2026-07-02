@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 
-import { cn } from "@/lib/utils"
 
 export type DecayCardProps = {
   width?: number

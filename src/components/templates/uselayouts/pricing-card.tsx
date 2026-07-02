@@ -1,16 +1,9 @@
 "use client";
 
-import {
-  Add01Icon,
-  MinusPlus01Icon,
-  MinusSignIcon,
-  Tick02Icon,
-  UserGroupIcon,
-  UserStoryIcon,
-} from "@hugeicons/core-free-icons";
+import { Add01Icon, MinusSignIcon, Tick02Icon, UserStoryIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import NumberFlow from "@number-flow/react";
-import { AnimatePresence, motion, LayoutGroup } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
 // Change Here

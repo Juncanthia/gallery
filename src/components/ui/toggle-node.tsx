@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 
 import type { PlateElementProps } from 'platejs/react';
 
@@ -18,8 +17,8 @@ export function ToggleElement(props: PlateElementProps) {
   return (
     <PlateElement {...props} className="pl-6">
       <Button
-        size="icon"
-        variant="ghost"
+        shape="square"
+        variant="text"
         className="-left-0.5 absolute top-0 size-6 cursor-pointer select-none items-center justify-center rounded-md p-px text-muted-foreground transition-colors hover:bg-accent [&_svg]:size-4"
         contentEditable={false}
         {...buttonProps}

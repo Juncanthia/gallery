@@ -105,8 +105,8 @@ function OptionItem({
     <Button
       ref={buttonRef}
       data-id={option.id}
-      variant="ghost"
-      size="lg"
+      variant="text"
+      size="large"
       role="option"
       aria-selected={isSelected}
       onClick={onToggle}

@@ -74,7 +74,7 @@ function GradualBlur(props: GradualBlurConfig) {
       style: {},
       ...presetConfig,
       ...props,
-    } as GradualBlurConfig & { position: string; strength: number; height: string; divCount: number; opacity: number; exponential: boolean }
+    } as GradualBlurConfig & { position: string; strength: number; height: string; divCount: number; opacity: number; exponential: boolean; curve: string; zIndex: number }
   }, [props])
 
   const [isVisible, setIsVisible] = useState(config.animated !== "scroll")

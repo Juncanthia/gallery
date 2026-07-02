@@ -208,7 +208,7 @@ export function MetaBalls({
     resize()
 
     function onPointerMove(e: PointerEvent) {
-      if (!enableMouseInteraction) return
+      if (!enableMouseInteraction || !container) return
       const rect = container.getBoundingClientRect()
       const px = e.clientX - rect.left
       const py = e.clientY - rect.top

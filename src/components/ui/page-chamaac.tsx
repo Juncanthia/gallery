@@ -1,3 +1,3 @@
 "use client"
 
-export { ModernSmoke } from "@/components/effects/backgrounds/chamaac/modern-smoke/page"
+export { default as ModernSmoke } from "@/components/effects/backgrounds/chamaac/modern-smoke/page"
