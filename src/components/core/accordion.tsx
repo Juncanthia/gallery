@@ -1,18 +1,158 @@
-import { ChevronDown as ChevronDownIcon } from 'lucide-react';
+'use client';
 
-import {
-  Accordion as AccordionPrimitive,
-  AccordionItem as AccordionItemPrimitive,
-  AccordionHeader as AccordionHeaderPrimitive,
-  AccordionTrigger as AccordionTriggerPrimitive,
-  AccordionContent as AccordionContentPrimitive,
-  useAccordionItem,
-  type AccordionProps as AccordionPrimitiveProps,
-  type AccordionItemProps as AccordionItemPrimitiveProps,
-  type AccordionTriggerProps as AccordionTriggerPrimitiveProps,
-  type AccordionContentProps as AccordionContentPrimitiveProps,
-} from '@/components/_internal/radix/accordion';
+import * as React from 'react';
+import {Accordion as RadixAccordion} from 'radix-ui';
+import { motion, AnimatePresence, type HTMLMotionProps } from 'motion/react';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
+import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { ChevronDown as ChevronDownIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+type AccordionContextType = {
+  value: string | string[] | undefined;
+  setValue: (value: string | string[] | undefined) => void;
+};
+
+type AccordionItemContextType = {
+  value: string;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+};
+
+const [AccordionProvider, useAccordion] =
+  getStrictContext<AccordionContextType>('AccordionContext');
+
+const [AccordionItemProvider, useAccordionItem] =
+  getStrictContext<AccordionItemContextType>('AccordionItemContext');
+
+type AccordionPrimitiveProps = React.ComponentProps<typeof RadixAccordion.Root>;
+
+function AccordionPrimitive(props: AccordionPrimitiveProps) {
+  const [value, setValue] = useControlledState<string | string[] | undefined>({
+    value: props?.value,
+    defaultValue: props?.defaultValue,
+    onChange: props?.onValueChange as (
+      value: string | string[] | undefined,
+    ) => void,
+  });
+
+  return (
+    <AccordionProvider value={{ value, setValue }}>
+      <RadixAccordion.Root
+        data-slot="accordion"
+        {...props}
+        onValueChange={setValue}
+      />
+    </AccordionProvider>
+  );
+}
+
+type AccordionItemPrimitiveProps = React.ComponentProps<typeof RadixAccordion.Item>;
+
+function AccordionItemPrimitive(props: AccordionItemPrimitiveProps) {
+  const { value } = useAccordion();
+  const [isOpen, setIsOpen] = React.useState(
+    value?.includes(props?.value) ?? false,
+  );
+
+  React.useEffect(() => {
+    setIsOpen(value?.includes(props?.value) ?? false);
+  }, [value, props?.value]);
+
+  return (
+    <AccordionItemProvider value={{ isOpen, setIsOpen, value: props.value }}>
+      <RadixAccordion.Item data-slot="accordion-item" {...props} />
+    </AccordionItemProvider>
+  );
+}
+
+type AccordionHeaderProps = React.ComponentProps<
+  typeof RadixAccordion.Header
+>;
+
+function AccordionHeaderPrimitive(props: AccordionHeaderProps) {
+  return <RadixAccordion.Header data-slot="accordion-header" {...props} />;
+}
+
+type AccordionTriggerPrimitiveProps = React.ComponentProps<
+  typeof RadixAccordion.Trigger
+>;
+
+function AccordionTriggerPrimitive(props: AccordionTriggerPrimitiveProps) {
+  return (
+    <RadixAccordion.Trigger data-slot="accordion-trigger" {...props} />
+  );
+}
+
+type AccordionContentPrimitiveProps = Omit<
+  React.ComponentProps<typeof RadixAccordion.Content>,
+  'asChild' | 'forceMount'
+> &
+  HTMLMotionProps<'div'> & {
+    keepRendered?: boolean;
+  };
+
+function AccordionContentPrimitive({
+  keepRendered = false,
+  transition = { duration: 0.35, ease: 'easeInOut' },
+  ...props
+}: AccordionContentPrimitiveProps) {
+  const { isOpen } = useAccordionItem();
+
+  return (
+    <AnimatePresence>
+      {keepRendered ? (
+        <RadixAccordion.Content asChild forceMount>
+          <motion.div
+            key="accordion-content"
+            data-slot="accordion-content"
+            initial={{ height: 0, opacity: 0, '--mask-stop': '0%', y: 20 }}
+            animate={
+              isOpen
+                ? { height: 'auto', opacity: 1, '--mask-stop': '100%', y: 0 }
+                : { height: 0, opacity: 0, '--mask-stop': '0%', y: 20 }
+            }
+            transition={transition}
+            style={{
+              maskImage:
+                'linear-gradient(black var(--mask-stop), transparent var(--mask-stop))',
+              WebkitMaskImage:
+                'linear-gradient(black var(--mask-stop), transparent var(--mask-stop))',
+              overflow: 'hidden',
+            }}
+            {...props}
+          />
+        </RadixAccordion.Content>
+      ) : (
+        isOpen && (
+          <RadixAccordion.Content asChild forceMount>
+            <motion.div
+              key="accordion-content"
+              data-slot="accordion-content"
+              initial={{ height: 0, opacity: 0, '--mask-stop': '0%', y: 20 }}
+              animate={{
+                height: 'auto',
+                opacity: 1,
+                '--mask-stop': '100%',
+                y: 0,
+              }}
+              exit={{ height: 0, opacity: 0, '--mask-stop': '0%', y: 20 }}
+              transition={transition}
+              style={{
+                maskImage:
+                  'linear-gradient(black var(--mask-stop), transparent var(--mask-stop))',
+                WebkitMaskImage:
+                  'linear-gradient(black var(--mask-stop), transparent var(--mask-stop))',
+                overflow: 'hidden',
+              }}
+              {...props}
+            />
+          </RadixAccordion.Content>
+        )
+      )}
+    </AnimatePresence>
+  );
+}
 
 type AccordionSize = 'small' | 'middle' | 'large';
 type AccordionExpandIconPlacement = 'start' | 'end';
@@ -69,7 +209,6 @@ const accordionTriggerSizeClasses: Record<AccordionSize, string> = {
   large: 'px-4 py-4',
 };
 
-import * as React from 'react';
 const AccordionContext = React.createContext<{ variant?: 'default' }>({ variant: 'default' });
 
 function Accordion({
