@@ -52,7 +52,7 @@ pnpm type-check 2>&1 | tail -5
 - [x] Q3：包名 → 暂不定，内部别名用 `@/kit/*`
 - [x] Q4：（作废）`ui/` 目录已不存在，Stage B 已完成。转发壳问题转化为 **Q6**
 - [x] Q5：Tier 1 名单 → **通用 hooks 全部公开**（含 useUploadFile）；charts/media/data-table 领域 hooks 仍为 Tier 3 不进 kit
-- [ ] **Q6（新增，待裁决）**：`_internal/radix/` 壳/肉分层的处理，方案 A（就地合并进 core，消灭分层）或方案 B（原样搬迁到 foundations/primitives），见 `06-fact-check.md` 第二节。**A 未裁决前 T1.4 不得开工**
+- [x] **Q6**：`_internal/radix/` 壳/肉分层 → **方案 A（就地合并进 core，消灭分层）**，见 `06-fact-check.md` 第二节 + `AGENT_BRIEFING.md`
 
 ### Phase 0 出口检查
 
