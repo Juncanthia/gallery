@@ -11,7 +11,7 @@ import {
   useDismiss,
   useScrollLock,
   visuallyHidden,
-} from "@/components/_internal/dice/internal";
+} from "@/_internals/foundations/headless";
 import { FloatingFocusManager } from "@floating-ui/react";
 import * as React from "react";
 import { getDataState, useMentionContext } from "./mention-root";

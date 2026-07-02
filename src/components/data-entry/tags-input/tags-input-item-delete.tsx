@@ -1,4 +1,4 @@
-import { composeEventHandlers, Primitive } from "@/components/_internal/dice/internal";
+import { composeEventHandlers, Primitive } from "@/_internals/foundations/headless";
 import * as React from "react";
 import { useTagsInputItem } from "./tags-input-item";
 import { useTagsInput } from "./tags-input-root";

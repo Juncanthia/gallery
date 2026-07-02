@@ -11,7 +11,7 @@ import {
   useId,
   useItemCollection,
   VisuallyHiddenInput,
-} from "@/components/_internal/dice/internal";
+} from "@/_internals/foundations/headless";
 import * as React from "react";
 import type { TagsInputInput } from "./tags-input-input";
 

@@ -6,7 +6,7 @@ import {
   useFormControl,
   useId,
   VisuallyHiddenInput,
-} from "@/components/_internal/dice/internal";
+} from "@/_internals/foundations/headless";
 import * as React from "react";
 import { useCheckboxGroup } from "./checkbox-group-root";
 

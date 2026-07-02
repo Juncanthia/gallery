@@ -4,7 +4,7 @@ import {
   DATA_ITEM_ATTR,
   Primitive,
   useId,
-} from "@/components/_internal/dice/internal";
+} from "@/_internals/foundations/headless";
 import * as React from "react";
 import { type InputValue, useTagsInput } from "./tags-input-root";
 

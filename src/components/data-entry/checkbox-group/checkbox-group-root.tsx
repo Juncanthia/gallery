@@ -6,7 +6,7 @@ import {
   useControllableState,
   useDirection,
   useId,
-} from "@/components/_internal/dice/internal";
+} from "@/_internals/foundations/headless";
 import * as React from "react";
 
 const ROOT_NAME = "CheckboxGroupRoot";

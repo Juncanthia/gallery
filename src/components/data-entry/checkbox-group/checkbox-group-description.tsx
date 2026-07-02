@@ -1,4 +1,4 @@
-import { Primitive } from "@/components/_internal/dice/internal";
+import { Primitive } from "@/_internals/foundations/headless";
 import * as React from "react";
 import { useCheckboxGroup } from "./checkbox-group-root";
 

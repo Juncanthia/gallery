@@ -1,4 +1,4 @@
-import { Portal as PortalPrimitive, type PortalProps } from "@/components/_internal/dice/internal";
+import { Portal as PortalPrimitive, type PortalProps } from "@/_internals/foundations/headless";
 import * as React from "react";
 
 const PORTAL_NAME = "MentionPortal";

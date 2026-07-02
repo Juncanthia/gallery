@@ -1,4 +1,4 @@
-import { Presence, Primitive } from "@/components/_internal/dice/internal";
+import { Presence, Primitive } from "@/_internals/foundations/headless";
 import * as React from "react";
 import { getDataState, useCheckboxGroupItem } from "./checkbox-group-item";
 

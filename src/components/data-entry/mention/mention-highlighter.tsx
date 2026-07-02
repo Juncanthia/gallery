@@ -1,4 +1,4 @@
-import { useCallbackRef, useComposedRefs } from "@/components/_internal/dice/internal";
+import { useCallbackRef, useComposedRefs } from "@/_internals/foundations/headless";
 import * as React from "react";
 import { useMentionContext } from "./mention-root";
 
