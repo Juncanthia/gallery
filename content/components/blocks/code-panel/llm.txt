@@ -99,7 +99,7 @@ export default function Demo() {
 | cursor | 是否显示打字光标动画（最后一行末尾闪烁竖线） | `boolean` | - |
 | className | 附加样式类，与默认代码区样式合并 | `string` | - |
 
-`CodeBlock` 继承 `Omit<CodeBlockPropsPrimitive, 'code'>`，即 CodeBlock primitive 除 `code` 外的所有属性。`code` 从 Context 自动获取，`theme` 由 `useTheme().resolvedTheme` 自动推断（`'dark'` 或 `'light'`）。代码高亮和打字动画由底层 `CodeBlockPrimitive`（`@/components/_internal/animate/blocks/code-block`）处理。
+`CodeBlock` 继承 `Omit<CodeBlockPropsPrimitive, 'code'>`，即 CodeBlock primitive 除 `code` 外的所有属性。`code` 从 Context 自动获取，`theme` 由 `useTheme().resolvedTheme` 自动推断（`'dark'` 或 `'light'`）。代码高亮和打字动画由底层 `CodeBlockPrimitive`（`@/_internals/foundations/primitives/animate/code-block`）处理。
 
 ## 样式模型 {#styling-model}
 
@@ -117,16 +117,16 @@ export default function Demo() {
 
 - `src/components/blocks/code-panel/index.tsx`（复合组件定义）
 - `src/components/core/blocks/code-panel.tsx`（re-export barrel）
-- `src/primitives/animate/blocks/code-block.tsx`（底层 CodeBlock primitive，负责语法高亮和打字动画）
+- `src/_internals/foundations/primitives/animate/blocks/code-block.tsx`（底层 CodeBlock primitive，负责语法高亮和打字动画）
 
 直接依赖摘要：
 
 - React（`useRef`、Context）
 - `next-themes`（`useTheme`，用于暗色模式主题切换）
-- `@/components/_internal/animate/blocks/code-block`（`CodeBlock` primitive 及类型）
+- `@/_internals/foundations/primitives/animate/code-block`（`CodeBlock` primitive 及类型）
 - `@/components/core/copy-button`（复制按钮）
 - `@/lib/get-strict-context`（强类型 Context 工具）
-- `@/lib/utils`（`cn` 样式合并）
+- `@/kit/utils`（`cn` 样式合并）
 - Tailwind CSS
 
 实现注意：

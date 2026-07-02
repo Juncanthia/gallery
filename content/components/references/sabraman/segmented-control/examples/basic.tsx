@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { LegacySegmentedControl } from "@/components/_internal/sabraman"
+import { LegacySegmentedControl } from "@/components/legacy-ui"
 
 export default function Demo() {
   const [value, setValue] = useState("option1")

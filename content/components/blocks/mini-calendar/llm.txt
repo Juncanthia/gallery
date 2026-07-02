@@ -146,7 +146,7 @@ export default function Demo() {
 - `src/components/blocks/mini-calendar/index.tsx` — 组件实现
 - `src/components/core/blocks/mini-calendar.tsx` — 重新导出
 
-直接依赖：`@/components/core/button`、`@/lib/utils`、`@radix-ui/react-use-controllable-state`、`date-fns`、`lucide-react`、`radix-ui`（Slot）。
+直接依赖：`@/components/core/button`、`@/kit/utils`、`@radix-ui/react-use-controllable-state`、`date-fns`、`lucide-react`、`radix-ui`（Slot）。
 
 实现注意：
 

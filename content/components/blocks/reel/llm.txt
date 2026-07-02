@@ -291,7 +291,7 @@ export default function Demo() {
 - `lucide-react`：图标（ChevronLeft、ChevronRight、Pause、Play、Volume2、VolumeX）。
 - `@/components/core/button`：控制按钮。
 - `@/components/core/progress`：默认进度条。
-- `@/lib/utils`：`cn` 工具函数。
+- `@/kit/utils`：`cn` 工具函数。
 
 关键行为：
 

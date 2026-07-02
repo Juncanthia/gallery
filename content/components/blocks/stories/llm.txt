@@ -228,7 +228,7 @@ type StoryOverlayProps = HTMLAttributes<HTMLDivElement> & {
 
 - `@/components/core/avatar` — 作者头像
 - `@/components/core/carousel` — 轮播容器（基于 Embla）
-- `@/lib/utils` — `cn` 样式合并工具
+- `@/kit/utils` — `cn` 样式合并工具
 
 实现注意：
 

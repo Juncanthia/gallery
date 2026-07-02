@@ -221,7 +221,7 @@ export default function Demo() {
 
 - `@/components/core/tabs`：Tabs、TabsContent、TabsList、TabsTrigger。
 - `@/components/core/copy-button`：CopyButton 复制按钮（内部依赖 Button 和 motion/react）。
-- `@/lib/utils`：`cn` 样式合并函数。
+- `@/kit/utils`：`cn` 样式合并函数。
 
 关键行为：
 

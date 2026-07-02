@@ -236,7 +236,7 @@ function useFileUpload<T>(selector: (state: { files: Map<File, FileState>; dragO
 
 - `radix-ui`（`Slot` 用于 `asChild`，`Direction` 用于 RTL 继承）
 - `lucide-react`（文件类型图标）
-- `@/lib/utils`（cn）
+- `@/kit/utils`（cn）
 - `@/hooks/use-as-ref`、`@/hooks/use-lazy-ref`（通用 ref/惰性初始化 hook，非 UI 组件，多处复用）
 - `React.useSyncExternalStore`（内部 store 订阅机制）
 

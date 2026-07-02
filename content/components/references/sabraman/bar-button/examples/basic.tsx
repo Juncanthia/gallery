@@ -1,5 +1,5 @@
 import { Search, Download, ChevronRight } from "lucide-react"
-import { LegacyBarButton } from "@/components/_internal/sabraman"
+import { LegacyBarButton } from "@/components/legacy-ui"
 
 export default function Demo() {
   return (

@@ -149,7 +149,7 @@ export default function Demo() {
 
 - `src/components/blocks/avatar-stack/index.tsx`：AvatarStack 定义。
 
-直接依赖：`@/lib/utils`（cn）。
+直接依赖：`@/kit/utils`（cn）。
 
 关键行为：
 

@@ -108,7 +108,7 @@ type ToggleProps = TogglePrimitiveProps &
 直接依赖摘要：
 
 - `class-variance-authority`
-- `@/components/_internal/radix/toggle`
+- `@/components/core/toggle`
 
 实现注意：
 

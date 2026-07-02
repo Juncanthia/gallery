@@ -231,7 +231,7 @@ export default function Demo() {
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/core/context-menu` 导入，不要从 `@/components/_internal/radix` 直接导入。
+1. 从 `@/components/core/context-menu` 导入，不要从 `@/components/core` 直接导入。
 2. 简单菜单优先使用 items 模式，复杂自定义使用组合模式。
 3. 危险操作使用 `variant="destructive"`（组合模式）或 `danger: true`（items 模式）。
 4. 基于 Radix ContextMenu，保留所有键盘和 ARIA 语义。

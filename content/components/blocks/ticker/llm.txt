@@ -188,7 +188,7 @@ type TickerPriceChangeProps = HTMLAttributes<HTMLSpanElement> & {
 直接依赖摘要：
 
 - `@/components/core/avatar` — TickerIcon 的头像展示
-- `@/lib/utils` — `cn` 样式合并工具
+- `@/kit/utils` — `cn` 样式合并工具
 - `react` — Context、memo、useMemo
 
 实现注意：

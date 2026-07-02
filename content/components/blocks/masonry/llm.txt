@@ -194,7 +194,7 @@ export default function Demo() {
 
 - React（`ReactNode` 类型）
 - Tailwind CSS `columns-*` 和 `break-inside-*` 工具类（`Masonry`）
-- `@/lib/utils`（cn，`Masonry`）
+- `@/kit/utils`（cn，`Masonry`）
 - `radix-ui`（`Slot`，`VirtualMasonry`/`VirtualMasonryItem` 的 `asChild`）
 - `@/lib/compose-refs`、`@/hooks/use-isomorphic-layout-effect`（`VirtualMasonry` 复用的通用 ref/effect 工具，非 UI 组件）
 

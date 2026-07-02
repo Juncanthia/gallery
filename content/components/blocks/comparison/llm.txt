@@ -147,7 +147,7 @@ export default function Demo() {
 - React（`useState`、`createContext`、`useContext`、事件处理）
 - `motion/react`（`motion`、`useMotionValue`、`useSpring`、`useTransform`）
 - `lucide-react`（`GripVertical` 图标）
-- `@/lib/utils`（`cn` 样式合并）
+- `@/kit/utils`（`cn` 样式合并）
 - Tailwind CSS
 
 实现注意：

@@ -198,7 +198,7 @@ type Activity = {
 
 - React（`useContext`、`createContext`、`useMemo`、`Fragment`）
 - `date-fns`（`differenceInCalendarDays`、`eachDayOfInterval`、`formatISO`、`getDay`、`getMonth`、`getYear`、`nextDay`、`parseISO`、`subWeeks`）
-- `@/lib/utils`（`cn` 样式合并）
+- `@/kit/utils`（`cn` 样式合并）
 - Tailwind CSS
 
 实现注意：

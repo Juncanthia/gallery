@@ -137,7 +137,7 @@ export default function Demo() {
 - `@radix-ui/react-use-controllable-state` — 受控/非受控状态管理
 - `motion/react` — 激活态指示器布局动画（`layoutId`）
 - `lucide-react` — Monitor、Sun、Moon 图标
-- `@/lib/utils` — `cn` 样式合并工具
+- `@/kit/utils` — `cn` 样式合并工具
 
 实现注意：
 

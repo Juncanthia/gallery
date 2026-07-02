@@ -224,7 +224,7 @@ type SidebarSeparatorProps = React.ComponentProps<typeof Separator>;
 - `@/components/core/skeleton`
 - `@/components/core/sheet`
 - `@/components/blocks/tooltip-motion`
-- `@/components/_internal/effects/highlight`
+- `@/kit/primitives`
 
 实现注意：
 

@@ -100,7 +100,7 @@ export default function Demo() {
 
 - `src/components/blocks/code-tabs/index.tsx`：复合组件定义。
 - `src/components/core/blocks/code-tabs.tsx`：re-export barrel。
-- `src/primitives/animate/tabs.tsx`：Tabs 动效 primitive。
+- `src/_internals/foundations/primitives/animate/tabs.tsx`：Tabs 动效 primitive。
 - `src/components/core/copy-button.tsx`：复制按钮。
 
 直接依赖：React（useState、useEffect）、next-themes（useTheme）、shiki（codeToHtml、createCssVariablesTheme、动态 import）、Tabs primitive 系列、CopyButton、cn。

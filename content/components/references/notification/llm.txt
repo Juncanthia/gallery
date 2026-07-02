@@ -56,7 +56,7 @@ stack:
 命令式调用，无需组件声明。
 
 ```tsx
-import { references/notification } from "@/components/_internal/sabraman"
+import { references/notification } from "@/components/legacy-ui"
 
 export default function Demo() {
   return (
@@ -81,7 +81,7 @@ export default function Demo() {
 ### 带操作与配置
 
 ```tsx
-import { references/notification } from "@/components/_internal/sabraman"
+import { references/notification } from "@/components/legacy-ui"
 
 export default function Demo() {
   return (
@@ -188,7 +188,7 @@ export default function Demo() {
 
 当 AI 生成本项目通知相关代码时，应遵守：
 
-1. 从 `@/components/_internal/sabraman` 导入 `references/notification` 对象。
+1. 从 `@/components/legacy-ui` 导入 `references/notification` 对象。
 2. 使用 `references/notification.success/info/warning/error` 方法，传入 `NotificationArgs` 对象。
 3. 确保页面中已挂载 `<Toaster />`（来自 `@/components/core/toaster`）。
 4. `title` 为必填属性，`description` 为可选。

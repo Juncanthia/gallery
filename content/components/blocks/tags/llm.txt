@@ -231,7 +231,7 @@ type TagsItemProps = ComponentProps<typeof CommandItem>;
 - `@/components/core/popover` — 下拉面板
 - `@/components/blocks/combobox` — Tags 底层实现
 - `lucide-react` — 图标
-- `@/lib/utils` — `cn` 样式合并工具
+- `@/kit/utils` — `cn` 样式合并工具
 
 实现注意：
 

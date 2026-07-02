@@ -226,7 +226,7 @@ type StatusLabelProps = HTMLAttributes<HTMLSpanElement>
 直接依赖：
 
 - `@/components/core/badge`：Status 底层基于 Badge 渲染。
-- `@/lib/utils`：`cn` 类名合并工具。
+- `@/kit/utils`：`cn` 类名合并工具。
 
 关键行为：
 

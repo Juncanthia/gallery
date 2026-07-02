@@ -141,7 +141,7 @@ type RadioGroupItemProps = RadioGroupItemPrimitiveProps & {
 直接依赖摘要：
 
 - `class-variance-authority`
-- `@/components/_internal/radix/radio-group`
+- `@/components/core/radio-group`
 
 实现注意：
 

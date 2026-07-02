@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { LegacySwitch } from "@/components/_internal/sabraman"
+import { LegacySwitch } from "@/components/legacy-ui"
 
 export default function Demo() {
   const [checked, setChecked] = useState(false)

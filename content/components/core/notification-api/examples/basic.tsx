@@ -1,4 +1,4 @@
-import { showLegacyNotification } from "@/components/_internal/sabraman"
+import { showLegacyNotification } from "@/components/legacy-ui"
 import { Button } from "@/components/core/button"
 
 export default function Na() {

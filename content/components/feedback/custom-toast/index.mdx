@@ -34,7 +34,7 @@ CustomToast 通过 `type` 区分提示语义，每种类型有独立的图标和
 ```tsx
 import { Toaster } from "sonner"
 import { Button } from "@/components/core/button"
-import { customToast } from "@/components/_internal/gooseui/lib/toast"
+import { customToast } from "@/kit/utils"
 
 export default function Demo() {
   return (
@@ -175,7 +175,7 @@ CustomToast 使用 Tailwind CSS 构建。如需全局调整样式，修改 `src/
 
 AI 生成 CustomToast 代码时：
 
-1. 从 `@/components/_internal/gooseui/lib/toast` 导入 `customToast`。
+1. 从 `@/kit/utils` 导入 `customToast`。
 2. 从 `sonner` 导入 `Toaster` 并在应用根组件中渲染。
 3. 从 `@/components/feedback/custom-toast` 导入 `CustomToast`（仅在需要直接使用组件时）。
 4. 使用 `customToast.success()` / `.error()` / `.warning()` / `.info()` 触发提示。

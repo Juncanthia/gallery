@@ -165,7 +165,7 @@ type PopoverArrowProps = PopoverArrowPrimitiveProps;
 直接依赖摘要：
 
 - `@/components/core/button`
-- `@/components/_internal/radix/popover`
+- `@/components/core/popover`
 
 实现注意：
 

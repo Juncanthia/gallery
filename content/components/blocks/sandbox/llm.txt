@@ -198,7 +198,7 @@ export default function Demo() {
 
 ## 依赖与实现说明
 
-核心文件：`src/components/blocks/sandbox/index.tsx`。依赖：`@codeblocks/sandbox/sandpack-react`（沙箱引擎）、`@/lib/utils`（`cn`）。
+核心文件：`src/components/blocks/sandbox/index.tsx`。依赖：`@codeblocks/sandbox/sandpack-react`（沙箱引擎）、`@/kit/utils`（`cn`）。
 
 关键行为：
 1. SandboxTabs 通过 Context 管理 Tab 切换，支持受控和非受控双模式。

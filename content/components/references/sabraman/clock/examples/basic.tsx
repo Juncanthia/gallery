@@ -1,4 +1,4 @@
-import { LegacyClock } from "@/components/_internal/sabraman"
+import { LegacyClock } from "@/components/legacy-ui"
 
 export default function Demo() {
   return (

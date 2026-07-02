@@ -25,7 +25,7 @@ Notification 通知提醒。全局通知提醒 API，在屏幕角落展示提示
 <ComponentShowcase id="references/notification" path="references/notification/basic" />
 
 ```tsx
-import { references/notification } from "@/components/_internal/sabraman"
+import { references/notification } from "@/components/legacy-ui"
 import { Button } from "@/components/core/button"
 
 export default function Demo() {
@@ -87,7 +87,7 @@ export default function Demo() {
 ### 自定义位置与时长
 
 ```tsx
-import { references/notification } from "@/components/_internal/sabraman"
+import { references/notification } from "@/components/legacy-ui"
 import { Button } from "@/components/core/button"
 
 export default function Demo() {
@@ -209,7 +209,7 @@ references/notification.destroy("upload")
 
 <h2 id="llm-rules">LLM 使用规则</h2>
 
-1. 从 `@/components/_internal/sabraman` 导入 `references/notification` 对象。
+1. 从 `@/components/legacy-ui` 导入 `references/notification` 对象。
 2. 使用 `references/notification.success/info/warning/error` 方法，`title` 为必填。
 3. 确保页面中已挂载 `<Toaster />`（来自 `@/components/core/toaster`）。
 4. 需要不自动关闭的通知设置 `duration: 0`。

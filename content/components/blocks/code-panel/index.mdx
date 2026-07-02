@@ -48,7 +48,7 @@ import { Code, CodeBlock } from "@/components/blocks/code-panel"
 
 export default function Demo() {
   return (
-    <Code code={`import { cn } from "@/lib/utils"\n\nexport function Button({ className, ...props }) {\n  return <button className={cn("btn", className)} {...props} />\n}`}>
+    <Code code={`import { cn } from "@/kit/utils"\n\nexport function Button({ className, ...props }) {\n  return <button className={cn("btn", className)} {...props} />\n}`}>
       <CodeBlock />
     </Code>
   )

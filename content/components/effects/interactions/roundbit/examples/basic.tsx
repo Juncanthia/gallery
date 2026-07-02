@@ -1,4 +1,4 @@
-import { RoundbitFrame } from "@/components/_internal/sabraman"
+import { RoundbitFrame } from "@/components/legacy-ui"
 
 export default function Demo() {
   return (

@@ -8,7 +8,7 @@ import {
   LegacyAlertDialogHeader,
   LegacyAlertDialogTitle,
   LegacyAlertDialogTrigger,
-} from "@/components/_internal/sabraman"
+} from "@/components/legacy-ui"
 
 export default function Demo() {
   return (

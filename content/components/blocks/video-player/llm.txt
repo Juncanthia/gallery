@@ -165,7 +165,7 @@ export default function Demo() {
 - `react` — 组件框架
 - `tailwindcss` — 样式系统
 - `media-chrome`（`^4.19.2`）— Web Components 媒体控制库，提供 `<media-controller>`、`<media-control-bar>` 等 Custom Elements 及其 React 绑定
-- `@/lib/utils` 中的 `cn` — 类名合并工具
+- `@/kit/utils` 中的 `cn` — 类名合并工具
 
 实现要点：
 

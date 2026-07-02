@@ -27,7 +27,7 @@ stack:
 
 # TooltipMotion 动效提示
 
-带布局动画和弹性动效的提示组件，基于 `@/components/_internal/animate/tooltip` 构建，额外叠加 `motion/react-client` 的 `layout` 动画能力。Tooltip 显示/隐藏时带有位移和缩放入场动画，内容变化时自动触发布局变形过渡。
+带布局动画和弹性动效的提示组件，基于 `@/_internals/foundations/primitives/animate/tooltip` 构建，额外叠加 `motion/react-client` 的 `layout` 动画能力。Tooltip 显示/隐藏时带有位移和缩放入场动画，内容变化时自动触发布局变形过渡。
 
 本组件为项目本地复合组件，无 Ant Design 直接对应。实现以本地源码为准，不引入 AntD 的 ConfigProvider、css-in-js、Design Token 运行时或历史兼容语法糖。
 
@@ -166,7 +166,7 @@ type TooltipContentProps = {
 ## 样式模型 {#styling-model}
 
 - 样式主要由 Tailwind CSS className 与本地 `cn` 合并函数控制。
-- 组件包装 `@/components/_internal/animate/tooltip` primitive，交互状态、键盘行为、ARIA 基础和浮动定位能力来自底层 primitive；本地复合组件负责视觉收敛和 motion 动画叠加。
+- 组件包装 `@/_internals/foundations/primitives/animate/tooltip` primitive，交互状态、键盘行为、ARIA 基础和浮动定位能力来自底层 primitive；本地复合组件负责视觉收敛和 motion 动画叠加。
 - 进出场动画由 primitive 内置的 `motion.div`（带 `AnimatePresence`）控制，使用 spring 过渡（stiffness: 300, damping: 35）。
 - 内容布局动画由复合层添加的 `motion.div layout` prop 控制。
 - 主题颜色使用 `bg-primary`、`text-primary-foreground`、`fill-primary` 等项目级语义变量。
@@ -180,9 +180,9 @@ type TooltipContentProps = {
 
 直接依赖摘要：
 
-- `@/components/_internal/animate/tooltip` — 动画 Tooltip primitive（基于 `@floating-ui/react` 定位 + `motion/react` 动画）
+- `@/_internals/foundations/primitives/animate/tooltip` — 动画 Tooltip primitive（基于 `@floating-ui/react` 定位 + `motion/react` 动画）
 - `motion/react-client` — 布局动画 `motion.div`
-- `@/lib/utils` — `cn` 样式合并工具
+- `@/kit/utils` — `cn` 样式合并工具
 
 实现注意：
 

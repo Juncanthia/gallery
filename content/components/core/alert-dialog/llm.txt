@@ -170,7 +170,7 @@ type AlertDialogCancelProps = AlertDialogCancelPrimitiveProps;
 直接依赖摘要：
 
 - `@/components/core/button`
-- `@/components/_internal/radix/alert-dialog`
+- `@/components/core/alert-dialog`
 - `@/components/core/button-variants`
 
 实现注意：

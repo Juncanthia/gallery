@@ -161,7 +161,7 @@ Spinner 的样式由 Tailwind CSS + SVG 内联动画组合而成，无独立 CVA
 依赖：
 
 - `lucide-react`：Loader2Icon、LoaderCircleIcon、LoaderIcon、LoaderPinwheelIcon。
-- `@/lib/utils`：`cn` 工具函数。
+- `@/kit/utils`：`cn` 工具函数。
 
 关键行为：
 

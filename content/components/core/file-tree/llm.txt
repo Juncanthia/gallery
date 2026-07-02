@@ -200,7 +200,7 @@ type FileItemProps = FilePrimitiveProps & {
 
 直接依赖摘要：
 
-- `@/components/_internal/radix/file-tree`
+- `@/components/core/file-tree`
 
 实现注意：
 

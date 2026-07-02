@@ -285,7 +285,7 @@ CodeBlock 通过 CSS 变量主题 + Tailwind CSS 构建。
 - `@radix-ui/react-use-controllable-state`（受控/非受控状态管理）
 - `@/components/core/copy-button`（复制按钮）
 - `@/components/core/select`（下拉选择器）
-- `@/lib/utils`（cn 工具函数）
+- `@/kit/utils`（cn 工具函数）
 
 关键行为：
 

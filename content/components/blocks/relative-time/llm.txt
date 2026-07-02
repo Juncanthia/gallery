@@ -149,7 +149,7 @@ export default function Demo() {
 
 直接依赖：
 - `@radix-ui/react-use-controllable-state` — `useControllableState` hook，管理受控/非受控状态。
-- `@/lib/utils` — `cn` 工具函数。
+- `@/kit/utils` — `cn` 工具函数。
 
 实现注意：
 1. 双层 Context 架构：`RelativeTimeContext` 提供 `{ time, dateFormatOptions, timeFormatOptions }`；`RelativeTimeZoneContext` 提供 `{ zone }`。子组件按需消费。

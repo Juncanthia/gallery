@@ -239,7 +239,7 @@ export default function Demo() {
 - `lucide-react`（ChevronLeft、ChevronRight 图标）
 - `@/components/core/button`（翻页按钮）
 - `@/components/core/select`（月份/年份下拉选择器）
-- `@/lib/utils`（cn 样式合并）
+- `@/kit/utils`（cn 样式合并）
 
 实现注意：
 

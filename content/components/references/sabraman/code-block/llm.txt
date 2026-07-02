@@ -1,8 +1,8 @@
 ---
 component: LegacyCodeBlockCommand
-import: "@/components/_internal/sabraman"
-utility-import: "@/components/_internal/sabraman"
-exports: LegacyCodeBlockCommand, LegacyCodeBlockCommandProps (from ui/sabraman-blocks/code-block); convertNpmCommand, PackageManagerIcon, usePreferredPackageManager, PackageManager, ConvertNpmCommandResult (from @/components/_internal/sabraman)
+import: "@/components/legacy-ui"
+utility-import: "@/components/legacy-ui"
+exports: LegacyCodeBlockCommand, LegacyCodeBlockCommandProps (from ui/sabraman-blocks/code-block); convertNpmCommand, PackageManagerIcon, usePreferredPackageManager, PackageManager, ConvertNpmCommandResult (from @/components/legacy-ui)
 base: standalone (no base component)
 style: macOS 10.15 legacy terminal-style code block with package manager switcher
 ---
@@ -38,7 +38,7 @@ style: macOS 10.15 legacy terminal-style code block with package manager switche
 ## Code Example
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
+import { LegacyCodeBlockCommand } from "@/components/legacy-ui"
 
 function InstallInstructions() {
   return (
@@ -55,8 +55,8 @@ function InstallInstructions() {
 Using convertNpmCommand:
 
 ```tsx
-import { LegacyCodeBlockCommand } from "@/components/_internal/sabraman"
-import { convertNpmCommand } from "@/components/_internal/sabraman"
+import { LegacyCodeBlockCommand } from "@/components/legacy-ui"
+import { convertNpmCommand } from "@/components/legacy-ui"
 
 function InstallInstructions() {
   const commands = convertNpmCommand("npm install @hyper/sabraman")
@@ -66,9 +66,9 @@ function InstallInstructions() {
 ```
 
 ## Constraints
-- Import LegacyCodeBlockCommand from "@/components/_internal/sabraman" (NOT from @/components/_internal/sabraman directly).
+- Import LegacyCodeBlockCommand from "@/components/legacy-ui" (NOT from @/components/legacy-ui directly).
 - Always provide at least one of bun/npm/pnpm/yarn; if none are provided the component returns null.
-- Use convertNpmCommand (imported from "@/components/_internal/sabraman") to generate commands from a single npm command.
+- Use convertNpmCommand (imported from "@/components/legacy-ui") to generate commands from a single npm command.
 - Use spread syntax ({...commands}) when passing convertNpmCommand result to LegacyCodeBlockCommand.
 - The initialPackageManager prop is only used on first render; subsequent renders respect the user's localStorage preference.
 - Use onCopySuccess/onCopyError for toast/analytics integration on copy.

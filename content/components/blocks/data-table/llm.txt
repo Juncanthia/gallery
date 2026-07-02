@@ -207,7 +207,7 @@ export default function Demo() {
 - `@/components/core/table`（底层表格原语）
 - `@/components/core/button`（列头排序按钮）
 - `@/components/core/dropdown-menu`（列头排序下拉菜单）
-- `@/lib/utils`（`cn` 工具函数）
+- `@/kit/utils`（`cn` 工具函数）
 - Tailwind CSS
 
 实现注意：

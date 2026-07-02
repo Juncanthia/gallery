@@ -25,7 +25,7 @@ stack:
 
 # CursorFollow 光标跟随
 
-CursorFollow 是一个光标跟随效果复合组件，由 CursorProvider 容器、Cursor 光标图形和 CursorFollow 跟随标签三部分组成。它封装了底层 cursor primitive（`@/components/_internal/animate/cursor`），提供简洁的 API：CursorProvider 管理光标区域，Cursor 渲染自定义 SVG 光标，CursorFollow 在光标附近显示跟随标签（如提示文字、状态信息）。
+CursorFollow 是一个光标跟随效果复合组件，由 CursorProvider 容器、Cursor 光标图形和 CursorFollow 跟随标签三部分组成。它封装了底层 cursor primitive（`@/_internals/foundations/primitives/animate/cursor`），提供简洁的 API：CursorProvider 管理光标区域，Cursor 渲染自定义 SVG 光标，CursorFollow 在光标附近显示跟随标签（如提示文字、状态信息）。
 
 本组件为项目本地复合组件，无 Ant Design 直接对应。实现以本地源码为准。
 
@@ -125,7 +125,7 @@ export default function Demo() {
 - 样式由 Tailwind CSS className 与本地 `cn` 合并函数控制。
 - Cursor 默认 `size-6 text-foreground`，渲染为 SVG 箭头光标图形。
 - CursorFollow 默认 `bg-foreground rounded-md text-background px-2 py-1 text-sm`，深底白字跟随标签。
-- 定位和动画由底层 cursor primitive（`@/components/_internal/animate/cursor`）的 motion/react 弹簧物理控制，本地组件仅负责视觉样式收敛。
+- 定位和动画由底层 cursor primitive（`@/_internals/foundations/primitives/animate/cursor`）的 motion/react 弹簧物理控制，本地组件仅负责视觉样式收敛。
 - 主题颜色优先使用 `text-foreground`、`bg-foreground`、`text-background` 等项目级语义变量。
 
 ## 依赖与实现说明 {#implementation-notes}
@@ -134,13 +134,13 @@ export default function Demo() {
 
 - `src/components/blocks/cursor-follow/index.tsx`（复合组件定义）
 - `src/components/core/blocks/cursor-follow.tsx`（re-export barrel）
-- `src/primitives/animate/cursor.tsx`（底层 cursor primitive，基于 motion/react 实现定位和弹簧动画）
+- `src/_internals/foundations/primitives/animate/cursor.tsx`（底层 cursor primitive，基于 motion/react 实现定位和弹簧动画）
 
 直接依赖摘要：
 
 - React
-- `@/components/_internal/animate/cursor`（CursorProviderPrimitive、CursorPrimitive、CursorFollowPrimitive、CursorContainerPrimitive 及类型）
-- `@/lib/utils`（`cn` 样式合并）
+- `@/_internals/foundations/primitives/animate/cursor`（CursorProviderPrimitive、CursorPrimitive、CursorFollowPrimitive、CursorContainerPrimitive 及类型）
+- `@/kit/utils`（`cn` 样式合并）
 - Tailwind CSS
 
 实现注意：

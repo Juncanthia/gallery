@@ -205,7 +205,7 @@ export default function Demo() {
 
 - React（`useState`、`useEffect`、`createContext`、`useContext`、`window.matchMedia`）
 - `react-svg-blocks/credit-card-payment-icons`（`PaymentIcon`，支付服务商 SVG 图标）
-- `@/lib/utils`（`cn` 样式合并）
+- `@/kit/utils`（`cn` 样式合并）
 - Tailwind CSS（含 `@container`、`transform-3d` 插件）
 
 实现注意：

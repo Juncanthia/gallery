@@ -161,7 +161,7 @@ type CheckboxGroupProps = Omit<
 
 直接依赖摘要：
 
-- `@/components/_internal/radix/checkbox`
+- `@/components/core/checkbox`
 - `class-variance-authority`
 
 实现注意：

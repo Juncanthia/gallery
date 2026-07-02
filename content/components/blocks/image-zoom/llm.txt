@@ -121,7 +121,7 @@ export default function Demo() {
 直接依赖摘要：
 
 - `react-medium-blocks/image-zoom`（Zoom 组件）
-- `@/lib/utils`（cn）
+- `@/kit/utils`（cn）
 
 实现注意：
 

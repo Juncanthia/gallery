@@ -203,7 +203,7 @@ export default function Demo() {
 - `radix-ui`：Slot 用于 asChild 模式。
 - `lucide-react`：CropIcon、RotateCcwIcon。
 - `@/components/core/button`：Button 组件。
-- `@/lib/utils`：cn 工具函数。
+- `@/kit/utils`：cn 工具函数。
 - `react-blocks/image-crop/dist/ReactCrop.css`：react-blocks/image-crop 必需样式。
 
 实现要点：

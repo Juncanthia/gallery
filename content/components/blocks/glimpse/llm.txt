@@ -200,7 +200,7 @@ export default function Demo() {
 关键依赖：
 
 - `@/components/core/hover-card`：Radix HoverCard 的封装组件（HoverCard、HoverCardTrigger、HoverCardContent）。
-- `@/lib/utils`：`cn` 工具函数。
+- `@/kit/utils`：`cn` 工具函数。
 
 关键行为：
 

@@ -237,7 +237,7 @@ export default function Demo() {
 - `@/components/core/badge`（Badge）
 - `@/components/core/button`（Button）
 - `lucide-react`（ChevronDownIcon、ChevronUpIcon、MinusIcon）
-- `@/lib/utils`（cn）
+- `@/kit/utils`（cn）
 
 实现注意：
 

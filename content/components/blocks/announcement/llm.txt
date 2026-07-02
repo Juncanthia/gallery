@@ -133,7 +133,7 @@ export default function Demo() {
 
 - `src/components/blocks/announcement/index.tsx`：Announcement、AnnouncementTag、AnnouncementTitle 三者定义。
 
-直接依赖：`@/components/core/badge`、`@/lib/utils`（cn）。
+直接依赖：`@/components/core/badge`、`@/kit/utils`（cn）。
 
 关键行为：
 

@@ -237,7 +237,7 @@ type TourStepConfig = {
 - `@floating-ui/react-dom` — 卡片定位、碰撞规避、自动更新和箭头坐标
 - `motion/react` — `motion.div`、`AnimatePresence`
 - `@/components/core/button` — 步骤导航按钮
-- `@/lib/utils` — `cn` 样式合并工具
+- `@/kit/utils` — `cn` 样式合并工具
 
 实现注意：
 

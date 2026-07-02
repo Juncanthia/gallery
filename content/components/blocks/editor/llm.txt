@@ -334,7 +334,7 @@ export default function Demo() {
 - `tippy.js`：斜杠命令弹出定位。
 - `lucide-react`：图标库。
 - `@/components/core/button`、`@/components/core/command`、`@/components/core/dropdown-menu`、`@/components/core/popover`、`@/components/core/separator`、`@/components/core/tooltip`：底层 UI 组件。
-- `@/lib/utils`：cn 工具函数。
+- `@/kit/utils`：cn 工具函数。
 
 关键行为：
 
