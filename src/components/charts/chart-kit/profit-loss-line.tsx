@@ -11,10 +11,7 @@ import {
 } from "./fade-edges";
 import { useProfitLossLegendHover } from "./profit-loss-legend-hover";
 import { splitProfitLossSegments } from "./profit-loss-segments";
-
-// CurveFactory type - simplified version compatible with visx
-// biome-ignore lint/suspicious/noExplicitAny: d3 curve factory type
-type CurveFactory = any;
+import type { CurveFactory } from "./types";
 
 export const PROFIT_LOSS_POSITIVE_COLOR = "var(--color-emerald-500)";
 export const PROFIT_LOSS_NEGATIVE_COLOR = "var(--color-red-500)";

@@ -12,6 +12,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import type { GeoPermissibleObjects } from "../types";
 
 // ZoomState from visx/zoom that includes isDragging
 interface ZoomState {
@@ -77,8 +78,7 @@ export interface ChoroplethStableContextValue {
   pathGenerator: (feature: ChoroplethFeature) => string | undefined;
 
   // Raw path function for graticule (accepts any geo object)
-  // biome-ignore lint/suspicious/noExplicitAny: GeoJSON types are complex
-  rawPathGenerator: (geo: any) => string | null;
+  rawPathGenerator: (geo: GeoPermissibleObjects) => string | null;
 
   // Project geo coordinates to screen coordinates
   projectPoint: (coords: [number, number]) => [number, number] | null;

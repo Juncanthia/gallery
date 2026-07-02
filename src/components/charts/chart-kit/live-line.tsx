@@ -1,11 +1,8 @@
 "use client";
 
 import { curveMonotoneX } from "@visx/curve";
-
-// biome-ignore lint/suspicious/noExplicitAny: d3 curve factory type
-type CurveFactory = any;
-
 import { AreaClosed, LinePath } from "@visx/shape";
+import type { CurveFactory } from "./types";
 import { motion } from "motion/react";
 import { useCallback, useId, useMemo } from "react";
 import { chartCssVars, useChart } from "./chart-context";

@@ -29,6 +29,7 @@ import {
 import { ChoroplethFeature as ChoroplethFeatureLayer } from "./choropleth-feature";
 import { ChoroplethGraticule as ChoroplethGraticuleLayer } from "./choropleth-graticule";
 import { ChoroplethTooltip as ChoroplethTooltipLayer } from "./choropleth-tooltip";
+import type { GeoPermissibleObjects } from "../types";
 
 export interface ChoroplethChartProps {
   /** GeoJSON FeatureCollection data */
@@ -168,8 +169,7 @@ const DEFAULT_INITIAL_ZOOM: TransformMatrix = {
 };
 
 interface MercatorRenderProps {
-  // biome-ignore lint/suspicious/noExplicitAny: visx geo projection bundle
-  path: (geo: any) => string | null;
+  path: (geo: GeoPermissibleObjects) => string | null;
   projection: (coords: [number, number]) => [number, number] | null | undefined;
 }
 
@@ -261,8 +261,7 @@ const ChoroplethMercatorContent = memo(function ChoroplethMercatorContent({
   );
 
   const rawPathGenerator = useCallback(
-    // biome-ignore lint/suspicious/noExplicitAny: GeoJSON types are complex
-    (geo: any) => mercator.path(geo),
+    (geo: GeoPermissibleObjects) => mercator.path(geo),
     [mercator]
   );
 

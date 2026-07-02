@@ -16,6 +16,7 @@ import {
   LINE_LOADING_PULSE_EASE,
   LOADING_LABEL_EXIT_S,
 } from "./line-loading-timing";
+import type { CurveFactory } from "./types";
 
 /**
  * Shared "sweep" loading visuals. A soft diagonal shimmer band travels across a
@@ -26,10 +27,6 @@ import {
  * the traveling pulse on `<Line>` and `<Area>`, and as the skeleton for
  * `<BarChart status="loading">`.
  */
-
-// CurveFactory type - simplified version compatible with visx
-// biome-ignore lint/suspicious/noExplicitAny: d3 curve factory type
-type CurveFactory = any;
 
 /** One shimmer sweep, in seconds. */
 const DEFAULT_SWEEP_DURATION_S = 2;

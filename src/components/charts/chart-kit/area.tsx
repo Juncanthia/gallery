@@ -2,12 +2,8 @@
 
 import { curveMonotoneX } from "@visx/curve";
 import { AreaClosed, LinePath } from "@visx/shape";
-
-// CurveFactory type - simplified version compatible with visx
-// biome-ignore lint/suspicious/noExplicitAny: d3 curve factory type
-type CurveFactory = any;
-
 import { useCallback, useId, useMemo, useRef, useState } from "react";
+import type { CurveFactory } from "./types";
 import { AreaGradientDefs } from "./area-gradient-defs";
 import { chartCssVars, useChartStable, useYScale } from "./chart-context";
 import type { ChartPhase, LoadingStyle } from "./chart-phase";
