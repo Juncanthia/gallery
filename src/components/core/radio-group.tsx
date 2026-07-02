@@ -7,7 +7,7 @@ import { getStrictContext } from '@/_internals/foundations/utils/get-strict-cont
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { Circle as CircleIcon } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type RadioGroupContextType = {
   value: string;

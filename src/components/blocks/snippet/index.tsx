@@ -6,7 +6,7 @@ import {
 } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/core/tabs";
 import { CopyButton } from "@/components/core/copy-button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 export type SnippetProps = ComponentProps<typeof Tabs>;
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type CSSProperties, type ReactNode, useEffect } from "react";
 import { useMotionValue, animate, useTransform, motion } from "motion/react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 interface AnimatedNumberProps {
   value: number;

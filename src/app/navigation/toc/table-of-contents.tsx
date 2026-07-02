@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { Separator } from "@/components/core/separator"
-import { cn } from "@/lib/utils"
+import { cn } from "@/kit/utils"
 import {
   TableOfContentsHeader,
   TableOfContentsList,

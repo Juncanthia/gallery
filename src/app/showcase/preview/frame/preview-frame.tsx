@@ -2,7 +2,7 @@ import { Copy, RotateCw, Smartphone, Tablet, Monitor } from "lucide-react"
 import { type ReactNode, useState, createContext } from "react"
 import { toast } from "sonner"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/kit/utils"
 import { rememberRecentCopy } from "../../../runtime/gallery/recent-copies"
 
 export type PreviewFrameConfig = {

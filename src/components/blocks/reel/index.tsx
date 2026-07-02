@@ -27,7 +27,7 @@ import {
 } from "react";
 import { Button } from "@/components/core/button";
 import { Progress } from "@/components/core/progress";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 // Explicit type for reel items
 export type ReelItem = {

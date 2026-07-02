@@ -6,7 +6,7 @@ import {
   useIsInView,
   type UseIsInViewOptions,
 } from '@/_internals/foundations/hooks/use-is-in-view';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type CodeBlockProps = React.ComponentProps<'div'> & {
   code: string;

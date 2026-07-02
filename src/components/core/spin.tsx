@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Loader2 as SpinnerIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type SpinSize = "small" | "default" | "large"
 

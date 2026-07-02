@@ -2,7 +2,7 @@
 
 import { forwardRef, useMemo, useRef, useEffect } from "react"
 import { motion } from "motion/react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type VariableProximityProps = {
   label: string

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const darkenColor = (hex: string, percent: number): string => {
   let color = hex.startsWith("#") ? hex.slice(1) : hex

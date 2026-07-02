@@ -2,7 +2,7 @@
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react"
 import { motion, AnimatePresence, type Transition, type TargetAndTransition, type VariantLabels } from "motion/react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type RotatingTextProps = {
   texts: string[]

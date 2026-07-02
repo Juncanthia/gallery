@@ -5,7 +5,7 @@ import type { PlateElementProps } from 'platejs/react';
 
 import { PlateElement } from 'platejs/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 export function ParagraphElement(props: PlateElementProps) {
   return (

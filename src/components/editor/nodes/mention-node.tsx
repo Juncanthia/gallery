@@ -14,7 +14,7 @@ import {
   useSelected,
 } from 'platejs/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { useMounted } from '@/_internals/foundations/hooks/use-mounted';
 import { inlineSuggestionVariants } from '@/_internals/foundations/utils/suggestion';
 

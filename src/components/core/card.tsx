@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { Skeleton } from "@/components/core/skeleton"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type CardSize = "default" | "sm" | "small"
 type CardVariant = "outlined" | "borderless"

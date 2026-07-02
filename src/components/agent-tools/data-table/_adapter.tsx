@@ -13,7 +13,7 @@
  *   Table        → shadcn/ui Table
  */
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 export { Button } from "@/components/core/button";
 export { DropdownMenu } from "@/components/core/dropdown-menu"
 export { DropdownMenuContent } from "@/components/core/dropdown-menu"

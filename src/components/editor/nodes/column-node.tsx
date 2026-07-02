@@ -39,7 +39,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/core/tooltip';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 export const ColumnElement = withHOC(
   ResizableProvider,

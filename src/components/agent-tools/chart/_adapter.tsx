@@ -9,7 +9,7 @@
  *   Card  → shadcn/ui Card
  */
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 export { ChartContainer } from "@/components/core/chart"
 export { ChartTooltip } from "@/components/core/chart"
 export { ChartTooltipContent } from "@/components/core/chart"

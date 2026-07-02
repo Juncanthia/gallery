@@ -2,7 +2,7 @@ import * as React from "react";
 import { Check, Copy } from "lucide-react";
 import { Slot } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 const textVariants = cva("", {
   variants: {

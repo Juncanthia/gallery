@@ -5,7 +5,7 @@
  * copied to another project by updating these imports to match the target
  * project's paths.
  */
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 
 export { Button } from "@/components/core/button";
 export type { ButtonColor, ButtonVariant } from "@/components/core/button";

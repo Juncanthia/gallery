@@ -7,7 +7,7 @@ import { PanelLeft as PanelLeftIcon } from 'lucide-react';
 import { type Transition } from 'motion/react';
 
 import { useIsMobile } from '@/_internals/foundations/hooks/use-mobile';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { Button } from '@/components/core/button';
 import { Input } from '@/components/core/input';
 import { Separator } from '@/components/core/separator';

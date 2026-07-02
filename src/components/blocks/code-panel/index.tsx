@@ -7,7 +7,7 @@ import {
   CodeBlock as CodeBlockPrimitive,
   type CodeBlockProps as CodeBlockPropsPrimitive,
 } from '@/_internals/foundations/primitives/animate/code-block';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { CopyButton } from '@/components/core/copy-button';
 import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 

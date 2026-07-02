@@ -10,7 +10,7 @@ import {
   ScrollingNumberHighlight as ScrollingNumberHighlightPrimitive,
   type ScrollingNumberContainerProps as ScrollingNumberContainerPrimitiveProps,
 } from '@/_internals/foundations/primitives/texts/scrolling-number';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import {
   Particles,
   ParticlesEffect,

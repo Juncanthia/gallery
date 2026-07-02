@@ -2,7 +2,7 @@ import * as React from "react"
 import { Inbox as InboxIcon } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type EmptyProps = React.ComponentProps<"div"> & {
   image?: React.ReactNode | string | false

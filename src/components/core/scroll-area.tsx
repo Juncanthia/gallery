@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 function composeRefs<T>(
   ...refs: Array<React.Ref<T> | undefined>

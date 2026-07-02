@@ -12,7 +12,7 @@ import {
   type TooltipTriggerProps as TooltipTriggerPrimitiveProps,
   type TooltipContentProps as TooltipContentPrimitiveProps,
 } from '@/_internals/foundations/primitives/animate/tooltip';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type TooltipProviderProps = TooltipProviderPrimitiveProps;
 

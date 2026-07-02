@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { motion, useMotionValue, useTransform, type PanInfo } from "motion/react"
 import { Circle, Code, FileText, Layers, Layout } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type CarouselItem = {
   title: string

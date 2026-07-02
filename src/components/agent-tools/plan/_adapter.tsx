@@ -10,7 +10,7 @@
  *   Collapsible → shadcn/ui Collapsible
  */
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 export { Accordion } from "@/components/core/accordion"
 export { AccordionItem } from "@/components/core/accordion"
 export { AccordionTrigger } from "@/components/core/accordion"

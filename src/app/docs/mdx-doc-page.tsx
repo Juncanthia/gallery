@@ -1,6 +1,6 @@
 import { isValidElement, type ReactNode } from "react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/kit/utils"
 import { DocTableOfContents } from "../navigation/toc/table-of-contents"
 
 type TocItem = {

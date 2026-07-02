@@ -4,7 +4,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/core/radio-group";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import {
   type ComponentProps,
   createContext,

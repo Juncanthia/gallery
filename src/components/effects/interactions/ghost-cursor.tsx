@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type GhostCursorProps = {
   className?: string

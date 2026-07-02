@@ -13,7 +13,7 @@ import {
 } from "@floating-ui/react-dom"
 import { AnimatePresence, motion } from "motion/react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Button } from "@/components/core/button"
 
 export type TourPlacement =

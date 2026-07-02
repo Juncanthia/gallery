@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { X as XIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type TagColor = "default" | "blue" | "green" | "red" | "orange" | "purple" | "cyan" | "magenta"
 

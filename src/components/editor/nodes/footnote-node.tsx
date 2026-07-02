@@ -32,7 +32,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/core/command';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { Button } from '@/components/core/button';
 import {
   InlineCombobox,

@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/core/dialog"
 import { Input } from "@/components/core/input"
-import { cn } from "@/lib/utils"
+import { cn } from "@/kit/utils"
 import { gallerySearchEntries } from "../../registry/catalog"
 import { readRecentVisits, rememberRecentVisit } from "../../runtime/recent-visits"
 

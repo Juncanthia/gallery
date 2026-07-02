@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useCallback, useMemo, memo } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const DEFAULT_INNER_GRADIENT = "linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)"
 

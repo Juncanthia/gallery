@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/core/tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { floatButtonVariants, type FloatButtonShape, type FloatButtonSize, type FloatButtonType } from "@/components/core/variants/float-button-variants";
 
 type FloatButtonBadge = string | number | Omit<BadgeProps, "children" | "text" | "status">;

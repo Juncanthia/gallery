@@ -9,6 +9,6 @@
  *   Separator → shadcn/ui Separator
  */
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 export { Button } from "@/components/core/button";
 export { Separator } from "@/components/core/separator";

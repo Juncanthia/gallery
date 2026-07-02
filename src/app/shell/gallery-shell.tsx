@@ -24,7 +24,7 @@ import {
 import { Link, Outlet, useRouterState } from "@tanstack/react-router"
 
 import { Toaster } from "@/components/core/toaster"
-import { cn } from "@/lib/utils"
+import { cn } from "@/kit/utils"
 import {
   galleryItemCount,
   GALLERY_NAV_GROUPS,

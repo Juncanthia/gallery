@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { Fingerprint, Activity, Lock } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type ReflectiveCardProps = {
   blurStrength?: number

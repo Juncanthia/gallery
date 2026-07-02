@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 type FlexDirection = "row" | "row-reverse" | "col" | "col-reverse";
 type FlexOrientation = "horizontal" | "vertical";

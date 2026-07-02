@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/core/dropdown-menu"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { ChevronDown as ChevronDownIcon, ChevronRight as ChevronRightIcon, MoveHorizontal as MoreHorizontalIcon } from "lucide-react"
 
 type BreadcrumbParams = Record<string, string | number>

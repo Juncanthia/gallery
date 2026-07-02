@@ -3,4 +3,4 @@
  */
 "use client";
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";

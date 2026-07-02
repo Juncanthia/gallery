@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { Button } from "@/components/core/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/core/popover";
 import { Command, CommandInput, CommandList, CommandEmpty } from "@/components/core/command";

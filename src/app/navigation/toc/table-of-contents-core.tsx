@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ListTree } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/kit/utils"
 import {
   buildTocPath,
   getDepthOffset,

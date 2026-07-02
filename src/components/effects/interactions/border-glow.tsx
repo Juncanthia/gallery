@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useEffect } from "react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 function parseHSL(hslStr: string) {
   const match = hslStr.match(/([\d.]+)\s*([\d.]+)%?\s*([\d.]+)%?/)

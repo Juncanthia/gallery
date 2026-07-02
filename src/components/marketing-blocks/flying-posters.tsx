@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react"
 import { Renderer, Camera, Transform, Plane, Program, Mesh, Texture } from "ogl"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const vertexShader = `
 precision highp float;

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, createElement, useMemo, useCallback } from "react"
 import { gsap } from "gsap"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type TextTypeProps = {
   text: string | string[]

@@ -9,7 +9,7 @@ import {
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 export type { DragEndEvent } from "@dnd-kit/core";
 

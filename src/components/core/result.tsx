@@ -1,6 +1,6 @@
 import React from "react";
 import { CircleCheck as CheckCircle2, CircleX as XCircle, Info, TriangleAlert as AlertTriangle, FileQuestionMark as FileQuestion, Lock, ServerOff } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 export type ResultStatus =
   | "success"

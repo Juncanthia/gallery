@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Dialog as DialogPrimitive, Slot } from "radix-ui"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Button } from "@/components/core/button"
 import { ScrollArea } from "@/components/core/scroll-area"
 import { XIcon } from "lucide-react"

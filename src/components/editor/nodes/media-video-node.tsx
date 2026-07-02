@@ -12,7 +12,7 @@ import { useMediaState } from '@platejs/media/react';
 import { ResizableProvider, useResizableValue } from '@platejs/resizable';
 import { PlateElement, useEditorMounted, withHOC } from 'platejs/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 import { Caption, CaptionTextarea } from '@/components/editor/toolbars/caption';
 import {

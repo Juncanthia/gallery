@@ -85,7 +85,7 @@ import {
   PopoverAnchor,
   PopoverContent,
 } from '@/components/core/popover';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 import { blockSelectionVariants } from '@/components/editor/blocks/block-selection';
 import {

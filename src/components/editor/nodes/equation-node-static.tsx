@@ -6,7 +6,7 @@ import { getEquationHtml } from '@platejs/math';
 import { RadicalIcon } from 'lucide-react';
 import { SlateElement } from 'platejs/static';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { inlineSuggestionVariants } from '@/_internals/foundations/utils/suggestion';
 
 export function EquationElementStatic(

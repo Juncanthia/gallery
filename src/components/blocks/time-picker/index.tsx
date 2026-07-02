@@ -4,7 +4,7 @@ import * as React from "react"
 import { Clock, X } from "lucide-react"
 import { useControllableState } from "@radix-ui/react-use-controllable-state"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Button } from "@/components/core/button"
 import {
   Popover,

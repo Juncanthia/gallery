@@ -21,7 +21,7 @@ import type {
 import { SuggestionPlugin } from '@platejs/suggestion/react';
 import { PlateLeaf, useEditorPlugin, usePluginOption } from 'platejs/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import type { SuggestionConfig } from '@/components/editor/plugins/suggestion-kit';
 import { voidRemoveSuggestionOverlayVariants } from '@/components/editor/nodes/suggestion-node-static';
 

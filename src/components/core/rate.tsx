@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Star as StarIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type RateProps = {
   /** Current value (controlled). */

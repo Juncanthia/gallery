@@ -7,7 +7,7 @@ import { useEmojiDropdownMenuState } from '@platejs/emoji/react';
 import { PlateElement } from 'platejs/react';
 
 import { Button } from '@/components/core/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 import { EmojiPicker, EmojiPopover } from '@/components/editor/toolbars/emoji-toolbar-button';
 

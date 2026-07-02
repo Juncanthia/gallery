@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react"
 import { motion, useMotionValue, useAnimationFrame, useTransform, type MotionStyle } from "motion/react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type GradientTextProps = {
   children: React.ReactNode

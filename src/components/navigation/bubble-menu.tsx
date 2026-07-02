@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { gsap } from "gsap"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type MenuItem = {
   label: string

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Spin } from "@/components/core/spin"
 import { Empty } from "@/components/core/empty-state"
 

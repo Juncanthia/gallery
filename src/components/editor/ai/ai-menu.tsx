@@ -57,7 +57,7 @@ import {
   PopoverAnchor,
   PopoverContent,
 } from '@/components/core/popover';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { commentPlugin } from '@/components/editor/plugins/comment-kit';
 
 import { AIChatEditor } from './ai-chat-editor';

@@ -10,7 +10,7 @@ import {
   useVelocity,
   useAnimationFrame,
 } from "motion/react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type ScrollVelocityProps = {
   scrollContainerRef?: React.RefObject<HTMLElement | null>

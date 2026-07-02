@@ -14,7 +14,7 @@ import {
   Wind,
   type LucideIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import type {
   ForecastDay,
   TemperatureUnit,

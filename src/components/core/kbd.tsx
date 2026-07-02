@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import * as React from "react"
 
 type KbdProps = React.ComponentProps<"kbd"> & {

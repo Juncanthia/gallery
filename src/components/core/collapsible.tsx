@@ -6,7 +6,7 @@ import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
 import { getStrictContext } from '@/_internals/foundations/utils/get-strict-context';
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type CollapsibleContextType = {
   isOpen: boolean;

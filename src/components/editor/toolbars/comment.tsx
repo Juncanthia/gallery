@@ -45,7 +45,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/core/dropdown-menu';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { BasicMarksKit } from '@/components/editor/plugins/basic-marks-kit';
 import {
   type TDiscussion,

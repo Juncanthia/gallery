@@ -1,6 +1,6 @@
 import React, { type ComponentProps } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { Check as CheckIcon, X as XIcon } from "lucide-react";
 
 export type StepStatus = "wait" | "process" | "finish" | "error";

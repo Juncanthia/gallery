@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, useState, useMemo } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const CURVE_FUNCTIONS: Record<string, (p: number) => number> = {
   linear: (p) => p,

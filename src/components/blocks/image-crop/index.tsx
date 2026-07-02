@@ -25,7 +25,7 @@ import ReactCrop, {
   type PixelCrop,
   type ReactCropProps,
 } from "react-image-crop";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 import "react-image-crop/dist/ReactCrop.css";
 

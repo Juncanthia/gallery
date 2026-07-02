@@ -4,7 +4,7 @@ import { animate, motion, useMotionValue, useMotionValueEvent, useTransform } fr
 import { useEffect, useRef, useState } from "react"
 import { Volume1, Volume2 } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const MAX_OVERFLOW = 50
 

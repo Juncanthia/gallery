@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/core/avatar";
 import { Badge } from "@/components/core/badge";
 import { Button } from "@/components/core/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 export type PillProps = ComponentProps<typeof Badge> & {
   themed?: boolean;

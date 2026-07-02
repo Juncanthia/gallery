@@ -3,7 +3,7 @@
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, type MotionStyle } from "motion/react"
 import { Children, cloneElement, useEffect, useMemo, useRef, useState } from "react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type DockItemData = {
   icon: React.ReactNode

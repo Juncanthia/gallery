@@ -12,7 +12,7 @@ import {
   type TabsContentProps as TabsContentPrimitiveProps,
   type TabsContentsProps as TabsContentsPrimitiveProps,
 } from '@/_internals/foundations/primitives/animate/tabs';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type TabsProps = TabsPrimitiveProps;
 

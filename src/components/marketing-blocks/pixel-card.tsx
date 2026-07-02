@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 // Styles: requires pixel-card CSS (PixelCard.css)
 // Dependencies: none (vanilla canvas)

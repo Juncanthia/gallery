@@ -18,7 +18,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/core/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 const BANNER_ANIMATION_DURATION = 400;
 const DEFAULT_BANNER_PRIORITY = 0;

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type PillNavItem = {
   href: string

@@ -4,7 +4,7 @@ import { LoaderCircle } from "lucide-react"
 import { motion } from "motion/react"
 import { Slot } from "radix-ui"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import {
   buttonVariants,
   type ButtonVariant,

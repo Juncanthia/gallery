@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type SkeletonSize = "sm" | "small" | "default" | "middle" | "lg" | "large"
 type SkeletonShape = "default" | "circle" | "square" | "round"

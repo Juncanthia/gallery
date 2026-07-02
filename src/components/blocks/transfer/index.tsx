@@ -1,5 +1,5 @@
 import { useState, useMemo, type ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { Button } from "@/components/core/button";
 import { Checkbox } from "@/components/core/checkbox";
 import { Input } from "@/components/core/input";

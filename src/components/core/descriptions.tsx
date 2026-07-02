@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 type DescriptionsVariant = "default" | "bordered";
 type DescriptionsSize = "sm" | "small" | "default" | "middle" | "lg" | "large";

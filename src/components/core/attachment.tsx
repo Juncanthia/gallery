@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { FileIcon, UploadCloud, X } from "lucide-react"
 import { Slot } from "radix-ui"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { Button } from "@/components/core/button"
 
 type AttachmentState = "idle" | "uploading" | "processing" | "error" | "done"

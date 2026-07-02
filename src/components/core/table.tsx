@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Checkbox } from "@/components/core/checkbox"
 import { Pagination, type PaginationProps } from "@/components/core/pagination"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type TableRecord = Record<string, unknown>
 type TableSize = "small" | "default" | "large"

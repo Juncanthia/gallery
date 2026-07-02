@@ -13,7 +13,7 @@ import { getStrictContext } from '@/_internals/foundations/utils/get-strict-cont
 import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
 import { type VariantProps } from 'class-variance-authority';
 import { toggleVariants } from '@/components/core/toggle';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type ToggleGroupPrimitiveContextType = {
   value: string | string[] | undefined;

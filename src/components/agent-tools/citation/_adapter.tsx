@@ -10,7 +10,7 @@
  */
 "use client";
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 export { Popover } from "@/components/core/popover"
 export { PopoverContent } from "@/components/core/popover"
 export { PopoverTrigger } from "@/components/core/popover"

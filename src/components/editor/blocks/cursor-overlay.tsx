@@ -11,7 +11,7 @@ import { getTableGridAbove } from '@platejs/table';
 import { RangeApi } from 'platejs';
 import { useEditorRef, usePluginOption } from 'platejs/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 export function CursorOverlay() {
   const { cursors } = useCursorOverlay();

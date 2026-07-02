@@ -9,7 +9,7 @@ import { X as XIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';
 import { Button } from '@/components/core/button';
 import { ScrollArea } from '@/components/core/scroll-area';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type SheetContextType = {
   isOpen: boolean;

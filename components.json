@@ -16,7 +16,7 @@
   "menuAccent": "subtle",
   "aliases": {
     "components": "@/components",
-    "utils": "@/lib/utils",
+    "utils": "@/_internals/foundations/utils/cn",
     "core": "@/components/core",
     "lib": "@/lib",
     "hooks": "@/hooks"

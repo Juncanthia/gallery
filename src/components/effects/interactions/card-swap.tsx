@@ -3,7 +3,7 @@
 import React, { Children, cloneElement, forwardRef, isValidElement, useEffect, useMemo, useRef } from "react"
 import gsap from "gsap"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export const Card = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { customClass?: string }>(
   ({ customClass, ...rest }, ref) => (

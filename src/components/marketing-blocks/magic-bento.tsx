@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback, useState } from "react"
 import { gsap } from "gsap"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 const DEFAULT_PARTICLE_COUNT = 12
 const DEFAULT_SPOTLIGHT_RADIUS = 300

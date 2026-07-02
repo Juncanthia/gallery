@@ -41,7 +41,7 @@ import { createPortal } from "react-dom";
 import tunnel from "tunnel-rat";
 import { Card } from "@/components/core/card";
 import { ScrollArea, ScrollBar } from "@/components/core/scroll-area";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 const t = tunnel();
 

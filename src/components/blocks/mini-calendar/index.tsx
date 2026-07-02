@@ -14,7 +14,7 @@ import {
   useContext,
 } from "react";
 import { Button } from "@/components/core/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 // Context for sharing state between components
 type MiniCalendarContextType = {

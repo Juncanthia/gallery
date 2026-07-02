@@ -111,7 +111,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/core/select";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 export type { BundledLanguage } from "shiki";
 

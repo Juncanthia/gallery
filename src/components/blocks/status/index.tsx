@@ -1,6 +1,6 @@
 import type { ComponentProps, HTMLAttributes } from "react";
 import { Badge } from "@/components/core/badge";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 type ServiceStatus = "online" | "offline" | "maintenance" | "degraded";
 type SemanticStatus = "default" | "success" | "error" | "warning" | "info";

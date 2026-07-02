@@ -9,7 +9,7 @@ import { ResizableProvider } from '@platejs/resizable';
 import { FileUp } from 'lucide-react';
 import { PlateElement, useReadOnly, withHOC } from 'platejs/react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { Caption, CaptionTextarea } from '@/components/editor/toolbars/caption';
 
 export const FileElement = withHOC(

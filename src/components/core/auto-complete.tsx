@@ -5,7 +5,7 @@ import { useControllableState } from "@radix-ui/react-use-controllable-state"
 import { Command as CommandPrimitive } from "cmdk"
 import { XIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import {
   Command,
   CommandEmpty,

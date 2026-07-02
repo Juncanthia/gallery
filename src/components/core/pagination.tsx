@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { Button } from "@/components/core/button"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,

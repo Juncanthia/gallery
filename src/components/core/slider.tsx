@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/core/tooltip"
 import { SlidingNumber } from "@/components/data-display/sliding-number"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type SliderPrimitiveProps = React.ComponentProps<typeof SliderPrimitive.Root>
 

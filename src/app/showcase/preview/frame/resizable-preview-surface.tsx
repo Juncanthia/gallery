@@ -1,6 +1,6 @@
 import { type ReactNode, useContext, useRef, useState } from "react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/kit/utils"
 import { PreviewFrameContext } from "./preview-frame"
 
 type ResizablePreviewSurfaceProps = {

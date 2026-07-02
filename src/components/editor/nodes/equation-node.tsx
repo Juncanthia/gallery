@@ -27,7 +27,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/core/popover';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { inlineSuggestionVariants } from '@/_internals/foundations/utils/suggestion';
 
 export function EquationElement(props: PlateElementProps<TEquationElement>) {

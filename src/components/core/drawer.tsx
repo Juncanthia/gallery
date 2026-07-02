@@ -3,7 +3,7 @@ import { X } from "lucide-react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { Button, type ButtonProps } from "@/components/core/button"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 type DrawerPlacement = "top" | "bottom" | "left" | "right"
 type DrawerSize = "default" | "large" | number | string

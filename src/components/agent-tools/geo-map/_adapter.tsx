@@ -8,7 +8,7 @@
  *   Leaflet → map primitives from react-leaflet
  */
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 export {
   CircleMarker,
   MapContainer,

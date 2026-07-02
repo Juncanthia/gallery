@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, type ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { Button } from "@/components/core/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/core/popover";
 import { ChevronRight as ChevronRightIcon, Bone as XIcon, ChevronsUpDown as ChevronsUpDownIcon } from "lucide-react";

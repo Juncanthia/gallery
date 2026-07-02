@@ -20,7 +20,7 @@ import {
   AutoHeight,
   type AutoHeightProps,
 } from '@/_internals/foundations/primitives/effects/auto-height';
-import { cn } from '@/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 type TabsContextType = {
   value: string | undefined;

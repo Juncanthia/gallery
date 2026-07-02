@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef, useCallback } from "react"
 import Lenis from "lenis"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type ScrollStackItemProps = {
   children: React.ReactNode

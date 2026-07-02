@@ -8,6 +8,6 @@
  *   Button → shadcn/ui Button
  */
 
-export { cn } from "@/lib/utils";
+export { cn } from "@/_internals/foundations/utils/cn";
 export { Button } from "@/components/core/button";
 export type { ButtonColor, ButtonVariant } from "@/components/core/button";

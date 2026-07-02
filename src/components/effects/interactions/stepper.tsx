@@ -2,7 +2,7 @@
 
 import React, { useState, Children, useRef, useLayoutEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type StepperProps = {
   children: React.ReactNode

@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from "react"
 import { motion, useInView } from "motion/react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 
 export type AnimatedListProps = {
   items?: string[]
