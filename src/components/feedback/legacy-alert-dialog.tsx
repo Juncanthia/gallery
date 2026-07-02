@@ -2,7 +2,7 @@
 
 import { XIcon } from "lucide-react";
 import * as React from "react";
-import { useSafeLegacyUiLocale } from "@/components/_internal/sabraman/components/legacy-locale-context";
+import { useSafeLegacyUiLocale } from "@/components/general/legacy-locale-context";
 import { cn } from "@/_internals/foundations/utils/cn";
 import {
 	Dialog,

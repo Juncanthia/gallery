@@ -1,7 +1,7 @@
 "use client"
 
 import type * as React from "react"
-import { useGlobalStyles } from "@/components/_internal/gooseui/hooks/use-global-styles"
+import { useGlobalStyles } from "@/_internals/foundations/hooks/use-global-styles"
 import { cn } from "@/_internals/foundations/utils/cn"
 
 const REVEAL_ON_SCROLL_STYLES = `

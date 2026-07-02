@@ -1,7 +1,7 @@
 export { cn } from "@/_internals/foundations/utils/cn"
 export { useIsomorphicLayoutEffect } from "@/_internals/foundations/hooks/use-isomorphic-layout-effect"
-export { buildRoundbitPaths, initRoundbit } from "@/components/_internal/sabraman/lib/roundbit"
-export type { RoundbitController, RoundbitCornerValues, RoundbitPathOptions, RoundbitPathResult } from "@/components/_internal/sabraman/lib/roundbit"
+export { buildRoundbitPaths, initRoundbit } from "@/components/effects/interactions/lib/roundbit"
+export type { RoundbitController, RoundbitCornerValues, RoundbitPathOptions, RoundbitPathResult } from "@/components/effects/interactions/lib/roundbit"
 
 export { RoundbitFrame } from "@/components/effects/interactions/roundbit"
 export type { RoundbitFrameProps } from "@/components/effects/interactions/roundbit"
@@ -63,5 +63,5 @@ export {
 	LegacyUiLocaleProvider,
 	useLegacyUiLocale,
 	useSafeLegacyUiLocale,
-} from "@/components/_internal/sabraman/components/legacy-locale-context"
-export type { SupportedLocale } from "@/components/_internal/sabraman/components/legacy-locale-context"
+} from "@/components/general/legacy-locale-context"
+export type { SupportedLocale } from "@/components/general/legacy-locale-context"
