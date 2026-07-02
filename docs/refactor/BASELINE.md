@@ -77,3 +77,14 @@ pnpm typecheck   # 项目实际脚本名（04 文档写 type-check，package.jso
 ```
 
 结果：**0 错误**（`tsc -b` 退出码 0）
+
+> 注：package.json 脚本名为 `typecheck`，非 `type-check`。
+
+## 工具链基线（T0.3）
+
+| 命令 | 结果 | 备注 |
+|------|------|------|
+| `pnpm typecheck` | ✅ 通过 | ~51s |
+| `pnpm build` | ❌ 失败 | ~53s；`source-registry.ts` 仍引用已删除的 `src/components/ui/*` |
+| `pnpm check:registry` | ✅ 通过 | Registry OK (220 items) |
+| `ts-morph` | ✅ 已安装 | devDependency ^28.0.0 |
