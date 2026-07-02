@@ -4,7 +4,7 @@ import { Button } from '@/components/core/button'
 import { Input } from '@/components/core/input'
 import { Label } from '@/components/core/label'
 import { Separator } from '@/components/core/separator'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import {
   Bell,
   Check,

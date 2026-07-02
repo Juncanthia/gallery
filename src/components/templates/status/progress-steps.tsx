@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { Check } from 'lucide-react'
 import { demoProgressSteps } from './demo/status'
 

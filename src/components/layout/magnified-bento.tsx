@@ -19,7 +19,7 @@ import {
   LockIcon,
 } from "@hugeicons/core-free-icons";
 import { motion, useMotionValue, useMotionTemplate } from "motion/react";
-import { cn } from "@/components/templates/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 // change here
 const TAG_ROWS = [

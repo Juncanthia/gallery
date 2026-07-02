@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/core/button'
 import { Checkbox } from '@/components/core/checkbox'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { ChevronDown, MapPin, Maximize2, SlidersHorizontal, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { demoMapLocations, demoMapCenter, demoMapZoom } from './demo/map'

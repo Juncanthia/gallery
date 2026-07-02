@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/core/button";
-import { cn } from "@/components/templates/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";

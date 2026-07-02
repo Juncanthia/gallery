@@ -8,7 +8,7 @@ import {
   PopoverTrigger
 } from '@/components/core/popover'
 import { ArrowLeft, ChevronLeft, ChevronRight, Globe, Search } from 'lucide-react'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { demoDateTimePickerData } from '@/components/templates/form/demo/form'
 
 /** Timezone configuration using IANA timezone identifiers for correct DST handling */

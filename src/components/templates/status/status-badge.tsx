@@ -9,7 +9,7 @@ import {
   Truck,
   type LucideIcon,
 } from "lucide-react"
-import { cn } from "@/components/document/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { demoStatusBadge } from './demo/status'
 
 /**

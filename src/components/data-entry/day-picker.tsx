@@ -2,7 +2,7 @@
 import { Tick02Icon, UnfoldMoreIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
-import { cn } from "@/components/templates/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { AnimatePresence, motion } from "motion/react";
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

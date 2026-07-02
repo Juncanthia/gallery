@@ -37,7 +37,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/core/popover";
-import { cn } from "@/components/templates/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import useMeasure from "react-use-measure";
 

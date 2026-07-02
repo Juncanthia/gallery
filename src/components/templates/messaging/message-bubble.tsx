@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/core/dropdown-menu'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { demoTextMessages, demoImageMessages, demoReactionMessage, demoVoiceMessage } from './demo/messaging'
 import { Check, CheckCheck, Smile } from 'lucide-react'
 import { useRef, useState } from 'react'

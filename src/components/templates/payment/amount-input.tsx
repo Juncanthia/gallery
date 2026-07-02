@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useMemo } from "react"
 import { Button } from "@/components/core/button"
 import { Minus, Plus } from "lucide-react"
-import { cn } from "@/components/document/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { demoAmountPresets } from "./demo/payment"
 
 /**

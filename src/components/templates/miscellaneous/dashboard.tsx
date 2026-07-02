@@ -3,7 +3,7 @@
 import { Minus, TrendingDown, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import { Skeleton } from '@/components/core/skeleton';
-import { cn } from '@/components/document/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 
 export interface StatCardItem {
   label: string;

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/core/button'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 

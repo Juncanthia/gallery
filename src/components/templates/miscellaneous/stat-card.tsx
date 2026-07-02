@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp, TrendingDown, Minus } from "lucide-react"
-import { cn } from "@/components/document/lib/utils"
+import { cn } from "@/_internals/foundations/utils/cn"
 import { demoStats } from './demo/miscellaneous'
 
 /**

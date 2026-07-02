@@ -4,7 +4,7 @@ import { Button } from '@/components/core/button';
 import { Input } from '@/components/core/input';
 import { Label } from '@/components/core/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/core/popover';
-import { cn } from '@/components/document/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { ChevronDown, Paperclip, Search, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { countries } from './countries';

@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/core/select'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { demoIssueReportFormData } from './demo/form'
 import { ChevronDown, ChevronUp, Paperclip, Send, X } from 'lucide-react'
 import { useRef, useState } from 'react'

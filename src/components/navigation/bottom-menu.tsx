@@ -18,7 +18,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useMemo, useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import useMeasure from "react-use-measure";
-import { cn } from "@/components/templates/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 // Change Here
 const MAIN_NAV = [

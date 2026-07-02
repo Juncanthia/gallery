@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/core/select'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { demoTableColumns, demoTableRows } from './demo/list'
 import {
   ArrowDownAZ,

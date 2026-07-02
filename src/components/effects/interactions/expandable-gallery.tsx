@@ -6,7 +6,7 @@ import { useClickOutside } from "@/_internals/foundations/hooks/use-click-outsid
 import { Button } from "@/components/core/button";
 import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { cn } from "@/components/templates/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 
 // Change Here
 const PHOTOS = [

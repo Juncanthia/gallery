@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/core/button';
 import { Card } from '@/components/core/card';
-import { cn } from '@/components/document/lib/utils';
+import { cn } from '@/_internals/foundations/utils/cn';
 import { FileImage, FileSpreadsheet, FileText, Upload, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

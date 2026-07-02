@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/core/button'
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { Check, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { demoTags } from './demo/selection'

@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/components/document/lib/utils'
+import { cn } from '@/_internals/foundations/utils/cn'
 import { MapPin } from 'lucide-react'
 import { lazy } from 'react'
 import type { ComponentType } from 'react'

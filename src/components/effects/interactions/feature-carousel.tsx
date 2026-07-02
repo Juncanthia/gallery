@@ -12,7 +12,7 @@ import {
   DashboardSquare01Icon,
   MagicWandIcon,
 } from "@hugeicons/core-free-icons";
-import { cn } from "@/components/templates/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 // Change Here
