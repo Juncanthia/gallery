@@ -7,7 +7,7 @@ import {
   InputGroupInput,
 } from "@/components/core/input-group";
 import { Label } from "@/components/core/label";
-import { useDebounce } from "@/components/data-display/data-table-filters/hooks/use-debounce";
+import { useDebounce } from "@/_internals/foundations/hooks/use-debounce";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { DataTableInputFilterField } from "./types";

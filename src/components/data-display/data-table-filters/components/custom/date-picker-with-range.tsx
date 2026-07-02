@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/core/select";
 import { Separator } from "@/components/core/separator";
-import { useDebounce } from "@/components/data-display/data-table-filters/hooks/use-debounce";
+import { useDebounce } from "@/_internals/foundations/hooks/use-debounce";
 import { presets as defaultPresets } from "@/components/data-display/data-table-filters/lib/date-preset";
 import { cn } from "@/components/data-display/data-table-filters/lib/utils";
 import { format } from "date-fns";
