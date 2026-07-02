@@ -1,15 +1,122 @@
-import { Circle as CircleIcon } from 'lucide-react';
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+'use client';
 
-import {
-  RadioGroup as RadioGroupPrimitive,
-  RadioGroupItem as RadioGroupItemPrimitive,
-  RadioGroupIndicator as RadioGroupIndicatorPrimitive,
-  type RadioGroupProps as RadioGroupPrimitiveProps,
-  type RadioGroupItemProps as RadioGroupItemPrimitiveProps,
-} from '@/components/_internal/radix/radio-group';
+import * as React from 'react';
+import {RadioGroup as RadixRadioGroup} from 'radix-ui';
+import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
+import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
+import { useControlledState } from '@/_internals/foundations/hooks/use-controlled-state';
+import { Circle as CircleIcon } from 'lucide-react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
+
+type RadioGroupContextType = {
+  value: string;
+  setValue: (value: string) => void;
+};
+
+type RadioGroupItemContextType = {
+  isChecked: boolean;
+  setIsChecked: (isChecked: boolean) => void;
+};
+
+const [RadioGroupProvider, useRadioGroup] =
+  getStrictContext<RadioGroupContextType>('RadioGroupContext');
+
+const [RadioGroupItemProvider, useRadioGroupItem] =
+  getStrictContext<RadioGroupItemContextType>('RadioGroupItemContext');
+
+type RadioGroupPrimitiveProps = React.ComponentProps<typeof RadixRadioGroup.Root>;
+
+function RadioGroupPrimitive(props: RadioGroupPrimitiveProps) {
+  const [value, setValue] = useControlledState({
+    value: props.value ?? undefined,
+    defaultValue: props.defaultValue,
+    onChange: props.onValueChange,
+  });
+
+  return (
+    <RadioGroupProvider value={{ value, setValue }}>
+      <RadixRadioGroup.Root
+        data-slot="radio-group"
+        {...props}
+        onValueChange={setValue}
+      />
+    </RadioGroupProvider>
+  );
+}
+
+type RadioGroupIndicatorProps = Omit<
+  React.ComponentProps<typeof RadixRadioGroup.Indicator>,
+  'asChild' | 'forceMount'
+> &
+  HTMLMotionProps<'div'>;
+
+function RadioGroupIndicatorPrimitive({
+  transition = { type: 'spring', stiffness: 200, damping: 16 },
+  ...props
+}: RadioGroupIndicatorProps) {
+  const { isChecked } = useRadioGroupItem();
+
+  return (
+    <AnimatePresence>
+      {isChecked && (
+        <RadixRadioGroup.Indicator
+          data-slot="radio-group-indicator"
+          asChild
+          forceMount
+        >
+          <motion.div
+            key="radio-group-indicator-circle"
+            data-slot="radio-group-indicator-circle"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={transition}
+            {...props}
+          />
+        </RadixRadioGroup.Indicator>
+      )}
+    </AnimatePresence>
+  );
+}
+
+type RadioGroupItemPrimitiveProps = Omit<
+  React.ComponentProps<typeof RadixRadioGroup.Item>,
+  'asChild'
+> &
+  HTMLMotionProps<'button'>;
+
+function RadioGroupItemPrimitive({
+  value: valueProps,
+  disabled,
+  required,
+  ...props
+}: RadioGroupItemPrimitiveProps) {
+  const { value } = useRadioGroup();
+  const [isChecked, setIsChecked] = React.useState(value === valueProps);
+
+  React.useEffect(() => {
+    setIsChecked(value === valueProps);
+  }, [value, valueProps]);
+
+  return (
+    <RadioGroupItemProvider value={{ isChecked, setIsChecked }}>
+      <RadixRadioGroup.Item
+        asChild
+        value={valueProps}
+        disabled={disabled}
+        required={required}
+      >
+        <motion.button
+          data-slot="radio-group-item"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          {...props}
+        />
+      </RadixRadioGroup.Item>
+    </RadioGroupItemProvider>
+  );
+}
 
 const radioGroupItemVariants = cva(
   'aspect-square shrink-0 rounded-full outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200',
