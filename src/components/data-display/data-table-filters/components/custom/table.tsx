@@ -1,4 +1,4 @@
-import { cn } from "@/components/data-display/data-table-filters/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import * as React from "react";
 
 interface TableProps extends React.ComponentProps<"table"> {

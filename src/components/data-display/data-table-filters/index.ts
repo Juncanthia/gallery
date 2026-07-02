@@ -1,6 +1,6 @@
 "use client";
 
-import "./lib/react-table";
+import "@/_internals/domains/data-table/utils/react-table";
 
 export * from "./components/custom/date-picker-with-range";
 export { Slider as DataTableSliderControl } from "./components/custom/slider";
@@ -22,5 +22,5 @@ export * from "./components/data-table/data-table-toolbar";
 export * from "./components/data-table/data-table-view-options";
 export * from "./components/data-table/types";
 export * from "./components/data-table/data-table-cell";
-export * from "./lib/table/filterfns";
-export * from "./lib/colors";
+export * from "@/_internals/domains/data-table/utils/table/filterfns";
+export * from "@/_internals/domains/data-table/utils/colors";

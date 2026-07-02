@@ -20,7 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/core/popover";
-import { cn } from "@/components/data-display/data-table-filters/lib/utils";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { Check, GripVertical, Settings2 } from "lucide-react";
 import { useMemo, useState } from "react";
 

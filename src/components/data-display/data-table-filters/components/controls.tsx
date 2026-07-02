@@ -1,5 +1,5 @@
-import { useLocalStorage } from "@/components/data-display/data-table-filters/hooks/use-local-storage";
-import { CONTROLS_KEY } from "@/components/data-display/data-table-filters/lib/constants/local-storage";
+import { useLocalStorage } from "@/_internals/domains/data-table/hooks/use-local-storage";
+import { CONTROLS_KEY } from "@/_internals/domains/data-table/utils/constants/local-storage";
 import { createContext, useContext } from "react";
 
 interface ControlsContextType {

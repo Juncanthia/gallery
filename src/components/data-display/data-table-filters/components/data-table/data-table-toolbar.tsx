@@ -9,8 +9,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/core/tooltip";
-import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
-import { formatCompactNumber } from "@/components/data-display/data-table-filters/lib/format";
+import { useHotKey } from "@/_internals/domains/data-table/hooks/use-hot-key";
+import { formatCompactNumber } from "@/_internals/domains/data-table/utils/format";
 import { useControls } from "@/components/data-display/data-table-filters/components/controls";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { DataTableFilterControlsDrawer } from "./data-table-filter-controls-drawer";

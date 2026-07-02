@@ -1,4 +1,4 @@
-import { getStatusColor } from "@/components/data-display/data-table-filters/lib/request/status-code";
+import { getStatusColor } from "@/_internals/domains/data-table/utils/request/status-code";
 
 export function DataTableCellStatusCode({
   value,

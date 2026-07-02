@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/core/tooltip";
-import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
+import { useHotKey } from "@/_internals/domains/data-table/hooks/use-hot-key";
 import { X } from "lucide-react";
 
 export function DataTableResetButton() {

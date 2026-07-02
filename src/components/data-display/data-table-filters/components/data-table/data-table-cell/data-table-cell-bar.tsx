@@ -1,4 +1,4 @@
-import { hexToRgb } from "@/components/data-display/data-table-filters/lib/colors";
+import { hexToRgb } from "@/_internals/domains/data-table/utils/colors";
 
 const OPACITY = 0.5;
 const BORDER_OPACITY = 1;

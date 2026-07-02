@@ -9,7 +9,7 @@ import {
 } from "@/components/core/input-group";
 import { Label } from "@/components/core/label";
 import { useDebounce } from "@/_internals/foundations/hooks/use-debounce";
-import { isArrayOfNumbers } from "@/components/data-display/data-table-filters/lib/is-array";
+import { isArrayOfNumbers } from "@/_internals/domains/data-table/utils/is-array";
 import { useEffect, useState } from "react";
 import type { DataTableSliderFilterField } from "./types";
 

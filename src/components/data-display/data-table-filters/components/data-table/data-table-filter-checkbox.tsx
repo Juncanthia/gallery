@@ -9,8 +9,8 @@ import {
 } from "@/components/core/input-group";
 import { Label } from "@/components/core/label";
 import { Skeleton } from "@/components/core/skeleton";
-import { formatCompactNumber } from "@/components/data-display/data-table-filters/lib/format";
-import { cn } from "@/components/data-display/data-table-filters/lib/utils";
+import { formatCompactNumber } from "@/_internals/domains/data-table/utils/format";
+import { cn } from "@/_internals/foundations/utils/cn";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import type { DataTableCheckboxFilterField } from "./types";

@@ -17,18 +17,18 @@ import { DataTableResetButton } from "@/components/data-display/data-table-filte
 import { DataTableToolbar } from "@/components/data-display/data-table-filters/components/data-table/data-table-toolbar"; // TODO: check where to put this
 import type { DataTableFilterField } from "@/components/data-display/data-table-filters/components/data-table/types";
 import { Button } from "@/components/core/button";
-import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
-import { useLocalStorage } from "@/components/data-display/data-table-filters/hooks/use-local-storage";
+import { useHotKey } from "@/_internals/domains/data-table/hooks/use-hot-key";
+import { useLocalStorage } from "@/_internals/domains/data-table/hooks/use-local-storage";
 import {
   getColumnOrderKey,
   getColumnVisibilityKey,
-} from "@/components/data-display/data-table-filters/lib/constants/local-storage";
-import { getFacetedUniqueValuesFlattened } from "@/components/data-display/data-table-filters/lib/data-table/faceted";
-import { formatCompactNumber } from "@/components/data-display/data-table-filters/lib/format";
-import { useFilterActions } from "@/components/data-display/data-table-filters/lib/store/hooks/useFilterActions";
-import { useFilterState } from "@/components/data-display/data-table-filters/lib/store/hooks/useFilterState";
-import { arrSome, inDateRange } from "@/components/data-display/data-table-filters/lib/table/filterfns";
-import { cn } from "@/components/data-display/data-table-filters/lib/utils";
+} from "@/_internals/domains/data-table/utils/constants/local-storage";
+import { getFacetedUniqueValuesFlattened } from "@/_internals/domains/data-table/utils/data-table/faceted";
+import { formatCompactNumber } from "@/_internals/domains/data-table/utils/format";
+import { useFilterActions } from "@/_internals/domains/data-table/store/hooks/useFilterActions";
+import { useFilterState } from "@/_internals/domains/data-table/store/hooks/useFilterState";
+import { arrSome, inDateRange } from "@/_internals/domains/data-table/utils/table/filterfns";
+import { cn } from "@/_internals/foundations/utils/cn";
 import {
   type FetchNextPageOptions,
   type FetchPreviousPageOptions,

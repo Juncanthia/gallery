@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/core/tooltip";
-import { useHotKey } from "@/components/data-display/data-table-filters/hooks/use-hot-key";
+import { useHotKey } from "@/_internals/domains/data-table/hooks/use-hot-key";
 import type { Row, Table as TTable } from "@tanstack/react-table";
 import { X } from "lucide-react";
 import * as React from "react";

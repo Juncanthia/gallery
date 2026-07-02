@@ -2,7 +2,7 @@
 
 import { DatePickerWithRange } from "@/components/data-display/data-table-filters/components/custom/date-picker-with-range";
 import { useDataTable } from "@/components/data-display/data-table-filters/components/data-table/data-table-provider";
-import { isArrayOfDates } from "@/components/data-display/data-table-filters/lib/is-array";
+import { isArrayOfDates } from "@/_internals/domains/data-table/utils/is-array";
 import { useMemo } from "react";
 import type { DateRange } from "react-day-picker";
 import type { DataTableTimerangeFilterField } from "./types";
