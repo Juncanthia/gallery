@@ -8,13 +8,13 @@ import type {
   MediaStore,
 } from "@/components/media/ui/media-provider"
 
-import { useMediaStore } from "@/components/media/hooks/use-media"
-import { usePlaybackStore } from "@/components/media/hooks/use-playback"
+import { useMediaStore } from "@/_internals/domains/media/hooks/use-media"
+import { usePlaybackStore } from "@/_internals/domains/media/hooks/use-playback"
 import {
   type PlayerStore,
   usePlayerStore,
-} from "@/components/media/hooks/use-player"
-import { off, on } from "@/components/media/lib/utils"
+} from "@/_internals/domains/media/hooks/use-player"
+import { off, on } from "@/_internals/domains/media/utils/utils"
 import {
   useMediaEvents,
   useMediaFeatureApi,

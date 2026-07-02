@@ -3,7 +3,7 @@
 import { SkipForwardIcon } from "@phosphor-icons/react"
 
 import { Button } from "@/components/media/blocks/video-player/components/button"
-import { usePlaylistStore } from "@/components/media/hooks/use-playlist"
+import { usePlaylistStore } from "@/_internals/domains/media/hooks/use-playlist"
 
 export function PlaylistNextControl() {
   const next = usePlaylistStore((state) => state.next)

@@ -3,14 +3,14 @@
 import React, { useRef } from "react"
 import shaka from "shaka-player"
 
-import type { PlaybackStore } from "@/components/media/hooks/use-playback"
+import type { PlaybackStore } from "@/_internals/domains/media/hooks/use-playback"
 import type {
   MediaEventSlice,
   MediaFeature,
 } from "@/components/media/ui/media-provider"
 
-import { useMediaStore } from "@/components/media/hooks/use-media"
-import { noop, off, on } from "@/components/media/lib/utils"
+import { useMediaStore } from "@/_internals/domains/media/hooks/use-media"
+import { noop, off, on } from "@/_internals/domains/media/utils/utils"
 import {
   useMediaEvents,
   useMediaFeatureApi,

@@ -7,8 +7,8 @@ import { Button } from "@/components/core/button"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
-import { useSeek } from "@/components/media/hooks/use-seek"
+} from "@/_internals/domains/media/hooks/use-playback"
+import { useSeek } from "@/_internals/domains/media/hooks/use-seek"
 
 export interface SeekControlProps extends React.ComponentProps<typeof Button> {
   asChild?: boolean

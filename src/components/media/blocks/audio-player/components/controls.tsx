@@ -13,8 +13,8 @@ import { VolumeControl } from "@/components/media/blocks/audio-player/components
 import {
   AssetSourceType,
   useAssetStore,
-} from "@/components/media/hooks/use-asset"
-import { usePlaylistStore } from "@/components/media/hooks/use-playlist"
+} from "@/_internals/domains/media/hooks/use-asset"
+import { usePlaylistStore } from "@/_internals/domains/media/hooks/use-playlist"
 
 export function PlayerControls() {
   const sourceType = useAssetStore((state) => state.sourceType)

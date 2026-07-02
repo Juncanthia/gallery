@@ -1,4 +1,4 @@
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 export function LimeplayLogo(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...etc } = props

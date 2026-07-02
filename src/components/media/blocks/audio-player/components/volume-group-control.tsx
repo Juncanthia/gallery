@@ -2,13 +2,13 @@
 
 import { AnimatePresence, motion } from "motion/react"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import { Button } from "@/components/media/blocks/audio-player/components/button"
 import {
   VolumeFullIcon,
   VolumeMutedIcon,
 } from "@/components/media/blocks/audio-player/components/icons"
-import { useVolumeStore } from "@/components/media/hooks/use-volume"
+import { useVolumeStore } from "@/_internals/domains/media/hooks/use-volume"
 import { MuteControl } from "@/components/media/ui/mute-control"
 import * as VolumeSlider from "@/components/media/ui/volume-control"
 

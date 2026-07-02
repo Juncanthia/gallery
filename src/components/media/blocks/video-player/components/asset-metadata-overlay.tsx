@@ -2,7 +2,7 @@
 
 import type { VideoPlayerAsset } from "@/components/media/blocks/video-player/components/media-player"
 
-import { useAsset } from "@/components/media/hooks/use-asset"
+import { useAsset } from "@/_internals/domains/media/hooks/use-asset"
 import { ControlsTopContainer } from "@/components/media/ui/player-layout"
 
 export function AssetMetadataOverlay() {

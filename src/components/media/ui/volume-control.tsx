@@ -3,13 +3,13 @@
 import * as SliderPrimitive from "@radix-ui/react-slider"
 import React, { useImperativeHandle, useRef, useState } from "react"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
-import { useTrackEvents } from "@/components/media/hooks/use-track-events"
-import { useVolumeStore } from "@/components/media/hooks/use-volume"
+} from "@/_internals/domains/media/hooks/use-playback"
+import { useTrackEvents } from "@/_internals/domains/media/hooks/use-track-events"
+import { useVolumeStore } from "@/_internals/domains/media/hooks/use-volume"
 
 const VOLUME_RESET_BASE = 0.05
 

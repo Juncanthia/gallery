@@ -6,7 +6,7 @@ import {
 } from "@phosphor-icons/react"
 
 import { Button } from "@/components/core/button"
-import { usePlaybackStore } from "@/components/media/hooks/use-playback"
+import { usePlaybackStore } from "@/_internals/domains/media/hooks/use-playback"
 import { PlaybackControl } from "@/components/media/ui/playback-control"
 
 export function PlaybackStateControlDemo() {

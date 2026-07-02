@@ -5,8 +5,8 @@ import { PlusIcon, XIcon } from "lucide-react"
 import {
   type SavedStream,
   useStreamPanelStore,
-} from "@/components/media/stream-panel/use-stream-panel"
-import { cn } from "@/components/media/lib/utils"
+} from "@/_internals/domains/media/hooks/use-stream-panel"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 import { Button } from "@/components/core/button"
 import { Separator } from "@/components/core/separator"

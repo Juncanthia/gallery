@@ -3,16 +3,16 @@
 import { BookmarkPlus, ChevronRight, FolderKanban, type LucideProps } from "lucide-react"
 import React, { useMemo, useState } from "react"
 
-import type { StreamPanelContentKind } from "@/components/media/stream-panel/use-stream-panel"
+import type { StreamPanelContentKind } from "@/_internals/domains/media/hooks/use-stream-panel"
 
-import { getPlaylistPresetsForType } from "@/components/media/stream-panel/content-catalog"
-import { useStreamPanelStore } from "@/components/media/stream-panel/use-stream-panel"
+import { getPlaylistPresetsForType } from "@/_internals/domains/media/utils/content-catalog"
+import { useStreamPanelStore } from "@/_internals/domains/media/hooks/use-stream-panel"
 import { Field, FieldLabel } from "@/components/core/form-field"
 import { Popover, PopoverContent } from "@/components/core/popover"
 import { Separator } from "@/components/core/separator"
 import { ToggleGroup, ToggleGroupItem } from "@/components/core/toggle-group"
-import { getPresetsForType, type StreamPreset } from "@/components/media/lib/stream-presets"
-import { cn } from "@/components/media/lib/utils"
+import { getPresetsForType, type StreamPreset } from "@/_internals/domains/media/utils/stream-presets"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 import type { OverlayShellPlacement } from "./overlay-shell"
 
@@ -27,7 +27,7 @@ import {
   STREAM_PANEL_POSITION_CLASSES,
   type StreamPanelOverlay,
   type StreamPanelProps,
-} from "./panel-popover.config"
+} from "@/_internals/domains/media/utils/panel-popover.config"
 import { PlaylistsOverlay } from "./playlists-overlay"
 import { PresetsOverlay } from "./presets-overlay"
 import { useStreamPanel } from "./provider"

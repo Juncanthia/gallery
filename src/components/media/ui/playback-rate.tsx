@@ -7,7 +7,7 @@ import {
   SelectItem,
   Select as SelectPrimitive,
 } from "@/components/core/select"
-import { usePlaybackRateStore } from "@/components/media/hooks/use-playback-rate"
+import { usePlaybackRateStore } from "@/_internals/domains/media/hooks/use-playback-rate"
 
 export function SelectRoot(
   props: React.ComponentProps<typeof SelectPrimitive>

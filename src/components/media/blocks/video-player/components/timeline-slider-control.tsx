@@ -3,8 +3,8 @@
 import { useState } from "react"
 
 import { Button } from "@/components/media/blocks/video-player/components/button"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
-import { useTimelineStore } from "@/components/media/hooks/use-timeline"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
+import { useTimelineStore } from "@/_internals/domains/media/hooks/use-timeline"
 import * as TimelineSlider from "@/components/media/ui/timeline-control"
 import {
   Duration,

@@ -15,9 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/core/dropdown-menu"
 import { Button } from "@/components/media/blocks/video-player/components/button"
-import { useMediaStore } from "@/components/media/hooks/use-media"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
-import { usePlaylistStore } from "@/components/media/hooks/use-playlist"
+import { useMediaStore } from "@/_internals/domains/media/hooks/use-media"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
+import { usePlaylistStore } from "@/_internals/domains/media/hooks/use-playlist"
 
 export function Playlist() {
   const currentItem = usePlaylistStore(

@@ -14,11 +14,11 @@ import type {
   PlaybackUrls,
 } from "@/components/media/blocks/audio-player/components/audio-source"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import { AudioSourceProvider } from "@/components/media/blocks/audio-player/components/audio-source"
 import { PlayerControls } from "@/components/media/blocks/audio-player/components/controls"
 import { TimelineControl } from "@/components/media/blocks/audio-player/components/fixed-timeline-control"
-import { MediaProvider } from "@/components/media/blocks/audio-player/lib/media-kit"
+import { MediaProvider } from "@/_internals/domains/media/utils/media-kit-audio"
 import { Media } from "@/components/media/ui/media"
 import { RootContainer } from "@/components/media/ui/root-container"
 

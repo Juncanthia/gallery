@@ -1,9 +1,9 @@
-import type { StreamPanelPlaylistPreset } from "@/components/media/stream-panel/content-catalog"
+import type { StreamPanelPlaylistPreset } from "@/_internals/domains/media/utils/content-catalog"
 import type {
   StreamPanelContentKind,
   StreamPanelPlayerType,
-} from "@/components/media/stream-panel/use-stream-panel"
-import type { StreamPreset } from "@/components/media/lib/stream-presets"
+} from "@/_internals/domains/media/hooks/use-stream-panel"
+import type { StreamPreset } from "@/_internals/domains/media/utils/stream-presets"
 
 export const STREAM_PANEL_OVERLAY = {
   CONTENT: "content",

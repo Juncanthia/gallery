@@ -7,8 +7,8 @@ import { Button } from "@/components/core/button"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
-import { useVolumeStore } from "@/components/media/hooks/use-volume"
+} from "@/_internals/domains/media/hooks/use-playback"
+import { useVolumeStore } from "@/_internals/domains/media/hooks/use-volume"
 
 export interface MuteControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean

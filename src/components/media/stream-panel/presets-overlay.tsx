@@ -4,10 +4,10 @@ import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { CheckIcon } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
-import type { StreamFeature, StreamPreset } from "@/components/media/lib/stream-presets"
+import type { StreamFeature, StreamPreset } from "@/_internals/domains/media/utils/stream-presets"
 
-import { getStreamSupport, initStreamSupport } from "@/components/media/lib/stream-support"
-import { cn } from "@/components/media/lib/utils"
+import { getStreamSupport, initStreamSupport } from "@/_internals/domains/media/utils/stream-support"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 

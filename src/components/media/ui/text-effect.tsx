@@ -10,7 +10,7 @@ import type {
 import { AnimatePresence, motion } from "motion/react"
 import React from "react"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 export type PerType = "char" | "line" | "word"
 

@@ -8,7 +8,7 @@ import { createStore, type StoreApi } from "zustand/vanilla"
 import {
   type MediaProviderProps,
   type MediaStore,
-} from "@/components/media/hooks/use-media"
+} from "@/_internals/domains/media/hooks/use-media"
 
 export type { MediaProviderProps, MediaStore }
 

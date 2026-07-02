@@ -4,12 +4,12 @@ import { ClosedCaptioningIcon } from "@phosphor-icons/react"
 import { useEffect } from "react"
 
 import { Button } from "@/components/core/button"
-import { useCaptionsStore } from "@/components/media/hooks/use-captions"
+import { useCaptionsStore } from "@/_internals/domains/media/hooks/use-captions"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
+} from "@/_internals/domains/media/hooks/use-playback"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
 import {
   CaptionsContainer,
   CaptionsControl,

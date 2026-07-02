@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef } from "react"
 
 import * as React from "react"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 export interface PlayerContainerProps extends ComponentPropsWithoutRef<"div"> {
   className?: string

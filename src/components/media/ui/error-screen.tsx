@@ -12,7 +12,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/media/ui/item"
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 const MEDIA_ERROR_MAP: Partial<
   Record<number, { code: string; title: string }>

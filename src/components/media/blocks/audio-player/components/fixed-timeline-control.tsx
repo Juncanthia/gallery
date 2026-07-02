@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import * as TimelineSlider from "@/components/media/ui/timeline-control"
 import {
   Duration,

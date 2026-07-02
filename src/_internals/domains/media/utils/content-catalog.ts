@@ -2,8 +2,8 @@ import type shaka from "shaka-player"
 
 import { z } from "zod"
 
-import type { StreamPanelPlayerType } from "@/components/media/stream-panel/use-stream-panel"
-import type { Asset } from "@/components/media/hooks/use-asset"
+import type { StreamPanelPlayerType } from "@/_internals/domains/media/hooks/use-stream-panel"
+import type { Asset } from "@/_internals/domains/media/hooks/use-asset"
 
 export interface AppleMusicArtwork {
   bgColor?: string

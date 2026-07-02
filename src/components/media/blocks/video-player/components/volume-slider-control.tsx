@@ -1,4 +1,4 @@
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import * as VolumeSlider from "@/components/media/ui/volume-control"
 
 export function VolumeSliderControl() {

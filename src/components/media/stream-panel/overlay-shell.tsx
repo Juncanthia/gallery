@@ -4,7 +4,7 @@ import { ChevronLeft } from "lucide-react"
 import { domAnimation, LazyMotion, m } from "motion/react"
 import * as React from "react"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 import { Button } from "@/components/core/button"
 

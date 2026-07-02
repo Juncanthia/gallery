@@ -7,16 +7,16 @@ import type {
   Asset,
   PlayerSource,
   UseAssetOptions,
-} from "@/components/media/hooks/use-asset"
+} from "@/_internals/domains/media/hooks/use-asset"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import { AssetMetadataOverlay } from "@/components/media/blocks/video-player/components/asset-metadata-overlay"
 import { BottomControls } from "@/components/media/blocks/video-player/components/bottom-controls"
 import { Button } from "@/components/media/blocks/video-player/components/button"
-import { MediaProvider } from "@/components/media/blocks/video-player/lib/media-kit"
-import { useAsset } from "@/components/media/hooks/use-asset"
-import { usePlaybackStore } from "@/components/media/hooks/use-playback"
-import { PlaybackSourceController } from "@/components/media/hooks/use-playback-source"
+import { MediaProvider } from "@/_internals/domains/media/utils/media-kit-video"
+import { useAsset } from "@/_internals/domains/media/hooks/use-asset"
+import { usePlaybackStore } from "@/_internals/domains/media/hooks/use-playback"
+import { PlaybackSourceController } from "@/_internals/domains/media/hooks/use-playback-source"
 import { CaptionsContainer } from "@/components/media/ui/captions"
 import { ErrorScreen } from "@/components/media/ui/error-screen"
 import { FallbackPoster } from "@/components/media/ui/fallback-poster"

@@ -7,7 +7,7 @@ import {
 } from "@phosphor-icons/react"
 
 import { Button } from "@/components/core/button"
-import { useVolumeStore } from "@/components/media/hooks/use-volume"
+import { useVolumeStore } from "@/_internals/domains/media/hooks/use-volume"
 import { MuteControl } from "@/components/media/ui/mute-control"
 
 export function VolumeStateControlDemo() {

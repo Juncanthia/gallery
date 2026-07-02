@@ -3,10 +3,10 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { CheckIcon } from "lucide-react"
 
-import type { StreamPanelPlaylistPreset } from "@/components/media/stream-panel/content-catalog"
-import type { StreamPanelSelection } from "@/components/media/stream-panel/use-stream-panel"
+import type { StreamPanelPlaylistPreset } from "@/_internals/domains/media/utils/content-catalog"
+import type { StreamPanelSelection } from "@/_internals/domains/media/hooks/use-stream-panel"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"
 

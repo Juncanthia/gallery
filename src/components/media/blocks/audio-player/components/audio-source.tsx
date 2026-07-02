@@ -6,10 +6,10 @@ import type {
   Asset,
   PlayerSource,
   UseAssetOptions,
-} from "@/components/media/hooks/use-asset"
+} from "@/_internals/domains/media/hooks/use-asset"
 
-import { AssetRecoveryAction } from "@/components/media/hooks/use-asset"
-import { PlaybackSourceController } from "@/components/media/hooks/use-playback-source"
+import { AssetRecoveryAction } from "@/_internals/domains/media/hooks/use-asset"
+import { PlaybackSourceController } from "@/_internals/domains/media/hooks/use-playback-source"
 
 export interface AudioAssetDisplayMetadata {
   poster?: string

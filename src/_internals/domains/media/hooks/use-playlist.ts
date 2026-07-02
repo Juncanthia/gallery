@@ -12,7 +12,7 @@ import type {
   MediaFeature,
 } from "@/components/media/ui/media-provider"
 
-import { useMediaStore } from "@/components/media/hooks/use-media"
+import { useMediaStore } from "@/_internals/domains/media/hooks/use-media"
 import {
   useMediaEvents,
   useMediaFeatureApi,

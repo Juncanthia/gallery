@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
 
 import { Separator } from "@/components/core/separator"
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

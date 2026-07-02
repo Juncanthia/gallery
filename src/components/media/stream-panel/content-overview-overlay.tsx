@@ -7,9 +7,9 @@ import { ChevronRightIcon, Film, Satellite, Video } from "lucide-react"
 import type {
   StreamPanelContentKind,
   StreamPanelPlayerType,
-} from "@/components/media/stream-panel/use-stream-panel"
+} from "@/_internals/domains/media/hooks/use-stream-panel"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 
 import { Separator } from "@/components/core/separator"
 import { OverlayShell, type OverlayShellPlacement } from "./overlay-shell"

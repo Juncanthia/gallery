@@ -11,17 +11,17 @@ import type {
   MediaStore,
 } from "@/components/media/ui/media-provider"
 
-import { useInterval } from "@/components/media/hooks/use-interval"
-import { useMediaStore } from "@/components/media/hooks/use-media"
+import { useInterval } from "@/_internals/domains/media/hooks/use-interval"
+import { useMediaStore } from "@/_internals/domains/media/hooks/use-media"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
+} from "@/_internals/domains/media/hooks/use-playback"
 import {
   type PlayerStore,
   usePlayerStore,
-} from "@/components/media/hooks/use-player"
-import { noop, off, on, toFixedNumber } from "@/components/media/lib/utils"
+} from "@/_internals/domains/media/hooks/use-player"
+import { noop, off, on, toFixedNumber } from "@/_internals/domains/media/utils/utils"
 import {
   useMediaEvents,
   useMediaFeatureApi,

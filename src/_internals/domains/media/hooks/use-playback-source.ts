@@ -7,14 +7,14 @@ import type {
   GetAssetId,
   PlayerSource,
   UseAssetOptions,
-} from "@/components/media/hooks/use-asset"
+} from "@/_internals/domains/media/hooks/use-asset"
 
 import {
   AssetSourceOrigin,
   AssetSourceType,
   useAsset,
-} from "@/components/media/hooks/use-asset"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
+} from "@/_internals/domains/media/hooks/use-asset"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
 
 export interface UsePlaybackSourceOptions<TAsset extends Asset> {
   autoLoad?: boolean

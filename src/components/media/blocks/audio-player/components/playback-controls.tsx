@@ -11,9 +11,9 @@ import {
   PlayIcon,
   PreviousIcon,
 } from "@/components/media/blocks/audio-player/components/icons"
-import { usePlaybackStore } from "@/components/media/hooks/use-playback"
-import { RECOMMENDED_PLAYER_BUFFERING_THROTTLE_MS } from "@/components/media/hooks/use-player"
-import { usePlaylist } from "@/components/media/hooks/use-playlist"
+import { usePlaybackStore } from "@/_internals/domains/media/hooks/use-playback"
+import { RECOMMENDED_PLAYER_BUFFERING_THROTTLE_MS } from "@/_internals/domains/media/hooks/use-player"
+import { usePlaylist } from "@/_internals/domains/media/hooks/use-playlist"
 import { PlaybackControl } from "@/components/media/ui/playback-control"
 
 export function PlaybackControls({

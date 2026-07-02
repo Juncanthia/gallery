@@ -3,9 +3,9 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useMemo } from "react"
 
-import type { RepeatMode } from "@/components/media/hooks/use-playlist"
+import type { RepeatMode } from "@/_internals/domains/media/hooks/use-playlist"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import { Button } from "@/components/media/blocks/audio-player/components/button"
 import {
   RepeatAllIcon,
@@ -17,7 +17,7 @@ import {
 import {
   usePlaylist,
   usePlaylistStore,
-} from "@/components/media/hooks/use-playlist"
+} from "@/_internals/domains/media/hooks/use-playlist"
 
 type RepeatControlVariant = "asset" | "playlist"
 

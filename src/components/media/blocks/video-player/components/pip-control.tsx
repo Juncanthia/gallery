@@ -3,7 +3,7 @@
 import { PictureInPictureIcon } from "@phosphor-icons/react"
 
 import { Button } from "@/components/media/blocks/video-player/components/button"
-import { usePictureInPictureStore } from "@/components/media/hooks/use-picture-in-picture"
+import { usePictureInPictureStore } from "@/_internals/domains/media/hooks/use-picture-in-picture"
 import { PictureInPictureControl as PictureInPictureControlPrimitive } from "@/components/media/ui/picture-in-picture-control"
 
 export function PictureInPictureControl() {

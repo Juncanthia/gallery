@@ -4,11 +4,11 @@ import { Slot } from "@radix-ui/react-slot"
 import * as React from "react"
 
 import { Button } from "@/components/core/button"
-import { usePictureInPictureStore } from "@/components/media/hooks/use-picture-in-picture"
+import { usePictureInPictureStore } from "@/_internals/domains/media/hooks/use-picture-in-picture"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
+} from "@/_internals/domains/media/hooks/use-playback"
 
 export interface PictureInPictureControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**

@@ -1,4 +1,4 @@
-import { useMediaStore } from "@/components/media/hooks/use-media"
+import { useMediaStore } from "@/_internals/domains/media/hooks/use-media"
 import { useMediaApi } from "@/components/media/ui/media-provider"
 
 export function useSeek() {

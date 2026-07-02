@@ -3,14 +3,14 @@
 import * as SliderPrimitive from "@radix-ui/react-slider"
 import React, { useImperativeHandle, useRef } from "react"
 
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
-import { useTimelineStore } from "@/components/media/hooks/use-timeline"
-import { useTrackEvents } from "@/components/media/hooks/use-track-events"
+} from "@/_internals/domains/media/hooks/use-playback"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
+import { useTimelineStore } from "@/_internals/domains/media/hooks/use-timeline"
+import { useTrackEvents } from "@/_internals/domains/media/hooks/use-track-events"
 
 export type TimelineRootPropsDocs = Pick<
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>,

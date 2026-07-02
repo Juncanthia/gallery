@@ -4,9 +4,9 @@ import type {
   AudioPlayerAsset,
   PlaybackUrls,
 } from "@/components/media/blocks/audio-player/components/audio-source"
-import type { UseAssetReturn } from "@/components/media/hooks/use-asset"
+import type { UseAssetReturn } from "@/_internals/domains/media/hooks/use-asset"
 
-import { useAsset } from "@/components/media/hooks/use-asset"
+import { useAsset } from "@/_internals/domains/media/hooks/use-asset"
 
 export type { PlaybackUrls }
 

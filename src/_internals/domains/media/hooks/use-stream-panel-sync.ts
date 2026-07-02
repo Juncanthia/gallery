@@ -6,8 +6,8 @@ import type {
   Asset,
   AssetEvents,
   UseAssetOptions,
-} from "@/components/media/hooks/use-asset"
-import type { PlaybackStore } from "@/components/media/hooks/use-playback"
+} from "@/_internals/domains/media/hooks/use-asset"
+import type { PlaybackStore } from "@/_internals/domains/media/hooks/use-playback"
 
 import {
   addBlenderCaptions,
@@ -18,27 +18,27 @@ import {
   fetchPlaylistPresetAssets,
   isBlenderOpenFilmAsset,
   type StreamPanelPlaylistPreset,
-} from "@/components/media/stream-panel/content-catalog"
+} from "@/_internals/domains/media/utils/content-catalog"
 import {
   type StreamPanelContentKind,
   type StreamPanelPlayerType,
   type StreamPanelSelection,
   useStreamPanelStore,
   useStreamPanelStoreHydrated,
-} from "@/components/media/stream-panel/use-stream-panel"
-import { getPresetsForType, type StreamPreset } from "@/components/media/lib/stream-presets"
+} from "@/_internals/domains/media/hooks/use-stream-panel"
+import { getPresetsForType, type StreamPreset } from "@/_internals/domains/media/utils/stream-presets"
 import {
   AssetRecoveryAction,
   useAsset,
-} from "@/components/media/hooks/use-asset"
-import { useMediaStore } from "@/components/media/hooks/use-media"
-import { PLAYBACK_FEATURE_KEY } from "@/components/media/hooks/use-playback"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
+} from "@/_internals/domains/media/hooks/use-asset"
+import { useMediaStore } from "@/_internals/domains/media/hooks/use-media"
+import { PLAYBACK_FEATURE_KEY } from "@/_internals/domains/media/hooks/use-playback"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
 import {
   PLAYLIST_FEATURE_KEY,
   type PlaylistStore,
-} from "@/components/media/hooks/use-playlist"
-import { useVolumeStore } from "@/components/media/hooks/use-volume"
+} from "@/_internals/domains/media/hooks/use-playlist"
+import { useVolumeStore } from "@/_internals/domains/media/hooks/use-volume"
 import {
   useMediaEvents,
   useMediaFeatureApi,

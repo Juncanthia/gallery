@@ -5,12 +5,12 @@ import { Slot } from "@radix-ui/react-slot"
 import React, { useEffect } from "react"
 
 import { Button } from "@/components/core/button"
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import {
   useCaptions,
   useCaptionsStore,
-} from "@/components/media/hooks/use-captions"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
+} from "@/_internals/domains/media/hooks/use-captions"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
 
 export interface CaptionsControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**

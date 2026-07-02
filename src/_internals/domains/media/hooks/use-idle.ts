@@ -3,7 +3,7 @@
 import throttle from "lodash.throttle"
 import { useEffect, useState } from "react"
 
-import { off, on } from "@/components/media/lib/utils"
+import { off, on } from "@/_internals/domains/media/utils/utils"
 
 const defaultEvents = [
   "mousemove",

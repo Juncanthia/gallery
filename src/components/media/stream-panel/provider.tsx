@@ -9,9 +9,9 @@ import React, {
   useState,
 } from "react"
 
-import type { StreamPanelPlaylistPreset } from "@/components/media/stream-panel/content-catalog"
-import type { StreamPanelPlayerType } from "@/components/media/stream-panel/use-stream-panel"
-import type { StreamPreset } from "@/components/media/lib/stream-presets"
+import type { StreamPanelPlaylistPreset } from "@/_internals/domains/media/utils/content-catalog"
+import type { StreamPanelPlayerType } from "@/_internals/domains/media/hooks/use-stream-panel"
+import type { StreamPreset } from "@/_internals/domains/media/utils/stream-presets"
 import type {
   PopoverHandle,
   PopoverOpenChangeDetails,

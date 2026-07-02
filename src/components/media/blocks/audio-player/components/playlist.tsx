@@ -9,14 +9,14 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/core/dropdown-menu"
-import { cn } from "@/components/media/lib/utils"
+import { cn } from "@/_internals/domains/media/utils/utils"
 import {
   type AudioPlayerAsset,
   getAudioAssetMetadata,
 } from "@/components/media/blocks/audio-player/components/audio-source"
 import { Button } from "@/components/media/blocks/audio-player/components/button"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
-import { usePlaylistStore } from "@/components/media/hooks/use-playlist"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
+import { usePlaylistStore } from "@/_internals/domains/media/hooks/use-playlist"
 import { LimeplayLogo } from "@/components/media/ui/limeplay-logo"
 
 const PLAYLIST_SIDE_OFFSET = 24

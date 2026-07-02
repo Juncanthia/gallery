@@ -4,7 +4,7 @@ import {
   type AudioPlayerAsset,
   getAudioAssetMetadata,
 } from "@/components/media/blocks/audio-player/components/audio-source"
-import { useAsset } from "@/components/media/hooks/use-asset"
+import { useAsset } from "@/_internals/domains/media/hooks/use-asset"
 import { LimeplayLogo } from "@/components/media/ui/limeplay-logo"
 
 export function TrackInfo() {

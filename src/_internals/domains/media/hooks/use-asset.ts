@@ -7,16 +7,16 @@ import { useCallback, useEffect } from "react"
 import type {
   PlaybackEvents,
   PlaybackStore,
-} from "@/components/media/hooks/use-playback"
+} from "@/_internals/domains/media/hooks/use-playback"
 import type {
   PlayerEvents,
   PlayerStore,
-} from "@/components/media/hooks/use-player"
+} from "@/_internals/domains/media/hooks/use-player"
 import type {
   PlaylistChangeEvent,
   PlaylistEvents,
   PlaylistStore,
-} from "@/components/media/hooks/use-playlist"
+} from "@/_internals/domains/media/hooks/use-playlist"
 import type {
   ImmerStoreApi,
   MediaEventSlice,
@@ -24,8 +24,8 @@ import type {
   MediaStore,
 } from "@/components/media/ui/media-provider"
 
-import { isLoadInterrupted } from "@/components/media/hooks/use-player"
-import { usePlaylist } from "@/components/media/hooks/use-playlist"
+import { isLoadInterrupted } from "@/_internals/domains/media/hooks/use-player"
+import { usePlaylist } from "@/_internals/domains/media/hooks/use-playlist"
 import {
   useMediaEvents,
   useMediaFeatureApi,

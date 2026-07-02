@@ -1,9 +1,9 @@
 import React from "react"
 
-import { cn } from "@/components/media/lib/utils"
-import { usePlayerStore } from "@/components/media/hooks/use-player"
-import { useTimelineStore } from "@/components/media/hooks/use-timeline"
-import { durationDateTime, formatTimestamp } from "@/components/media/lib/time"
+import { cn } from "@/_internals/domains/media/utils/utils"
+import { usePlayerStore } from "@/_internals/domains/media/hooks/use-player"
+import { useTimelineStore } from "@/_internals/domains/media/hooks/use-timeline"
+import { durationDateTime, formatTimestamp } from "@/_internals/domains/media/utils/time"
 
 const HOURS_IN_SECONDS = 60 * 60
 

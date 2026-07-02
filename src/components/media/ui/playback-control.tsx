@@ -7,7 +7,7 @@ import { Button } from "@/components/core/button"
 import {
   MediaReadyState,
   usePlaybackStore,
-} from "@/components/media/hooks/use-playback"
+} from "@/_internals/domains/media/hooks/use-playback"
 
 interface PlaybackControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**

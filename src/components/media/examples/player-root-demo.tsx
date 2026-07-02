@@ -15,14 +15,14 @@ import {
   StreamPanelProvider,
   useStreamPanel,
 } from "@/components/media/stream-panel"
-import { useStreamPanelSync } from "@/components/media/stream-panel/use-stream-panel-sync"
+import { useStreamPanelSync } from "@/_internals/domains/media/hooks/use-stream-panel-sync"
 import { Button } from "@/components/core/button"
 import { PopoverTrigger } from "@/components/core/popover"
 import { Tabs, TabsContent, TabsList } from "@/components/core/tabs"
-import { cn } from "@/components/media/lib/utils"
-import { useAsset } from "@/components/media/hooks/use-asset"
+import { cn } from "@/_internals/domains/media/utils/utils"
+import { useAsset } from "@/_internals/domains/media/hooks/use-asset"
 import { CustomDemoControls } from "@/components/media/internal/custom-demo-controls"
-import { MediaProvider, useMediaStore } from "@/components/media/internal/media"
+import { MediaProvider, useMediaStore } from "@/_internals/domains/media/utils/media-kit-full"
 import {
   ErrorScreen,
   getErrorDetails,
