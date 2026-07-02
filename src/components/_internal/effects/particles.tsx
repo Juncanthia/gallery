@@ -7,7 +7,7 @@ import { Slot, type WithAsChild } from '@/components/_internal/animate/slot';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@/components/_internal/hooks/use-is-in-view';
+} from '@/_internals/foundations/hooks/use-is-in-view';
 import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
 
 type Side = 'top' | 'bottom' | 'left' | 'right';

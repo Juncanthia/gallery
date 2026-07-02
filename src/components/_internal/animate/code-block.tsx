@@ -5,7 +5,7 @@ import * as React from 'react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@/components/_internal/hooks/use-is-in-view';
+} from '@/_internals/foundations/hooks/use-is-in-view';
 import { cn } from '@/lib/utils';
 
 type CodeBlockProps = React.ComponentProps<'div'> & {
