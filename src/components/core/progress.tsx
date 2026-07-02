@@ -1,11 +1,49 @@
-import type * as React from 'react';
+'use client';
 
-import {
-  Progress as ProgressPrimitive,
-  ProgressIndicator as ProgressIndicatorPrimitive,
-  type ProgressProps as ProgressPrimitiveProps,
-} from '@/components/_internal/radix/progress';
+import * as React from 'react';
+import {Progress as RadixProgress} from 'radix-ui';
+import { motion } from 'motion/react';
+import { getStrictContext } from '@/components/_internal/lib/get-strict-context';
 import { cn } from '@/lib/utils';
+
+type ProgressContextType = {
+  value: number;
+};
+
+const [ProgressProvider, useProgress] =
+  getStrictContext<ProgressContextType>('ProgressContext');
+
+type ProgressPrimitiveProps = React.ComponentProps<typeof RadixProgress.Root>;
+
+function ProgressPrimitive(props: ProgressPrimitiveProps) {
+  return (
+    <ProgressProvider value={{ value: props.value ?? 0 }}>
+      <RadixProgress.Root data-slot="progress" {...props} />
+    </ProgressProvider>
+  );
+}
+
+const MotionProgressIndicator = motion.create(RadixProgress.Indicator);
+
+type ProgressIndicatorProps = React.ComponentProps<
+  typeof MotionProgressIndicator
+>;
+
+function ProgressIndicatorPrimitive({
+  transition = { type: 'spring', stiffness: 100, damping: 30 },
+  ...props
+}: ProgressIndicatorProps) {
+  const { value } = useProgress();
+
+  return (
+    <MotionProgressIndicator
+      data-slot="progress-indicator"
+      animate={{ x: `-${100 - (value || 0)}%` }}
+      transition={transition}
+      {...props}
+    />
+  );
+}
 
 type ProgressStatus = 'normal' | 'exception' | 'active' | 'success';
 type ProgressType = 'line' | 'circle' | 'dashboard';
